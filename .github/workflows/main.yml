@@ -11,24 +11,18 @@ jobs:
     steps:
       - name: Check out Git repository
         uses: actions/checkout@v2
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v1
         with:
-          node-version: 12
-
-      - name: Install Node.js dependencies
-        run: npm install
-
-      - name: Run wearerequired linters
-        uses: wearerequired/lint-action@v1
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          # Enable linters
-          eslint: true
-          prettier: true
+          # Make sure the actual branch is checked out when running on pull requests
+          ref: ${{ github.head_ref }}
           
-      - name: New action
+      - name: Run ESLint
         uses: getsentry/action-eslint-fix@v1
         with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Prettify code
+        uses: creyD/prettier_action@v3.1
+        with:
+          prettier_options: --write **/*.{js,md}
+        env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
