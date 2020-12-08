@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
 export default function NotFoundScreen({ navigation }: StackScreenProps<RootStackParamList, 'NotFound'>) {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>This screen doesn't exist.</Text>
+      <Text style={styles.title}>This screen doesn&apos;t exist.</Text>
       <TouchableOpacity onPress={() => navigation.replace('Root')} style={styles.link}>
         <Text style={styles.linkText}>Go to home screen!</Text>
       </TouchableOpacity>

@@ -17,7 +17,8 @@ export default function EditScreenInfo({ path }: { path: string }) {
         <View
           style={[styles.codeHighlightContainer, styles.homeScreenFilename]}
           darkColor="rgba(255,255,255,0.05)"
-          lightColor="rgba(0,0,0,0.05)">
+          lightColor="rgba(0,0,0,0.05)"
+        >
           <MonoText>{path}</MonoText>
         </View>
 
@@ -29,7 +30,7 @@ export default function EditScreenInfo({ path }: { path: string }) {
       <View style={styles.helpContainer}>
         <TouchableOpacity onPress={handleHelpPress} style={styles.helpLink}>
           <Text style={styles.helpLinkText} lightColor={Colors.light.tint}>
-            Tap here if your app doesn't automatically update after making changes
+            Tap here if your app doesn&apos;t automatically update after making changes
           </Text>
         </TouchableOpacity>
       </View>

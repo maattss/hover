@@ -40,6 +40,7 @@ function TabOneNavigator() {
         component={FeedScreen}
         options={({ navigation }) => ({
           headerTitle: 'Feed',
+          // eslint-disable-next-line react/display-name
           headerRight: () => <HeaderIcon onPress={() => navigation.navigate('Settings')} name="ios-settings" />,
         })}
       />
@@ -83,6 +84,9 @@ const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
 export default function BottomTabNavigator() {
   const colorScheme = useColorScheme();
+  const tabBarIconHome = ({ color = '' as string }) => <TabBarIcon name="ios-home" color={color} />;
+  const tabBarIconStats = ({ color = '' as string }) => <TabBarIcon name="ios-stats" color={color} />;
+  const tabBarIconNavigate = ({ color = '' as string }) => <TabBarIcon name="ios-navigate" color={color} />;
 
   return (
     <BottomTab.Navigator initialRouteName="Feed" tabBarOptions={{ activeTintColor: Colors[colorScheme].tint }}>
@@ -90,21 +94,21 @@ export default function BottomTabNavigator() {
         name="Feed"
         component={TabOneNavigator}
         options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="ios-home" color={color} />,
+          tabBarIcon: tabBarIconHome,
         }}
       />
       <BottomTab.Screen
         name="Explore"
         component={TabTwoNavigator}
         options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="ios-navigate" color={color} />,
+          tabBarIcon: tabBarIconStats,
         }}
       />
       <BottomTab.Screen
         name="Statistics"
         component={TabThreeNavigator}
         options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="ios-stats" color={color} />,
+          tabBarIcon: tabBarIconNavigate,
         }}
       />
     </BottomTab.Navigator>
