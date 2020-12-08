@@ -12,8 +12,7 @@ export default function SettingsScreen() {
       await Firebase.auth().signOut();
     } catch (error) {
       console.error(error);
-      Alert.alert('Error', error.message);
-    }
+      		Alert.alert('Error', error.message);}
   };
   return (
     <View style={tailwind('py-5 px-5 flex-1')}>
