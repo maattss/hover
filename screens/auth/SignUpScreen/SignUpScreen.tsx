@@ -1,16 +1,12 @@
 import React, { useState } from 'react';
 import { StackScreenProps } from '@react-navigation/stack';
-import {
-  Text, View, TextInput, TouchableOpacity, Alert,
-} from 'react-native';
+import { Text, View, TextInput, TouchableOpacity, Alert } from 'react-native';
 import tailwind from 'tailwind-rn';
 import { AuthenticationStackParamList } from '../../../types';
 
 import Firebase, { fns } from '../../../lib/firebase';
 
-const SignUpScreen = ({
-  navigation,
-}: StackScreenProps<AuthenticationStackParamList, 'Signup'>) => {
+const SignUpScreen = ({ navigation }: StackScreenProps<AuthenticationStackParamList, 'Signup'>) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -48,20 +44,14 @@ const SignUpScreen = ({
           style={tailwind('text-lg border-b-2 border-blue-500 mt-5')}
         />
 
-        <TouchableOpacity
-          style={tailwind('bg-blue-500 rounded-lg py-3 mt-10')}
-          onPress={handleSignup}>
-          <Text style={tailwind('text-white text-center font-bold text-lg')}>
-            Sign up
-          </Text>
+        <TouchableOpacity style={tailwind('bg-blue-500 rounded-lg py-3 mt-10')} onPress={handleSignup}>
+          <Text style={tailwind('text-white text-center font-bold text-lg')}>Sign up</Text>
         </TouchableOpacity>
       </View>
 
       <View style={tailwind('mt-2 flex-row justify-center')}>
         <Text>Already have an account?</Text>
-        <TouchableOpacity
-          style={tailwind('ml-1')}
-          onPress={() => navigation.navigate('Login')}>
+        <TouchableOpacity style={tailwind('ml-1')} onPress={() => navigation.navigate('Login')}>
           <Text style={tailwind('text-blue-500')}>Login</Text>
         </TouchableOpacity>
       </View>

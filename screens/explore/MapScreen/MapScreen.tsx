@@ -38,24 +38,26 @@ export default function TabTwoScreen() {
         userLocationAnnotationTitle="Your location"
         minZoomLevel={5}
         style={styles.mapStyle}
-        onRegionChange={(region) => setMapLocation({
-          latitude: region.latitude,
-          longitude: region.longitude,
-        })
+        onRegionChange={(region) =>
+          setMapLocation({
+            latitude: region.latitude,
+            longitude: region.longitude,
+          })
         }
-        onRegionChangeComplete={(region) => setMapLocation({
-          latitude: region.latitude,
-          longitude: region.longitude,
-        })
+        onRegionChangeComplete={(region) =>
+          setMapLocation({
+            latitude: region.latitude,
+            longitude: region.longitude,
+          })
         }
-        onUserLocationChange={(location) => setUserLocation({
-          latitude: location.nativeEvent.coordinate.latitude,
-          longitude: location.nativeEvent.coordinate.longitude,
-        })
+        onUserLocationChange={(location) =>
+          setUserLocation({
+            latitude: location.nativeEvent.coordinate.latitude,
+            longitude: location.nativeEvent.coordinate.longitude,
+          })
         }>
         <Text style={styles.textStyle}>
-          User location: (
-          {userLocation ? userLocation.latitude.toPrecision(5) : 'Unknown'},{' '}
+          User location: ({userLocation ? userLocation.latitude.toPrecision(5) : 'Unknown'},{' '}
           {userLocation ? userLocation.longitude.toPrecision(5) : 'Unknown'})
         </Text>
         <Text style={styles.textStyle}>
