@@ -55,8 +55,7 @@ export default function TabTwoScreen() {
             latitude: location.nativeEvent.coordinate.latitude,
             longitude: location.nativeEvent.coordinate.longitude,
           })
-        }
-      >
+        }>
         <Text style={styles.textStyle}>
           User location: ({userLocation ? userLocation.latitude.toPrecision(5) : 'Unknown'},{' '}
           {userLocation ? userLocation.longitude.toPrecision(5) : 'Unknown'})
