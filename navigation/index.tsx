@@ -12,7 +12,7 @@ import LinkingConfiguration from './LinkingConfiguration';
 
 import SignupScreen from '../screens/auth/SignUpScreen/SignUpScreen';
 import LoginScreen from '../screens/auth/LoginScreen/LoginScreen';
-import NotFoundScreen from '../screens/not-found/NotFoundScreen/NotFoundScreen';
+import NotFoundScreen from '../screens/notFound/NotFoundScreen/NotFoundScreen';
 
 const RootStack = createStackNavigator<RootStackParamList>();
 const AuthenticationStack = createStackNavigator<AuthenticationStackParamList>();
