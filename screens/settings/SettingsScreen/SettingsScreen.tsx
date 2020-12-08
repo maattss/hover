@@ -1,8 +1,6 @@
 import React from 'react';
 
-import {
-  Alert, View, Text, TouchableOpacity,
-} from 'react-native';
+import { Alert, View, Text, TouchableOpacity } from 'react-native';
 import tailwind from 'tailwind-rn';
 import Firebase from '../../../lib/firebase';
 
