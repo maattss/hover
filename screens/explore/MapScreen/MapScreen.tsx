@@ -54,8 +54,7 @@ export default function TabTwoScreen() {
         })
         }>
         <Text style={styles.textStyle}>
-          User location: (
-          {userLocation ? userLocation.latitude.toPrecision(5) : 'Unknown'},{' '}
+          User location: ({userLocation ? userLocation.latitude.toPrecision(5) : 'Unknown'},{' '}
           {userLocation ? userLocation.longitude.toPrecision(5) : 'Unknown'})
         </Text>
         <Text style={styles.textStyle}>

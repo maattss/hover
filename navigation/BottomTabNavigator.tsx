@@ -8,10 +8,7 @@ import useColorScheme from '../hooks/useColorScheme';
 import MapScreen from '../screens/explore/MapScreen/MapScreen';
 import FeedScreen from '../screens/feed/FeedScreen/FeedScreen';
 import {
-  BottomTabParamList,
-  TabOneParamList,
-  TabThreeParamList,
-  TabTwoParamList,
+  BottomTabParamList, TabOneParamList, TabThreeParamList, TabTwoParamList,
 } from '../types';
 import StatisticsScreen from '../screens/statistics/StatisticsScreen/StatisticsScreen';
 import SettingsScreen from '../screens/settings/SettingsScreen/SettingsScreen';
@@ -45,12 +42,7 @@ function TabOneNavigator() {
         component={FeedScreen}
         options={({ navigation }) => ({
           headerTitle: 'Feed',
-          headerRight: () => (
-            <HeaderIcon
-              onPress={() => navigation.navigate('Settings')}
-              name="ios-settings"
-            />
-          ),
+          headerRight: () => <HeaderIcon onPress={() => navigation.navigate('Settings')} name="ios-settings" />,
         })}
       />
       <TabOneStack.Screen
@@ -70,11 +62,7 @@ const TabTwoStack = createStackNavigator<TabTwoParamList>();
 function TabTwoNavigator() {
   return (
     <TabTwoStack.Navigator>
-      <TabTwoStack.Screen
-        name="TabTwoScreen"
-        component={MapScreen}
-        options={{ headerTitle: 'Explore' }}
-      />
+      <TabTwoStack.Screen name="TabTwoScreen" component={MapScreen} options={{ headerTitle: 'Explore' }} />
     </TabTwoStack.Navigator>
   );
 }
@@ -99,34 +87,26 @@ export default function BottomTabNavigator() {
   const colorScheme = useColorScheme();
 
   return (
-    <BottomTab.Navigator
-      initialRouteName="Feed"
-      tabBarOptions={{ activeTintColor: Colors[colorScheme].tint }}>
+    <BottomTab.Navigator initialRouteName="Feed" tabBarOptions={{ activeTintColor: Colors[colorScheme].tint }}>
       <BottomTab.Screen
         name="Feed"
         component={TabOneNavigator}
         options={{
-          tabBarIcon: ({ color }) => (
-            <TabBarIcon name="ios-home" color={color} />
-          ),
+          tabBarIcon: ({ color }) => <TabBarIcon name="ios-home" color={color} />,
         }}
       />
       <BottomTab.Screen
         name="Explore"
         component={TabTwoNavigator}
         options={{
-          tabBarIcon: ({ color }) => (
-            <TabBarIcon name="ios-navigate" color={color} />
-          ),
+          tabBarIcon: ({ color }) => <TabBarIcon name="ios-navigate" color={color} />,
         }}
       />
       <BottomTab.Screen
         name="Statistics"
         component={TabThreeNavigator}
         options={{
-          tabBarIcon: ({ color }) => (
-            <TabBarIcon name="ios-stats" color={color} />
-          ),
+          tabBarIcon: ({ color }) => <TabBarIcon name="ios-stats" color={color} />,
         }}
       />
     </BottomTab.Navigator>
