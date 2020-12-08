@@ -1,5 +1,8 @@
-name: Lint
-on: push
+name: Linting
+on: 
+  pull_request:
+    branches: 
+      - main
 jobs:
   run-linters:
     name: Run linters
@@ -14,14 +17,18 @@ jobs:
         with:
           node-version: 12
 
-      # ESLint and Prettier must be in `package.json`
       - name: Install Node.js dependencies
         run: npm install
 
-      - name: Run linters
+      - name: Run wearerequired linters
         uses: wearerequired/lint-action@v1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           # Enable linters
           eslint: true
           prettier: true
+          
+      - name: New action
+        uses: getsentry/action-eslint-fix@v1
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
