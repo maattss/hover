@@ -1,7 +1,7 @@
 name: Linting
-on: 
+on:
   pull_request:
-    branches: 
+    branches:
       - main
 jobs:
   run-linters:
@@ -22,15 +22,15 @@ jobs:
 
       - name: Install dependencies
         run: yarn
-          
-      - name: Run ESLint
-        uses: getsentry/action-eslint-fix@v1
-        with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Prettify code
         uses: creyD/prettier_action@v3.1
         with:
-          prettier_options: --write **/*.{js,md}
+          prettier_options: --write **/*.{js,jsx,ts,tsx,json,css,scss,md}
         env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run ESLint with fix
+        uses: getsentry/action-eslint-fix@v1
+        with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
