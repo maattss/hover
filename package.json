@@ -87,11 +87,11 @@
     }
   },
   "lint-staged": {
-    "./**/*.{js,jsx,ts,tsx}": [
-      "eslint --fix --cache './**/*.{js,jsx,ts,tsx}'"
-    ],
     "./**/*.{js,jsx,ts,tsx,json,css,scss,md}": [
       "prettier --write './**/*.{js,jsx,ts,tsx,json,css,scss,md}'"
+    ],
+    "./**/*.{js,jsx,ts,tsx}": [
+      "eslint --fix --cache './**/*.{js,jsx,ts,tsx}'"
     ]
   }
 }
