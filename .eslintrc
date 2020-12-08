@@ -1,0 +1,48 @@
+{
+  "root": true,
+  "env": {
+    "browser": true,
+    "es2021": true,
+    "node": true
+  },
+  "extends": [
+    "plugin:jest/recommended",
+    "plugin:react/recommended",
+    "airbnb",
+    "prettier/react"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": 12,
+    "sourceType": "module"
+  },
+  "plugins": ["react", "@typescript-eslint", "jest"],
+  "rules": {
+    "react/jsx-props-no-spreading": "off",
+    "react/prop-types": 0,
+    "react/destructuring-assignment": "off",
+    "import/prefer-default-export": "warn",
+    "import/no-unresolved": 0,
+    "no-underscore-dangle": ["error", { "allow": ["__typename"] }],
+    "no-use-before-define": [0],
+    "@typescript-eslint/no-use-before-define": [0],
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": [2, { "args": "none" }],
+    "react/jsx-filename-extension": [1, { "extensions": [".tsx", ".jsx"] }],
+    "import/extensions": [
+      "warn",
+      "never",
+      {
+        "ts": "always",
+        "tsx": "always",
+        "js": "always",
+        "jsx": "always"
+      }
+    ],
+    "no-console": ["error", { "allow": ["warn", "error"] }],
+    "react/no-unescaped-entities": ["error", { "forbid": [">", "}"] }]
+  }
+}
