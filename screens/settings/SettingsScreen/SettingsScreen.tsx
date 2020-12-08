@@ -1,8 +1,6 @@
 import React from 'react';
 
-import {
-  Alert, View, Text, TouchableOpacity,
-} from 'react-native';
+import { Alert, View, Text, TouchableOpacity } from 'react-native';
 import tailwind from 'tailwind-rn';
 import Firebase from '../../../lib/firebase';
 
@@ -12,7 +10,8 @@ export default function SettingsScreen() {
       await Firebase.auth().signOut();
     } catch (error) {
       console.error(error);
-      		Alert.alert('Error', error.message);}
+      Alert.alert('Error', error.message);
+    }
   };
   return (
     <View style={tailwind('py-5 px-5 flex-1')}>
