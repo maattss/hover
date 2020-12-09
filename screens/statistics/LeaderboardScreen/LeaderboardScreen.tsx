@@ -1,6 +1,6 @@
 import React from 'react';
 import tailwind from 'tailwind-rn';
-import Leaderboard, { Item } from '../../../components/Leaderboard';
+import Leaderboard, { Item } from '../../../components/leaderboard/Leaderboard';
 
 import { View } from '../../../components/Themed';
 
