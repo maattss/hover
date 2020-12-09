@@ -8,7 +8,7 @@ const orange = '#CD5000';
 // Base colors
 export const black = '#000000';
 export const transparent = 'rgba(0, 0, 0, 0)';
-export const white = '#ffffff';
+export const white = '#FFFFFF';
 export const gray100 = '#F8F9FA';
 export const gray200 = '#EBEBEB';
 export const gray300 = '#DEE2E6';
@@ -19,7 +19,7 @@ export const gray700 = '#444';
 export const gray800 = '#303030';
 export const gray900 = '#222';
 
-// Pallettes
+// Palettes
 export const lightColors = {
   background: white,
   primary: blue,
@@ -27,9 +27,6 @@ export const lightColors = {
   text: almostBlack,
   error: red,
   success: green,
-  black: black,
-  white: white,
-  transparent: transparent,
 };
 
 export const darkColors = {
@@ -39,9 +36,6 @@ export const darkColors = {
   text: white,
   error: red,
   success: green,
-  black: black,
-  white: white,
-  transparent: transparent,
 };
 
 export type Colors = typeof lightColors;
