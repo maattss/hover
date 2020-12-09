@@ -129,7 +129,14 @@ export function sortData(sortParam: SortParam) {
   const { data, sort } = sortParam;
   if (sort) sort(data);
   if (Array.isArray(data)) {
-    return data && data.sort((item1, item2) => item2.score - item1.score);
+    return (
+      data &&
+      data.sort((item1, item2) => {
+        if (item2.score === null) return -1;
+        if (item1.score === null) return 1;
+        return item2.score - item1.score;
+      })
+    );
   }
   return [];
 }

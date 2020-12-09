@@ -28,7 +28,7 @@ export default function LeaderboardScreen() {
     },
     {
       name: 'Hanne',
-      score: 1320,
+      score: null,
       icon: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSr27ZFBaclzKcxg2FgJh6xi3Z5-9vP_U1DPcB149bYXxlPKqv-',
     },
     {
@@ -59,7 +59,7 @@ export default function LeaderboardScreen() {
     },
     {
       name: 'Lauren Leonard',
-      score: 30,
+      score: null,
       icon: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSr27ZFBaclzKcxg2FgJh6xi3Z5-9vP_U1DPcB149bYXxlPKqv-',
     },
   ];
