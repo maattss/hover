@@ -3,8 +3,7 @@ import MapView, { Circle } from 'react-native-maps';
 import { StyleSheet, Dimensions } from 'react-native';
 import { Text, View } from '../../../components/Themed';
 import { Location } from '../../../types';
-import { useTheme } from '../../../styles/ThemeProvider';
-import { color } from 'react-native-reanimated';
+import { useTheme } from '../../../theme/ThemeProvider';
 
 const { width, height } = Dimensions.get('window');
 
@@ -56,7 +55,7 @@ const TabTwoScreen: React.FC = () => {
         <Circle
           center={{ latitude: 63.419, longitude: 10.4025 }}
           radius={100}
-          fillColor={colors.error}
+          fillColor={colors.primary}
           strokeWidth={0.1}
         />
       </MapView>

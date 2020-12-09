@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useColorScheme } from 'react-native-appearance';
-import { lightColors, darkColors, Colors } from './colorThemes';
+import { lightColors, darkColors, Colors } from './colors';
 
 export interface Theme {
   isDark: boolean;
@@ -15,8 +15,7 @@ export const ThemeContext = React.createContext<Theme>({
   setScheme: () => {},
 });
 
-// eslint-disable-next-line @typescript-eslint/ban-types
-export const ThemeProvider: React.FC<{}> = (props) => {
+export const ThemeProvider: React.FC = (props) => {
   const colorScheme = useColorScheme();
   const [isDark, setIsDark] = React.useState<boolean>(colorScheme === 'dark');
 

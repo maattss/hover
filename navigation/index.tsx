@@ -49,8 +49,9 @@ export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeNa
 
   return (
     <NavigationContainer linking={LinkingConfiguration} theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      {userAuthState && <RootNavigator />}
-      {!userAuthState && <AuthenticationNavigator />}
+      <RootNavigator />
+      {/* {userAuthState && <RootNavigator />}
+      {!userAuthState && <AuthenticationNavigator />} */}
     </NavigationContainer>
   );
 }

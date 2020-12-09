@@ -86,5 +86,6 @@
     "./**/*.{js,jsx,ts,tsx}": [
       "eslint --fix --cache './**/*.{js,jsx,ts,tsx}'"
     ]
-  }
+  },
+  "postinstall": "touch ./.metadata_never_index"
 }
