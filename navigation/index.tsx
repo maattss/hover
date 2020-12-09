@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ColorSchemeName } from 'react-native';
-import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
+import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { User } from 'firebase';
 
@@ -17,25 +16,25 @@ import NotFoundScreen from '../screens/notFound/NotFoundScreen/NotFoundScreen';
 const RootStack = createStackNavigator<RootStackParamList>();
 const AuthenticationStack = createStackNavigator<AuthenticationStackParamList>();
 
-function RootNavigator() {
+const RootNavigator: React.FC = () => {
   return (
     <RootStack.Navigator screenOptions={{ headerShown: false }}>
       <RootStack.Screen name="Root" component={BottomTabNavigator} />
       <RootStack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
     </RootStack.Navigator>
   );
-}
+};
 
-function AuthenticationNavigator() {
+const AuthenticationNavigator: React.FC = () => {
   return (
     <AuthenticationStack.Navigator screenOptions={{ headerShown: false }}>
       <AuthenticationStack.Screen name="Login" component={LoginScreen} />
       <AuthenticationStack.Screen name="Signup" component={SignupScreen} />
     </AuthenticationStack.Navigator>
   );
-}
+};
 
-export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
+const Navigation: React.FC = () => {
   const [userAuthState, setUserAuthState] = useState<User | null>(null);
   useEffect(() => {
     Firebase.auth().onAuthStateChanged((user) => {
@@ -48,10 +47,11 @@ export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeNa
   }, []);
 
   return (
-    <NavigationContainer linking={LinkingConfiguration} theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <RootNavigator />
-      {/* {userAuthState && <RootNavigator />}
-      {!userAuthState && <AuthenticationNavigator />} */}
+    <NavigationContainer linking={LinkingConfiguration}>
+      {userAuthState && <RootNavigator />}
+      {!userAuthState && <AuthenticationNavigator />}
     </NavigationContainer>
   );
-}
+};
+
+export default Navigation;
