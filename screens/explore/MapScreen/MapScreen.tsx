@@ -3,27 +3,16 @@ import MapView, { Circle } from 'react-native-maps';
 import { StyleSheet, Dimensions } from 'react-native';
 import { Text, View } from '../../../components/Themed';
 import { Location } from '../../../types';
+import { useTheme } from '../../../styles/ThemeProvider';
+import { color } from 'react-native-reanimated';
 
 const { width, height } = Dimensions.get('window');
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  mapStyle: {
-    width,
-    height,
-  },
-  textStyle: {
-    backgroundColor: 'transparent',
-  },
-});
-
-export default function TabTwoScreen() {
+const TabTwoScreen: React.FC = () => {
   const [mapLocation, setMapLocation] = useState<Location>();
   const [userLocation, setUserLocation] = useState<Location>();
+
+  const { colors } = useTheme();
 
   return (
     <View style={styles.container}>
@@ -67,10 +56,27 @@ export default function TabTwoScreen() {
         <Circle
           center={{ latitude: 63.419, longitude: 10.4025 }}
           radius={100}
-          fillColor="rgba(231,76,60,0.6)"
+          fillColor={colors.error}
           strokeWidth={0.1}
         />
       </MapView>
     </View>
   );
-}
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  mapStyle: {
+    width,
+    height,
+  },
+  textStyle: {
+    backgroundColor: 'transparent',
+  },
+});
+
+export default TabTwoScreen;
