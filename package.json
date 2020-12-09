@@ -22,6 +22,8 @@
     "preset": "jest-expo"
   },
   "dependencies": {
+    "@apollo/client": "^3.3.4",
+    "@apollo/link-context": "^2.0.0-beta.3",
     "@expo/vector-icons": "^10.0.0",
     "@react-native-community/masked-view": "0.1.10",
     "@react-navigation/bottom-tabs": "^5.8.0",
@@ -39,6 +41,7 @@
     "expo-status-bar": "~1.0.2",
     "expo-web-browser": "~8.5.0",
     "firebase": "7.9.0",
+    "graphql": "^15.4.0",
     "react": "17.0.1",
     "react-dom": "17.0.1",
     "react-native": "^0.63.3",

@@ -5,6 +5,8 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { User } from 'firebase';
 
 import Firebase from '../lib/firebase';
+import { ApolloProvider } from '@apollo/client';
+import { apolloClient } from '../lib/apollo';
 
 import { RootStackParamList, AuthenticationStackParamList } from '../types';
 import BottomTabNavigator from './BottomTabNavigator';
@@ -19,10 +21,12 @@ const AuthenticationStack = createStackNavigator<AuthenticationStackParamList>()
 
 function RootNavigator() {
   return (
-    <RootStack.Navigator screenOptions={{ headerShown: false }}>
-      <RootStack.Screen name="Root" component={BottomTabNavigator} />
-      <RootStack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
-    </RootStack.Navigator>
+    <ApolloProvider client={apolloClient}>
+      <RootStack.Navigator screenOptions={{ headerShown: false }}>
+        <RootStack.Screen name="Root" component={BottomTabNavigator} />
+        <RootStack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
+      </RootStack.Navigator>
+    </ApolloProvider>
   );
 }
 
