@@ -1,5 +1,3 @@
-/* eslint-disable react/no-unused-prop-types */
-/* eslint-disable react/require-default-props */
 import React, { useState, useEffect } from 'react';
 import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
@@ -33,7 +31,6 @@ export type Item = {
 };
 
 export default function Leaderboard(props: LeaderboardProps) {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [sortedData, setSortedData] = useState<Item[]>([]);
 
   useEffect(() => {
