@@ -5,11 +5,11 @@ import * as React from 'react';
 import { StyleSheet } from 'react-native';
 import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
-import MapScreen from '../screens/explore/MapScreen/MapScreen';
-import FeedScreen from '../screens/feed/FeedScreen/FeedScreen';
+import MapScreen from '../screens/explore/MapScreen';
+import FeedScreen from '../screens/feed/FeedScreen';
 import { BottomTabParamList, TabOneParamList, TabThreeParamList, TabTwoParamList } from '../types';
-import StatisticsScreen from '../screens/statistics/StatisticsScreen/StatisticsScreen';
-import SettingsScreen from '../screens/settings/SettingsScreen/SettingsScreen';
+import StatisticsScreen from '../screens/statistics/StatisticsScreen';
+import SettingsScreen from '../screens/settings/SettingsScreen';
 
 const styles = StyleSheet.create({
   headericon: {

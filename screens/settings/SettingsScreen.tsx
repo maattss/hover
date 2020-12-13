@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Alert, View, Text, TouchableOpacity } from 'react-native';
 import tailwind from 'tailwind-rn';
-import Firebase from '../../../lib/firebase';
+import Firebase from '../../lib/firebase';
 
 export default function SettingsScreen() {
   const handleLogout = async () => {

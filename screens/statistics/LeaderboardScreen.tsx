@@ -1,8 +1,8 @@
 import React from 'react';
 import tailwind from 'tailwind-rn';
-import Leaderboard, { Item } from '../../../components/leaderboard/Leaderboard';
+import Leaderboard, { Item } from '../../components/leaderboard/Leaderboard';
 
-import { View } from '../../../components/Themed';
+import { View } from '../../components/Themed';
 
 export default function LeaderboardScreen() {
   const data: Item[] = [

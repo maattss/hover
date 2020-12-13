@@ -9,9 +9,9 @@ import { RootStackParamList, AuthenticationStackParamList } from '../types';
 import BottomTabNavigator from './BottomTabNavigator';
 import LinkingConfiguration from './LinkingConfiguration';
 
-import SignupScreen from '../screens/auth/SignUpScreen/SignUpScreen';
-import LoginScreen from '../screens/auth/LoginScreen/LoginScreen';
-import NotFoundScreen from '../screens/notFound/NotFoundScreen/NotFoundScreen';
+import SignupScreen from '../screens/auth/SignUpScreen';
+import LoginScreen from '../screens/auth/LoginScreen';
+import NotFoundScreen from '../screens/notFound/NotFoundScreen';
 
 const RootStack = createStackNavigator<RootStackParamList>();
 const AuthenticationStack = createStackNavigator<AuthenticationStackParamList>();
@@ -48,8 +48,9 @@ const Navigation: React.FC = () => {
 
   return (
     <NavigationContainer linking={LinkingConfiguration}>
-      {userAuthState && <RootNavigator />}
-      {!userAuthState && <AuthenticationNavigator />}
+      <RootNavigator />
+      {/* {userAuthState && <RootNavigator />}
+      {!userAuthState && <AuthenticationNavigator />} */}
     </NavigationContainer>
   );
 };

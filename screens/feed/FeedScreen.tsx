@@ -1,8 +1,8 @@
 import React from 'react';
 import tailwind from 'tailwind-rn';
 
-import { View } from '../../../components/Themed';
-import FeedTopBar from '../../../navigation/FeedTopBar';
+import { View } from '../../components/Themed';
+import FeedTopBar from '../../navigation/FeedTopBar';
 
 export default function TabOneScreen() {
   return (
