@@ -3,13 +3,12 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import * as React from 'react';
 import { StyleSheet } from 'react-native';
-import Colors from '../constants/Colors';
-import useColorScheme from '../hooks/useColorScheme';
 import MapScreen from '../screens/explore/MapScreen';
 import FeedScreen from '../screens/feed/FeedScreen';
 import { BottomTabParamList, TabOneParamList, TabThreeParamList, TabTwoParamList } from '../types';
 import StatisticsScreen from '../screens/statistics/StatisticsScreen';
 import SettingsScreen from '../screens/settings/SettingsScreen';
+import { useTheme } from '../theme/ThemeProvider';
 
 const styles = StyleSheet.create({
   headericon: {
@@ -82,14 +81,14 @@ function TabThreeNavigator() {
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
-export default function BottomTabNavigator() {
-  const colorScheme = useColorScheme();
+const BottomTabNavigator: React.FC = () => {
+  const { colors } = useTheme();
   const tabBarIconHome = ({ color = '' as string }) => <TabBarIcon name="ios-home" color={color} />;
   const tabBarIconStats = ({ color = '' as string }) => <TabBarIcon name="ios-stats" color={color} />;
   const tabBarIconNavigate = ({ color = '' as string }) => <TabBarIcon name="ios-navigate" color={color} />;
 
   return (
-    <BottomTab.Navigator initialRouteName="Feed" tabBarOptions={{ activeTintColor: Colors[colorScheme].tint }}>
+    <BottomTab.Navigator initialRouteName="Feed" tabBarOptions={{ activeTintColor: colors.primary }}>
       <BottomTab.Screen
         name="Feed"
         component={TabOneNavigator}
@@ -113,4 +112,6 @@ export default function BottomTabNavigator() {
       />
     </BottomTab.Navigator>
   );
-}
+};
+
+export default BottomTabNavigator;
