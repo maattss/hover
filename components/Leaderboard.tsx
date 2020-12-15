@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-
-const oddRowColor = 'white';
-const evenRowColor = '#f2f5f7';
+import { white, gray200 } from '../theme/colors';
 
 interface SortParam {
   data: Item[];
@@ -39,8 +37,8 @@ export default function Leaderboard(props: LeaderboardProps) {
   }, []);
 
   const defaultRenderItem = (item: Item, index: number) => {
-    const evenColor = props.evenRowColor || evenRowColor;
-    const oddColor = props.oddRowColor || oddRowColor;
+    const evenColor = props.evenRowColor || gray200;
+    const oddColor = props.oddRowColor || white;
     const rowColor = index % 2 === 0 ? evenColor : oddColor;
 
     const rowJSx = (
@@ -75,6 +73,22 @@ export default function Leaderboard(props: LeaderboardProps) {
       renderItem={({ item, index }) => renderItemS(item, index)}
     />
   );
+}
+
+export function sortData(sortParam: SortParam) {
+  const { data, sort } = sortParam;
+  if (sort) sort(data);
+  if (Array.isArray(data)) {
+    return (
+      data &&
+      data.sort((item1, item2) => {
+        if (item2.score === null) return -1;
+        if (item1.score === null) return 1;
+        return item2.score - item1.score;
+      })
+    );
+  }
+  return [];
 }
 
 const styles = StyleSheet.create({
@@ -121,19 +135,3 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
 });
-
-export function sortData(sortParam: SortParam) {
-  const { data, sort } = sortParam;
-  if (sort) sort(data);
-  if (Array.isArray(data)) {
-    return (
-      data &&
-      data.sort((item1, item2) => {
-        if (item2.score === null) return -1;
-        if (item1.score === null) return 1;
-        return item2.score - item1.score;
-      })
-    );
-  }
-  return [];
-}

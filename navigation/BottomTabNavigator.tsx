@@ -10,17 +10,6 @@ import StatisticsScreen from '../screens/statistics/StatisticsScreen';
 import SettingsScreen from '../screens/settings/SettingsScreen';
 import { useTheme } from '../theme/ThemeProvider';
 
-const styles = StyleSheet.create({
-  headericon: {
-    fontSize: 25,
-    marginRight: 10,
-  },
-  tabicon: {
-    fontSize: 30,
-    marginBottom: -3,
-  },
-});
-
 function TabBarIcon(props: { name: string; color: string }) {
   return <Ionicons style={styles.tabicon} {...props} />;
 }
@@ -113,5 +102,16 @@ const BottomTabNavigator: React.FC = () => {
     </BottomTab.Navigator>
   );
 };
+
+const styles = StyleSheet.create({
+  headericon: {
+    fontSize: 25,
+    marginRight: 10,
+  },
+  tabicon: {
+    fontSize: 30,
+    marginBottom: -3,
+  },
+});
 
 export default BottomTabNavigator;

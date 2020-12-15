@@ -2,38 +2,15 @@ import * as React from 'react';
 import { Text as DefaultText, View as DefaultView } from 'react-native';
 import { useTheme } from '../theme/ThemeProvider';
 
-export function useThemeColor(
-  props: { light?: string; dark?: string },
-  colorName: keyof typeof Colors.light & keyof typeof Colors.dark,
-) {
-  const theme = useColorScheme();
-  const colorFromProps = props[theme];
+// TODO: Add common Text component which sets common text color and font family
+export const Text: React.FC = (props) => {
   const { colors } = useTheme();
-
-  if (colorFromProps) {
-    return colorFromProps;
-  }
-  return Colors[theme][colorName];
-}
-
-type ThemeProps = {
-  lightColor?: string;
-  darkColor?: string;
+  return <DefaultText />;
 };
 
-export type TextProps = ThemeProps & DefaultText['props'];
-export type ViewProps = ThemeProps & DefaultView['props'];
+// TODO: Add common View component which sets common background
+export const View: React.FC = (props) => {
+  const { colors } = useTheme();
 
-export function Text(props: TextProps) {
-  const { style, lightColor, darkColor, ...otherProps } = props;
-  const color = useThemeColor({ light: lightColor, dark: darkColor }, 'text');
-
-  return <DefaultText style={[{ color }, style]} {...otherProps} />;
-}
-
-export function View(props: ViewProps) {
-  const { style, lightColor, darkColor, ...otherProps } = props;
-  const backgroundColor = useThemeColor({ light: lightColor, dark: darkColor }, 'background');
-
-  return <DefaultView style={[{ backgroundColor }, style]} {...otherProps} />;
-}
+  return <DefaultView />;
+};
