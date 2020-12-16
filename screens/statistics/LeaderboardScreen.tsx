@@ -4,7 +4,7 @@ import Leaderboard, { Item } from '../../components/Leaderboard';
 
 import { View } from '../../components/Themed';
 
-export default function LeaderboardScreen() {
+const LeaderboardScreen = () => {
   const data: Item[] = [
     {
       name: 'Siri',
@@ -68,4 +68,6 @@ export default function LeaderboardScreen() {
       <Leaderboard data={data} />
     </View>
   );
-}
+};
+
+export default LeaderboardScreen;

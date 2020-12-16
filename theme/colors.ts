@@ -1,9 +1,9 @@
 // Palette colors
-const almostBlack = '#121212';
-const green = '#5C913B';
-const red = '#E74C3C';
-const blue = '#375A7F';
-const orange = '#CD5000';
+export const almostBlack = '#121212';
+export const green = '#5C913B';
+export const red = '#E74C3C';
+export const blue = '#375A7F';
+export const orange = '#CD5000';
 
 // Base colors
 export const black = '#000000';

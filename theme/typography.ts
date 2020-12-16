@@ -1,4 +1,5 @@
 import * as Colors from './colors';
+import { Appearance } from 'react-native';
 
 export const extraLargeFontSize = 32;
 export const largeFontSize = 24;
@@ -17,30 +18,30 @@ const base = {
 };
 
 export const link = {
-  color: Colors.thoughtbotRed,
+  color: Colors.red,
   fontWeight: 'bold',
 };
 
 export const bodyText = {
-  color: Colors.baseText,
+  color: Appearance.getColorScheme() == 'dark' ? Colors.white : Colors.almostBlack,
   fontSize: smallFontSize,
   lineHeight: 19,
 };
 
 export const headerText = {
-  color: Colors.darkText,
+  color: Appearance.getColorScheme() == 'dark' ? Colors.white : Colors.almostBlack,
   fontSize: headerFontSize,
   fontWeight: 'bold',
 };
 
 export const descriptionText = {
-  color: Colors.baseText,
+  color: Appearance.getColorScheme() == 'dark' ? Colors.white : Colors.almostBlack,
   fontSize: smallFontSize,
 };
 
 export const screenHeader = {
   ...base,
-  color: Colors.baseText,
+  color: Appearance.getColorScheme() == 'dark' ? Colors.white : Colors.almostBlack,
   fontSize: largeFontSize,
   fontWeight: 'bold',
 };
