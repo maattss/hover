@@ -14,7 +14,7 @@ import { GRAPHQL_API_URL } from './FirebaseConfig';
 const asyncAuthLink = setContext(async () => {
   return {
     headers: {
-      Authorization: `Bearer ${await Firebase.auth().currentUser.getIdToken()}`,
+      Authorization: `Bearer ${await Firebase.auth().currentUser?.getIdToken()}`,
     },
   };
 });
