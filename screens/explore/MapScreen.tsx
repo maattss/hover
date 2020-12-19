@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import MapView, { Circle } from 'react-native-maps';
-import { StyleSheet, Dimensions } from 'react-native';
-import { Text, View } from '../../components/Themed';
+import { StyleSheet, Dimensions, Text, View } from 'react-native';
 import { Location } from '../../types';
 import { useTheme } from '../../theme/ThemeProvider';
 

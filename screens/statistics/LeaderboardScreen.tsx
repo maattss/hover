@@ -1,8 +1,7 @@
 import React from 'react';
 import tailwind from 'tailwind-rn';
 import Leaderboard, { Item } from '../../components/Leaderboard';
-
-import { View } from '../../components/Themed';
+import { View } from 'react-native';
 
 const LeaderboardScreen = () => {
   const data: Item[] = [

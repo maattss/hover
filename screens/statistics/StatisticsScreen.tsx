@@ -1,6 +1,6 @@
 import React from 'react';
 import tailwind from 'tailwind-rn';
-import { View } from '../../components/Themed';
+import { View } from 'react-native';
 import StatisticsTopBar from '../../navigation/StatisticsTopBar';
 
 const TabThreeScreen = () => {
