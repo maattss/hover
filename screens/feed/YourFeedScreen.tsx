@@ -1,7 +1,6 @@
 import React from 'react';
 import tailwind from 'tailwind-rn';
-
-import { Text, View } from '../../../components/Themed';
+import { Text, View } from 'react-native';
 
 export default function YourFeedScreen() {
   return (

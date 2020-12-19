@@ -1,7 +1,7 @@
 import React from 'react';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import LeaderboardScreen from '../screens/statistics/LeaderboardScreen/LeaderboardScreen';
-import YourStatisticsScreen from '../screens/statistics/YourStatisticsScreen/YourStatisticsScreen';
+import LeaderboardScreen from '../screens/statistics/LeaderboardScreen';
+import YourStatisticsScreen from '../screens/statistics/YourStatisticsScreen';
 
 const TopTab = createMaterialTopTabNavigator();
 

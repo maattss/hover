@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { StackScreenProps } from '@react-navigation/stack';
 import { Text, View, TextInput, TouchableOpacity, Alert } from 'react-native';
 import tailwind from 'tailwind-rn';
-import { AuthenticationStackParamList } from '../../../types';
+import { AuthenticationStackParamList } from '../../types';
 
-import Firebase, { fns } from '../../../lib/firebase';
+import Firebase, { fns } from '../../lib/firebase';
 
 const SignUpScreen = ({ navigation }: StackScreenProps<AuthenticationStackParamList, 'Signup'>) => {
   const [email, setEmail] = useState('');

@@ -1,10 +1,9 @@
 import React from 'react';
 import tailwind from 'tailwind-rn';
-import Leaderboard, { Item } from '../../../components/leaderboard/Leaderboard';
+import Leaderboard, { Item } from '../../components/Leaderboard';
+import { View } from 'react-native';
 
-import { View } from '../../../components/Themed';
-
-export default function LeaderboardScreen() {
+const LeaderboardScreen = () => {
   const data: Item[] = [
     {
       name: 'Siri',
@@ -68,4 +67,6 @@ export default function LeaderboardScreen() {
       <Leaderboard data={data} />
     </View>
   );
-}
+};
+
+export default LeaderboardScreen;

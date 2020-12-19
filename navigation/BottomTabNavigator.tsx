@@ -3,24 +3,12 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import * as React from 'react';
 import { StyleSheet } from 'react-native';
-import Colors from '../constants/Colors';
-import useColorScheme from '../hooks/useColorScheme';
-import MapScreen from '../screens/explore/MapScreen/MapScreen';
-import FeedScreen from '../screens/feed/FeedScreen/FeedScreen';
+import MapScreen from '../screens/explore/MapScreen';
+import FeedScreen from '../screens/feed/FeedScreen';
 import { BottomTabParamList, TabOneParamList, TabThreeParamList, TabTwoParamList } from '../types';
-import StatisticsScreen from '../screens/statistics/StatisticsScreen/StatisticsScreen';
-import SettingsScreen from '../screens/settings/SettingsScreen/SettingsScreen';
-
-const styles = StyleSheet.create({
-  headericon: {
-    fontSize: 25,
-    marginRight: 10,
-  },
-  tabicon: {
-    fontSize: 30,
-    marginBottom: -3,
-  },
-});
+import StatisticsScreen from '../screens/statistics/StatisticsScreen';
+import SettingsScreen from '../screens/settings/SettingsScreen';
+import { useTheme } from '../theme/ThemeProvider';
 
 function TabBarIcon(props: { name: string; color: string }) {
   return <Ionicons style={styles.tabicon} {...props} />;
@@ -82,14 +70,14 @@ function TabThreeNavigator() {
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
-export default function BottomTabNavigator() {
-  const colorScheme = useColorScheme();
+const BottomTabNavigator: React.FC = () => {
+  const { colors } = useTheme();
   const tabBarIconHome = ({ color = '' as string }) => <TabBarIcon name="ios-home" color={color} />;
   const tabBarIconStats = ({ color = '' as string }) => <TabBarIcon name="ios-stats" color={color} />;
   const tabBarIconNavigate = ({ color = '' as string }) => <TabBarIcon name="ios-navigate" color={color} />;
 
   return (
-    <BottomTab.Navigator initialRouteName="Feed" tabBarOptions={{ activeTintColor: Colors[colorScheme].tint }}>
+    <BottomTab.Navigator initialRouteName="Feed" tabBarOptions={{ activeTintColor: colors.primary }}>
       <BottomTab.Screen
         name="Feed"
         component={TabOneNavigator}
@@ -113,4 +101,17 @@ export default function BottomTabNavigator() {
       />
     </BottomTab.Navigator>
   );
-}
+};
+
+const styles = StyleSheet.create({
+  headericon: {
+    fontSize: 25,
+    marginRight: 10,
+  },
+  tabicon: {
+    fontSize: 30,
+    marginBottom: -3,
+  },
+});
+
+export default BottomTabNavigator;

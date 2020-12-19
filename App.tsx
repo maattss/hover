@@ -1,22 +1,26 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
+import { AppearanceProvider } from 'react-native-appearance';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { ThemeProvider } from './theme/ThemeProvider';
 
 import useCachedResources from './hooks/useCachedResources';
-import useColorScheme from './hooks/useColorScheme';
 import Navigation from './navigation';
 
 export default function App() {
   const isLoadingComplete = useCachedResources();
-  const colorScheme = useColorScheme();
 
   if (!isLoadingComplete) {
     return null;
   }
   return (
     <SafeAreaProvider>
-      <Navigation colorScheme={colorScheme} />
-      <StatusBar />
+      <AppearanceProvider>
+        <ThemeProvider>
+          <Navigation />
+          <StatusBar />
+        </ThemeProvider>
+      </AppearanceProvider>
     </SafeAreaProvider>
   );
 }
