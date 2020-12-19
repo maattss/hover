@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { SafeAreaView, Text, TouchableOpacity, ActivityIndicator, View, TextInput, StyleSheet } from 'react-native';
-import tailwind, { getColor } from 'tailwind-rn';
+import tailwind from 'tailwind-rn';
 import { useQuery, useMutation } from '@apollo/client';
 import { Feather } from '@expo/vector-icons';
 
 import Firebase from '../../../lib/firebase';
 import { GET_USER, UPDATE_USER_NAME } from '../../../lib/queries/settingsQueries';
-import { color } from 'react-native-reanimated';
 
 const SettingsScreen = () => {
   const id = Firebase.auth().currentUser?.uid;
