@@ -5,7 +5,7 @@ import YourStatisticsScreen from '../screens/statistics/YourStatisticsScreen';
 
 const TopTab = createMaterialTopTabNavigator();
 
-const StatisticsTopBar = () => {
+const StatisticsTopBar: React.FC = () => {
   return (
     <TopTab.Navigator>
       <TopTab.Screen name="Leaderboard" component={LeaderboardScreen} />
