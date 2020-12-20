@@ -10,17 +10,17 @@ import StatisticsScreen from '../screens/statistics/StatisticsScreen';
 import SettingsScreen from '../screens/settings/SettingsScreen';
 import { useTheme } from '../theme/ThemeProvider';
 
-function TabBarIcon(props: { name: string; color: string }) {
+const TabBarIcon = (props: { name: string; color: string }) => {
   return <Ionicons style={styles.tabicon} {...props} />;
-}
+};
 
-function HeaderIcon(props: { name: string; onPress: () => void }) {
+const HeaderIcon = (props: { name: string; onPress: () => void }) => {
   return <Ionicons style={styles.headericon} {...props} />;
-}
+};
 
 const TabOneStack = createStackNavigator<TabOneParamList>();
 
-function TabOneNavigator() {
+const TabOneNavigator: React.FC = () => {
   return (
     <TabOneStack.Navigator initialRouteName="Feed">
       <TabOneStack.Screen
@@ -42,21 +42,21 @@ function TabOneNavigator() {
       />
     </TabOneStack.Navigator>
   );
-}
+};
 
 const TabTwoStack = createStackNavigator<TabTwoParamList>();
 
-function TabTwoNavigator() {
+const TabTwoNavigator: React.FC = () => {
   return (
     <TabTwoStack.Navigator>
       <TabTwoStack.Screen name="TabTwoScreen" component={MapScreen} options={{ headerTitle: 'Explore' }} />
     </TabTwoStack.Navigator>
   );
-}
+};
 
 const TabThreeStack = createStackNavigator<TabThreeParamList>();
 
-function TabThreeNavigator() {
+const TabThreeNavigator: React.FC = () => {
   return (
     <TabThreeStack.Navigator>
       <TabThreeStack.Screen
@@ -66,7 +66,7 @@ function TabThreeNavigator() {
       />
     </TabThreeStack.Navigator>
   );
-}
+};
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
