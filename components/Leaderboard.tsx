@@ -75,7 +75,7 @@ const Leaderboard = (props: LeaderboardProps) => {
   );
 };
 
-export function sortData(sortParam: SortParam) {
+export const sortData = (sortParam: SortParam) => {
   const { data, sort } = sortParam;
   if (sort) sort(data);
   if (Array.isArray(data)) {
@@ -89,7 +89,7 @@ export function sortData(sortParam: SortParam) {
     );
   }
   return [];
-}
+};
 
 const styles = StyleSheet.create({
   row: {
