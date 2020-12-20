@@ -6,10 +6,9 @@ import { useTheme } from '../../theme/ThemeProvider';
 
 const { width, height } = Dimensions.get('window');
 
-const TabTwoScreen: React.FC = () => {
+const MapScreen: React.FC = () => {
   const [mapLocation, setMapLocation] = useState<Location>();
   const [userLocation, setUserLocation] = useState<Location>();
-
   const { colors } = useTheme();
 
   return (
@@ -77,4 +76,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default TabTwoScreen;
+export default MapScreen;

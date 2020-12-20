@@ -3,7 +3,6 @@ import { StackScreenProps } from '@react-navigation/stack';
 import { Text, View, TextInput, TouchableOpacity, Alert } from 'react-native';
 import tailwind from 'tailwind-rn';
 import { AuthenticationStackParamList } from '../../types';
-
 import Firebase from '../../lib/firebase';
 
 const LoginScreen = ({ navigation }: StackScreenProps<AuthenticationStackParamList, 'Login'>) => {
