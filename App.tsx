@@ -18,7 +18,7 @@ export default function App() {
       <AppearanceProvider>
         <ThemeProvider>
           <Navigation />
-          <StatusBar />
+          <StatusBar style="dark" />
         </ThemeProvider>
       </AppearanceProvider>
     </SafeAreaProvider>
