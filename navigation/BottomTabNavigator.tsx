@@ -1,4 +1,4 @@
-import { Ionicons } from '@expo/vector-icons';
+import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import * as React from 'react';
@@ -10,17 +10,17 @@ import StatisticsScreen from '../screens/statistics/StatisticsScreen';
 import SettingsScreen from '../screens/settings/SettingsScreen';
 import { useTheme } from '../theme/ThemeProvider';
 
-function TabBarIcon(props: { name: string; color: string }) {
-  return <Ionicons style={styles.tabicon} {...props} />;
-}
+const TabBarIcon = (props: { name: string; color: string }) => {
+  return <FAIcon style={styles.tabicon} {...props} />;
+};
 
-function HeaderIcon(props: { name: string; onPress: () => void }) {
-  return <Ionicons style={styles.headericon} {...props} />;
-}
+const HeaderIcon = (props: { name: string; onPress: () => void }) => {
+  return <FAIcon style={styles.headericon} {...props} />;
+};
 
 const TabOneStack = createStackNavigator<TabOneParamList>();
 
-function TabOneNavigator() {
+const TabOneNavigator: React.FC = () => {
   return (
     <TabOneStack.Navigator initialRouteName="Feed">
       <TabOneStack.Screen
@@ -29,7 +29,7 @@ function TabOneNavigator() {
         options={({ navigation }) => ({
           headerTitle: 'Feed',
           // eslint-disable-next-line react/display-name
-          headerRight: () => <HeaderIcon onPress={() => navigation.navigate('Settings')} name="ios-settings" />,
+          headerRight: () => <HeaderIcon onPress={() => navigation.navigate('Settings')} name="cog" />,
         })}
       />
       <TabOneStack.Screen
@@ -42,21 +42,21 @@ function TabOneNavigator() {
       />
     </TabOneStack.Navigator>
   );
-}
+};
 
 const TabTwoStack = createStackNavigator<TabTwoParamList>();
 
-function TabTwoNavigator() {
+const TabTwoNavigator: React.FC = () => {
   return (
     <TabTwoStack.Navigator>
       <TabTwoStack.Screen name="TabTwoScreen" component={MapScreen} options={{ headerTitle: 'Explore' }} />
     </TabTwoStack.Navigator>
   );
-}
+};
 
 const TabThreeStack = createStackNavigator<TabThreeParamList>();
 
-function TabThreeNavigator() {
+const TabThreeNavigator: React.FC = () => {
   return (
     <TabThreeStack.Navigator>
       <TabThreeStack.Screen
@@ -66,15 +66,15 @@ function TabThreeNavigator() {
       />
     </TabThreeStack.Navigator>
   );
-}
+};
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
 const BottomTabNavigator: React.FC = () => {
   const { colors } = useTheme();
-  const tabBarIconHome = ({ color = '' as string }) => <TabBarIcon name="ios-home" color={color} />;
-  const tabBarIconStats = ({ color = '' as string }) => <TabBarIcon name="ios-stats" color={color} />;
-  const tabBarIconNavigate = ({ color = '' as string }) => <TabBarIcon name="ios-navigate" color={color} />;
+  const tabBarIconHome = ({ color = '' as string }) => <TabBarIcon name="home" color={color} />;
+  const tabBarIconNavigate = ({ color = '' as string }) => <TabBarIcon name="location-arrow" color={color} />;
+  const tabBarIconStats = ({ color = '' as string }) => <TabBarIcon name="chart-bar" color={color} />;
 
   return (
     <BottomTab.Navigator initialRouteName="Feed" tabBarOptions={{ activeTintColor: colors.primary }}>
@@ -89,14 +89,14 @@ const BottomTabNavigator: React.FC = () => {
         name="Explore"
         component={TabTwoNavigator}
         options={{
-          tabBarIcon: tabBarIconStats,
+          tabBarIcon: tabBarIconNavigate,
         }}
       />
       <BottomTab.Screen
         name="Statistics"
         component={TabThreeNavigator}
         options={{
-          tabBarIcon: tabBarIconNavigate,
+          tabBarIcon: tabBarIconStats,
         }}
       />
     </BottomTab.Navigator>

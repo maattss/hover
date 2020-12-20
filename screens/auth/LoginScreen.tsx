@@ -3,7 +3,6 @@ import { StackScreenProps } from '@react-navigation/stack';
 import { Text, View, TextInput, TouchableOpacity, Alert } from 'react-native';
 import tailwind from 'tailwind-rn';
 import { AuthenticationStackParamList } from '../../types';
-
 import Firebase from '../../lib/firebase';
 
 const LoginScreen = ({ navigation }: StackScreenProps<AuthenticationStackParamList, 'Login'>) => {
@@ -19,10 +18,10 @@ const LoginScreen = ({ navigation }: StackScreenProps<AuthenticationStackParamLi
     }
   };
   return (
-    <View style={tailwind('py-10 px-5 flex-1 justify-center')}>
+    <View style={tailwind('pb-20 px-5 flex-1 justify-center')}>
       <Text style={tailwind('text-4xl font-bold')}>Login</Text>
 
-      <View style={tailwind('mt-10')}>
+      <View style={tailwind('mt-8')}>
         <TextInput
           placeholder="Email"
           onChangeText={(val) => setEmail(val)}
@@ -33,7 +32,7 @@ const LoginScreen = ({ navigation }: StackScreenProps<AuthenticationStackParamLi
           placeholder="Password"
           onChangeText={(val) => setPassword(val)}
           secureTextEntry
-          style={tailwind('text-lg border-b-2 border-blue-500 mt-5')}
+          style={tailwind('text-lg border-b-2 border-blue-500 mt-8')}
         />
 
         <TouchableOpacity style={tailwind('bg-blue-500 rounded-lg py-3 mt-10')} onPress={handleLogin}>
