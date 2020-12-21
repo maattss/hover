@@ -7,6 +7,7 @@ export const button = {
   padding: Spacing.base,
   borderRadius: Spacing.large,
   backgroundColor: Colors.blue,
+  alignItems: 'center' as const,
 };
 
 export const buttonText = {

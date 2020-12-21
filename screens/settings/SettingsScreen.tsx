@@ -8,15 +8,11 @@ import { red } from '../../theme/colors';
 const DATA: Item[] = [
   {
     id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-    title: 'First Item',
+    title: 'Language',
   },
   {
     id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-    title: 'Second Item',
-  },
-  {
-    id: '58694a0f-3da1-471f-bd96-145571e29d72',
-    title: 'Third Item',
+    title: 'Appearance',
   },
 ];
 
@@ -26,9 +22,9 @@ type Item = {
 };
 
 const Item = (item: Item) => (
-  <View style={styles.logOutButton}>
-    <Text style={styles.logOutButtonText}>{item.title}</Text>
-  </View>
+  <TouchableOpacity style={styles.settingsItem}>
+    <Text style={{ ...Buttons.buttonText }}>{item.title}</Text>
+  </TouchableOpacity>
 );
 
 const SettingsScreen = () => {
@@ -57,7 +53,7 @@ const SettingsScreen = () => {
 
   return (
     <View style={styles.container}>
-      <FlatList data={DATA} renderItem={renderItem} keyExtractor={(item) => item.id} />
+      <FlatList data={DATA} renderItem={renderItem} keyExtractor={(item) => item.id} style={styles.settingsList} />
       <TouchableOpacity style={styles.logOutButton} onPress={areYouSure}>
         <Text style={{ ...Buttons.buttonText }}>Sign out</Text>
       </TouchableOpacity>
@@ -74,11 +70,18 @@ const styles = StyleSheet.create({
     paddingTop: Spacing.small,
     paddingBottom: Spacing.small,
   },
+  settingsList: {
+    width: '100%',
+  },
+  settingsItem: {
+    ...Buttons.button,
+    width: '90%',
+    marginBottom: Spacing.small,
+  },
   logOutButton: {
     ...Buttons.button,
     backgroundColor: red,
     width: '90%',
-    alignItems: 'center',
   },
   logOutButtonText: {
     ...Buttons.buttonText,
