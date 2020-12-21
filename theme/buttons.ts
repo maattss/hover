@@ -1,50 +1,22 @@
 import * as Colors from './colors';
-import * as Spacing from './spacing';
 import * as Typography from './typography';
+import * as Spacing from './spacing';
+import { Appearance } from 'react-native';
 
-export const base = {
-  alignItems: 'center',
-  marginRight: Spacing.smallest,
-  marginVertical: Spacing.tiny,
-};
-
-export const text = {
-  color: Colors.white,
-  fontSize: Typography.smallestFontSize,
-  fontWeight: 'bold',
-  letterSpacing: 1,
-};
-
-export const textUnselected = {
-  ...text,
-  color: Colors.gray500,
-};
-
-export const small = {
-  paddingHorizontal: Spacing.small,
-  paddingVertical: Spacing.small + 2,
-  width: 75,
-};
-
-export const large = {
-  paddingHorizontal: Spacing.large,
-  paddingVertical: Spacing.large + 4,
-};
-
-export const rounded = {
-  borderRadius: 50,
-};
-
-export const selected = {
+export const button = {
+  padding: Spacing.base,
+  borderRadius: Spacing.large,
   backgroundColor: Colors.blue,
 };
 
-export const unselected = {
-  backgroundColor: Colors.gray200,
+export const buttonText = {
+  color: Appearance.getColorScheme() == 'dark' ? Colors.white : Colors.almostBlack,
+  fontSize: Typography.buttonFontSize,
+  fontWeight: 'bold' as const,
+  letterSpacing: 1,
 };
 
-export const smallRounded = {
-  ...base,
-  ...small,
-  ...rounded,
+export const buttonTextUnselected = {
+  ...buttonText,
+  color: Colors.gray200,
 };

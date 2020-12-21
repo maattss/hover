@@ -8,7 +8,7 @@ export const baseFontSize = 16;
 export const smallFontSize = 14;
 export const smallestFontSize = 10;
 export const largeHeaderFontSize = 20;
-export const headerFontSize = 18;
+export const headerFontSize = 32;
 
 const base = {
   alignItems: 'center',
@@ -29,9 +29,9 @@ export const bodyText = {
 };
 
 export const headerText = {
-  color: Appearance.getColorScheme() == 'dark' ? Colors.white : Colors.almostBlack,
+  color: Appearance.getColorScheme() == 'dark' ? Colors.almostBlack : Colors.almostBlack,
   fontSize: headerFontSize,
-  fontWeight: 'bold',
+  fontWeight: 'bold' as const,
 };
 
 export const descriptionText = {
