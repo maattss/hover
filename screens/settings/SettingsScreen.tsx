@@ -4,6 +4,7 @@ import Firebase from '../../lib/firebase';
 import { useTheme } from '../../theme/ThemeProvider';
 import { Buttons, Spacing, Typography } from '../../theme';
 import { red } from '../../theme/colors';
+import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 
 const DATA: Item[] = [
   {
@@ -24,6 +25,7 @@ type Item = {
 const Item = (item: Item) => (
   <TouchableOpacity style={styles.settingsItem}>
     <Text style={{ ...Buttons.buttonText }}>{item.title}</Text>
+    <FAIcon name="chevron-right" style={{ ...Buttons.buttonText }} />
   </TouchableOpacity>
 );
 
@@ -53,7 +55,10 @@ const SettingsScreen = () => {
 
   return (
     <View style={styles.container}>
-      <FlatList data={DATA} renderItem={renderItem} keyExtractor={(item) => item.id} style={styles.settingsList} />
+      <View style={styles.settingsContainer}>
+        <FlatList data={DATA} renderItem={renderItem} keyExtractor={(item) => item.id} style={styles.settingsList} />
+      </View>
+
       <TouchableOpacity style={styles.logOutButton} onPress={areYouSure}>
         <Text style={{ ...Buttons.buttonText }}>Sign out</Text>
       </TouchableOpacity>
@@ -70,13 +75,20 @@ const styles = StyleSheet.create({
     paddingTop: Spacing.small,
     paddingBottom: Spacing.small,
   },
-  settingsList: {
+  settingsContainer: {
     width: '100%',
+    display: 'flex',
+    alignItems: 'center',
+  },
+  settingsList: {
+    width: '90%',
   },
   settingsItem: {
     ...Buttons.button,
-    width: '90%',
     marginBottom: Spacing.small,
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   logOutButton: {
     ...Buttons.button,

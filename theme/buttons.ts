@@ -1,17 +1,17 @@
 import * as Colors from './colors';
 import * as Typography from './typography';
 import * as Spacing from './spacing';
-import { Appearance } from 'react-native';
 
 export const button = {
+  color: Colors.almostBlack,
   padding: Spacing.base,
   borderRadius: Spacing.large,
-  backgroundColor: Colors.blue,
+  backgroundColor: Colors.gray400,
   alignItems: 'center' as const,
 };
 
 export const buttonText = {
-  color: Appearance.getColorScheme() == 'dark' ? Colors.white : Colors.almostBlack,
+  color: Colors.almostBlack,
   fontSize: Typography.buttonFontSize,
   fontWeight: 'bold' as const,
   letterSpacing: 1,

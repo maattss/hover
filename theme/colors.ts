@@ -9,14 +9,14 @@ export const orange = '#CD5000';
 export const black = '#000000';
 export const transparent = 'rgba(0, 0, 0, 0)';
 export const white = '#FFFFFF';
-export const gray100 = '#F8F9FA';
-export const gray200 = '#EBEBEB';
-export const gray300 = '#DEE2E6';
-export const gray400 = '#CED4DA';
-export const gray500 = '#ABD5BD';
-export const gray600 = '#888';
-export const gray700 = '#444';
-export const gray800 = '#303030';
+export const gray100 = '#F5F5F5';
+export const gray200 = '#EEEEEE';
+export const gray300 = '#E0E0E0';
+export const gray400 = '#BDBDBD';
+export const gray500 = '#9E9E9E';
+export const gray600 = '#757575';
+export const gray700 = '#616161';
+export const gray800 = '#424242';
 export const gray900 = '#222';
 
 // Palettes
