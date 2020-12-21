@@ -5,8 +5,8 @@ import * as Spacing from './spacing';
 export const button = {
   color: Colors.almostBlack,
   padding: Spacing.base,
-  borderRadius: Spacing.large,
-  backgroundColor: Colors.gray400,
+  borderRadius: Spacing.smaller,
+  backgroundColor: Colors.white,
   alignItems: 'center' as const,
 };
 

@@ -5,6 +5,7 @@ import { useTheme } from '../../theme/ThemeProvider';
 import { Buttons, Spacing, Typography } from '../../theme';
 import { red } from '../../theme/colors';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
+import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 const DATA: Item[] = [
   {
@@ -74,6 +75,7 @@ const styles = StyleSheet.create({
     paddingRight: Spacing.large,
     paddingTop: Spacing.small,
     paddingBottom: Spacing.small,
+    backgroundColor: Colors.primary,
   },
   settingsContainer: {
     width: '100%',
@@ -81,11 +83,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   settingsList: {
-    width: '90%',
+    width: '100%',
   },
   settingsItem: {
     ...Buttons.button,
-    marginBottom: Spacing.small,
+    marginBottom: Spacing.smaller,
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -93,7 +95,8 @@ const styles = StyleSheet.create({
   logOutButton: {
     ...Buttons.button,
     backgroundColor: red,
-    width: '90%',
+    width: '100%',
+    marginTop: Spacing.base,
   },
   logOutButtonText: {
     ...Buttons.buttonText,

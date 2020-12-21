@@ -3,6 +3,7 @@ import MapView, { Circle } from 'react-native-maps';
 import { StyleSheet, Dimensions, Text, View } from 'react-native';
 import { Location } from '../../types';
 import { useTheme } from '../../theme/ThemeProvider';
+import { Spacing, Typography } from '../../theme';
 
 const { width, height } = Dimensions.get('window');
 
@@ -72,6 +73,9 @@ const styles = StyleSheet.create({
     height,
   },
   textStyle: {
+    ...Typography.bodyText,
+    paddingTop: Spacing.smaller,
+    paddingLeft: Spacing.smaller,
     backgroundColor: 'transparent',
   },
 });
