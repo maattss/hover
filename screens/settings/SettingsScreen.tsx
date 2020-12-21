@@ -1,10 +1,35 @@
 import React from 'react';
-import { Alert, View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import tailwind from 'tailwind-rn';
+import { Alert, View, Text, TouchableOpacity, StyleSheet, FlatList } from 'react-native';
 import Firebase from '../../lib/firebase';
 import { useTheme } from '../../theme/ThemeProvider';
 import { Buttons, Spacing, Typography } from '../../theme';
 import { red } from '../../theme/colors';
+
+const DATA: Item[] = [
+  {
+    id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
+    title: 'First Item',
+  },
+  {
+    id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
+    title: 'Second Item',
+  },
+  {
+    id: '58694a0f-3da1-471f-bd96-145571e29d72',
+    title: 'Third Item',
+  },
+];
+
+type Item = {
+  id: string;
+  title: string;
+};
+
+const Item = (item: Item) => (
+  <View style={styles.logOutButton}>
+    <Text style={styles.logOutButtonText}>{item.title}</Text>
+  </View>
+);
 
 const SettingsScreen = () => {
   const { colors } = useTheme();
@@ -28,8 +53,11 @@ const SettingsScreen = () => {
       ],
       { cancelable: false },
     );
+  const renderItem = ({ item }: { item: Item }) => <Item id={item.id} title={item.title} />;
+
   return (
     <View style={styles.container}>
+      <FlatList data={DATA} renderItem={renderItem} keyExtractor={(item) => item.id} />
       <TouchableOpacity style={styles.logOutButton} onPress={areYouSure}>
         <Text style={{ ...Buttons.buttonText }}>Sign out</Text>
       </TouchableOpacity>

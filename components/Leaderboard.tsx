@@ -22,7 +22,7 @@ interface LeaderboardProps {
   evenRowColor?: string;
 }
 
-export type Item = {
+type Item = {
   name: string;
   score: number | null;
   icon?: string;
@@ -63,14 +63,14 @@ const Leaderboard = (props: LeaderboardProps) => {
     );
   };
 
-  const renderItemS = (item: Item, index: number) =>
+  const renderItems = (item: Item, index: number) =>
     props.renderItem ? props.renderItem(item, index) : defaultRenderItem(item, index);
 
   return (
     <FlatList
       data={sortedData}
       keyExtractor={(item, index) => index.toString()}
-      renderItem={({ item, index }) => renderItemS(item, index)}
+      renderItem={({ item, index }) => renderItems(item, index)}
     />
   );
 };
