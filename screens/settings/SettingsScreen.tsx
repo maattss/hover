@@ -31,7 +31,7 @@ const Item = (item: Item) => (
 );
 
 const SettingsScreen = () => {
-  const { colors } = useTheme();
+  const { colors, isDark } = useTheme();
   const handleLogout = async () => {
     try {
       await Firebase.auth().signOut();
@@ -59,7 +59,9 @@ const SettingsScreen = () => {
       <View style={styles.settingsContainer}>
         <FlatList data={DATA} renderItem={renderItem} keyExtractor={(item) => item.id} style={styles.settingsList} />
       </View>
-
+      <View style={styles.settingsContainer}>
+        <Text style={{ ...Typography.bodyText }}>{isDark ? 'Dark' : 'Light'}</Text>
+      </View>
       <Switch />
       <TouchableOpacity style={styles.logOutButton} onPress={areYouSure}>
         <Text style={{ ...Buttons.buttonText }}>Sign out</Text>
