@@ -1,5 +1,7 @@
-import * as Colors from './colors';
+import * as DefaultColors from './colors';
 import { Appearance } from 'react-native';
+import { ThemeContext } from './ThemeProvider';
+import { ThemeProvider } from '@react-navigation/native';
 
 export const extraLargeFontSize = 32;
 export const largeFontSize = 24;
@@ -18,30 +20,26 @@ const base = {
 };
 
 export const link = {
-  color: Colors.red,
+  color: DefaultColors.red,
   fontWeight: 'bold',
 };
 
 export const bodyText = {
-  color: Appearance.getColorScheme() == 'dark' ? Colors.white : Colors.almostBlack,
   fontSize: smallFontSize,
   lineHeight: 19,
 };
 
 export const headerText = {
-  color: Appearance.getColorScheme() == 'dark' ? Colors.almostBlack : Colors.almostBlack,
   fontSize: headerFontSize,
   fontWeight: 'bold' as const,
 };
 
 export const descriptionText = {
-  color: Appearance.getColorScheme() == 'dark' ? Colors.white : Colors.almostBlack,
   fontSize: smallFontSize,
 };
 
 export const screenHeader = {
   ...base,
-  color: Appearance.getColorScheme() == 'dark' ? Colors.white : Colors.almostBlack,
   fontSize: largeFontSize,
   fontWeight: 'bold',
 };

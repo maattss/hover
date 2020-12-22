@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import MapView, { Circle } from 'react-native-maps';
+import MapView, { Circle, MAP_TYPES } from 'react-native-maps';
 import { StyleSheet, Dimensions, Text, View } from 'react-native';
 import { Location } from '../../types';
 import { useTheme } from '../../theme/ThemeProvider';
@@ -21,6 +21,7 @@ const MapScreen: React.FC = () => {
           latitudeDelta: 0.09,
           longitudeDelta: 0.09 * (width / height),
         }}
+        mapType={'satellite'}
         showsUserLocation
         userLocationAnnotationTitle="Your location"
         minZoomLevel={5}
