@@ -5,7 +5,7 @@ import { useTheme } from '../../theme/ThemeProvider';
 import { Buttons, Spacing, Typography } from '../../theme';
 import { red } from '../../theme/colors';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
-import { Colors } from 'react-native/Libraries/NewAppScreen';
+import { Switch } from '../../components/Switch';
 
 const DATA: Item[] = [
   {
@@ -60,6 +60,7 @@ const SettingsScreen = () => {
         <FlatList data={DATA} renderItem={renderItem} keyExtractor={(item) => item.id} style={styles.settingsList} />
       </View>
 
+      <Switch />
       <TouchableOpacity style={styles.logOutButton} onPress={areYouSure}>
         <Text style={{ ...Buttons.buttonText }}>Sign out</Text>
       </TouchableOpacity>
@@ -75,7 +76,6 @@ const styles = StyleSheet.create({
     paddingRight: Spacing.large,
     paddingTop: Spacing.small,
     paddingBottom: Spacing.small,
-    backgroundColor: Colors.primary,
   },
   settingsContainer: {
     width: '100%',

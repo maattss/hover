@@ -22,7 +22,7 @@ interface LeaderboardProps {
   evenRowColor?: string;
 }
 
-type Item = {
+export type Item = {
   name: string;
   score: number | null;
   icon?: string;
