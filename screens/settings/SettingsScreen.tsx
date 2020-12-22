@@ -66,6 +66,7 @@ const SettingsScreen = () => {
       <TouchableOpacity style={styles.logOutButton} onPress={areYouSure}>
         <Text style={{ ...Buttons.buttonText }}>Sign out</Text>
       </TouchableOpacity>
+      <Text style={{ ...Typography.bodyText }}>Hover Version 0.0.1</Text>
     </View>
   );
 };
