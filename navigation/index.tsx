@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
+import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { User } from 'firebase';
 import Firebase from '../lib/firebase';
@@ -34,7 +34,7 @@ const AuthenticationNavigator: React.FC = () => {
 
 const Navigation: React.FC = () => {
   const [userAuthState, setUserAuthState] = useState<User | null>(null);
-  const { colors } = useTheme();
+  const { colors, isDark } = useTheme();
 
   useEffect(() => {
     Firebase.auth().onAuthStateChanged((user) => {
@@ -46,7 +46,16 @@ const Navigation: React.FC = () => {
     });
   }, []);
 
-  const CustomTheme = {
+  const DarkCustomTheme = {
+    ...DarkTheme,
+    colors: {
+      ...DarkTheme.colors,
+      background: colors.background,
+      primary: colors.primary,
+      text: colors.text,
+    },
+  };
+  const LightCustomTheme = {
     ...DefaultTheme,
     colors: {
       ...DefaultTheme.colors,
@@ -57,7 +66,7 @@ const Navigation: React.FC = () => {
   };
 
   return (
-    <NavigationContainer linking={LinkingConfiguration} theme={CustomTheme}>
+    <NavigationContainer linking={LinkingConfiguration} theme={isDark ? DarkCustomTheme : LightCustomTheme}>
       <RootNavigator />
       {/* {userAuthState && <RootNavigator />}
       {!userAuthState && <AuthenticationNavigator />} */}
