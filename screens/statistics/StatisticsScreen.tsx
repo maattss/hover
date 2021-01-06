@@ -1,14 +1,20 @@
 import React from 'react';
-import tailwind from 'tailwind-rn';
-import { View } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import StatisticsTopBar from '../../navigation/StatisticsTopBar';
 
-const TabThreeScreen = () => {
+const TabThreeScreen: React.FC = () => {
   return (
-    <View style={tailwind('flex-1')}>
+    <View style={styles.container}>
       <StatisticsTopBar />
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    display: 'flex',
+    flexGrow: 1,
+  },
+});
 
 export default TabThreeScreen;

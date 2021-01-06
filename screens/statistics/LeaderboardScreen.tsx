@@ -1,9 +1,8 @@
 import React from 'react';
-import tailwind from 'tailwind-rn';
 import Leaderboard, { Item } from '../../components/Leaderboard';
 import { View } from 'react-native';
 
-const LeaderboardScreen = () => {
+const LeaderboardScreen: React.FC = () => {
   const data: Item[] = [
     {
       name: 'Siri',
@@ -63,7 +62,7 @@ const LeaderboardScreen = () => {
     },
   ];
   return (
-    <View style={tailwind('flex-1')}>
+    <View>
       <Leaderboard data={data} />
     </View>
   );

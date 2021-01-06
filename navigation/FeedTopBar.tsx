@@ -5,11 +5,13 @@ import FollowingFeedScreen from '../screens/feed/FollowingFeedScreen';
 
 const TopTab = createMaterialTopTabNavigator();
 
-export default function FeedTopBar() {
+const FeedTopBar: React.FC = () => {
   return (
     <TopTab.Navigator>
       <TopTab.Screen name="Following" component={FollowingFeedScreen} />
       <TopTab.Screen name="You" component={YourFeedScreen} />
     </TopTab.Navigator>
   );
-}
+};
+
+export default FeedTopBar;

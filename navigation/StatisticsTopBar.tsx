@@ -5,11 +5,13 @@ import YourStatisticsScreen from '../screens/statistics/YourStatisticsScreen';
 
 const TopTab = createMaterialTopTabNavigator();
 
-export default function StatisticsTopBar() {
+const StatisticsTopBar: React.FC = () => {
   return (
     <TopTab.Navigator>
       <TopTab.Screen name="Leaderboard" component={LeaderboardScreen} />
       <TopTab.Screen name="Your Statistics" component={YourStatisticsScreen} />
     </TopTab.Navigator>
   );
-}
+};
+
+export default StatisticsTopBar;

@@ -1,9 +1,7 @@
-import { StatusBar } from 'expo-status-bar';
 import React from 'react';
+import { StatusBar } from 'react-native';
 import { AppearanceProvider } from 'react-native-appearance';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { ThemeProvider } from './theme/ThemeProvider';
-
 import useCachedResources from './hooks/useCachedResources';
 import Navigation from './navigation';
 
@@ -16,10 +14,8 @@ export default function App() {
   return (
     <SafeAreaProvider>
       <AppearanceProvider>
-        <ThemeProvider>
-          <Navigation />
-          <StatusBar />
-        </ThemeProvider>
+        <Navigation />
+        <StatusBar animated barStyle={'light-content'} />
       </AppearanceProvider>
     </SafeAreaProvider>
   );

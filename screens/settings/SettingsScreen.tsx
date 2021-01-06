@@ -1,147 +1,93 @@
-import React, { useState, useEffect } from 'react';
-import { SafeAreaView, Text, TouchableOpacity, ActivityIndicator, View, TextInput, StyleSheet } from 'react-native';
-import tailwind from 'tailwind-rn';
-import { useQuery, useMutation } from '@apollo/client';
-import { Feather } from '@expo/vector-icons';
+import React from 'react';
+import { Alert, View, Text, TouchableOpacity, StyleSheet, FlatList } from 'react-native';
+import { Buttons, Spacing, Typography, red, Colors } from '../../theme';
+import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 
-import Firebase from '../../lib/firebase';
-import { GET_USER, UPDATE_USER_NAME } from '../../lib/queries/settingsQueries';
+const DATA: Item[] = [
+  {
+    id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
+    title: 'Language',
+  },
+  {
+    id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
+    title: 'Appearance',
+  },
+];
+
+type Item = {
+  id: string;
+  title: string;
+};
+
+const Item = (item: Item) => (
+  <TouchableOpacity style={styles.settingsItem}>
+    <Text style={{ ...Buttons.buttonText }}>{item.title}</Text>
+    <FAIcon name="chevron-right" style={{ ...Buttons.buttonText }} />
+  </TouchableOpacity>
+);
 
 const SettingsScreen = () => {
-  const id = Firebase.auth().currentUser?.uid;
-  const [editing, setEditing] = useState(false);
-  const [name, setName] = useState('');
-  const { loading: fetchLoading, data } = useQuery(GET_USER, { variables: { id } });
-  const [updateUser, { loading: mutationLoading, data: response }] = useMutation(UPDATE_USER_NAME);
-  useEffect(() => {
-    let newName = null;
-
-    if (data) {
-      const { users_by_pk: user } = data;
-      const { name } = user;
-      newName = name;
-    }
-
-    if (response) {
-      const { update_users_by_pk } = response;
-      const { name } = update_users_by_pk;
-      newName = name;
-    }
-    setName(newName);
-  }, [data, response]);
-
-  if (fetchLoading || mutationLoading)
-    return (
-      <SafeAreaView style={[styles.flex, styles.center]}>
-        <ActivityIndicator color={'rgba(59, 130, 246, 1)'} />
-      </SafeAreaView>
+  const areYouSure = () =>
+    Alert.alert(
+      'Are you Sure?',
+      'You will be signed out of your account.',
+      [
+        {
+          text: 'Cancel',
+        },
+        { text: 'Sign out', onPress: () => handleLogout() },
+      ],
+      { cancelable: false },
     );
-  return (
-    <SafeAreaView style={styles.flex}>
-      <View style={styles.container}>
-        <View style={tailwind('mt-10')}>
-          {(!name || editing) && (
-            <View>
-              <Text style={styles.textXl}>What is your name?</Text>
-              <View style={styles.row}>
-                <TextInput
-                  placeholder={!name ? 'Name ...' : name}
-                  onChangeText={(val) => setName(val)}
-                  onFocus={() => setEditing(true)}
-                  style={tailwind('text-2xl flex-grow')}
-                />
-                <TouchableOpacity
-                  style={[styles.roundBtn, styles.editBtn]}
-                  onPress={() => {
-                    updateUser({
-                      variables: {
-                        id,
-                        name,
-                      },
-                    });
-                    setEditing(false);
-                  }}>
-                  <Feather name="check" size={16} color="#fff" />
-                </TouchableOpacity>
-              </View>
-            </View>
-          )}
+  const renderItem = ({ item }: { item: Item }) => <Item id={item.id} title={item.title} />;
 
-          {name && !editing && (
-            <View>
-              <Text style={styles.textXl}>Did I get your name right?</Text>
-              <View style={styles.row}>
-                <Text style={tailwind('text-2xl text-blue-500')}>{name}</Text>
-                <TouchableOpacity style={[styles.roundBtn, styles.editBtn]} onPress={() => setEditing(true)}>
-                  <Feather name="edit" size={16} color="#fff" />
-                </TouchableOpacity>
-              </View>
-            </View>
-          )}
-        </View>
-        <View style={[styles.row]}>
-          <TouchableOpacity style={[styles.longBtn, styles.signoutBtn]} onPress={() => Firebase.auth().signOut()}>
-            <Text style={styles.textXl}>
-              Sign out
-              <Feather name="log-out" color="#fff" size={20} />
-            </Text>
-          </TouchableOpacity>
-        </View>
+  return (
+    <View style={styles.container}>
+      <View style={styles.settingsContainer}>
+        <FlatList data={DATA} renderItem={renderItem} keyExtractor={(item) => item.id} style={styles.settingsList} />
       </View>
-    </SafeAreaView>
+      <TouchableOpacity style={styles.logOutButton} onPress={areYouSure}>
+        <Text style={{ ...Buttons.buttonText }}>Sign out</Text>
+      </TouchableOpacity>
+      <Text style={{ ...Typography.bodyText }}>Hover Version 0.0.1</Text>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  flex: {
-    flexGrow: 1,
-    flexShrink: 1,
-    flexBasis: 0,
-  },
   container: {
-    paddingBottom: 50,
-    paddingTop: 50,
-    paddingRight: 20,
-    paddingLeft: 20,
+    display: 'flex',
+    alignItems: 'center',
+    paddingLeft: Spacing.large,
+    paddingRight: Spacing.large,
+    paddingTop: Spacing.small,
+    paddingBottom: Spacing.small,
   },
-  row: {
-    marginTop: 2,
+  settingsContainer: {
+    width: '100%',
+    display: 'flex',
+    alignItems: 'center',
+  },
+  settingsList: {
+    width: '100%',
+  },
+  settingsItem: {
+    ...Buttons.button,
+    marginBottom: Spacing.smaller,
+    display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingBottom: 2,
   },
-  roundBtn: {
-    height: 40,
-    width: 40,
-    borderRadius: 9999,
-    justifyContent: 'center',
-    alignItems: 'center',
+  logOutButton: {
+    ...Buttons.button,
+    backgroundColor: Colors.red,
+    width: '100%',
+    marginTop: Spacing.base,
+    marginBottom: Spacing.base,
   },
-  center: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  editBtn: {
-    backgroundColor: 'rgba(59, 130, 246, 1)',
-  },
-  longBtn: {
-    height: 50,
-    width: 300,
-    borderRadius: 9999,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  signoutBtn: {
-    backgroundColor: 'rgba(239, 68, 68, 1)',
-  },
-  textXl: {
-    fontSize: 15,
-    lineHeight: 15,
-  },
-  label: {
-    fontSize: 17,
-    flex: 1,
-    paddingRight: 80,
+  logOutButtonText: {
+    ...Buttons.buttonText,
   },
 });
+
+export default SettingsScreen;

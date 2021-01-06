@@ -2,15 +2,13 @@ import React, { useState } from 'react';
 import MapView, { Circle } from 'react-native-maps';
 import { StyleSheet, Dimensions, Text, View } from 'react-native';
 import { Location } from '../../types';
-import { useTheme } from '../../theme/ThemeProvider';
+import { Colors, Spacing, Typography } from '../../theme';
 
 const { width, height } = Dimensions.get('window');
 
-const TabTwoScreen: React.FC = () => {
+const MapScreen: React.FC = () => {
   const [mapLocation, setMapLocation] = useState<Location>();
   const [userLocation, setUserLocation] = useState<Location>();
-
-  const { colors } = useTheme();
 
   return (
     <View style={styles.container}>
@@ -21,6 +19,7 @@ const TabTwoScreen: React.FC = () => {
           latitudeDelta: 0.09,
           longitudeDelta: 0.09 * (width / height),
         }}
+        mapType={'satellite'}
         showsUserLocation
         userLocationAnnotationTitle="Your location"
         minZoomLevel={5}
@@ -54,7 +53,7 @@ const TabTwoScreen: React.FC = () => {
         <Circle
           center={{ latitude: 63.419, longitude: 10.4025 }}
           radius={100}
-          fillColor={colors.primary}
+          fillColor={Colors.almostBlack}
           strokeWidth={0.1}
         />
       </MapView>
@@ -73,8 +72,12 @@ const styles = StyleSheet.create({
     height,
   },
   textStyle: {
+    ...Typography.bodyText,
+    paddingTop: Spacing.smaller,
+    paddingLeft: Spacing.smaller,
     backgroundColor: 'transparent',
+    color: Colors.white,
   },
 });
 
-export default TabTwoScreen;
+export default MapScreen;

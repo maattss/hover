@@ -28,7 +28,7 @@ export type Item = {
   icon?: string;
 };
 
-export default function Leaderboard(props: LeaderboardProps) {
+const Leaderboard = (props: LeaderboardProps) => {
   const [sortedData, setSortedData] = useState<Item[]>([]);
 
   useEffect(() => {
@@ -73,9 +73,9 @@ export default function Leaderboard(props: LeaderboardProps) {
       renderItem={({ item, index }) => renderItemS(item, index)}
     />
   );
-}
+};
 
-export function sortData(sortParam: SortParam) {
+export const sortData = (sortParam: SortParam) => {
   const { data, sort } = sortParam;
   if (sort) sort(data);
   if (Array.isArray(data)) {
@@ -89,7 +89,7 @@ export function sortData(sortParam: SortParam) {
     );
   }
   return [];
-}
+};
 
 const styles = StyleSheet.create({
   row: {
@@ -135,3 +135,5 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
 });
+
+export default Leaderboard;

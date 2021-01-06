@@ -1,13 +1,26 @@
 import React from 'react';
-import tailwind from 'tailwind-rn';
-import { Text, View } from 'react-native';
+import { Text, View, StyleSheet } from 'react-native';
+import { Spacing, Typography } from '../../theme';
 
-const YourStatisticsScreen = () => {
+const YourStatisticsScreen: React.FC = () => {
   return (
-    <View style={tailwind('py-5 px-5 flex-1')}>
-      <Text style={tailwind('text-4xl text-center font-bold')}>Your Stats</Text>
+    <View style={styles.container}>
+      <Text style={styles.text}>Your Stats</Text>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    display: 'flex',
+    paddingBottom: Spacing.base,
+  },
+  text: {
+    paddingTop: Spacing.base,
+    textAlign: 'center',
+    fontWeight: 'bold',
+    fontSize: Typography.headerFontSize,
+  },
+});
 
 export default YourStatisticsScreen;
