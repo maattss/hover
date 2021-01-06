@@ -14,11 +14,7 @@ import { GRAPHQL_API_URL } from './FirebaseConfig';
 const asyncAuthLink = setContext(async () => {
   return {
     headers: {
-<<<<<<< HEAD
       Authorization: `Bearer ${await Firebase.auth().currentUser?.getIdToken()}`,
-=======
-      Authorization: `Bearer ${await Firebase.auth().currentUser.getIdToken()}`,
->>>>>>> grapql for editing user
     },
   };
 });

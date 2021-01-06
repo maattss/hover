@@ -4,11 +4,11 @@ import tailwind, { getColor } from 'tailwind-rn';
 import { useQuery, useMutation } from '@apollo/client';
 import { Feather } from '@expo/vector-icons';
 
-import { GET_USER, UPDATE_USER_NAME } from '../../../lib/queries';
 import Firebase from '../../../lib/firebase';
+import { GET_USER, UPDATE_USER_NAME } from '../../../lib/queries/settingsQueries';
 
-export default function SettingsScreen() {
-  const id = Firebase.auth().currentUser.uid;
+const SettingsScreen = () => {
+  const id = Firebase.auth().currentUser?.uid;
   const [editing, setEditing] = useState(false);
   const [name, setName] = useState('');
   const { loading: fetchLoading, data } = useQuery(GET_USER, { variables: { id } });
@@ -109,4 +109,5 @@ export default function SettingsScreen() {
       </View>
     </SafeAreaView>
   );
-}
+};
+export default SettingsScreen;
