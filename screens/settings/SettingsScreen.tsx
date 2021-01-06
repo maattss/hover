@@ -1,7 +1,7 @@
 import React from 'react';
 import { Alert, View, Text, TouchableOpacity, StyleSheet, FlatList } from 'react-native';
 import Firebase from '../../lib/firebase';
-import { Buttons, Spacing, Typography, red } from '../../theme';
+import { Buttons, Spacing, Typography, red, Colors } from '../../theme';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 
 const DATA: Item[] = [
@@ -89,9 +89,10 @@ const styles = StyleSheet.create({
   },
   logOutButton: {
     ...Buttons.button,
-    backgroundColor: red,
+    backgroundColor: Colors.red,
     width: '100%',
     marginTop: Spacing.base,
+    marginBottom: Spacing.base,
   },
   logOutButtonText: {
     ...Buttons.buttonText,
