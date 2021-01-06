@@ -2,13 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { User } from 'firebase';
-
 import Firebase from '../lib/firebase';
-
 import { RootStackParamList, AuthenticationStackParamList } from '../types';
 import BottomTabNavigator from './BottomTabNavigator';
 import LinkingConfiguration from './LinkingConfiguration';
-
 import SignupScreen from '../screens/auth/SignUpScreen';
 import LoginScreen from '../screens/auth/LoginScreen';
 import NotFoundScreen from '../screens/notFound/NotFoundScreen';
@@ -36,6 +33,7 @@ const AuthenticationNavigator: React.FC = () => {
 
 const Navigation: React.FC = () => {
   const [userAuthState, setUserAuthState] = useState<User | null>(null);
+
   useEffect(() => {
     Firebase.auth().onAuthStateChanged((user) => {
       if (user) {

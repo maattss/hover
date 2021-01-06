@@ -1,50 +1,23 @@
 import * as Colors from './colors';
-import * as Spacing from './spacing';
 import * as Typography from './typography';
+import * as Spacing from './spacing';
 
-export const base = {
-  alignItems: 'center',
-  marginRight: Spacing.smallest,
-  marginVertical: Spacing.tiny,
+export const button = {
+  color: Colors.almostBlack,
+  padding: Spacing.base,
+  borderRadius: Spacing.smaller,
+  backgroundColor: Colors.white,
+  alignItems: 'center' as const,
 };
 
-export const text = {
-  color: Colors.white,
-  fontSize: Typography.smallestFontSize,
-  fontWeight: 'bold',
+export const buttonText = {
+  color: Colors.almostBlack,
+  fontSize: Typography.buttonFontSize,
+  fontWeight: 'bold' as const,
   letterSpacing: 1,
 };
 
-export const textUnselected = {
-  ...text,
-  color: Colors.gray500,
-};
-
-export const small = {
-  paddingHorizontal: Spacing.small,
-  paddingVertical: Spacing.small + 2,
-  width: 75,
-};
-
-export const large = {
-  paddingHorizontal: Spacing.large,
-  paddingVertical: Spacing.large + 4,
-};
-
-export const rounded = {
-  borderRadius: 50,
-};
-
-export const selected = {
-  backgroundColor: Colors.blue,
-};
-
-export const unselected = {
-  backgroundColor: Colors.gray200,
-};
-
-export const smallRounded = {
-  ...base,
-  ...small,
-  ...rounded,
+export const buttonTextUnselected = {
+  ...buttonText,
+  color: Colors.gray200,
 };

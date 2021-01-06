@@ -1,14 +1,21 @@
 import React from 'react';
-import tailwind from 'tailwind-rn';
-import { View } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import FeedTopBar from '../../navigation/FeedTopBar';
 
 const FeedScreen: React.FC = () => {
   return (
-    <View style={tailwind('flex-1')}>
+    <View style={styles.container}>
       <FeedTopBar />
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    padding: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});
 
 export default FeedScreen;

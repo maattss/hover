@@ -1,13 +1,25 @@
 import React from 'react';
-import tailwind from 'tailwind-rn';
-import { Text, View } from 'react-native';
+import { Text, View, StyleSheet } from 'react-native';
 
 const FollowingFeedScreen: React.FC = () => {
   return (
-    <View style={tailwind('py-5 px-5 flex-1')}>
-      <Text style={tailwind('text-4xl text-center font-bold')}>Followers&apos; Activites</Text>
+    <View style={styles.container}>
+      <Text style={styles.header}>Followers&apos; Activites</Text>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    padding: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  header: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+});
 
 export default FollowingFeedScreen;
