@@ -6,7 +6,6 @@ import { Feather } from '@expo/vector-icons';
 
 import Firebase from '../../lib/firebase';
 import { GET_USER, UPDATE_USER_NAME } from '../../lib/queries/settingsQueries';
-import { color } from 'react-native-reanimated';
 
 const SettingsScreen = () => {
   const id = Firebase.auth().currentUser?.uid;
