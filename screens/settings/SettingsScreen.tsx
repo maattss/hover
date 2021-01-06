@@ -1,8 +1,7 @@
 import React from 'react';
 import { Alert, View, Text, TouchableOpacity, StyleSheet, FlatList } from 'react-native';
 import Firebase from '../../lib/firebase';
-import { Buttons, Spacing, Typography } from '../../theme';
-import { red } from '../../theme/colors';
+import { Buttons, Spacing, Typography, red } from '../../theme';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 
 const DATA: Item[] = [

@@ -1,5 +1,4 @@
 import React from 'react';
-import tailwind from 'tailwind-rn';
 import Leaderboard, { Item } from '../../components/Leaderboard';
 import { View } from 'react-native';
 
@@ -63,7 +62,7 @@ const LeaderboardScreen: React.FC = () => {
     },
   ];
   return (
-    <View style={tailwind('flex-1')}>
+    <View>
       <Leaderboard data={data} />
     </View>
   );
