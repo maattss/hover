@@ -46,9 +46,8 @@ const Navigation: React.FC = () => {
 
   return (
     <NavigationContainer linking={LinkingConfiguration}>
-      <RootNavigator />
-      {/* {userAuthState && <RootNavigator />}
-      {!userAuthState && <AuthenticationNavigator />} */}
+      {userAuthState && <RootNavigator />}
+      {!userAuthState && <AuthenticationNavigator />}
     </NavigationContainer>
   );
 };
