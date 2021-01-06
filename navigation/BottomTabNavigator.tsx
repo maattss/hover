@@ -7,8 +7,9 @@ import MapScreen from '../screens/explore/MapScreen';
 import FeedScreen from '../screens/feed/FeedScreen';
 import { BottomTabParamList, TabOneParamList, TabThreeParamList, TabTwoParamList } from '../types';
 import StatisticsScreen from '../screens/statistics/StatisticsScreen';
-import SettingsScreen from '../screens/settings/SettingsScreen';
+
 import { useTheme } from '../theme/ThemeProvider';
+import SettingsScreen from '../screens/settings/SettingsScreen/SettingsScreen';
 
 function TabBarIcon(props: { name: string; color: string }) {
   return <Ionicons style={styles.tabicon} {...props} />;
