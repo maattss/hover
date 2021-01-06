@@ -1,5 +1,6 @@
 import React from 'react';
 import { Alert, View, Text, TouchableOpacity, StyleSheet, FlatList } from 'react-native';
+import Firebase from '../../lib/firebase';
 import { Buttons, Spacing, Typography, red, Colors } from '../../theme';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 
@@ -27,6 +28,14 @@ const Item = (item: Item) => (
 );
 
 const SettingsScreen = () => {
+  const handleLogout = async () => {
+    try {
+      await Firebase.auth().signOut();
+    } catch (error) {
+      console.error(error);
+      Alert.alert('Error', error.message);
+    }
+  };
   const areYouSure = () =>
     Alert.alert(
       'Are you Sure?',
