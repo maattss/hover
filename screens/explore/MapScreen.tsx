@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import MapView, { Circle, MAP_TYPES } from 'react-native-maps';
+import MapView, { Circle } from 'react-native-maps';
 import { StyleSheet, Dimensions, Text, View } from 'react-native';
 import { Location } from '../../types';
 import { useTheme } from '../../theme/ThemeProvider';

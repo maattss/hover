@@ -1,13 +1,26 @@
 import React from 'react';
-import tailwind from 'tailwind-rn';
-import { Text, View } from 'react-native';
+import { Text, View, StyleSheet } from 'react-native';
+import { useTheme } from '../../theme/ThemeProvider';
 
 const YourFeedScreen: React.FC = () => {
   return (
-    <View style={tailwind('py-5 px-5 flex-1')}>
-      <Text style={tailwind('py-5 text-4xl text-center font-bold')}>Your Activities</Text>
+    <View style={styles.container}>
+      <Text style={styles.header}>Your Activities</Text>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    padding: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  header: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+});
 
 export default YourFeedScreen;
