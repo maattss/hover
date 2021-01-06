@@ -29,6 +29,11 @@ export const bodyText = {
   lineHeight: 19,
 };
 
+export const largeBodyText = {
+  fontSize: largeFontSize,
+  lineHeight: 26,
+};
+
 export const headerText = {
   fontSize: headerFontSize,
   fontWeight: 'bold' as const,

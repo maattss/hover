@@ -7,8 +7,9 @@ import MapScreen from '../screens/explore/MapScreen';
 import FeedScreen from '../screens/feed/FeedScreen';
 import { BottomTabParamList, TabOneParamList, TabThreeParamList, TabTwoParamList } from '../types';
 import StatisticsScreen from '../screens/statistics/StatisticsScreen';
-import SettingsScreen from '../screens/settings/SettingsScreen';
 import { Colors } from '../theme';
+import SettingsScreen from '../screens/settings/SettingsScreen';
+import UserSettingsScreen from '../screens/settings/SettingsScreen/UserSettingsScreen';
 
 const TabBarIcon = (props: { name: string; color: string }) => {
   return <FAIcon style={styles.tabicon} {...props} />;
@@ -36,8 +37,14 @@ const TabOneNavigator: React.FC = () => {
         name="Settings"
         component={SettingsScreen}
         options={{
-          gestureEnabled: false,
           headerTitle: 'Settings',
+        }}
+      />
+      <TabOneStack.Screen
+        name="UserSettings"
+        component={UserSettingsScreen}
+        options={{
+          headerTitle: 'UserSettings',
         }}
       />
     </TabOneStack.Navigator>

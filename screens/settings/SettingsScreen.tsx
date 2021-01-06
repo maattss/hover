@@ -4,30 +4,28 @@ import Firebase from '../../lib/firebase';
 import { Buttons, Spacing, Typography, Colors } from '../../theme';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 
-const DATA: Item[] = [
-  {
-    id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-    title: 'Language',
-  },
-  {
-    id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-    title: 'Appearance',
-  },
-];
+import { StackNavigationProp } from '@react-navigation/stack';
+import { SettingsStackParamList } from '../../types';
 
+type NavigationProp = StackNavigationProp<SettingsStackParamList>;
+
+type Props = {
+  navigation: NavigationProp;
+};
 type Item = {
   id: string;
   title: string;
+  onClick?: () => void;
 };
 
 const Item = (item: Item) => (
-  <TouchableOpacity style={styles.settingsItem}>
+  <TouchableOpacity style={styles.settingsItem} onPress={() => (item.onClick ? item.onClick() : null)}>
     <Text style={{ ...Buttons.buttonText }}>{item.title}</Text>
     <FAIcon name="chevron-right" style={{ ...Buttons.buttonText }} />
   </TouchableOpacity>
 );
 
-const SettingsScreen = () => {
+const SettingsScreen = ({ navigation }: Props) => {
   const handleLogout = async () => {
     try {
       await Firebase.auth().signOut();
@@ -36,6 +34,22 @@ const SettingsScreen = () => {
       Alert.alert('Error', error.message);
     }
   };
+  const SettingMenu: Item[] = [
+    {
+      id: 'bd7acbea-c1b1-873h-aed5-3ad53ahsj8ba',
+      title: 'User Settings',
+      onClick: () => navigation.navigate('UserSettings'),
+    },
+    {
+      id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
+      title: 'Language',
+    },
+    {
+      id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
+      title: 'Appearance',
+    },
+  ];
+
   const areYouSure = () =>
     Alert.alert(
       'Are you Sure?',
@@ -48,12 +62,17 @@ const SettingsScreen = () => {
       ],
       { cancelable: false },
     );
-  const renderItem = ({ item }: { item: Item }) => <Item id={item.id} title={item.title} />;
+  const renderItem = ({ item }: { item: Item }) => <Item id={item.id} title={item.title} onClick={item.onClick} />;
 
   return (
     <View style={styles.container}>
       <View style={styles.settingsContainer}>
-        <FlatList data={DATA} renderItem={renderItem} keyExtractor={(item) => item.id} style={styles.settingsList} />
+        <FlatList
+          data={SettingMenu}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.id}
+          style={styles.settingsList}
+        />
       </View>
       <TouchableOpacity style={styles.logOutButton} onPress={areYouSure}>
         <Text style={{ ...Buttons.buttonText }}>Sign out</Text>
