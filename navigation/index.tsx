@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
+import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { User } from 'firebase';
 import Firebase from '../lib/firebase';
@@ -9,7 +9,6 @@ import LinkingConfiguration from './LinkingConfiguration';
 import SignupScreen from '../screens/auth/SignUpScreen';
 import LoginScreen from '../screens/auth/LoginScreen';
 import NotFoundScreen from '../screens/notFound/NotFoundScreen';
-import { useTheme } from '../theme/ThemeProvider';
 
 const RootStack = createStackNavigator<RootStackParamList>();
 const AuthenticationStack = createStackNavigator<AuthenticationStackParamList>();
@@ -34,7 +33,6 @@ const AuthenticationNavigator: React.FC = () => {
 
 const Navigation: React.FC = () => {
   const [userAuthState, setUserAuthState] = useState<User | null>(null);
-  const { colors, isDark } = useTheme();
 
   useEffect(() => {
     Firebase.auth().onAuthStateChanged((user) => {
@@ -46,27 +44,8 @@ const Navigation: React.FC = () => {
     });
   }, []);
 
-  const DarkCustomTheme = {
-    ...DarkTheme,
-    colors: {
-      ...DarkTheme.colors,
-      background: colors.background,
-      primary: colors.primary,
-      text: colors.text,
-    },
-  };
-  const LightCustomTheme = {
-    ...DefaultTheme,
-    colors: {
-      ...DefaultTheme.colors,
-      background: colors.background,
-      primary: colors.primary,
-      text: colors.text,
-    },
-  };
-
   return (
-    <NavigationContainer linking={LinkingConfiguration} theme={isDark ? DarkCustomTheme : LightCustomTheme}>
+    <NavigationContainer linking={LinkingConfiguration}>
       <RootNavigator />
       {/* {userAuthState && <RootNavigator />}
       {!userAuthState && <AuthenticationNavigator />} */}

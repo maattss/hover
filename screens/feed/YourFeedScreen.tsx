@@ -1,6 +1,5 @@
 import React from 'react';
 import { Text, View, StyleSheet } from 'react-native';
-import { useTheme } from '../../theme/ThemeProvider';
 
 const YourFeedScreen: React.FC = () => {
   return (

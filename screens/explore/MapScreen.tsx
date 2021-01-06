@@ -2,15 +2,13 @@ import React, { useState } from 'react';
 import MapView, { Circle } from 'react-native-maps';
 import { StyleSheet, Dimensions, Text, View } from 'react-native';
 import { Location } from '../../types';
-import { useTheme } from '../../theme/ThemeProvider';
-import { Spacing, Typography } from '../../theme';
+import { Colors, Spacing, Typography } from '../../theme';
 
 const { width, height } = Dimensions.get('window');
 
 const MapScreen: React.FC = () => {
   const [mapLocation, setMapLocation] = useState<Location>();
   const [userLocation, setUserLocation] = useState<Location>();
-  const { colors } = useTheme();
 
   return (
     <View style={styles.container}>
@@ -55,7 +53,7 @@ const MapScreen: React.FC = () => {
         <Circle
           center={{ latitude: 63.419, longitude: 10.4025 }}
           radius={100}
-          fillColor={colors.primary}
+          fillColor={Colors.almostBlack}
           strokeWidth={0.1}
         />
       </MapView>
@@ -78,6 +76,7 @@ const styles = StyleSheet.create({
     paddingTop: Spacing.smaller,
     paddingLeft: Spacing.smaller,
     backgroundColor: 'transparent',
+    color: Colors.white,
   },
 });
 

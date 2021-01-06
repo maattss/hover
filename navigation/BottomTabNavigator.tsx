@@ -8,7 +8,7 @@ import FeedScreen from '../screens/feed/FeedScreen';
 import { BottomTabParamList, TabOneParamList, TabThreeParamList, TabTwoParamList } from '../types';
 import StatisticsScreen from '../screens/statistics/StatisticsScreen';
 import SettingsScreen from '../screens/settings/SettingsScreen';
-import { useTheme } from '../theme/ThemeProvider';
+import { Colors } from '../theme';
 
 const TabBarIcon = (props: { name: string; color: string }) => {
   return <FAIcon style={styles.tabicon} {...props} />;
@@ -71,13 +71,12 @@ const TabThreeNavigator: React.FC = () => {
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
 const BottomTabNavigator: React.FC = () => {
-  const { colors } = useTheme();
   const tabBarIconHome = ({ color = '' as string }) => <TabBarIcon name="home" color={color} />;
   const tabBarIconNavigate = ({ color = '' as string }) => <TabBarIcon name="location-arrow" color={color} />;
   const tabBarIconStats = ({ color = '' as string }) => <TabBarIcon name="chart-bar" color={color} />;
 
   return (
-    <BottomTab.Navigator initialRouteName="Feed" tabBarOptions={{ activeTintColor: colors.primary }}>
+    <BottomTab.Navigator initialRouteName="Feed" tabBarOptions={{ activeTintColor: Colors.blue }}>
       <BottomTab.Screen
         name="Feed"
         component={TabOneNavigator}

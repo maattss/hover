@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import FeedTopBar from '../../navigation/FeedTopBar';
-import { useTheme } from '../../theme/ThemeProvider';
 
 const FeedScreen: React.FC = () => {
   return (

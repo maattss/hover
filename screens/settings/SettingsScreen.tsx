@@ -1,11 +1,9 @@
 import React from 'react';
 import { Alert, View, Text, TouchableOpacity, StyleSheet, FlatList } from 'react-native';
 import Firebase from '../../lib/firebase';
-import { useTheme } from '../../theme/ThemeProvider';
 import { Buttons, Spacing, Typography } from '../../theme';
 import { red } from '../../theme/colors';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
-import { Switch } from '../../components/Switch';
 
 const DATA: Item[] = [
   {
@@ -31,7 +29,6 @@ const Item = (item: Item) => (
 );
 
 const SettingsScreen = () => {
-  const { colors, isDark } = useTheme();
   const handleLogout = async () => {
     try {
       await Firebase.auth().signOut();
@@ -59,10 +56,6 @@ const SettingsScreen = () => {
       <View style={styles.settingsContainer}>
         <FlatList data={DATA} renderItem={renderItem} keyExtractor={(item) => item.id} style={styles.settingsList} />
       </View>
-      <View style={styles.settingsContainer}>
-        <Text style={{ ...Typography.bodyText }}>{isDark ? 'Dark' : 'Light'}</Text>
-      </View>
-      <Switch />
       <TouchableOpacity style={styles.logOutButton} onPress={areYouSure}>
         <Text style={{ ...Buttons.buttonText }}>Sign out</Text>
       </TouchableOpacity>
