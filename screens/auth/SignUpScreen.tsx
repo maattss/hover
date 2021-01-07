@@ -1,61 +1,151 @@
 import React, { useState } from 'react';
 import { StackScreenProps } from '@react-navigation/stack';
-import { Text, View, TextInput, TouchableOpacity, Alert } from 'react-native';
-import tailwind from 'tailwind-rn';
+import { Text, View, TextInput, TouchableOpacity, Alert, ActivityIndicator, StyleSheet } from 'react-native';
 import { AuthenticationStackParamList } from '../../types';
 import Firebase, { fns } from '../../lib/firebase';
+import { Buttons, Colors, Spacing, Typography } from '../../theme';
 
 const SignUpScreen = ({ navigation }: StackScreenProps<AuthenticationStackParamList, 'Signup'>) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [validationSuccess, setvalidationSuccess] = useState(true);
 
   const handleSignup = async () => {
+    setLoading(true);
     try {
-      /* Do some sort of validation before this
-      Think password length and so on */
-      // Extract the function into a variable
-      const registerUser = fns.httpsCallable('registerUser');
-      // Call the function
-      await registerUser({ email, password });
-      // Log the user in
-      await Firebase.auth().signInWithEmailAndPassword(email, password);
+      if (password !== confirmPassword) setvalidationSuccess(false);
+      if (validationSuccess) {
+        // Extract the function into a variable
+        const registerUser = fns.httpsCallable('registerUser');
+        // Call the function
+        await registerUser({ email, password });
+        // Log the user in
+        await Firebase.auth().signInWithEmailAndPassword(email, password);
+        Alert.alert('Signup success');
+      } else {
+        Alert.alert('Something wrong...', 'Please check your email, and that both passwords match!');
+        setLoading(false);
+      }
     } catch (error) {
       console.error(error);
       Alert.alert('Error', error.message);
+      setLoading(false);
     }
   };
-  return (
-    <View style={tailwind('pb-20 px-5 flex-1 justify-center')}>
-      <Text style={tailwind('text-4xl font-bold')}>Sign up</Text>
 
-      <View style={tailwind('mt-8')}>
-        <TextInput
-          placeholder="Email"
-          onChangeText={(val) => setEmail(val)}
-          autoCapitalize="none"
-          style={tailwind('text-xl border-b-2 border-blue-500')}
-        />
-        <TextInput
-          placeholder="Password"
-          onChangeText={(val) => setPassword(val)}
-          autoCapitalize="none"
-          secureTextEntry
-          style={tailwind('text-xl border-b-2 border-blue-500 mt-8')}
-        />
+  const handleCancel = () => {
+    setLoading(false);
+  };
 
-        <TouchableOpacity style={tailwind('bg-blue-500 rounded-lg py-3 mt-10')} onPress={handleSignup}>
-          <Text style={tailwind('text-white text-center font-bold text-lg')}>Sign up</Text>
+  if (loading) {
+    return (
+      <View style={styles.container}>
+        <ActivityIndicator size={'large'} />
+        <Text style={styles.infoText}>Signing up... Please wait</Text>
+        <TouchableOpacity style={styles.cancelButton} onPress={handleCancel}>
+          <Text style={{ ...Buttons.buttonText }}>Cancel</Text>
         </TouchableOpacity>
       </View>
-
-      <View style={tailwind('mt-2 flex-row justify-center')}>
-        <Text>Already have an account?</Text>
-        <TouchableOpacity style={tailwind('ml-1')} onPress={() => navigation.navigate('Login')}>
-          <Text style={tailwind('text-blue-500')}>Login</Text>
-        </TouchableOpacity>
+    );
+  } else {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.header}>Sign up</Text>
+        <View style={styles.formContainer}>
+          <TextInput
+            placeholder="Email"
+            placeholderTextColor="black"
+            onChangeText={(val) => setEmail(val)}
+            autoCapitalize="none"
+            keyboardType="email-address"
+            style={styles.formField}
+          />
+          <TextInput
+            placeholder="Password"
+            placeholderTextColor="black"
+            onChangeText={(val) => setPassword(val)}
+            autoCapitalize="none"
+            secureTextEntry
+            style={styles.formField}
+          />
+          <TextInput
+            placeholder="Confirm password"
+            placeholderTextColor="black"
+            onChangeText={(val) => setConfirmPassword(val)}
+            autoCapitalize="none"
+            secureTextEntry
+            style={styles.formField}
+          />
+          <TouchableOpacity style={styles.signUpButton} onPress={handleSignup}>
+            <Text style={{ ...Buttons.buttonText, color: Colors.white }}>Sign up</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.loginContainer}>
+          <Text style={{ ...Typography.bodyText }}>Already have an account?</Text>
+          <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+            <Text style={styles.loginLink}>Login</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-    </View>
-  );
+    );
+  }
 };
+
+const styles = StyleSheet.create({
+  container: {
+    display: 'flex',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    height: '100%',
+    width: '100%',
+    marginTop: '30%',
+  },
+  header: {
+    ...Typography.headerText,
+    marginBottom: Spacing.base,
+    textAlign: 'left',
+    width: '80%',
+  },
+  formContainer: {
+    width: '80%',
+  },
+  formField: {
+    ...Buttons.button,
+    ...Typography.bodyText,
+    padding: Spacing.small,
+    marginBottom: Spacing.base,
+    backgroundColor: Colors.gray300,
+  },
+  infoText: {
+    ...Typography.bodyText,
+    paddingTop: Spacing.base,
+  },
+  signUpButton: {
+    ...Buttons.button,
+    backgroundColor: Colors.blue,
+    width: '100%',
+    marginTop: Spacing.base,
+    marginBottom: Spacing.base,
+  },
+  cancelButton: {
+    ...Buttons.button,
+    backgroundColor: Colors.red,
+    width: '60%',
+    marginTop: Spacing.largest,
+    marginBottom: Spacing.base,
+  },
+  loginLink: {
+    ...Typography.bodyText,
+    color: Colors.blue,
+    marginLeft: Spacing.smallest,
+    fontWeight: 'bold',
+  },
+  loginContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+  },
+});
 
 export default SignUpScreen;
