@@ -1,8 +1,10 @@
+import { ApolloProvider } from '@apollo/client';
 import React from 'react';
 import { StatusBar } from 'react-native';
 import { AppearanceProvider } from 'react-native-appearance';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import useCachedResources from './hooks/useCachedResources';
+import { apolloClient } from './lib/apollo';
 import Navigation from './navigation';
 
 export default function App() {
@@ -12,11 +14,13 @@ export default function App() {
     return null;
   }
   return (
-    <SafeAreaProvider>
-      <AppearanceProvider>
-        <Navigation />
-        <StatusBar animated barStyle={'dark-content'} />
-      </AppearanceProvider>
-    </SafeAreaProvider>
+    <ApolloProvider client={apolloClient}>
+      <SafeAreaProvider>
+        <AppearanceProvider>
+          <Navigation />
+          <StatusBar animated barStyle={'dark-content'} />
+        </AppearanceProvider>
+      </SafeAreaProvider>
+    </ApolloProvider>
   );
 }

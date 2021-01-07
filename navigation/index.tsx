@@ -3,38 +3,13 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { User } from 'firebase';
 import Firebase from '../lib/firebase';
-import { ApolloProvider } from '@apollo/client';
-import { apolloClient } from '../lib/apollo';
 
-import { RootStackParamList, AuthenticationStackParamList } from '../types';
+import { RootStackParamList } from '../types';
 import BottomTabNavigator from './BottomTabNavigator';
-import LinkingConfiguration from './LinkingConfiguration';
 import SignupScreen from '../screens/auth/SignUpScreen';
 import LoginScreen from '../screens/auth/LoginScreen';
-import NotFoundScreen from '../screens/notFound/NotFoundScreen';
 
 const RootStack = createStackNavigator<RootStackParamList>();
-const AuthenticationStack = createStackNavigator<AuthenticationStackParamList>();
-
-const RootNavigator: React.FC = () => {
-  return (
-    <ApolloProvider client={apolloClient}>
-      <RootStack.Navigator screenOptions={{ headerShown: false }}>
-        <RootStack.Screen name="Root" component={BottomTabNavigator} />
-        <RootStack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
-      </RootStack.Navigator>
-    </ApolloProvider>
-  );
-};
-
-const AuthenticationNavigator: React.FC = () => {
-  return (
-    <AuthenticationStack.Navigator screenOptions={{ headerShown: false }}>
-      <AuthenticationStack.Screen name="Login" component={LoginScreen} />
-      <AuthenticationStack.Screen name="Signup" component={SignupScreen} />
-    </AuthenticationStack.Navigator>
-  );
-};
 
 const Navigation: React.FC = () => {
   const [userAuthState, setUserAuthState] = useState<User | null>(null);
@@ -50,9 +25,17 @@ const Navigation: React.FC = () => {
   }, []);
 
   return (
-    <NavigationContainer linking={LinkingConfiguration}>
-      {userAuthState && <RootNavigator />}
-      {!userAuthState && <AuthenticationNavigator />}
+    <NavigationContainer>
+      <RootStack.Navigator screenOptions={{ headerShown: false }}>
+        {userAuthState ? (
+          <RootStack.Screen name="Root" component={BottomTabNavigator} />
+        ) : (
+          <>
+            <RootStack.Screen name="Login" component={LoginScreen} />
+            <RootStack.Screen name="Signup" component={SignupScreen} />
+          </>
+        )}
+      </RootStack.Navigator>
     </NavigationContainer>
   );
 };

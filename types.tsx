@@ -1,9 +1,5 @@
 export type RootStackParamList = {
   Root: undefined;
-  NotFound: undefined;
-};
-
-export type AuthenticationStackParamList = {
   Signup: undefined;
   Login: undefined;
 };
