@@ -1,18 +1,29 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, TouchableOpacity, ActivityIndicator, View, TextInput } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  ActivityIndicator,
+  View,
+  TextInput,
+  TextStyle,
+  ViewStyle,
+} from 'react-native';
 import { useQuery, useMutation } from '@apollo/client';
 import { Entypo } from '@expo/vector-icons';
 
 import Firebase from '../../../lib/firebase';
 import { GET_USER, UPDATE_USER_NAME } from '../../../lib/queries/settingsQueries';
 import { Buttons, Colors, Spacing, Typography } from '../../../theme';
+import { SettingsProps } from '../SettingsScreen';
 
-const UserSettingsScreen: React.FC = () => {
+const UserSettingsScreen = ({ navigation }: SettingsProps) => {
   const id = Firebase.auth().currentUser?.uid;
-  const [editing, setEditing] = useState(false);
   const [name, setName] = useState('');
-  const { loading: fetchLoading, data } = useQuery(GET_USER, { variables: { id } });
-  const [updateUser, { loading: mutationLoading, data: response }] = useMutation(UPDATE_USER_NAME);
+  const { loading: fetchLoading, error: fetchError, data } = useQuery(GET_USER, { variables: { id } });
+  const [updateUser, { loading: mutationLoading, error: mutationError, data: response }] = useMutation(
+    UPDATE_USER_NAME,
+  );
   useEffect(() => {
     let newName = null;
 
@@ -31,6 +42,14 @@ const UserSettingsScreen: React.FC = () => {
     setName(newName);
   }, [data, response]);
 
+  if (fetchError) {
+    console.error(fetchError);
+    return <div>Error!</div>;
+  }
+  if (mutationError) {
+    console.error(mutationError);
+    return <div>Mutation Error!</div>;
+  }
   if (fetchLoading || mutationLoading)
     return (
       <View style={styles.container}>
@@ -39,67 +58,65 @@ const UserSettingsScreen: React.FC = () => {
     );
   return (
     <View style={styles.container}>
-      {(!name || editing) && (
-        <View>
-          <View style={styles.textInputRow}>
-            <Text style={styles.textStyle}>Name</Text>
-            <View style={styles.inputContainer}>
-              <TextInput
-                placeholder={!name ? 'What is your name?' : name}
-                onChangeText={(val) => setName(val)}
-                onFocus={() => setEditing(true)}
-                style={styles.textInput}
-              />
-            </View>
-          </View>
-          <TouchableOpacity
-            style={[styles.editButton]}
-            onPress={() => {
-              updateUser({
-                variables: {
-                  id,
-                  name,
-                },
-              });
-              setEditing(false);
-            }}>
-            <Text>Save</Text>
-            <Entypo name="edit" />
-          </TouchableOpacity>
+      <View style={styles.textInputRow}>
+        <Text style={styles.textStyle}>Name</Text>
+        <View style={styles.inputContainer}>
+          <TextInput
+            placeholder={'What is your name?'}
+            value={name}
+            onChangeText={(val) => setName(val)}
+            style={styles.textInput}
+          />
         </View>
-      )}
-      {name && !editing && (
-        <View>
-          <Text style={styles.textStyle}>Did I get your name right?</Text>
-          <View>
-            <Text style={styles.textStyle}>{name}</Text>
-            <TouchableOpacity style={styles.editButton} onPress={() => setEditing(true)}>
-              <Entypo name="edit" />
-            </TouchableOpacity>
-          </View>
-        </View>
-      )}
+      </View>
+      <TouchableOpacity
+        style={[styles.editButton]}
+        onPress={() => {
+          updateUser({
+            variables: {
+              id,
+              name,
+            },
+          })
+            .then(({ data }) => {
+              setName(data);
+              console.log(name);
+            })
+            .finally(() => navigation.goBack())
+            .catch((error) => {
+              console.error(error.message);
+            });
+        }}>
+        <Text style={{ ...Buttons.buttonText }}>
+          Save <Entypo name="edit" />
+        </Text>
+      </TouchableOpacity>
     </View>
   );
 };
 export default UserSettingsScreen;
 
-const styles = StyleSheet.create({
+interface Style {
+  container: ViewStyle;
+  textStyle: TextStyle;
+  textInputRow: ViewStyle;
+  textInput: ViewStyle;
+  inputContainer: ViewStyle;
+  editButton: ViewStyle;
+}
+
+const styles = StyleSheet.create<Style>({
   container: {
     display: 'flex',
     alignItems: 'center',
-    paddingLeft: Spacing.large,
-    paddingRight: Spacing.large,
-    paddingTop: Spacing.small,
-    paddingBottom: Spacing.small,
+    paddingHorizontal: Spacing.large,
+    paddingVertical: Spacing.small,
   },
   textStyle: {
     backgroundColor: 'transparent',
     ...Typography.largeBodyText,
-    paddingLeft: Spacing.large,
-    paddingRight: Spacing.large,
-    paddingTop: Spacing.small,
-    paddingBottom: Spacing.small,
+    paddingHorizontal: Spacing.large,
+    paddingVertical: Spacing.small,
   },
   textInputRow: {
     display: 'flex',
@@ -117,10 +134,8 @@ const styles = StyleSheet.create({
     borderColor: Colors.blue,
     borderBottomWidth: 2,
     backgroundColor: Colors.white,
-    paddingLeft: Spacing.large,
-    paddingRight: Spacing.large,
-    paddingTop: Spacing.small,
-    paddingBottom: Spacing.small,
+    paddingHorizontal: Spacing.large,
+    paddingVertical: Spacing.small,
   },
   editButton: {
     ...Buttons.button,

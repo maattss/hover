@@ -9,7 +9,7 @@ import { SettingsStackParamList } from '../../types';
 
 type NavigationProp = StackNavigationProp<SettingsStackParamList>;
 
-type Props = {
+export type SettingsProps = {
   navigation: NavigationProp;
 };
 type Item = {
@@ -25,7 +25,7 @@ const Item = (item: Item) => (
   </TouchableOpacity>
 );
 
-const SettingsScreen = ({ navigation }: Props) => {
+const SettingsScreen = ({ navigation }: SettingsProps) => {
   const handleLogout = async () => {
     try {
       await Firebase.auth().signOut();
