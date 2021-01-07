@@ -21,26 +21,34 @@ import { SettingsProps } from '../SettingsScreen';
 const UserSettingsScreen = ({ navigation }: SettingsProps) => {
   const id = Firebase.auth().currentUser?.uid;
   const [name, setName] = useState('');
-  const { loading: fetchLoading, error: fetchError, data } = useQuery(GET_USER, { variables: { id } });
+  const [bio, setBio] = useState('');
+  const { loading: fetchLoading, error: fetchError, data } = useQuery(GET_USER, {
+    variables: { id },
+    pollInterval: 500,
+  });
   const [updateUser, { loading: mutationLoading, error: mutationError, data: response }] = useMutation(
     UPDATE_USER_NAME,
   );
   useEffect(() => {
     let newName = null;
+    let newBio = null;
 
     if (data) {
       const { users_by_pk: user } = data;
-      const { name } = user;
+      const { name, bio } = user;
       newName = name;
+      newBio = bio;
     }
 
     if (response) {
       const { update_users_by_pk } = response;
-      const { name } = update_users_by_pk;
+      const { name, bio } = update_users_by_pk;
       newName = name;
+      newBio = bio;
     }
 
     setName(newName);
+    setBio(newBio);
   }, [data, response]);
 
   if (fetchError) {
@@ -59,39 +67,46 @@ const UserSettingsScreen = ({ navigation }: SettingsProps) => {
     );
   return (
     <View style={styles.container}>
-      <View style={styles.textInputRow}>
-        <Text style={styles.textStyle}>Name</Text>
-        <View style={styles.inputContainer}>
+      <View style={styles.formContainer}>
+        <View style={styles.formRow}>
+          <Text style={styles.labelText}>Name</Text>
           <TextInput
             placeholder={'What is your name?'}
             value={name}
             onChangeText={(val) => setName(val)}
-            style={styles.textInput}
+            style={styles.formField}
           />
         </View>
-      </View>
-      <TouchableOpacity
-        style={[styles.editButton]}
-        onPress={() => {
-          updateUser({
-            variables: {
-              id,
-              name,
-            },
-          })
-            .then(({ data }) => {
-              setName(data);
-              console.log(name);
+        <View style={styles.formRow}>
+          <Text style={styles.labelText}>Bio</Text>
+          <TextInput
+            placeholder={'Tell me something about yourself!'}
+            value={bio}
+            onChangeText={(val) => setBio(val)}
+            style={styles.formField}
+            multiline={true}
+          />
+        </View>
+        <TouchableOpacity
+          style={[styles.editButton]}
+          onPress={() => {
+            updateUser({
+              variables: {
+                id,
+                name,
+                bio,
+              },
             })
-            .finally(() => navigation.goBack())
-            .catch((error) => {
-              console.error(error.message);
-            });
-        }}>
-        <Text style={{ ...Buttons.buttonText }}>
-          Save <Entypo name="edit" />
-        </Text>
-      </TouchableOpacity>
+              .finally(() => navigation.goBack())
+              .catch((error) => {
+                console.error(error.message);
+              });
+          }}>
+          <Text style={{ ...Buttons.buttonText }}>
+            Save <Entypo name="edit" />
+          </Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -99,10 +114,10 @@ export default UserSettingsScreen;
 
 interface Style {
   container: ViewStyle;
-  textStyle: TextStyle;
-  textInputRow: ViewStyle;
-  textInput: ViewStyle;
-  inputContainer: ViewStyle;
+  formContainer: ViewStyle;
+  formRow: ViewStyle;
+  formField: ViewStyle;
+  labelText: TextStyle;
   editButton: ViewStyle;
 }
 
@@ -113,30 +128,28 @@ const styles = StyleSheet.create<Style>({
     paddingHorizontal: Spacing.large,
     paddingVertical: Spacing.small,
   },
-  textStyle: {
-    backgroundColor: 'transparent',
-    ...Typography.largeBodyText,
-    paddingHorizontal: Spacing.large,
-    paddingVertical: Spacing.small,
+  formContainer: {
+    width: '90%',
   },
-  textInputRow: {
+  formRow: {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginLeft: Spacing.large,
-    marginRight: Spacing.large,
-    marginTop: Spacing.small,
-    marginBottom: Spacing.small,
+    marginBottom: Spacing.base,
   },
-  textInput: {
-    ...Typography.largeBodyText,
+  formField: {
+    ...Buttons.button,
+    ...Typography.bodyText,
+    padding: Spacing.small,
+    backgroundColor: Colors.gray300,
+    width: '80%',
+    alignItems: 'center',
   },
-  inputContainer: {
-    borderColor: Colors.blue,
-    borderBottomWidth: 2,
-    backgroundColor: Colors.white,
-    paddingHorizontal: Spacing.large,
-    paddingVertical: Spacing.small,
+  labelText: {
+    ...Typography.bodyText,
+    paddingTop: Spacing.base,
+    width: '20%',
+    alignItems: 'center',
   },
   editButton: {
     ...Buttons.button,
