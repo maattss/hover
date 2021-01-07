@@ -9,7 +9,7 @@ import { BottomTabParamList, TabOneParamList, TabThreeParamList, TabTwoParamList
 import StatisticsScreen from '../screens/statistics/StatisticsScreen';
 import { Colors } from '../theme';
 import SettingsScreen from '../screens/settings/SettingsScreen';
-import UserSettingsScreen from '../screens/settings/SettingsScreen/UserSettingsScreen';
+import UserSettingsScreen from '../screens/settings/UserSettingsScreen';
 
 const TabBarIcon = (props: { name: string; color: string }) => {
   return <FAIcon style={styles.tabicon} {...props} />;

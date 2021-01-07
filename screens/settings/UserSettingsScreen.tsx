@@ -13,12 +13,12 @@ import {
 import { useQuery, useMutation } from '@apollo/client';
 import { Entypo } from '@expo/vector-icons';
 
-import Firebase from '../../../lib/firebase';
-import { GET_USER, UPDATE_USER_NAME } from '../../../lib/queries/settingsQueries';
-import { Buttons, Colors, Spacing, Typography } from '../../../theme';
-import { SettingsProps } from '../SettingsScreen';
+import Firebase from '../../lib/firebase';
+import { GET_USER, UPDATE_USER_NAME } from '../../lib/queries/settingsQueries';
+import { Buttons, Colors, Spacing, Typography } from '../../theme';
+import { SettingsProps } from './SettingsScreen';
 
-const UserSettingsScreen = ({ navigation }: SettingsProps) => {
+const UserSettingsScreen: React.FC<SettingsProps> = ({ navigation }: SettingsProps) => {
   const id = Firebase.auth().currentUser?.uid;
   const [name, setName] = useState('');
   const [bio, setBio] = useState('');

@@ -25,7 +25,7 @@ const Item = (item: Item) => (
   </TouchableOpacity>
 );
 
-const SettingsScreen = ({ navigation }: SettingsProps) => {
+const SettingsScreen: React.FC<SettingsProps> = ({ navigation }: SettingsProps) => {
   const handleLogout = async () => {
     try {
       await Firebase.auth().signOut();
