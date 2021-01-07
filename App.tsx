@@ -15,7 +15,7 @@ export default function App() {
     <SafeAreaProvider>
       <AppearanceProvider>
         <Navigation />
-        <StatusBar animated barStyle={'light-content'} />
+        <StatusBar animated barStyle={'dark-content'} />
       </AppearanceProvider>
     </SafeAreaProvider>
   );
