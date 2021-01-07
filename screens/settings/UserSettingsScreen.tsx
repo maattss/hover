@@ -24,7 +24,7 @@ const UserSettingsScreen: React.FC<SettingsProps> = ({ navigation }: SettingsPro
   const [bio, setBio] = useState('');
   const { loading: fetchLoading, error: fetchError, data } = useQuery(GET_USER, {
     variables: { id },
-    pollInterval: 500,
+    pollInterval: 1000,
   });
   const [updateUser, { loading: mutationLoading, error: mutationError, data: response }] = useMutation(
     UPDATE_USER_NAME,
@@ -61,8 +61,8 @@ const UserSettingsScreen: React.FC<SettingsProps> = ({ navigation }: SettingsPro
   }
   if (fetchLoading || mutationLoading)
     return (
-      <View style={styles.container}>
-        <ActivityIndicator color={Colors.blue} />
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size={'large'} color={Colors.blue} />
       </View>
     );
   return (
@@ -115,6 +115,7 @@ export default UserSettingsScreen;
 
 interface Style {
   container: ViewStyle;
+  loadingContainer: ViewStyle;
   formContainer: ViewStyle;
   formRow: ViewStyle;
   formField: ViewStyle;
@@ -128,6 +129,14 @@ const styles = StyleSheet.create<Style>({
     alignItems: 'center',
     paddingHorizontal: Spacing.large,
     paddingVertical: Spacing.small,
+  },
+  loadingContainer: {
+    display: 'flex',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    height: '100%',
+    width: '100%',
+    marginTop: '30%',
   },
   formContainer: {
     width: '90%',
