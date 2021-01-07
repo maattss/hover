@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { StackScreenProps } from '@react-navigation/stack';
 import { Text, View, TextInput, TouchableOpacity, Alert, ActivityIndicator, StyleSheet } from 'react-native';
-import tailwind from 'tailwind-rn';
 import { AuthenticationStackParamList } from '../../types';
 import Firebase, { fns } from '../../lib/firebase';
-import { Colors, Spacing, Typography } from '../../theme';
+import { Buttons, Colors, Spacing, Typography } from '../../theme';
 
 const SignUpScreen = ({ navigation }: StackScreenProps<AuthenticationStackParamList, 'Signup'>) => {
   const [email, setEmail] = useState('');
@@ -29,17 +28,24 @@ const SignUpScreen = ({ navigation }: StackScreenProps<AuthenticationStackParamL
     }
   };
 
+  const handleCancel = () => {
+    setSignUpInProgress(false);
+  };
+
   if (signUpInProgress) {
     return (
       <View style={styles.container}>
         <ActivityIndicator size={'large'} />
         <Text style={styles.infoText}>Signing you in... Please wait</Text>
+        <TouchableOpacity style={styles.cancelButton} onPress={handleCancel}>
+          <Text style={{ ...Buttons.buttonText }}>Cancel</Text>
+        </TouchableOpacity>
       </View>
     );
   } else {
     return (
       <View style={styles.container}>
-        <Text style={{ ...Typography.headerText }}>Sign up</Text>
+        <Text style={styles.header}>Sign up</Text>
         <View style={styles.formContainer}>
           <TextInput
             placeholder="Email"
@@ -47,7 +53,6 @@ const SignUpScreen = ({ navigation }: StackScreenProps<AuthenticationStackParamL
             onChangeText={(val) => setEmail(val)}
             autoCapitalize="none"
             style={styles.formField}
-            underlineColorAndroid={'blue'}
           />
           <TextInput
             placeholder="Password"
@@ -58,21 +63,21 @@ const SignUpScreen = ({ navigation }: StackScreenProps<AuthenticationStackParamL
             style={styles.formField}
           />
           <TextInput
-            placeholder="Repeat your password"
+            placeholder="Confirm password"
             placeholderTextColor="black"
             onChangeText={(val) => setPassword(val)}
             autoCapitalize="none"
             secureTextEntry
             style={styles.formField}
           />
-          <TouchableOpacity style={tailwind('bg-blue-500 rounded-lg py-3 mt-10')} onPress={handleSignup}>
-            <Text style={tailwind('text-white text-center font-bold text-lg')}>Sign up</Text>
+          <TouchableOpacity style={styles.signUpButton} onPress={handleSignup}>
+            <Text style={{ ...Buttons.buttonText, color: Colors.white }}>Sign up</Text>
           </TouchableOpacity>
         </View>
-        <View style={tailwind('mt-2 flex-row justify-center')}>
-          <Text>Already have an account?</Text>
-          <TouchableOpacity style={tailwind('ml-1')} onPress={() => navigation.navigate('Login')}>
-            <Text style={tailwind('text-blue-500')}>Login</Text>
+        <View style={styles.loginContainer}>
+          <Text style={{ ...Typography.bodyText }}>Already have an account?</Text>
+          <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+            <Text style={styles.loginLink}>Login</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -88,17 +93,48 @@ const styles = StyleSheet.create({
     height: '100%',
     width: '100%',
   },
+  header: {
+    ...Typography.headerText,
+    marginBottom: Spacing.base,
+    textAlign: 'left',
+    width: '80%',
+  },
   formContainer: {
     width: '80%',
   },
   formField: {
+    ...Buttons.button,
     ...Typography.bodyText,
-    paddingTop: Spacing.base,
-    paddingBottom: Spacing.base,
+    padding: Spacing.small,
+    marginBottom: Spacing.base,
+    backgroundColor: Colors.gray300,
   },
   infoText: {
     ...Typography.bodyText,
     paddingTop: Spacing.base,
+  },
+  signUpButton: {
+    ...Buttons.button,
+    backgroundColor: Colors.blue,
+    width: '100%',
+    marginTop: Spacing.base,
+    marginBottom: Spacing.base,
+  },
+  cancelButton: {
+    ...Buttons.button,
+    backgroundColor: Colors.red,
+    width: '60%',
+    marginTop: Spacing.largest,
+    marginBottom: Spacing.base,
+  },
+  loginLink: {
+    ...Typography.bodyText,
+    color: Colors.blue,
+    marginLeft: Spacing.hairline,
+  },
+  loginContainer: {
+    display: 'flex',
+    flexDirection: 'row',
   },
 });
 
