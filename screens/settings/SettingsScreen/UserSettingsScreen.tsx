@@ -85,6 +85,7 @@ const UserSettingsScreen = ({ navigation }: SettingsProps) => {
             onChangeText={(val) => setBio(val)}
             style={styles.formField}
             multiline={true}
+            numberOfLines={3}
           />
         </View>
         <TouchableOpacity
@@ -143,13 +144,12 @@ const styles = StyleSheet.create<Style>({
     padding: Spacing.small,
     backgroundColor: Colors.gray300,
     width: '80%',
-    alignItems: 'center',
+    textAlignVertical: 'top',
   },
   labelText: {
     ...Typography.bodyText,
     paddingTop: Spacing.base,
     width: '20%',
-    alignItems: 'center',
   },
   editButton: {
     ...Buttons.button,
