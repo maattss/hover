@@ -53,8 +53,7 @@
     "react-native-screens": "~2.15.0",
     "react-native-tab-view": "^2.15.2",
     "react-native-web": "~0.13.12",
-    "react-scripts": "^4.0.0",
-    "tailwind-rn": "^2.0.1"
+    "react-scripts": "^4.0.0"
   },
   "devDependencies": {
     "@babel/core": "~7.9.0",

@@ -1,6 +1,6 @@
 import firebase from 'firebase';
 import 'firebase/functions';
-import firebaseConfig from './FirebaseConfig';
+import { firebaseConfig } from '../config';
 
 const Firebase = firebase.initializeApp(firebaseConfig);
 export const fns = firebase.functions();
