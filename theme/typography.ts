@@ -1,4 +1,4 @@
-import * as DefaultColors from './colors';
+import * as Colors from './colors';
 
 const extraLargeFontSize = 32;
 const largeFontSize = 24;
@@ -17,22 +17,24 @@ const base = {
 };
 
 export const link = {
-  color: DefaultColors.red,
+  color: Colors.red,
   fontWeight: 'bold',
 };
 
 export const bodyText = {
-  fontSize: smallFontSize,
-  lineHeight: 19,
+  fontSize: baseFontSize,
+  color: Colors.almostBlack,
 };
 
 export const headerText = {
   fontSize: headerFontSize,
   fontWeight: 'bold' as const,
+  color: Colors.almostBlack,
 };
 
 export const descriptionText = {
   fontSize: smallFontSize,
+  color: Colors.almostBlack,
 };
 
 export const screenHeader = {

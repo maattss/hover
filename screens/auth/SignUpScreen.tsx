@@ -14,8 +14,7 @@ const SignUpScreen = ({ navigation }: StackScreenProps<AuthenticationStackParamL
   const handleSignup = async () => {
     setSignUpInProgress(true);
     try {
-      /* Do some sort of validation before this
-      Think password length and so on */
+      /* TODO: Password validation and check that passwords match */
       // Extract the function into a variable
       const registerUser = fns.httpsCallable('registerUser');
       // Call the function
@@ -39,21 +38,32 @@ const SignUpScreen = ({ navigation }: StackScreenProps<AuthenticationStackParamL
     );
   } else {
     return (
-      <View style={tailwind('pb-20 px-5 flex-1 justify-center')}>
+      <View style={styles.container}>
         <Text style={{ ...Typography.headerText }}>Sign up</Text>
-        <View style={tailwind('mt-8')}>
+        <View style={styles.formContainer}>
           <TextInput
             placeholder="Email"
+            placeholderTextColor="black"
             onChangeText={(val) => setEmail(val)}
             autoCapitalize="none"
-            style={tailwind('text-xl border-b-2 border-blue-500')}
+            style={styles.formField}
+            underlineColorAndroid={'blue'}
           />
           <TextInput
             placeholder="Password"
+            placeholderTextColor="black"
             onChangeText={(val) => setPassword(val)}
             autoCapitalize="none"
             secureTextEntry
-            style={tailwind('text-xl border-b-2 border-blue-500 mt-8')}
+            style={styles.formField}
+          />
+          <TextInput
+            placeholder="Repeat your password"
+            placeholderTextColor="black"
+            onChangeText={(val) => setPassword(val)}
+            autoCapitalize="none"
+            secureTextEntry
+            style={styles.formField}
           />
           <TouchableOpacity style={tailwind('bg-blue-500 rounded-lg py-3 mt-10')} onPress={handleSignup}>
             <Text style={tailwind('text-white text-center font-bold text-lg')}>Sign up</Text>
@@ -76,6 +86,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     height: '100%',
+    width: '100%',
+  },
+  formContainer: {
+    width: '80%',
+  },
+  formField: {
+    ...Typography.bodyText,
+    paddingTop: Spacing.base,
+    paddingBottom: Spacing.base,
   },
   infoText: {
     ...Typography.bodyText,
