@@ -36,7 +36,7 @@ const SignUpScreen = ({ navigation }: StackScreenProps<AuthenticationStackParamL
     return (
       <View style={styles.container}>
         <ActivityIndicator size={'large'} />
-        <Text style={styles.infoText}>Signing you in... Please wait</Text>
+        <Text style={styles.infoText}>Signing up... Please wait</Text>
         <TouchableOpacity style={styles.cancelButton} onPress={handleCancel}>
           <Text style={{ ...Buttons.buttonText }}>Cancel</Text>
         </TouchableOpacity>
@@ -52,6 +52,7 @@ const SignUpScreen = ({ navigation }: StackScreenProps<AuthenticationStackParamL
             placeholderTextColor="black"
             onChangeText={(val) => setEmail(val)}
             autoCapitalize="none"
+            keyboardType="email-address"
             style={styles.formField}
           />
           <TextInput
@@ -130,7 +131,8 @@ const styles = StyleSheet.create({
   loginLink: {
     ...Typography.bodyText,
     color: Colors.blue,
-    marginLeft: Spacing.hairline,
+    marginLeft: Spacing.smallest,
+    fontWeight: 'bold',
   },
   loginContainer: {
     display: 'flex',
