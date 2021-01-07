@@ -24,7 +24,6 @@ const UserSettingsScreen: React.FC<SettingsProps> = ({ navigation }: SettingsPro
   const [bio, setBio] = useState('');
   const { loading: fetchLoading, error: fetchError, data } = useQuery(GET_USER, {
     variables: { id },
-    pollInterval: 1000,
   });
   const [updateUser, { loading: mutationLoading, error: mutationError, data: response }] = useMutation(
     UPDATE_USER_NAME,
