@@ -141,4 +141,4 @@ docs/pages/versions/*/react-native/*.diff
 .eslintcache
 
 # Firebase config
-lib/FirebaseConfig.ts
+config.ts
