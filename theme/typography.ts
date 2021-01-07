@@ -26,6 +26,11 @@ export const bodyText = {
   color: Colors.almostBlack,
 };
 
+export const largeBodyText = {
+  fontSize: largeFontSize,
+  lineHeight: 26,
+};
+
 export const headerText = {
   fontSize: headerFontSize,
   fontWeight: 'bold' as const,

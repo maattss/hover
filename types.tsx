@@ -16,8 +16,7 @@ export type BottomTabParamList = {
 
 export type TabOneParamList = {
   Feed: undefined;
-  Settings: undefined;
-};
+} & SettingsStackParamList;
 
 export type TabTwoParamList = {
   TabTwoScreen: undefined;
@@ -25,6 +24,11 @@ export type TabTwoParamList = {
 
 export type TabThreeParamList = {
   TabThreeScreen: undefined;
+};
+
+export type SettingsStackParamList = {
+  Settings: undefined;
+  UserSettings: undefined;
 };
 
 export type Location = {
