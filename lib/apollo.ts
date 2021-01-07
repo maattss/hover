@@ -5,7 +5,7 @@ import { setContext } from '@apollo/link-context';
 // import { GRAPHQL_API_URL } from 'react-native-dotenv';
 
 import Firebase from './firebase';
-import { GRAPHQL_API_URL } from './FirebaseConfig';
+import { GRAPHQL_API_URL } from './config';
 
 // This is where the magic happens, this function
 // is called every time we make a request to our Hasura
