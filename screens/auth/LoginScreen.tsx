@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { StackScreenProps } from '@react-navigation/stack';
-import { Text, View, TextInput, TouchableOpacity, Alert, StyleSheet } from 'react-native';
+import { Text, View, TextInput, TouchableOpacity, Alert, StyleSheet, ActivityIndicator } from 'react-native';
 import { AuthenticationStackParamList } from '../../types';
 import Firebase from '../../lib/firebase';
 import { Buttons, Colors, Spacing, Typography } from '../../theme';
@@ -8,46 +8,61 @@ import { Buttons, Colors, Spacing, Typography } from '../../theme';
 const LoginScreen = ({ navigation }: StackScreenProps<AuthenticationStackParamList, 'Login'>) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleLogin = async () => {
+    setLoading(true);
     try {
       await Firebase.auth().signInWithEmailAndPassword(email, password);
     } catch (error) {
       console.error(error);
       Alert.alert('Error', error.message);
+      setLoading(false);
     }
   };
-  return (
-    <View style={styles.container}>
-      <Text style={styles.header}>Login</Text>
-      <View style={styles.formContainer}>
-        <TextInput
-          placeholder="Email"
-          onChangeText={(val) => setEmail(val)}
-          autoCapitalize="none"
-          keyboardType="email-address"
-          style={styles.formField}
-        />
-        <TextInput
-          placeholder="Password"
-          onChangeText={(val) => setPassword(val)}
-          secureTextEntry
-          style={styles.formField}
-        />
 
-        <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
-          <Text style={{ ...Buttons.buttonText, color: Colors.white }}>Login</Text>
-        </TouchableOpacity>
+  if (loading) {
+    return (
+      <View style={styles.container}>
+        <ActivityIndicator size={'large'} />
+        <Text style={styles.infoText}>Logging you in... Please wait</Text>
       </View>
+    );
+  } else {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.header}>Login</Text>
+        <View style={styles.formContainer}>
+          <TextInput
+            placeholder="Email"
+            placeholderTextColor="black"
+            onChangeText={(val) => setEmail(val)}
+            autoCapitalize="none"
+            keyboardType="email-address"
+            style={styles.formField}
+          />
+          <TextInput
+            placeholder="Password"
+            placeholderTextColor="black"
+            onChangeText={(val) => setPassword(val)}
+            secureTextEntry
+            style={styles.formField}
+          />
 
-      <View style={styles.signupContainer}>
-        <Text style={{ ...Typography.bodyText }}>Not a member yet?</Text>
-        <TouchableOpacity onPress={() => navigation.navigate('Signup')}>
-          <Text style={styles.signupLink}>Sign up</Text>
-        </TouchableOpacity>
+          <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
+            <Text style={{ ...Buttons.buttonText, color: Colors.white }}>Login</Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.signupContainer}>
+          <Text style={{ ...Typography.bodyText }}>Not a member yet?</Text>
+          <TouchableOpacity onPress={() => navigation.navigate('Signup')}>
+            <Text style={styles.signupLink}>Sign up</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-    </View>
-  );
+    );
+  }
 };
 
 const styles = StyleSheet.create({

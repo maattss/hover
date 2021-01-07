@@ -14,6 +14,7 @@ const SignUpScreen = ({ navigation }: StackScreenProps<AuthenticationStackParamL
     setSignUpInProgress(true);
     try {
       /* TODO: Password validation and check that passwords match */
+      /* TODO: email validation */
       // Extract the function into a variable
       const registerUser = fns.httpsCallable('registerUser');
       // Call the function
@@ -23,8 +24,7 @@ const SignUpScreen = ({ navigation }: StackScreenProps<AuthenticationStackParamL
     } catch (error) {
       console.error(error);
       Alert.alert('Error', error.message);
-    } finally {
-      setSignUpInProgress(true);
+      setSignUpInProgress(false);
     }
   };
 
