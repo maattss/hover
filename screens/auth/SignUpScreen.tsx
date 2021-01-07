@@ -8,19 +8,26 @@ import { Buttons, Colors, Spacing, Typography } from '../../theme';
 const SignUpScreen = ({ navigation }: StackScreenProps<AuthenticationStackParamList, 'Signup'>) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [signUpInProgress, setSignUpInProgress] = useState(false);
 
   const handleSignup = async () => {
     setSignUpInProgress(true);
+    const [validationSuccess, setvalidationSuccess] = useState(true);
     try {
-      /* TODO: Password validation and check that passwords match */
-      /* TODO: email validation */
-      // Extract the function into a variable
-      const registerUser = fns.httpsCallable('registerUser');
-      // Call the function
-      await registerUser({ email, password });
-      // Log the user in
-      await Firebase.auth().signInWithEmailAndPassword(email, password);
+      if (password !== confirmPassword) setvalidationSuccess(false);
+
+      if (validationSuccess) {
+        // Extract the function into a variable
+        const registerUser = fns.httpsCallable('registerUser');
+        // Call the function
+        await registerUser({ email, password });
+        // Log the user in
+        await Firebase.auth().signInWithEmailAndPassword(email, password);
+      } else {
+        Alert.alert('Error', 'Validation error... Please check your email and that the passwords match');
+        setSignUpInProgress(false);
+      }
     } catch (error) {
       console.error(error);
       Alert.alert('Error', error.message);
@@ -66,7 +73,7 @@ const SignUpScreen = ({ navigation }: StackScreenProps<AuthenticationStackParamL
           <TextInput
             placeholder="Confirm password"
             placeholderTextColor="black"
-            onChangeText={(val) => setPassword(val)}
+            onChangeText={(val) => setConfirmPassword(val)}
             autoCapitalize="none"
             secureTextEntry
             style={styles.formField}
