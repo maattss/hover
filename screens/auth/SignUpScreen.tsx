@@ -10,13 +10,12 @@ const SignUpScreen = ({ navigation }: StackScreenProps<AuthenticationStackParamL
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [signUpInProgress, setSignUpInProgress] = useState(false);
+  const [validationSuccess, setvalidationSuccess] = useState(true);
 
   const handleSignup = async () => {
     setSignUpInProgress(true);
-    const [validationSuccess, setvalidationSuccess] = useState(true);
     try {
       if (password !== confirmPassword) setvalidationSuccess(false);
-
       if (validationSuccess) {
         // Extract the function into a variable
         const registerUser = fns.httpsCallable('registerUser');
@@ -24,8 +23,9 @@ const SignUpScreen = ({ navigation }: StackScreenProps<AuthenticationStackParamL
         await registerUser({ email, password });
         // Log the user in
         await Firebase.auth().signInWithEmailAndPassword(email, password);
+        Alert.alert('Signup success');
       } else {
-        Alert.alert('Error', 'Validation error... Please check your email and that the passwords match');
+        Alert.alert('Something wrong...', 'Please check your email, and that both passwords match!');
         setSignUpInProgress(false);
       }
     } catch (error) {
@@ -96,10 +96,11 @@ const SignUpScreen = ({ navigation }: StackScreenProps<AuthenticationStackParamL
 const styles = StyleSheet.create({
   container: {
     display: 'flex',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center',
     height: '100%',
     width: '100%',
+    marginTop: '30%',
   },
   header: {
     ...Typography.headerText,

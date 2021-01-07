@@ -68,10 +68,11 @@ const LoginScreen = ({ navigation }: StackScreenProps<AuthenticationStackParamLi
 const styles = StyleSheet.create({
   container: {
     display: 'flex',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center',
     height: '100%',
     width: '100%',
+    marginTop: '30%',
   },
   header: {
     ...Typography.headerText,
