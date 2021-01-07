@@ -8,6 +8,7 @@ import {
   TextInput,
   TextStyle,
   ViewStyle,
+  Alert,
 } from 'react-native';
 import { useQuery, useMutation } from '@apollo/client';
 import { Entypo } from '@expo/vector-icons';
@@ -44,11 +45,11 @@ const UserSettingsScreen = ({ navigation }: SettingsProps) => {
 
   if (fetchError) {
     console.error(fetchError);
-    return <div>Error!</div>;
+    Alert.alert('Error', fetchError.message);
   }
   if (mutationError) {
     console.error(mutationError);
-    return <div>Mutation Error!</div>;
+    Alert.alert('Error', mutationError.message);
   }
   if (fetchLoading || mutationLoading)
     return (
