@@ -9,11 +9,11 @@ const SignUpScreen = ({ navigation }: StackScreenProps<AuthenticationStackParamL
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [signUpInProgress, setSignUpInProgress] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [validationSuccess, setvalidationSuccess] = useState(true);
 
   const handleSignup = async () => {
-    setSignUpInProgress(true);
+    setLoading(true);
     try {
       if (password !== confirmPassword) setvalidationSuccess(false);
       if (validationSuccess) {
@@ -26,20 +26,20 @@ const SignUpScreen = ({ navigation }: StackScreenProps<AuthenticationStackParamL
         Alert.alert('Signup success');
       } else {
         Alert.alert('Something wrong...', 'Please check your email, and that both passwords match!');
-        setSignUpInProgress(false);
+        setLoading(false);
       }
     } catch (error) {
       console.error(error);
       Alert.alert('Error', error.message);
-      setSignUpInProgress(false);
+      setLoading(false);
     }
   };
 
   const handleCancel = () => {
-    setSignUpInProgress(false);
+    setLoading(false);
   };
 
-  if (signUpInProgress) {
+  if (loading) {
     return (
       <View style={styles.container}>
         <ActivityIndicator size={'large'} />
