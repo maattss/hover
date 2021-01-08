@@ -54,18 +54,14 @@ const MapScreen: React.FC = () => {
         }>
         <View style={styles.infoContainer}>
           <View style={styles.positionContainer}>
-            <View>
-              <Text style={styles.infoText}>
-                User location: ({userLocation ? userLocation.latitude.toPrecision(5) : 'Unknown'},{' '}
-                {userLocation ? userLocation.longitude.toPrecision(5) : 'Unknown'})
-              </Text>
-            </View>
-            <View>
-              <Text style={styles.infoText}>
-                Map region: ({mapLocation ? mapLocation.latitude.toPrecision(5) : ''},{' '}
-                {mapLocation ? mapLocation.longitude.toPrecision(5) : ''})
-              </Text>
-            </View>
+            <Text style={styles.infoText}>
+              User location: ({userLocation ? userLocation.latitude.toPrecision(5) : 'Unknown'},{' '}
+              {userLocation ? userLocation.longitude.toPrecision(5) : 'Unknown'})
+            </Text>
+            <Text style={styles.infoText}>
+              Map region: ({mapLocation ? mapLocation.latitude.toPrecision(5) : ''},{' '}
+              {mapLocation ? mapLocation.longitude.toPrecision(5) : ''})
+            </Text>
           </View>
           <TouchableOpacity style={styles.mapStyleButton} onPress={toggleMapType}>
             <FAIcon style={iconStyle} name="globe-europe" />
@@ -111,6 +107,7 @@ const styles = StyleSheet.create({
   infoText: {
     ...Typography.bodyText,
     color: Colors.white,
+    paddingBottom: Spacing.hairline,
   },
   mapStyleButton: {
     ...Buttons.iconButton,
