@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing.small,
   },
   titleText: {
-    ...Typography.screenHeader,
+    ...Typography.headerText,
     paddingTop: Spacing.base,
   },
   bodyText: {

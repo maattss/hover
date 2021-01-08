@@ -15,7 +15,7 @@ export type FeedStackParamList = {
 } & SettingsNavigationStackParamList;
 
 export type ExploreStackParamList = {
-  Explore: undefined;
+  Map: undefined;
 };
 export type StatisticsStackParamList = {
   Statistics: undefined;
@@ -29,9 +29,6 @@ export type SettingsNavigationStackParamList = {
   'Settings Menu': undefined;
   'User Settings': undefined;
   About: undefined;
-};
-export type ExploreNavigationStackParamList = {
-  Map: undefined;
 };
 export type StatisticsTopTabStackParamList = {
   Leaderboard: undefined;

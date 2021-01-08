@@ -19,8 +19,8 @@ const TopTab = createMaterialTopTabNavigator<StatisticsTopTabStackParamList>();
 const StatisticsTopBar: React.FC = () => {
   return (
     <TopTab.Navigator>
-      <TopTab.Screen name="Leaderboard" component={LeaderboardScreen} />
       <TopTab.Screen name="Your Statistics" component={YourStatisticsScreen} />
+      <TopTab.Screen name="Leaderboard" component={LeaderboardScreen} />
     </TopTab.Navigator>
   );
 };
