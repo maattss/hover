@@ -18,6 +18,10 @@ export const link = {
   fontWeight: 'bold',
 };
 
+export const icon = {
+  fontSize: largeFontSize,
+};
+
 export const smallText = {
   fontSize: smallestFontSize,
   color: Colors.almostBlack,
