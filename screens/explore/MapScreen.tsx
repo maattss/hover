@@ -54,14 +54,18 @@ const MapScreen: React.FC = () => {
         }>
         <View style={styles.infoContainer}>
           <View style={styles.positionContainer}>
-            <Text style={styles.infoText}>
-              User location: ({userLocation ? userLocation.latitude.toPrecision(5) : 'Unknown'},{' '}
-              {userLocation ? userLocation.longitude.toPrecision(5) : 'Unknown'})
-            </Text>
-            <Text style={styles.infoText}>
-              Map region: ({mapLocation ? mapLocation.latitude.toPrecision(5) : ''},{' '}
-              {mapLocation ? mapLocation.longitude.toPrecision(5) : ''})
-            </Text>
+            <View>
+              <Text style={styles.infoText}>
+                User location: ({userLocation ? userLocation.latitude.toPrecision(5) : 'Unknown'},{' '}
+                {userLocation ? userLocation.longitude.toPrecision(5) : 'Unknown'})
+              </Text>
+            </View>
+            <View>
+              <Text style={styles.infoText}>
+                Map region: ({mapLocation ? mapLocation.latitude.toPrecision(5) : ''},{' '}
+                {mapLocation ? mapLocation.longitude.toPrecision(5) : ''})
+              </Text>
+            </View>
           </View>
           <TouchableOpacity style={styles.mapStyleButton} onPress={toggleMapType}>
             <FAIcon style={iconStyle} name="globe-europe" />
@@ -91,9 +95,10 @@ const styles = StyleSheet.create({
   },
   infoContainer: {
     display: 'flex',
+    width,
+    height,
   },
   positionContainer: {
-    display: 'flex',
     position: 'absolute',
     top: '6%',
     left: '3%',
@@ -109,10 +114,9 @@ const styles = StyleSheet.create({
   },
   mapStyleButton: {
     ...Buttons.iconButton,
-    display: 'flex',
     position: 'absolute',
     top: '6%',
-    left: '80%',
+    left: '85%',
     backgroundColor: Colors.almostBlack,
   },
   icon: {
