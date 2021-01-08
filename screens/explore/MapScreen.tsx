@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import MapView, { Circle, MapTypes } from 'react-native-maps';
 import { StyleSheet, Dimensions, Text, View, TouchableOpacity } from 'react-native';
-import { Location } from '../../types';
-import { Buttons, Colors, Spacing, Typography } from '../../theme';
+import { Location } from '../../types/types';
+import { Colors, Spacing, Typography } from '../../theme';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 
 const { width, height } = Dimensions.get('window');
