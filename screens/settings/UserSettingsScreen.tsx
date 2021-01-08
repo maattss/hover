@@ -9,6 +9,7 @@ import {
   TextStyle,
   ViewStyle,
   Alert,
+  ScrollView,
 } from 'react-native';
 import { useQuery, useMutation } from '@apollo/client';
 import { Entypo } from '@expo/vector-icons';
@@ -16,7 +17,7 @@ import { Entypo } from '@expo/vector-icons';
 import Firebase from '../../lib/firebase';
 import { GET_USER, UPDATE_USER_NAME } from '../../lib/queries/settingsQueries';
 import { Buttons, Colors, Spacing, Typography } from '../../theme';
-import { SettingsProps } from './SettingsScreen';
+import { SettingsProps } from './SettingsMenuScreen';
 
 const UserSettingsScreen: React.FC<SettingsProps> = ({ navigation }: SettingsProps) => {
   const id = Firebase.auth().currentUser?.uid;
@@ -65,49 +66,51 @@ const UserSettingsScreen: React.FC<SettingsProps> = ({ navigation }: SettingsPro
       </View>
     );
   return (
-    <View style={styles.container}>
-      <View style={styles.formContainer}>
-        <View style={styles.formRow}>
-          <Text style={styles.labelText}>Name</Text>
-          <TextInput
-            placeholder={'What is your name?'}
-            value={name}
-            onChangeText={(val) => setName(val)}
-            style={styles.formField}
-          />
+    <ScrollView keyboardShouldPersistTaps="handled">
+      <View style={styles.container}>
+        <View style={styles.formContainer}>
+          <View style={styles.formRow}>
+            <Text style={styles.labelText}>Name</Text>
+            <TextInput
+              placeholder={'What is your name?'}
+              value={name}
+              onChangeText={(val) => setName(val)}
+              style={styles.formField}
+            />
+          </View>
+          <View style={styles.formRow}>
+            <Text style={styles.labelText}>Bio</Text>
+            <TextInput
+              placeholder={'Tell me something about yourself!'}
+              value={bio}
+              onChangeText={(val) => setBio(val)}
+              style={styles.formField}
+              multiline={true}
+              numberOfLines={3}
+            />
+          </View>
+          <TouchableOpacity
+            style={[styles.editButton]}
+            onPress={() => {
+              updateUser({
+                variables: {
+                  id,
+                  name,
+                  bio,
+                },
+              })
+                .finally(() => navigation.goBack())
+                .catch((error) => {
+                  console.error(error.message);
+                });
+            }}>
+            <Text style={{ ...Buttons.buttonText }}>
+              Save <Entypo name="edit" />
+            </Text>
+          </TouchableOpacity>
         </View>
-        <View style={styles.formRow}>
-          <Text style={styles.labelText}>Bio</Text>
-          <TextInput
-            placeholder={'Tell me something about yourself!'}
-            value={bio}
-            onChangeText={(val) => setBio(val)}
-            style={styles.formField}
-            multiline={true}
-            numberOfLines={3}
-          />
-        </View>
-        <TouchableOpacity
-          style={[styles.editButton]}
-          onPress={() => {
-            updateUser({
-              variables: {
-                id,
-                name,
-                bio,
-              },
-            })
-              .finally(() => navigation.goBack())
-              .catch((error) => {
-                console.error(error.message);
-              });
-          }}>
-          <Text style={{ ...Buttons.buttonText }}>
-            Save <Entypo name="edit" />
-          </Text>
-        </TouchableOpacity>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 export default UserSettingsScreen;
@@ -126,8 +129,7 @@ const styles = StyleSheet.create<Style>({
   container: {
     display: 'flex',
     alignItems: 'center',
-    paddingHorizontal: Spacing.large,
-    paddingVertical: Spacing.small,
+    padding: Spacing.large,
   },
   loadingContainer: {
     display: 'flex',

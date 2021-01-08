@@ -1,5 +1,5 @@
 import React from 'react';
-import { ExploreNavigationStackParamList } from '../types';
+import { ExploreNavigationStackParamList } from '../types/navigationTypes';
 import { createStackNavigator } from '@react-navigation/stack';
 import MapScreen from '../screens/explore/MapScreen';
 

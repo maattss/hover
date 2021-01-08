@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Spacing, Typography } from '../../theme';
-import { SettingsProps } from './SettingsScreen';
+import { SettingsProps } from './SettingsMenuScreen';
 
 const AboutScreen: React.FC<SettingsProps> = () => {
   return (

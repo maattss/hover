@@ -5,7 +5,7 @@ import { AppearanceProvider } from 'react-native-appearance';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import useCachedResources from './hooks/useCachedResources';
 import { apolloClient } from './lib/apollo';
-import AppNavigation from './navigation/AppNavigation';
+import AppNavigation from './navigation/RootNavigation';
 
 export default function App() {
   const isLoadingComplete = useCachedResources();

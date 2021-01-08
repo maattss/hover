@@ -12,8 +12,8 @@ export type RootTabParamList = {
 
 export type FeedStackParamList = {
   Feed: undefined;
-  Settings: undefined;
-};
+} & SettingsNavigationStackParamList;
+
 export type ExploreStackParamList = {
   Explore: undefined;
 };
@@ -26,6 +26,7 @@ export type FeedTopTabStackParamList = {
   You: undefined;
 };
 export type SettingsNavigationStackParamList = {
+  'Settings Menu': undefined;
   'User Settings': undefined;
   About: undefined;
 };
@@ -35,9 +36,4 @@ export type ExploreNavigationStackParamList = {
 export type StatisticsTopTabStackParamList = {
   Leaderboard: undefined;
   'Your Statistics': undefined;
-};
-
-export type Location = {
-  latitude: number;
-  longitude: number;
 };
