@@ -16,10 +16,9 @@ const styles = StyleSheet.create({
     paddingBottom: Spacing.base,
   },
   text: {
+    ...Typography.headerText,
     paddingTop: Spacing.base,
     textAlign: 'center',
-    fontWeight: 'bold',
-    fontSize: Typography.headerFontSize,
   },
 });
 

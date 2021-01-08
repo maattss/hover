@@ -12,9 +12,8 @@ const FeedScreen: React.FC = () => {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 5,
-    alignItems: 'center',
-    justifyContent: 'center',
+    display: 'flex',
+    flexGrow: 1,
   },
 });
 
