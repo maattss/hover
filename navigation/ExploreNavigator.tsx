@@ -1,9 +1,9 @@
 import React from 'react';
-import { ExploreNavigationStackParamList } from '../types/navigationTypes';
+import { ExploreStackParamList } from '../types/navigationTypes';
 import { createStackNavigator } from '@react-navigation/stack';
 import MapScreen from '../screens/explore/MapScreen';
 
-const ExploreStack = createStackNavigator<ExploreNavigationStackParamList>();
+const ExploreStack = createStackNavigator<ExploreStackParamList>();
 
 const ExploreNavigator: React.FC = () => {
   return (
