@@ -2,8 +2,9 @@ import React from 'react';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import LeaderboardScreen from '../screens/statistics/LeaderboardScreen';
 import YourStatisticsScreen from '../screens/statistics/YourStatisticsScreen';
+import { StatisticsTopTabStackParamList } from '../types';
 
-const TopTab = createMaterialTopTabNavigator();
+const TopTab = createMaterialTopTabNavigator<StatisticsTopTabStackParamList>();
 
 const StatisticsTopBar: React.FC = () => {
   return (

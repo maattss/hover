@@ -5,7 +5,7 @@ import { AppearanceProvider } from 'react-native-appearance';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import useCachedResources from './hooks/useCachedResources';
 import { apolloClient } from './lib/apollo';
-import Navigation from './navigation';
+import AppNavigation from './navigation/AppNavigation';
 
 export default function App() {
   const isLoadingComplete = useCachedResources();
@@ -17,7 +17,7 @@ export default function App() {
     <ApolloProvider client={apolloClient}>
       <SafeAreaProvider>
         <AppearanceProvider>
-          <Navigation />
+          <AppNavigation />
           <StatusBar animated barStyle={'dark-content'} />
         </AppearanceProvider>
       </SafeAreaProvider>

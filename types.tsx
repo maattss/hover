@@ -1,30 +1,37 @@
 export type RootStackParamList = {
-  Root: undefined;
+  Main: undefined;
   Signup: undefined;
   Login: undefined;
 };
 
-export type BottomTabParamList = {
+export type RootTabParamList = {
   Feed: undefined;
   Explore: undefined;
   Statistics: undefined;
 };
 
-export type TabOneParamList = {
+export type FeedStackParamList = {
   Feed: undefined;
-} & SettingsStackParamList;
-
-export type TabTwoParamList = {
-  TabTwoScreen: undefined;
-};
-
-export type TabThreeParamList = {
-  TabThreeScreen: undefined;
-};
-
-export type SettingsStackParamList = {
   Settings: undefined;
-  UserSettings: undefined;
+};
+export type ExploreStackParamList = {
+  Explore: undefined;
+};
+export type StatisticsStackParamList = {
+  Statistics: undefined;
+};
+
+export type FeedTopTabStackParamList = {
+  Following: undefined;
+  You: undefined;
+};
+export type SettingsStackParamList = {
+  'User Settings': undefined;
+  About: undefined;
+};
+export type StatisticsTopTabStackParamList = {
+  Leaderboard: undefined;
+  'Your Statistics': undefined;
 };
 
 export type Location = {

@@ -5,13 +5,13 @@ import { User } from 'firebase';
 import Firebase from '../lib/firebase';
 
 import { RootStackParamList } from '../types';
-import BottomTabNavigator from './BottomTabNavigator';
+import TabNavigator from './TabNavigator';
 import SignupScreen from '../screens/auth/SignUpScreen';
 import LoginScreen from '../screens/auth/LoginScreen';
 
-const RootStack = createStackNavigator<RootStackParamList>();
+export const RootStack = createStackNavigator<RootStackParamList>();
 
-const Navigation: React.FC = () => {
+const AppNavigation: React.FC = () => {
   const [userAuthState, setUserAuthState] = useState<User | null>(null);
 
   useEffect(() => {
@@ -28,7 +28,7 @@ const Navigation: React.FC = () => {
     <NavigationContainer>
       <RootStack.Navigator screenOptions={{ headerShown: false }}>
         {userAuthState ? (
-          <RootStack.Screen name="Root" component={BottomTabNavigator} />
+          <RootStack.Screen name="Main" component={TabNavigator} />
         ) : (
           <>
             <RootStack.Screen name="Login" component={LoginScreen} />
@@ -40,4 +40,4 @@ const Navigation: React.FC = () => {
   );
 };
 
-export default Navigation;
+export default AppNavigation;

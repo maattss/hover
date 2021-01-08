@@ -38,7 +38,7 @@ const SettingsScreen: React.FC<SettingsProps> = ({ navigation }: SettingsProps) 
     {
       id: 'bd7acbea-c1b1-873h-aed5-3ad53ahsj8ba',
       title: 'User Settings',
-      onClick: () => navigation.navigate('UserSettings'),
+      onClick: () => navigation.navigate('User Settings'),
     },
     {
       id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
@@ -47,6 +47,11 @@ const SettingsScreen: React.FC<SettingsProps> = ({ navigation }: SettingsProps) 
     {
       id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
       title: 'Appearance',
+    },
+    {
+      id: 'bd78heea-c1b1-873h-aed5-3hjsnahsj8ba',
+      title: 'About',
+      onClick: () => navigation.navigate('About'),
     },
   ];
 
