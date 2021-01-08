@@ -52,22 +52,6 @@ const MapScreen: React.FC = () => {
             longitude: location.nativeEvent.coordinate.longitude,
           })
         }>
-        <View style={styles.infoContainer}>
-          <View style={styles.positionContainer}>
-            <Text style={styles.infoText}>
-              User location: ({userLocation ? userLocation.latitude.toPrecision(5) : 'Unknown'},{' '}
-              {userLocation ? userLocation.longitude.toPrecision(5) : 'Unknown'})
-            </Text>
-            <Text style={styles.infoText}>
-              Map region: ({mapLocation ? mapLocation.latitude.toPrecision(5) : ''},{' '}
-              {mapLocation ? mapLocation.longitude.toPrecision(5) : ''})
-            </Text>
-          </View>
-          <TouchableOpacity style={styles.mapStyleButton} onPress={toggleMapType}>
-            <FAIcon style={iconStyle} name="globe-europe" />
-          </TouchableOpacity>
-        </View>
-
         <Circle
           center={{ latitude: 63.419, longitude: 10.4025 }}
           radius={100}
@@ -75,6 +59,22 @@ const MapScreen: React.FC = () => {
           strokeWidth={0.1}
         />
       </MapView>
+
+      <View style={styles.positionContainer}>
+        <Text style={styles.infoText}>
+          User location: ({userLocation ? userLocation.latitude.toPrecision(5) : 'Unknown'},{' '}
+          {userLocation ? userLocation.longitude.toPrecision(5) : 'Unknown'})
+        </Text>
+        <Text style={styles.infoText}>
+          Map region: ({mapLocation ? mapLocation.latitude.toPrecision(5) : ''},{' '}
+          {mapLocation ? mapLocation.longitude.toPrecision(5) : ''})
+        </Text>
+      </View>
+      <View style={styles.infoContainer}>
+        <TouchableOpacity style={styles.mapStyleButton} onPress={toggleMapType}>
+          <FAIcon style={iconStyle} name="globe-europe" />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -90,16 +90,16 @@ const styles = StyleSheet.create({
     height,
   },
   infoContainer: {
-    display: 'flex',
-    width,
-    height,
+    position: 'absolute',
+    top: '8%',
+    left: '85%',
   },
   positionContainer: {
-    position: 'absolute',
-    top: '6%',
-    left: '3%',
     backgroundColor: Colors.almostBlack,
     alignItems: 'flex-start',
+    position: 'absolute',
+    top: '8%',
+    left: '3%',
     padding: Spacing.smaller,
     margin: 0,
     borderRadius: 10,
@@ -108,12 +108,10 @@ const styles = StyleSheet.create({
     ...Typography.bodyText,
     color: Colors.white,
     paddingBottom: Spacing.hairline,
+    backgroundColor: Colors.almostBlack,
   },
   mapStyleButton: {
     ...Buttons.iconButton,
-    position: 'absolute',
-    top: '6%',
-    left: '85%',
     backgroundColor: Colors.almostBlack,
   },
   icon: {
