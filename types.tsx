@@ -25,9 +25,12 @@ export type FeedTopTabStackParamList = {
   Following: undefined;
   You: undefined;
 };
-export type SettingsStackParamList = {
+export type SettingsNavigationStackParamList = {
   'User Settings': undefined;
   About: undefined;
+};
+export type ExploreNavigationStackParamList = {
+  Map: undefined;
 };
 export type StatisticsTopTabStackParamList = {
   Leaderboard: undefined;

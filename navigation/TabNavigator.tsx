@@ -2,13 +2,13 @@ import React from 'react';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { StyleSheet } from 'react-native';
-import MapScreen from '../screens/explore/MapScreen';
 import FeedScreen from '../screens/feed/FeedScreen';
 import StatisticsScreen from '../screens/statistics/StatisticsScreen';
 import { Colors } from '../theme';
 import { ExploreStackParamList, FeedStackParamList, RootTabParamList, StatisticsStackParamList } from '../types';
 import { createStackNavigator } from '@react-navigation/stack';
-import SettingsNavigation from './SettingsNavigation';
+import SettingsNavigator from './SettingsNavigator';
+import ExploreNavigator from './ExploreNavigator';
 
 const TabIcon = (props: { name: string; color: string }) => {
   return <FAIcon style={styles.tabicon} {...props} />;
@@ -34,7 +34,7 @@ const FeedTab: React.FC = () => {
           headerRight: () => <HeaderIcon name="cog" onPress={() => navigation.navigate('Settings')} />,
         })}
       />
-      <FeedStack.Screen name="Settings" component={SettingsNavigation} />
+      <FeedStack.Screen name="Settings" component={SettingsNavigator} />
     </FeedStack.Navigator>
   );
 };
@@ -42,7 +42,7 @@ const FeedTab: React.FC = () => {
 const ExploreTab: React.FC = () => {
   return (
     <ExploreStack.Navigator>
-      <ExploreStack.Screen name="Explore" component={MapScreen} />
+      <ExploreStack.Screen name="Explore" component={ExploreNavigator} />
     </ExploreStack.Navigator>
   );
 };

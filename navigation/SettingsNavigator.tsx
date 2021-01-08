@@ -1,12 +1,12 @@
 import React from 'react';
-import { SettingsStackParamList } from '../types';
+import { SettingsNavigationStackParamList } from '../types';
 import { createStackNavigator } from '@react-navigation/stack';
 import UserSettingsScreen from '../screens/settings/UserSettingsScreen';
 import AboutScreen from '../screens/settings/AboutScreen';
 
-const SettingsStack = createStackNavigator<SettingsStackParamList>();
+const SettingsStack = createStackNavigator<SettingsNavigationStackParamList>();
 
-const SettingsNavigation: React.FC = () => {
+const SettingsNavigator: React.FC = () => {
   return (
     <SettingsStack.Navigator>
       <SettingsStack.Screen name="User Settings" component={UserSettingsScreen} />
@@ -15,4 +15,4 @@ const SettingsNavigation: React.FC = () => {
   );
 };
 
-export default SettingsNavigation;
+export default SettingsNavigator;
