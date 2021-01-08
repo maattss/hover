@@ -42,14 +42,16 @@ const MapScreen: React.FC = () => {
             longitude: location.nativeEvent.coordinate.longitude,
           })
         }>
-        <Text style={styles.textStyle}>
-          User location: ({userLocation ? userLocation.latitude.toPrecision(5) : 'Unknown'},{' '}
-          {userLocation ? userLocation.longitude.toPrecision(5) : 'Unknown'})
-        </Text>
-        <Text style={styles.textStyle}>
-          Map region: ({mapLocation ? mapLocation.latitude.toPrecision(5) : ''},{' '}
-          {mapLocation ? mapLocation.longitude.toPrecision(5) : ''})
-        </Text>
+        <View style={styles.infoContainer}>
+          <Text style={styles.infoText}>
+            User location: ({userLocation ? userLocation.latitude.toPrecision(5) : 'Unknown'},{' '}
+            {userLocation ? userLocation.longitude.toPrecision(5) : 'Unknown'})
+          </Text>
+          <Text style={styles.infoText}>
+            Map region: ({mapLocation ? mapLocation.latitude.toPrecision(5) : ''},{' '}
+            {mapLocation ? mapLocation.longitude.toPrecision(5) : ''})
+          </Text>
+        </View>
         <Circle
           center={{ latitude: 63.419, longitude: 10.4025 }}
           radius={100}
@@ -71,11 +73,19 @@ const styles = StyleSheet.create({
     width,
     height,
   },
-  textStyle: {
+  infoContainer: {
+    display: 'flex',
+    position: 'absolute',
+    top: '6%',
+    left: '3%',
+    backgroundColor: Colors.almostBlack,
+    alignItems: 'flex-start',
+    padding: Spacing.smaller,
+    margin: 0,
+    borderRadius: 10,
+  },
+  infoText: {
     ...Typography.bodyText,
-    paddingTop: Spacing.smaller,
-    paddingLeft: Spacing.smaller,
-    backgroundColor: 'transparent',
     color: Colors.white,
   },
 });
