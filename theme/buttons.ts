@@ -17,10 +17,10 @@ export const buttonText = {
   letterSpacing: 1,
 };
 
+/*
 export const iconButton = {
-  fontSize: Typography.headerText,
-  marginBottom: -3,
-};
+  fontSize: 30, //Typography.headerText.fontSize,
+};*/
 
 export const buttonTextUnselected = {
   ...buttonText,

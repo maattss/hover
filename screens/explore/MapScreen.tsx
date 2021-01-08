@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import MapView, { Circle } from 'react-native-maps';
-import { StyleSheet, Dimensions, Text, View, Pressable } from 'react-native';
+import { StyleSheet, Dimensions, Text, View, TouchableOpacity } from 'react-native';
 import { Location } from '../../types';
 import { Buttons, Colors, Spacing, Typography } from '../../theme';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
@@ -54,9 +54,9 @@ const MapScreen: React.FC = () => {
           </Text>
         </View>
         <View style={styles.mapStyleContainer}>
-          <Pressable style={styles.mapStyleButton}>
-            <FAIcon style={{ ...Buttons.iconButton }} name="globe-europe" />
-          </Pressable>
+          <TouchableOpacity style={styles.mapStyleButton}>
+            <FAIcon style={styles.icon} name="globe-europe" />
+          </TouchableOpacity>
         </View>
         <Circle
           center={{ latitude: 63.419, longitude: 10.4025 }}
@@ -106,6 +106,7 @@ const styles = StyleSheet.create({
     marginTop: Spacing.base,
     marginBottom: Spacing.base,
   },
+  icon: {},
 });
 
 export default MapScreen;

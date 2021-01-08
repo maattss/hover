@@ -12,7 +12,7 @@ import SettingsScreen from '../screens/settings/SettingsScreen';
 import UserSettingsScreen from '../screens/settings/UserSettingsScreen';
 
 const TabBarIcon = (props: { name: string; color: string }) => {
-  return <FAIcon style={{ ...Buttons.iconButton }} {...props} />;
+  return <FAIcon style={styles.tabicon} {...props} />;
 };
 
 const HeaderIcon = (props: { name: string; onPress: () => void }) => {
@@ -117,6 +117,10 @@ const styles = StyleSheet.create({
   headericon: {
     fontSize: 25,
     marginRight: 10,
+  },
+  tabicon: {
+    fontSize: 30,
+    marginBottom: -3,
   },
 });
 
