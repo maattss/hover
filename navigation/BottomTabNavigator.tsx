@@ -56,7 +56,11 @@ const TabTwoStack = createStackNavigator<TabTwoParamList>();
 const TabTwoNavigator: React.FC = () => {
   return (
     <TabTwoStack.Navigator>
-      <TabTwoStack.Screen name="TabTwoScreen" component={MapScreen} options={{ headerTitle: 'Explore' }} />
+      <TabTwoStack.Screen
+        name="TabTwoScreen"
+        component={MapScreen}
+        options={{ headerTitle: 'Explore', headerShown: false }}
+      />
     </TabTwoStack.Navigator>
   );
 };
