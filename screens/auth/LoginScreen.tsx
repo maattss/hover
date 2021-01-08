@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { StackScreenProps } from '@react-navigation/stack';
 import { Text, View, TextInput, TouchableOpacity, Alert, StyleSheet, ActivityIndicator } from 'react-native';
-import { AuthenticationStackParamList } from '../../types';
+import { RootStackParamList } from '../../types/navigationTypes';
 import Firebase from '../../lib/firebase';
 import { Buttons, Colors, Spacing, Typography } from '../../theme';
 
-const LoginScreen = ({ navigation }: StackScreenProps<AuthenticationStackParamList, 'Login'>) => {
+const LoginScreen = ({ navigation }: StackScreenProps<RootStackParamList, 'Login'>) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);

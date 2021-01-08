@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import MapView, { Circle } from 'react-native-maps';
 import { StyleSheet, Dimensions, Text, View } from 'react-native';
-import { Location } from '../../types';
+import { Location } from '../../types/types';
 import { Colors, Spacing, Typography } from '../../theme';
 
 const { width, height } = Dimensions.get('window');
