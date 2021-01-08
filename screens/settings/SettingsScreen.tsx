@@ -5,9 +5,9 @@ import { Buttons, Spacing, Typography, Colors } from '../../theme';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 
 import { StackNavigationProp } from '@react-navigation/stack';
-import { SettingsStackParamList } from '../../types';
+import { SettingsNavigationStackParamList } from '../../types';
 
-type NavigationProp = StackNavigationProp<SettingsStackParamList>;
+type NavigationProp = StackNavigationProp<SettingsNavigationStackParamList>;
 
 export type SettingsProps = {
   navigation: NavigationProp;
