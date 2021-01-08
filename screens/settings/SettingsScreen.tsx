@@ -113,9 +113,6 @@ const styles = StyleSheet.create({
     marginTop: Spacing.base,
     marginBottom: Spacing.base,
   },
-  logOutButtonText: {
-    ...Buttons.buttonText,
-  },
 });
 
 export default SettingsScreen;

@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import MapView, { Circle } from 'react-native-maps';
-import { StyleSheet, Dimensions, Text, View } from 'react-native';
+import { StyleSheet, Dimensions, Text, View, Pressable } from 'react-native';
 import { Location } from '../../types';
-import { Colors, Spacing, Typography } from '../../theme';
+import { Buttons, Colors, Spacing, Typography } from '../../theme';
+import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 
 const { width, height } = Dimensions.get('window');
 
@@ -52,6 +53,11 @@ const MapScreen: React.FC = () => {
             {mapLocation ? mapLocation.longitude.toPrecision(5) : ''})
           </Text>
         </View>
+        <View style={styles.mapStyleContainer}>
+          <Pressable style={styles.mapStyleButton}>
+            <FAIcon style={{ ...Buttons.iconButton }} name="globe-europe" />
+          </Pressable>
+        </View>
         <Circle
           center={{ latitude: 63.419, longitude: 10.4025 }}
           radius={100}
@@ -87,6 +93,18 @@ const styles = StyleSheet.create({
   infoText: {
     ...Typography.bodyText,
     color: Colors.white,
+  },
+  mapStyleContainer: {
+    position: 'absolute',
+    top: '10%',
+    right: '10%',
+  },
+  mapStyleButton: {
+    ...Buttons.button,
+    backgroundColor: Colors.red,
+    width: '100%',
+    marginTop: Spacing.base,
+    marginBottom: Spacing.base,
   },
 });
 

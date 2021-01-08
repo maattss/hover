@@ -7,12 +7,12 @@ import MapScreen from '../screens/explore/MapScreen';
 import FeedScreen from '../screens/feed/FeedScreen';
 import { BottomTabParamList, TabOneParamList, TabThreeParamList, TabTwoParamList } from '../types';
 import StatisticsScreen from '../screens/statistics/StatisticsScreen';
-import { Colors } from '../theme';
+import { Buttons, Colors } from '../theme';
 import SettingsScreen from '../screens/settings/SettingsScreen';
 import UserSettingsScreen from '../screens/settings/UserSettingsScreen';
 
 const TabBarIcon = (props: { name: string; color: string }) => {
-  return <FAIcon style={styles.tabicon} {...props} />;
+  return <FAIcon style={{ ...Buttons.iconButton }} {...props} />;
 };
 
 const HeaderIcon = (props: { name: string; onPress: () => void }) => {
@@ -117,10 +117,6 @@ const styles = StyleSheet.create({
   headericon: {
     fontSize: 25,
     marginRight: 10,
-  },
-  tabicon: {
-    fontSize: 30,
-    marginBottom: -3,
   },
 });
 

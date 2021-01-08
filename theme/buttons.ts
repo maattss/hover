@@ -12,9 +12,14 @@ export const button = {
 
 export const buttonText = {
   color: Colors.almostBlack,
-  fontSize: Typography.buttonFontSize,
+  fontSize: Typography.bodyText,
   fontWeight: 'bold' as const,
   letterSpacing: 1,
+};
+
+export const iconButton = {
+  fontSize: Typography.headerText,
+  marginBottom: -3,
 };
 
 export const buttonTextUnselected = {
