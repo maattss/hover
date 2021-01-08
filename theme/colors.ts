@@ -19,17 +19,9 @@ export const gray700 = '#616161';
 export const gray800 = '#424242';
 export const gray900 = '#222';
 
-// Palettes
-export const lightColors = {
-  background: white,
-  primary: blue,
-  secondary: orange,
-  text: almostBlack,
-  error: red,
-  success: green,
-};
+// Palette
 
-export const darkColors = {
+export const Colors = {
   background: almostBlack,
   primary: blue,
   secondary: orange,
@@ -37,5 +29,3 @@ export const darkColors = {
   error: red,
   success: green,
 };
-
-export type Colors = typeof lightColors;
