@@ -12,7 +12,6 @@ import {
   ScrollView,
 } from 'react-native';
 import { useQuery, useMutation } from '@apollo/client';
-import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import Firebase from '../../lib/firebase';
 import { GET_USER, UPDATE_USER_NAME } from '../../lib/queries/settingsQueries';
 import { Buttons, Colors, Spacing, Typography } from '../../theme';

@@ -9,7 +9,7 @@ import { StyleSheet } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import YourFeedScreen from '../screens/feed/YourFeedScreen';
 import FollowingFeedScreen from '../screens/feed/FollowingFeedScreen';
-import { Spacing, Typography } from '../theme';
+import { Typography } from '../theme';
 
 const HeaderIcon = (props: { name: string; onPress: () => void }) => {
   return <FAIcon style={styles.headericon} {...props} />;
