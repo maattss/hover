@@ -12,8 +12,7 @@ import {
   ScrollView,
 } from 'react-native';
 import { useQuery, useMutation } from '@apollo/client';
-import { Entypo } from '@expo/vector-icons';
-
+import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import Firebase from '../../lib/firebase';
 import { GET_USER, UPDATE_USER_NAME } from '../../lib/queries/settingsQueries';
 import { Buttons, Colors, Spacing, Typography } from '../../theme';
@@ -108,9 +107,7 @@ const UserSettingsScreen: React.FC<SettingsProps> = ({ navigation }: SettingsPro
                   console.error(error.message);
                 });
             }}>
-            <Text style={{ ...Buttons.buttonText }}>
-              Save <Entypo name="edit" />
-            </Text>
+            <Text style={{ ...Buttons.buttonText }}>Save</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -135,7 +132,7 @@ const styles = StyleSheet.create<Style>({
   container: {
     display: 'flex',
     alignItems: 'center',
-    padding: Spacing.large,
+    paddingHorizontal: Spacing.base,
   },
   loadingContainer: {
     display: 'flex',
@@ -147,7 +144,7 @@ const styles = StyleSheet.create<Style>({
   },
   formContainer: {
     width: '90%',
-    marginTop: '10%',
+    marginTop: '5%',
   },
   formRow: {
     display: 'flex',
