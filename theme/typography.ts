@@ -1,13 +1,10 @@
 import * as Colors from './colors';
 
-const extraLargeFontSize = 32;
-const largeFontSize = 24;
-const buttonFontSize = 18;
-const baseFontSize = 16;
-const smallFontSize = 14;
 const smallestFontSize = 10;
-const largeHeaderFontSize = 20;
-const headerFontSize = 32;
+const smallFontSize = 14;
+const baseFontSize = 18;
+const largeFontSize = 24;
+const largestFontSize = 32;
 
 const base = {
   alignItems: 'center',
@@ -21,24 +18,28 @@ export const link = {
   fontWeight: 'bold',
 };
 
+export const icon = {
+  fontSize: largeFontSize,
+};
+
+export const smallText = {
+  fontSize: smallestFontSize,
+  color: Colors.almostBlack,
+};
+
 export const bodyText = {
-  fontSize: baseFontSize,
+  fontSize: smallFontSize,
   color: Colors.almostBlack,
 };
 
 export const largeBodyText = {
-  fontSize: largeFontSize,
-  lineHeight: 26,
-};
-
-export const headerText = {
-  fontSize: headerFontSize,
-  fontWeight: 'bold' as const,
+  fontSize: baseFontSize,
   color: Colors.almostBlack,
 };
 
-export const descriptionText = {
-  fontSize: smallFontSize,
+export const headerText = {
+  fontSize: largestFontSize,
+  fontWeight: 'bold' as const,
   color: Colors.almostBlack,
 };
 
@@ -50,15 +51,5 @@ export const screenHeader = {
 
 export const screenFooter = {
   ...base,
-  ...descriptionText,
-};
-
-export const sectionHeader = {
-  ...base,
-  ...headerText,
-};
-
-export const count = {
-  ...base,
-  ...descriptionText,
+  ...bodyText,
 };

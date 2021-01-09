@@ -22,12 +22,12 @@ const styles = StyleSheet.create({
   container: {
     display: 'flex',
     alignItems: 'center',
-    paddingHorizontal: Spacing.large,
-    paddingVertical: Spacing.small,
+    paddingHorizontal: Spacing.base,
   },
   titleText: {
     ...Typography.headerText,
     paddingTop: Spacing.base,
+    width: '100%',
   },
   bodyText: {
     ...Typography.bodyText,

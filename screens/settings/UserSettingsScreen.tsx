@@ -12,8 +12,6 @@ import {
   ScrollView,
 } from 'react-native';
 import { useQuery, useMutation } from '@apollo/client';
-import { Entypo } from '@expo/vector-icons';
-
 import Firebase from '../../lib/firebase';
 import { GET_USER, UPDATE_USER_NAME } from '../../lib/queries/settingsQueries';
 import { Buttons, Colors, Spacing, Typography } from '../../theme';
@@ -70,7 +68,9 @@ const UserSettingsScreen: React.FC<SettingsProps> = ({ navigation }: SettingsPro
       <View style={styles.container}>
         <View style={styles.formContainer}>
           <View style={styles.formRow}>
-            <Text style={styles.labelText}>Name</Text>
+            <View style={styles.labelContainer}>
+              <Text style={styles.labelText}>Name</Text>
+            </View>
             <TextInput
               placeholder={'What is your name?'}
               value={name}
@@ -79,12 +79,14 @@ const UserSettingsScreen: React.FC<SettingsProps> = ({ navigation }: SettingsPro
             />
           </View>
           <View style={styles.formRow}>
-            <Text style={styles.labelText}>Bio</Text>
+            <View style={styles.labelContainer}>
+              <Text style={styles.labelText}>Bio</Text>
+            </View>
             <TextInput
               placeholder={'Tell me something about yourself!'}
               value={bio}
               onChangeText={(val) => setBio(val)}
-              style={styles.formField}
+              style={styles.formFieldMultiLine}
               multiline={true}
               numberOfLines={3}
             />
@@ -104,9 +106,7 @@ const UserSettingsScreen: React.FC<SettingsProps> = ({ navigation }: SettingsPro
                   console.error(error.message);
                 });
             }}>
-            <Text style={{ ...Buttons.buttonText }}>
-              Save <Entypo name="edit" />
-            </Text>
+            <Text style={{ ...Buttons.buttonText }}>Save</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -121,7 +121,9 @@ interface Style {
   formContainer: ViewStyle;
   formRow: ViewStyle;
   formField: ViewStyle;
+  formFieldMultiLine: ViewStyle;
   labelText: TextStyle;
+  labelContainer: ViewStyle;
   editButton: ViewStyle;
 }
 
@@ -129,7 +131,7 @@ const styles = StyleSheet.create<Style>({
   container: {
     display: 'flex',
     alignItems: 'center',
-    padding: Spacing.large,
+    paddingHorizontal: Spacing.base,
   },
   loadingContainer: {
     display: 'flex',
@@ -137,10 +139,11 @@ const styles = StyleSheet.create<Style>({
     alignItems: 'center',
     height: '100%',
     width: '100%',
-    marginTop: '30%',
+    marginTop: '20%',
   },
   formContainer: {
     width: '90%',
+    marginTop: '5%',
   },
   formRow: {
     display: 'flex',
@@ -151,14 +154,26 @@ const styles = StyleSheet.create<Style>({
   formField: {
     ...Buttons.button,
     ...Typography.bodyText,
-    padding: Spacing.small,
     backgroundColor: Colors.gray300,
     width: '80%',
-    textAlignVertical: 'top',
+  },
+  formFieldMultiLine: {
+    ...Buttons.button,
+    ...Typography.bodyText,
+    backgroundColor: Colors.gray300,
+    width: '80%',
+    paddingTop: Spacing.base,
+    paddingLeft: Spacing.base,
   },
   labelText: {
-    ...Typography.bodyText,
-    paddingTop: Spacing.base,
+    ...Typography.largeBodyText,
+    fontWeight: 'bold',
+  },
+  labelContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    paddingLeft: Spacing.smallest,
     width: '20%',
   },
   editButton: {
@@ -166,6 +181,5 @@ const styles = StyleSheet.create<Style>({
     backgroundColor: Colors.blue,
     width: '100%',
     marginTop: Spacing.base,
-    marginBottom: Spacing.base,
   },
 });

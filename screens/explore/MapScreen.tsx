@@ -1,14 +1,24 @@
 import React, { useState } from 'react';
-import MapView, { Circle } from 'react-native-maps';
-import { StyleSheet, Dimensions, Text, View } from 'react-native';
+import MapView, { Circle, MapTypes } from 'react-native-maps';
+import { StyleSheet, Dimensions, Text, View, TouchableOpacity } from 'react-native';
 import { Location } from '../../types/types';
-import { Colors, Spacing, Typography } from '../../theme';
+import { Colors, Spacing, Typography, Buttons } from '../../theme';
+import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 
 const { width, height } = Dimensions.get('window');
 
 const MapScreen: React.FC = () => {
   const [mapLocation, setMapLocation] = useState<Location>();
   const [userLocation, setUserLocation] = useState<Location>();
+  const [chosenMapType, setChosenMapType] = useState<MapTypes>('standard');
+
+  const iconStyle = {
+    fontSize: Typography.icon.fontSize,
+    color: chosenMapType === 'satellite' ? Colors.blue : Colors.white,
+  };
+
+  const toggleMapType = () =>
+    chosenMapType === 'satellite' ? setChosenMapType('standard') : setChosenMapType('satellite');
 
   return (
     <View style={styles.container}>
@@ -19,7 +29,7 @@ const MapScreen: React.FC = () => {
           latitudeDelta: 0.09,
           longitudeDelta: 0.09 * (width / height),
         }}
-        mapType={'satellite'}
+        mapType={chosenMapType}
         showsUserLocation
         userLocationAnnotationTitle="Your location"
         minZoomLevel={5}
@@ -42,14 +52,6 @@ const MapScreen: React.FC = () => {
             longitude: location.nativeEvent.coordinate.longitude,
           })
         }>
-        <Text style={styles.textStyle}>
-          User location: ({userLocation ? userLocation.latitude.toPrecision(5) : 'Unknown'},{' '}
-          {userLocation ? userLocation.longitude.toPrecision(5) : 'Unknown'})
-        </Text>
-        <Text style={styles.textStyle}>
-          Map region: ({mapLocation ? mapLocation.latitude.toPrecision(5) : ''},{' '}
-          {mapLocation ? mapLocation.longitude.toPrecision(5) : ''})
-        </Text>
         <Circle
           center={{ latitude: 63.419, longitude: 10.4025 }}
           radius={100}
@@ -57,6 +59,22 @@ const MapScreen: React.FC = () => {
           strokeWidth={0.1}
         />
       </MapView>
+
+      <View style={styles.positionContainer}>
+        <Text style={styles.infoText}>
+          User location: ({userLocation ? userLocation.latitude.toPrecision(5) : 'Unknown'},{' '}
+          {userLocation ? userLocation.longitude.toPrecision(5) : 'Unknown'})
+        </Text>
+        <Text style={styles.infoText}>
+          Map region: ({mapLocation ? mapLocation.latitude.toPrecision(5) : ''},{' '}
+          {mapLocation ? mapLocation.longitude.toPrecision(5) : ''})
+        </Text>
+      </View>
+      <View style={styles.infoContainer}>
+        <TouchableOpacity style={styles.mapStyleButton} onPress={toggleMapType}>
+          <FAIcon style={iconStyle} name="globe-europe" />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -71,12 +89,34 @@ const styles = StyleSheet.create({
     width,
     height,
   },
-  textStyle: {
+  infoContainer: {
+    position: 'absolute',
+    top: '8%',
+    left: '85%',
+  },
+  positionContainer: {
+    backgroundColor: Colors.almostBlack,
+    alignItems: 'flex-start',
+    position: 'absolute',
+    top: '8%',
+    left: '3%',
+    padding: Spacing.smaller,
+    margin: 0,
+    borderRadius: 10,
+  },
+  infoText: {
     ...Typography.bodyText,
-    paddingTop: Spacing.smaller,
-    paddingLeft: Spacing.smaller,
-    backgroundColor: 'transparent',
     color: Colors.white,
+    paddingBottom: Spacing.hairline,
+    backgroundColor: Colors.almostBlack,
+  },
+  mapStyleButton: {
+    ...Buttons.iconButton,
+    backgroundColor: Colors.almostBlack,
+  },
+  icon: {
+    fontSize: Typography.icon.fontSize,
+    color: Colors.blue,
   },
 });
 

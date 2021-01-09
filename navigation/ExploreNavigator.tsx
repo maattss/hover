@@ -7,7 +7,7 @@ const ExploreStack = createStackNavigator<ExploreStackParamList>();
 
 const ExploreNavigator: React.FC = () => {
   return (
-    <ExploreStack.Navigator>
+    <ExploreStack.Navigator screenOptions={{ headerShown: false }}>
       <ExploreStack.Screen name="Map" component={MapScreen} />
     </ExploreStack.Navigator>
   );

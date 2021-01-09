@@ -1,5 +1,6 @@
 import React from 'react';
 import { Text, View, StyleSheet } from 'react-native';
+import { Typography, Spacing } from '../../theme';
 
 const FollowingFeedScreen: React.FC = () => {
   return (
@@ -13,12 +14,10 @@ const styles = StyleSheet.create({
   container: {
     padding: 5,
     alignItems: 'center',
-    justifyContent: 'center',
   },
   header: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    ...Typography.headerText,
+    paddingTop: Spacing.base,
   },
 });
 
