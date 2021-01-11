@@ -1,6 +1,6 @@
 import React, { useState, createRef } from 'react';
 import MapView, { Circle, EventUserLocation, MapTypes, Region } from 'react-native-maps';
-import { StyleSheet, Dimensions, Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, Dimensions, Text, View, TouchableOpacity, Alert } from 'react-native';
 import { Location } from '../../types/types';
 import { Colors, Spacing, Typography, Buttons } from '../../theme';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
@@ -13,9 +13,9 @@ const MapScreen: React.FC = () => {
     latitude: 63.419,
     longitude: 10.4025,
   };
-  // Only for tessting purposes
+  // Only for testing purposes
   const exampleCircleLocation: Location = { latitude: 58.886713, longitude: 5.73246 };
-  const exampleCircleRadius = 25;
+  const exampleCircleRadius = 10;
 
   const [mapLocation, setMapLocation] = useState<Location>();
   const [userLocation, setUserLocation] = useState<Location>();
@@ -35,18 +35,18 @@ const MapScreen: React.FC = () => {
     chosenMapType === 'satellite' ? setChosenMapType('standard') : setChosenMapType('satellite');
 
   const regionChange = (region: Region) => {
-    const regionLocation: Location = { latitude: region.latitude, longitude: region.longitude };
     setMapLocation({
       latitude: region.latitude,
       longitude: region.longitude,
     });
-    isInsideCircle(regionLocation, exampleCircleLocation, exampleCircleRadius);
   };
   const userChange = (location: EventUserLocation) => {
-    setUserLocation({
+    const newUserLocation: Location = {
       latitude: location.nativeEvent.coordinate.latitude,
       longitude: location.nativeEvent.coordinate.longitude,
-    });
+    };
+    if (isInsideCircle(newUserLocation, exampleCircleLocation, exampleCircleRadius)) notify();
+    setUserLocation(newUserLocation);
   };
 
   const mapView = createRef<MapView>();
@@ -63,17 +63,30 @@ const MapScreen: React.FC = () => {
     );
   };
   const isInsideCircle = (userLocation: Location, circleLocation: Location, circleRadius: number) => {
-    const circle_x = circleLocation.latitude;
-    const circle_y = circleLocation.longitude;
-    const user_x = userLocation.latitude;
-    const user_y = userLocation.longitude;
-
-    // Calculate if user location is inside circle or not
-    if (((user_x - circle_x) ^ 2) + ((user_y - circle_y) ^ 2) < (circleRadius ^ 2)) {
-      return true;
-    }
+    const distance = measure(
+      userLocation.latitude,
+      userLocation.longitude,
+      circleLocation.latitude,
+      circleLocation.longitude,
+    );
+    if (distance <= circleRadius) return true;
     return false;
   };
+
+  const measure = (lat1: number, lon1: number, lat2: number, lon2: number) => {
+    // Generally used geo measurement function
+    const R = 6378.137; // Radius of earth in KM
+    const dLat = (lat2 * Math.PI) / 180 - (lat1 * Math.PI) / 180;
+    const dLon = (lon2 * Math.PI) / 180 - (lon1 * Math.PI) / 180;
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos((lat1 * Math.PI) / 180) * Math.cos((lat2 * Math.PI) / 180) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const d = R * c;
+    return d * 1000; // Convert to meters
+  };
+
+  const notify = () => Alert.alert('Congrats. Inside Geofence!');
 
   return (
     <View style={styles.container}>
