@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, createRef } from 'react';
 import MapView, { Circle, EventUserLocation, MapTypes, Region } from 'react-native-maps';
 import { StyleSheet, Dimensions, Text, View, TouchableOpacity } from 'react-native';
 import { Location } from '../../types/types';
@@ -8,6 +8,10 @@ import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 const { width, height } = Dimensions.get('window');
 
 const MapScreen: React.FC = () => {
+  const defaultLocation: Location = {
+    latitude: 63.419,
+    longitude: 10.4025,
+  };
   const [mapLocation, setMapLocation] = useState<Location>();
   const [userLocation, setUserLocation] = useState<Location>();
   const [chosenMapType, setChosenMapType] = useState<MapTypes>('standard');
@@ -32,7 +36,6 @@ const MapScreen: React.FC = () => {
     });
   };
   const regionChangeComplete = (region: Region) => {
-    setCentreOnUser(false);
     setMapLocation({
       latitude: region.latitude,
       longitude: region.longitude,
@@ -45,23 +48,34 @@ const MapScreen: React.FC = () => {
     });
   };
 
+  const mapView = createRef<MapView>();
+  const animateMapToUserPos = () => {
+    setCentreOnUser(true);
+    mapView.current?.animateToRegion(
+      {
+        longitude: userLocation ? userLocation.longitude : defaultLocation.longitude,
+        latitude: userLocation ? userLocation.latitude : defaultLocation.latitude,
+        latitudeDelta: 0.04,
+        longitudeDelta: 0.04 * (width / height),
+      },
+      1000,
+    );
+  };
+
   return (
     <View style={styles.container}>
       <MapView
-        initialRegion={{
-          latitude: 63.419,
-          longitude: 10.4025,
-          latitudeDelta: 0.09,
-          longitudeDelta: 0.09 * (width / height),
-        }}
+        ref={mapView}
         mapType={chosenMapType}
         showsUserLocation
-        userLocationAnnotationTitle="Your location"
-        minZoomLevel={5}
+        showsMyLocationButton
         style={styles.mapStyle}
         onRegionChange={(region) => regionChange(region)}
-        onRegionChangeComplete={() => regionChangeComplete(region)}
-        onUserLocationChange={(location) => userChange(location)}>
+        onRegionChangeComplete={(region) => regionChangeComplete(region)}
+        onUserLocationChange={(location) => userChange(location)}
+        onMapReady={animateMapToUserPos}
+        onDoublePress={() => setCentreOnUser(false)}
+        onPanDrag={() => setCentreOnUser(false)}>
         <Circle
           center={{ latitude: 63.419, longitude: 10.4025 }}
           radius={100}
@@ -84,7 +98,7 @@ const MapScreen: React.FC = () => {
         <TouchableOpacity style={styles.mapStyleButton} onPress={toggleMapType}>
           <FAIcon style={mapTypeIconStyle} name="globe-europe" />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.centreOnUserButton} onPress={() => setCentreOnUser(true)}>
+        <TouchableOpacity style={styles.centreOnUserButton} onPress={animateMapToUserPos}>
           <FAIcon style={centreOnUserIconStyle} name="crosshairs" />
         </TouchableOpacity>
       </View>
