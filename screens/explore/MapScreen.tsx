@@ -35,12 +35,6 @@ const MapScreen: React.FC = () => {
       longitude: region.longitude,
     });
   };
-  const regionChangeComplete = (region: Region) => {
-    setMapLocation({
-      latitude: region.latitude,
-      longitude: region.longitude,
-    });
-  };
   const userChange = (location: EventUserLocation) => {
     setUserLocation({
       latitude: location.nativeEvent.coordinate.latitude,
@@ -71,7 +65,7 @@ const MapScreen: React.FC = () => {
         showsMyLocationButton
         style={styles.mapStyle}
         onRegionChange={(region) => regionChange(region)}
-        onRegionChangeComplete={(region) => regionChangeComplete(region)}
+        onRegionChangeComplete={(region) => regionChange(region)}
         onUserLocationChange={(location) => userChange(location)}
         onMapReady={animateMapToUserPos}
         onDoublePress={() => setCentreOnUser(false)}
