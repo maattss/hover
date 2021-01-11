@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import MapView, { Circle, MapTypes } from 'react-native-maps';
+import MapView, { Circle, EventUserLocation, MapTypes, Region } from 'react-native-maps';
 import { StyleSheet, Dimensions, Text, View, TouchableOpacity } from 'react-native';
 import { Location } from '../../types/types';
 import { Colors, Spacing, Typography, Buttons } from '../../theme';
@@ -11,14 +11,39 @@ const MapScreen: React.FC = () => {
   const [mapLocation, setMapLocation] = useState<Location>();
   const [userLocation, setUserLocation] = useState<Location>();
   const [chosenMapType, setChosenMapType] = useState<MapTypes>('standard');
+  const [centreOnUser, setCentreOnUser] = useState(false);
 
-  const iconStyle = {
+  const mapTypeIconStyle = {
     fontSize: Typography.icon.fontSize,
     color: chosenMapType === 'satellite' ? Colors.blue : Colors.white,
+  };
+  const centreOnUserIconStyle = {
+    fontSize: Typography.icon.fontSize,
+    color: centreOnUser ? Colors.blue : Colors.white,
   };
 
   const toggleMapType = () =>
     chosenMapType === 'satellite' ? setChosenMapType('standard') : setChosenMapType('satellite');
+
+  const regionChange = (region: Region) => {
+    setMapLocation({
+      latitude: region.latitude,
+      longitude: region.longitude,
+    });
+  };
+  const regionChangeComplete = (region: Region) => {
+    setCentreOnUser(false);
+    setMapLocation({
+      latitude: region.latitude,
+      longitude: region.longitude,
+    });
+  };
+  const userChange = (location: EventUserLocation) => {
+    setUserLocation({
+      latitude: location.nativeEvent.coordinate.latitude,
+      longitude: location.nativeEvent.coordinate.longitude,
+    });
+  };
 
   return (
     <View style={styles.container}>
@@ -34,24 +59,9 @@ const MapScreen: React.FC = () => {
         userLocationAnnotationTitle="Your location"
         minZoomLevel={5}
         style={styles.mapStyle}
-        onRegionChange={(region) =>
-          setMapLocation({
-            latitude: region.latitude,
-            longitude: region.longitude,
-          })
-        }
-        onRegionChangeComplete={(region) =>
-          setMapLocation({
-            latitude: region.latitude,
-            longitude: region.longitude,
-          })
-        }
-        onUserLocationChange={(location) =>
-          setUserLocation({
-            latitude: location.nativeEvent.coordinate.latitude,
-            longitude: location.nativeEvent.coordinate.longitude,
-          })
-        }>
+        onRegionChange={(region) => regionChange(region)}
+        onRegionChangeComplete={() => regionChangeComplete(region)}
+        onUserLocationChange={(location) => userChange(location)}>
         <Circle
           center={{ latitude: 63.419, longitude: 10.4025 }}
           radius={100}
@@ -72,7 +82,10 @@ const MapScreen: React.FC = () => {
       </View>
       <View style={styles.infoContainer}>
         <TouchableOpacity style={styles.mapStyleButton} onPress={toggleMapType}>
-          <FAIcon style={iconStyle} name="globe-europe" />
+          <FAIcon style={mapTypeIconStyle} name="globe-europe" />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.centreOnUserButton} onPress={() => setCentreOnUser(true)}>
+          <FAIcon style={centreOnUserIconStyle} name="crosshairs" />
         </TouchableOpacity>
       </View>
     </View>
@@ -91,14 +104,14 @@ const styles = StyleSheet.create({
   },
   infoContainer: {
     position: 'absolute',
-    top: '8%',
+    top: '85%',
     left: '85%',
   },
   positionContainer: {
     backgroundColor: Colors.almostBlack,
     alignItems: 'flex-start',
     position: 'absolute',
-    top: '8%',
+    top: '6%',
     left: '3%',
     padding: Spacing.smaller,
     margin: 0,
@@ -113,6 +126,11 @@ const styles = StyleSheet.create({
   mapStyleButton: {
     ...Buttons.iconButton,
     backgroundColor: Colors.almostBlack,
+  },
+  centreOnUserButton: {
+    ...Buttons.iconButton,
+    backgroundColor: Colors.almostBlack,
+    marginTop: Spacing.smallest,
   },
   icon: {
     fontSize: Typography.icon.fontSize,
