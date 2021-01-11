@@ -4,6 +4,7 @@ export const green = '#5C913B';
 export const red = '#E74C3C';
 export const blue = '#375A7F';
 export const orange = '#CD5000';
+export const yellow = '#FBBD2D';
 
 // Base colors
 export const black = '#000000';
