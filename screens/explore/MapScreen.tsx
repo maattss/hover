@@ -8,10 +8,15 @@ import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 const { width, height } = Dimensions.get('window');
 
 const MapScreen: React.FC = () => {
+  // Default location NTNU Trondheim
   const defaultLocation: Location = {
     latitude: 63.419,
     longitude: 10.4025,
   };
+  // Only for tessting purposes
+  const exampleCircleLocation: Location = { latitude: 58.886713, longitude: 5.73246 };
+  const exampleCircleRadius = 25;
+
   const [mapLocation, setMapLocation] = useState<Location>();
   const [userLocation, setUserLocation] = useState<Location>();
   const [chosenMapType, setChosenMapType] = useState<MapTypes>('standard');
@@ -30,10 +35,12 @@ const MapScreen: React.FC = () => {
     chosenMapType === 'satellite' ? setChosenMapType('standard') : setChosenMapType('satellite');
 
   const regionChange = (region: Region) => {
+    const regionLocation: Location = { latitude: region.latitude, longitude: region.longitude };
     setMapLocation({
       latitude: region.latitude,
       longitude: region.longitude,
     });
+    isInsideCircle(regionLocation, exampleCircleLocation, exampleCircleRadius);
   };
   const userChange = (location: EventUserLocation) => {
     setUserLocation({
@@ -44,7 +51,7 @@ const MapScreen: React.FC = () => {
 
   const mapView = createRef<MapView>();
   const animateMapToUserPos = () => {
-    setCentreOnUser(true);
+    if (userLocation) setCentreOnUser(true);
     mapView.current?.animateToRegion(
       {
         longitude: userLocation ? userLocation.longitude : defaultLocation.longitude,
@@ -54,6 +61,18 @@ const MapScreen: React.FC = () => {
       },
       1000,
     );
+  };
+  const isInsideCircle = (userLocation: Location, circleLocation: Location, circleRadius: number) => {
+    const circle_x = circleLocation.latitude;
+    const circle_y = circleLocation.longitude;
+    const user_x = userLocation.latitude;
+    const user_y = userLocation.longitude;
+
+    // Calculate if user location is inside circle or not
+    if (((user_x - circle_x) ^ 2) + ((user_y - circle_y) ^ 2) < (circleRadius ^ 2)) {
+      return true;
+    }
+    return false;
   };
 
   return (
@@ -71,9 +90,9 @@ const MapScreen: React.FC = () => {
         onDoublePress={() => setCentreOnUser(false)}
         onPanDrag={() => setCentreOnUser(false)}>
         <Circle
-          center={{ latitude: 63.419, longitude: 10.4025 }}
-          radius={100}
-          fillColor={Colors.almostBlack}
+          center={{ latitude: exampleCircleLocation.latitude, longitude: exampleCircleLocation.longitude }}
+          radius={exampleCircleRadius}
+          fillColor={Colors.red}
           strokeWidth={0.1}
         />
       </MapView>
