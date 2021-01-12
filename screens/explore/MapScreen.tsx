@@ -24,8 +24,8 @@ const MapScreen: React.FC = () => {
     radius: 10,
   };
   const exampleCircleGeoFence2: CircleGeoFence = {
-    latitude: 58.886713,
-    longitude: 5.73246,
+    latitude: 58.88671,
+    longitude: 5.7324,
     variant: GeoFenceVariant.CIRCLE,
     radius: 10,
   };
@@ -128,16 +128,30 @@ const MapScreen: React.FC = () => {
     return false;
   };
 
-  // TODO: Draw all geofences
   const drawGeoFences = () => {
-    return (
-      <Circle
-        center={{ latitude: exampleCircleGeoFence1.latitude, longitude: exampleCircleGeoFence1.longitude }}
-        radius={exampleCircleGeoFence1.radius}
-        fillColor={Colors.red}
-        strokeWidth={0.1}
-      />
-    );
+    return exampleGeoFences.map((geoFence) => {
+      if (geoFence.variant === GeoFenceVariant.CIRCLE) {
+        const currentGeoFence = geoFence as CircleGeoFence;
+        return (
+          <Circle
+            center={{ latitude: currentGeoFence.latitude, longitude: currentGeoFence.longitude }}
+            radius={currentGeoFence.radius}
+            fillColor={Colors.red}
+            strokeWidth={0.1}
+          />
+        );
+      } else if (geoFence.variant === GeoFenceVariant.RECTANGLE) {
+        const currentGeoFence = geoFence as RectangleGeoFence;
+        return (
+          <Circle
+            center={{ latitude: currentGeoFence.latitude, longitude: currentGeoFence.longitude }}
+            radius={10}
+            fillColor={Colors.red}
+            strokeWidth={0.1}
+          />
+        );
+      }
+    });
   };
 
   return (
@@ -154,7 +168,7 @@ const MapScreen: React.FC = () => {
         onMapReady={animateMapToUserPos}
         onDoublePress={() => setCentreOnUser(false)}
         onPanDrag={() => setCentreOnUser(false)}>
-        {drawGeoFences}
+        {drawGeoFences()}
       </MapView>
 
       <View style={styles.positionContainer}>
