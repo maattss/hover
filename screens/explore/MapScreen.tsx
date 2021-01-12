@@ -1,10 +1,11 @@
 import React, { useState, createRef } from 'react';
 import MapView, { Circle, EventUserLocation, MapTypes, Region } from 'react-native-maps';
-import { StyleSheet, Dimensions, Text, View, TouchableOpacity, Alert } from 'react-native';
+import { StyleSheet, Dimensions, Text, View, TouchableOpacity } from 'react-native';
 import { Location } from '../../types/defaultTypes';
+import { GeoFence, GeoFenceVariant, CircleGeoFence, RectangleGeoFence } from '../../types/geoFenceTypes';
 import { Colors, Spacing, Typography, Buttons } from '../../theme';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
-import SnackBar, { snackbarType } from '../../components/SnackBar';
+import SnackBar, { SnackBarVariant } from '../../components/SnackBar';
 
 const { width, height } = Dimensions.get('window');
 
@@ -14,15 +15,36 @@ const MapScreen: React.FC = () => {
     latitude: 63.419,
     longitude: 10.4025,
   };
-  // Only for testing purposes
-  const exampleCircleLocation: Location = { latitude: 58.886713, longitude: 5.73246 };
-  const exampleCircleRadius = 10;
 
-  const [mapLocation, setMapLocation] = useState<Location>();
+  // Example locations, only for testing purposes. Should be fetched from db.
+  const exampleCircleGeoFence1: CircleGeoFence = {
+    latitude: 58.886713,
+    longitude: 5.73246,
+    variant: GeoFenceVariant.CIRCLE,
+    radius: 10,
+  };
+  const exampleCircleGeoFence2: CircleGeoFence = {
+    latitude: 58.886713,
+    longitude: 5.73246,
+    variant: GeoFenceVariant.CIRCLE,
+    radius: 10,
+  };
+  const exampleSquareGeoFence: RectangleGeoFence = {
+    latitude: 63.419,
+    longitude: 10.4025,
+    variant: GeoFenceVariant.RECTANGLE,
+    xDistance: 10,
+    yDistance: 10,
+  };
+  const exampleGeoFences: GeoFence[] = [exampleCircleGeoFence1, exampleCircleGeoFence2, exampleSquareGeoFence];
+
+  const [mapRegion, setMapRegion] = useState<Location>();
   const [userLocation, setUserLocation] = useState<Location>();
   const [chosenMapType, setChosenMapType] = useState<MapTypes>('standard');
   const [centreOnUser, setCentreOnUser] = useState(false);
+  const [showSnackBar, setShowSnackBar] = useState(false);
 
+  // Dynamic styles
   const mapTypeIconStyle = {
     fontSize: Typography.icon.fontSize,
     color: chosenMapType === 'satellite' ? Colors.blue : Colors.white,
@@ -32,22 +54,24 @@ const MapScreen: React.FC = () => {
     color: centreOnUser ? Colors.blue : Colors.white,
   };
 
+  // Map event listner functions
   const toggleMapType = () =>
     chosenMapType === 'satellite' ? setChosenMapType('standard') : setChosenMapType('satellite');
 
   const regionChange = (region: Region) => {
-    setMapLocation({
-      latitude: region.latitude,
-      longitude: region.longitude,
-    });
+    setMapRegion(region);
   };
   const userChange = (location: EventUserLocation) => {
     const newUserLocation: Location = {
       latitude: location.nativeEvent.coordinate.latitude,
       longitude: location.nativeEvent.coordinate.longitude,
     };
-    if (isInsideCircle(newUserLocation, exampleCircleLocation, exampleCircleRadius)) notify();
     setUserLocation(newUserLocation);
+    if (isInsideGeoFences(newUserLocation)) {
+      setShowSnackBar(true);
+    } else {
+      setShowSnackBar(false);
+    }
   };
 
   const mapView = createRef<MapView>();
@@ -63,18 +87,30 @@ const MapScreen: React.FC = () => {
       1000,
     );
   };
-  const isInsideCircle = (userLocation: Location, circleLocation: Location, circleRadius: number) => {
-    const distance = measure(
-      userLocation.latitude,
-      userLocation.longitude,
-      circleLocation.latitude,
-      circleLocation.longitude,
-    );
-    if (distance <= circleRadius) return true;
+
+  const isInsideGeoFences = (userLocation: Location) => {
+    exampleGeoFences.forEach((geoFence) => {
+      if (geoFence.variant == GeoFenceVariant.CIRCLE) {
+        if (isInsideCircle(userLocation, geoFence as CircleGeoFence)) return true;
+      } else if (geoFence.variant == GeoFenceVariant.RECTANGLE) {
+        if (isInsideRectangle(userLocation, geoFence as RectangleGeoFence)) return true;
+      }
+    });
     return false;
   };
 
-  const measure = (lat1: number, lon1: number, lat2: number, lon2: number) => {
+  const isInsideCircle = (userLocation: Location, geoFence: CircleGeoFence) => {
+    const distance = measureCircleDistance(
+      userLocation.latitude,
+      userLocation.longitude,
+      geoFence.latitude,
+      geoFence.longitude,
+    );
+    if (distance <= geoFence.radius) return true;
+    return false;
+  };
+
+  const measureCircleDistance = (lat1: number, lon1: number, lat2: number, lon2: number) => {
     // Generally used geo measurement function
     const R = 6378.137; // Radius of earth in KM
     const dLat = (lat2 * Math.PI) / 180 - (lat1 * Math.PI) / 180;
@@ -86,8 +122,20 @@ const MapScreen: React.FC = () => {
     const d = R * c;
     return d * 1000; // Convert to meters
   };
+  const isInsideRectangle = (userLocation: Location, geoFence: RectangleGeoFence) => {
+    return false;
+  };
 
-  const notify = () => Alert.alert('Congrats. Inside Geofence!');
+  const drawGeoFences = () => {
+    return (
+      <Circle
+        center={{ latitude: exampleCircleGeoFence1.latitude, longitude: exampleCircleGeoFence1.longitude }}
+        radius={exampleCircleGeoFence1.radius}
+        fillColor={Colors.red}
+        strokeWidth={0.1}
+      />
+    );
+  };
 
   return (
     <View style={styles.container}>
@@ -103,12 +151,7 @@ const MapScreen: React.FC = () => {
         onMapReady={animateMapToUserPos}
         onDoublePress={() => setCentreOnUser(false)}
         onPanDrag={() => setCentreOnUser(false)}>
-        <Circle
-          center={{ latitude: exampleCircleLocation.latitude, longitude: exampleCircleLocation.longitude }}
-          radius={exampleCircleRadius}
-          fillColor={Colors.red}
-          strokeWidth={0.1}
-        />
+        {drawGeoFences}
       </MapView>
 
       <View style={styles.positionContainer}>
@@ -117,8 +160,8 @@ const MapScreen: React.FC = () => {
           {userLocation ? userLocation.longitude.toPrecision(5) : 'Unknown'})
         </Text>
         <Text style={styles.infoText}>
-          Map region: ({mapLocation ? mapLocation.latitude.toPrecision(5) : ''},{' '}
-          {mapLocation ? mapLocation.longitude.toPrecision(5) : ''})
+          Map region: ({mapRegion ? mapRegion.latitude.toPrecision(5) : ''},{' '}
+          {mapRegion ? mapRegion.longitude.toPrecision(5) : ''})
         </Text>
       </View>
       <View style={styles.infoContainer}>
@@ -129,7 +172,13 @@ const MapScreen: React.FC = () => {
           <FAIcon style={centreOnUserIconStyle} name="crosshairs" />
         </TouchableOpacity>
       </View>
-      <SnackBar variant={snackbarType.INFO} message={'test'} title={'test title'} show={true} />
+      <SnackBar
+        variant={SnackBarVariant.INFO}
+        title={'Earning points!'}
+        message={'You are inside a geofence and will automatically earn points when you are inside this area.'}
+        show={showSnackBar}
+        setShow={setShowSnackBar}
+      />
     </View>
   );
 };
@@ -146,14 +195,14 @@ const styles = StyleSheet.create({
   },
   infoContainer: {
     position: 'absolute',
-    top: '85%',
+    top: '7%',
     left: '85%',
   },
   positionContainer: {
     backgroundColor: Colors.almostBlack,
     alignItems: 'flex-start',
     position: 'absolute',
-    top: '6%',
+    top: '7%',
     left: '3%',
     padding: Spacing.smaller,
     margin: 0,

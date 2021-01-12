@@ -1,14 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Buttons, Colors, Typography, Spacing } from '../theme';
+import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 
-interface SnackbarProps {
-  variant: snackbarType;
+interface SnackBarProps {
+  variant: SnackBarVariant;
   title: string;
   message?: string;
   show: boolean;
+  setShow: React.Dispatch<React.SetStateAction<boolean>>;
+  closeButton?: boolean;
 }
-export enum snackbarType {
+export enum SnackBarVariant {
   SUCCESS,
   WARNING,
   DANGER,
@@ -16,37 +19,35 @@ export enum snackbarType {
   DEFAULT,
 }
 
-const getBackgroundColor = (variant: snackbarType) => {
+const getBackgroundColor = (variant: SnackBarVariant) => {
   switch (variant) {
-    case snackbarType.SUCCESS:
+    case SnackBarVariant.SUCCESS:
       return Colors.green;
-    case snackbarType.DANGER:
+    case SnackBarVariant.DANGER:
       return Colors.red;
-    case snackbarType.WARNING:
+    case SnackBarVariant.WARNING:
       return Colors.yellow;
-    case snackbarType.INFO:
+    case SnackBarVariant.INFO:
       return Colors.blue;
     default:
       return Colors.gray200;
   }
 };
 
-const SnackBar = (props: SnackbarProps) => {
-  const [open, setOpen] = useState(true);
+const SnackBar = (props: SnackBarProps) => {
   const snackbarStyles = {
     backgroundColor: getBackgroundColor(props.variant),
   };
-  useEffect(() => {
-    if (props.show) setOpen(true);
-  }, [props.show]);
-  if (open) {
+  if (props.show) {
     return (
       <View style={[styles.container, snackbarStyles]}>
-        <Text>{props.title}</Text>
-        <Text>{props.message}</Text>
-        <TouchableOpacity onPress={() => setOpen(false)} style={{ ...Buttons.button }}>
-          <Text>Close</Text>
-        </TouchableOpacity>
+        <Text style={styles.title}>{props.title}</Text>
+        <Text style={styles.message}>{props.message}</Text>
+        {props.closeButton && (
+          <TouchableOpacity onPress={() => props.setShow(false)} style={styles.closeButton}>
+            <FAIcon name="times" style={{ ...Buttons.buttonText }} />
+          </TouchableOpacity>
+        )}
       </View>
     );
   } else {
@@ -58,17 +59,26 @@ const styles = StyleSheet.create({
   container: {
     display: 'flex',
     position: 'absolute',
-    top: '5%',
-    left: '5%',
-    width: '90%',
-    height: '10%',
+    bottom: '2%',
+    left: '2%',
+    width: '96%',
     borderRadius: Spacing.smaller,
+    padding: Spacing.base,
   },
   title: {
     ...Typography.headerText,
+    paddingBottom: Spacing.base,
+    textAlign: 'center',
   },
   message: {
-    ...Typography.bodyText,
+    ...Typography.largeBodyText,
+    display: 'flex',
+  },
+  closeButton: {
+    ...Buttons.iconButton,
+    position: 'absolute',
+    top: '12%',
+    right: '2%',
   },
 });
 
