@@ -1,7 +1,6 @@
 import React, { useState, createRef } from 'react';
-import MapView, { Circle, EventUserLocation, MapTypes, Region } from 'react-native-maps';
+import MapView, { Circle, EventUserLocation, LatLng, MapTypes, Polygon, Region } from 'react-native-maps';
 import { StyleSheet, Dimensions, Text, View, TouchableOpacity } from 'react-native';
-import { Location } from '../../types/defaultTypes';
 import { GeoFence, GeoFenceVariant, CircleGeoFence, RectangleGeoFence } from '../../types/geoFenceTypes';
 import { Colors, Spacing, Typography, Buttons } from '../../theme';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
@@ -11,7 +10,7 @@ const { width, height } = Dimensions.get('window');
 
 const MapScreen: React.FC = () => {
   // Default location NTNU Trondheim
-  const defaultLocation: Location = {
+  const defaultLocation: LatLng = {
     latitude: 63.419,
     longitude: 10.4025,
   };
@@ -30,16 +29,20 @@ const MapScreen: React.FC = () => {
     radius: 10,
   };
   const exampleSquareGeoFence: RectangleGeoFence = {
-    latitude: 63.419,
-    longitude: 10.4025,
+    latitude: 63.4177,
+    longitude: 10.4038,
     variant: GeoFenceVariant.RECTANGLE,
-    xDistance: 10,
-    yDistance: 10,
+    coordinates: [
+      { latitude: 63.418966, longitude: 10.398712 },
+      { latitude: 63.419907, longitude: 10.403844 },
+      { latitude: 63.415855, longitude: 10.408178 },
+      { latitude: 63.415116, longitude: 10.403951 },
+    ],
   };
   const exampleGeoFences: GeoFence[] = [exampleCircleGeoFence1, exampleCircleGeoFence2, exampleSquareGeoFence];
 
-  const [mapRegion, setMapRegion] = useState<Location>();
-  const [userLocation, setUserLocation] = useState<Location>();
+  const [mapRegion, setMapRegion] = useState<LatLng>();
+  const [userLocation, setUserLocation] = useState<LatLng>();
   const [chosenMapType, setChosenMapType] = useState<MapTypes>('standard');
   const [centreOnUser, setCentreOnUser] = useState(false);
   const [showSnackBar, setShowSnackBar] = useState(false);
@@ -62,7 +65,7 @@ const MapScreen: React.FC = () => {
     setMapRegion(region);
   };
   const userChange = (location: EventUserLocation) => {
-    const newUserLocation: Location = {
+    const newUserLocation: LatLng = {
       latitude: location.nativeEvent.coordinate.latitude,
       longitude: location.nativeEvent.coordinate.longitude,
     };
@@ -88,7 +91,7 @@ const MapScreen: React.FC = () => {
     );
   };
 
-  const isInsideGeoFences = (userLocation: Location) => {
+  const isInsideGeoFences = (userLocation: LatLng) => {
     exampleGeoFences.forEach((geoFence) => {
       if (geoFence.variant == GeoFenceVariant.CIRCLE) {
         if (isInsideCircle(userLocation, geoFence as CircleGeoFence)) return true;
@@ -99,7 +102,7 @@ const MapScreen: React.FC = () => {
     return false;
   };
 
-  const isInsideCircle = (userLocation: Location, geoFence: CircleGeoFence) => {
+  const isInsideCircle = (userLocation: LatLng, geoFence: CircleGeoFence) => {
     const distance = measureCircleDistance(
       userLocation.latitude,
       userLocation.longitude,
@@ -124,7 +127,7 @@ const MapScreen: React.FC = () => {
   };
 
   // TODO: Implement
-  const isInsideRectangle = (userLocation: Location, geoFence: RectangleGeoFence) => {
+  const isInsideRectangle = (userLocation: LatLng, geoFence: RectangleGeoFence) => {
     return false;
   };
 
@@ -142,14 +145,7 @@ const MapScreen: React.FC = () => {
         );
       } else if (geoFence.variant === GeoFenceVariant.RECTANGLE) {
         const currentGeoFence = geoFence as RectangleGeoFence;
-        return (
-          <Circle
-            center={{ latitude: currentGeoFence.latitude, longitude: currentGeoFence.longitude }}
-            radius={10}
-            fillColor={Colors.red}
-            strokeWidth={0.1}
-          />
-        );
+        return <Polygon coordinates={currentGeoFence.coordinates} fillColor={Colors.red} strokeWidth={0.1} />;
       }
     });
   };
