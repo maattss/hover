@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { Buttons, Colors, Typography } from '../theme';
+import { Buttons, Colors, Typography, Spacing } from '../theme';
 
 interface SnackbarProps {
   variant: snackbarType;
   title: string;
-  message: string;
+  message?: string;
+  show: boolean;
 }
 export enum snackbarType {
   SUCCESS,
@@ -31,21 +32,26 @@ const getBackgroundColor = (variant: snackbarType) => {
 };
 
 const SnackBar = (props: SnackbarProps) => {
-  const [showSnackBar, setShowSnackBar] = useState(true);
+  const [open, setOpen] = useState(true);
   const snackbarStyles = {
     backgroundColor: getBackgroundColor(props.variant),
   };
-  return (
-    showSnackBar && (
+  useEffect(() => {
+    if (props.show) setOpen(true);
+  }, [props.show]);
+  if (open) {
+    return (
       <View style={[styles.container, snackbarStyles]}>
         <Text>{props.title}</Text>
         <Text>{props.message}</Text>
-        <TouchableOpacity onPress={() => setShowSnackBar(false)} style={{ ...Buttons.button }}>
+        <TouchableOpacity onPress={() => setOpen(false)} style={{ ...Buttons.button }}>
           <Text>Close</Text>
         </TouchableOpacity>
       </View>
-    )
-  );
+    );
+  } else {
+    return <></>;
+  }
 };
 
 const styles = StyleSheet.create({
@@ -56,6 +62,7 @@ const styles = StyleSheet.create({
     left: '5%',
     width: '90%',
     height: '10%',
+    borderRadius: Spacing.smaller,
   },
   title: {
     ...Typography.headerText,

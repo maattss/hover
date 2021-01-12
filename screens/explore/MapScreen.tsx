@@ -1,9 +1,10 @@
 import React, { useState, createRef } from 'react';
 import MapView, { Circle, EventUserLocation, MapTypes, Region } from 'react-native-maps';
 import { StyleSheet, Dimensions, Text, View, TouchableOpacity, Alert } from 'react-native';
-import { Location } from '../../types/types';
+import { Location } from '../../types/defaultTypes';
 import { Colors, Spacing, Typography, Buttons } from '../../theme';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
+import SnackBar, { snackbarType } from '../../components/SnackBar';
 
 const { width, height } = Dimensions.get('window');
 
@@ -128,6 +129,7 @@ const MapScreen: React.FC = () => {
           <FAIcon style={centreOnUserIconStyle} name="crosshairs" />
         </TouchableOpacity>
       </View>
+      <SnackBar variant={snackbarType.INFO} message={'test'} title={'test title'} show={true} />
     </View>
   );
 };
