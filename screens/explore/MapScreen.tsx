@@ -122,10 +122,13 @@ const MapScreen: React.FC = () => {
     const d = R * c;
     return d * 1000; // Convert to meters
   };
+
+  // TODO: Implement
   const isInsideRectangle = (userLocation: Location, geoFence: RectangleGeoFence) => {
     return false;
   };
 
+  // TODO: Draw all geofences
   const drawGeoFences = () => {
     return (
       <Circle
@@ -195,15 +198,15 @@ const styles = StyleSheet.create({
   },
   infoContainer: {
     position: 'absolute',
-    top: '7%',
-    left: '85%',
+    top: '6%',
+    right: '0.5%',
   },
   positionContainer: {
     backgroundColor: Colors.almostBlack,
     alignItems: 'flex-start',
     position: 'absolute',
-    top: '7%',
-    left: '3%',
+    top: '6%',
+    left: '0.5%',
     padding: Spacing.smaller,
     margin: 0,
     borderRadius: 10,
