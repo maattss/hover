@@ -23,6 +23,10 @@ export default function App() {
       }
 
       setLocation(await Location.getCurrentPositionAsync({}));
+      await Location.startLocationUpdatesAsync(LOCATION_BACKGROUND_TRACKING, {
+        accuracy: Location.Accuracy.Highest,
+        timeInterval: 100,
+      });
     })();
   }, []);
 
