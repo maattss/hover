@@ -158,7 +158,6 @@ const MapScreen: React.FC = () => {
         ref={mapView}
         mapType={chosenMapType}
         showsUserLocation
-        showsMyLocationButton
         style={styles.mapStyle}
         onRegionChange={(region) => regionChange(region)}
         onRegionChangeComplete={(region) => regionChange(region)}
