@@ -11,63 +11,63 @@ import {
 import { Colors, Spacing, Typography, Buttons } from '../../theme';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import SnackBar, { SnackBarVariant } from '../../components/SnackBar';
-import { isInsideCircle, isInsideRectangle } from '../../helpers/mapCalculations';
+import { isInsideCircle, isInsidePolygon } from '../../helpers/mapCalculations';
 
 const { width, height } = Dimensions.get('window');
 
+// Default location NTNU Trondheim
+const defaultLocation: LatLng = {
+  latitude: 63.419,
+  longitude: 10.4025,
+};
+
+// Example locations, only for testing purposes. Should be fetched from db.
+const exampleCircleGeoFence1: CircleGeoFence = {
+  latitude: 58.88495,
+  longitude: 5.7313,
+  variant: GeoFenceVariant.CIRCLE,
+  category: GeoFenceCategory.SOCIAL,
+  radius: 20,
+};
+const exampleCircleGeoFence2: CircleGeoFence = {
+  latitude: 58.88603,
+  longitude: 5.73234,
+  variant: GeoFenceVariant.CIRCLE,
+  category: GeoFenceCategory.EXERCISE,
+  radius: 5,
+};
+const exampleSquareGeoFence1: PolygonGeoFence = {
+  latitude: 63.4177,
+  longitude: 10.4038,
+  variant: GeoFenceVariant.POLYGON,
+  category: GeoFenceCategory.EDUCATION,
+  coordinates: [
+    { latitude: 63.418966, longitude: 10.398712 },
+    { latitude: 63.419907, longitude: 10.403844 },
+    { latitude: 63.415855, longitude: 10.408178 },
+    { latitude: 63.415116, longitude: 10.403951 },
+  ],
+};
+const exampleSquareGeoFence2: PolygonGeoFence = {
+  latitude: 63.4177,
+  longitude: 10.4038,
+  variant: GeoFenceVariant.POLYGON,
+  category: GeoFenceCategory.EXERCISE,
+  coordinates: [
+    { latitude: 58.886871, longitude: 5.732375 },
+    { latitude: 58.887181, longitude: 5.733686 },
+    { latitude: 58.88681, longitude: 5.734147 },
+    { latitude: 58.88645, longitude: 5.732805 },
+  ],
+};
+const exampleGeoFences: GeoFence[] = [
+  exampleCircleGeoFence1,
+  exampleCircleGeoFence2,
+  exampleSquareGeoFence1,
+  exampleSquareGeoFence2,
+];
+
 const MapScreen: React.FC = () => {
-  // Default location NTNU Trondheim
-  const defaultLocation: LatLng = {
-    latitude: 63.419,
-    longitude: 10.4025,
-  };
-
-  // Example locations, only for testing purposes. Should be fetched from db.
-  const exampleCircleGeoFence1: CircleGeoFence = {
-    latitude: 58.886713,
-    longitude: 5.73246,
-    variant: GeoFenceVariant.CIRCLE,
-    category: GeoFenceCategory.SOCIAL,
-    radius: 10,
-  };
-  const exampleCircleGeoFence2: CircleGeoFence = {
-    latitude: 58.88671,
-    longitude: 5.7324,
-    variant: GeoFenceVariant.CIRCLE,
-    category: GeoFenceCategory.EXERCISE,
-    radius: 10,
-  };
-  const exampleSquareGeoFence1: PolygonGeoFence = {
-    latitude: 63.4177,
-    longitude: 10.4038,
-    variant: GeoFenceVariant.POLYGON,
-    category: GeoFenceCategory.EDUCATION,
-    coordinates: [
-      { latitude: 63.418966, longitude: 10.398712 },
-      { latitude: 63.419907, longitude: 10.403844 },
-      { latitude: 63.415855, longitude: 10.408178 },
-      { latitude: 63.415116, longitude: 10.403951 },
-    ],
-  };
-  const exampleSquareGeoFence2: PolygonGeoFence = {
-    latitude: 63.4177,
-    longitude: 10.4038,
-    variant: GeoFenceVariant.POLYGON,
-    category: GeoFenceCategory.EXERCISE,
-    coordinates: [
-      { latitude: 58.886871, longitude: 5.732375 },
-      { latitude: 58.887181, longitude: 5.733686 },
-      { latitude: 58.88681, longitude: 5.734147 },
-      { latitude: 58.88645, longitude: 5.732805 },
-    ],
-  };
-  const exampleGeoFences: GeoFence[] = [
-    exampleCircleGeoFence1,
-    exampleCircleGeoFence2,
-    exampleSquareGeoFence1,
-    exampleSquareGeoFence2,
-  ];
-
   const [mapRegion, setMapRegion] = useState<LatLng>();
   const [userLocation, setUserLocation] = useState<LatLng>();
   const [chosenMapType, setChosenMapType] = useState<MapTypes>('standard');
@@ -97,13 +97,10 @@ const MapScreen: React.FC = () => {
       longitude: location.nativeEvent.coordinate.longitude,
     };
     setUserLocation(newUserLocation);
-    const insideGeo = isInsideGeoFences(newUserLocation);
-    console.log('inside geo: ' + insideGeo);
+
     if (isInsideGeoFences(newUserLocation)) {
-      console.log('show snackbar');
       setShowSnackBar(true);
     } else {
-      console.log('not show snackbar');
       setShowSnackBar(false);
     }
   };
@@ -123,34 +120,34 @@ const MapScreen: React.FC = () => {
   };
 
   const isInsideGeoFences = (userLocation: LatLng) => {
-    exampleGeoFences.forEach((geoFence) => {
+    for (const geoFence of exampleGeoFences) {
       if (geoFence.variant == GeoFenceVariant.CIRCLE) {
         if (isInsideCircle(userLocation, geoFence as CircleGeoFence)) return true;
       }
       if (geoFence.variant == GeoFenceVariant.POLYGON) {
-        console.log('isInside:' + isInsideRectangle(userLocation, geoFence as PolygonGeoFence));
-        // Does not work as expected. Check this
-        if (isInsideRectangle(userLocation, geoFence as PolygonGeoFence)) return true;
+        if (isInsidePolygon(userLocation, geoFence as PolygonGeoFence)) return true;
       }
-    });
-    return false;
+    }
   };
 
   const drawGeoFences = () => {
-    return exampleGeoFences.map((geoFence) => {
+    return exampleGeoFences.map((geoFence, index) => {
       if (geoFence.variant === GeoFenceVariant.CIRCLE) {
         const currentGeoFence = geoFence as CircleGeoFence;
         return (
           <Circle
+            key={index}
             center={{ latitude: currentGeoFence.latitude, longitude: currentGeoFence.longitude }}
             radius={currentGeoFence.radius}
-            fillColor={Colors.red}
+            fillColor={currentGeoFence.category === GeoFenceCategory.EDUCATION ? Colors.red : Colors.blue}
             strokeWidth={0.1}
           />
         );
       } else if (geoFence.variant === GeoFenceVariant.POLYGON) {
         const currentGeoFence = geoFence as PolygonGeoFence;
-        return <Polygon coordinates={currentGeoFence.coordinates} fillColor={Colors.red} strokeWidth={0.1} />;
+        return (
+          <Polygon key={index} coordinates={currentGeoFence.coordinates} fillColor={Colors.red} strokeWidth={0.1} />
+        );
       }
     });
   };

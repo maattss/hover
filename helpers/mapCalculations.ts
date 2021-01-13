@@ -25,13 +25,13 @@ const measureCircleDistance = (lat1: number, lon1: number, lat2: number, lon2: n
   return d * 1000; // Convert to meters
 };
 
-export const isInsideRectangle = (userLocation: LatLng, geoFence: PolygonGeoFence) => {
+export const isInsidePolygon = (userLocation: LatLng, geoFence: PolygonGeoFence) => {
   // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const classifyPoint = require('robust-point-in-polygon');
+  const classifyPoint = require('robust-point-in-polygon'); // Exactly determines if a point is contained in a 2D polygon.
   const polygon = geoFence.coordinates.map((coordinate) => {
     return [coordinate.latitude, coordinate.longitude];
   });
   const insidePolygon = classifyPoint(polygon, [userLocation.latitude, userLocation.longitude]);
-  if (insidePolygon === 1 || insidePolygon === 0) return true;
+  if (insidePolygon === -1 || insidePolygon === 0) return true;
   return false;
 };
