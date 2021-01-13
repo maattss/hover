@@ -4,19 +4,24 @@ export interface CircleGeoFence {
   latitude: number;
   longitude: number;
   variant: GeoFenceVariant;
+  category: GeoFenceCategory;
   radius: number;
 }
-// TODO: This should by renamed polygon
-export interface RectangleGeoFence {
+export interface PolygonGeoFence {
   latitude: number;
   longitude: number;
   variant: GeoFenceVariant;
+  category: GeoFenceCategory;
   coordinates: LatLng[];
 }
-
 export enum GeoFenceVariant {
   CIRCLE,
-  RECTANGLE,
+  POLYGON,
+}
+export enum GeoFenceCategory {
+  EDUCATION,
+  EXERCISE,
+  SOCIAL,
 }
 
-export type GeoFence = CircleGeoFence | RectangleGeoFence;
+export type GeoFence = CircleGeoFence | PolygonGeoFence;

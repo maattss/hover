@@ -1,10 +1,17 @@
 import React, { useState, createRef } from 'react';
 import MapView, { Circle, EventUserLocation, LatLng, MapTypes, Polygon, Region } from 'react-native-maps';
 import { StyleSheet, Dimensions, Text, View, TouchableOpacity } from 'react-native';
-import { GeoFence, GeoFenceVariant, CircleGeoFence, RectangleGeoFence } from '../../types/geoFenceTypes';
+import {
+  GeoFence,
+  GeoFenceVariant,
+  CircleGeoFence,
+  PolygonGeoFence,
+  GeoFenceCategory,
+} from '../../types/geoFenceTypes';
 import { Colors, Spacing, Typography, Buttons } from '../../theme';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import SnackBar, { SnackBarVariant } from '../../components/SnackBar';
+import { isInsideCircle, isInsideRectangle } from '../../helpers/mapCalculations';
 
 const { width, height } = Dimensions.get('window');
 
@@ -20,18 +27,21 @@ const MapScreen: React.FC = () => {
     latitude: 58.886713,
     longitude: 5.73246,
     variant: GeoFenceVariant.CIRCLE,
+    category: GeoFenceCategory.SOCIAL,
     radius: 10,
   };
   const exampleCircleGeoFence2: CircleGeoFence = {
     latitude: 58.88671,
     longitude: 5.7324,
     variant: GeoFenceVariant.CIRCLE,
+    category: GeoFenceCategory.EXERCISE,
     radius: 10,
   };
-  const exampleSquareGeoFence: RectangleGeoFence = {
+  const exampleSquareGeoFence1: PolygonGeoFence = {
     latitude: 63.4177,
     longitude: 10.4038,
-    variant: GeoFenceVariant.RECTANGLE,
+    variant: GeoFenceVariant.POLYGON,
+    category: GeoFenceCategory.EDUCATION,
     coordinates: [
       { latitude: 63.418966, longitude: 10.398712 },
       { latitude: 63.419907, longitude: 10.403844 },
@@ -39,7 +49,24 @@ const MapScreen: React.FC = () => {
       { latitude: 63.415116, longitude: 10.403951 },
     ],
   };
-  const exampleGeoFences: GeoFence[] = [exampleCircleGeoFence1, exampleCircleGeoFence2, exampleSquareGeoFence];
+  const exampleSquareGeoFence2: PolygonGeoFence = {
+    latitude: 63.4177,
+    longitude: 10.4038,
+    variant: GeoFenceVariant.POLYGON,
+    category: GeoFenceCategory.EXERCISE,
+    coordinates: [
+      { latitude: 58.886871, longitude: 5.732375 },
+      { latitude: 58.887181, longitude: 5.733686 },
+      { latitude: 58.88681, longitude: 5.734147 },
+      { latitude: 58.88645, longitude: 5.732805 },
+    ],
+  };
+  const exampleGeoFences: GeoFence[] = [
+    exampleCircleGeoFence1,
+    exampleCircleGeoFence2,
+    exampleSquareGeoFence1,
+    exampleSquareGeoFence2,
+  ];
 
   const [mapRegion, setMapRegion] = useState<LatLng>();
   const [userLocation, setUserLocation] = useState<LatLng>();
@@ -70,9 +97,13 @@ const MapScreen: React.FC = () => {
       longitude: location.nativeEvent.coordinate.longitude,
     };
     setUserLocation(newUserLocation);
+    const insideGeo = isInsideGeoFences(newUserLocation);
+    console.log('inside geo: ' + insideGeo);
     if (isInsideGeoFences(newUserLocation)) {
+      console.log('show snackbar');
       setShowSnackBar(true);
     } else {
+      console.log('not show snackbar');
       setShowSnackBar(false);
     }
   };
@@ -95,39 +126,13 @@ const MapScreen: React.FC = () => {
     exampleGeoFences.forEach((geoFence) => {
       if (geoFence.variant == GeoFenceVariant.CIRCLE) {
         if (isInsideCircle(userLocation, geoFence as CircleGeoFence)) return true;
-      } else if (geoFence.variant == GeoFenceVariant.RECTANGLE) {
-        if (isInsideRectangle(userLocation, geoFence as RectangleGeoFence)) return true;
+      }
+      if (geoFence.variant == GeoFenceVariant.POLYGON) {
+        console.log('isInside:' + isInsideRectangle(userLocation, geoFence as PolygonGeoFence));
+        // Does not work as expected. Check this
+        if (isInsideRectangle(userLocation, geoFence as PolygonGeoFence)) return true;
       }
     });
-    return false;
-  };
-
-  const isInsideCircle = (userLocation: LatLng, geoFence: CircleGeoFence) => {
-    const distance = measureCircleDistance(
-      userLocation.latitude,
-      userLocation.longitude,
-      geoFence.latitude,
-      geoFence.longitude,
-    );
-    if (distance <= geoFence.radius) return true;
-    return false;
-  };
-
-  const measureCircleDistance = (lat1: number, lon1: number, lat2: number, lon2: number) => {
-    // Generally used geo measurement function
-    const R = 6378.137; // Radius of earth in KM
-    const dLat = (lat2 * Math.PI) / 180 - (lat1 * Math.PI) / 180;
-    const dLon = (lon2 * Math.PI) / 180 - (lon1 * Math.PI) / 180;
-    const a =
-      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-      Math.cos((lat1 * Math.PI) / 180) * Math.cos((lat2 * Math.PI) / 180) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    const d = R * c;
-    return d * 1000; // Convert to meters
-  };
-
-  // TODO: Implement
-  const isInsideRectangle = (userLocation: LatLng, geoFence: RectangleGeoFence) => {
     return false;
   };
 
@@ -143,8 +148,8 @@ const MapScreen: React.FC = () => {
             strokeWidth={0.1}
           />
         );
-      } else if (geoFence.variant === GeoFenceVariant.RECTANGLE) {
-        const currentGeoFence = geoFence as RectangleGeoFence;
+      } else if (geoFence.variant === GeoFenceVariant.POLYGON) {
+        const currentGeoFence = geoFence as PolygonGeoFence;
         return <Polygon coordinates={currentGeoFence.coordinates} fillColor={Colors.red} strokeWidth={0.1} />;
       }
     });
