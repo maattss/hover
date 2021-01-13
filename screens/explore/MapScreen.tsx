@@ -12,6 +12,9 @@ import { Colors, Spacing, Typography, Buttons } from '../../theme';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import SnackBar, { SnackBarVariant } from '../../components/SnackBar';
 import { isInsideCircle, isInsidePolygon } from '../../helpers/mapCalculations';
+import Firebase from 'lib/firebase';
+import { GET_GEOFENCES } from '../../lib/queries/geoFenceQueries';
+import { useQuery } from '@apollo/client';
 
 const { width, height } = Dimensions.get('window');
 
@@ -60,6 +63,8 @@ const exampleSquareGeoFence2: PolygonGeoFence = {
     { latitude: 58.88645, longitude: 5.732805 },
   ],
 };
+
+// TODO: Fetch from db
 const exampleGeoFences: GeoFence[] = [
   exampleCircleGeoFence1,
   exampleCircleGeoFence2,
@@ -73,6 +78,11 @@ const MapScreen: React.FC = () => {
   const [chosenMapType, setChosenMapType] = useState<MapTypes>('standard');
   const [centreOnUser, setCentreOnUser] = useState(false);
   const [showSnackBar, setShowSnackBar] = useState(false);
+
+  const id = Firebase.auth().currentUser?.uid;
+  const { loading: fetchLoading, error: fetchError, data } = useQuery(GET_GEOFENCES, {
+    variables: { id },
+  });
 
   // Dynamic styles
   const mapTypeIconStyle = {

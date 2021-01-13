@@ -1,9 +1,5 @@
 import { ApolloClient, HttpLink, InMemoryCache } from '@apollo/client';
 import { setContext } from '@apollo/link-context';
-// Make sure you create a new environment variable
-// that points to your graphql endpoint
-// import { GRAPHQL_API_URL } from 'react-native-dotenv';
-
 import Firebase from './firebase';
 import { GRAPHQL_API_URL } from './config';
 
