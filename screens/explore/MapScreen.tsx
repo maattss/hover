@@ -49,8 +49,8 @@ const exampleSquareGeoFence1: PolygonGeoFence = {
   ],
 };
 const exampleSquareGeoFence2: PolygonGeoFence = {
-  latitude: 63.4177,
-  longitude: 10.4038,
+  latitude: 58.8868,
+  longitude: 5.733,
   variant: GeoFenceVariant.POLYGON,
   category: GeoFenceCategory.EXERCISE,
   coordinates: [
