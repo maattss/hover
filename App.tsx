@@ -1,6 +1,6 @@
 import { ApolloProvider } from '@apollo/client';
-import React from 'react';
-import { StatusBar } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Platform, StatusBar } from 'react-native';
 import { AppearanceProvider } from 'react-native-appearance';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import AuthProvider from './components/AuthProvider';
