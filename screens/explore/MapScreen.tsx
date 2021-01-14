@@ -34,9 +34,10 @@ const MapScreen: React.FC = () => {
   const { error: fetchError, data: data } = useQuery(GET_GEOFENCES);
 
   useEffect(() => {
-    // Geo fence data fetched from db
+    // Geo-fence data fetched from db
     if (data) {
       const fetchedGeoFences: GeoFence[] = [];
+
       for (const obj of data.geofences) {
         if (obj.variant === 'CIRCLE') {
           fetchedGeoFences.push({
@@ -47,6 +48,7 @@ const MapScreen: React.FC = () => {
             radius: obj.radius,
           } as CircleGeoFence);
         } else if (obj.variant === 'POLYGON') {
+          // Translate from string coordinates in db to array of LatLng objects
           const coordinatesRaw: string = obj.coordinates.split(',');
           const coordinates = [];
           for (let i = 0; i < coordinatesRaw.length; i = i + 2) {
@@ -67,11 +69,6 @@ const MapScreen: React.FC = () => {
       setGeoFences(fetchedGeoFences);
     }
   }, [data]);
-
-  if (fetchError) {
-    console.log('Error:', fetchError);
-    Alert.alert('Error', fetchError.message);
-  }
 
   // Dynamic styles
   const mapTypeIconStyle = {
@@ -156,6 +153,10 @@ const MapScreen: React.FC = () => {
     }
   };
 
+  if (fetchError) {
+    console.log('Error:', fetchError);
+    Alert.alert('Error', fetchError.message);
+  }
   return (
     <View style={styles.container}>
       <MapView
@@ -244,14 +245,6 @@ const styles = StyleSheet.create({
   icon: {
     fontSize: Typography.icon.fontSize,
     color: Colors.blue,
-  },
-  loadingContainer: {
-    display: 'flex',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    height: '100%',
-    width: '100%',
-    marginTop: '20%',
   },
 });
 
