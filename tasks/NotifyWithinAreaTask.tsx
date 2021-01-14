@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import * as Location from 'expo-location';
 import { NOTIFY_WITHIN_AREA } from '../tasks';
-import { useQuery } from '@apollo/client';
-import { GET_GEOFENCES } from '../lib/queries/geoFenceQueries';
 import { Alert } from 'react-native';
 import { convertToRegion } from '../helpers/mapCalculations';
+import { useGeofencesQuery } from '../graphql/queries/Geofences.generated';
 
 // This task checks if user's position is within a given regions
 const NotifyWithinAreaTask = () => {
   const [regions, setRegions] = useState<Location.LocationRegion[]>();
 
-  const { data: data, loading, error: fetchError } = useQuery(GET_GEOFENCES);
+  const { data: data, loading, error: fetchError } = useGeofencesQuery();
 
   useEffect(() => {
     if (!loading && data) {
