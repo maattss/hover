@@ -24,23 +24,23 @@ export const icon = {
 
 export const smallText = {
   fontSize: smallestFontSize,
-  color: Colors.almostBlack,
+  color: Colors.white,
 };
 
 export const bodyText = {
   fontSize: smallFontSize,
-  color: Colors.almostBlack,
+  color: Colors.white,
 };
 
 export const largeBodyText = {
   fontSize: baseFontSize,
-  color: Colors.almostBlack,
+  color: Colors.white,
 };
 
 export const headerText = {
   fontSize: largestFontSize,
   fontWeight: 'bold' as const,
-  color: Colors.almostBlack,
+  color: Colors.white,
 };
 
 export const screenHeader = {
