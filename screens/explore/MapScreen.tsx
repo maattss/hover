@@ -1,6 +1,6 @@
 import React, { useState, createRef, useEffect } from 'react';
 import MapView, { Circle, EventUserLocation, LatLng, MapTypes, Polygon, Region } from 'react-native-maps';
-import { StyleSheet, Dimensions, Text, View, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
+import { StyleSheet, Dimensions, Text, View, TouchableOpacity, Alert } from 'react-native';
 import {
   GeoFence,
   GeoFenceVariant,
@@ -31,9 +31,10 @@ const MapScreen: React.FC = () => {
   const [showSnackBar, setShowSnackBar] = useState(false);
   const [geoFences, setGeoFences] = useState<GeoFence[]>();
 
-  const { loading: fetchLoading, error: fetchError, data } = useQuery(GET_GEOFENCES);
+  const { error: fetchError, data: data } = useQuery(GET_GEOFENCES);
 
   useEffect(() => {
+    // Geo fence data fetched from db
     if (data) {
       const fetchedGeoFences: GeoFence[] = [];
       for (const obj of data.geofences) {
@@ -89,6 +90,7 @@ const MapScreen: React.FC = () => {
   const regionChange = (region: Region) => {
     setMapRegion(region);
   };
+
   const userChange = (location: EventUserLocation) => {
     const newUserLocation: LatLng = {
       latitude: location.nativeEvent.coordinate.latitude,

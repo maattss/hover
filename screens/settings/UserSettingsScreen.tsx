@@ -27,6 +27,7 @@ const UserSettingsScreen: React.FC<SettingsProps> = ({ navigation }: SettingsPro
   const [updateUser, { loading: mutationLoading, error: mutationError, data: response }] = useMutation(
     UPDATE_USER_NAME,
   );
+
   useEffect(() => {
     if (data) {
       const { name, bio } = data.users_by_pk;
