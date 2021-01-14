@@ -7,6 +7,8 @@ import { RootTabParamList } from '../types/navigationTypes';
 import ExploreNavigator from './ExploreNavigator';
 import FeedNavigator from './FeedNavigator';
 import StatisticsNavigator from './StatisticsNavigator';
+import LocationBackgroundTask from '../tasks/LocationBackgroundTask';
+import NotifyWithinAreaTask from '../tasks/NotifyWithinAreaTask';
 
 const TabIcon = (props: { name: string; color: string }) => {
   return <FAIcon style={styles.tabicon} {...props} />;
@@ -20,31 +22,35 @@ const TabNavigator: React.FC = () => {
   const tabIconStatistics = ({ color = '' as string }) => <TabIcon name="chart-bar" color={color} />;
 
   return (
-    <Tab.Navigator tabBarOptions={{ activeTintColor: Colors.blue, keyboardHidesTabBar: true }}>
-      <Tab.Screen
-        name="Feed"
-        component={FeedNavigator}
-        options={{
-          tabBarIcon: tabIconHome,
-        }}
-      />
+    <>
+      <LocationBackgroundTask />
+      <NotifyWithinAreaTask />
+      <Tab.Navigator tabBarOptions={{ activeTintColor: Colors.blue, keyboardHidesTabBar: true }}>
+        <Tab.Screen
+          name="Feed"
+          component={FeedNavigator}
+          options={{
+            tabBarIcon: tabIconHome,
+          }}
+        />
 
-      <Tab.Screen
-        name="Explore"
-        component={ExploreNavigator}
-        options={{
-          tabBarIcon: tabIconExplore,
-        }}
-      />
+        <Tab.Screen
+          name="Explore"
+          component={ExploreNavigator}
+          options={{
+            tabBarIcon: tabIconExplore,
+          }}
+        />
 
-      <Tab.Screen
-        name="Statistics"
-        component={StatisticsNavigator}
-        options={{
-          tabBarIcon: tabIconStatistics,
-        }}
-      />
-    </Tab.Navigator>
+        <Tab.Screen
+          name="Statistics"
+          component={StatisticsNavigator}
+          options={{
+            tabBarIcon: tabIconStatistics,
+          }}
+        />
+      </Tab.Navigator>
+    </>
   );
 };
 
