@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, DarkTheme } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { User } from 'firebase';
 import Firebase from '../lib/firebase';
@@ -25,7 +25,7 @@ const AppNavigation: React.FC = () => {
   }, []);
 
   return (
-    <NavigationContainer>
+    <NavigationContainer theme={DarkTheme}>
       <RootStack.Navigator screenOptions={{ headerShown: false }}>
         {userAuthState ? (
           <RootStack.Screen name="Main" component={TabNavigator} />
