@@ -1,14 +1,15 @@
 import { gql } from '@apollo/client';
 
 export const GET_GEOFENCES = gql`
-  query($id: String!) {
+  query geofenceQuery {
     geofences {
-      category
-      coordinates
+      id
       latitude
       longitude
       radius
       variant
+      coordinates
+      category
     }
   }
 `;

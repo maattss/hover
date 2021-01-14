@@ -1,4 +1,4 @@
-import React, { useState, createRef } from 'react';
+import React, { useState, createRef, useEffect } from 'react';
 import MapView, { Circle, EventUserLocation, LatLng, MapTypes, Polygon, Region } from 'react-native-maps';
 import { StyleSheet, Dimensions, Text, View, TouchableOpacity } from 'react-native';
 import {
@@ -12,7 +12,6 @@ import { Colors, Spacing, Typography, Buttons } from '../../theme';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import SnackBar, { SnackBarVariant } from '../../components/SnackBar';
 import { isInsideCircle, isInsidePolygon } from '../../helpers/mapCalculations';
-import Firebase from 'lib/firebase';
 import { GET_GEOFENCES } from '../../lib/queries/geoFenceQueries';
 import { useQuery } from '@apollo/client';
 
@@ -64,7 +63,6 @@ const exampleSquareGeoFence2: PolygonGeoFence = {
   ],
 };
 
-// TODO: Fetch from db
 const exampleGeoFences: GeoFence[] = [
   exampleCircleGeoFence1,
   exampleCircleGeoFence2,
@@ -78,11 +76,40 @@ const MapScreen: React.FC = () => {
   const [chosenMapType, setChosenMapType] = useState<MapTypes>('standard');
   const [centreOnUser, setCentreOnUser] = useState(false);
   const [showSnackBar, setShowSnackBar] = useState(false);
+  const [geoFences, setGeoFences] = useState<GeoFence[]>();
 
-  const id = Firebase.auth().currentUser?.uid;
-  const { loading: fetchLoading, error: fetchError, data } = useQuery(GET_GEOFENCES, {
-    variables: { id },
-  });
+  const { loading: fetchLoading, error: fetchError, data } = useQuery(GET_GEOFENCES);
+
+  useEffect(() => {
+    if (data) {
+      const fetchedGeoFences: GeoFence[] = [];
+      for (const obj of data.geofences) {
+        if (obj.variant === 'CIRCLE') {
+          fetchedGeoFences.push({
+            latitude: obj.latitude,
+            longitude: obj.longitude,
+            radius: obj.radius,
+            category: GeoFenceCategory[obj.category as keyof typeof GeoFenceCategory],
+          } as CircleGeoFence);
+        } else if (obj.variant === 'POLYGON') {
+          fetchedGeoFences.push({
+            latitude: obj.latitude,
+            longitude: obj.longitude,
+            coordinates: obj.coordinates,
+            category: GeoFenceCategory[obj.category as keyof typeof GeoFenceCategory],
+          } as PolygonGeoFence);
+        }
+      }
+      setGeoFences(fetchedGeoFences);
+    }
+  }, [data]);
+  useEffect(() => {
+    console.log('Loading...');
+  }, [fetchLoading]);
+
+  if (fetchError) {
+    console.log('Error:', fetchError);
+  }
 
   // Dynamic styles
   const mapTypeIconStyle = {
@@ -141,6 +168,7 @@ const MapScreen: React.FC = () => {
   };
 
   const drawGeoFences = () => {
+    console.log('Geofences', geoFences);
     return exampleGeoFences.map((geoFence, index) => {
       if (geoFence.variant === GeoFenceVariant.CIRCLE) {
         const currentGeoFence = geoFence as CircleGeoFence;
