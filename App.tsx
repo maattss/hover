@@ -18,15 +18,13 @@ export default function App() {
     SplashScreen.hideAsync();
   }
   return (
-    <AuthProvider>
-      <ApolloProvider client={apolloClient}>
-        <SafeAreaProvider>
-          <AppearanceProvider>
-            <AppNavigation />
-            <StatusBar animated barStyle={'light-content'} />
-          </AppearanceProvider>
-        </SafeAreaProvider>
-      </ApolloProvider>
-    </AuthProvider>
+    <ApolloProvider client={apolloClient}>
+      <SafeAreaProvider>
+        <AppearanceProvider>
+          <AppNavigation />
+          <StatusBar animated barStyle={'light-content'} />
+        </AppearanceProvider>
+      </SafeAreaProvider>
+    </ApolloProvider>
   );
 }
