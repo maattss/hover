@@ -27,35 +27,23 @@ const UserSettingsScreen: React.FC<SettingsProps> = ({ navigation }: SettingsPro
   const [updateUser, { loading: mutationLoading, error: mutationError, data: response }] = useMutation(
     UPDATE_USER_NAME,
   );
+
   useEffect(() => {
-    let newName = null;
-    let newBio = null;
-
     if (data) {
-      const { users_by_pk: user } = data;
-      const { name, bio } = user;
-      newName = name;
-      newBio = bio;
+      const { name, bio } = data.users_by_pk;
+      setName(name);
+      setBio(bio);
     }
-
     if (response) {
-      const { update_users_by_pk } = response;
-      const { name, bio } = update_users_by_pk;
-      newName = name;
-      newBio = bio;
+      const { name, bio } = response.update_users_by_pk;
+      setName(name);
+      setBio(bio);
     }
-
-    setName(newName);
-    setBio(newBio);
   }, [data, response]);
 
-  if (fetchError) {
-    console.error(fetchError);
-    Alert.alert('Error', fetchError.message);
-  }
-  if (mutationError) {
-    console.error(mutationError);
-    Alert.alert('Error', mutationError.message);
+  if (fetchError || mutationError) {
+    console.error(fetchError || mutationError);
+    Alert.alert('Error', fetchError?.message || mutationError?.message);
   }
   if (fetchLoading || mutationLoading)
     return (

@@ -22,6 +22,7 @@ export enum GeoFenceCategory {
   EDUCATION,
   EXERCISE,
   SOCIAL,
+  CULTURE,
 }
 
 export type GeoFence = CircleGeoFence | PolygonGeoFence;

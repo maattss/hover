@@ -1,6 +1,6 @@
-import React, { useState, createRef } from 'react';
+import React, { useState, createRef, useEffect } from 'react';
 import MapView, { Circle, EventUserLocation, LatLng, MapTypes, Polygon, Region } from 'react-native-maps';
-import { StyleSheet, Dimensions, Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, Dimensions, Text, View, TouchableOpacity, Alert } from 'react-native';
 import {
   GeoFence,
   GeoFenceVariant,
@@ -12,6 +12,8 @@ import { Colors, Spacing, Typography, Buttons } from '../../theme';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import SnackBar, { SnackBarVariant } from '../../components/SnackBar';
 import { isInsideCircle, isInsidePolygon } from '../../helpers/mapCalculations';
+import { GET_GEOFENCES } from '../../lib/queries/geoFenceQueries';
+import { useQuery } from '@apollo/client';
 
 const { width, height } = Dimensions.get('window');
 
@@ -21,58 +23,52 @@ const defaultLocation: LatLng = {
   longitude: 10.4025,
 };
 
-// Example locations, only for testing purposes. Should be fetched from db.
-const exampleCircleGeoFence1: CircleGeoFence = {
-  latitude: 58.88495,
-  longitude: 5.7313,
-  variant: GeoFenceVariant.CIRCLE,
-  category: GeoFenceCategory.SOCIAL,
-  radius: 20,
-};
-const exampleCircleGeoFence2: CircleGeoFence = {
-  latitude: 58.88603,
-  longitude: 5.73234,
-  variant: GeoFenceVariant.CIRCLE,
-  category: GeoFenceCategory.EXERCISE,
-  radius: 5,
-};
-const exampleSquareGeoFence1: PolygonGeoFence = {
-  latitude: 63.4177,
-  longitude: 10.4038,
-  variant: GeoFenceVariant.POLYGON,
-  category: GeoFenceCategory.EDUCATION,
-  coordinates: [
-    { latitude: 63.418966, longitude: 10.398712 },
-    { latitude: 63.419907, longitude: 10.403844 },
-    { latitude: 63.415855, longitude: 10.408178 },
-    { latitude: 63.415116, longitude: 10.403951 },
-  ],
-};
-const exampleSquareGeoFence2: PolygonGeoFence = {
-  latitude: 63.4177,
-  longitude: 10.4038,
-  variant: GeoFenceVariant.POLYGON,
-  category: GeoFenceCategory.EXERCISE,
-  coordinates: [
-    { latitude: 58.886871, longitude: 5.732375 },
-    { latitude: 58.887181, longitude: 5.733686 },
-    { latitude: 58.88681, longitude: 5.734147 },
-    { latitude: 58.88645, longitude: 5.732805 },
-  ],
-};
-const exampleGeoFences: GeoFence[] = [
-  exampleCircleGeoFence1,
-  exampleCircleGeoFence2,
-  exampleSquareGeoFence1,
-  exampleSquareGeoFence2,
-];
-
 const MapScreen: React.FC = () => {
   const [mapRegion, setMapRegion] = useState<LatLng>();
   const [userLocation, setUserLocation] = useState<LatLng>();
   const [chosenMapType, setChosenMapType] = useState<MapTypes>('standard');
   const [centreOnUser, setCentreOnUser] = useState(false);
   const [showSnackBar, setShowSnackBar] = useState(false);
+  const [geoFences, setGeoFences] = useState<GeoFence[]>();
+
+  const { error: fetchError, data: data } = useQuery(GET_GEOFENCES);
+
+  useEffect(() => {
+    // Geo-fence data fetched from db
+    if (data) {
+      const fetchedGeoFences: GeoFence[] = [];
+
+      for (const obj of data.geofences) {
+        if (obj.variant === 'CIRCLE') {
+          fetchedGeoFences.push({
+            latitude: obj.latitude,
+            longitude: obj.longitude,
+            category: GeoFenceCategory[obj.category as keyof typeof GeoFenceCategory],
+            variant: GeoFenceVariant[obj.variant as keyof typeof GeoFenceVariant],
+            radius: obj.radius,
+          } as CircleGeoFence);
+        } else if (obj.variant === 'POLYGON') {
+          // Translate from string coordinates in db to array of LatLng objects
+          const coordinatesRaw: string = obj.coordinates.split(',');
+          const coordinates = [];
+          for (let i = 0; i < coordinatesRaw.length; i = i + 2) {
+            coordinates.push({
+              latitude: +coordinatesRaw[i],
+              longitude: +coordinatesRaw[i + 1],
+            });
+          }
+          fetchedGeoFences.push({
+            latitude: obj.latitude,
+            longitude: obj.longitude,
+            category: GeoFenceCategory[obj.category as keyof typeof GeoFenceCategory],
+            variant: GeoFenceVariant[obj.variant as keyof typeof GeoFenceVariant],
+            coordinates: coordinates,
+          } as PolygonGeoFence);
+        }
+      }
+      setGeoFences(fetchedGeoFences);
+    }
+  }, [data]);
 
   // Dynamic styles
   const mapTypeIconStyle = {
@@ -91,6 +87,7 @@ const MapScreen: React.FC = () => {
   const regionChange = (region: Region) => {
     setMapRegion(region);
   };
+
   const userChange = (location: EventUserLocation) => {
     const newUserLocation: LatLng = {
       latitude: location.nativeEvent.coordinate.latitude,
@@ -120,38 +117,46 @@ const MapScreen: React.FC = () => {
   };
 
   const isInsideGeoFences = (userLocation: LatLng) => {
-    for (const geoFence of exampleGeoFences) {
-      if (geoFence.variant == GeoFenceVariant.CIRCLE) {
-        if (isInsideCircle(userLocation, geoFence as CircleGeoFence)) return true;
-      }
-      if (geoFence.variant == GeoFenceVariant.POLYGON) {
-        if (isInsidePolygon(userLocation, geoFence as PolygonGeoFence)) return true;
+    if (geoFences) {
+      for (const geoFence of geoFences) {
+        if (geoFence.variant == GeoFenceVariant.CIRCLE) {
+          if (isInsideCircle(userLocation, geoFence as CircleGeoFence)) return true;
+        }
+        if (geoFence.variant == GeoFenceVariant.POLYGON) {
+          if (isInsidePolygon(userLocation, geoFence as PolygonGeoFence)) return true;
+        }
       }
     }
   };
 
   const drawGeoFences = () => {
-    return exampleGeoFences.map((geoFence, index) => {
-      if (geoFence.variant === GeoFenceVariant.CIRCLE) {
-        const currentGeoFence = geoFence as CircleGeoFence;
-        return (
-          <Circle
-            key={index}
-            center={{ latitude: currentGeoFence.latitude, longitude: currentGeoFence.longitude }}
-            radius={currentGeoFence.radius}
-            fillColor={currentGeoFence.category === GeoFenceCategory.EDUCATION ? Colors.red : Colors.blue}
-            strokeWidth={0.1}
-          />
-        );
-      } else if (geoFence.variant === GeoFenceVariant.POLYGON) {
-        const currentGeoFence = geoFence as PolygonGeoFence;
-        return (
-          <Polygon key={index} coordinates={currentGeoFence.coordinates} fillColor={Colors.red} strokeWidth={0.1} />
-        );
-      }
-    });
+    if (geoFences) {
+      return geoFences.map((geoFence, index) => {
+        if (geoFence.variant === GeoFenceVariant.CIRCLE) {
+          const currentGeoFence = geoFence as CircleGeoFence;
+          return (
+            <Circle
+              key={index}
+              center={{ latitude: currentGeoFence.latitude, longitude: currentGeoFence.longitude }}
+              radius={currentGeoFence.radius}
+              fillColor={currentGeoFence.category === GeoFenceCategory.EDUCATION ? Colors.red : Colors.blue}
+              strokeWidth={0.1}
+            />
+          );
+        } else if (geoFence.variant === GeoFenceVariant.POLYGON) {
+          const currentGeoFence = geoFence as PolygonGeoFence;
+          return (
+            <Polygon key={index} coordinates={currentGeoFence.coordinates} fillColor={Colors.red} strokeWidth={0.1} />
+          );
+        }
+      });
+    }
   };
 
+  if (fetchError) {
+    console.log('Error:', fetchError);
+    Alert.alert('Error', fetchError.message);
+  }
   return (
     <View style={styles.container}>
       <MapView
