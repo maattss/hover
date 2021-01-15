@@ -1629,6 +1629,7 @@
   resolved "https://registry.yarnpkg.com/@firebase/webchannel-wrapper/-/webchannel-wrapper-0.2.35.tgz#232e857698efb30cdda98b6f6a7a31a905d16147"
   integrity sha512-7njiGBbFW0HCnuKNEJLcQt9EjfOzG8EJiXlFJwA3XfgiFxPVHmXrcF4d5yold2wfiwCwrXpeNTGZ854oRr6Hcw==
 
+<<<<<<< HEAD
 "@graphql-codegen/add@^2.0.2":
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/@graphql-codegen/add/-/add-2.0.2.tgz#4acbb95be9ebb859a3cebfe7132fdf49ffe06dd8"
@@ -1637,6 +1638,8 @@
     "@graphql-codegen/plugin-helpers" "^1.18.2"
     tslib "~2.0.1"
 
+=======
+>>>>>>> Init codegen
 "@graphql-codegen/cli@^1.20.0":
   version "1.20.0"
   resolved "https://registry.yarnpkg.com/@graphql-codegen/cli/-/cli-1.20.0.tgz#e1bb62fce07caaf1395ca6e94ffc0f2ba1f57938"
@@ -1698,6 +1701,7 @@
     "@graphql-tools/utils" "^6"
     tslib "~2.0.1"
 
+<<<<<<< HEAD
 "@graphql-codegen/fragment-matcher@^2.0.1":
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/@graphql-codegen/fragment-matcher/-/fragment-matcher-2.0.1.tgz#be1bdb7590952304639b4c58dc2074e14e1663c0"
@@ -1706,6 +1710,8 @@
     "@graphql-codegen/plugin-helpers" "^1.18.2"
     tslib "~2.0.1"
 
+=======
+>>>>>>> Init codegen
 "@graphql-codegen/introspection@^1.18.1":
   version "1.18.1"
   resolved "https://registry.yarnpkg.com/@graphql-codegen/introspection/-/introspection-1.18.1.tgz#fe3f781b2b60cc69a0cf535a3cfe912c71e32770"
@@ -1714,6 +1720,7 @@
     "@graphql-codegen/plugin-helpers" "^1.18.2"
     tslib "~2.0.1"
 
+<<<<<<< HEAD
 "@graphql-codegen/near-operation-file-preset@^1.17.13":
   version "1.17.13"
   resolved "https://registry.yarnpkg.com/@graphql-codegen/near-operation-file-preset/-/near-operation-file-preset-1.17.13.tgz#b99d00cb289f5862d7534dae44bb90084e342a1a"
@@ -1725,6 +1732,8 @@
     parse-filepath "^1.0.2"
     tslib "~2.0.1"
 
+=======
+>>>>>>> Init codegen
 "@graphql-codegen/plugin-helpers@^1.18.2":
   version "1.18.2"
   resolved "https://registry.yarnpkg.com/@graphql-codegen/plugin-helpers/-/plugin-helpers-1.18.2.tgz#57011076cb8b8f5d04d37d226a5eda300c01be94"
@@ -1742,6 +1751,7 @@
     tslib "~2.0.1"
     upper-case "2.0.1"
 
+<<<<<<< HEAD
 "@graphql-codegen/typescript-graphql-files-modules@1.18.1":
   version "1.18.1"
   resolved "https://registry.yarnpkg.com/@graphql-codegen/typescript-graphql-files-modules/-/typescript-graphql-files-modules-1.18.1.tgz#66926a36d30cfc43fb42eb879ac1bd2a0e9c77f3"
@@ -1750,6 +1760,8 @@
     "@graphql-codegen/plugin-helpers" "^1.18.2"
     tslib "~2.0.1"
 
+=======
+>>>>>>> Init codegen
 "@graphql-codegen/typescript-operations@^1.17.13":
   version "1.17.13"
   resolved "https://registry.yarnpkg.com/@graphql-codegen/typescript-operations/-/typescript-operations-1.17.13.tgz#a5b08c1573b9507ca5a9e66e795aecc40ddc5305"
