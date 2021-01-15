@@ -41,6 +41,8 @@ const MapScreen: React.FC = () => {
       for (const obj of data.geofences) {
         if (obj.variant === 'CIRCLE') {
           fetchedGeoFences.push({
+            name: obj.name,
+            description: obj.description,
             latitude: obj.latitude,
             longitude: obj.longitude,
             category: GeoFenceCategory[obj.category as keyof typeof GeoFenceCategory],
@@ -58,10 +60,13 @@ const MapScreen: React.FC = () => {
             });
           }
           fetchedGeoFences.push({
+            name: obj.name,
+            description: obj.description,
             latitude: obj.latitude,
             longitude: obj.longitude,
             category: GeoFenceCategory[obj.category as keyof typeof GeoFenceCategory],
             variant: GeoFenceVariant[obj.variant as keyof typeof GeoFenceVariant],
+            radius: obj.radius,
             coordinates: coordinates,
           } as PolygonGeoFence);
         }
@@ -154,7 +159,7 @@ const MapScreen: React.FC = () => {
   };
 
   if (fetchError) {
-    console.log('Error:', fetchError);
+    console.error('Error:', fetchError);
     Alert.alert('Error', fetchError.message);
   }
   return (
