@@ -34,8 +34,6 @@ export const DarkTheme: Theme = {
     border: almostBlack,
     notification: red,
   },
-<<<<<<< HEAD
-=======
 };
 
 export const LightTheme: Theme = {
@@ -48,5 +46,4 @@ export const LightTheme: Theme = {
     border: 'rgb(216, 216, 216)',
     notification: 'rgb(255, 59, 48)',
   },
->>>>>>> Updated theme! Dark mode ftw
 };
