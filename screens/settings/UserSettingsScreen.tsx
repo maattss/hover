@@ -13,7 +13,8 @@ import {
 } from 'react-native';
 import { useQuery, useMutation } from '@apollo/client';
 import Firebase from '../../lib/firebase';
-import { GET_USER, UPDATE_USER_NAME } from '../../lib/queries/settingsQueries';
+import { GET_USER } from '../../lib/queries/settingsQueries';
+import { UPDATE_USER_NAME } from '../../lib/mutations/settingsMutations';
 import { Buttons, Colors, Spacing, Typography } from '../../theme';
 import { SettingsProps } from './SettingsMenuScreen';
 

@@ -1,17 +1,17 @@
 module.exports = {
   schema: [
     {
-      'https://hasura.io/learn/graphql': {
+      'https://hover.hasura.app/v1/graphql': {
         headers: {
-          Authorization: 'Bearer ' + process.env.AUTH_TOKEN,
+          'X-Hasura-Admin-Secret': process.env.ADMIN_SECRET,
         },
       },
     },
   ],
-  documents: ['./src/**/*.tsx', './src/**/*.ts'],
+  documents: ['./lib/queries/*.ts', './lib/mutations/*.ts'],
   overwrite: true,
   generates: {
-    './src/generated/graphql.tsx': {
+    './types/graphQLTypes.tsx': {
       plugins: ['typescript', 'typescript-operations', 'typescript-react-apollo'],
       config: {
         skipTypename: false,
@@ -19,9 +19,6 @@ module.exports = {
         withHOC: false,
         withComponent: false,
       },
-    },
-    './graphql.schema.json': {
-      plugins: ['introspection'],
     },
   },
 };

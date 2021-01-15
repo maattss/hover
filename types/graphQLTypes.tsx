@@ -3032,6 +3032,16 @@ export enum Users_Update_Column {
   UpdatedAt = 'updated_at',
 }
 
+export type Unnamed_1_MutationVariables = Exact<{
+  id: Scalars['String'];
+  name: Scalars['String'];
+  bio?: Maybe<Scalars['String']>;
+}>;
+
+export type Unnamed_1_Mutation = { __typename?: 'mutation_root' } & {
+  update_users_by_pk?: Maybe<{ __typename?: 'users' } & Pick<Users, 'id' | 'name' | 'bio'>>;
+};
+
 export type GeofenceQueryQueryVariables = Exact<{ [key: string]: never }>;
 
 export type GeofenceQueryQuery = { __typename?: 'query_root' } & {
@@ -3043,6 +3053,50 @@ export type GeofenceQueryQuery = { __typename?: 'query_root' } & {
   >;
 };
 
+export type Unnamed_2_QueryVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+export type Unnamed_2_Query = { __typename?: 'query_root' } & {
+  users_by_pk?: Maybe<{ __typename?: 'users' } & Pick<Users, 'id' | 'name' | 'bio'>>;
+};
+
+export const Document = gql`
+  mutation($id: String!, $name: String!, $bio: String) {
+    update_users_by_pk(pk_columns: { id: $id }, _set: { name: $name, bio: $bio }) {
+      id
+      name
+      bio
+    }
+  }
+`;
+export type MutationFn = Apollo.MutationFunction<Mutation, MutationVariables>;
+
+/**
+ * __useMutation__
+ *
+ * To run a mutation, you first call `useMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [mutation, { data, loading, error }] = useMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      name: // value for 'name'
+ *      bio: // value for 'bio'
+ *   },
+ * });
+ */
+export function useMutation(baseOptions?: Apollo.MutationHookOptions<Mutation, MutationVariables>) {
+  return Apollo.useMutation<Mutation, MutationVariables>(Document, baseOptions);
+}
+export type MutationHookResult = ReturnType<typeof useMutation>;
+export type MutationResult = Apollo.MutationResult<Mutation>;
+export type MutationOptions = Apollo.BaseMutationOptions<Mutation, MutationVariables>;
 export const GeofenceQueryDocument = gql`
   query geofenceQuery {
     geofences {
@@ -3087,3 +3141,38 @@ export function useGeofenceQueryLazyQuery(
 export type GeofenceQueryQueryHookResult = ReturnType<typeof useGeofenceQueryQuery>;
 export type GeofenceQueryLazyQueryHookResult = ReturnType<typeof useGeofenceQueryLazyQuery>;
 export type GeofenceQueryQueryResult = Apollo.QueryResult<GeofenceQueryQuery, GeofenceQueryQueryVariables>;
+export const Document = gql`
+  query($id: String!) {
+    users_by_pk(id: $id) {
+      id
+      name
+      bio
+    }
+  }
+`;
+
+/**
+ * __useQuery__
+ *
+ * To run a query within a React component, call `useQuery` and pass it any options that fit your needs.
+ * When your component renders, `useQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useQuery(baseOptions: Apollo.QueryHookOptions<Query, QueryVariables>) {
+  return Apollo.useQuery<Query, QueryVariables>(Document, baseOptions);
+}
+export function useLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Query, QueryVariables>) {
+  return Apollo.useLazyQuery<Query, QueryVariables>(Document, baseOptions);
+}
+export type QueryHookResult = ReturnType<typeof useQuery>;
+export type LazyQueryHookResult = ReturnType<typeof useLazyQuery>;
+export type QueryResult = Apollo.QueryResult<Query, QueryVariables>;
