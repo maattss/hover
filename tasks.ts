@@ -1,5 +1,6 @@
 import * as TaskManager from 'expo-task-manager';
 import * as Location from 'expo-location';
+import { Alert } from 'react-native';
 
 /*
  * Tasks must be defined in the top-level scope,
@@ -52,6 +53,6 @@ TaskManager.defineTask(EXIT_AREA_TRACKING, ({ data: { eventType, region }, error
   }
   if ((eventType as Location.LocationGeofencingEventType) === Location.LocationGeofencingEventType.Exit) {
     console.log("You've left the area:", region);
-    alert("You've left the area. Would you like to publish your activity?");
+    Alert.alert("You've left the area. Would you like to publish your activity?");
   }
 });
