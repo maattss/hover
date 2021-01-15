@@ -3,9 +3,9 @@ import { Theme } from '@react-navigation/native';
 // Palette colors
 export const almostBlack = '#121212';
 export const almostWhite = '#E5E5E7';
-export const green = '#28A745';
-export const red = '#CB2431';
-export const blue = '#0366d6';
+export const green = '#5C913B';
+export const red = '#FF453A';
+export const blue = '#007AFF';
 export const orange = '#CD5000';
 export const yellow = '#FBBD2D';
 
@@ -34,4 +34,19 @@ export const DarkTheme: Theme = {
     border: almostBlack,
     notification: red,
   },
+<<<<<<< HEAD
+=======
+};
+
+export const LightTheme: Theme = {
+  dark: false,
+  colors: {
+    primary: blue,
+    background: 'rgb(242, 242, 242)',
+    card: 'rgb(255, 255, 255)',
+    text: 'rgb(28, 28, 30)',
+    border: 'rgb(216, 216, 216)',
+    notification: 'rgb(255, 59, 48)',
+  },
+>>>>>>> Updated theme! Dark mode ftw
 };
