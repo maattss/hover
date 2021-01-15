@@ -57,11 +57,13 @@ const MapScreen: React.FC = () => {
               longitude: +coordinatesRaw[i + 1],
             });
           }
+
           fetchedGeoFences.push({
             latitude: obj.latitude,
             longitude: obj.longitude,
             category: GeoFenceCategory[obj.category as keyof typeof GeoFenceCategory],
             variant: GeoFenceVariant[obj.variant as keyof typeof GeoFenceVariant],
+            radius: obj.radius,
             coordinates: coordinates,
           } as PolygonGeoFence);
         }

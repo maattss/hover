@@ -12,6 +12,7 @@ export interface PolygonGeoFence {
   longitude: number;
   variant: GeoFenceVariant;
   category: GeoFenceCategory;
+  radius: number;
   coordinates: LatLng[];
 }
 export enum GeoFenceVariant {
