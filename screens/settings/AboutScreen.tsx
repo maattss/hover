@@ -6,13 +6,13 @@ import { SettingsProps } from './SettingsMenuScreen';
 const AboutScreen: React.FC<SettingsProps> = () => {
   return (
     <View style={styles.container}>
-      <Text style={styles.titleText}>Here is some information about the App.</Text>
+      <Text style={styles.titleText}>Application information</Text>
       <Text style={styles.bodyText}>
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis sapiente error maiores, corporis molestias
         mollitia numquam voluptatem, sunt corrupti fugiat inventore hic doloribus, quidem odit quas consectetur eius
         labore ad!
       </Text>
-      <Text style={styles.bodyText}>Hover Version 0.0.1</Text>
+      <Text style={styles.bodyText}>Version 0.0.1 (alpha)</Text>
     </View>
   );
 };
@@ -28,6 +28,7 @@ const styles = StyleSheet.create({
     ...Typography.headerText,
     paddingTop: Spacing.base,
     width: '100%',
+    textAlign: 'center',
   },
   bodyText: {
     ...Typography.bodyText,
