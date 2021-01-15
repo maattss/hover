@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { white, gray200 } from '../theme/colors';
+import { Colors, Typography } from '../theme';
 
 interface SortParam {
   data: Item[];
@@ -37,22 +37,23 @@ const Leaderboard = (props: LeaderboardProps) => {
   }, []);
 
   const defaultRenderItem = (item: Item, index: number) => {
-    const evenColor = props.evenRowColor || gray200;
-    const oddColor = props.oddRowColor || white;
+    const evenColor = props.evenRowColor || Colors.black;
+    const oddColor = props.oddRowColor || Colors.almostBlack;
     const rowColor = index % 2 === 0 ? evenColor : oddColor;
 
     const rowJSx = (
       <View style={[styles.row, props.rowStyle, { backgroundColor: rowColor }]}>
         <View style={styles.left}>
-          <Text style={[styles.rank, props.rankStyle, index < 9 ? styles.singleDidget : styles.doubleDidget]}>
+          <Text
+            style={[styles.text, styles.rank, props.rankStyle, index < 9 ? styles.singleDidget : styles.doubleDidget]}>
             {index + 1}
           </Text>
           {item.icon && <Image source={{ uri: item.icon }} style={[styles.avatar, props.avatarStyle]} />}
-          <Text style={[styles.label, props.labelStyle]} numberOfLines={1}>
+          <Text style={[styles.text, styles.label, props.labelStyle]} numberOfLines={1}>
             {item.name}
           </Text>
         </View>
-        <Text style={[styles.score, props.scoreStyle]}>{item.score || 0}</Text>
+        <Text style={[styles.text, styles.score, props.scoreStyle]}>{item.score || 0}</Text>
       </View>
     );
 
@@ -133,6 +134,9 @@ const styles = StyleSheet.create({
     width: 30,
     borderRadius: 30 / 2,
     marginRight: 10,
+  },
+  text: {
+    ...Typography.bodyText,
   },
 });
 

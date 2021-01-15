@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { NavigationContainer, DarkTheme } from '@react-navigation/native';
+import { NavigationContainer, Theme } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { User } from 'firebase';
 import Firebase from '../lib/firebase';
@@ -8,6 +8,7 @@ import { RootStackParamList } from '../types/navigationTypes';
 import TabNavigator from './TabNavigator';
 import SignupScreen from '../screens/auth/SignUpScreen';
 import LoginScreen from '../screens/auth/LoginScreen';
+import { DarkTheme } from '../theme/colors';
 
 export const RootStack = createStackNavigator<RootStackParamList>();
 

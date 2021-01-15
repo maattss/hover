@@ -1,8 +1,11 @@
+import { Theme } from '@react-navigation/native';
+
 // Palette colors
 export const almostBlack = '#121212';
+export const almostWhite = '#E5E5E7';
 export const green = '#5C913B';
-export const red = '#E74C3C';
-export const blue = '#375A7F';
+export const red = '#FF453A';
+export const blue = '#007AFF';
 export const orange = '#CD5000';
 export const yellow = '#FBBD2D';
 
@@ -20,13 +23,27 @@ export const gray700 = '#616161';
 export const gray800 = '#424242';
 export const gray900 = '#222';
 
-// Palette
+// Themes
+export const DarkTheme: Theme = {
+  dark: true,
+  colors: {
+    primary: blue,
+    background: black,
+    card: almostBlack,
+    text: almostWhite,
+    border: almostBlack,
+    notification: red,
+  },
+};
 
-export const Colors = {
-  background: almostBlack,
-  primary: blue,
-  secondary: orange,
-  text: white,
-  error: red,
-  success: green,
+export const LightTheme: Theme = {
+  dark: false,
+  colors: {
+    primary: blue,
+    background: 'rgb(242, 242, 242)',
+    card: 'rgb(255, 255, 255)',
+    text: 'rgb(28, 28, 30)',
+    border: 'rgb(216, 216, 216)',
+    notification: 'rgb(255, 59, 48)',
+  },
 };
