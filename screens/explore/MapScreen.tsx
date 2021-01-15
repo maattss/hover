@@ -57,7 +57,6 @@ const MapScreen: React.FC = () => {
               longitude: +coordinatesRaw[i + 1],
             });
           }
-
           fetchedGeoFences.push({
             latitude: obj.latitude,
             longitude: obj.longitude,
@@ -156,7 +155,7 @@ const MapScreen: React.FC = () => {
   };
 
   if (fetchError) {
-    console.log('Error:', fetchError);
+    console.error('Error:', fetchError);
     Alert.alert('Error', fetchError.message);
   }
   return (
