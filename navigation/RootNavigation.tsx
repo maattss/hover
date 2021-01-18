@@ -6,6 +6,7 @@ import TabNavigator from './TabNavigator';
 import SignupScreen from '../screens/auth/SignUpScreen';
 import LoginScreen from '../screens/auth/LoginScreen';
 import useAuthentication from '../hooks/useAuthentication';
+import { DarkTheme } from '../theme/colors';
 
 export const RootStack = createStackNavigator<RootStackParamList>();
 
@@ -13,7 +14,7 @@ const AppNavigation: React.FC = () => {
   const user = useAuthentication();
 
   return (
-    <NavigationContainer>
+    <NavigationContainer theme={DarkTheme}>
       <RootStack.Navigator screenOptions={{ headerShown: false }}>
         {user ? (
           <RootStack.Screen name="Main" component={TabNavigator} />

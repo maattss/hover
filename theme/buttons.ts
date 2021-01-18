@@ -3,15 +3,14 @@ import * as Typography from './typography';
 import * as Spacing from './spacing';
 
 export const button = {
-  color: Colors.almostBlack,
   padding: Spacing.base,
   borderRadius: Spacing.smaller,
-  backgroundColor: Colors.white,
+  backgroundColor: Colors.blue,
   alignItems: 'center' as const,
 };
 
 export const buttonText = {
-  color: Colors.almostBlack,
+  color: Colors.almostWhite,
   fontSize: Typography.bodyText.fontSize,
   fontWeight: 'bold' as const,
   letterSpacing: 1,
