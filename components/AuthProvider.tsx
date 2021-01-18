@@ -1,5 +1,5 @@
 import React, { useEffect, useState, ReactNode } from 'react';
-import { User } from 'firebase';
+import { User } from '../lib/firebase';
 import Firebase from '../lib/firebase';
 
 interface Props {
@@ -10,13 +10,13 @@ export const AuthContext = React.createContext<User | null>(null);
 AuthContext.displayName = 'AuthContext';
 
 export const AuthProvider = ({ children }: Props) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [userAuthState, setUserAuthState] = useState<User | null>(null);
 
   useEffect(() => {
-    Firebase.auth().onAuthStateChanged((user) => (user ? setUser(user) : setUser(null)));
+    Firebase.auth().onAuthStateChanged((user) => (user ? setUserAuthState(user) : setUserAuthState(null)));
   }, []);
 
-  return <AuthContext.Provider value={user}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={userAuthState}>{children}</AuthContext.Provider>;
 };
 
 export default AuthProvider;
