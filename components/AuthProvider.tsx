@@ -4,7 +4,6 @@ import Firebase from '../lib/firebase';
 
 interface Props {
   children: ReactNode;
-  // any other props that come into the component
 }
 
 export const AuthContext = React.createContext<User | null>(null);

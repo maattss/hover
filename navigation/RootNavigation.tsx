@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { User } from 'firebase';
-import Firebase from '../lib/firebase';
 import { RootStackParamList } from '../types/navigationTypes';
 import TabNavigator from './TabNavigator';
 import SignupScreen from '../screens/auth/SignUpScreen';
@@ -12,30 +11,13 @@ import useAuthentication from '../hooks/useAuthentication';
 export const RootStack = createStackNavigator<RootStackParamList>();
 
 const AppNavigation: React.FC = () => {
-  const [userAuthState, setUserAuthState] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
+  const user = useAuthentication();
+  console.log(user);
 
-  useEffect(() => {
-    Firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        setUserAuthState(user);
-        setLoading(false);
-      } else {
-        setUserAuthState(null);
-      }
-    });
-    if (!Firebase.auth().currentUser && !userAuthState) {
-      setLoading(true);
-    } else {
-      setLoading(false);
-    }
-  }, []);
-  console.log('Loading? ' + loading);
-  // If loading add splash screen
   return (
     <NavigationContainer>
       <RootStack.Navigator screenOptions={{ headerShown: false }}>
-        {!loading ? (
+        {!user ? (
           <RootStack.Screen name="Main" component={TabNavigator} />
         ) : (
           <>
