@@ -17,29 +17,27 @@ import { GET_USER } from '../../lib/queries/settingsQueries';
 import { UPDATE_USER_NAME } from '../../lib/mutations/settingsMutations';
 import { Buttons, Colors, Spacing, Typography } from '../../theme';
 import { SettingsProps } from './SettingsMenuScreen';
-import { Query_Root, Users } from '../../types/graphQLTypes';
+import { Query_Root, Mutation_Root } from '../../types/graphQLTypes';
 
 const UserSettingsScreen: React.FC<SettingsProps> = ({ navigation }: SettingsProps) => {
   const id = Firebase.auth().currentUser?.uid;
   const [name, setName] = useState('');
   const [bio, setBio] = useState('');
-  const { loading: fetchLoading, error: fetchError, data } = useQuery<Query_Root, Quer>(GET_USER, {
+  const { loading: fetchLoading, error: fetchError, data } = useQuery<Query_Root>(GET_USER, {
     variables: { id },
   });
-  const [updateUser, { loading: mutationLoading, error: mutationError, data: response }] = useMutation(
+  const [updateUser, { loading: mutationLoading, error: mutationError, data: response }] = useMutation<Mutation_Root>(
     UPDATE_USER_NAME,
   );
 
   useEffect(() => {
     if (data) {
-      const { name, bio } = data.users_by_pk;
-      setName(name);
-      setBio(bio);
+      setName(data.users_by_pk?.name ? data.users_by_pk?.name : '');
+      setBio(data.users_by_pk?.bio ? data.users_by_pk?.bio : '');
     }
     if (response) {
-      const { name, bio } = response.update_users_by_pk;
-      setName(name);
-      setBio(bio);
+      setName(response.update_users_by_pk?.name ? response.update_users_by_pk?.name : '');
+      setBio(response.update_users_by_pk?.bio ? response.update_users_by_pk?.bio : '');
     }
   }, [data, response]);
 
