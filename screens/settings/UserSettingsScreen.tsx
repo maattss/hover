@@ -142,13 +142,13 @@ const styles = StyleSheet.create<Style>({
   formField: {
     ...Buttons.button,
     ...Typography.bodyText,
-    backgroundColor: Colors.gray300,
+    backgroundColor: Colors.gray900,
     width: '80%',
   },
   formFieldMultiLine: {
     ...Buttons.button,
     ...Typography.bodyText,
-    backgroundColor: Colors.gray300,
+    backgroundColor: Colors.gray900,
     width: '80%',
     paddingTop: Spacing.base,
     paddingLeft: Spacing.base,

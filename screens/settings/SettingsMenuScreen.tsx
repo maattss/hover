@@ -118,14 +118,10 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
+    backgroundColor: Colors.gray900,
   },
   settingsItemDisabled: {
-    ...Buttons.button,
-    marginBottom: Spacing.smaller,
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    backgroundColor: Colors.gray300,
+    display: 'none',
   },
   logOutButton: {
     ...Buttons.button,

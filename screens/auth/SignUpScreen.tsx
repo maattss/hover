@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
     ...Typography.bodyText,
     padding: Spacing.small,
     marginBottom: Spacing.base,
-    backgroundColor: Colors.gray300,
+    backgroundColor: Colors.gray900,
   },
   infoText: {
     ...Typography.bodyText,

@@ -30,19 +30,37 @@ const getBackgroundColor = (variant: SnackBarVariant) => {
     case SnackBarVariant.INFO:
       return Colors.blue;
     default:
-      return Colors.gray200;
+      return Colors.almostBlack;
+  }
+};
+
+const getColor = (variant: SnackBarVariant) => {
+  switch (variant) {
+    case SnackBarVariant.SUCCESS:
+      return Colors.almostBlack;
+    case SnackBarVariant.DANGER:
+      return Colors.almostBlack;
+    case SnackBarVariant.WARNING:
+      return Colors.almostBlack;
+    case SnackBarVariant.INFO:
+      return Colors.almostWhite;
+    default:
+      return Colors.almostWhite;
   }
 };
 
 const SnackBar = (props: SnackBarProps) => {
-  const snackbarStyles = {
+  const snackBarBgColor = {
     backgroundColor: getBackgroundColor(props.variant),
+  };
+  const snackBarColor = {
+    color: getColor(props.variant),
   };
   if (props.show) {
     return (
-      <View style={[styles.container, snackbarStyles]}>
-        <Text style={styles.title}>{props.title}</Text>
-        <Text style={styles.message}>{props.message}</Text>
+      <View style={[styles.container, snackBarBgColor]}>
+        <Text style={[styles.title, snackBarColor]}>{props.title}</Text>
+        <Text style={[styles.message, snackBarColor]}>{props.message}</Text>
         {props.closeButton && (
           <TouchableOpacity onPress={() => props.setShow(false)} style={styles.closeButton}>
             <FAIcon name="times" style={{ ...Buttons.buttonText }} />

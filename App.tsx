@@ -18,7 +18,7 @@ export default function App() {
       <SafeAreaProvider>
         <AppearanceProvider>
           <AppNavigation />
-          <StatusBar animated barStyle={'dark-content'} />
+          <StatusBar animated barStyle={'light-content'} />
         </AppearanceProvider>
       </SafeAreaProvider>
     </ApolloProvider>

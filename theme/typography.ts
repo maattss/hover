@@ -20,27 +20,28 @@ export const link = {
 
 export const icon = {
   fontSize: largeFontSize,
+  color: Colors.almostWhite,
 };
 
 export const smallText = {
   fontSize: smallestFontSize,
-  color: Colors.almostBlack,
+  color: Colors.almostWhite,
 };
 
 export const bodyText = {
   fontSize: smallFontSize,
-  color: Colors.almostBlack,
+  color: Colors.almostWhite,
 };
 
 export const largeBodyText = {
   fontSize: baseFontSize,
-  color: Colors.almostBlack,
+  color: Colors.almostWhite,
 };
 
 export const headerText = {
   fontSize: largestFontSize,
   fontWeight: 'bold' as const,
-  color: Colors.almostBlack,
+  color: Colors.almostWhite,
 };
 
 export const screenHeader = {
