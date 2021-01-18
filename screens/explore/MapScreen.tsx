@@ -12,9 +12,7 @@ import { Colors, Spacing, Typography, Buttons } from '../../theme';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import SnackBar, { SnackBarVariant } from '../../components/SnackBar';
 import { isInsideCircle, isInsidePolygon } from '../../helpers/mapCalculations';
-import { GET_GEOFENCES } from '../../lib/queries/geoFenceQueries';
-import { useQuery } from '@apollo/client';
-import { Query_Root } from '../../types/graphQLTypes';
+import { useGeofencesQuery } from '../../graphql/queries/Geofences.generated';
 
 const { width, height } = Dimensions.get('window');
 
@@ -32,7 +30,7 @@ const MapScreen: React.FC = () => {
   const [showSnackBar, setShowSnackBar] = useState(false);
   const [geoFences, setGeoFences] = useState<GeoFence[]>();
 
-  const { error: fetchError, data: data } = useQuery<Query_Root>(GET_GEOFENCES);
+  const { error: fetchError, data: data } = useGeofencesQuery();
 
   useEffect(() => {
     // Geo-fence data fetched from db
