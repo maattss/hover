@@ -11,24 +11,22 @@ import {
   Alert,
   ScrollView,
 } from 'react-native';
-import { useQuery, useMutation } from '@apollo/client';
 import Firebase from '../../lib/firebase';
-import { GET_USER } from '../../lib/queries/settingsQueries';
-import { UPDATE_USER_NAME } from '../../lib/mutations/settingsMutations';
 import { Buttons, Colors, Spacing, Typography } from '../../theme';
 import { SettingsProps } from './SettingsMenuScreen';
-import { Query_Root, Mutation_Root } from '../../types/graphQLTypes';
+import { useUserQuery } from '../../graphql/queries/User.generated';
+import { useUpdateUserMutation } from '../../graphql/mutations/UpdateUser.generated';
 
 const UserSettingsScreen: React.FC<SettingsProps> = ({ navigation }: SettingsProps) => {
   const id = Firebase.auth().currentUser?.uid;
   const [name, setName] = useState('');
   const [bio, setBio] = useState('');
-  const { loading: fetchLoading, error: fetchError, data } = useQuery<Query_Root>(GET_USER, {
-    variables: { id },
+  const { loading: fetchLoading, error: fetchError, data } = useUserQuery({
+    variables: {
+      id: id,
+    },
   });
-  const [updateUser, { loading: mutationLoading, error: mutationError, data: response }] = useMutation<Mutation_Root>(
-    UPDATE_USER_NAME,
-  );
+  const [updateUser, { loading: mutationLoading, error: mutationError, data: response }] = useUpdateUserMutation();
 
   useEffect(() => {
     if (data) {

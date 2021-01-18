@@ -8,16 +8,40 @@ module.exports = {
       },
     },
   ],
-  documents: ['./lib/queries/*.ts', './lib/mutations/*.ts'],
+  documents: 'graphql/**/*.graphql',
   overwrite: true,
+  hooks: {
+    afterOneFileWrite: 'prettier --write',
+    afterAllFileWrite: 'prettier --write',
+  },
   generates: {
-    './types/graphQLTypes.tsx': {
-      plugins: ['typescript', 'typescript-operations', 'typescript-react-apollo'],
+    'types/types.ts': {
+      plugins: [{ add: { content: '/* eslint-disable */' } }, 'typescript'],
+    },
+    'types/': {
+      preset: 'near-operation-file',
+      presetConfig: {
+        extension: '.generated.tsx',
+        baseTypesPath: 'types.ts',
+      },
+      plugins: [
+        { add: { content: '/* eslint-disable */' } },
+        'typescript',
+        'typescript-operations',
+        'typescript-react-apollo',
+      ],
       config: {
+        gqlImport: '@apollo/client#gql',
         skipTypename: false,
         withHooks: true,
         withHOC: false,
         withComponent: false,
+        immutableTypes: true,
+        nonOptionalTypename: true,
+        reactApolloVersion: 3,
+        withMutationFn: false,
+        withResultType: false,
+        withMutationOptionsType: false,
       },
     },
   },

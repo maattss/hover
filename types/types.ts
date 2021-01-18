@@ -1,5 +1,4 @@
-import { gql } from '@apollo/client';
-import * as Apollo from '@apollo/client';
+/* eslint-disable */
 export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
@@ -52,11 +51,11 @@ export type String_Comparison_Exp = {
 export type Activities = {
   __typename?: 'activities';
   activity_id: Scalars['Int'];
-  caption: Scalars['String'];
+  caption?: Maybe<Scalars['String']>;
   category: Categories_Enum;
   category_id: Scalars['Int'];
   created_at?: Maybe<Scalars['timestamptz']>;
-  location_id: Scalars['Int'];
+  geofence_id: Scalars['Int'];
   updated_at?: Maybe<Scalars['timestamptz']>;
   user_id: Scalars['String'];
 };
@@ -116,14 +115,14 @@ export type Activities_Avg_Fields = {
   __typename?: 'activities_avg_fields';
   activity_id?: Maybe<Scalars['Float']>;
   category_id?: Maybe<Scalars['Float']>;
-  location_id?: Maybe<Scalars['Float']>;
+  geofence_id?: Maybe<Scalars['Float']>;
 };
 
 /** order by avg() on columns of table "activities" */
 export type Activities_Avg_Order_By = {
   activity_id?: Maybe<Order_By>;
   category_id?: Maybe<Order_By>;
-  location_id?: Maybe<Order_By>;
+  geofence_id?: Maybe<Order_By>;
 };
 
 /** Boolean expression to filter rows from the table "activities". All fields are combined with a logical 'AND'. */
@@ -136,7 +135,7 @@ export type Activities_Bool_Exp = {
   category?: Maybe<Categories_Enum_Comparison_Exp>;
   category_id?: Maybe<Int_Comparison_Exp>;
   created_at?: Maybe<Timestamptz_Comparison_Exp>;
-  location_id?: Maybe<Int_Comparison_Exp>;
+  geofence_id?: Maybe<Int_Comparison_Exp>;
   updated_at?: Maybe<Timestamptz_Comparison_Exp>;
   user_id?: Maybe<String_Comparison_Exp>;
 };
@@ -151,7 +150,7 @@ export enum Activities_Constraint {
 export type Activities_Inc_Input = {
   activity_id?: Maybe<Scalars['Int']>;
   category_id?: Maybe<Scalars['Int']>;
-  location_id?: Maybe<Scalars['Int']>;
+  geofence_id?: Maybe<Scalars['Int']>;
 };
 
 /** input type for inserting data into table "activities" */
@@ -161,7 +160,7 @@ export type Activities_Insert_Input = {
   category?: Maybe<Categories_Enum>;
   category_id?: Maybe<Scalars['Int']>;
   created_at?: Maybe<Scalars['timestamptz']>;
-  location_id?: Maybe<Scalars['Int']>;
+  geofence_id?: Maybe<Scalars['Int']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
   user_id?: Maybe<Scalars['String']>;
 };
@@ -173,7 +172,7 @@ export type Activities_Max_Fields = {
   caption?: Maybe<Scalars['String']>;
   category_id?: Maybe<Scalars['Int']>;
   created_at?: Maybe<Scalars['timestamptz']>;
-  location_id?: Maybe<Scalars['Int']>;
+  geofence_id?: Maybe<Scalars['Int']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
   user_id?: Maybe<Scalars['String']>;
 };
@@ -184,7 +183,7 @@ export type Activities_Max_Order_By = {
   caption?: Maybe<Order_By>;
   category_id?: Maybe<Order_By>;
   created_at?: Maybe<Order_By>;
-  location_id?: Maybe<Order_By>;
+  geofence_id?: Maybe<Order_By>;
   updated_at?: Maybe<Order_By>;
   user_id?: Maybe<Order_By>;
 };
@@ -196,7 +195,7 @@ export type Activities_Min_Fields = {
   caption?: Maybe<Scalars['String']>;
   category_id?: Maybe<Scalars['Int']>;
   created_at?: Maybe<Scalars['timestamptz']>;
-  location_id?: Maybe<Scalars['Int']>;
+  geofence_id?: Maybe<Scalars['Int']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
   user_id?: Maybe<Scalars['String']>;
 };
@@ -207,7 +206,7 @@ export type Activities_Min_Order_By = {
   caption?: Maybe<Order_By>;
   category_id?: Maybe<Order_By>;
   created_at?: Maybe<Order_By>;
-  location_id?: Maybe<Order_By>;
+  geofence_id?: Maybe<Order_By>;
   updated_at?: Maybe<Order_By>;
   user_id?: Maybe<Order_By>;
 };
@@ -241,7 +240,7 @@ export type Activities_Order_By = {
   category?: Maybe<Order_By>;
   category_id?: Maybe<Order_By>;
   created_at?: Maybe<Order_By>;
-  location_id?: Maybe<Order_By>;
+  geofence_id?: Maybe<Order_By>;
   updated_at?: Maybe<Order_By>;
   user_id?: Maybe<Order_By>;
 };
@@ -264,7 +263,7 @@ export enum Activities_Select_Column {
   /** column name */
   CreatedAt = 'created_at',
   /** column name */
-  LocationId = 'location_id',
+  GeofenceId = 'geofence_id',
   /** column name */
   UpdatedAt = 'updated_at',
   /** column name */
@@ -278,7 +277,7 @@ export type Activities_Set_Input = {
   category?: Maybe<Categories_Enum>;
   category_id?: Maybe<Scalars['Int']>;
   created_at?: Maybe<Scalars['timestamptz']>;
-  location_id?: Maybe<Scalars['Int']>;
+  geofence_id?: Maybe<Scalars['Int']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
   user_id?: Maybe<Scalars['String']>;
 };
@@ -288,14 +287,14 @@ export type Activities_Stddev_Fields = {
   __typename?: 'activities_stddev_fields';
   activity_id?: Maybe<Scalars['Float']>;
   category_id?: Maybe<Scalars['Float']>;
-  location_id?: Maybe<Scalars['Float']>;
+  geofence_id?: Maybe<Scalars['Float']>;
 };
 
 /** order by stddev() on columns of table "activities" */
 export type Activities_Stddev_Order_By = {
   activity_id?: Maybe<Order_By>;
   category_id?: Maybe<Order_By>;
-  location_id?: Maybe<Order_By>;
+  geofence_id?: Maybe<Order_By>;
 };
 
 /** aggregate stddev_pop on columns */
@@ -303,14 +302,14 @@ export type Activities_Stddev_Pop_Fields = {
   __typename?: 'activities_stddev_pop_fields';
   activity_id?: Maybe<Scalars['Float']>;
   category_id?: Maybe<Scalars['Float']>;
-  location_id?: Maybe<Scalars['Float']>;
+  geofence_id?: Maybe<Scalars['Float']>;
 };
 
 /** order by stddev_pop() on columns of table "activities" */
 export type Activities_Stddev_Pop_Order_By = {
   activity_id?: Maybe<Order_By>;
   category_id?: Maybe<Order_By>;
-  location_id?: Maybe<Order_By>;
+  geofence_id?: Maybe<Order_By>;
 };
 
 /** aggregate stddev_samp on columns */
@@ -318,14 +317,14 @@ export type Activities_Stddev_Samp_Fields = {
   __typename?: 'activities_stddev_samp_fields';
   activity_id?: Maybe<Scalars['Float']>;
   category_id?: Maybe<Scalars['Float']>;
-  location_id?: Maybe<Scalars['Float']>;
+  geofence_id?: Maybe<Scalars['Float']>;
 };
 
 /** order by stddev_samp() on columns of table "activities" */
 export type Activities_Stddev_Samp_Order_By = {
   activity_id?: Maybe<Order_By>;
   category_id?: Maybe<Order_By>;
-  location_id?: Maybe<Order_By>;
+  geofence_id?: Maybe<Order_By>;
 };
 
 /** aggregate sum on columns */
@@ -333,14 +332,14 @@ export type Activities_Sum_Fields = {
   __typename?: 'activities_sum_fields';
   activity_id?: Maybe<Scalars['Int']>;
   category_id?: Maybe<Scalars['Int']>;
-  location_id?: Maybe<Scalars['Int']>;
+  geofence_id?: Maybe<Scalars['Int']>;
 };
 
 /** order by sum() on columns of table "activities" */
 export type Activities_Sum_Order_By = {
   activity_id?: Maybe<Order_By>;
   category_id?: Maybe<Order_By>;
-  location_id?: Maybe<Order_By>;
+  geofence_id?: Maybe<Order_By>;
 };
 
 /** update columns of table "activities" */
@@ -356,7 +355,7 @@ export enum Activities_Update_Column {
   /** column name */
   CreatedAt = 'created_at',
   /** column name */
-  LocationId = 'location_id',
+  GeofenceId = 'geofence_id',
   /** column name */
   UpdatedAt = 'updated_at',
   /** column name */
@@ -368,14 +367,14 @@ export type Activities_Var_Pop_Fields = {
   __typename?: 'activities_var_pop_fields';
   activity_id?: Maybe<Scalars['Float']>;
   category_id?: Maybe<Scalars['Float']>;
-  location_id?: Maybe<Scalars['Float']>;
+  geofence_id?: Maybe<Scalars['Float']>;
 };
 
 /** order by var_pop() on columns of table "activities" */
 export type Activities_Var_Pop_Order_By = {
   activity_id?: Maybe<Order_By>;
   category_id?: Maybe<Order_By>;
-  location_id?: Maybe<Order_By>;
+  geofence_id?: Maybe<Order_By>;
 };
 
 /** aggregate var_samp on columns */
@@ -383,14 +382,14 @@ export type Activities_Var_Samp_Fields = {
   __typename?: 'activities_var_samp_fields';
   activity_id?: Maybe<Scalars['Float']>;
   category_id?: Maybe<Scalars['Float']>;
-  location_id?: Maybe<Scalars['Float']>;
+  geofence_id?: Maybe<Scalars['Float']>;
 };
 
 /** order by var_samp() on columns of table "activities" */
 export type Activities_Var_Samp_Order_By = {
   activity_id?: Maybe<Order_By>;
   category_id?: Maybe<Order_By>;
-  location_id?: Maybe<Order_By>;
+  geofence_id?: Maybe<Order_By>;
 };
 
 /** aggregate variance on columns */
@@ -398,14 +397,14 @@ export type Activities_Variance_Fields = {
   __typename?: 'activities_variance_fields';
   activity_id?: Maybe<Scalars['Float']>;
   category_id?: Maybe<Scalars['Float']>;
-  location_id?: Maybe<Scalars['Float']>;
+  geofence_id?: Maybe<Scalars['Float']>;
 };
 
 /** order by variance() on columns of table "activities" */
 export type Activities_Variance_Order_By = {
   activity_id?: Maybe<Order_By>;
   category_id?: Maybe<Order_By>;
-  location_id?: Maybe<Order_By>;
+  geofence_id?: Maybe<Order_By>;
 };
 
 /** columns and relationships of "categories" */
@@ -3031,150 +3030,3 @@ export enum Users_Update_Column {
   /** column name */
   UpdatedAt = 'updated_at',
 }
-
-export type UpdateUserMutationVariables = Exact<{
-  id: Scalars['String'];
-  name: Scalars['String'];
-  bio?: Maybe<Scalars['String']>;
-}>;
-
-export type UpdateUserMutation = { __typename?: 'mutation_root' } & {
-  update_users_by_pk?: Maybe<{ __typename?: 'users' } & Pick<Users, 'id' | 'name' | 'bio'>>;
-};
-
-export type GetGeofencesQueryVariables = Exact<{ [key: string]: never }>;
-
-export type GetGeofencesQuery = { __typename?: 'query_root' } & {
-  geofences: Array<
-    { __typename?: 'geofences' } & Pick<
-      Geofences,
-      'id' | 'name' | 'description' | 'latitude' | 'longitude' | 'radius' | 'variant' | 'coordinates' | 'category'
-    >
-  >;
-};
-
-export type GetUserQueryVariables = Exact<{
-  id: Scalars['String'];
-}>;
-
-export type GetUserQuery = { __typename?: 'query_root' } & {
-  users_by_pk?: Maybe<{ __typename?: 'users' } & Pick<Users, 'id' | 'name' | 'bio'>>;
-};
-
-export const UpdateUserDocument = gql`
-  mutation updateUser($id: String!, $name: String!, $bio: String) {
-    update_users_by_pk(pk_columns: { id: $id }, _set: { name: $name, bio: $bio }) {
-      id
-      name
-      bio
-    }
-  }
-`;
-export type UpdateUserMutationFn = Apollo.MutationFunction<UpdateUserMutation, UpdateUserMutationVariables>;
-
-/**
- * __useUpdateUserMutation__
- *
- * To run a mutation, you first call `useUpdateUserMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateUserMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateUserMutation, { data, loading, error }] = useUpdateUserMutation({
- *   variables: {
- *      id: // value for 'id'
- *      name: // value for 'name'
- *      bio: // value for 'bio'
- *   },
- * });
- */
-export function useUpdateUserMutation(
-  baseOptions?: Apollo.MutationHookOptions<UpdateUserMutation, UpdateUserMutationVariables>,
-) {
-  return Apollo.useMutation<UpdateUserMutation, UpdateUserMutationVariables>(UpdateUserDocument, baseOptions);
-}
-export type UpdateUserMutationHookResult = ReturnType<typeof useUpdateUserMutation>;
-export type UpdateUserMutationResult = Apollo.MutationResult<UpdateUserMutation>;
-export type UpdateUserMutationOptions = Apollo.BaseMutationOptions<UpdateUserMutation, UpdateUserMutationVariables>;
-export const GetGeofencesDocument = gql`
-  query getGeofences {
-    geofences {
-      id
-      name
-      description
-      latitude
-      longitude
-      radius
-      variant
-      coordinates
-      category
-    }
-  }
-`;
-
-/**
- * __useGetGeofencesQuery__
- *
- * To run a query within a React component, call `useGetGeofencesQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetGeofencesQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetGeofencesQuery({
- *   variables: {
- *   },
- * });
- */
-export function useGetGeofencesQuery(
-  baseOptions?: Apollo.QueryHookOptions<GetGeofencesQuery, GetGeofencesQueryVariables>,
-) {
-  return Apollo.useQuery<GetGeofencesQuery, GetGeofencesQueryVariables>(GetGeofencesDocument, baseOptions);
-}
-export function useGetGeofencesLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<GetGeofencesQuery, GetGeofencesQueryVariables>,
-) {
-  return Apollo.useLazyQuery<GetGeofencesQuery, GetGeofencesQueryVariables>(GetGeofencesDocument, baseOptions);
-}
-export type GetGeofencesQueryHookResult = ReturnType<typeof useGetGeofencesQuery>;
-export type GetGeofencesLazyQueryHookResult = ReturnType<typeof useGetGeofencesLazyQuery>;
-export type GetGeofencesQueryResult = Apollo.QueryResult<GetGeofencesQuery, GetGeofencesQueryVariables>;
-export const GetUserDocument = gql`
-  query getUser($id: String!) {
-    users_by_pk(id: $id) {
-      id
-      name
-      bio
-    }
-  }
-`;
-
-/**
- * __useGetUserQuery__
- *
- * To run a query within a React component, call `useGetUserQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetUserQuery({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useGetUserQuery(baseOptions: Apollo.QueryHookOptions<GetUserQuery, GetUserQueryVariables>) {
-  return Apollo.useQuery<GetUserQuery, GetUserQueryVariables>(GetUserDocument, baseOptions);
-}
-export function useGetUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUserQuery, GetUserQueryVariables>) {
-  return Apollo.useLazyQuery<GetUserQuery, GetUserQueryVariables>(GetUserDocument, baseOptions);
-}
-export type GetUserQueryHookResult = ReturnType<typeof useGetUserQuery>;
-export type GetUserLazyQueryHookResult = ReturnType<typeof useGetUserLazyQuery>;
-export type GetUserQueryResult = Apollo.QueryResult<GetUserQuery, GetUserQueryVariables>;
