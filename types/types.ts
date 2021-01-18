@@ -50,14 +50,63 @@ export type String_Comparison_Exp = {
 /** columns and relationships of "activities" */
 export type Activities = {
   __typename?: 'activities';
+  /** An object relationship */
+  activityByCategory: Categories;
   activity_id: Scalars['Int'];
   caption?: Maybe<Scalars['String']>;
   category: Categories_Enum;
-  category_id: Scalars['Int'];
+  /** An array relationship */
+  comments: Array<Comments>;
+  /** An aggregated array relationship */
+  comments_aggregate: Comments_Aggregate;
   created_at?: Maybe<Scalars['timestamptz']>;
+  /** An object relationship */
+  geofence: Geofences;
   geofence_id: Scalars['Int'];
+  /** An array relationship */
+  likes: Array<Likes>;
+  /** An aggregated array relationship */
+  likes_aggregate: Likes_Aggregate;
   updated_at?: Maybe<Scalars['timestamptz']>;
+  /** An object relationship */
+  user: Users;
   user_id: Scalars['String'];
+};
+
+/** columns and relationships of "activities" */
+export type ActivitiesCommentsArgs = {
+  distinct_on?: Maybe<Array<Comments_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Comments_Order_By>>;
+  where?: Maybe<Comments_Bool_Exp>;
+};
+
+/** columns and relationships of "activities" */
+export type ActivitiesComments_AggregateArgs = {
+  distinct_on?: Maybe<Array<Comments_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Comments_Order_By>>;
+  where?: Maybe<Comments_Bool_Exp>;
+};
+
+/** columns and relationships of "activities" */
+export type ActivitiesLikesArgs = {
+  distinct_on?: Maybe<Array<Likes_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Likes_Order_By>>;
+  where?: Maybe<Likes_Bool_Exp>;
+};
+
+/** columns and relationships of "activities" */
+export type ActivitiesLikes_AggregateArgs = {
+  distinct_on?: Maybe<Array<Likes_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Likes_Order_By>>;
+  where?: Maybe<Likes_Bool_Exp>;
 };
 
 /** aggregated selection of "activities" */
@@ -114,14 +163,12 @@ export type Activities_Arr_Rel_Insert_Input = {
 export type Activities_Avg_Fields = {
   __typename?: 'activities_avg_fields';
   activity_id?: Maybe<Scalars['Float']>;
-  category_id?: Maybe<Scalars['Float']>;
   geofence_id?: Maybe<Scalars['Float']>;
 };
 
 /** order by avg() on columns of table "activities" */
 export type Activities_Avg_Order_By = {
   activity_id?: Maybe<Order_By>;
-  category_id?: Maybe<Order_By>;
   geofence_id?: Maybe<Order_By>;
 };
 
@@ -130,13 +177,17 @@ export type Activities_Bool_Exp = {
   _and?: Maybe<Array<Maybe<Activities_Bool_Exp>>>;
   _not?: Maybe<Activities_Bool_Exp>;
   _or?: Maybe<Array<Maybe<Activities_Bool_Exp>>>;
+  activityByCategory?: Maybe<Categories_Bool_Exp>;
   activity_id?: Maybe<Int_Comparison_Exp>;
   caption?: Maybe<String_Comparison_Exp>;
   category?: Maybe<Categories_Enum_Comparison_Exp>;
-  category_id?: Maybe<Int_Comparison_Exp>;
+  comments?: Maybe<Comments_Bool_Exp>;
   created_at?: Maybe<Timestamptz_Comparison_Exp>;
+  geofence?: Maybe<Geofences_Bool_Exp>;
   geofence_id?: Maybe<Int_Comparison_Exp>;
+  likes?: Maybe<Likes_Bool_Exp>;
   updated_at?: Maybe<Timestamptz_Comparison_Exp>;
+  user?: Maybe<Users_Bool_Exp>;
   user_id?: Maybe<String_Comparison_Exp>;
 };
 
@@ -149,19 +200,22 @@ export enum Activities_Constraint {
 /** input type for incrementing integer column in table "activities" */
 export type Activities_Inc_Input = {
   activity_id?: Maybe<Scalars['Int']>;
-  category_id?: Maybe<Scalars['Int']>;
   geofence_id?: Maybe<Scalars['Int']>;
 };
 
 /** input type for inserting data into table "activities" */
 export type Activities_Insert_Input = {
+  activityByCategory?: Maybe<Categories_Obj_Rel_Insert_Input>;
   activity_id?: Maybe<Scalars['Int']>;
   caption?: Maybe<Scalars['String']>;
   category?: Maybe<Categories_Enum>;
-  category_id?: Maybe<Scalars['Int']>;
+  comments?: Maybe<Comments_Arr_Rel_Insert_Input>;
   created_at?: Maybe<Scalars['timestamptz']>;
+  geofence?: Maybe<Geofences_Obj_Rel_Insert_Input>;
   geofence_id?: Maybe<Scalars['Int']>;
+  likes?: Maybe<Likes_Arr_Rel_Insert_Input>;
   updated_at?: Maybe<Scalars['timestamptz']>;
+  user?: Maybe<Users_Obj_Rel_Insert_Input>;
   user_id?: Maybe<Scalars['String']>;
 };
 
@@ -170,7 +224,6 @@ export type Activities_Max_Fields = {
   __typename?: 'activities_max_fields';
   activity_id?: Maybe<Scalars['Int']>;
   caption?: Maybe<Scalars['String']>;
-  category_id?: Maybe<Scalars['Int']>;
   created_at?: Maybe<Scalars['timestamptz']>;
   geofence_id?: Maybe<Scalars['Int']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
@@ -181,7 +234,6 @@ export type Activities_Max_Fields = {
 export type Activities_Max_Order_By = {
   activity_id?: Maybe<Order_By>;
   caption?: Maybe<Order_By>;
-  category_id?: Maybe<Order_By>;
   created_at?: Maybe<Order_By>;
   geofence_id?: Maybe<Order_By>;
   updated_at?: Maybe<Order_By>;
@@ -193,7 +245,6 @@ export type Activities_Min_Fields = {
   __typename?: 'activities_min_fields';
   activity_id?: Maybe<Scalars['Int']>;
   caption?: Maybe<Scalars['String']>;
-  category_id?: Maybe<Scalars['Int']>;
   created_at?: Maybe<Scalars['timestamptz']>;
   geofence_id?: Maybe<Scalars['Int']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
@@ -204,7 +255,6 @@ export type Activities_Min_Fields = {
 export type Activities_Min_Order_By = {
   activity_id?: Maybe<Order_By>;
   caption?: Maybe<Order_By>;
-  category_id?: Maybe<Order_By>;
   created_at?: Maybe<Order_By>;
   geofence_id?: Maybe<Order_By>;
   updated_at?: Maybe<Order_By>;
@@ -235,13 +285,17 @@ export type Activities_On_Conflict = {
 
 /** ordering options when selecting data from "activities" */
 export type Activities_Order_By = {
+  activityByCategory?: Maybe<Categories_Order_By>;
   activity_id?: Maybe<Order_By>;
   caption?: Maybe<Order_By>;
   category?: Maybe<Order_By>;
-  category_id?: Maybe<Order_By>;
+  comments_aggregate?: Maybe<Comments_Aggregate_Order_By>;
   created_at?: Maybe<Order_By>;
+  geofence?: Maybe<Geofences_Order_By>;
   geofence_id?: Maybe<Order_By>;
+  likes_aggregate?: Maybe<Likes_Aggregate_Order_By>;
   updated_at?: Maybe<Order_By>;
+  user?: Maybe<Users_Order_By>;
   user_id?: Maybe<Order_By>;
 };
 
@@ -259,8 +313,6 @@ export enum Activities_Select_Column {
   /** column name */
   Category = 'category',
   /** column name */
-  CategoryId = 'category_id',
-  /** column name */
   CreatedAt = 'created_at',
   /** column name */
   GeofenceId = 'geofence_id',
@@ -275,7 +327,6 @@ export type Activities_Set_Input = {
   activity_id?: Maybe<Scalars['Int']>;
   caption?: Maybe<Scalars['String']>;
   category?: Maybe<Categories_Enum>;
-  category_id?: Maybe<Scalars['Int']>;
   created_at?: Maybe<Scalars['timestamptz']>;
   geofence_id?: Maybe<Scalars['Int']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
@@ -286,14 +337,12 @@ export type Activities_Set_Input = {
 export type Activities_Stddev_Fields = {
   __typename?: 'activities_stddev_fields';
   activity_id?: Maybe<Scalars['Float']>;
-  category_id?: Maybe<Scalars['Float']>;
   geofence_id?: Maybe<Scalars['Float']>;
 };
 
 /** order by stddev() on columns of table "activities" */
 export type Activities_Stddev_Order_By = {
   activity_id?: Maybe<Order_By>;
-  category_id?: Maybe<Order_By>;
   geofence_id?: Maybe<Order_By>;
 };
 
@@ -301,14 +350,12 @@ export type Activities_Stddev_Order_By = {
 export type Activities_Stddev_Pop_Fields = {
   __typename?: 'activities_stddev_pop_fields';
   activity_id?: Maybe<Scalars['Float']>;
-  category_id?: Maybe<Scalars['Float']>;
   geofence_id?: Maybe<Scalars['Float']>;
 };
 
 /** order by stddev_pop() on columns of table "activities" */
 export type Activities_Stddev_Pop_Order_By = {
   activity_id?: Maybe<Order_By>;
-  category_id?: Maybe<Order_By>;
   geofence_id?: Maybe<Order_By>;
 };
 
@@ -316,14 +363,12 @@ export type Activities_Stddev_Pop_Order_By = {
 export type Activities_Stddev_Samp_Fields = {
   __typename?: 'activities_stddev_samp_fields';
   activity_id?: Maybe<Scalars['Float']>;
-  category_id?: Maybe<Scalars['Float']>;
   geofence_id?: Maybe<Scalars['Float']>;
 };
 
 /** order by stddev_samp() on columns of table "activities" */
 export type Activities_Stddev_Samp_Order_By = {
   activity_id?: Maybe<Order_By>;
-  category_id?: Maybe<Order_By>;
   geofence_id?: Maybe<Order_By>;
 };
 
@@ -331,14 +376,12 @@ export type Activities_Stddev_Samp_Order_By = {
 export type Activities_Sum_Fields = {
   __typename?: 'activities_sum_fields';
   activity_id?: Maybe<Scalars['Int']>;
-  category_id?: Maybe<Scalars['Int']>;
   geofence_id?: Maybe<Scalars['Int']>;
 };
 
 /** order by sum() on columns of table "activities" */
 export type Activities_Sum_Order_By = {
   activity_id?: Maybe<Order_By>;
-  category_id?: Maybe<Order_By>;
   geofence_id?: Maybe<Order_By>;
 };
 
@@ -350,8 +393,6 @@ export enum Activities_Update_Column {
   Caption = 'caption',
   /** column name */
   Category = 'category',
-  /** column name */
-  CategoryId = 'category_id',
   /** column name */
   CreatedAt = 'created_at',
   /** column name */
@@ -366,14 +407,12 @@ export enum Activities_Update_Column {
 export type Activities_Var_Pop_Fields = {
   __typename?: 'activities_var_pop_fields';
   activity_id?: Maybe<Scalars['Float']>;
-  category_id?: Maybe<Scalars['Float']>;
   geofence_id?: Maybe<Scalars['Float']>;
 };
 
 /** order by var_pop() on columns of table "activities" */
 export type Activities_Var_Pop_Order_By = {
   activity_id?: Maybe<Order_By>;
-  category_id?: Maybe<Order_By>;
   geofence_id?: Maybe<Order_By>;
 };
 
@@ -381,14 +420,12 @@ export type Activities_Var_Pop_Order_By = {
 export type Activities_Var_Samp_Fields = {
   __typename?: 'activities_var_samp_fields';
   activity_id?: Maybe<Scalars['Float']>;
-  category_id?: Maybe<Scalars['Float']>;
   geofence_id?: Maybe<Scalars['Float']>;
 };
 
 /** order by var_samp() on columns of table "activities" */
 export type Activities_Var_Samp_Order_By = {
   activity_id?: Maybe<Order_By>;
-  category_id?: Maybe<Order_By>;
   geofence_id?: Maybe<Order_By>;
 };
 
@@ -396,14 +433,12 @@ export type Activities_Var_Samp_Order_By = {
 export type Activities_Variance_Fields = {
   __typename?: 'activities_variance_fields';
   activity_id?: Maybe<Scalars['Float']>;
-  category_id?: Maybe<Scalars['Float']>;
   geofence_id?: Maybe<Scalars['Float']>;
 };
 
 /** order by variance() on columns of table "activities" */
 export type Activities_Variance_Order_By = {
   activity_id?: Maybe<Order_By>;
-  category_id?: Maybe<Order_By>;
   geofence_id?: Maybe<Order_By>;
 };
 
@@ -575,11 +610,15 @@ export enum Categories_Update_Column {
 /** columns and relationships of "comments" */
 export type Comments = {
   __typename?: 'comments';
+  /** An object relationship */
+  activity: Activities;
   activity_id: Scalars['Int'];
   comment_id: Scalars['Int'];
   content: Scalars['String'];
   created_at?: Maybe<Scalars['timestamptz']>;
   updated_at?: Maybe<Scalars['timestamp']>;
+  /** An object relationship */
+  user: Users;
   user_id: Scalars['String'];
 };
 
@@ -651,11 +690,13 @@ export type Comments_Bool_Exp = {
   _and?: Maybe<Array<Maybe<Comments_Bool_Exp>>>;
   _not?: Maybe<Comments_Bool_Exp>;
   _or?: Maybe<Array<Maybe<Comments_Bool_Exp>>>;
+  activity?: Maybe<Activities_Bool_Exp>;
   activity_id?: Maybe<Int_Comparison_Exp>;
   comment_id?: Maybe<Int_Comparison_Exp>;
   content?: Maybe<String_Comparison_Exp>;
   created_at?: Maybe<Timestamptz_Comparison_Exp>;
   updated_at?: Maybe<Timestamp_Comparison_Exp>;
+  user?: Maybe<Users_Bool_Exp>;
   user_id?: Maybe<String_Comparison_Exp>;
 };
 
@@ -673,11 +714,13 @@ export type Comments_Inc_Input = {
 
 /** input type for inserting data into table "comments" */
 export type Comments_Insert_Input = {
+  activity?: Maybe<Activities_Obj_Rel_Insert_Input>;
   activity_id?: Maybe<Scalars['Int']>;
   comment_id?: Maybe<Scalars['Int']>;
   content?: Maybe<Scalars['String']>;
   created_at?: Maybe<Scalars['timestamptz']>;
   updated_at?: Maybe<Scalars['timestamp']>;
+  user?: Maybe<Users_Obj_Rel_Insert_Input>;
   user_id?: Maybe<Scalars['String']>;
 };
 
@@ -747,11 +790,13 @@ export type Comments_On_Conflict = {
 
 /** ordering options when selecting data from "comments" */
 export type Comments_Order_By = {
+  activity?: Maybe<Activities_Order_By>;
   activity_id?: Maybe<Order_By>;
   comment_id?: Maybe<Order_By>;
   content?: Maybe<Order_By>;
   created_at?: Maybe<Order_By>;
   updated_at?: Maybe<Order_By>;
+  user?: Maybe<Users_Order_By>;
   user_id?: Maybe<Order_By>;
 };
 
@@ -910,8 +955,12 @@ export type Float8_Comparison_Exp = {
 export type Followings = {
   __typename?: 'followings';
   created_at?: Maybe<Scalars['timestamptz']>;
+  /** An object relationship */
+  follower: Users;
   following_id: Scalars['String'];
   updated_at?: Maybe<Scalars['timestamptz']>;
+  /** An object relationship */
+  user: Users;
   user_id: Scalars['String'];
 };
 
@@ -955,8 +1004,10 @@ export type Followings_Bool_Exp = {
   _not?: Maybe<Followings_Bool_Exp>;
   _or?: Maybe<Array<Maybe<Followings_Bool_Exp>>>;
   created_at?: Maybe<Timestamptz_Comparison_Exp>;
+  follower?: Maybe<Users_Bool_Exp>;
   following_id?: Maybe<String_Comparison_Exp>;
   updated_at?: Maybe<Timestamptz_Comparison_Exp>;
+  user?: Maybe<Users_Bool_Exp>;
   user_id?: Maybe<String_Comparison_Exp>;
 };
 
@@ -969,8 +1020,10 @@ export enum Followings_Constraint {
 /** input type for inserting data into table "followings" */
 export type Followings_Insert_Input = {
   created_at?: Maybe<Scalars['timestamptz']>;
+  follower?: Maybe<Users_Obj_Rel_Insert_Input>;
   following_id?: Maybe<Scalars['String']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
+  user?: Maybe<Users_Obj_Rel_Insert_Input>;
   user_id?: Maybe<Scalars['String']>;
 };
 
@@ -1033,8 +1086,10 @@ export type Followings_On_Conflict = {
 /** ordering options when selecting data from "followings" */
 export type Followings_Order_By = {
   created_at?: Maybe<Order_By>;
+  follower?: Maybe<Users_Order_By>;
   following_id?: Maybe<Order_By>;
   updated_at?: Maybe<Order_By>;
+  user?: Maybe<Users_Order_By>;
   user_id?: Maybe<Order_By>;
 };
 
@@ -2835,12 +2890,78 @@ export type Timestamptz_Comparison_Exp = {
 /** columns and relationships of "users" */
 export type Users = {
   __typename?: 'users';
+  /** An array relationship */
+  activities: Array<Activities>;
+  /** An aggregated array relationship */
+  activities_aggregate: Activities_Aggregate;
   bio?: Maybe<Scalars['String']>;
   created_at?: Maybe<Scalars['timestamptz']>;
   email: Scalars['String'];
+  /** An array relationship */
+  followers: Array<Followings>;
+  /** An aggregated array relationship */
+  followers_aggregate: Followings_Aggregate;
+  /** An array relationship */
+  following: Array<Followings>;
+  /** An aggregated array relationship */
+  following_aggregate: Followings_Aggregate;
   id: Scalars['String'];
   name?: Maybe<Scalars['String']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
+};
+
+/** columns and relationships of "users" */
+export type UsersActivitiesArgs = {
+  distinct_on?: Maybe<Array<Activities_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Activities_Order_By>>;
+  where?: Maybe<Activities_Bool_Exp>;
+};
+
+/** columns and relationships of "users" */
+export type UsersActivities_AggregateArgs = {
+  distinct_on?: Maybe<Array<Activities_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Activities_Order_By>>;
+  where?: Maybe<Activities_Bool_Exp>;
+};
+
+/** columns and relationships of "users" */
+export type UsersFollowersArgs = {
+  distinct_on?: Maybe<Array<Followings_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Followings_Order_By>>;
+  where?: Maybe<Followings_Bool_Exp>;
+};
+
+/** columns and relationships of "users" */
+export type UsersFollowers_AggregateArgs = {
+  distinct_on?: Maybe<Array<Followings_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Followings_Order_By>>;
+  where?: Maybe<Followings_Bool_Exp>;
+};
+
+/** columns and relationships of "users" */
+export type UsersFollowingArgs = {
+  distinct_on?: Maybe<Array<Followings_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Followings_Order_By>>;
+  where?: Maybe<Followings_Bool_Exp>;
+};
+
+/** columns and relationships of "users" */
+export type UsersFollowing_AggregateArgs = {
+  distinct_on?: Maybe<Array<Followings_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Followings_Order_By>>;
+  where?: Maybe<Followings_Bool_Exp>;
 };
 
 /** aggregated selection of "users" */
@@ -2882,9 +3003,12 @@ export type Users_Bool_Exp = {
   _and?: Maybe<Array<Maybe<Users_Bool_Exp>>>;
   _not?: Maybe<Users_Bool_Exp>;
   _or?: Maybe<Array<Maybe<Users_Bool_Exp>>>;
+  activities?: Maybe<Activities_Bool_Exp>;
   bio?: Maybe<String_Comparison_Exp>;
   created_at?: Maybe<Timestamptz_Comparison_Exp>;
   email?: Maybe<String_Comparison_Exp>;
+  followers?: Maybe<Followings_Bool_Exp>;
+  following?: Maybe<Followings_Bool_Exp>;
   id?: Maybe<String_Comparison_Exp>;
   name?: Maybe<String_Comparison_Exp>;
   updated_at?: Maybe<Timestamptz_Comparison_Exp>;
@@ -2902,9 +3026,12 @@ export enum Users_Constraint {
 
 /** input type for inserting data into table "users" */
 export type Users_Insert_Input = {
+  activities?: Maybe<Activities_Arr_Rel_Insert_Input>;
   bio?: Maybe<Scalars['String']>;
   created_at?: Maybe<Scalars['timestamptz']>;
   email?: Maybe<Scalars['String']>;
+  followers?: Maybe<Followings_Arr_Rel_Insert_Input>;
+  following?: Maybe<Followings_Arr_Rel_Insert_Input>;
   id?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
@@ -2976,9 +3103,12 @@ export type Users_On_Conflict = {
 
 /** ordering options when selecting data from "users" */
 export type Users_Order_By = {
+  activities_aggregate?: Maybe<Activities_Aggregate_Order_By>;
   bio?: Maybe<Order_By>;
   created_at?: Maybe<Order_By>;
   email?: Maybe<Order_By>;
+  followers_aggregate?: Maybe<Followings_Aggregate_Order_By>;
+  following_aggregate?: Maybe<Followings_Aggregate_Order_By>;
   id?: Maybe<Order_By>;
   name?: Maybe<Order_By>;
   updated_at?: Maybe<Order_By>;
@@ -3030,150 +3160,3 @@ export enum Users_Update_Column {
   /** column name */
   UpdatedAt = 'updated_at',
 }
-
-export type UpdateUserMutationVariables = Exact<{
-  id: Scalars['String'];
-  name: Scalars['String'];
-  bio?: Maybe<Scalars['String']>;
-}>;
-
-export type UpdateUserMutation = { __typename?: 'mutation_root' } & {
-  update_users_by_pk?: Maybe<{ __typename?: 'users' } & Pick<Users, 'id' | 'name' | 'bio'>>;
-};
-
-export type GetGeofencesQueryVariables = Exact<{ [key: string]: never }>;
-
-export type GetGeofencesQuery = { __typename?: 'query_root' } & {
-  geofences: Array<
-    { __typename?: 'geofences' } & Pick<
-      Geofences,
-      'id' | 'name' | 'description' | 'latitude' | 'longitude' | 'radius' | 'variant' | 'coordinates' | 'category'
-    >
-  >;
-};
-
-export type GetUserQueryVariables = Exact<{
-  id: Scalars['String'];
-}>;
-
-export type GetUserQuery = { __typename?: 'query_root' } & {
-  users_by_pk?: Maybe<{ __typename?: 'users' } & Pick<Users, 'id' | 'name' | 'bio'>>;
-};
-
-export const UpdateUserDocument = gql`
-  mutation updateUser($id: String!, $name: String!, $bio: String) {
-    update_users_by_pk(pk_columns: { id: $id }, _set: { name: $name, bio: $bio }) {
-      id
-      name
-      bio
-    }
-  }
-`;
-export type UpdateUserMutationFn = Apollo.MutationFunction<UpdateUserMutation, UpdateUserMutationVariables>;
-
-/**
- * __useUpdateUserMutation__
- *
- * To run a mutation, you first call `useUpdateUserMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateUserMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateUserMutation, { data, loading, error }] = useUpdateUserMutation({
- *   variables: {
- *      id: // value for 'id'
- *      name: // value for 'name'
- *      bio: // value for 'bio'
- *   },
- * });
- */
-export function useUpdateUserMutation(
-  baseOptions?: Apollo.MutationHookOptions<UpdateUserMutation, UpdateUserMutationVariables>,
-) {
-  return Apollo.useMutation<UpdateUserMutation, UpdateUserMutationVariables>(UpdateUserDocument, baseOptions);
-}
-export type UpdateUserMutationHookResult = ReturnType<typeof useUpdateUserMutation>;
-export type UpdateUserMutationResult = Apollo.MutationResult<UpdateUserMutation>;
-export type UpdateUserMutationOptions = Apollo.BaseMutationOptions<UpdateUserMutation, UpdateUserMutationVariables>;
-export const GetGeofencesDocument = gql`
-  query getGeofences {
-    geofences {
-      id
-      name
-      description
-      latitude
-      longitude
-      radius
-      variant
-      coordinates
-      category
-    }
-  }
-`;
-
-/**
- * __useGetGeofencesQuery__
- *
- * To run a query within a React component, call `useGetGeofencesQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetGeofencesQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetGeofencesQuery({
- *   variables: {
- *   },
- * });
- */
-export function useGetGeofencesQuery(
-  baseOptions?: Apollo.QueryHookOptions<GetGeofencesQuery, GetGeofencesQueryVariables>,
-) {
-  return Apollo.useQuery<GetGeofencesQuery, GetGeofencesQueryVariables>(GetGeofencesDocument, baseOptions);
-}
-export function useGetGeofencesLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<GetGeofencesQuery, GetGeofencesQueryVariables>,
-) {
-  return Apollo.useLazyQuery<GetGeofencesQuery, GetGeofencesQueryVariables>(GetGeofencesDocument, baseOptions);
-}
-export type GetGeofencesQueryHookResult = ReturnType<typeof useGetGeofencesQuery>;
-export type GetGeofencesLazyQueryHookResult = ReturnType<typeof useGetGeofencesLazyQuery>;
-export type GetGeofencesQueryResult = Apollo.QueryResult<GetGeofencesQuery, GetGeofencesQueryVariables>;
-export const GetUserDocument = gql`
-  query getUser($id: String!) {
-    users_by_pk(id: $id) {
-      id
-      name
-      bio
-    }
-  }
-`;
-
-/**
- * __useGetUserQuery__
- *
- * To run a query within a React component, call `useGetUserQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetUserQuery({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useGetUserQuery(baseOptions: Apollo.QueryHookOptions<GetUserQuery, GetUserQueryVariables>) {
-  return Apollo.useQuery<GetUserQuery, GetUserQueryVariables>(GetUserDocument, baseOptions);
-}
-export function useGetUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUserQuery, GetUserQueryVariables>) {
-  return Apollo.useLazyQuery<GetUserQuery, GetUserQueryVariables>(GetUserDocument, baseOptions);
-}
-export type GetUserQueryHookResult = ReturnType<typeof useGetUserQuery>;
-export type GetUserLazyQueryHookResult = ReturnType<typeof useGetUserLazyQuery>;
-export type GetUserQueryResult = Apollo.QueryResult<GetUserQuery, GetUserQueryVariables>;

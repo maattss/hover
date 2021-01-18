@@ -54,14 +54,63 @@ export type String_Comparison_Exp = {
 /** columns and relationships of "activities" */
 export type Activities = {
   readonly __typename: 'activities';
+  /** An object relationship */
+  readonly activityByCategory: Categories;
   readonly activity_id: Scalars['Int'];
   readonly caption?: Maybe<Scalars['String']>;
   readonly category: Categories_Enum;
-  readonly category_id: Scalars['Int'];
+  /** An array relationship */
+  readonly comments: ReadonlyArray<Comments>;
+  /** An aggregated array relationship */
+  readonly comments_aggregate: Comments_Aggregate;
   readonly created_at?: Maybe<Scalars['timestamptz']>;
+  /** An object relationship */
+  readonly geofence: Geofences;
   readonly geofence_id: Scalars['Int'];
+  /** An array relationship */
+  readonly likes: ReadonlyArray<Likes>;
+  /** An aggregated array relationship */
+  readonly likes_aggregate: Likes_Aggregate;
   readonly updated_at?: Maybe<Scalars['timestamptz']>;
+  /** An object relationship */
+  readonly user: Users;
   readonly user_id: Scalars['String'];
+};
+
+/** columns and relationships of "activities" */
+export type ActivitiesCommentsArgs = {
+  distinct_on?: Maybe<ReadonlyArray<Comments_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<ReadonlyArray<Comments_Order_By>>;
+  where?: Maybe<Comments_Bool_Exp>;
+};
+
+/** columns and relationships of "activities" */
+export type ActivitiesComments_AggregateArgs = {
+  distinct_on?: Maybe<ReadonlyArray<Comments_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<ReadonlyArray<Comments_Order_By>>;
+  where?: Maybe<Comments_Bool_Exp>;
+};
+
+/** columns and relationships of "activities" */
+export type ActivitiesLikesArgs = {
+  distinct_on?: Maybe<ReadonlyArray<Likes_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<ReadonlyArray<Likes_Order_By>>;
+  where?: Maybe<Likes_Bool_Exp>;
+};
+
+/** columns and relationships of "activities" */
+export type ActivitiesLikes_AggregateArgs = {
+  distinct_on?: Maybe<ReadonlyArray<Likes_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<ReadonlyArray<Likes_Order_By>>;
+  where?: Maybe<Likes_Bool_Exp>;
 };
 
 /** aggregated selection of "activities" */
@@ -118,14 +167,12 @@ export type Activities_Arr_Rel_Insert_Input = {
 export type Activities_Avg_Fields = {
   readonly __typename: 'activities_avg_fields';
   readonly activity_id?: Maybe<Scalars['Float']>;
-  readonly category_id?: Maybe<Scalars['Float']>;
   readonly geofence_id?: Maybe<Scalars['Float']>;
 };
 
 /** order by avg() on columns of table "activities" */
 export type Activities_Avg_Order_By = {
   readonly activity_id?: Maybe<Order_By>;
-  readonly category_id?: Maybe<Order_By>;
   readonly geofence_id?: Maybe<Order_By>;
 };
 
@@ -134,13 +181,17 @@ export type Activities_Bool_Exp = {
   readonly _and?: Maybe<ReadonlyArray<Maybe<Activities_Bool_Exp>>>;
   readonly _not?: Maybe<Activities_Bool_Exp>;
   readonly _or?: Maybe<ReadonlyArray<Maybe<Activities_Bool_Exp>>>;
+  readonly activityByCategory?: Maybe<Categories_Bool_Exp>;
   readonly activity_id?: Maybe<Int_Comparison_Exp>;
   readonly caption?: Maybe<String_Comparison_Exp>;
   readonly category?: Maybe<Categories_Enum_Comparison_Exp>;
-  readonly category_id?: Maybe<Int_Comparison_Exp>;
+  readonly comments?: Maybe<Comments_Bool_Exp>;
   readonly created_at?: Maybe<Timestamptz_Comparison_Exp>;
+  readonly geofence?: Maybe<Geofences_Bool_Exp>;
   readonly geofence_id?: Maybe<Int_Comparison_Exp>;
+  readonly likes?: Maybe<Likes_Bool_Exp>;
   readonly updated_at?: Maybe<Timestamptz_Comparison_Exp>;
+  readonly user?: Maybe<Users_Bool_Exp>;
   readonly user_id?: Maybe<String_Comparison_Exp>;
 };
 
@@ -153,19 +204,22 @@ export enum Activities_Constraint {
 /** input type for incrementing integer column in table "activities" */
 export type Activities_Inc_Input = {
   readonly activity_id?: Maybe<Scalars['Int']>;
-  readonly category_id?: Maybe<Scalars['Int']>;
   readonly geofence_id?: Maybe<Scalars['Int']>;
 };
 
 /** input type for inserting data into table "activities" */
 export type Activities_Insert_Input = {
+  readonly activityByCategory?: Maybe<Categories_Obj_Rel_Insert_Input>;
   readonly activity_id?: Maybe<Scalars['Int']>;
   readonly caption?: Maybe<Scalars['String']>;
   readonly category?: Maybe<Categories_Enum>;
-  readonly category_id?: Maybe<Scalars['Int']>;
+  readonly comments?: Maybe<Comments_Arr_Rel_Insert_Input>;
   readonly created_at?: Maybe<Scalars['timestamptz']>;
+  readonly geofence?: Maybe<Geofences_Obj_Rel_Insert_Input>;
   readonly geofence_id?: Maybe<Scalars['Int']>;
+  readonly likes?: Maybe<Likes_Arr_Rel_Insert_Input>;
   readonly updated_at?: Maybe<Scalars['timestamptz']>;
+  readonly user?: Maybe<Users_Obj_Rel_Insert_Input>;
   readonly user_id?: Maybe<Scalars['String']>;
 };
 
@@ -174,7 +228,6 @@ export type Activities_Max_Fields = {
   readonly __typename: 'activities_max_fields';
   readonly activity_id?: Maybe<Scalars['Int']>;
   readonly caption?: Maybe<Scalars['String']>;
-  readonly category_id?: Maybe<Scalars['Int']>;
   readonly created_at?: Maybe<Scalars['timestamptz']>;
   readonly geofence_id?: Maybe<Scalars['Int']>;
   readonly updated_at?: Maybe<Scalars['timestamptz']>;
@@ -185,7 +238,6 @@ export type Activities_Max_Fields = {
 export type Activities_Max_Order_By = {
   readonly activity_id?: Maybe<Order_By>;
   readonly caption?: Maybe<Order_By>;
-  readonly category_id?: Maybe<Order_By>;
   readonly created_at?: Maybe<Order_By>;
   readonly geofence_id?: Maybe<Order_By>;
   readonly updated_at?: Maybe<Order_By>;
@@ -197,7 +249,6 @@ export type Activities_Min_Fields = {
   readonly __typename: 'activities_min_fields';
   readonly activity_id?: Maybe<Scalars['Int']>;
   readonly caption?: Maybe<Scalars['String']>;
-  readonly category_id?: Maybe<Scalars['Int']>;
   readonly created_at?: Maybe<Scalars['timestamptz']>;
   readonly geofence_id?: Maybe<Scalars['Int']>;
   readonly updated_at?: Maybe<Scalars['timestamptz']>;
@@ -208,7 +259,6 @@ export type Activities_Min_Fields = {
 export type Activities_Min_Order_By = {
   readonly activity_id?: Maybe<Order_By>;
   readonly caption?: Maybe<Order_By>;
-  readonly category_id?: Maybe<Order_By>;
   readonly created_at?: Maybe<Order_By>;
   readonly geofence_id?: Maybe<Order_By>;
   readonly updated_at?: Maybe<Order_By>;
@@ -239,13 +289,17 @@ export type Activities_On_Conflict = {
 
 /** ordering options when selecting data from "activities" */
 export type Activities_Order_By = {
+  readonly activityByCategory?: Maybe<Categories_Order_By>;
   readonly activity_id?: Maybe<Order_By>;
   readonly caption?: Maybe<Order_By>;
   readonly category?: Maybe<Order_By>;
-  readonly category_id?: Maybe<Order_By>;
+  readonly comments_aggregate?: Maybe<Comments_Aggregate_Order_By>;
   readonly created_at?: Maybe<Order_By>;
+  readonly geofence?: Maybe<Geofences_Order_By>;
   readonly geofence_id?: Maybe<Order_By>;
+  readonly likes_aggregate?: Maybe<Likes_Aggregate_Order_By>;
   readonly updated_at?: Maybe<Order_By>;
+  readonly user?: Maybe<Users_Order_By>;
   readonly user_id?: Maybe<Order_By>;
 };
 
@@ -263,8 +317,6 @@ export enum Activities_Select_Column {
   /** column name */
   Category = 'category',
   /** column name */
-  CategoryId = 'category_id',
-  /** column name */
   CreatedAt = 'created_at',
   /** column name */
   GeofenceId = 'geofence_id',
@@ -279,7 +331,6 @@ export type Activities_Set_Input = {
   readonly activity_id?: Maybe<Scalars['Int']>;
   readonly caption?: Maybe<Scalars['String']>;
   readonly category?: Maybe<Categories_Enum>;
-  readonly category_id?: Maybe<Scalars['Int']>;
   readonly created_at?: Maybe<Scalars['timestamptz']>;
   readonly geofence_id?: Maybe<Scalars['Int']>;
   readonly updated_at?: Maybe<Scalars['timestamptz']>;
@@ -290,14 +341,12 @@ export type Activities_Set_Input = {
 export type Activities_Stddev_Fields = {
   readonly __typename: 'activities_stddev_fields';
   readonly activity_id?: Maybe<Scalars['Float']>;
-  readonly category_id?: Maybe<Scalars['Float']>;
   readonly geofence_id?: Maybe<Scalars['Float']>;
 };
 
 /** order by stddev() on columns of table "activities" */
 export type Activities_Stddev_Order_By = {
   readonly activity_id?: Maybe<Order_By>;
-  readonly category_id?: Maybe<Order_By>;
   readonly geofence_id?: Maybe<Order_By>;
 };
 
@@ -305,14 +354,12 @@ export type Activities_Stddev_Order_By = {
 export type Activities_Stddev_Pop_Fields = {
   readonly __typename: 'activities_stddev_pop_fields';
   readonly activity_id?: Maybe<Scalars['Float']>;
-  readonly category_id?: Maybe<Scalars['Float']>;
   readonly geofence_id?: Maybe<Scalars['Float']>;
 };
 
 /** order by stddev_pop() on columns of table "activities" */
 export type Activities_Stddev_Pop_Order_By = {
   readonly activity_id?: Maybe<Order_By>;
-  readonly category_id?: Maybe<Order_By>;
   readonly geofence_id?: Maybe<Order_By>;
 };
 
@@ -320,14 +367,12 @@ export type Activities_Stddev_Pop_Order_By = {
 export type Activities_Stddev_Samp_Fields = {
   readonly __typename: 'activities_stddev_samp_fields';
   readonly activity_id?: Maybe<Scalars['Float']>;
-  readonly category_id?: Maybe<Scalars['Float']>;
   readonly geofence_id?: Maybe<Scalars['Float']>;
 };
 
 /** order by stddev_samp() on columns of table "activities" */
 export type Activities_Stddev_Samp_Order_By = {
   readonly activity_id?: Maybe<Order_By>;
-  readonly category_id?: Maybe<Order_By>;
   readonly geofence_id?: Maybe<Order_By>;
 };
 
@@ -335,14 +380,12 @@ export type Activities_Stddev_Samp_Order_By = {
 export type Activities_Sum_Fields = {
   readonly __typename: 'activities_sum_fields';
   readonly activity_id?: Maybe<Scalars['Int']>;
-  readonly category_id?: Maybe<Scalars['Int']>;
   readonly geofence_id?: Maybe<Scalars['Int']>;
 };
 
 /** order by sum() on columns of table "activities" */
 export type Activities_Sum_Order_By = {
   readonly activity_id?: Maybe<Order_By>;
-  readonly category_id?: Maybe<Order_By>;
   readonly geofence_id?: Maybe<Order_By>;
 };
 
@@ -354,8 +397,6 @@ export enum Activities_Update_Column {
   Caption = 'caption',
   /** column name */
   Category = 'category',
-  /** column name */
-  CategoryId = 'category_id',
   /** column name */
   CreatedAt = 'created_at',
   /** column name */
@@ -370,14 +411,12 @@ export enum Activities_Update_Column {
 export type Activities_Var_Pop_Fields = {
   readonly __typename: 'activities_var_pop_fields';
   readonly activity_id?: Maybe<Scalars['Float']>;
-  readonly category_id?: Maybe<Scalars['Float']>;
   readonly geofence_id?: Maybe<Scalars['Float']>;
 };
 
 /** order by var_pop() on columns of table "activities" */
 export type Activities_Var_Pop_Order_By = {
   readonly activity_id?: Maybe<Order_By>;
-  readonly category_id?: Maybe<Order_By>;
   readonly geofence_id?: Maybe<Order_By>;
 };
 
@@ -385,14 +424,12 @@ export type Activities_Var_Pop_Order_By = {
 export type Activities_Var_Samp_Fields = {
   readonly __typename: 'activities_var_samp_fields';
   readonly activity_id?: Maybe<Scalars['Float']>;
-  readonly category_id?: Maybe<Scalars['Float']>;
   readonly geofence_id?: Maybe<Scalars['Float']>;
 };
 
 /** order by var_samp() on columns of table "activities" */
 export type Activities_Var_Samp_Order_By = {
   readonly activity_id?: Maybe<Order_By>;
-  readonly category_id?: Maybe<Order_By>;
   readonly geofence_id?: Maybe<Order_By>;
 };
 
@@ -400,14 +437,12 @@ export type Activities_Var_Samp_Order_By = {
 export type Activities_Variance_Fields = {
   readonly __typename: 'activities_variance_fields';
   readonly activity_id?: Maybe<Scalars['Float']>;
-  readonly category_id?: Maybe<Scalars['Float']>;
   readonly geofence_id?: Maybe<Scalars['Float']>;
 };
 
 /** order by variance() on columns of table "activities" */
 export type Activities_Variance_Order_By = {
   readonly activity_id?: Maybe<Order_By>;
-  readonly category_id?: Maybe<Order_By>;
   readonly geofence_id?: Maybe<Order_By>;
 };
 
@@ -579,11 +614,15 @@ export enum Categories_Update_Column {
 /** columns and relationships of "comments" */
 export type Comments = {
   readonly __typename: 'comments';
+  /** An object relationship */
+  readonly activity: Activities;
   readonly activity_id: Scalars['Int'];
   readonly comment_id: Scalars['Int'];
   readonly content: Scalars['String'];
   readonly created_at?: Maybe<Scalars['timestamptz']>;
   readonly updated_at?: Maybe<Scalars['timestamp']>;
+  /** An object relationship */
+  readonly user: Users;
   readonly user_id: Scalars['String'];
 };
 
@@ -655,11 +694,13 @@ export type Comments_Bool_Exp = {
   readonly _and?: Maybe<ReadonlyArray<Maybe<Comments_Bool_Exp>>>;
   readonly _not?: Maybe<Comments_Bool_Exp>;
   readonly _or?: Maybe<ReadonlyArray<Maybe<Comments_Bool_Exp>>>;
+  readonly activity?: Maybe<Activities_Bool_Exp>;
   readonly activity_id?: Maybe<Int_Comparison_Exp>;
   readonly comment_id?: Maybe<Int_Comparison_Exp>;
   readonly content?: Maybe<String_Comparison_Exp>;
   readonly created_at?: Maybe<Timestamptz_Comparison_Exp>;
   readonly updated_at?: Maybe<Timestamp_Comparison_Exp>;
+  readonly user?: Maybe<Users_Bool_Exp>;
   readonly user_id?: Maybe<String_Comparison_Exp>;
 };
 
@@ -677,11 +718,13 @@ export type Comments_Inc_Input = {
 
 /** input type for inserting data into table "comments" */
 export type Comments_Insert_Input = {
+  readonly activity?: Maybe<Activities_Obj_Rel_Insert_Input>;
   readonly activity_id?: Maybe<Scalars['Int']>;
   readonly comment_id?: Maybe<Scalars['Int']>;
   readonly content?: Maybe<Scalars['String']>;
   readonly created_at?: Maybe<Scalars['timestamptz']>;
   readonly updated_at?: Maybe<Scalars['timestamp']>;
+  readonly user?: Maybe<Users_Obj_Rel_Insert_Input>;
   readonly user_id?: Maybe<Scalars['String']>;
 };
 
@@ -751,11 +794,13 @@ export type Comments_On_Conflict = {
 
 /** ordering options when selecting data from "comments" */
 export type Comments_Order_By = {
+  readonly activity?: Maybe<Activities_Order_By>;
   readonly activity_id?: Maybe<Order_By>;
   readonly comment_id?: Maybe<Order_By>;
   readonly content?: Maybe<Order_By>;
   readonly created_at?: Maybe<Order_By>;
   readonly updated_at?: Maybe<Order_By>;
+  readonly user?: Maybe<Users_Order_By>;
   readonly user_id?: Maybe<Order_By>;
 };
 
@@ -914,8 +959,12 @@ export type Float8_Comparison_Exp = {
 export type Followings = {
   readonly __typename: 'followings';
   readonly created_at?: Maybe<Scalars['timestamptz']>;
+  /** An object relationship */
+  readonly follower: Users;
   readonly following_id: Scalars['String'];
   readonly updated_at?: Maybe<Scalars['timestamptz']>;
+  /** An object relationship */
+  readonly user: Users;
   readonly user_id: Scalars['String'];
 };
 
@@ -959,8 +1008,10 @@ export type Followings_Bool_Exp = {
   readonly _not?: Maybe<Followings_Bool_Exp>;
   readonly _or?: Maybe<ReadonlyArray<Maybe<Followings_Bool_Exp>>>;
   readonly created_at?: Maybe<Timestamptz_Comparison_Exp>;
+  readonly follower?: Maybe<Users_Bool_Exp>;
   readonly following_id?: Maybe<String_Comparison_Exp>;
   readonly updated_at?: Maybe<Timestamptz_Comparison_Exp>;
+  readonly user?: Maybe<Users_Bool_Exp>;
   readonly user_id?: Maybe<String_Comparison_Exp>;
 };
 
@@ -973,8 +1024,10 @@ export enum Followings_Constraint {
 /** input type for inserting data into table "followings" */
 export type Followings_Insert_Input = {
   readonly created_at?: Maybe<Scalars['timestamptz']>;
+  readonly follower?: Maybe<Users_Obj_Rel_Insert_Input>;
   readonly following_id?: Maybe<Scalars['String']>;
   readonly updated_at?: Maybe<Scalars['timestamptz']>;
+  readonly user?: Maybe<Users_Obj_Rel_Insert_Input>;
   readonly user_id?: Maybe<Scalars['String']>;
 };
 
@@ -1037,8 +1090,10 @@ export type Followings_On_Conflict = {
 /** ordering options when selecting data from "followings" */
 export type Followings_Order_By = {
   readonly created_at?: Maybe<Order_By>;
+  readonly follower?: Maybe<Users_Order_By>;
   readonly following_id?: Maybe<Order_By>;
   readonly updated_at?: Maybe<Order_By>;
+  readonly user?: Maybe<Users_Order_By>;
   readonly user_id?: Maybe<Order_By>;
 };
 
@@ -2839,12 +2894,78 @@ export type Timestamptz_Comparison_Exp = {
 /** columns and relationships of "users" */
 export type Users = {
   readonly __typename: 'users';
+  /** An array relationship */
+  readonly activities: ReadonlyArray<Activities>;
+  /** An aggregated array relationship */
+  readonly activities_aggregate: Activities_Aggregate;
   readonly bio?: Maybe<Scalars['String']>;
   readonly created_at?: Maybe<Scalars['timestamptz']>;
   readonly email: Scalars['String'];
+  /** An array relationship */
+  readonly followers: ReadonlyArray<Followings>;
+  /** An aggregated array relationship */
+  readonly followers_aggregate: Followings_Aggregate;
+  /** An array relationship */
+  readonly following: ReadonlyArray<Followings>;
+  /** An aggregated array relationship */
+  readonly following_aggregate: Followings_Aggregate;
   readonly id: Scalars['String'];
   readonly name?: Maybe<Scalars['String']>;
   readonly updated_at?: Maybe<Scalars['timestamptz']>;
+};
+
+/** columns and relationships of "users" */
+export type UsersActivitiesArgs = {
+  distinct_on?: Maybe<ReadonlyArray<Activities_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<ReadonlyArray<Activities_Order_By>>;
+  where?: Maybe<Activities_Bool_Exp>;
+};
+
+/** columns and relationships of "users" */
+export type UsersActivities_AggregateArgs = {
+  distinct_on?: Maybe<ReadonlyArray<Activities_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<ReadonlyArray<Activities_Order_By>>;
+  where?: Maybe<Activities_Bool_Exp>;
+};
+
+/** columns and relationships of "users" */
+export type UsersFollowersArgs = {
+  distinct_on?: Maybe<ReadonlyArray<Followings_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<ReadonlyArray<Followings_Order_By>>;
+  where?: Maybe<Followings_Bool_Exp>;
+};
+
+/** columns and relationships of "users" */
+export type UsersFollowers_AggregateArgs = {
+  distinct_on?: Maybe<ReadonlyArray<Followings_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<ReadonlyArray<Followings_Order_By>>;
+  where?: Maybe<Followings_Bool_Exp>;
+};
+
+/** columns and relationships of "users" */
+export type UsersFollowingArgs = {
+  distinct_on?: Maybe<ReadonlyArray<Followings_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<ReadonlyArray<Followings_Order_By>>;
+  where?: Maybe<Followings_Bool_Exp>;
+};
+
+/** columns and relationships of "users" */
+export type UsersFollowing_AggregateArgs = {
+  distinct_on?: Maybe<ReadonlyArray<Followings_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<ReadonlyArray<Followings_Order_By>>;
+  where?: Maybe<Followings_Bool_Exp>;
 };
 
 /** aggregated selection of "users" */
@@ -2886,9 +3007,12 @@ export type Users_Bool_Exp = {
   readonly _and?: Maybe<ReadonlyArray<Maybe<Users_Bool_Exp>>>;
   readonly _not?: Maybe<Users_Bool_Exp>;
   readonly _or?: Maybe<ReadonlyArray<Maybe<Users_Bool_Exp>>>;
+  readonly activities?: Maybe<Activities_Bool_Exp>;
   readonly bio?: Maybe<String_Comparison_Exp>;
   readonly created_at?: Maybe<Timestamptz_Comparison_Exp>;
   readonly email?: Maybe<String_Comparison_Exp>;
+  readonly followers?: Maybe<Followings_Bool_Exp>;
+  readonly following?: Maybe<Followings_Bool_Exp>;
   readonly id?: Maybe<String_Comparison_Exp>;
   readonly name?: Maybe<String_Comparison_Exp>;
   readonly updated_at?: Maybe<Timestamptz_Comparison_Exp>;
@@ -2906,9 +3030,12 @@ export enum Users_Constraint {
 
 /** input type for inserting data into table "users" */
 export type Users_Insert_Input = {
+  readonly activities?: Maybe<Activities_Arr_Rel_Insert_Input>;
   readonly bio?: Maybe<Scalars['String']>;
   readonly created_at?: Maybe<Scalars['timestamptz']>;
   readonly email?: Maybe<Scalars['String']>;
+  readonly followers?: Maybe<Followings_Arr_Rel_Insert_Input>;
+  readonly following?: Maybe<Followings_Arr_Rel_Insert_Input>;
   readonly id?: Maybe<Scalars['String']>;
   readonly name?: Maybe<Scalars['String']>;
   readonly updated_at?: Maybe<Scalars['timestamptz']>;
@@ -2980,9 +3107,12 @@ export type Users_On_Conflict = {
 
 /** ordering options when selecting data from "users" */
 export type Users_Order_By = {
+  readonly activities_aggregate?: Maybe<Activities_Aggregate_Order_By>;
   readonly bio?: Maybe<Order_By>;
   readonly created_at?: Maybe<Order_By>;
   readonly email?: Maybe<Order_By>;
+  readonly followers_aggregate?: Maybe<Followings_Aggregate_Order_By>;
+  readonly following_aggregate?: Maybe<Followings_Aggregate_Order_By>;
   readonly id?: Maybe<Order_By>;
   readonly name?: Maybe<Order_By>;
   readonly updated_at?: Maybe<Order_By>;
