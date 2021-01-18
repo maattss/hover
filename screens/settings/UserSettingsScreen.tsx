@@ -17,12 +17,13 @@ import { GET_USER } from '../../lib/queries/settingsQueries';
 import { UPDATE_USER_NAME } from '../../lib/mutations/settingsMutations';
 import { Buttons, Colors, Spacing, Typography } from '../../theme';
 import { SettingsProps } from './SettingsMenuScreen';
+import { Query_Root } from '../../types/graphQLTypes';
 
 const UserSettingsScreen: React.FC<SettingsProps> = ({ navigation }: SettingsProps) => {
   const id = Firebase.auth().currentUser?.uid;
   const [name, setName] = useState('');
   const [bio, setBio] = useState('');
-  const { loading: fetchLoading, error: fetchError, data } = useQuery(GET_USER, {
+  const { loading: fetchLoading, error: fetchError, data } = useQuery<Query_Root>(GET_USER, {
     variables: { id },
   });
   const [updateUser, { loading: mutationLoading, error: mutationError, data: response }] = useMutation(

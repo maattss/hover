@@ -35,7 +35,6 @@ const LoginScreen = ({ navigation }: StackScreenProps<RootStackParamList, 'Login
         <View style={styles.formContainer}>
           <TextInput
             placeholder="Email"
-            placeholderTextColor="black"
             onChangeText={(val) => setEmail(val)}
             autoCapitalize="none"
             keyboardType="email-address"
@@ -43,14 +42,13 @@ const LoginScreen = ({ navigation }: StackScreenProps<RootStackParamList, 'Login
           />
           <TextInput
             placeholder="Password"
-            placeholderTextColor="black"
             onChangeText={(val) => setPassword(val)}
             secureTextEntry
             style={styles.formField}
           />
 
           <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
-            <Text style={{ ...Buttons.buttonText, color: Colors.white }}>Login</Text>
+            <Text style={{ ...Buttons.buttonText }}>Login</Text>
           </TouchableOpacity>
         </View>
 
