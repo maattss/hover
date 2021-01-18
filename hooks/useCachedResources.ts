@@ -29,8 +29,6 @@ const useCachedResources = () => {
         await Font.loadAsync({
           ...FontAwesome5.font,
         });
-
-        // Log in user
       } catch (e) {
         // We might want to provide this error information to an error reporting service
         console.warn(e);
