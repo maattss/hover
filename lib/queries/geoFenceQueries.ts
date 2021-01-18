@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client';
 
 export const GET_GEOFENCES = gql`
-  query geofenceQuery {
+  query getGeofences {
     geofences {
       id
       name

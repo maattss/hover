@@ -39,7 +39,7 @@ const MapScreen: React.FC = () => {
     if (data) {
       const fetchedGeoFences: GeoFence[] = [];
       for (const obj of data.geofences) {
-        console.log(obj);
+        console.log('obj', obj);
         if (obj.variant === 'CIRCLE') {
           fetchedGeoFences.push({
             name: obj.name,
@@ -73,6 +73,7 @@ const MapScreen: React.FC = () => {
         }
       }
       setGeoFences(fetchedGeoFences);
+      console.log('fetchedGeoFences', fetchedGeoFences);
     }
   }, [data]);
 

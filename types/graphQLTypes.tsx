@@ -3032,19 +3032,19 @@ export enum Users_Update_Column {
   UpdatedAt = 'updated_at',
 }
 
-export type Unnamed_1_MutationVariables = Exact<{
+export type UpdateUserMutationVariables = Exact<{
   id: Scalars['String'];
   name: Scalars['String'];
   bio?: Maybe<Scalars['String']>;
 }>;
 
-export type Unnamed_1_Mutation = { __typename?: 'mutation_root' } & {
+export type UpdateUserMutation = { __typename?: 'mutation_root' } & {
   update_users_by_pk?: Maybe<{ __typename?: 'users' } & Pick<Users, 'id' | 'name' | 'bio'>>;
 };
 
-export type GeofenceQueryQueryVariables = Exact<{ [key: string]: never }>;
+export type GetGeofencesQueryVariables = Exact<{ [key: string]: never }>;
 
-export type GeofenceQueryQuery = { __typename?: 'query_root' } & {
+export type GetGeofencesQuery = { __typename?: 'query_root' } & {
   geofences: Array<
     { __typename?: 'geofences' } & Pick<
       Geofences,
@@ -3053,16 +3053,16 @@ export type GeofenceQueryQuery = { __typename?: 'query_root' } & {
   >;
 };
 
-export type Unnamed_2_QueryVariables = Exact<{
+export type GetUserQueryVariables = Exact<{
   id: Scalars['String'];
 }>;
 
-export type Unnamed_2_Query = { __typename?: 'query_root' } & {
+export type GetUserQuery = { __typename?: 'query_root' } & {
   users_by_pk?: Maybe<{ __typename?: 'users' } & Pick<Users, 'id' | 'name' | 'bio'>>;
 };
 
-export const Document = gql`
-  mutation($id: String!, $name: String!, $bio: String) {
+export const UpdateUserDocument = gql`
+  mutation updateUser($id: String!, $name: String!, $bio: String) {
     update_users_by_pk(pk_columns: { id: $id }, _set: { name: $name, bio: $bio }) {
       id
       name
@@ -3070,20 +3070,20 @@ export const Document = gql`
     }
   }
 `;
-export type MutationFn = Apollo.MutationFunction<Mutation, MutationVariables>;
+export type UpdateUserMutationFn = Apollo.MutationFunction<UpdateUserMutation, UpdateUserMutationVariables>;
 
 /**
- * __useMutation__
+ * __useUpdateUserMutation__
  *
- * To run a mutation, you first call `useMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useUpdateUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateUserMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [mutation, { data, loading, error }] = useMutation({
+ * const [updateUserMutation, { data, loading, error }] = useUpdateUserMutation({
  *   variables: {
  *      id: // value for 'id'
  *      name: // value for 'name'
@@ -3091,14 +3091,16 @@ export type MutationFn = Apollo.MutationFunction<Mutation, MutationVariables>;
  *   },
  * });
  */
-export function useMutation(baseOptions?: Apollo.MutationHookOptions<Mutation, MutationVariables>) {
-  return Apollo.useMutation<Mutation, MutationVariables>(Document, baseOptions);
+export function useUpdateUserMutation(
+  baseOptions?: Apollo.MutationHookOptions<UpdateUserMutation, UpdateUserMutationVariables>,
+) {
+  return Apollo.useMutation<UpdateUserMutation, UpdateUserMutationVariables>(UpdateUserDocument, baseOptions);
 }
-export type MutationHookResult = ReturnType<typeof useMutation>;
-export type MutationResult = Apollo.MutationResult<Mutation>;
-export type MutationOptions = Apollo.BaseMutationOptions<Mutation, MutationVariables>;
-export const GeofenceQueryDocument = gql`
-  query geofenceQuery {
+export type UpdateUserMutationHookResult = ReturnType<typeof useUpdateUserMutation>;
+export type UpdateUserMutationResult = Apollo.MutationResult<UpdateUserMutation>;
+export type UpdateUserMutationOptions = Apollo.BaseMutationOptions<UpdateUserMutation, UpdateUserMutationVariables>;
+export const GetGeofencesDocument = gql`
+  query getGeofences {
     geofences {
       id
       name
@@ -3114,35 +3116,35 @@ export const GeofenceQueryDocument = gql`
 `;
 
 /**
- * __useGeofenceQueryQuery__
+ * __useGetGeofencesQuery__
  *
- * To run a query within a React component, call `useGeofenceQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useGeofenceQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetGeofencesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetGeofencesQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGeofenceQueryQuery({
+ * const { data, loading, error } = useGetGeofencesQuery({
  *   variables: {
  *   },
  * });
  */
-export function useGeofenceQueryQuery(
-  baseOptions?: Apollo.QueryHookOptions<GeofenceQueryQuery, GeofenceQueryQueryVariables>,
+export function useGetGeofencesQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetGeofencesQuery, GetGeofencesQueryVariables>,
 ) {
-  return Apollo.useQuery<GeofenceQueryQuery, GeofenceQueryQueryVariables>(GeofenceQueryDocument, baseOptions);
+  return Apollo.useQuery<GetGeofencesQuery, GetGeofencesQueryVariables>(GetGeofencesDocument, baseOptions);
 }
-export function useGeofenceQueryLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<GeofenceQueryQuery, GeofenceQueryQueryVariables>,
+export function useGetGeofencesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetGeofencesQuery, GetGeofencesQueryVariables>,
 ) {
-  return Apollo.useLazyQuery<GeofenceQueryQuery, GeofenceQueryQueryVariables>(GeofenceQueryDocument, baseOptions);
+  return Apollo.useLazyQuery<GetGeofencesQuery, GetGeofencesQueryVariables>(GetGeofencesDocument, baseOptions);
 }
-export type GeofenceQueryQueryHookResult = ReturnType<typeof useGeofenceQueryQuery>;
-export type GeofenceQueryLazyQueryHookResult = ReturnType<typeof useGeofenceQueryLazyQuery>;
-export type GeofenceQueryQueryResult = Apollo.QueryResult<GeofenceQueryQuery, GeofenceQueryQueryVariables>;
-export const Document = gql`
-  query($id: String!) {
+export type GetGeofencesQueryHookResult = ReturnType<typeof useGetGeofencesQuery>;
+export type GetGeofencesLazyQueryHookResult = ReturnType<typeof useGetGeofencesLazyQuery>;
+export type GetGeofencesQueryResult = Apollo.QueryResult<GetGeofencesQuery, GetGeofencesQueryVariables>;
+export const GetUserDocument = gql`
+  query getUser($id: String!) {
     users_by_pk(id: $id) {
       id
       name
@@ -3152,27 +3154,27 @@ export const Document = gql`
 `;
 
 /**
- * __useQuery__
+ * __useGetUserQuery__
  *
- * To run a query within a React component, call `useQuery` and pass it any options that fit your needs.
- * When your component renders, `useQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetUserQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useQuery({
+ * const { data, loading, error } = useGetUserQuery({
  *   variables: {
  *      id: // value for 'id'
  *   },
  * });
  */
-export function useQuery(baseOptions: Apollo.QueryHookOptions<Query, QueryVariables>) {
-  return Apollo.useQuery<Query, QueryVariables>(Document, baseOptions);
+export function useGetUserQuery(baseOptions: Apollo.QueryHookOptions<GetUserQuery, GetUserQueryVariables>) {
+  return Apollo.useQuery<GetUserQuery, GetUserQueryVariables>(GetUserDocument, baseOptions);
 }
-export function useLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Query, QueryVariables>) {
-  return Apollo.useLazyQuery<Query, QueryVariables>(Document, baseOptions);
+export function useGetUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUserQuery, GetUserQueryVariables>) {
+  return Apollo.useLazyQuery<GetUserQuery, GetUserQueryVariables>(GetUserDocument, baseOptions);
 }
-export type QueryHookResult = ReturnType<typeof useQuery>;
-export type LazyQueryHookResult = ReturnType<typeof useLazyQuery>;
-export type QueryResult = Apollo.QueryResult<Query, QueryVariables>;
+export type GetUserQueryHookResult = ReturnType<typeof useGetUserQuery>;
+export type GetUserLazyQueryHookResult = ReturnType<typeof useGetUserLazyQuery>;
+export type GetUserQueryResult = Apollo.QueryResult<GetUserQuery, GetUserQueryVariables>;
