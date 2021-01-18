@@ -1,16 +1,14 @@
 import { FontAwesome5 } from '@expo/vector-icons';
 import * as Font from 'expo-font';
-import * as SplashScreen from 'expo-splash-screen';
 import * as React from 'react';
 
 const useCachedResources = () => {
-  const [isLoadingComplete, setLoadingComplete] = React.useState(false);
+  const [isLoadingAssets, setLoadingAssets] = React.useState(true);
 
   // Load any resources or data that we need prior to rendering the app
   React.useEffect(() => {
-    async function loadResourcesAndDataAsync() {
+    const loadResourcesAsync = async () => {
       try {
-        SplashScreen.preventAutoHideAsync();
         // Load fonts
         await Font.loadAsync({
           ...FontAwesome5.font,
@@ -19,15 +17,13 @@ const useCachedResources = () => {
         // We might want to provide this error information to an error reporting service
         console.warn(e);
       } finally {
-        setLoadingComplete(true);
-        SplashScreen.hideAsync();
+        setLoadingAssets(false);
       }
-    }
-
-    loadResourcesAndDataAsync();
+    };
+    loadResourcesAsync();
   }, []);
 
-  return isLoadingComplete;
+  return isLoadingAssets;
 };
 
 export default useCachedResources;

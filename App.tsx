@@ -7,12 +7,15 @@ import AuthProvider from './components/AuthProvider';
 import useCachedResources from './hooks/useCachedResources';
 import { apolloClient } from './lib/apollo';
 import AppNavigation from './navigation/RootNavigation';
+import * as SplashScreen from 'expo-splash-screen';
 
 export default function App() {
-  const isLoadingComplete = useCachedResources();
-
-  if (!isLoadingComplete) {
+  const isLoadingAssets = useCachedResources();
+  if (isLoadingAssets) {
+    SplashScreen.preventAutoHideAsync();
     return null;
+  } else {
+    SplashScreen.hideAsync();
   }
   return (
     <AuthProvider>

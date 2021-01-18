@@ -8,31 +8,34 @@ interface Props {
 
 interface AuthContextValues {
   user: User | null;
-  loading: boolean;
+  isLoadingUser: boolean;
 }
 
-export const AuthContext = React.createContext<AuthContextValues>({ user: null, loading: true });
+export const AuthContext = React.createContext<AuthContextValues>({ user: null, isLoadingUser: true });
 AuthContext.displayName = 'AuthContext';
 
 export const AuthProvider = ({ children }: Props) => {
   const [userAuthState, setUserAuthState] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [isLoadingUser, setLoadingUser] = useState(true);
 
   useEffect(() => {
-    Firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        setUserAuthState(user);
-        setLoading(false);
-      } else {
-        setUserAuthState(null);
-        setLoading(false);
-      }
-    });
+    const loadDataAsync = async () => {
+      await Firebase.auth().onAuthStateChanged((user) => {
+        if (user) {
+          setUserAuthState(user);
+          setLoadingUser(false);
+        } else {
+          setUserAuthState(null);
+          setLoadingUser(false);
+        }
+      });
+    };
+    loadDataAsync();
   }, []);
 
   const value: AuthContextValues = {
     user: userAuthState,
-    loading: loading,
+    isLoadingUser: isLoadingUser,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
