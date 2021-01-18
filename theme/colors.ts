@@ -1,7 +1,7 @@
 // Palette colors
 export const almostBlack = '#121212';
 export const green = '#5C913B';
-export const red = '#E74C3C';
+export const red = '#E74C3C'; // #DD2E44? Same as thumbnail
 export const blue = '#375A7F';
 export const orange = '#CD5000';
 export const yellow = '#FBBD2D';

@@ -1,4 +1,4 @@
-import { Ionicons } from '@expo/vector-icons';
+import { FontAwesome5 } from '@expo/vector-icons';
 import * as Font from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import * as React from 'react';
@@ -14,10 +14,10 @@ const useCachedResources = () => {
 
         // Load fonts
         await Font.loadAsync({
-          ...Ionicons.font,
-          // eslint-disable-next-line
-          'space-mono': require('../assets/fonts/SpaceMono-Regular.ttf'),
+          ...FontAwesome5.font,
         });
+
+        // Log in user
       } catch (e) {
         // We might want to provide this error information to an error reporting service
         console.warn(e);
