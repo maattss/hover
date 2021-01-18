@@ -7,8 +7,6 @@ import { RootTabParamList } from '../types/navigationTypes';
 import ExploreNavigator from './ExploreNavigator';
 import FeedNavigator from './FeedNavigator';
 import StatisticsNavigator from './StatisticsNavigator';
-import LocationBackgroundTask from '../tasks/LocationBackgroundTask';
-import NotifyWithinAreaTask from '../tasks/NotifyWithinAreaTask';
 
 const TabIcon = (props: { name: string; color: string }) => {
   return <FAIcon style={styles.tabicon} {...props} />;

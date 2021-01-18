@@ -19,10 +19,11 @@
     "ios": {
       "supportsTablet": true,
       "infoPlist": {
-        "UIBackgroundModes": ["location", "fetch"],
+        "UIBackgroundModes": ["location"],
+        "NSLocationAlwaysUsage": "YES",
         "NSLocationWhenInUseUsageDescription": "text",
         "NSLocationAlwaysAndWhenInUseUsageDescription": "text",
-        "NSLocationAlwaysUsageDescription": "text"
+        "NSLocationAlwaysUsageDescription": "I want to get your location Information in background"
       }
     },
     "android": {
