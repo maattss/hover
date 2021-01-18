@@ -1,11 +1,11 @@
 import React from 'react';
 import { View, StyleSheet, ActivityIndicator } from 'react-native';
-import { Spacing, Typography } from '../../theme';
+import { Colors, Spacing, Typography } from '../../theme';
 
 const LoadingScreen = () => {
   return (
     <View style={styles.container}>
-      <ActivityIndicator size={'large'} />
+      <ActivityIndicator size={'large'} color={Colors.blue} />
     </View>
   );
 };
