@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { NavigationContainer } from '@react-navigation/native';
 import { LOCATION, usePermissions } from 'expo-permissions';
+import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { User } from 'firebase';
 import Firebase from '../lib/firebase';
@@ -12,7 +12,6 @@ import LoginScreen from '../screens/auth/LoginScreen';
 import { DarkTheme } from '../theme/colors';
 import NotifyWithinAreaTask from '../tasks/NotifyWithinAreaTask';
 import { View, Text, ActivityIndicator, TouchableOpacity, StyleSheet } from 'react-native';
-import { Colors } from '../theme/colors';
 import { Buttons } from '../theme';
 
 export const RootStack = createStackNavigator<RootStackParamList>();
@@ -83,7 +82,6 @@ const styles = StyleSheet.create({
   page: {
     flex: 1,
     justifyContent: 'center',
-    backgroundColor: Colors.background,
     padding: 4,
   },
   box: {
