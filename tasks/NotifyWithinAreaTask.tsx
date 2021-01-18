@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import * as Location from 'expo-location';
-import { checkMultiPermissions } from '../helpers/checkPermissions';
 import { NOTIFY_WITHIN_AREA } from '../tasks';
 import { useQuery } from '@apollo/client';
 import { GET_GEOFENCES } from '../lib/queries/geoFenceQueries';
@@ -19,13 +18,10 @@ const NotifyWithinAreaTask = () => {
       setRegions(convertToRegion(data.geofences));
     }
   }, [data]);
-  useEffect(() => {
-    checkMultiPermissions().then(() => startLocationTracking());
-  }, [regions]);
 
-  const startLocationTracking = async () => {
-    await Location.startGeofencingAsync(NOTIFY_WITHIN_AREA, regions);
-  };
+  useEffect(() => {
+    if (regions) Location.startGeofencingAsync(NOTIFY_WITHIN_AREA, regions);
+  }, [regions]);
 
   if (fetchError) {
     console.log('Error:', fetchError);

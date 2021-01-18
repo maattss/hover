@@ -19,10 +19,11 @@
     "ios": {
       "supportsTablet": true,
       "infoPlist": {
-        "UIBackgroundModes": ["location", "fetch"],
+        "UIBackgroundModes": ["location"],
+        "NSLocationAlwaysUsage": "YES",
         "NSLocationWhenInUseUsageDescription": "text",
         "NSLocationAlwaysAndWhenInUseUsageDescription": "text",
-        "NSLocationAlwaysUsageDescription": "text"
+        "NSLocationAlwaysUsageDescription": "I want to get your location Information in background"
       }
     },
     "android": {
@@ -31,7 +32,8 @@
         "backgroundColor": "#FFFFFF"
       },
       "useNextNotificationsApi": true,
-      "permissions": ["ACCESS_COARSE_LOCATION", "ACCESS_FINE_LOCATION", "ACCESS_BACKGROUND_LOCATION"]
+      "permissions": ["ACCESS_COARSE_LOCATION", "ACCESS_FINE_LOCATION", "ACCESS_BACKGROUND_LOCATION"],
+      "package": "com.sirimykland.hover"
     },
     "web": {
       "favicon": "./assets/images/favicon.png"
