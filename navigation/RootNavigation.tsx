@@ -35,7 +35,7 @@ const MainContainer: React.FC = () => {
         <Text style={styles.paragraph}>To monitor your activity, we need access to background location.</Text>
       </View>
       {!permission ? (
-        <ActivityIndicator color={Colors.primary} />
+        <ActivityIndicator />
       ) : (
         <View style={styles.center}>
           <TouchableOpacity onPress={askPermission}>
