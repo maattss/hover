@@ -1,7 +1,9 @@
 /* eslint-disable */
 import * as Types from '../../types/types';
 
+import { UserFragmentFragment } from '../Fragments.generated';
 import { gql } from '@apollo/client';
+import { UserFragmentFragmentDoc } from '../Fragments.generated';
 import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -1139,7 +1141,29 @@ export enum Followings_Update_Column {
 export type Geofence_Variants = {
   readonly __typename: 'geofence_variants';
   readonly description?: Maybe<Scalars['String']>;
+  /** An array relationship */
+  readonly geofences: ReadonlyArray<Geofences>;
+  /** An aggregated array relationship */
+  readonly geofences_aggregate: Geofences_Aggregate;
   readonly name: Scalars['String'];
+};
+
+/** columns and relationships of "geofence_variants" */
+export type Geofence_VariantsGeofencesArgs = {
+  distinct_on?: Maybe<ReadonlyArray<Geofences_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<ReadonlyArray<Geofences_Order_By>>;
+  where?: Maybe<Geofences_Bool_Exp>;
+};
+
+/** columns and relationships of "geofence_variants" */
+export type Geofence_VariantsGeofences_AggregateArgs = {
+  distinct_on?: Maybe<ReadonlyArray<Geofences_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<ReadonlyArray<Geofences_Order_By>>;
+  where?: Maybe<Geofences_Bool_Exp>;
 };
 
 /** aggregated selection of "geofence_variants" */
@@ -1182,6 +1206,7 @@ export type Geofence_Variants_Bool_Exp = {
   readonly _not?: Maybe<Geofence_Variants_Bool_Exp>;
   readonly _or?: Maybe<ReadonlyArray<Maybe<Geofence_Variants_Bool_Exp>>>;
   readonly description?: Maybe<String_Comparison_Exp>;
+  readonly geofences?: Maybe<Geofences_Bool_Exp>;
   readonly name?: Maybe<String_Comparison_Exp>;
 };
 
@@ -1210,6 +1235,7 @@ export type Geofence_Variants_Enum_Comparison_Exp = {
 /** input type for inserting data into table "geofence_variants" */
 export type Geofence_Variants_Insert_Input = {
   readonly description?: Maybe<Scalars['String']>;
+  readonly geofences?: Maybe<Geofences_Arr_Rel_Insert_Input>;
   readonly name?: Maybe<Scalars['String']>;
 };
 
@@ -1264,6 +1290,7 @@ export type Geofence_Variants_On_Conflict = {
 /** ordering options when selecting data from "geofence_variants" */
 export type Geofence_Variants_Order_By = {
   readonly description?: Maybe<Order_By>;
+  readonly geofences_aggregate?: Maybe<Geofences_Aggregate_Order_By>;
   readonly name?: Maybe<Order_By>;
 };
 
@@ -1297,11 +1324,19 @@ export enum Geofence_Variants_Update_Column {
 /** columns and relationships of "geofences" */
 export type Geofences = {
   readonly __typename: 'geofences';
+  /** An array relationship */
+  readonly activities: ReadonlyArray<Activities>;
+  /** An aggregated array relationship */
+  readonly activities_aggregate: Activities_Aggregate;
   readonly category: Categories_Enum;
   /** Only for polygons */
   readonly coordinates?: Maybe<Scalars['String']>;
   readonly created_at: Scalars['timestamptz'];
   readonly description?: Maybe<Scalars['String']>;
+  /** An object relationship */
+  readonly geofenceByCategory: Categories;
+  /** An object relationship */
+  readonly geofence_variant: Geofence_Variants;
   readonly id: Scalars['Int'];
   readonly latitude: Scalars['float8'];
   readonly longitude: Scalars['float8'];
@@ -1309,6 +1344,24 @@ export type Geofences = {
   readonly radius: Scalars['float8'];
   readonly updated_at: Scalars['timestamptz'];
   readonly variant: Geofence_Variants_Enum;
+};
+
+/** columns and relationships of "geofences" */
+export type GeofencesActivitiesArgs = {
+  distinct_on?: Maybe<ReadonlyArray<Activities_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<ReadonlyArray<Activities_Order_By>>;
+  where?: Maybe<Activities_Bool_Exp>;
+};
+
+/** columns and relationships of "geofences" */
+export type GeofencesActivities_AggregateArgs = {
+  distinct_on?: Maybe<ReadonlyArray<Activities_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<ReadonlyArray<Activities_Order_By>>;
+  where?: Maybe<Activities_Bool_Exp>;
 };
 
 /** aggregated selection of "geofences" */
@@ -1383,10 +1436,13 @@ export type Geofences_Bool_Exp = {
   readonly _and?: Maybe<ReadonlyArray<Maybe<Geofences_Bool_Exp>>>;
   readonly _not?: Maybe<Geofences_Bool_Exp>;
   readonly _or?: Maybe<ReadonlyArray<Maybe<Geofences_Bool_Exp>>>;
+  readonly activities?: Maybe<Activities_Bool_Exp>;
   readonly category?: Maybe<Categories_Enum_Comparison_Exp>;
   readonly coordinates?: Maybe<String_Comparison_Exp>;
   readonly created_at?: Maybe<Timestamptz_Comparison_Exp>;
   readonly description?: Maybe<String_Comparison_Exp>;
+  readonly geofenceByCategory?: Maybe<Categories_Bool_Exp>;
+  readonly geofence_variant?: Maybe<Geofence_Variants_Bool_Exp>;
   readonly id?: Maybe<Int_Comparison_Exp>;
   readonly latitude?: Maybe<Float8_Comparison_Exp>;
   readonly longitude?: Maybe<Float8_Comparison_Exp>;
@@ -1412,10 +1468,13 @@ export type Geofences_Inc_Input = {
 
 /** input type for inserting data into table "geofences" */
 export type Geofences_Insert_Input = {
+  readonly activities?: Maybe<Activities_Arr_Rel_Insert_Input>;
   readonly category?: Maybe<Categories_Enum>;
   readonly coordinates?: Maybe<Scalars['String']>;
   readonly created_at?: Maybe<Scalars['timestamptz']>;
   readonly description?: Maybe<Scalars['String']>;
+  readonly geofenceByCategory?: Maybe<Categories_Obj_Rel_Insert_Input>;
+  readonly geofence_variant?: Maybe<Geofence_Variants_Obj_Rel_Insert_Input>;
   readonly id?: Maybe<Scalars['Int']>;
   readonly latitude?: Maybe<Scalars['float8']>;
   readonly longitude?: Maybe<Scalars['float8']>;
@@ -1503,10 +1562,13 @@ export type Geofences_On_Conflict = {
 
 /** ordering options when selecting data from "geofences" */
 export type Geofences_Order_By = {
+  readonly activities_aggregate?: Maybe<Activities_Aggregate_Order_By>;
   readonly category?: Maybe<Order_By>;
   readonly coordinates?: Maybe<Order_By>;
   readonly created_at?: Maybe<Order_By>;
   readonly description?: Maybe<Order_By>;
+  readonly geofenceByCategory?: Maybe<Categories_Order_By>;
+  readonly geofence_variant?: Maybe<Geofence_Variants_Order_By>;
   readonly id?: Maybe<Order_By>;
   readonly latitude?: Maybe<Order_By>;
   readonly longitude?: Maybe<Order_By>;
@@ -1710,9 +1772,13 @@ export type Geofences_Variance_Order_By = {
 /** columns and relationships of "likes" */
 export type Likes = {
   readonly __typename: 'likes';
+  /** An object relationship */
+  readonly activity: Activities;
   readonly activity_id: Scalars['Int'];
   readonly created_at?: Maybe<Scalars['timestamptz']>;
   readonly updated_at?: Maybe<Scalars['timestamptz']>;
+  /** An object relationship */
+  readonly user: Users;
   readonly user_id: Scalars['String'];
 };
 
@@ -1782,9 +1848,11 @@ export type Likes_Bool_Exp = {
   readonly _and?: Maybe<ReadonlyArray<Maybe<Likes_Bool_Exp>>>;
   readonly _not?: Maybe<Likes_Bool_Exp>;
   readonly _or?: Maybe<ReadonlyArray<Maybe<Likes_Bool_Exp>>>;
+  readonly activity?: Maybe<Activities_Bool_Exp>;
   readonly activity_id?: Maybe<Int_Comparison_Exp>;
   readonly created_at?: Maybe<Timestamptz_Comparison_Exp>;
   readonly updated_at?: Maybe<Timestamptz_Comparison_Exp>;
+  readonly user?: Maybe<Users_Bool_Exp>;
   readonly user_id?: Maybe<String_Comparison_Exp>;
 };
 
@@ -1803,9 +1871,11 @@ export type Likes_Inc_Input = {
 
 /** input type for inserting data into table "likes" */
 export type Likes_Insert_Input = {
+  readonly activity?: Maybe<Activities_Obj_Rel_Insert_Input>;
   readonly activity_id?: Maybe<Scalars['Int']>;
   readonly created_at?: Maybe<Scalars['timestamptz']>;
   readonly updated_at?: Maybe<Scalars['timestamptz']>;
+  readonly user?: Maybe<Users_Obj_Rel_Insert_Input>;
   readonly user_id?: Maybe<Scalars['String']>;
 };
 
@@ -1867,9 +1937,11 @@ export type Likes_On_Conflict = {
 
 /** ordering options when selecting data from "likes" */
 export type Likes_Order_By = {
+  readonly activity?: Maybe<Activities_Order_By>;
   readonly activity_id?: Maybe<Order_By>;
   readonly created_at?: Maybe<Order_By>;
   readonly updated_at?: Maybe<Order_By>;
+  readonly user?: Maybe<Users_Order_By>;
   readonly user_id?: Maybe<Order_By>;
 };
 
@@ -1999,10 +2071,10 @@ export type Mutation_Root = {
   readonly delete_categories?: Maybe<Categories_Mutation_Response>;
   /** delete single row from the table: "categories" */
   readonly delete_categories_by_pk?: Maybe<Categories>;
+  /** delete single row from the table: "comments" */
+  readonly delete_comment?: Maybe<Comments>;
   /** delete data from the table: "comments" */
   readonly delete_comments?: Maybe<Comments_Mutation_Response>;
-  /** delete single row from the table: "comments" */
-  readonly delete_comments_by_pk?: Maybe<Comments>;
   /** delete data from the table: "followings" */
   readonly delete_followings?: Maybe<Followings_Mutation_Response>;
   /** delete single row from the table: "followings" */
@@ -2019,10 +2091,10 @@ export type Mutation_Root = {
   readonly delete_likes?: Maybe<Likes_Mutation_Response>;
   /** delete single row from the table: "likes" */
   readonly delete_likes_by_pk?: Maybe<Likes>;
+  /** delete single row from the table: "users" */
+  readonly delete_user?: Maybe<Users>;
   /** delete data from the table: "users" */
   readonly delete_users?: Maybe<Users_Mutation_Response>;
-  /** delete single row from the table: "users" */
-  readonly delete_users_by_pk?: Maybe<Users>;
   /** insert data into the table: "activities" */
   readonly insert_activities?: Maybe<Activities_Mutation_Response>;
   /** insert a single row into the table: "activities" */
@@ -2031,10 +2103,10 @@ export type Mutation_Root = {
   readonly insert_categories?: Maybe<Categories_Mutation_Response>;
   /** insert a single row into the table: "categories" */
   readonly insert_categories_one?: Maybe<Categories>;
+  /** insert a single row into the table: "comments" */
+  readonly insert_comment?: Maybe<Comments>;
   /** insert data into the table: "comments" */
   readonly insert_comments?: Maybe<Comments_Mutation_Response>;
-  /** insert a single row into the table: "comments" */
-  readonly insert_comments_one?: Maybe<Comments>;
   /** insert data into the table: "followings" */
   readonly insert_followings?: Maybe<Followings_Mutation_Response>;
   /** insert a single row into the table: "followings" */
@@ -2051,10 +2123,10 @@ export type Mutation_Root = {
   readonly insert_likes?: Maybe<Likes_Mutation_Response>;
   /** insert a single row into the table: "likes" */
   readonly insert_likes_one?: Maybe<Likes>;
+  /** insert a single row into the table: "users" */
+  readonly insert_user?: Maybe<Users>;
   /** insert data into the table: "users" */
   readonly insert_users?: Maybe<Users_Mutation_Response>;
-  /** insert a single row into the table: "users" */
-  readonly insert_users_one?: Maybe<Users>;
   /** update data of the table: "activities" */
   readonly update_activities?: Maybe<Activities_Mutation_Response>;
   /** update single row of the table: "activities" */
@@ -2063,10 +2135,10 @@ export type Mutation_Root = {
   readonly update_categories?: Maybe<Categories_Mutation_Response>;
   /** update single row of the table: "categories" */
   readonly update_categories_by_pk?: Maybe<Categories>;
+  /** update single row of the table: "comments" */
+  readonly update_comment?: Maybe<Comments>;
   /** update data of the table: "comments" */
   readonly update_comments?: Maybe<Comments_Mutation_Response>;
-  /** update single row of the table: "comments" */
-  readonly update_comments_by_pk?: Maybe<Comments>;
   /** update data of the table: "followings" */
   readonly update_followings?: Maybe<Followings_Mutation_Response>;
   /** update single row of the table: "followings" */
@@ -2083,10 +2155,10 @@ export type Mutation_Root = {
   readonly update_likes?: Maybe<Likes_Mutation_Response>;
   /** update single row of the table: "likes" */
   readonly update_likes_by_pk?: Maybe<Likes>;
+  /** update single row of the table: "users" */
+  readonly update_user?: Maybe<Users>;
   /** update data of the table: "users" */
   readonly update_users?: Maybe<Users_Mutation_Response>;
-  /** update single row of the table: "users" */
-  readonly update_users_by_pk?: Maybe<Users>;
 };
 
 /** mutation root */
@@ -2110,13 +2182,13 @@ export type Mutation_RootDelete_Categories_By_PkArgs = {
 };
 
 /** mutation root */
-export type Mutation_RootDelete_CommentsArgs = {
-  where: Comments_Bool_Exp;
+export type Mutation_RootDelete_CommentArgs = {
+  comment_id: Scalars['Int'];
 };
 
 /** mutation root */
-export type Mutation_RootDelete_Comments_By_PkArgs = {
-  comment_id: Scalars['Int'];
+export type Mutation_RootDelete_CommentsArgs = {
+  where: Comments_Bool_Exp;
 };
 
 /** mutation root */
@@ -2162,13 +2234,13 @@ export type Mutation_RootDelete_Likes_By_PkArgs = {
 };
 
 /** mutation root */
-export type Mutation_RootDelete_UsersArgs = {
-  where: Users_Bool_Exp;
+export type Mutation_RootDelete_UserArgs = {
+  id: Scalars['String'];
 };
 
 /** mutation root */
-export type Mutation_RootDelete_Users_By_PkArgs = {
-  id: Scalars['String'];
+export type Mutation_RootDelete_UsersArgs = {
+  where: Users_Bool_Exp;
 };
 
 /** mutation root */
@@ -2196,14 +2268,14 @@ export type Mutation_RootInsert_Categories_OneArgs = {
 };
 
 /** mutation root */
-export type Mutation_RootInsert_CommentsArgs = {
-  objects: ReadonlyArray<Comments_Insert_Input>;
+export type Mutation_RootInsert_CommentArgs = {
+  object: Comments_Insert_Input;
   on_conflict?: Maybe<Comments_On_Conflict>;
 };
 
 /** mutation root */
-export type Mutation_RootInsert_Comments_OneArgs = {
-  object: Comments_Insert_Input;
+export type Mutation_RootInsert_CommentsArgs = {
+  objects: ReadonlyArray<Comments_Insert_Input>;
   on_conflict?: Maybe<Comments_On_Conflict>;
 };
 
@@ -2256,14 +2328,14 @@ export type Mutation_RootInsert_Likes_OneArgs = {
 };
 
 /** mutation root */
-export type Mutation_RootInsert_UsersArgs = {
-  objects: ReadonlyArray<Users_Insert_Input>;
+export type Mutation_RootInsert_UserArgs = {
+  object: Users_Insert_Input;
   on_conflict?: Maybe<Users_On_Conflict>;
 };
 
 /** mutation root */
-export type Mutation_RootInsert_Users_OneArgs = {
-  object: Users_Insert_Input;
+export type Mutation_RootInsert_UsersArgs = {
+  objects: ReadonlyArray<Users_Insert_Input>;
   on_conflict?: Maybe<Users_On_Conflict>;
 };
 
@@ -2294,17 +2366,17 @@ export type Mutation_RootUpdate_Categories_By_PkArgs = {
 };
 
 /** mutation root */
+export type Mutation_RootUpdate_CommentArgs = {
+  _inc?: Maybe<Comments_Inc_Input>;
+  _set?: Maybe<Comments_Set_Input>;
+  pk_columns: Comments_Pk_Columns_Input;
+};
+
+/** mutation root */
 export type Mutation_RootUpdate_CommentsArgs = {
   _inc?: Maybe<Comments_Inc_Input>;
   _set?: Maybe<Comments_Set_Input>;
   where: Comments_Bool_Exp;
-};
-
-/** mutation root */
-export type Mutation_RootUpdate_Comments_By_PkArgs = {
-  _inc?: Maybe<Comments_Inc_Input>;
-  _set?: Maybe<Comments_Set_Input>;
-  pk_columns: Comments_Pk_Columns_Input;
 };
 
 /** mutation root */
@@ -2360,15 +2432,15 @@ export type Mutation_RootUpdate_Likes_By_PkArgs = {
 };
 
 /** mutation root */
-export type Mutation_RootUpdate_UsersArgs = {
+export type Mutation_RootUpdate_UserArgs = {
   _set?: Maybe<Users_Set_Input>;
-  where: Users_Bool_Exp;
+  pk_columns: Users_Pk_Columns_Input;
 };
 
 /** mutation root */
-export type Mutation_RootUpdate_Users_By_PkArgs = {
+export type Mutation_RootUpdate_UsersArgs = {
   _set?: Maybe<Users_Set_Input>;
-  pk_columns: Users_Pk_Columns_Input;
+  where: Users_Bool_Exp;
 };
 
 /** column ordering options */
@@ -2402,12 +2474,12 @@ export type Query_Root = {
   readonly categories_aggregate: Categories_Aggregate;
   /** fetch data from the table: "categories" using primary key columns */
   readonly categories_by_pk?: Maybe<Categories>;
+  /** fetch data from the table: "comments" using primary key columns */
+  readonly comment?: Maybe<Comments>;
   /** fetch data from the table: "comments" */
   readonly comments: ReadonlyArray<Comments>;
   /** fetch aggregated fields from the table: "comments" */
   readonly comments_aggregate: Comments_Aggregate;
-  /** fetch data from the table: "comments" using primary key columns */
-  readonly comments_by_pk?: Maybe<Comments>;
   /** fetch data from the table: "followings" */
   readonly followings: ReadonlyArray<Followings>;
   /** fetch aggregated fields from the table: "followings" */
@@ -2432,12 +2504,12 @@ export type Query_Root = {
   readonly likes_aggregate: Likes_Aggregate;
   /** fetch data from the table: "likes" using primary key columns */
   readonly likes_by_pk?: Maybe<Likes>;
+  /** fetch data from the table: "users" using primary key columns */
+  readonly user?: Maybe<Users>;
   /** fetch data from the table: "users" */
   readonly users: ReadonlyArray<Users>;
   /** fetch aggregated fields from the table: "users" */
   readonly users_aggregate: Users_Aggregate;
-  /** fetch data from the table: "users" using primary key columns */
-  readonly users_by_pk?: Maybe<Users>;
 };
 
 /** query root */
@@ -2487,6 +2559,11 @@ export type Query_RootCategories_By_PkArgs = {
 };
 
 /** query root */
+export type Query_RootCommentArgs = {
+  comment_id: Scalars['Int'];
+};
+
+/** query root */
 export type Query_RootCommentsArgs = {
   distinct_on?: Maybe<ReadonlyArray<Comments_Select_Column>>;
   limit?: Maybe<Scalars['Int']>;
@@ -2502,11 +2579,6 @@ export type Query_RootComments_AggregateArgs = {
   offset?: Maybe<Scalars['Int']>;
   order_by?: Maybe<ReadonlyArray<Comments_Order_By>>;
   where?: Maybe<Comments_Bool_Exp>;
-};
-
-/** query root */
-export type Query_RootComments_By_PkArgs = {
-  comment_id: Scalars['Int'];
 };
 
 /** query root */
@@ -2604,6 +2676,11 @@ export type Query_RootLikes_By_PkArgs = {
 };
 
 /** query root */
+export type Query_RootUserArgs = {
+  id: Scalars['String'];
+};
+
+/** query root */
 export type Query_RootUsersArgs = {
   distinct_on?: Maybe<ReadonlyArray<Users_Select_Column>>;
   limit?: Maybe<Scalars['Int']>;
@@ -2621,11 +2698,6 @@ export type Query_RootUsers_AggregateArgs = {
   where?: Maybe<Users_Bool_Exp>;
 };
 
-/** query root */
-export type Query_RootUsers_By_PkArgs = {
-  id: Scalars['String'];
-};
-
 /** subscription root */
 export type Subscription_Root = {
   readonly __typename: 'subscription_root';
@@ -2641,12 +2713,12 @@ export type Subscription_Root = {
   readonly categories_aggregate: Categories_Aggregate;
   /** fetch data from the table: "categories" using primary key columns */
   readonly categories_by_pk?: Maybe<Categories>;
+  /** fetch data from the table: "comments" using primary key columns */
+  readonly comment?: Maybe<Comments>;
   /** fetch data from the table: "comments" */
   readonly comments: ReadonlyArray<Comments>;
   /** fetch aggregated fields from the table: "comments" */
   readonly comments_aggregate: Comments_Aggregate;
-  /** fetch data from the table: "comments" using primary key columns */
-  readonly comments_by_pk?: Maybe<Comments>;
   /** fetch data from the table: "followings" */
   readonly followings: ReadonlyArray<Followings>;
   /** fetch aggregated fields from the table: "followings" */
@@ -2671,12 +2743,12 @@ export type Subscription_Root = {
   readonly likes_aggregate: Likes_Aggregate;
   /** fetch data from the table: "likes" using primary key columns */
   readonly likes_by_pk?: Maybe<Likes>;
+  /** fetch data from the table: "users" using primary key columns */
+  readonly user?: Maybe<Users>;
   /** fetch data from the table: "users" */
   readonly users: ReadonlyArray<Users>;
   /** fetch aggregated fields from the table: "users" */
   readonly users_aggregate: Users_Aggregate;
-  /** fetch data from the table: "users" using primary key columns */
-  readonly users_by_pk?: Maybe<Users>;
 };
 
 /** subscription root */
@@ -2726,6 +2798,11 @@ export type Subscription_RootCategories_By_PkArgs = {
 };
 
 /** subscription root */
+export type Subscription_RootCommentArgs = {
+  comment_id: Scalars['Int'];
+};
+
+/** subscription root */
 export type Subscription_RootCommentsArgs = {
   distinct_on?: Maybe<ReadonlyArray<Comments_Select_Column>>;
   limit?: Maybe<Scalars['Int']>;
@@ -2741,11 +2818,6 @@ export type Subscription_RootComments_AggregateArgs = {
   offset?: Maybe<Scalars['Int']>;
   order_by?: Maybe<ReadonlyArray<Comments_Order_By>>;
   where?: Maybe<Comments_Bool_Exp>;
-};
-
-/** subscription root */
-export type Subscription_RootComments_By_PkArgs = {
-  comment_id: Scalars['Int'];
 };
 
 /** subscription root */
@@ -2843,6 +2915,11 @@ export type Subscription_RootLikes_By_PkArgs = {
 };
 
 /** subscription root */
+export type Subscription_RootUserArgs = {
+  id: Scalars['String'];
+};
+
+/** subscription root */
 export type Subscription_RootUsersArgs = {
   distinct_on?: Maybe<ReadonlyArray<Users_Select_Column>>;
   limit?: Maybe<Scalars['Int']>;
@@ -2858,11 +2935,6 @@ export type Subscription_RootUsers_AggregateArgs = {
   offset?: Maybe<Scalars['Int']>;
   order_by?: Maybe<ReadonlyArray<Users_Order_By>>;
   where?: Maybe<Users_Bool_Exp>;
-};
-
-/** subscription root */
-export type Subscription_RootUsers_By_PkArgs = {
-  id: Scalars['String'];
 };
 
 /** expression to compare columns of type timestamp. All fields are combined with logical 'AND'. */
@@ -3170,17 +3242,16 @@ export type UserQueryVariables = Types.Exact<{
 }>;
 
 export type UserQuery = { readonly __typename: 'query_root' } & {
-  readonly users_by_pk?: Types.Maybe<{ readonly __typename: 'users' } & Pick<Types.Users, 'id' | 'name' | 'bio'>>;
+  readonly user?: Types.Maybe<{ readonly __typename: 'users' } & UserFragmentFragment>;
 };
 
 export const UserDocument = gql`
   query User($id: String!) {
-    users_by_pk(id: $id) {
-      id
-      name
-      bio
+    user(id: $id) {
+      ...userFragment
     }
   }
+  ${UserFragmentFragmentDoc}
 `;
 
 /**

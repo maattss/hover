@@ -1,14 +1,27 @@
-fragment userFragment on users {
+fragment basicUserFragment on users {
   id
   email
   name
   bio
+}
+
+fragment userFragment on users {
+  ...basicUserFragment
   created_at
   updated_at
   followers {
     follower {
-      id
-      name
+      ...basicUserFragment
+    }
+  }
+  followers_aggregate {
+    aggregate {
+      count(distinct: true, columns: user_id)
+    }
+  }
+  following {
+    user {
+      ...basicUserFragment
     }
   }
   following_aggregate {
@@ -16,56 +29,46 @@ fragment userFragment on users {
       count(distinct: true, columns: user_id)
     }
   }
-  following {
-    user {
-      id
-      name
-    }
-  }
   activities {
-    ...activitiesFragment
+    ...activityFragment
   }
 }
 
-fragment activitityFragment on activities {
+fragment activityFragment on activities {
   activity_id
   category
   caption
   comments {
-   ...commentsFragments
+    ...commentFragment
   }
   geofence {
-  ...geofenceFragment
+    ...geofenceFragment
   }
   created_at
   updated_at
 }
 
-fragment commentFragment on activities {
-    comment_id
-    activity_id
-    content
-    user {
-      ...userFragment
-    }
+fragment commentFragment on comments {
+  comment_id
+  activity_id
+  content
+  user {
+    ...basicUserFragment
+  }
   created_at
   updated_at
 }
 
-fragment geofencesFragment on geofences {
-    id
-    name
-    category
-    coordinates
-    description
-    latitude
-    longitude
-    radius
-    variant
-    created_at
-    updated_at
-}
-
-fragment geofenceVariantsFragment on geofenceVariants {
-    description
+fragment geofenceFragment on geofences {
+  id
+  name
+  category
+  coordinates
+  description
+  latitude
+  longitude
+  radius
+  variant
+  created_at
+  updated_at
 }

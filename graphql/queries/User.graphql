@@ -1,5 +1,5 @@
 query User($id: String!) {
-  users(id: $id) {
+  user(id: $id) {
     ...userFragment
   }
 }

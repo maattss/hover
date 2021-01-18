@@ -1,10 +1,7 @@
 /* eslint-disable */
-import * as Types from '../../types/types';
+import * as Types from '../types/types';
 
-import { BasicUserFragmentFragment } from '../Fragments.generated';
 import { gql } from '@apollo/client';
-import { BasicUserFragmentFragmentDoc } from '../Fragments.generated';
-import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
@@ -3237,47 +3234,145 @@ export enum Users_Update_Column {
   UpdatedAt = 'updated_at',
 }
 
-export type UpdateUserMutationVariables = Types.Exact<{
-  id: Types.Scalars['String'];
-  name: Types.Scalars['String'];
-  bio: Types.Scalars['String'];
-}>;
+export type BasicUserFragmentFragment = { readonly __typename: 'users' } & Pick<
+  Types.Users,
+  'id' | 'email' | 'name' | 'bio'
+>;
 
-export type UpdateUserMutation = { readonly __typename: 'mutation_root' } & {
-  readonly update_user?: Types.Maybe<{ readonly __typename: 'users' } & BasicUserFragmentFragment>;
-};
+export type UserFragmentFragment = { readonly __typename: 'users' } & Pick<Types.Users, 'created_at' | 'updated_at'> & {
+    readonly followers: ReadonlyArray<
+      { readonly __typename: 'followings' } & {
+        readonly follower: { readonly __typename: 'users' } & BasicUserFragmentFragment;
+      }
+    >;
+    readonly followers_aggregate: { readonly __typename: 'followings_aggregate' } & {
+      readonly aggregate?: Types.Maybe<
+        { readonly __typename: 'followings_aggregate_fields' } & Pick<Types.Followings_Aggregate_Fields, 'count'>
+      >;
+    };
+    readonly following: ReadonlyArray<
+      { readonly __typename: 'followings' } & {
+        readonly user: { readonly __typename: 'users' } & BasicUserFragmentFragment;
+      }
+    >;
+    readonly following_aggregate: { readonly __typename: 'followings_aggregate' } & {
+      readonly aggregate?: Types.Maybe<
+        { readonly __typename: 'followings_aggregate_fields' } & Pick<Types.Followings_Aggregate_Fields, 'count'>
+      >;
+    };
+    readonly activities: ReadonlyArray<{ readonly __typename: 'activities' } & ActivityFragmentFragment>;
+  } & BasicUserFragmentFragment;
 
-export const UpdateUserDocument = gql`
-  mutation UpdateUser($id: String!, $name: String!, $bio: String!) {
-    update_user(pk_columns: { id: $id }, _set: { name: $name, bio: $bio }) {
+export type ActivityFragmentFragment = { readonly __typename: 'activities' } & Pick<
+  Types.Activities,
+  'activity_id' | 'category' | 'caption' | 'created_at' | 'updated_at'
+> & {
+    readonly comments: ReadonlyArray<{ readonly __typename: 'comments' } & CommentFragmentFragment>;
+    readonly geofence: { readonly __typename: 'geofences' } & GeofenceFragmentFragment;
+  };
+
+export type CommentFragmentFragment = { readonly __typename: 'comments' } & Pick<
+  Types.Comments,
+  'comment_id' | 'activity_id' | 'content' | 'created_at' | 'updated_at'
+> & { readonly user: { readonly __typename: 'users' } & BasicUserFragmentFragment };
+
+export type GeofenceFragmentFragment = { readonly __typename: 'geofences' } & Pick<
+  Types.Geofences,
+  | 'id'
+  | 'name'
+  | 'category'
+  | 'coordinates'
+  | 'description'
+  | 'latitude'
+  | 'longitude'
+  | 'radius'
+  | 'variant'
+  | 'created_at'
+  | 'updated_at'
+>;
+
+export const BasicUserFragmentFragmentDoc = gql`
+  fragment basicUserFragment on users {
+    id
+    email
+    name
+    bio
+  }
+`;
+export const CommentFragmentFragmentDoc = gql`
+  fragment commentFragment on comments {
+    comment_id
+    activity_id
+    content
+    user {
       ...basicUserFragment
     }
+    created_at
+    updated_at
   }
   ${BasicUserFragmentFragmentDoc}
 `;
-
-/**
- * __useUpdateUserMutation__
- *
- * To run a mutation, you first call `useUpdateUserMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateUserMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateUserMutation, { data, loading, error }] = useUpdateUserMutation({
- *   variables: {
- *      id: // value for 'id'
- *      name: // value for 'name'
- *      bio: // value for 'bio'
- *   },
- * });
- */
-export function useUpdateUserMutation(
-  baseOptions?: Apollo.MutationHookOptions<UpdateUserMutation, UpdateUserMutationVariables>,
-) {
-  return Apollo.useMutation<UpdateUserMutation, UpdateUserMutationVariables>(UpdateUserDocument, baseOptions);
-}
-export type UpdateUserMutationHookResult = ReturnType<typeof useUpdateUserMutation>;
+export const GeofenceFragmentFragmentDoc = gql`
+  fragment geofenceFragment on geofences {
+    id
+    name
+    category
+    coordinates
+    description
+    latitude
+    longitude
+    radius
+    variant
+    created_at
+    updated_at
+  }
+`;
+export const ActivityFragmentFragmentDoc = gql`
+  fragment activityFragment on activities {
+    activity_id
+    category
+    caption
+    comments {
+      ...commentFragment
+    }
+    geofence {
+      ...geofenceFragment
+    }
+    created_at
+    updated_at
+  }
+  ${CommentFragmentFragmentDoc}
+  ${GeofenceFragmentFragmentDoc}
+`;
+export const UserFragmentFragmentDoc = gql`
+  fragment userFragment on users {
+    ...basicUserFragment
+    created_at
+    updated_at
+    followers {
+      follower {
+        ...basicUserFragment
+      }
+    }
+    followers_aggregate {
+      aggregate {
+        count(distinct: true, columns: user_id)
+      }
+    }
+    following {
+      user {
+        ...basicUserFragment
+      }
+    }
+    following_aggregate {
+      aggregate {
+        count(distinct: true, columns: user_id)
+      }
+    }
+    activities {
+      ...activityFragment
+    }
+  }
+  ${BasicUserFragmentFragmentDoc}
+  ${ActivityFragmentFragmentDoc}
+`;

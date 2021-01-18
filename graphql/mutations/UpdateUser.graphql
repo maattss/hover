@@ -1,5 +1,5 @@
 mutation UpdateUser($id: String!, $name: String!, $bio: String!) {
   update_user(pk_columns: { id: $id }, _set: { name: $name, bio: $bio }) {
-    ...userFragment
+    ...basicUserFragment
   }
 }
