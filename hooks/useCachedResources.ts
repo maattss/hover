@@ -2,7 +2,6 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import * as Font from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import * as React from 'react';
-import Firebase from '../lib/firebase';
 
 const useCachedResources = () => {
   const [isLoadingComplete, setLoadingComplete] = React.useState(false);
@@ -12,18 +11,6 @@ const useCachedResources = () => {
     async function loadResourcesAndDataAsync() {
       try {
         SplashScreen.preventAutoHideAsync();
-        Firebase.auth().onAuthStateChanged((user) => {
-          if (user) {
-            setUserAuthState(user);
-          } else {
-            setUserAuthState(null);
-          }
-        });
-        if (!Firebase.auth().currentUser && !userAuthState) {
-          setLoading(true);
-        } else {
-          setLoading(false);
-        }
 
         // Load fonts
         await Font.loadAsync({

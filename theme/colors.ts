@@ -4,7 +4,7 @@ import { Theme } from '@react-navigation/native';
 export const almostBlack = '#121212';
 export const almostWhite = '#E5E5E7';
 export const green = '#28A745';
-export const red = '#CB2431'; // #DD2E44? Same as thumbnail
+export const red = '#DD2E44';
 export const blue = '#0366d6';
 export const orange = '#CD5000';
 export const yellow = '#FBBD2D';
