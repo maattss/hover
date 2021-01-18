@@ -1,0 +1,71 @@
+fragment userFragment on users {
+  id
+  email
+  name
+  bio
+  created_at
+  updated_at
+  followers {
+    follower {
+      id
+      name
+    }
+  }
+  following_aggregate {
+    aggregate {
+      count(distinct: true, columns: user_id)
+    }
+  }
+  following {
+    user {
+      id
+      name
+    }
+  }
+  activities {
+    ...activitiesFragment
+  }
+}
+
+fragment activitityFragment on activities {
+  activity_id
+  category
+  caption
+  comments {
+   ...commentsFragments
+  }
+  geofence {
+  ...geofenceFragment
+  }
+  created_at
+  updated_at
+}
+
+fragment commentFragment on activities {
+    comment_id
+    activity_id
+    content
+    user {
+      ...userFragment
+    }
+  created_at
+  updated_at
+}
+
+fragment geofencesFragment on geofences {
+    id
+    name
+    category
+    coordinates
+    description
+    latitude
+    longitude
+    radius
+    variant
+    created_at
+    updated_at
+}
+
+fragment geofenceVariantsFragment on geofenceVariants {
+    description
+}
