@@ -42,7 +42,7 @@ const MapScreen: React.FC = () => {
         if (obj.variant === 'CIRCLE') {
           fetchedGeoFences.push({
             name: obj.name,
-            description: obj.description,
+            description: obj.description ? obj.description : '',
             latitude: obj.latitude,
             longitude: obj.longitude,
             category: GeoFenceCategory[obj.category as keyof typeof GeoFenceCategory],
@@ -61,7 +61,7 @@ const MapScreen: React.FC = () => {
           }
           fetchedGeoFences.push({
             name: obj.name,
-            description: obj.description,
+            description: obj.description ? obj.description : '',
             latitude: obj.latitude,
             longitude: obj.longitude,
             category: GeoFenceCategory[obj.category as keyof typeof GeoFenceCategory],
