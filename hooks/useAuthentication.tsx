@@ -1,9 +1,5 @@
-import * as React from 'react';
-import { User } from 'firebase';
-import Firebase from '../lib/firebase';
-
-const AuthContext = React.createContext<User | null>(null);
-AuthContext.displayName = 'AuthContext';
+import React from 'react';
+import { AuthContext } from '../components/AuthProvider';
 
 const useAuthentication = () => {
   const authentication = React.useContext(AuthContext);

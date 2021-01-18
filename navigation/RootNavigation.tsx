@@ -7,6 +7,7 @@ import { RootStackParamList } from '../types/navigationTypes';
 import TabNavigator from './TabNavigator';
 import SignupScreen from '../screens/auth/SignUpScreen';
 import LoginScreen from '../screens/auth/LoginScreen';
+import useAuthentication from '../hooks/useAuthentication';
 
 export const RootStack = createStackNavigator<RootStackParamList>();
 
