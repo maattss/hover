@@ -24,7 +24,7 @@ const LoginScreen = ({ navigation }: StackScreenProps<RootStackParamList, 'Login
   if (loading) {
     return (
       <View style={styles.container}>
-        <ActivityIndicator size={'large'} />
+        <ActivityIndicator size={'large'} color={Colors.blue} />
         <Text style={styles.infoText}>Logging you in... Please wait</Text>
       </View>
     );
