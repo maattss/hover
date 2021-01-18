@@ -11,12 +11,13 @@ import { DarkTheme } from '../theme/colors';
 export const RootStack = createStackNavigator<RootStackParamList>();
 
 const AppNavigation: React.FC = () => {
-  const user = useAuthentication();
-
+  const { user, loading } = useAuthentication();
+  console.log(user);
+  console.log(loading);
   return (
     <NavigationContainer theme={DarkTheme}>
       <RootStack.Navigator screenOptions={{ headerShown: false }}>
-        {user ? (
+        {user || loading ? (
           <RootStack.Screen name="Main" component={TabNavigator} />
         ) : (
           <>
