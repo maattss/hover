@@ -11,93 +11,102 @@ import {
   Alert,
   ScrollView,
 } from 'react-native';
-import Firebase from '../../lib/firebase';
 import { Buttons, Colors, Spacing, Typography } from '../../theme';
 import { SettingsProps } from './SettingsMenuScreen';
 import { useUserQuery } from '../../graphql/queries/User.generated';
 import { useUpdateUserMutation } from '../../graphql/mutations/UpdateUser.generated';
+import useAuthentication from '../../hooks/useAuthentication';
 
 const UserSettingsScreen: React.FC<SettingsProps> = ({ navigation }: SettingsProps) => {
-  const id = Firebase.auth().currentUser?.uid;
-  const [name, setName] = useState('');
-  const [bio, setBio] = useState('');
-  const { loading: fetchLoading, error: fetchError, data } = useUserQuery({
-    variables: {
-      id: id,
-    },
-  });
-  const [updateUser, { loading: mutationLoading, error: mutationError, data: response }] = useUpdateUserMutation();
-
-  useEffect(() => {
-    if (data) {
-      setName(data.users_by_pk?.name ? data.users_by_pk?.name : '');
-      setBio(data.users_by_pk?.bio ? data.users_by_pk?.bio : '');
-    }
-    if (response) {
-      setName(response.update_users_by_pk?.name ? response.update_users_by_pk?.name : '');
-      setBio(response.update_users_by_pk?.bio ? response.update_users_by_pk?.bio : '');
-    }
-  }, [data, response]);
-
-  if (fetchError || mutationError) {
-    console.error(fetchError || mutationError);
-    Alert.alert('Error', fetchError?.message || mutationError?.message);
-  }
-  if (fetchLoading || mutationLoading)
+  const id = useAuthentication().user?.uid;
+  if (!id) {
+    console.error('Error: User is', id);
     return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator size={'large'} color={Colors.blue} />
       </View>
     );
-  return (
-    <ScrollView keyboardShouldPersistTaps="handled">
-      <View style={styles.container}>
-        <View style={styles.formContainer}>
-          <View style={styles.formRow}>
-            <View style={styles.labelContainer}>
-              <Text style={styles.labelText}>Name</Text>
-            </View>
-            <TextInput
-              placeholder={'What is your name?'}
-              value={name}
-              onChangeText={(val) => setName(val)}
-              style={styles.formField}
-            />
-          </View>
-          <View style={styles.formRow}>
-            <View style={styles.labelContainer}>
-              <Text style={styles.labelText}>Bio</Text>
-            </View>
-            <TextInput
-              placeholder={'Tell me something about yourself!'}
-              value={bio}
-              onChangeText={(val) => setBio(val)}
-              style={styles.formFieldMultiLine}
-              multiline={true}
-              numberOfLines={3}
-            />
-          </View>
-          <TouchableOpacity
-            style={[styles.editButton]}
-            onPress={() => {
-              updateUser({
-                variables: {
-                  id,
-                  name,
-                  bio,
-                },
-              })
-                .finally(() => navigation.goBack())
-                .catch((error) => {
-                  console.error(error.message);
-                });
-            }}>
-            <Text style={{ ...Buttons.buttonText }}>Save</Text>
-          </TouchableOpacity>
+  } else {
+    const [name, setName] = useState('');
+    const [bio, setBio] = useState('');
+    const { loading: fetchLoading, error: fetchError, data } = useUserQuery({
+      variables: {
+        id: id,
+      },
+    });
+    const [updateUser, { loading: mutationLoading, error: mutationError, data: response }] = useUpdateUserMutation();
+
+    useEffect(() => {
+      if (data) {
+        setName(data.users_by_pk?.name ? data.users_by_pk?.name : '');
+        setBio(data.users_by_pk?.bio ? data.users_by_pk?.bio : '');
+      }
+      if (response) {
+        setName(response.update_users_by_pk?.name ? response.update_users_by_pk?.name : '');
+        setBio(response.update_users_by_pk?.bio ? response.update_users_by_pk?.bio : '');
+      }
+    }, [data, response]);
+
+    if (fetchError || mutationError) {
+      console.error(fetchError || mutationError);
+      Alert.alert('Error', fetchError?.message || mutationError?.message);
+    }
+    if (fetchLoading || mutationLoading)
+      return (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size={'large'} color={Colors.blue} />
         </View>
-      </View>
-    </ScrollView>
-  );
+      );
+    return (
+      <ScrollView keyboardShouldPersistTaps="handled">
+        <View style={styles.container}>
+          <View style={styles.formContainer}>
+            <View style={styles.formRow}>
+              <View style={styles.labelContainer}>
+                <Text style={styles.labelText}>Name</Text>
+              </View>
+              <TextInput
+                placeholder={'What is your name?'}
+                value={name}
+                onChangeText={(val) => setName(val)}
+                style={styles.formField}
+              />
+            </View>
+            <View style={styles.formRow}>
+              <View style={styles.labelContainer}>
+                <Text style={styles.labelText}>Bio</Text>
+              </View>
+              <TextInput
+                placeholder={'Tell me something about yourself!'}
+                value={bio}
+                onChangeText={(val) => setBio(val)}
+                style={styles.formFieldMultiLine}
+                multiline={true}
+                numberOfLines={3}
+              />
+            </View>
+            <TouchableOpacity
+              style={[styles.editButton]}
+              onPress={() => {
+                updateUser({
+                  variables: {
+                    id,
+                    name,
+                    bio,
+                  },
+                })
+                  .finally(() => navigation.goBack())
+                  .catch((error) => {
+                    console.error(error.message);
+                  });
+              }}>
+              <Text style={{ ...Buttons.buttonText }}>Save</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </ScrollView>
+    );
+  }
 };
 export default UserSettingsScreen;
 
