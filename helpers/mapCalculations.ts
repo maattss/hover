@@ -1,6 +1,7 @@
 import { Coordinate, LatLng } from 'react-native-maps';
 import { PolygonGeoFence, CircleGeoFence } from '../types/geoFenceTypes';
 import { LocationRegion } from 'expo-location';
+import { Geofences } from '../types/types';
 
 export const isInsideCircle = (userLocation: LatLng, geoFence: CircleGeoFence) => {
   const distance = measureCircleDistance(
@@ -49,12 +50,12 @@ export const estimatedRadius = (coordinates: Coordinate[]) => {
   return Math.sqrt(biggestLength);
 };
 
-export const convertToRegion = (geofences: any): LocationRegion[] => {
+export const convertToRegion = (geofences: Geofences[]): LocationRegion[] => {
   const fetchedGeoFences: LocationRegion[] = [];
   for (const obj of geofences) {
     if (obj.variant === 'CIRCLE') {
       fetchedGeoFences.push({
-        identifier: obj.id,
+        identifier: obj.id.toString(),
         latitude: obj.latitude,
         longitude: obj.longitude,
         radius: obj.radius,
@@ -62,14 +63,15 @@ export const convertToRegion = (geofences: any): LocationRegion[] => {
         notifyOnExit: true,
       });
     } else if (obj.variant === 'POLYGON') {
-      const coordinatesRaw: string = obj.coordinates.split(',');
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      const coordinatesRaw = obj.coordinates!.split(',');
       const coordinates: Coordinate[] = [];
       for (let i = 0; i < coordinatesRaw.length; i = i + 2) {
         coordinates.push([+coordinatesRaw[i], +coordinatesRaw[i + 1]]);
       }
       console.log('Radius:', obj.radius, '      EstimatedRadius:', estimatedRadius(coordinates));
       fetchedGeoFences.push({
-        identifier: obj.id,
+        identifier: obj.id.toString(),
         latitude: obj.latitude,
         longitude: obj.longitude,
         radius: obj.radius ? obj.radius : estimatedRadius(coordinates),
