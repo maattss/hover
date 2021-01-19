@@ -42,7 +42,7 @@ const SignUpScreen = ({ navigation }: StackScreenProps<RootStackParamList, 'Sign
   if (loading) {
     return (
       <View style={styles.container}>
-        <ActivityIndicator size={'large'} />
+        <ActivityIndicator size={'large'} color={Colors.blue} />
         <Text style={styles.infoText}>Signing up... Please wait</Text>
         <TouchableOpacity style={styles.cancelButton} onPress={handleCancel}>
           <Text style={{ ...Buttons.buttonText }}>Cancel</Text>
