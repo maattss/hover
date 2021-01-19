@@ -3239,33 +3239,28 @@ export type BasicUserFragmentFragment = { readonly __typename: 'users' } & Pick<
   'id' | 'email' | 'name' | 'bio'
 >;
 
-export type UserFragmentFragment = { readonly __typename: 'users' } & Pick<Types.Users, 'created_at' | 'updated_at'> & {
-    readonly followers: ReadonlyArray<
-      { readonly __typename: 'followings' } & {
-        readonly follower: { readonly __typename: 'users' } & BasicUserFragmentFragment;
-      }
+export type UserFragmentFragment = { readonly __typename: 'users' } & {
+  readonly followers: ReadonlyArray<
+    { readonly __typename: 'followings' } & {
+      readonly follower: { readonly __typename: 'users' } & BasicUserFragmentFragment;
+    }
+  >;
+  readonly followers_aggregate: { readonly __typename: 'followings_aggregate' } & {
+    readonly aggregate?: Types.Maybe<
+      { readonly __typename: 'followings_aggregate_fields' } & Pick<Types.Followings_Aggregate_Fields, 'count'>
     >;
-    readonly followers_aggregate: { readonly __typename: 'followings_aggregate' } & {
-      readonly aggregate?: Types.Maybe<
-        { readonly __typename: 'followings_aggregate_fields' } & Pick<Types.Followings_Aggregate_Fields, 'count'>
-      >;
-    };
-    readonly following: ReadonlyArray<
-      { readonly __typename: 'followings' } & {
-        readonly user: { readonly __typename: 'users' } & BasicUserFragmentFragment;
-      }
-    >;
-    readonly following_aggregate: { readonly __typename: 'followings_aggregate' } & {
-      readonly aggregate?: Types.Maybe<
-        { readonly __typename: 'followings_aggregate_fields' } & Pick<Types.Followings_Aggregate_Fields, 'count'>
-      >;
-    };
-    readonly activities: ReadonlyArray<{ readonly __typename: 'activities' } & ActivityFragmentFragment>;
-  } & BasicUserFragmentFragment;
+  };
+  readonly following: ReadonlyArray<
+    { readonly __typename: 'followings' } & {
+      readonly user: { readonly __typename: 'users' } & BasicUserFragmentFragment;
+    }
+  >;
+  readonly activities: ReadonlyArray<{ readonly __typename: 'activities' } & ActivityFragmentFragment>;
+} & BasicUserFragmentFragment;
 
 export type ActivityFragmentFragment = { readonly __typename: 'activities' } & Pick<
   Types.Activities,
-  'activity_id' | 'category' | 'caption' | 'created_at' | 'updated_at'
+  'activity_id' | 'category' | 'caption' | 'created_at'
 > & {
     readonly comments: ReadonlyArray<{ readonly __typename: 'comments' } & CommentFragmentFragment>;
     readonly geofence: { readonly __typename: 'geofences' } & GeofenceFragmentFragment;
@@ -3273,22 +3268,12 @@ export type ActivityFragmentFragment = { readonly __typename: 'activities' } & P
 
 export type CommentFragmentFragment = { readonly __typename: 'comments' } & Pick<
   Types.Comments,
-  'comment_id' | 'activity_id' | 'content' | 'created_at' | 'updated_at'
+  'comment_id' | 'activity_id' | 'content'
 > & { readonly user: { readonly __typename: 'users' } & BasicUserFragmentFragment };
 
 export type GeofenceFragmentFragment = { readonly __typename: 'geofences' } & Pick<
   Types.Geofences,
-  | 'id'
-  | 'name'
-  | 'category'
-  | 'coordinates'
-  | 'description'
-  | 'latitude'
-  | 'longitude'
-  | 'radius'
-  | 'variant'
-  | 'created_at'
-  | 'updated_at'
+  'id' | 'name' | 'category' | 'coordinates' | 'description' | 'latitude' | 'longitude' | 'radius' | 'variant'
 >;
 
 export const BasicUserFragmentFragmentDoc = gql`
@@ -3307,8 +3292,6 @@ export const CommentFragmentFragmentDoc = gql`
     user {
       ...basicUserFragment
     }
-    created_at
-    updated_at
   }
   ${BasicUserFragmentFragmentDoc}
 `;
@@ -3323,8 +3306,6 @@ export const GeofenceFragmentFragmentDoc = gql`
     longitude
     radius
     variant
-    created_at
-    updated_at
   }
 `;
 export const ActivityFragmentFragmentDoc = gql`
@@ -3332,14 +3313,13 @@ export const ActivityFragmentFragmentDoc = gql`
     activity_id
     category
     caption
+    created_at
     comments {
       ...commentFragment
     }
     geofence {
       ...geofenceFragment
     }
-    created_at
-    updated_at
   }
   ${CommentFragmentFragmentDoc}
   ${GeofenceFragmentFragmentDoc}
@@ -3347,8 +3327,6 @@ export const ActivityFragmentFragmentDoc = gql`
 export const UserFragmentFragmentDoc = gql`
   fragment userFragment on users {
     ...basicUserFragment
-    created_at
-    updated_at
     followers {
       follower {
         ...basicUserFragment
@@ -3362,11 +3340,6 @@ export const UserFragmentFragmentDoc = gql`
     following {
       user {
         ...basicUserFragment
-      }
-    }
-    following_aggregate {
-      aggregate {
-        count(distinct: true, columns: user_id)
       }
     }
     activities {

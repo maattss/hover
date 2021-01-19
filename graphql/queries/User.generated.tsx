@@ -1,9 +1,9 @@
 /* eslint-disable */
 import * as Types from '../../types/types';
 
-import { UserFragmentFragment } from '../Fragments.generated';
+import { BasicUserFragmentFragment } from '../Fragments.generated';
 import { gql } from '@apollo/client';
-import { UserFragmentFragmentDoc } from '../Fragments.generated';
+import { BasicUserFragmentFragmentDoc } from '../Fragments.generated';
 import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -3242,16 +3242,16 @@ export type UserQueryVariables = Types.Exact<{
 }>;
 
 export type UserQuery = { readonly __typename: 'query_root' } & {
-  readonly user?: Types.Maybe<{ readonly __typename: 'users' } & UserFragmentFragment>;
+  readonly user?: Types.Maybe<{ readonly __typename: 'users' } & BasicUserFragmentFragment>;
 };
 
 export const UserDocument = gql`
   query User($id: String!) {
     user(id: $id) {
-      ...userFragment
+      ...basicUserFragment
     }
   }
-  ${UserFragmentFragmentDoc}
+  ${BasicUserFragmentFragmentDoc}
 `;
 
 /**
