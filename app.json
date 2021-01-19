@@ -21,9 +21,9 @@
       "infoPlist": {
         "UIBackgroundModes": ["location"],
         "NSLocationAlwaysUsage": "YES",
-        "NSLocationWhenInUseUsageDescription": "text",
-        "NSLocationAlwaysAndWhenInUseUsageDescription": "text",
-        "NSLocationAlwaysUsageDescription": "I want to get your location Information in background"
+        "NSLocationWhenInUseUsageDescription": "Your location will be used to determine if you are within a valid geofencing region.",
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "Your location will be used to determine and notify you if you are within a valid geofencing region.",
+        "NSLocationAlwaysUsageDescription": "Your location will be used to notify you when you are located at valid geofencing region."
       }
     },
     "android": {
