@@ -20,31 +20,33 @@ const TabNavigator: React.FC = () => {
   const tabIconStatistics = ({ color = '' as string }) => <TabIcon name="chart-bar" color={color} />;
 
   return (
-    <Tab.Navigator tabBarOptions={{ activeTintColor: Colors.blue, keyboardHidesTabBar: true }}>
-      <Tab.Screen
-        name="Feed"
-        component={FeedNavigator}
-        options={{
-          tabBarIcon: tabIconHome,
-        }}
-      />
+    <>
+      <Tab.Navigator tabBarOptions={{ activeTintColor: Colors.blue, keyboardHidesTabBar: true }}>
+        <Tab.Screen
+          name="Feed"
+          component={FeedNavigator}
+          options={{
+            tabBarIcon: tabIconHome,
+          }}
+        />
 
-      <Tab.Screen
-        name="Explore"
-        component={ExploreNavigator}
-        options={{
-          tabBarIcon: tabIconExplore,
-        }}
-      />
+        <Tab.Screen
+          name="Explore"
+          component={ExploreNavigator}
+          options={{
+            tabBarIcon: tabIconExplore,
+          }}
+        />
 
-      <Tab.Screen
-        name="Statistics"
-        component={StatisticsNavigator}
-        options={{
-          tabBarIcon: tabIconStatistics,
-        }}
-      />
-    </Tab.Navigator>
+        <Tab.Screen
+          name="Statistics"
+          component={StatisticsNavigator}
+          options={{
+            tabBarIcon: tabIconStatistics,
+          }}
+        />
+      </Tab.Navigator>
+    </>
   );
 };
 

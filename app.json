@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "hover",
+    "name": "Hover",
     "slug": "hover",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -17,13 +17,23 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "UIBackgroundModes": ["location"],
+        "NSLocationAlwaysUsage": "YES",
+        "NSLocationWhenInUseUsageDescription": "Your location will be used to determine if you are within a valid geofencing region.",
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "Your location will be used to determine and notify you if you are within a valid geofencing region.",
+        "NSLocationAlwaysUsageDescription": "Your location will be used to notify you when you are located at valid geofencing region."
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "useNextNotificationsApi": true,
+      "permissions": ["ACCESS_COARSE_LOCATION", "ACCESS_FINE_LOCATION", "ACCESS_BACKGROUND_LOCATION"],
+      "package": "com.sirimykland.hover"
     },
     "web": {
       "favicon": "./assets/images/favicon.png"
