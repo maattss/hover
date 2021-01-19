@@ -1,5 +1,6 @@
 import React from 'react';
 import { LOCATION, usePermissions } from 'expo-permissions';
+import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { RootStackParamList } from '../types/navigationTypes';
 import TabNavigator from './TabNavigator';
@@ -10,7 +11,6 @@ import useAuthentication from '../hooks/useAuthentication';
 import { DarkTheme } from '../theme/colors';
 import NotifyWithinAreaTask from '../tasks/NotifyWithinAreaTask';
 import { View, Text, ActivityIndicator, TouchableOpacity } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
 
 export const RootStack = createStackNavigator<RootStackParamList>();
 
