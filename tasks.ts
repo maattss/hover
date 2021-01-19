@@ -22,7 +22,7 @@ TaskManager.defineTask(LOCATION_BACKGROUND_TRACKING, async ({ data: { locations 
     const { coords, timestamp } = locations[0];
     const { latitude, longitude } = coords;
 
-    console.log(`${timestamp}: ${latitude},${longitude}`);
+    console.log(`[Background update] ${timestamp}:  ${latitude}, ${longitude}`);
   }
 });
 
@@ -35,9 +35,9 @@ TaskManager.defineTask(NOTIFY_WITHIN_AREA, ({ data: { eventType, region }, error
     console.error('Error:', error.code, error.message);
     return;
   }
-  if ((eventType as Location.LocationGeofencingEventType) === Location.LocationGeofencingEventType.Enter) {
+  if (eventType === Location.LocationGeofencingEventType.Enter) {
     console.log("You've entered region:", region);
-  } else if ((eventType as Location.LocationGeofencingEventType) === Location.LocationGeofencingEventType.Exit) {
+  } else if (eventType === Location.LocationGeofencingEventType.Exit) {
     console.log("You've left region:", region);
   }
 });

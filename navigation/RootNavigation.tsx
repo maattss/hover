@@ -1,5 +1,4 @@
-import React from 'react';
-import { LOCATION, usePermissions } from 'expo-permissions';
+import React, { useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { RootStackParamList } from '../types/navigationTypes';
@@ -9,40 +8,23 @@ import LoginScreen from '../screens/auth/LoginScreen';
 import LoadingScreen from '../screens/auth/LoadingScreen';
 import useAuthentication from '../hooks/useAuthentication';
 import { DarkTheme } from '../theme/colors';
-import NotifyWithinAreaTask from '../tasks/NotifyWithinAreaTask';
-import { View, Text, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { useGeofencesQuery } from '../graphql/queries/Geofences.generated';
+import { startBackgroundUpdate } from '../tasks/locationBackgroundTasks';
+import { startGeofencing } from '../tasks/geofenceTasks';
+import { getLocationsPermissions } from '../helpers/permissions';
 
 export const RootStack = createStackNavigator<RootStackParamList>();
 
 const MainContainer: React.FC = () => {
-  const [permission, askPermission] = usePermissions(LOCATION);
+  const { data: data } = useGeofencesQuery();
 
-  if (permission?.granted) {
-    return (
-      <>
-        <NotifyWithinAreaTask />
-        <TabNavigator />
-      </>
-    );
-  }
+  useEffect(() => {
+    getLocationsPermissions();
+    startBackgroundUpdate();
+    if (data) startGeofencing(data);
+  }, [data]);
 
-  return (
-    <View>
-      <View>
-        <Text>We need your permission</Text>
-        <Text>To monitor your activity, we need access to background location.</Text>
-      </View>
-      {!permission ? (
-        <ActivityIndicator />
-      ) : (
-        <View>
-          <TouchableOpacity onPress={askPermission}>
-            <Text>Grant permission</Text>
-          </TouchableOpacity>
-        </View>
-      )}
-    </View>
-  );
+  return <TabNavigator />;
 };
 
 const AppNavigation: React.FC = () => {
