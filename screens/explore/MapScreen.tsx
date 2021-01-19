@@ -12,8 +12,7 @@ import { Colors, Spacing, Typography, Buttons } from '../../theme';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import SnackBar, { SnackBarVariant } from '../../components/SnackBar';
 import { isInsideCircle, isInsidePolygon } from '../../helpers/mapCalculations';
-import { GET_GEOFENCES } from '../../lib/queries/geoFenceQueries';
-import { useQuery } from '@apollo/client';
+import { useGeofencesQuery } from '../../graphql/queries/Geofences.generated';
 
 const { width, height } = Dimensions.get('window');
 
@@ -31,13 +30,12 @@ const MapScreen: React.FC = () => {
   const [showSnackBar, setShowSnackBar] = useState(false);
   const [geoFences, setGeoFences] = useState<GeoFence[]>();
 
-  const { error: fetchError, data: data } = useQuery(GET_GEOFENCES);
+  const { error: fetchError, data: data } = useGeofencesQuery();
 
   useEffect(() => {
     // Geo-fence data fetched from db
     if (data) {
       const fetchedGeoFences: GeoFence[] = [];
-
       for (const obj of data.geofences) {
         if (obj.variant === 'CIRCLE') {
           fetchedGeoFences.push({
@@ -51,7 +49,7 @@ const MapScreen: React.FC = () => {
           } as CircleGeoFence);
         } else if (obj.variant === 'POLYGON') {
           // Translate from string coordinates in db to array of LatLng objects
-          const coordinatesRaw: string = obj.coordinates.split(',');
+          const coordinatesRaw = obj.coordinates ? obj.coordinates.split(',') : '';
           const coordinates = [];
           for (let i = 0; i < coordinatesRaw.length; i = i + 2) {
             coordinates.push({

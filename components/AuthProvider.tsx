@@ -19,18 +19,15 @@ export const AuthProvider = ({ children }: Props) => {
   const [isLoadingUser, setLoadingUser] = useState(true);
 
   useEffect(() => {
-    const loadDataAsync = async () => {
-      await Firebase.auth().onAuthStateChanged((user) => {
-        if (user) {
-          setUserAuthState(user);
-          setLoadingUser(false);
-        } else {
-          setUserAuthState(null);
-          setLoadingUser(false);
-        }
-      });
-    };
-    loadDataAsync();
+    Firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        setUserAuthState(user);
+        setLoadingUser(false);
+      } else {
+        setUserAuthState(null);
+        setLoadingUser(false);
+      }
+    });
   }, []);
 
   const value: AuthContextValues = {
