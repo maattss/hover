@@ -20,12 +20,9 @@ import useAuthentication from '../../hooks/useAuthentication';
 const UserSettingsScreen: React.FC<SettingsProps> = ({ navigation }: SettingsProps) => {
   const id = useAuthentication().user?.uid;
   if (!id) {
-    console.error('Error: User is', id);
-    return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size={'large'} color={Colors.blue} />
-      </View>
-    );
+    console.error('Error: UserId is', id);
+    Alert.alert('Error: UserId is', id);
+    return <></>;
   } else {
     const [name, setName] = useState('');
     const [bio, setBio] = useState('');
