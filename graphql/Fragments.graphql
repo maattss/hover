@@ -7,8 +7,6 @@ fragment basicUserFragment on users {
 
 fragment userFragment on users {
   ...basicUserFragment
-  created_at
-  updated_at
   followers {
     follower {
       ...basicUserFragment
@@ -24,11 +22,6 @@ fragment userFragment on users {
       ...basicUserFragment
     }
   }
-  following_aggregate {
-    aggregate {
-      count(distinct: true, columns: user_id)
-    }
-  }
   activities {
     ...activityFragment
   }
@@ -38,14 +31,13 @@ fragment activityFragment on activities {
   activity_id
   category
   caption
+  created_at
   comments {
     ...commentFragment
   }
   geofence {
     ...geofenceFragment
   }
-  created_at
-  updated_at
 }
 
 fragment commentFragment on comments {
@@ -55,8 +47,6 @@ fragment commentFragment on comments {
   user {
     ...basicUserFragment
   }
-  created_at
-  updated_at
 }
 
 fragment geofenceFragment on geofences {
@@ -69,6 +59,4 @@ fragment geofenceFragment on geofences {
   longitude
   radius
   variant
-  created_at
-  updated_at
 }

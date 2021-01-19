@@ -20,16 +20,13 @@ import useAuthentication from '../../hooks/useAuthentication';
 const UserSettingsScreen: React.FC<SettingsProps> = ({ navigation }: SettingsProps) => {
   const id = useAuthentication().user?.uid;
   if (!id) {
-    console.error('Error: User is', id);
-    return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size={'large'} color={Colors.blue} />
-      </View>
-    );
+    console.error('Error: UserId is', id);
+    Alert.alert('Error: UserId is', id);
+    return <></>;
   } else {
     const [name, setName] = useState('');
     const [bio, setBio] = useState('');
-    const { loading: fetchLoading, error: fetchError, data } = useUserQuery({
+    const { loading: fetchLoading, error: fetchError, data: data } = useUserQuery({
       variables: {
         id: id,
       },
@@ -38,12 +35,12 @@ const UserSettingsScreen: React.FC<SettingsProps> = ({ navigation }: SettingsPro
 
     useEffect(() => {
       if (data) {
-        setName(data.users_by_pk?.name ? data.users_by_pk?.name : '');
-        setBio(data.users_by_pk?.bio ? data.users_by_pk?.bio : '');
+        setName(data.user?.name ? data.user?.name : '');
+        setBio(data.user?.bio ? data.user?.bio : '');
       }
       if (response) {
-        setName(response.update_users_by_pk?.name ? response.update_users_by_pk?.name : '');
-        setBio(response.update_users_by_pk?.bio ? response.update_users_by_pk?.bio : '');
+        setName(response.update_user?.name ? response.update_user?.name : '');
+        setBio(response.update_user?.bio ? response.update_user?.bio : '');
       }
     }, [data, response]);
 
@@ -67,6 +64,7 @@ const UserSettingsScreen: React.FC<SettingsProps> = ({ navigation }: SettingsPro
               </View>
               <TextInput
                 placeholder={'What is your name?'}
+                placeholderTextColor={Colors.gray600}
                 value={name}
                 onChangeText={(val) => setName(val)}
                 style={styles.formField}
@@ -78,6 +76,7 @@ const UserSettingsScreen: React.FC<SettingsProps> = ({ navigation }: SettingsPro
               </View>
               <TextInput
                 placeholder={'Tell me something about yourself!'}
+                placeholderTextColor={Colors.gray600}
                 value={bio}
                 onChangeText={(val) => setBio(val)}
                 style={styles.formFieldMultiLine}

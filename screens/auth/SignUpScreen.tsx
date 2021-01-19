@@ -56,7 +56,7 @@ const SignUpScreen = ({ navigation }: StackScreenProps<RootStackParamList, 'Sign
         <View style={styles.formContainer}>
           <TextInput
             placeholder="Email"
-            placeholderTextColor="black"
+            placeholderTextColor={Colors.gray600}
             onChangeText={(val) => setEmail(val)}
             autoCapitalize="none"
             keyboardType="email-address"
@@ -64,7 +64,7 @@ const SignUpScreen = ({ navigation }: StackScreenProps<RootStackParamList, 'Sign
           />
           <TextInput
             placeholder="Password"
-            placeholderTextColor="black"
+            placeholderTextColor={Colors.gray600}
             onChangeText={(val) => setPassword(val)}
             autoCapitalize="none"
             secureTextEntry
@@ -72,7 +72,7 @@ const SignUpScreen = ({ navigation }: StackScreenProps<RootStackParamList, 'Sign
           />
           <TextInput
             placeholder="Confirm password"
-            placeholderTextColor="black"
+            placeholderTextColor={Colors.gray600}
             onChangeText={(val) => setConfirmPassword(val)}
             autoCapitalize="none"
             secureTextEntry
