@@ -11,8 +11,9 @@ import {
 import { Colors, Spacing, Typography, Buttons } from '../../theme';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import SnackBar, { SnackBarVariant } from '../../components/SnackBar';
-import { isInsideCircle, isInsidePolygon } from '../../helpers/mapCalculations';
+import { isInsideCircle, isInsidePolygon } from '../../helpers/geoFenceCalculations';
 import { useGeofencesQuery } from '../../graphql/queries/Geofences.generated';
+import { convertToGeoFence } from '../../helpers/objectMappers';
 
 const { width, height } = Dimensions.get('window');
 
@@ -33,44 +34,7 @@ const MapScreen: React.FC = () => {
   const { error: fetchError, data: data } = useGeofencesQuery();
 
   useEffect(() => {
-    // Geo-fence data fetched from db
-    if (data) {
-      const fetchedGeoFences: GeoFence[] = [];
-      for (const obj of data.geofences) {
-        if (obj.variant === 'CIRCLE') {
-          fetchedGeoFences.push({
-            name: obj.name,
-            description: obj.description ? obj.description : '',
-            latitude: obj.latitude,
-            longitude: obj.longitude,
-            category: GeoFenceCategory[obj.category as keyof typeof GeoFenceCategory],
-            variant: GeoFenceVariant[obj.variant as keyof typeof GeoFenceVariant],
-            radius: obj.radius,
-          } as CircleGeoFence);
-        } else if (obj.variant === 'POLYGON') {
-          // Translate from string coordinates in db to array of LatLng objects
-          const coordinatesRaw = obj.coordinates ? obj.coordinates.split(',') : '';
-          const coordinates = [];
-          for (let i = 0; i < coordinatesRaw.length; i = i + 2) {
-            coordinates.push({
-              latitude: +coordinatesRaw[i],
-              longitude: +coordinatesRaw[i + 1],
-            });
-          }
-          fetchedGeoFences.push({
-            name: obj.name,
-            description: obj.description ? obj.description : '',
-            latitude: obj.latitude,
-            longitude: obj.longitude,
-            category: GeoFenceCategory[obj.category as keyof typeof GeoFenceCategory],
-            variant: GeoFenceVariant[obj.variant as keyof typeof GeoFenceVariant],
-            radius: obj.radius,
-            coordinates: coordinates,
-          } as PolygonGeoFence);
-        }
-      }
-      setGeoFences(fetchedGeoFences);
-    }
+    if (data) setGeoFences(convertToGeoFence(data));
   }, [data]);
 
   // Dynamic styles

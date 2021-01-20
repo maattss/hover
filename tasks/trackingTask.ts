@@ -3,6 +3,6 @@ import { EXIT_AREA_TRACKING } from '../tasks';
 
 // This task checks if user leaves a region
 export const exitAreaTrackingTask = async (regions: Location.LocationRegion[]) => {
-  console.log('Listening for Exit on region', regions[0]);
+  console.log('Listening for user exit on region', regions[0]);
   await Location.startGeofencingAsync(EXIT_AREA_TRACKING, regions);
 };
