@@ -1,7 +1,21 @@
-import { Coordinate, LatLng } from 'react-native-maps';
-import { PolygonGeoFence, CircleGeoFence } from '../types/geoFenceTypes';
+import { LatLng } from 'react-native-maps';
+import { PolygonGeoFence, CircleGeoFence, GeoFence, GeoFenceVariant } from '../types/geoFenceTypes';
 
-export const isInsideCircle = (userLocation: LatLng, geoFence: CircleGeoFence) => {
+export const isInsideGeoFences = (userLocation: LatLng, geoFences: GeoFence[] | undefined) => {
+  if (geoFences) {
+    for (const geoFence of geoFences) {
+      if (geoFence.variant == GeoFenceVariant.CIRCLE) {
+        if (isInsideCircle(userLocation, geoFence as CircleGeoFence)) return true;
+      }
+      if (geoFence.variant == GeoFenceVariant.POLYGON) {
+        if (isInsidePolygon(userLocation, geoFence as PolygonGeoFence)) return true;
+      }
+    }
+  }
+  return false;
+};
+
+const isInsideCircle = (userLocation: LatLng, geoFence: CircleGeoFence) => {
   const distance = measureCircleDistance(
     userLocation.latitude,
     userLocation.longitude,
@@ -9,6 +23,17 @@ export const isInsideCircle = (userLocation: LatLng, geoFence: CircleGeoFence) =
     geoFence.longitude,
   );
   if (distance <= geoFence.radius) return true;
+  return false;
+};
+
+const isInsidePolygon = (userLocation: LatLng, geoFence: PolygonGeoFence) => {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  const classifyPoint = require('robust-point-in-polygon'); // Exactly determines if a point is contained in a 2D polygon.
+  const polygon = geoFence.coordinates.map((coordinate) => {
+    return [coordinate.latitude, coordinate.longitude];
+  });
+  const insidePolygon = classifyPoint(polygon, [userLocation.latitude, userLocation.longitude]);
+  if (insidePolygon === -1 || insidePolygon === 0) return true;
   return false;
 };
 
@@ -23,17 +48,6 @@ const measureCircleDistance = (lat1: number, lon1: number, lat2: number, lon2: n
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   const d = R * c;
   return d * 1000; // Convert to meters
-};
-
-export const isInsidePolygon = (userLocation: LatLng, geoFence: PolygonGeoFence) => {
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const classifyPoint = require('robust-point-in-polygon'); // Exactly determines if a point is contained in a 2D polygon.
-  const polygon = geoFence.coordinates.map((coordinate) => {
-    return [coordinate.latitude, coordinate.longitude];
-  });
-  const insidePolygon = classifyPoint(polygon, [userLocation.latitude, userLocation.longitude]);
-  if (insidePolygon === -1 || insidePolygon === 0) return true;
-  return false;
 };
 
 export const estimatedRadius = (coordinates: LatLng[]) => {

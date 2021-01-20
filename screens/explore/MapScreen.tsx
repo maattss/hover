@@ -9,9 +9,10 @@ import {
   GeoFenceCategory,
 } from '../../types/geoFenceTypes';
 import { Colors, Spacing, Typography, Buttons } from '../../theme';
+import { hexToRGB } from '../../theme/colors';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import SnackBar, { SnackBarVariant } from '../../components/SnackBar';
-import { isInsideCircle, isInsidePolygon } from '../../helpers/geoFenceCalculations';
+import { isInsideGeoFences } from '../../helpers/geoFenceCalculations';
 import { useGeofencesQuery } from '../../graphql/queries/Geofences.generated';
 import { convertToGeoFence } from '../../helpers/objectMappers';
 
@@ -21,6 +22,52 @@ const { width, height } = Dimensions.get('window');
 const defaultLocation: LatLng = {
   latitude: 63.419,
   longitude: 10.4025,
+};
+
+const getGeoFenceColor = (category: GeoFenceCategory, opacity: number) => {
+  switch (category) {
+    case GeoFenceCategory.EDUCATION:
+      return hexToRGB(Colors.red, opacity);
+    case GeoFenceCategory.CULTURE:
+      return hexToRGB(Colors.green, opacity);
+    case GeoFenceCategory.EXERCISE:
+      return hexToRGB(Colors.blue, opacity);
+    case GeoFenceCategory.SOCIAL:
+      return hexToRGB(Colors.orange, opacity);
+    default:
+      return hexToRGB(Colors.almostBlack, opacity);
+  }
+};
+
+const drawGeoFences = (geoFences: GeoFence[] | undefined) => {
+  if (geoFences) {
+    return geoFences.map((geoFence, index) => {
+      if (geoFence.variant === GeoFenceVariant.CIRCLE) {
+        const currentGeoFence = geoFence as CircleGeoFence;
+        return (
+          <Circle
+            key={index}
+            center={{ latitude: currentGeoFence.latitude, longitude: currentGeoFence.longitude }}
+            radius={currentGeoFence.radius}
+            fillColor={getGeoFenceColor(currentGeoFence.category, 0.6)}
+            strokeColor={getGeoFenceColor(currentGeoFence.category, 1)}
+            strokeWidth={1}
+          />
+        );
+      } else if (geoFence.variant === GeoFenceVariant.POLYGON) {
+        const currentGeoFence = geoFence as PolygonGeoFence;
+        return (
+          <Polygon
+            key={index}
+            coordinates={currentGeoFence.coordinates}
+            fillColor={getGeoFenceColor(currentGeoFence.category, 0.6)}
+            strokeColor={getGeoFenceColor(currentGeoFence.category, 1)}
+            strokeWidth={1}
+          />
+        );
+      }
+    });
+  }
 };
 
 const MapScreen: React.FC = () => {
@@ -62,9 +109,11 @@ const MapScreen: React.FC = () => {
     };
     setUserLocation(newUserLocation);
 
-    if (isInsideGeoFences(newUserLocation)) {
+    if (isInsideGeoFences(newUserLocation, geoFences)) {
+      // TODO: Start to count score here?
       setShowSnackBar(true);
     } else {
+      // TODO: Stop to coint score here?
       setShowSnackBar(false);
     }
   };
@@ -81,43 +130,6 @@ const MapScreen: React.FC = () => {
       },
       1000,
     );
-  };
-
-  const isInsideGeoFences = (userLocation: LatLng) => {
-    if (geoFences) {
-      for (const geoFence of geoFences) {
-        if (geoFence.variant == GeoFenceVariant.CIRCLE) {
-          if (isInsideCircle(userLocation, geoFence as CircleGeoFence)) return true;
-        }
-        if (geoFence.variant == GeoFenceVariant.POLYGON) {
-          if (isInsidePolygon(userLocation, geoFence as PolygonGeoFence)) return true;
-        }
-      }
-    }
-  };
-
-  const drawGeoFences = () => {
-    if (geoFences) {
-      return geoFences.map((geoFence, index) => {
-        if (geoFence.variant === GeoFenceVariant.CIRCLE) {
-          const currentGeoFence = geoFence as CircleGeoFence;
-          return (
-            <Circle
-              key={index}
-              center={{ latitude: currentGeoFence.latitude, longitude: currentGeoFence.longitude }}
-              radius={currentGeoFence.radius}
-              fillColor={currentGeoFence.category === GeoFenceCategory.EDUCATION ? Colors.red : Colors.blue}
-              strokeWidth={0.1}
-            />
-          );
-        } else if (geoFence.variant === GeoFenceVariant.POLYGON) {
-          const currentGeoFence = geoFence as PolygonGeoFence;
-          return (
-            <Polygon key={index} coordinates={currentGeoFence.coordinates} fillColor={Colors.red} strokeWidth={0.1} />
-          );
-        }
-      });
-    }
   };
 
   if (fetchError) {
@@ -137,7 +149,7 @@ const MapScreen: React.FC = () => {
         onMapReady={animateMapToUserPos}
         onDoublePress={() => setCentreOnUser(false)}
         onPanDrag={() => setCentreOnUser(false)}>
-        {drawGeoFences()}
+        {drawGeoFences(geoFences)}
       </MapView>
 
       <View style={styles.positionContainer}>
