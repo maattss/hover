@@ -76,7 +76,8 @@ const MapScreen: React.FC = () => {
   const [userLocation, setUserLocation] = useState<LatLng>();
   const [chosenMapType, setChosenMapType] = useState<MapTypes>('standard');
   const [centreOnUser, setCentreOnUser] = useState(false);
-  const [showSnackBar, setShowSnackBar] = useState(false);
+  const [showLocationSnackBar, setShowLocationSnackBar] = useState(false);
+  const [newActivity, setNewActivity] = useState(false);
   const [tracking, setTracking] = useState(false);
   const [geoFences, setGeoFences] = useState<GeoFence[]>();
 
@@ -112,15 +113,19 @@ const MapScreen: React.FC = () => {
     setUserLocation(newUserLocation);
 
     if (isInsideGeoFences(newUserLocation, geoFences)) {
-      // TODO: Start to count score here?
-      setShowSnackBar(true);
+      setShowLocationSnackBar(true);
     } else {
-      // TODO: Stop to count score here?
-      setShowSnackBar(false);
+      setShowLocationSnackBar(false);
     }
   };
+  const startTracking = () => {
+    // TODO: Implement tracking mechanism
+  };
   const completeActivity = () => {
-    // Upload to db
+    // TODO: Upload activity to db
+    setShowLocationSnackBar(false);
+    setTracking(false);
+    setNewActivity(true);
   };
 
   const mapView = createRef<MapView>();
@@ -176,12 +181,13 @@ const MapScreen: React.FC = () => {
         </TouchableOpacity>
       </View>
       <LocationSnackBar
-        show={showSnackBar}
-        setShow={setShowSnackBar}
+        show={showLocationSnackBar}
+        setShow={setShowLocationSnackBar}
         tracking={tracking}
         setTracking={setTracking}
         completeActivity={completeActivity}
       />
+      {newActivity && <Text>Activity uploaded successfully!</Text>}
     </View>
   );
 };

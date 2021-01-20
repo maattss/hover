@@ -11,21 +11,31 @@ interface LocationSnackBarProps {
 }
 
 const LocationSnackBar = (props: LocationSnackBarProps) => {
-  if (props.show) {
+  if (props.tracking) {
     return (
       <View style={styles.container}>
         <Text style={styles.title}>Inside a Hover zone!</Text>
+        <Text style={styles.message}>
+          [Tracking: {props.tracking}, Show: {props.show}]
+        </Text>
         <Text style={styles.message}>Do you want to start tracking this activity?</Text>
         <TouchableOpacity onPress={() => props.setTracking(true)} style={styles.confirmButton}>
           <Text style={styles.confirmButtonText}>Yes</Text>
         </TouchableOpacity>
+        <TouchableOpacity onPress={() => props.setTracking(false)} style={styles.confirmButton}>
+          <Text style={styles.confirmButtonText}>No</Text>
+        </TouchableOpacity>
       </View>
     );
-  } else if (props.tracking) {
+  } else if (props.show) {
     return (
       <View style={styles.container}>
-        <Text style={styles.title}>Hovering...</Text>
-        <Text style={styles.message}>Hover, hover, hover... Never stop hovering.</Text>
+        <Text style={styles.title}>Earning points..</Text>
+        <Text style={styles.message}>
+          [Tracking: {props.tracking ? 'true' : 'false'}, Show: {props.show ? 'true' : 'false'}]
+        </Text>
+        <Text style={styles.message}>Good job, keep this activity going!</Text>
+        <Text style={styles.message}>Number of points earned: 0</Text>
         <TouchableOpacity onPress={() => props.completeActivity()} style={styles.confirmButton}>
           <Text style={styles.confirmButtonText}>Complete and upload activity</Text>
         </TouchableOpacity>
