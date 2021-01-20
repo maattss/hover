@@ -15,6 +15,7 @@ import SnackBar, { SnackBarVariant } from '../../components/SnackBar';
 import { isInsideGeoFences } from '../../helpers/geoFenceCalculations';
 import { useGeofencesQuery } from '../../graphql/queries/Geofences.generated';
 import { convertToGeoFence } from '../../helpers/objectMappers';
+import LocationSnackBar from '../../components/LocationSnackBar';
 
 const { width, height } = Dimensions.get('window');
 
@@ -76,6 +77,7 @@ const MapScreen: React.FC = () => {
   const [chosenMapType, setChosenMapType] = useState<MapTypes>('standard');
   const [centreOnUser, setCentreOnUser] = useState(false);
   const [showSnackBar, setShowSnackBar] = useState(false);
+  const [tracking, setTracking] = useState(false);
   const [geoFences, setGeoFences] = useState<GeoFence[]>();
 
   const { error: fetchError, data: data } = useGeofencesQuery();
@@ -113,9 +115,12 @@ const MapScreen: React.FC = () => {
       // TODO: Start to count score here?
       setShowSnackBar(true);
     } else {
-      // TODO: Stop to coint score here?
+      // TODO: Stop to count score here?
       setShowSnackBar(false);
     }
+  };
+  const completeActivity = () => {
+    // Upload to db
   };
 
   const mapView = createRef<MapView>();
@@ -170,12 +175,12 @@ const MapScreen: React.FC = () => {
           <FAIcon style={centreOnUserIconStyle} name="crosshairs" />
         </TouchableOpacity>
       </View>
-      <SnackBar
-        variant={SnackBarVariant.INFO}
-        title={'Earning points!'}
-        message={'You are inside a geofence and will automatically earn points when you are inside this area.'}
+      <LocationSnackBar
         show={showSnackBar}
         setShow={setShowSnackBar}
+        tracking={tracking}
+        setTracking={setTracking}
+        completeActivity={completeActivity}
       />
     </View>
   );

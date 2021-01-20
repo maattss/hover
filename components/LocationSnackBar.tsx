@@ -7,7 +7,7 @@ interface LocationSnackBarProps {
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
   tracking: boolean;
   setTracking: React.Dispatch<React.SetStateAction<boolean>>;
-  completeActivity: React.Dispatch<React.SetStateAction<boolean>>;
+  completeActivity: () => void;
 }
 
 const LocationSnackBar = (props: LocationSnackBarProps) => {
@@ -26,7 +26,7 @@ const LocationSnackBar = (props: LocationSnackBarProps) => {
       <View style={styles.container}>
         <Text style={styles.title}>Hovering...</Text>
         <Text style={styles.message}>Hover, hover, hover... Never stop hovering.</Text>
-        <TouchableOpacity onPress={() => props.completeActivity(true)} style={styles.trackButton}>
+        <TouchableOpacity onPress={() => props.completeActivity()} style={styles.trackButton}>
           Complete and upload activity
         </TouchableOpacity>
       </View>
