@@ -14,10 +14,10 @@ const LocationSnackBar = (props: LocationSnackBarProps) => {
   if (props.show) {
     return (
       <View style={styles.container}>
-        <Text style={styles.title}>Hover?</Text>
-        <Text style={styles.message}>You are inside a hover zone. Do you want to start tracking this activity?</Text>
-        <TouchableOpacity onPress={() => props.setTracking(true)} style={styles.trackButton}>
-          Yes!
+        <Text style={styles.title}>Inside a Hover zone!</Text>
+        <Text style={styles.message}>Do you want to start tracking this activity?</Text>
+        <TouchableOpacity onPress={() => props.setTracking(true)} style={styles.confirmButton}>
+          <Text style={styles.confirmButtonText}>Yes</Text>
         </TouchableOpacity>
       </View>
     );
@@ -26,8 +26,8 @@ const LocationSnackBar = (props: LocationSnackBarProps) => {
       <View style={styles.container}>
         <Text style={styles.title}>Hovering...</Text>
         <Text style={styles.message}>Hover, hover, hover... Never stop hovering.</Text>
-        <TouchableOpacity onPress={() => props.completeActivity()} style={styles.trackButton}>
-          Complete and upload activity
+        <TouchableOpacity onPress={() => props.completeActivity()} style={styles.confirmButton}>
+          <Text style={styles.confirmButtonText}>Complete and upload activity</Text>
         </TouchableOpacity>
       </View>
     );
@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
     width: '96%',
     borderRadius: Spacing.smaller,
     padding: Spacing.base,
-    backgroundColor: Colors.blue,
+    backgroundColor: Colors.hexToRGB(Colors.blue, 0.8),
   },
   title: {
     ...Typography.headerText,
@@ -55,12 +55,17 @@ const styles = StyleSheet.create({
   message: {
     ...Typography.largeBodyText,
     display: 'flex',
+    textAlign: 'center',
   },
-  trackButton: {
+  confirmButton: {
     ...Buttons.button,
-    position: 'absolute',
-    bottom: '0%',
-    left: '0%',
+    marginTop: Spacing.base,
+    width: '100%',
+    backgroundColor: Colors.hexToRGB(Colors.white, 0.9),
+  },
+  confirmButtonText: {
+    ...Buttons.buttonText,
+    color: Colors.almostBlack,
   },
 });
 
