@@ -14,8 +14,12 @@ export type RootTabParamList = {
 };
 
 export type FeedStackParamList = {
-  Feed: undefined;
-} & SettingsNavigationStackParamList;
+  Home: undefined;
+} & NotificationsStackParamList;
+
+export type NotificationsStackParamList = {
+  Notifications: undefined;
+};
 
 export type ExploreStackParamList = {
   Explore: undefined;
@@ -28,17 +32,19 @@ export type TrackingStackParamList = {
 };
 export type ProfileStackParamList = {
   Profile: undefined;
+} & SettingsNavigationStackParamList;
+
+export type SettingsNavigationStackParamList = {
+  Settings: undefined;
+  'User Settings': undefined;
+  About: undefined;
 };
 
 export type FeedTopTabStackParamList = {
   Following: undefined;
   You: undefined;
 };
-export type SettingsNavigationStackParamList = {
-  'Settings Menu': undefined;
-  'User Settings': undefined;
-  About: undefined;
-};
+
 export type StatisticsTopTabStackParamList = {
   Leaderboard: undefined;
   'Your Statistics': undefined;
