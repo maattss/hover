@@ -11,7 +11,7 @@ import {
 import { Colors, Spacing, Typography, Buttons } from '../../theme';
 import { hexToRGB } from '../../theme/colors';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
-import { isInsideGeoFences } from '../../helpers/geoFenceCalculations';
+import { insideGeoFences } from '../../helpers/geoFenceCalculations';
 import { useGeofencesQuery } from '../../graphql/queries/Geofences.generated';
 import { convertToGeoFence } from '../../helpers/objectMappers';
 import { useInterval } from '../../hooks/useInterval';
@@ -76,6 +76,7 @@ const TrackingScreen: React.FC = () => {
   const [centreOnUser, setCentreOnUser] = useState(false);
   const [inGeofence, setInGeoFence] = useState(false);
   const [isTracking, setIsTracking] = useState(false);
+  const [trackingCategory, setTrackingCategory] = useState<GeoFenceCategory>();
   const [counterRunning, setCounterRunning] = useState(false);
   const [geoFences, setGeoFences] = useState<GeoFence[]>();
   const [score, setScore] = useState(0);
@@ -106,8 +107,9 @@ const TrackingScreen: React.FC = () => {
       longitude: location.nativeEvent.coordinate.longitude,
     };
     setUserLocation(newUserLocation);
+    setTrackingCategory(insideGeoFences(newUserLocation, geoFences));
 
-    if (isInsideGeoFences(newUserLocation, geoFences)) {
+    if (trackingCategory) {
       setInGeoFence(true);
     } else {
       setInGeoFence(false);
@@ -175,15 +177,17 @@ const TrackingScreen: React.FC = () => {
         </View>
       </View>
       <Text style={{ ...Typography.bodyText, position: 'absolute', top: 10, left: 20 }}>
-        [InGeoFence={inGeofence ? 'true' : 'false'}] [isTracking={isTracking ? 'true' : 'false'}] [counterRunning=
-        {counterRunning ? 'true' : 'false'}]
+        [InGeoFence={inGeofence ? 'true' : 'false'}] [counterRunning={counterRunning ? 'true' : 'false'}]
+      </Text>
+      <Text style={{ ...Typography.bodyText, position: 'absolute', top: 20, left: 20 }}>
+        [isTracking={isTracking ? 'true' : 'false'}] [category={trackingCategory ? 'true' : 'false'}]
       </Text>
       <View style={styles.trackingInfoContainer}>
         {isTracking ? (
           <>
-            <Text style={{ ...Typography.headerText }}>You have earned {score}</Text>
+            <Text style={{ ...Typography.largeBodyText }}>You have earned</Text>
             <Text style={{ ...Typography.headerText }}>{score}</Text>
-            <Text style={{ ...Typography.headerText }}>so far in this session</Text>
+            <Text style={{ ...Typography.largeBodyText }}>so far in this session</Text>
           </>
         ) : (
           <Text style={{ ...Typography.headerText, textAlign: 'center' }}>Start hovering to earn points!</Text>

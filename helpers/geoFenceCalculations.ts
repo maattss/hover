@@ -1,18 +1,17 @@
 import { LatLng } from 'react-native-maps';
 import { PolygonGeoFence, CircleGeoFence, GeoFence, GeoFenceVariant } from '../types/geoFenceTypes';
 
-export const isInsideGeoFences = (userLocation: LatLng, geoFences: GeoFence[] | undefined) => {
+export const insideGeoFences = (userLocation: LatLng, geoFences: GeoFence[] | undefined) => {
   if (geoFences) {
     for (const geoFence of geoFences) {
       if (geoFence.variant == GeoFenceVariant.CIRCLE) {
-        if (isInsideCircle(userLocation, geoFence as CircleGeoFence)) return true;
+        if (isInsideCircle(userLocation, geoFence as CircleGeoFence)) return geoFence.category;
       }
       if (geoFence.variant == GeoFenceVariant.POLYGON) {
-        if (isInsidePolygon(userLocation, geoFence as PolygonGeoFence)) return true;
+        if (isInsidePolygon(userLocation, geoFence as PolygonGeoFence)) return geoFence.category;
       }
     }
   }
-  return false;
 };
 
 const isInsideCircle = (userLocation: LatLng, geoFence: CircleGeoFence) => {

@@ -12,7 +12,7 @@ import { Colors, Spacing, Typography, Buttons } from '../../theme';
 import { hexToRGB } from '../../theme/colors';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import SnackBar, { SnackBarVariant } from '../../components/SnackBar';
-import { isInsideGeoFences } from '../../helpers/geoFenceCalculations';
+import { insideGeoFences } from '../../helpers/geoFenceCalculations';
 import { useGeofencesQuery } from '../../graphql/queries/Geofences.generated';
 import { convertToGeoFence } from '../../helpers/objectMappers';
 
@@ -109,7 +109,7 @@ const MapScreen: React.FC = () => {
     };
     setUserLocation(newUserLocation);
 
-    if (isInsideGeoFences(newUserLocation, geoFences)) {
+    if (insideGeoFences(newUserLocation, geoFences)) {
       setShowSnackbar(true);
     } else {
       setShowSnackbar(false);
