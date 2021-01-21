@@ -131,9 +131,11 @@ const TrackingScreen: React.FC = () => {
   };
 
   const startTracking = () => {
-    setScore(0);
-    setCounterRunning(true);
-    setIsTracking(true);
+    if (inGeofence) {
+      setScore(0);
+      setCounterRunning(true);
+      setIsTracking(true);
+    }
   };
 
   const stopTracking = () => {
@@ -196,17 +198,23 @@ const TrackingScreen: React.FC = () => {
           <Text style={{ ...Typography.headerText, textAlign: 'center' }}>Start hovering to earn points!</Text>
         )}
       </View>
-      <View style={styles.trackingButtonContainer}>
-        {isTracking ? (
-          <TouchableOpacity style={[styles.trackingButton, { backgroundColor: Colors.red }]} onPress={stopTracking}>
-            <Text style={styles.trackingButtonText}>Stop</Text>
-          </TouchableOpacity>
-        ) : (
-          <TouchableOpacity style={[styles.trackingButton, { backgroundColor: Colors.green }]} onPress={startTracking}>
-            <Text style={styles.trackingButtonText}>Start</Text>
-          </TouchableOpacity>
-        )}
-      </View>
+      {inGeofence ? (
+        <View style={styles.trackingButtonContainer}>
+          {isTracking ? (
+            <TouchableOpacity style={[styles.trackingButton, { backgroundColor: Colors.red }]} onPress={stopTracking}>
+              <Text style={styles.trackingButtonText}>Stop</Text>
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              style={[styles.trackingButton, { backgroundColor: Colors.green }]}
+              onPress={startTracking}>
+              <Text style={styles.trackingButtonText}>Start</Text>
+            </TouchableOpacity>
+          )}
+        </View>
+      ) : (
+        <></>
+      )}
     </View>
   );
 };
