@@ -14,6 +14,7 @@ import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import { isInsideGeoFences } from '../../helpers/geoFenceCalculations';
 import { useGeofencesQuery } from '../../graphql/queries/Geofences.generated';
 import { convertToGeoFence } from '../../helpers/objectMappers';
+import { useInterval } from '../../hooks/useInterval';
 
 const { width, height } = Dimensions.get('window');
 
@@ -75,7 +76,9 @@ const TrackingScreen: React.FC = () => {
   const [centreOnUser, setCentreOnUser] = useState(false);
   const [inGeofence, setInGeoFence] = useState(false);
   const [isTracking, setIsTracking] = useState(false);
+  const [counterRunning, setCounterRunning] = useState(false);
   const [geoFences, setGeoFences] = useState<GeoFence[]>();
+  const [score, setScore] = useState(0);
 
   const { error: fetchError, data: data } = useGeofencesQuery();
 
@@ -125,6 +128,24 @@ const TrackingScreen: React.FC = () => {
     );
   };
 
+  const startTracking = () => {
+    setScore(0);
+    setCounterRunning(true);
+    setIsTracking(true);
+  };
+
+  const stopTracking = () => {
+    setCounterRunning(true);
+    setIsTracking(false);
+  };
+
+  useInterval(
+    () => {
+      setScore(score + 1);
+    },
+    counterRunning ? 1000 : null,
+  );
+
   if (fetchError) {
     console.error('Error:', fetchError);
     Alert.alert('Error', fetchError.message);
@@ -154,8 +175,22 @@ const TrackingScreen: React.FC = () => {
         </View>
       </View>
       <View style={styles.trackingContainer}>
-        <Text style={{ ...Typography.largeBodyText }}>InGeoFence: {inGeofence ? 'true' : 'false'}</Text>
-        <Text style={{ ...Typography.largeBodyText }}>IsTracking: {isTracking ? 'true' : 'false'}</Text>
+        <Text style={{ ...Typography.bodyText }}>
+          [InGeoFence={inGeofence ? 'true' : 'false'}] [isTracking={isTracking ? 'true' : 'false'}] [counterRunning=
+          {counterRunning ? 'true' : 'false'}]
+        </Text>
+        {isTracking ? (
+          <>
+            <TouchableOpacity style={[styles.trackingButton, { backgroundColor: Colors.red }]} onPress={stopTracking}>
+              <Text style={styles.trackingButtonText}>Stop</Text>
+            </TouchableOpacity>
+            <Text style={{ ...Typography.headerText, textAlign: 'center' }}>Score: {score}</Text>
+          </>
+        ) : (
+          <TouchableOpacity style={[styles.trackingButton, { backgroundColor: Colors.green }]} onPress={startTracking}>
+            <Text style={styles.trackingButtonText}>Start</Text>
+          </TouchableOpacity>
+        )}
       </View>
     </View>
   );
@@ -168,14 +203,15 @@ const styles = StyleSheet.create({
   },
   mapContainer: {
     width: '100%',
-    height: '40%',
+    height: '50%',
     alignItems: 'center',
     justifyContent: 'center',
   },
   trackingContainer: {
     width: '100%',
-    height: '60%',
+    height: '50%',
     padding: Spacing.base,
+    alignItems: 'center',
   },
   mapStyle: {
     width: '98%',
@@ -195,6 +231,19 @@ const styles = StyleSheet.create({
     ...Buttons.iconButton,
     backgroundColor: Colors.almostBlack,
     marginTop: Spacing.smallest,
+  },
+  trackingButton: {
+    padding: Spacing.small,
+    borderRadius: 50,
+    width: 100,
+    height: 100,
+    margin: Spacing.base,
+    justifyContent: 'center',
+  },
+  trackingButtonText: {
+    ...Buttons.buttonText,
+    fontSize: 24,
+    textAlign: 'center',
   },
   icon: {
     fontSize: Typography.icon.fontSize,
