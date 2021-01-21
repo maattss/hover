@@ -18,10 +18,10 @@ const FeedNavigator: React.FC = () => {
   return (
     <FeedStack.Navigator>
       <FeedStack.Screen
-        name="Home"
+        name="Feed"
         component={FeedTopBar}
         options={({ navigation }) => ({
-          headerTitle: 'Home',
+          headerTitle: 'Feed',
           // eslint-disable-next-line react/display-name
           headerRight: () => <HeaderIcon name="bell" onPress={() => navigation.navigate('Notifications')} />,
         })}

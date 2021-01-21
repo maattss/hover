@@ -6,7 +6,7 @@ export type RootStackParamList = {
 };
 
 export type RootTabParamList = {
-  Home: undefined;
+  Feed: undefined;
   Explore: undefined;
   Hover: undefined;
   Profile: undefined;
@@ -14,7 +14,7 @@ export type RootTabParamList = {
 };
 
 export type FeedStackParamList = {
-  Home: undefined;
+  Feed: undefined;
 } & NotificationsStackParamList;
 
 export type NotificationsStackParamList = {
@@ -43,9 +43,4 @@ export type SettingsNavigationStackParamList = {
 export type FeedTopTabStackParamList = {
   Following: undefined;
   You: undefined;
-};
-
-export type StatisticsTopTabStackParamList = {
-  Leaderboard: undefined;
-  'Your Statistics': undefined;
 };
