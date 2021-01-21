@@ -1,18 +1,11 @@
 import React, { useState, createRef, useEffect } from 'react';
 import MapView, { Circle, EventUserLocation, LatLng, MapTypes, Polygon, Region } from 'react-native-maps';
 import { StyleSheet, Dimensions, Text, View, TouchableOpacity, Alert } from 'react-native';
-import {
-  GeoFence,
-  GeoFenceVariant,
-  CircleGeoFence,
-  PolygonGeoFence,
-  GeoFenceCategory,
-} from '../../types/geoFenceTypes';
+import { GeoFence, GeoFenceVariant, CircleGeoFence, PolygonGeoFence } from '../../types/geoFenceTypes';
 import { Colors, Spacing, Typography, Buttons } from '../../theme';
-import { hexToRGB } from '../../theme/colors';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import SnackBar, { SnackBarVariant } from '../../components/SnackBar';
-import { insideGeoFences } from '../../helpers/geoFenceCalculations';
+import { getGeoFenceColor, insideGeoFences } from '../../helpers/geoFenceCalculations';
 import { useGeofencesQuery } from '../../graphql/queries/Geofences.generated';
 import { convertToGeoFence } from '../../helpers/objectMappers';
 
@@ -22,21 +15,6 @@ const { width, height } = Dimensions.get('window');
 const defaultLocation: LatLng = {
   latitude: 63.419,
   longitude: 10.4025,
-};
-
-const getGeoFenceColor = (category: GeoFenceCategory, opacity: number) => {
-  switch (category) {
-    case GeoFenceCategory.EDUCATION:
-      return hexToRGB(Colors.red, opacity);
-    case GeoFenceCategory.CULTURE:
-      return hexToRGB(Colors.green, opacity);
-    case GeoFenceCategory.EXERCISE:
-      return hexToRGB(Colors.blue, opacity);
-    case GeoFenceCategory.SOCIAL:
-      return hexToRGB(Colors.orange, opacity);
-    default:
-      return hexToRGB(Colors.almostBlack, opacity);
-  }
 };
 
 const drawGeoFences = (geoFences: GeoFence[] | undefined) => {

@@ -11,7 +11,7 @@ import {
 import { Colors, Spacing, Typography, Buttons } from '../../theme';
 import { hexToRGB } from '../../theme/colors';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
-import { insideGeoFences } from '../../helpers/geoFenceCalculations';
+import { getGeoFenceScoreRatio, insideGeoFences } from '../../helpers/geoFenceCalculations';
 import { useGeofencesQuery } from '../../graphql/queries/Geofences.generated';
 import { convertToGeoFence } from '../../helpers/objectMappers';
 import { useInterval } from '../../hooks/useInterval';
@@ -144,10 +144,12 @@ const TrackingScreen: React.FC = () => {
 
   useInterval(
     () => {
-      setScore(score + 1);
+      if (trackingCategory) setScore(score + 1 * getGeoFenceScoreRatio(trackingCategory));
     },
     counterRunning ? 1000 : null,
   );
+
+  // TODO: Add timer/ dynamic element illustrating tracking
 
   if (fetchError) {
     console.error('Error:', fetchError);
@@ -188,7 +190,7 @@ const TrackingScreen: React.FC = () => {
         {isTracking ? (
           <>
             <Text style={{ ...Typography.headerText }}>Score</Text>
-            <Text style={{ ...Typography.headerText, padding: Spacing.base }}>{score}</Text>
+            <Text style={{ ...Typography.headerText, padding: Spacing.base }}>{score.toFixed(0)}</Text>
           </>
         ) : (
           <Text style={{ ...Typography.headerText, textAlign: 'center' }}>Start hovering to earn points!</Text>
