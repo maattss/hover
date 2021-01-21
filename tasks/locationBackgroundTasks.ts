@@ -17,7 +17,7 @@ export const startBackgroundUpdate = async () => {
     showsBackgroundLocationIndicator: true,
   });
 };
-const stopBackgroundUpdate = async () => {
+export const stopBackgroundUpdate = async () => {
   console.log('Stopped background location updates...');
   await Location.stopLocationUpdatesAsync(LOCATION_BACKGROUND_TRACKING);
 };

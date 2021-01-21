@@ -2,24 +2,24 @@ import React from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 import { Spacing, Typography } from '../../theme';
 
-const YourStatisticsScreen: React.FC = () => {
+const NotificationsScreen: React.FC = () => {
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Your Stats</Text>
+      <Text style={styles.header}>Notifications</Text>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    display: 'flex',
-    paddingBottom: Spacing.base,
+    padding: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  text: {
+  header: {
     ...Typography.headerText,
     paddingTop: Spacing.base,
-    textAlign: 'center',
   },
 });
 
-export default YourStatisticsScreen;
+export default NotificationsScreen;
