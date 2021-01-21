@@ -139,6 +139,7 @@ const TrackingScreen: React.FC = () => {
   const stopTracking = () => {
     setCounterRunning(false);
     setIsTracking(false);
+    // TODO: Upload activity to db
   };
 
   useInterval(
@@ -176,18 +177,18 @@ const TrackingScreen: React.FC = () => {
           </TouchableOpacity>
         </View>
       </View>
-      <Text style={{ ...Typography.bodyText, position: 'absolute', top: 10, left: 20 }}>
+      <Text style={{ ...Typography.bodyText, position: 'absolute', top: 15, left: 20, backgroundColor: 'black' }}>
         [InGeoFence={inGeofence ? 'true' : 'false'}] [counterRunning={counterRunning ? 'true' : 'false'}]
       </Text>
-      <Text style={{ ...Typography.bodyText, position: 'absolute', top: 20, left: 20 }}>
-        [isTracking={isTracking ? 'true' : 'false'}] [category={trackingCategory ? 'true' : 'false'}]
+      <Text style={{ ...Typography.bodyText, position: 'absolute', top: 35, left: 20, backgroundColor: 'black' }}>
+        [isTracking={isTracking ? 'true' : 'false'}] [category=
+        {trackingCategory ? GeoFenceCategory[trackingCategory] : 'none'}]
       </Text>
       <View style={styles.trackingInfoContainer}>
         {isTracking ? (
           <>
-            <Text style={{ ...Typography.largeBodyText }}>You have earned</Text>
-            <Text style={{ ...Typography.headerText }}>{score}</Text>
-            <Text style={{ ...Typography.largeBodyText }}>so far in this session</Text>
+            <Text style={{ ...Typography.headerText }}>Score</Text>
+            <Text style={{ ...Typography.headerText, padding: Spacing.base }}>{score}</Text>
           </>
         ) : (
           <Text style={{ ...Typography.headerText, textAlign: 'center' }}>Start hovering to earn points!</Text>
