@@ -179,7 +179,15 @@ const TrackingScreen: React.FC = () => {
         {counterRunning ? 'true' : 'false'}]
       </Text>
       <View style={styles.trackingInfoContainer}>
-        {isTracking && <Text style={{ ...Typography.headerText, textAlign: 'center' }}>Score: {score}</Text>}
+        {isTracking ? (
+          <>
+            <Text style={{ ...Typography.headerText }}>You have earned {score}</Text>
+            <Text style={{ ...Typography.headerText }}>{score}</Text>
+            <Text style={{ ...Typography.headerText }}>so far in this session</Text>
+          </>
+        ) : (
+          <Text style={{ ...Typography.headerText, textAlign: 'center' }}>Start hovering to earn points!</Text>
+        )}
       </View>
       <View style={styles.trackingButtonContainer}>
         {isTracking ? (
@@ -211,6 +219,7 @@ const styles = StyleSheet.create({
     padding: Spacing.base,
     justifyContent: 'center',
     alignItems: 'center',
+    textAlign: 'center',
   },
   mapStyle: {
     width: '98%',
