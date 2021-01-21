@@ -11,7 +11,6 @@ import {
 import { Colors, Spacing, Typography, Buttons } from '../../theme';
 import { hexToRGB } from '../../theme/colors';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
-import SnackBar, { SnackBarVariant } from '../../components/SnackBar';
 import { isInsideGeoFences } from '../../helpers/geoFenceCalculations';
 import { useGeofencesQuery } from '../../graphql/queries/Geofences.generated';
 import { convertToGeoFence } from '../../helpers/objectMappers';
@@ -70,12 +69,12 @@ const drawGeoFences = (geoFences: GeoFence[] | undefined) => {
   }
 };
 
-const MapScreen: React.FC = () => {
-  const [mapRegion, setMapRegion] = useState<LatLng>();
+const TrackingScreen: React.FC = () => {
   const [userLocation, setUserLocation] = useState<LatLng>();
   const [chosenMapType, setChosenMapType] = useState<MapTypes>('standard');
   const [centreOnUser, setCentreOnUser] = useState(false);
   const [inGeofence, setInGeoFence] = useState(false);
+  const [isTracking, setIsTracking] = useState(false);
   const [geoFences, setGeoFences] = useState<GeoFence[]>();
 
   const { error: fetchError, data: data } = useGeofencesQuery();
@@ -97,10 +96,6 @@ const MapScreen: React.FC = () => {
   // Map event listner functions
   const toggleMapType = () =>
     chosenMapType === 'satellite' ? setChosenMapType('standard') : setChosenMapType('satellite');
-
-  const regionChange = (region: Region) => {
-    setMapRegion(region);
-  };
 
   const userChange = (location: EventUserLocation) => {
     const newUserLocation: LatLng = {
@@ -136,44 +131,32 @@ const MapScreen: React.FC = () => {
   }
   return (
     <View style={styles.container}>
-      <MapView
-        ref={mapView}
-        mapType={chosenMapType}
-        showsUserLocation
-        style={styles.mapStyle}
-        onRegionChange={(region) => regionChange(region)}
-        onRegionChangeComplete={(region) => regionChange(region)}
-        onUserLocationChange={(location) => userChange(location)}
-        onMapReady={animateMapToUserPos}
-        onDoublePress={() => setCentreOnUser(false)}
-        onPanDrag={() => setCentreOnUser(false)}>
-        {drawGeoFences(geoFences)}
-      </MapView>
+      <View style={styles.mapContainer}>
+        <MapView
+          ref={mapView}
+          mapType={chosenMapType}
+          showsUserLocation
+          style={styles.mapStyle}
+          onUserLocationChange={(location) => userChange(location)}
+          onMapReady={animateMapToUserPos}
+          onDoublePress={() => setCentreOnUser(false)}
+          onPanDrag={() => setCentreOnUser(false)}>
+          {drawGeoFences(geoFences)}
+        </MapView>
 
-      <View style={styles.positionContainer}>
-        <Text style={styles.infoText}>
-          User location: ({userLocation ? userLocation.latitude.toPrecision(5) : 'Unknown'},{' '}
-          {userLocation ? userLocation.longitude.toPrecision(5) : 'Unknown'})
-        </Text>
-        <Text style={styles.infoText}>
-          Map region: ({mapRegion ? mapRegion.latitude.toPrecision(5) : ''},{' '}
-          {mapRegion ? mapRegion.longitude.toPrecision(5) : ''})
-        </Text>
+        <View style={styles.infoContainer}>
+          <TouchableOpacity style={styles.mapStyleButton} onPress={toggleMapType}>
+            <FAIcon style={mapTypeIconStyle} name="globe-europe" />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.centreOnUserButton} onPress={animateMapToUserPos}>
+            <FAIcon style={centreOnUserIconStyle} name="crosshairs" />
+          </TouchableOpacity>
+        </View>
       </View>
-      <View style={styles.infoContainer}>
-        <TouchableOpacity style={styles.mapStyleButton} onPress={toggleMapType}>
-          <FAIcon style={mapTypeIconStyle} name="globe-europe" />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.centreOnUserButton} onPress={animateMapToUserPos}>
-          <FAIcon style={centreOnUserIconStyle} name="crosshairs" />
-        </TouchableOpacity>
+      <View style={styles.trackingContainer}>
+        <Text>InGeoFence: {inGeofence ? 'true' : 'false'}</Text>
+        <Text>IsTracking: {isTracking ? 'true' : 'false'}</Text>
       </View>
-      <SnackBar
-        variant={SnackBarVariant.INFO}
-        title={'Inside a Hover zone!'}
-        show={inGeofence}
-        message={'Head over to the Hover screen to start tracking.'}
-      />
     </View>
   );
 };
@@ -183,6 +166,16 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'space-between',
+  },
+  mapContainer: {
+    display: 'flex',
+    width: '100%',
+    height: '40%',
+  },
+  trackingContainer: {
+    display: 'flex',
+    width: '100%',
+    height: '60%',
   },
   mapStyle: {
     width,
@@ -203,12 +196,6 @@ const styles = StyleSheet.create({
     margin: 0,
     borderRadius: 10,
   },
-  infoText: {
-    ...Typography.bodyText,
-    color: Colors.white,
-    paddingBottom: Spacing.hairline,
-    backgroundColor: Colors.almostBlack,
-  },
   mapStyleButton: {
     ...Buttons.iconButton,
     backgroundColor: Colors.almostBlack,
@@ -224,4 +211,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MapScreen;
+export default TrackingScreen;

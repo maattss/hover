@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Buttons, Colors, Typography, Spacing } from '../theme';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
@@ -8,7 +8,6 @@ interface SnackBarProps {
   title: string;
   message?: string;
   show: boolean;
-  setShow: React.Dispatch<React.SetStateAction<boolean>>;
   closeButton?: boolean;
 }
 export enum SnackBarVariant {
@@ -50,19 +49,20 @@ const getColor = (variant: SnackBarVariant) => {
 };
 
 const SnackBar = (props: SnackBarProps) => {
+  const [show, setShow] = useState(props.show);
   const snackBarBgColor = {
     backgroundColor: getBackgroundColor(props.variant),
   };
   const snackBarColor = {
     color: getColor(props.variant),
   };
-  if (props.show) {
+  if (props.show || show) {
     return (
       <View style={[styles.container, snackBarBgColor]}>
         <Text style={[styles.title, snackBarColor]}>{props.title}</Text>
         <Text style={[styles.message, snackBarColor]}>{props.message}</Text>
         {props.closeButton && (
-          <TouchableOpacity onPress={() => props.setShow(false)} style={styles.closeButton}>
+          <TouchableOpacity onPress={() => setShow(false)} style={styles.closeButton}>
             <FAIcon name="times" style={{ ...Buttons.buttonText }} />
           </TouchableOpacity>
         )}
