@@ -27,7 +27,7 @@ const TabNavigator: React.FC = () => {
     <>
       <Tab.Navigator tabBarOptions={{ activeTintColor: Colors.blue, keyboardHidesTabBar: true }}>
         <Tab.Screen
-          name="Home"
+          name="Feed"
           component={FeedNavigator}
           options={{
             tabBarIcon: tabIconHome,

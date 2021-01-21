@@ -1,6 +1,6 @@
 import React, { useState, createRef, useEffect } from 'react';
 import MapView, { Circle, EventUserLocation, LatLng, MapTypes, Polygon } from 'react-native-maps';
-import { StyleSheet, Dimensions, Text, View, TouchableOpacity, Alert } from 'react-native';
+import { StyleSheet, Dimensions, Text, View, Alert, TouchableHighlight, TouchableOpacity } from 'react-native';
 import {
   GeoFence,
   GeoFenceVariant,
@@ -143,6 +143,9 @@ const TrackingScreen: React.FC = () => {
     setIsTracking(false);
     // TODO: Upload activity to db
   };
+  const pauseTracking = () => {
+    setCounterRunning(false);
+  };
 
   useInterval(
     () => {
@@ -151,7 +154,7 @@ const TrackingScreen: React.FC = () => {
     counterRunning ? 1000 : null,
   );
 
-  // TODO: Add timer/ dynamic element illustrating tracking
+  // TODO: Add timer/dynamic element illustrating tracking
 
   if (fetchError) {
     console.error('Error:', fetchError);
@@ -198,22 +201,24 @@ const TrackingScreen: React.FC = () => {
           <Text style={{ ...Typography.headerText, textAlign: 'center' }}>Start hovering to earn points!</Text>
         )}
       </View>
-      {inGeofence ? (
-        <View style={styles.trackingButtonContainer}>
-          {isTracking ? (
-            <TouchableOpacity style={[styles.trackingButton, { backgroundColor: Colors.red }]} onPress={stopTracking}>
-              <Text style={styles.trackingButtonText}>Stop</Text>
-            </TouchableOpacity>
-          ) : (
-            <TouchableOpacity
-              style={[styles.trackingButton, { backgroundColor: Colors.green }]}
-              onPress={startTracking}>
-              <Text style={styles.trackingButtonText}>Start</Text>
-            </TouchableOpacity>
-          )}
+
+      {isTracking ? (
+        <View style={styles.stopButtonContainer}>
+          <TouchableOpacity style={[styles.trackingButton, { backgroundColor: Colors.red }]} onPress={stopTracking}>
+            <Text style={styles.trackingButtonText}>Stop</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.trackingButton, { backgroundColor: Colors.gray800 }]}
+            onPress={pauseTracking}>
+            <Text style={styles.trackingButtonText}>Pause</Text>
+          </TouchableOpacity>
         </View>
       ) : (
-        <></>
+        <View style={styles.startButtonContainer}>
+          <TouchableOpacity style={[styles.trackingButton, { backgroundColor: Colors.green }]} onPress={startTracking}>
+            <Text style={styles.trackingButtonText}>Start</Text>
+          </TouchableOpacity>
+        </View>
       )}
     </View>
   );
@@ -255,9 +260,17 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.almostBlack,
     marginTop: Spacing.smallest,
   },
-  trackingButtonContainer: {
+  startButtonContainer: {
     height: '30%',
-    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  stopButtonContainer: {
+    height: '30%',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginLeft: Spacing.extraLarge,
+    marginRight: Spacing.extraLarge,
   },
   trackingButton: {
     padding: Spacing.small,
