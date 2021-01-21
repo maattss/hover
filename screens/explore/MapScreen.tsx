@@ -15,7 +15,6 @@ import SnackBar, { SnackBarVariant } from '../../components/SnackBar';
 import { isInsideGeoFences } from '../../helpers/geoFenceCalculations';
 import { useGeofencesQuery } from '../../graphql/queries/Geofences.generated';
 import { convertToGeoFence } from '../../helpers/objectMappers';
-import LocationSnackBar from '../../components/LocationSnackBar';
 
 const { width, height } = Dimensions.get('window');
 
@@ -76,9 +75,7 @@ const MapScreen: React.FC = () => {
   const [userLocation, setUserLocation] = useState<LatLng>();
   const [chosenMapType, setChosenMapType] = useState<MapTypes>('standard');
   const [centreOnUser, setCentreOnUser] = useState(false);
-  const [showLocationSnackBar, setShowLocationSnackBar] = useState(false);
-  const [newActivity, setNewActivity] = useState(false);
-  const [tracking, setTracking] = useState(false);
+  const [showSnackBar, setShowSnackBar] = useState(false);
   const [geoFences, setGeoFences] = useState<GeoFence[]>();
 
   const { error: fetchError, data: data } = useGeofencesQuery();
@@ -113,19 +110,10 @@ const MapScreen: React.FC = () => {
     setUserLocation(newUserLocation);
 
     if (isInsideGeoFences(newUserLocation, geoFences)) {
-      setShowLocationSnackBar(true);
+      setShowSnackBar(true);
     } else {
-      setShowLocationSnackBar(false);
+      setShowSnackBar(false);
     }
-  };
-  const startTracking = () => {
-    // TODO: Implement tracking mechanism
-  };
-  const completeActivity = () => {
-    // TODO: Upload activity to db
-    setShowLocationSnackBar(false);
-    setTracking(false);
-    setNewActivity(true);
   };
 
   const mapView = createRef<MapView>();
@@ -180,14 +168,13 @@ const MapScreen: React.FC = () => {
           <FAIcon style={centreOnUserIconStyle} name="crosshairs" />
         </TouchableOpacity>
       </View>
-      <LocationSnackBar
-        show={showLocationSnackBar}
-        setShow={setShowLocationSnackBar}
-        tracking={tracking}
-        setTracking={setTracking}
-        completeActivity={completeActivity}
+      <SnackBar
+        variant={SnackBarVariant.INFO}
+        title={'Earning points!'}
+        message={'You are inside a geofence and will automatically earn points when you are inside this area.'}
+        show={showSnackBar}
+        setShow={setShowSnackBar}
       />
-      {newActivity && <Text>Activity uploaded successfully!</Text>}
     </View>
   );
 };
