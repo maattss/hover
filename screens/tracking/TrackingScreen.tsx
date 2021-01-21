@@ -74,7 +74,7 @@ const TrackingScreen: React.FC = () => {
   const [chosenMapType, setChosenMapType] = useState<MapTypes>('standard');
   const [centreOnUser, setCentreOnUser] = useState(false);
   const [inGeofence, setInGeoFence] = useState(false);
-
+  const [isTracking, setIsTracking] = useState(false);
   const [geoFences, setGeoFences] = useState<GeoFence[]>();
 
   const { error: fetchError, data: data } = useGeofencesQuery();
@@ -155,6 +155,7 @@ const TrackingScreen: React.FC = () => {
       </View>
       <View style={styles.trackingContainer}>
         <Text style={{ ...Typography.largeBodyText }}>InGeoFence: {inGeofence ? 'true' : 'false'}</Text>
+        <Text style={{ ...Typography.largeBodyText }}>IsTracking: {isTracking ? 'true' : 'false'}</Text>
       </View>
     </View>
   );
