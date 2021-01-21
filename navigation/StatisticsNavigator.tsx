@@ -9,7 +9,7 @@ const StatisticsStack = createStackNavigator<StatisticsStackParamList>();
 const StatisticsNavigator: React.FC = () => {
   return (
     <StatisticsStack.Navigator>
-      <StatisticsStack.Screen name="Statistics" component={StatisticsTopBar} />
+      <StatisticsStack.Screen name="Leaderboard" component={StatisticsTopBar} />
     </StatisticsStack.Navigator>
   );
 };

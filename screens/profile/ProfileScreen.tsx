@@ -1,11 +1,11 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { Typography } from '../../theme';
+import { Spacing, Typography } from '../../theme';
 
 const ProfileScreen: React.FC = () => {
   return (
     <View style={styles.container}>
-      <Text style={{ ...Typography.headerText }}>Your profile screen</Text>
+      <Text style={{ ...Typography.headerText, marginTop: Spacing.base }}>Profile screen</Text>
     </View>
   );
 };

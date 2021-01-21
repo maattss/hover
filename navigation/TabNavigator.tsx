@@ -7,6 +7,8 @@ import { RootTabParamList } from '../types/navigationTypes';
 import ExploreNavigator from './ExploreNavigator';
 import FeedNavigator from './FeedNavigator';
 import StatisticsNavigator from './StatisticsNavigator';
+import TrackingNavigator from './TrackingNavigator';
+import ProfileNavigator from './ProfileNavigator';
 
 const TabIcon = (props: { name: string; color: string }) => {
   return <FAIcon style={styles.tabicon} {...props} />;
@@ -16,14 +18,16 @@ const Tab = createBottomTabNavigator<RootTabParamList>();
 
 const TabNavigator: React.FC = () => {
   const tabIconHome = ({ color = '' as string }) => <TabIcon name="home" color={color} />;
-  const tabIconExplore = ({ color = '' as string }) => <TabIcon name="location-arrow" color={color} />;
+  const tabIconExplore = ({ color = '' as string }) => <TabIcon name="map" color={color} />;
   const tabIconStatistics = ({ color = '' as string }) => <TabIcon name="chart-bar" color={color} />;
+  const tabIconTracking = ({ color = '' as string }) => <TabIcon name="location-arrow" color={color} />;
+  const tabIconProfile = ({ color = '' as string }) => <TabIcon name="user" color={color} />;
 
   return (
     <>
       <Tab.Navigator tabBarOptions={{ activeTintColor: Colors.blue, keyboardHidesTabBar: true }}>
         <Tab.Screen
-          name="Feed"
+          name="Home"
           component={FeedNavigator}
           options={{
             tabBarIcon: tabIconHome,
@@ -39,7 +43,23 @@ const TabNavigator: React.FC = () => {
         />
 
         <Tab.Screen
-          name="Statistics"
+          name="Hover"
+          component={TrackingNavigator}
+          options={{
+            tabBarIcon: tabIconTracking,
+          }}
+        />
+
+        <Tab.Screen
+          name="Profile"
+          component={ProfileNavigator}
+          options={{
+            tabBarIcon: tabIconProfile,
+          }}
+        />
+
+        <Tab.Screen
+          name="Leaderboard"
           component={StatisticsNavigator}
           options={{
             tabBarIcon: tabIconStatistics,

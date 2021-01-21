@@ -118,8 +118,8 @@ const TrackingScreen: React.FC = () => {
       {
         longitude: userLocation ? userLocation.longitude : defaultLocation.longitude,
         latitude: userLocation ? userLocation.latitude : defaultLocation.latitude,
-        latitudeDelta: 0.04,
-        longitudeDelta: 0.04 * (width / height),
+        latitudeDelta: 0.01,
+        longitudeDelta: 0.01 * (width / height),
       },
       1000,
     );
@@ -154,8 +154,8 @@ const TrackingScreen: React.FC = () => {
         </View>
       </View>
       <View style={styles.trackingContainer}>
-        <Text>InGeoFence: {inGeofence ? 'true' : 'false'}</Text>
-        <Text>IsTracking: {isTracking ? 'true' : 'false'}</Text>
+        <Text style={{ ...Typography.largeBodyText }}>InGeoFence: {inGeofence ? 'true' : 'false'}</Text>
+        <Text style={{ ...Typography.largeBodyText }}>IsTracking: {isTracking ? 'true' : 'false'}</Text>
       </View>
     </View>
   );
@@ -163,38 +163,29 @@ const TrackingScreen: React.FC = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    width: '100%',
+    height: '100%',
   },
   mapContainer: {
-    display: 'flex',
     width: '100%',
     height: '40%',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   trackingContainer: {
-    display: 'flex',
     width: '100%',
     height: '60%',
+    padding: Spacing.base,
   },
   mapStyle: {
-    width,
-    height,
+    width: '98%',
+    height: '95%',
+    borderRadius: Spacing.smaller,
   },
   infoContainer: {
     position: 'absolute',
     top: '6%',
-    right: '0.5%',
-  },
-  positionContainer: {
-    backgroundColor: Colors.almostBlack,
-    alignItems: 'flex-start',
-    position: 'absolute',
-    top: '6%',
-    left: '0.5%',
-    padding: Spacing.smaller,
-    margin: 0,
-    borderRadius: 10,
+    right: '2%',
   },
   mapStyleButton: {
     ...Buttons.iconButton,

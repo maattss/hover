@@ -6,9 +6,11 @@ export type RootStackParamList = {
 };
 
 export type RootTabParamList = {
-  Feed: undefined;
+  Home: undefined;
   Explore: undefined;
-  Statistics: undefined;
+  Hover: undefined;
+  Profile: undefined;
+  Leaderboard: undefined;
 };
 
 export type FeedStackParamList = {
@@ -16,10 +18,16 @@ export type FeedStackParamList = {
 } & SettingsNavigationStackParamList;
 
 export type ExploreStackParamList = {
-  Map: undefined;
+  Explore: undefined;
 };
 export type StatisticsStackParamList = {
-  Statistics: undefined;
+  Leaderboard: undefined;
+};
+export type TrackingStackParamList = {
+  Hover: undefined;
+};
+export type ProfileStackParamList = {
+  Profile: undefined;
 };
 
 export type FeedTopTabStackParamList = {
