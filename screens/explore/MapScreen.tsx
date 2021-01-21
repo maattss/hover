@@ -75,7 +75,6 @@ const MapScreen: React.FC = () => {
   const [userLocation, setUserLocation] = useState<LatLng>();
   const [chosenMapType, setChosenMapType] = useState<MapTypes>('standard');
   const [centreOnUser, setCentreOnUser] = useState(false);
-  const [inGeofence, setInGeoFence] = useState(false);
   const [showSnackbar, setShowSnackbar] = useState(false);
   const [geoFences, setGeoFences] = useState<GeoFence[]>();
 
@@ -111,10 +110,8 @@ const MapScreen: React.FC = () => {
     setUserLocation(newUserLocation);
 
     if (isInsideGeoFences(newUserLocation, geoFences)) {
-      setInGeoFence(true);
       setShowSnackbar(true);
     } else {
-      setInGeoFence(false);
       setShowSnackbar(false);
     }
   };
