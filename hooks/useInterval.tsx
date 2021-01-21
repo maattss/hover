@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
 export function useInterval(callback: () => void, delay: number | null) {
   // eslint-disable-next-line @typescript-eslint/no-empty-function

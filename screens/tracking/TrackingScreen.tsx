@@ -135,7 +135,7 @@ const TrackingScreen: React.FC = () => {
   };
 
   const stopTracking = () => {
-    setCounterRunning(true);
+    setCounterRunning(false);
     setIsTracking(false);
   };
 
@@ -174,18 +174,18 @@ const TrackingScreen: React.FC = () => {
           </TouchableOpacity>
         </View>
       </View>
-      <View style={styles.trackingContainer}>
-        <Text style={{ ...Typography.bodyText }}>
-          [InGeoFence={inGeofence ? 'true' : 'false'}] [isTracking={isTracking ? 'true' : 'false'}] [counterRunning=
-          {counterRunning ? 'true' : 'false'}]
-        </Text>
+      <Text style={{ ...Typography.bodyText, position: 'absolute', top: 10, left: 20 }}>
+        [InGeoFence={inGeofence ? 'true' : 'false'}] [isTracking={isTracking ? 'true' : 'false'}] [counterRunning=
+        {counterRunning ? 'true' : 'false'}]
+      </Text>
+      <View style={styles.trackingInfoContainer}>
+        {isTracking && <Text style={{ ...Typography.headerText, textAlign: 'center' }}>Score: {score}</Text>}
+      </View>
+      <View style={styles.trackingButtonContainer}>
         {isTracking ? (
-          <>
-            <TouchableOpacity style={[styles.trackingButton, { backgroundColor: Colors.red }]} onPress={stopTracking}>
-              <Text style={styles.trackingButtonText}>Stop</Text>
-            </TouchableOpacity>
-            <Text style={{ ...Typography.headerText, textAlign: 'center' }}>Score: {score}</Text>
-          </>
+          <TouchableOpacity style={[styles.trackingButton, { backgroundColor: Colors.red }]} onPress={stopTracking}>
+            <Text style={styles.trackingButtonText}>Stop</Text>
+          </TouchableOpacity>
         ) : (
           <TouchableOpacity style={[styles.trackingButton, { backgroundColor: Colors.green }]} onPress={startTracking}>
             <Text style={styles.trackingButtonText}>Start</Text>
@@ -202,15 +202,14 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   mapContainer: {
-    width: '100%',
-    height: '50%',
+    height: '60%',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  trackingContainer: {
-    width: '100%',
-    height: '50%',
+  trackingInfoContainer: {
+    height: '20%',
     padding: Spacing.base,
+    justifyContent: 'center',
     alignItems: 'center',
   },
   mapStyle: {
@@ -231,6 +230,10 @@ const styles = StyleSheet.create({
     ...Buttons.iconButton,
     backgroundColor: Colors.almostBlack,
     marginTop: Spacing.smallest,
+  },
+  trackingButtonContainer: {
+    height: '30%',
+    alignItems: 'center',
   },
   trackingButton: {
     padding: Spacing.small,
