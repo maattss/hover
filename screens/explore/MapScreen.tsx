@@ -76,6 +76,7 @@ const MapScreen: React.FC = () => {
   const [chosenMapType, setChosenMapType] = useState<MapTypes>('standard');
   const [centreOnUser, setCentreOnUser] = useState(false);
   const [inGeofence, setInGeoFence] = useState(false);
+  const [showSnackbar, setShowSnackbar] = useState(false);
   const [geoFences, setGeoFences] = useState<GeoFence[]>();
 
   const { error: fetchError, data: data } = useGeofencesQuery();
@@ -111,8 +112,10 @@ const MapScreen: React.FC = () => {
 
     if (isInsideGeoFences(newUserLocation, geoFences)) {
       setInGeoFence(true);
+      setShowSnackbar(true);
     } else {
       setInGeoFence(false);
+      setShowSnackbar(false);
     }
   };
 
@@ -171,7 +174,8 @@ const MapScreen: React.FC = () => {
       <SnackBar
         variant={SnackBarVariant.INFO}
         title={'Inside a Hover zone!'}
-        show={inGeofence}
+        show={showSnackbar}
+        setShow={setShowSnackbar}
         message={'Head over to the Hover screen to start tracking.'}
       />
     </View>
