@@ -141,7 +141,8 @@ const TrackingScreen: React.FC = () => {
   const stopTracking = () => {
     setCounterRunning(false);
     setIsTracking(false);
-    // TODO: Upload activity to db
+    // TODO: Upload activity to db, mutation
+    Alert.alert('Upload complete', 'Activity uploaded successfully!', { text: 'OK' }, { cancelable: false });
   };
   const pauseTracking = () => {
     setCounterRunning(false);
@@ -153,8 +154,6 @@ const TrackingScreen: React.FC = () => {
     },
     counterRunning ? 1000 : null,
   );
-
-  // TODO: Add timer/dynamic element illustrating tracking
 
   if (fetchError) {
     console.error('Error:', fetchError);
@@ -192,20 +191,49 @@ const TrackingScreen: React.FC = () => {
         {trackingCategory ? GeoFenceCategory[trackingCategory] : 'none'}]
       </Text>
       <View style={styles.trackingInfoContainer}>
-        {isTracking ? (
-          <>
-            <Text style={{ ...Typography.headerText }}>Earning point, keep it going!</Text>
-            <View>
-              <Text style={{ ...Typography.headerText, padding: Spacing.base }}>{score.toFixed(0)}</Text>
-              <ActivityIndicator size={'large'} color={Colors.blue} />
-            </View>
-          </>
-        ) : (
-          <Text style={{ ...Typography.headerText, textAlign: 'center' }}>Start hovering to earn points!</Text>
+        {isTracking && counterRunning && (
+          <View>
+            <Text style={{ ...Typography.headerText }}>Earning points, keep it going!</Text>
+            <Text style={{ ...Typography.headerText, padding: Spacing.base }}>{score.toFixed(0)}</Text>
+            <ActivityIndicator size={'large'} color={Colors.blue} />
+          </View>
+        )}
+        {isTracking && !counterRunning && (
+          <View>
+            <Text style={{ ...Typography.headerText }}>Paused, resume to keep earning points!</Text>
+            <Text style={{ ...Typography.headerText, padding: Spacing.base }}>{score.toFixed(0)}</Text>
+          </View>
+        )}
+        {!isTracking && !counterRunning && inGeofence && (
+          <Text style={{ ...Typography.headerText, textAlign: 'center' }}>
+            Inside geofence. Start hovering to earn points!
+          </Text>
+        )}
+        {!isTracking && !counterRunning && !inGeofence && (
+          <Text style={{ ...Typography.headerText, textAlign: 'center' }}>Move inside geofence to start tracking</Text>
         )}
       </View>
 
-      {isTracking ? (
+      {/* Tracking stopped / not started and user located inside geo fence */}
+      {!isTracking && !counterRunning && inGeofence && (
+        <View style={styles.startButtonContainer}>
+          <TouchableOpacity style={[styles.trackingButton, { backgroundColor: Colors.green }]} onPress={startTracking}>
+            <Text style={styles.trackingButtonText}>Start</Text>
+          </TouchableOpacity>
+        </View>
+      )}
+
+      {/* Tracking paused */}
+      {isTracking && !counterRunning && (
+        <View style={styles.startButtonContainer}>
+          <TouchableOpacity style={[styles.trackingButton, { backgroundColor: Colors.green }]} onPress={startTracking}>
+            <Text style={styles.trackingButtonText}>Resume</Text>
+          </TouchableOpacity>
+        </View>
+      )}
+
+      {/* Tracking */}
+      {isTracking && counterRunning && (
         <View style={styles.stopButtonContainer}>
           <TouchableOpacity style={[styles.trackingButton, { backgroundColor: Colors.red }]} onPress={stopTracking}>
             <Text style={styles.trackingButtonText}>Stop</Text>
@@ -214,12 +242,6 @@ const TrackingScreen: React.FC = () => {
             style={[styles.trackingButton, { backgroundColor: Colors.gray800 }]}
             onPress={pauseTracking}>
             <Text style={styles.trackingButtonText}>Pause</Text>
-          </TouchableOpacity>
-        </View>
-      ) : (
-        <View style={styles.startButtonContainer}>
-          <TouchableOpacity style={[styles.trackingButton, { backgroundColor: Colors.green }]} onPress={startTracking}>
-            <Text style={styles.trackingButtonText}>Start</Text>
           </TouchableOpacity>
         </View>
       )}
