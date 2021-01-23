@@ -1,6 +1,6 @@
 import React, { useState, createRef, useEffect } from 'react';
 import MapView, { Circle, EventUserLocation, LatLng, MapTypes, Polygon } from 'react-native-maps';
-import { StyleSheet, Dimensions, Text, View, Alert, TouchableHighlight, TouchableOpacity } from 'react-native';
+import { StyleSheet, Dimensions, Text, View, Alert, TouchableOpacity, ActivityIndicator } from 'react-native';
 import {
   GeoFence,
   GeoFenceVariant,
@@ -194,8 +194,11 @@ const TrackingScreen: React.FC = () => {
       <View style={styles.trackingInfoContainer}>
         {isTracking ? (
           <>
-            <Text style={{ ...Typography.headerText }}>Score</Text>
-            <Text style={{ ...Typography.headerText, padding: Spacing.base }}>{score.toFixed(0)}</Text>
+            <Text style={{ ...Typography.headerText }}>Earning point, keep it going!</Text>
+            <View>
+              <Text style={{ ...Typography.headerText, padding: Spacing.base }}>{score.toFixed(0)}</Text>
+              <ActivityIndicator size={'large'} color={Colors.blue} />
+            </View>
           </>
         ) : (
           <Text style={{ ...Typography.headerText, textAlign: 'center' }}>Start hovering to earn points!</Text>
