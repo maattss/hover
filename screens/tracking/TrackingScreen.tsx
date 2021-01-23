@@ -191,26 +191,29 @@ const TrackingScreen: React.FC = () => {
         {trackingCategory ? GeoFenceCategory[trackingCategory] : 'none'}]
       </Text>
       <View style={styles.trackingInfoContainer}>
+        {/* Tracking */}
         {isTracking && counterRunning && (
           <View>
-            <Text style={{ ...Typography.headerText }}>Earning points, keep it going!</Text>
-            <Text style={{ ...Typography.headerText, padding: Spacing.base }}>{score.toFixed(0)}</Text>
-            <ActivityIndicator size={'large'} color={Colors.blue} />
+            <Text style={{ ...Typography.headerText, marginTop: Spacing.base }}>Hovering...</Text>
+            <Text style={{ ...Typography.headerText, marginTop: Spacing.base }}>Score: {score.toFixed(0)}</Text>
+            <ActivityIndicator size={'large'} color={Colors.blue} style={{ marginTop: Spacing.base }} />
           </View>
         )}
+        {/* Tracking paused */}
         {isTracking && !counterRunning && (
           <View>
-            <Text style={{ ...Typography.headerText }}>Paused, resume to keep earning points!</Text>
-            <Text style={{ ...Typography.headerText, padding: Spacing.base }}>{score.toFixed(0)}</Text>
+            <Text style={{ ...Typography.headerText, marginTop: Spacing.base }}>Paused</Text>
+            <Text style={{ ...Typography.largeBodyText }}>Resume to earn more points!</Text>
+            <Text style={{ ...Typography.headerText, marginTop: Spacing.base }}>Score: {score.toFixed(0)}</Text>
           </View>
         )}
+        {/* Not tracking and in geo fence */}
         {!isTracking && !counterRunning && inGeofence && (
-          <Text style={{ ...Typography.headerText, textAlign: 'center' }}>
-            Inside geofence. Start hovering to earn points!
-          </Text>
+          <Text style={{ ...Typography.headerText, textAlign: 'center' }}>Start hovering to earn points!</Text>
         )}
+        {/* Not tracking and not in geo fence */}
         {!isTracking && !counterRunning && !inGeofence && (
-          <Text style={{ ...Typography.headerText, textAlign: 'center' }}>Move inside geofence to start tracking</Text>
+          <Text style={{ ...Typography.headerText, textAlign: 'center' }}>Move to hover zone to earning points!</Text>
         )}
       </View>
 
@@ -298,7 +301,7 @@ const styles = StyleSheet.create({
     marginRight: Spacing.extraLarge,
   },
   trackingButton: {
-    padding: Spacing.small,
+    padding: Spacing.smallest,
     borderRadius: 50,
     width: 100,
     height: 100,
