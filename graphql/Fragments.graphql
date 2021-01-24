@@ -29,7 +29,6 @@ fragment userFragment on users {
 
 fragment activityFragment on activities {
   activity_id
-  category
   caption
   created_at
   comments {

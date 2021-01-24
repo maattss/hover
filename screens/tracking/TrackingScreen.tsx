@@ -83,6 +83,18 @@ const TrackingScreen: React.FC = () => {
 
   const { error: fetchError, data: data } = useGeofencesQuery();
 
+  /*{
+    "activity": {
+        "caption": "Test activity",
+        "geofence_id": 9,
+        "score": 100,
+        "user_id": "LqzKOPWaY9aiquOGu9SBItAfJUz2",
+        "started_at": "2021-01-24T18:00:00",
+        "duration": "1:30:23"
+    }
+    }*/
+  const [addActivity, { loading: mutationLoading, error: mutationError, data: response }] = useAddActivity();
+
   useEffect(() => {
     if (data) setGeoFences(convertToGeoFence(data));
   }, [data]);
@@ -207,17 +219,17 @@ const TrackingScreen: React.FC = () => {
             <Text style={{ ...Typography.headerText, marginTop: Spacing.base }}>Score: {score.toFixed(0)}</Text>
           </View>
         )}
-        {/* Not tracking and in geo fence */}
+        {/* Not tracking and user in geo fence */}
         {!isTracking && !counterRunning && inGeofence && (
           <Text style={{ ...Typography.headerText, textAlign: 'center' }}>Start hovering to earn points!</Text>
         )}
-        {/* Not tracking and not in geo fence */}
+        {/* Not tracking and user outside geo fence */}
         {!isTracking && !counterRunning && !inGeofence && (
           <Text style={{ ...Typography.headerText, textAlign: 'center' }}>Move to hover zone to earning points!</Text>
         )}
       </View>
 
-      {/* Tracking stopped / not started and user located inside geo fence */}
+      {/* Tracking stopped / not started and user in geo fence */}
       {!isTracking && !counterRunning && inGeofence && (
         <View style={styles.startButtonContainer}>
           <TouchableOpacity style={[styles.trackingButton, { backgroundColor: Colors.green }]} onPress={startTracking}>

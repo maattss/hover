@@ -1,5 +1,9 @@
-mutation InsertActivity($user_id: String!, $geofence_id: Int!, $score: Int!, $caption: String!, $duration: interval!) {
-  insert_activities_one(
-    object: { caption: $caption, duration: $duration, score: $score, geofence_id: $geofence_id, user_id: $user_id }
-  )
+mutation InsertActivity($activity: activities_insert_input!) {
+  insert_activities_one(object: $activity) {
+    caption
+    duration
+    geofence_id
+    score
+    started_at
+  }
 }

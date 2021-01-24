@@ -4566,55 +4566,54 @@ export enum Users_Update_Column {
   UpdatedAt = 'updated_at',
 }
 
-export type GeofencesQueryVariables = Types.Exact<{ [key: string]: never }>;
+export type InsertActivityMutationVariables = Types.Exact<{
+  activity: Types.Activities_Insert_Input;
+}>;
 
-export type GeofencesQuery = { readonly __typename: 'query_root' } & {
-  readonly geofences: ReadonlyArray<
-    { readonly __typename: 'geofences' } & Pick<
-      Types.Geofences,
-      'id' | 'name' | 'description' | 'latitude' | 'longitude' | 'radius' | 'variant' | 'coordinates' | 'category'
+export type InsertActivityMutation = { readonly __typename: 'mutation_root' } & {
+  readonly insert_activities_one?: Types.Maybe<
+    { readonly __typename: 'activities' } & Pick<
+      Types.Activities,
+      'caption' | 'duration' | 'geofence_id' | 'score' | 'started_at'
     >
   >;
 };
 
-export const GeofencesDocument = gql`
-  query Geofences {
-    geofences {
-      id
-      name
-      description
-      latitude
-      longitude
-      radius
-      variant
-      coordinates
-      category
+export const InsertActivityDocument = gql`
+  mutation InsertActivity($activity: activities_insert_input!) {
+    insert_activities_one(object: $activity) {
+      caption
+      duration
+      geofence_id
+      score
+      started_at
     }
   }
 `;
 
 /**
- * __useGeofencesQuery__
+ * __useInsertActivityMutation__
  *
- * To run a query within a React component, call `useGeofencesQuery` and pass it any options that fit your needs.
- * When your component renders, `useGeofencesQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
+ * To run a mutation, you first call `useInsertActivityMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useInsertActivityMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
  *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const { data, loading, error } = useGeofencesQuery({
+ * const [insertActivityMutation, { data, loading, error }] = useInsertActivityMutation({
  *   variables: {
+ *      activity: // value for 'activity'
  *   },
  * });
  */
-export function useGeofencesQuery(baseOptions?: Apollo.QueryHookOptions<GeofencesQuery, GeofencesQueryVariables>) {
-  return Apollo.useQuery<GeofencesQuery, GeofencesQueryVariables>(GeofencesDocument, baseOptions);
-}
-export function useGeofencesLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<GeofencesQuery, GeofencesQueryVariables>,
+export function useInsertActivityMutation(
+  baseOptions?: Apollo.MutationHookOptions<InsertActivityMutation, InsertActivityMutationVariables>,
 ) {
-  return Apollo.useLazyQuery<GeofencesQuery, GeofencesQueryVariables>(GeofencesDocument, baseOptions);
+  return Apollo.useMutation<InsertActivityMutation, InsertActivityMutationVariables>(
+    InsertActivityDocument,
+    baseOptions,
+  );
 }
-export type GeofencesQueryHookResult = ReturnType<typeof useGeofencesQuery>;
-export type GeofencesLazyQueryHookResult = ReturnType<typeof useGeofencesLazyQuery>;
+export type InsertActivityMutationHookResult = ReturnType<typeof useInsertActivityMutation>;
