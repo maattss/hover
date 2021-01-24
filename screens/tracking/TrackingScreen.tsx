@@ -72,28 +72,22 @@ const drawGeoFences = (geoFences: GeoFence[] | undefined) => {
 };
 
 const TrackingScreen: React.FC = () => {
+  // Map state
   const [userLocation, setUserLocation] = useState<LatLng>();
   const [chosenMapType, setChosenMapType] = useState<MapTypes>('standard');
   const [centreOnUser, setCentreOnUser] = useState(false);
+  const [geoFences, setGeoFences] = useState<GeoFence[]>();
+
+  // Tracking state
   const [inGeofence, setInGeoFence] = useState(false);
   const [isTracking, setIsTracking] = useState(false);
-  const [trackingCategory, setTrackingCategory] = useState<GeoFenceCategory>();
   const [counterRunning, setCounterRunning] = useState(false);
-  const [geoFences, setGeoFences] = useState<GeoFence[]>();
+  const [trackingCategory, setTrackingCategory] = useState<GeoFenceCategory>();
   const [score, setScore] = useState(0);
+  const [duration, setDuration] = useState(0);
 
   const { error: fetchError, data: data } = useGeofencesQuery();
 
-  /*{
-    "activity": {
-        "caption": "Test activity",
-        "geofence_id": 9,
-        "score": 100,
-        "user_id": "LqzKOPWaY9aiquOGu9SBItAfJUz2",
-        "started_at": "2021-01-24T18:00:00",
-        "duration": "1:30:23"
-    }
-    }*/
   const [
     InsertActivity,
     { loading: mutationLoading, error: mutationError, data: response },
@@ -162,10 +156,9 @@ const TrackingScreen: React.FC = () => {
       InsertActivity({
         variables: {
           activity: {
-            caption: 'Test activity',
             geofence_id: 9,
             user_id: 'LqzKOPWaY9aiquOGu9SBItAfJUz2',
-            score: 100,
+            score: score,
             started_at: '2021-01-24T18:00:00',
             duration: '1:30:23',
           },
