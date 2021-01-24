@@ -15,6 +15,7 @@ import { getGeoFenceScoreRatio, insideGeoFences } from '../../helpers/geoFenceCa
 import { useGeofencesQuery } from '../../graphql/queries/Geofences.generated';
 import { convertToGeoFence } from '../../helpers/objectMappers';
 import { useInterval } from '../../hooks/useInterval';
+import { useInsertActivityMutation } from '../../graphql/mutations/InsertActivity.generated';
 
 const { width, height } = Dimensions.get('window');
 
@@ -93,7 +94,10 @@ const TrackingScreen: React.FC = () => {
         "duration": "1:30:23"
     }
     }*/
-  const [addActivity, { loading: mutationLoading, error: mutationError, data: response }] = useAddActivity();
+  const [
+    InsertActivity,
+    { loading: mutationLoading, error: mutationError, data: response },
+  ] = useInsertActivityMutation();
 
   useEffect(() => {
     if (data) setGeoFences(convertToGeoFence(data));
@@ -153,8 +157,36 @@ const TrackingScreen: React.FC = () => {
   const stopTracking = () => {
     setCounterRunning(false);
     setIsTracking(false);
-    // TODO: Upload activity to db, mutation
-    Alert.alert('Upload complete', 'Activity uploaded successfully!', { text: 'OK' }, { cancelable: false });
+
+    try {
+      InsertActivity({
+        variables: {
+          activity: {
+            caption: 'Test activity',
+            geofence_id: 9,
+            user_id: 'LqzKOPWaY9aiquOGu9SBItAfJUz2',
+            score: 100,
+            started_at: '2021-01-24T18:00:00',
+            duration: '1:30:23',
+          },
+        },
+      });
+    } catch (error) {
+      console.error('Mutation error', error.message);
+    }
+
+    Alert.alert(
+      'Upload complete',
+      'Activity uploaded successfully!',
+      [
+        {
+          text: 'Cancel',
+          onPress: () => console.log('Cancel Pressed'),
+        },
+        { text: 'OK', onPress: () => console.log('OK Pressed') },
+      ],
+      { cancelable: false },
+    );
   };
   const pauseTracking = () => {
     setCounterRunning(false);
