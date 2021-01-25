@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { FlatList, Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { Colors, Typography } from '../theme';
+import { ApolloQueryResult } from '@apollo/client';
+import React, { useState, useEffect, useCallback } from 'react';
+import { FlatList, Image, RefreshControl, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { HighscoreQuery } from '../graphql/queries/Highscore.generated';
+import { Colors, Spacing, Typography } from '../theme';
 
 interface SortParam {
   data: Item[];
@@ -20,8 +22,7 @@ interface LeaderboardProps {
   avatarStyle?: Record<string, unknown>;
   oddRowColor?: string;
   evenRowColor?: string;
-  refreshing: boolean;
-  onRefresh: () => Promise<void>;
+  refetch?: () => Promise<ApolloQueryResult<HighscoreQuery>>;
 }
 
 export type Item = {
@@ -33,11 +34,20 @@ export type Item = {
 
 const Leaderboard = (props: LeaderboardProps) => {
   const [sortedData, setSortedData] = useState<Item[]>([]);
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
     const { data, sort } = props;
     setSortedData(sortData({ data, sort }));
-  }, []);
+  }, [props.data]);
+
+  const onRefresh = useCallback(async () => {
+    if (props.refetch) {
+      setRefreshing(true);
+      await props.refetch();
+      setRefreshing(false);
+    }
+  }, [refreshing]);
 
   const defaultRenderItem = (item: Item, index: number) => {
     const evenColor = props.evenRowColor || Colors.black;
@@ -76,8 +86,17 @@ const Leaderboard = (props: LeaderboardProps) => {
         data={sortedData}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({ item, index }) => renderItemS(item, index)}
-        refreshing={props.refreshing}
-        onRefresh={() => props.onRefresh()}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={() => onRefresh()}
+            title={'Loading...'}
+            titleColor={Colors.almostWhite}
+            tintColor={Colors.blue}
+            colors={[Colors.blue]}
+            progressBackgroundColor={Colors.transparent}
+          />
+        }
       />
     </SafeAreaView>
   );
@@ -106,7 +125,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   row: {
-    paddingTop: 15,
+    paddingTop: Spacing.base,
     paddingBottom: 15,
     flexDirection: 'row',
     alignItems: 'center',
@@ -122,7 +141,7 @@ const styles = StyleSheet.create({
     marginRight: 5,
   },
   singleDidget: {
-    paddingLeft: 16,
+    paddingLeft: Spacing.base,
     paddingRight: 6,
   },
   doubleDidget: {
@@ -139,7 +158,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     position: 'absolute',
     right: 15,
-    paddingLeft: 15,
+    paddingLeft: Spacing.base,
   },
   avatar: {
     height: 30,

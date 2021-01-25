@@ -2,45 +2,26 @@ import React, { useEffect, useState } from 'react';
 import Leaderboard, { Item } from '../../components/Leaderboard';
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import { HighscoreQueryVariables, useHighscoreQuery } from '../../graphql/queries/Highscore.generated';
-import { Colors, Spacing, Typography } from '../../theme';
+import { Spacing, Typography } from '../../theme';
 import { convertToHighscoreList } from '../../helpers/objectMappers';
+import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 const LeaderboardScreen: React.FC = () => {
   const { data: data, loading, error, refetch } = useHighscoreQuery({
     variables: {} as HighscoreQueryVariables,
-    notifyOnNetworkStatusChange: true,
   });
-  const [highscores, setHighscores] = useState<Item[]>();
-  const [refreshing, setRefreshing] = useState(false);
+  const [highscores, setHighscores] = useState<Item[]>([]);
 
   useEffect(() => {
     if (data) {
-      console.log(data.users);
       setHighscores(convertToHighscoreList(data));
     }
-    console.log('setRefreshing(false);');
-    setRefreshing(false);
   }, [data]);
 
-  const refresh = async () => {
-    setRefreshing(true);
-    refetch();
-  };
-
-  if (loading || refreshing) {
-    return (
-      <View style={styles.container}>
-        <ActivityIndicator style={styles.loading} size={'large'} color={Colors.blue} />;
-      </View>
-    );
-  }
+  if (loading) return <ActivityIndicator size={'large'} color={Colors.blue} />;
   if (error) return <Text style={styles.infoText}>{error.message}</Text>;
 
-  return (
-    <View style={styles.container}>
-      {highscores && <Leaderboard data={highscores} refreshing={refreshing} onRefresh={refresh} />}
-    </View>
-  );
+  return <View style={styles.container}>{highscores && <Leaderboard data={highscores} refetch={refetch} />}</View>;
 };
 
 export default LeaderboardScreen;
