@@ -34,7 +34,7 @@ fragment basicActivityFragment on activities {
   geofence_id
   score
   started_at
-  stopped
+  stopped_at
 }
 
 fragment activityFragment on activities {

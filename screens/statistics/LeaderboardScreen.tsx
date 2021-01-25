@@ -1,71 +1,47 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Leaderboard, { Item } from '../../components/Leaderboard';
-import { View } from 'react-native';
+import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
+import { HighscoreQueryVariables, useHighscoreQuery } from '../../graphql/queries/Highscore.generated';
+import { Spacing, Typography } from '../../theme';
+import { convertToHighscoreList } from '../../helpers/objectMappers';
+import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 const LeaderboardScreen: React.FC = () => {
-  const data: Item[] = [
-    {
-      name: 'Siri',
-      score: 923,
-      icon: 'https://landofblogging.files.wordpress.com/2014/01/bitstripavatarprofilepic.jpeg?w=300&h=300',
-    },
-    {
-      name: 'Mats',
-      score: 263,
-      icon: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRsSlzi6GEickw2Ft62IdJTfXWsDFrOIbwXhzddXXt4FvsbNGhp',
-    },
-    {
-      name: 'Henrik',
-      score: 523,
-      icon: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcShPis8NLdplTV1AJx40z-KS8zdgaSPaCfNINLtQ-ENdPvrtMWz',
-    },
-    {
-      name: 'Jenny',
-      score: 420,
-      icon: 'https://cdn.dribbble.com/users/223408/screenshots/2134810/me-dribbble-size-001-001_1x.png',
-    },
-    {
-      name: 'Hanne',
-      score: null,
-      icon: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSr27ZFBaclzKcxg2FgJh6xi3Z5-9vP_U1DPcB149bYXxlPKqv-',
-    },
-    {
-      name: 'Adam',
-      score: 12,
-      icon: 'https://www.shareicon.net/data/128x128/2016/09/15/829473_man_512x512.png',
-    },
-    { name: 'Derek Black', score: 244, icon: 'http://ttsbilisim.com/wp-content/uploads/2014/09/20120807.png' },
-    {
-      name: 'Ericka Johannesburg',
-      score: 201,
-      icon: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcShPis8NLdplTV1AJx40z-KS8zdgaSPaCfNINLtQ-ENdPvrtMWz',
-    },
-    {
-      name: 'Tina Turner',
-      score: 722,
-      icon: 'https://cdn.dribbble.com/users/223408/screenshots/2134810/me-dribbble-size-001-001_1x.png',
-    },
-    {
-      name: 'Harry Reynolds',
-      score: null,
-      icon: 'https://www.kindpng.com/picc/m/78-785827_user-profile-avatar-login-account-male-user-icon.png',
-    },
-    {
-      name: 'Betty Davis',
-      score: 25,
-      icon: 'https://landofblogging.files.wordpress.com/2014/01/bitstripavatarprofilepic.jpeg?w=300&h=300',
-    },
-    {
-      name: 'Lauren Leonard',
-      score: null,
-      icon: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSr27ZFBaclzKcxg2FgJh6xi3Z5-9vP_U1DPcB149bYXxlPKqv-',
-    },
-  ];
-  return (
-    <View>
-      <Leaderboard data={data} />
-    </View>
-  );
+  const { data: data, loading, error, refetch } = useHighscoreQuery({
+    variables: {} as HighscoreQueryVariables,
+  });
+  const [highscores, setHighscores] = useState<Item[]>([]);
+
+  useEffect(() => {
+    if (data) {
+      setHighscores(convertToHighscoreList(data));
+    }
+  }, [data]);
+
+  if (loading) return <ActivityIndicator size={'large'} color={Colors.blue} />;
+  if (error) return <Text style={styles.infoText}>{error.message}</Text>;
+
+  return <View style={styles.container}>{highscores && <Leaderboard data={highscores} refetch={refetch} />}</View>;
 };
 
 export default LeaderboardScreen;
+
+const styles = StyleSheet.create({
+  container: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '100%',
+    width: '100%',
+    paddingBottom: '50%',
+    flex: 1,
+  },
+  infoText: {
+    ...Typography.bodyText,
+    paddingTop: Spacing.base,
+  },
+  loading: {
+    flex: 1,
+    marginVertical: Spacing.smaller,
+  },
+});

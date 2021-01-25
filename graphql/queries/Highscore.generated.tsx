@@ -1,9 +1,7 @@
 /* eslint-disable */
 import * as Types from '../../types/types';
 
-import { BasicActivityFragmentFragment } from '../Fragments.generated';
 import { gql } from '@apollo/client';
-import { BasicActivityFragmentFragmentDoc } from '../Fragments.generated';
 import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -4581,46 +4579,71 @@ export enum Users_Update_Column {
   UpdatedAt = 'updated_at',
 }
 
-export type InsertActivityMutationVariables = Types.Exact<{
-  activity: Types.Activities_Insert_Input;
+export type HighscoreQueryVariables = Types.Exact<{
+  timespan?: Types.Maybe<Types.Scalars['timestamptz']>;
+  category?: Types.Maybe<Types.Scalars['String']>;
 }>;
 
-export type InsertActivityMutation = { readonly __typename: 'mutation_root' } & {
-  readonly insert_activities_one?: Types.Maybe<{ readonly __typename: 'activities' } & BasicActivityFragmentFragment>;
+export type HighscoreQuery = { readonly __typename: 'query_root' } & {
+  readonly users: ReadonlyArray<
+    { readonly __typename: 'users' } & Pick<Types.Users, 'id' | 'name' | 'picture'> & {
+        readonly activities_aggregate: { readonly __typename: 'activities_aggregate' } & {
+          readonly aggregate?: Types.Maybe<
+            { readonly __typename: 'activities_aggregate_fields' } & {
+              readonly sum?: Types.Maybe<
+                { readonly __typename: 'activities_sum_fields' } & Pick<Types.Activities_Sum_Fields, 'score'>
+              >;
+            }
+          >;
+        };
+      }
+  >;
 };
 
-export const InsertActivityDocument = gql`
-  mutation InsertActivity($activity: activities_insert_input!) {
-    insert_activities_one(object: $activity) {
-      ...basicActivityFragment
+export const HighscoreDocument = gql`
+  query Highscore($timespan: timestamptz, $category: String) {
+    users(
+      order_by: { activities_aggregate: { sum: { score: desc } } }
+      where: { activities: { started_at: { _lt: $timespan }, geofence: { category: { _eq: $category } } } }
+    ) {
+      id
+      name
+      picture
+      activities_aggregate {
+        aggregate {
+          sum {
+            score
+          }
+        }
+      }
     }
   }
-  ${BasicActivityFragmentFragmentDoc}
 `;
 
 /**
- * __useInsertActivityMutation__
+ * __useHighscoreQuery__
  *
- * To run a mutation, you first call `useInsertActivityMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useInsertActivityMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
+ * To run a query within a React component, call `useHighscoreQuery` and pass it any options that fit your needs.
+ * When your component renders, `useHighscoreQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
  *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const [insertActivityMutation, { data, loading, error }] = useInsertActivityMutation({
+ * const { data, loading, error } = useHighscoreQuery({
  *   variables: {
- *      activity: // value for 'activity'
+ *      timespan: // value for 'timespan'
+ *      category: // value for 'category'
  *   },
  * });
  */
-export function useInsertActivityMutation(
-  baseOptions?: Apollo.MutationHookOptions<InsertActivityMutation, InsertActivityMutationVariables>,
-) {
-  return Apollo.useMutation<InsertActivityMutation, InsertActivityMutationVariables>(
-    InsertActivityDocument,
-    baseOptions,
-  );
+export function useHighscoreQuery(baseOptions?: Apollo.QueryHookOptions<HighscoreQuery, HighscoreQueryVariables>) {
+  return Apollo.useQuery<HighscoreQuery, HighscoreQueryVariables>(HighscoreDocument, baseOptions);
 }
-export type InsertActivityMutationHookResult = ReturnType<typeof useInsertActivityMutation>;
+export function useHighscoreLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<HighscoreQuery, HighscoreQueryVariables>,
+) {
+  return Apollo.useLazyQuery<HighscoreQuery, HighscoreQueryVariables>(HighscoreDocument, baseOptions);
+}
+export type HighscoreQueryHookResult = ReturnType<typeof useHighscoreQuery>;
+export type HighscoreLazyQueryHookResult = ReturnType<typeof useHighscoreLazyQuery>;

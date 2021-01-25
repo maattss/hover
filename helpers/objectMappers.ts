@@ -3,6 +3,8 @@ import { GeofencesQuery } from '../graphql/queries/Geofences.generated';
 import { LatLng } from 'react-native-maps';
 import { estimatedRadius } from './geoFenceCalculations';
 import { CircleGeoFence, GeoFence, GeoFenceCategory, GeoFenceVariant, PolygonGeoFence } from '../types/geoFenceTypes';
+import { Item } from '../components/Leaderboard';
+import { HighscoreQuery } from '../graphql/queries/Highscore.generated';
 
 export const convertToRegion = (data: GeofencesQuery): LocationRegion[] => {
   const geoFences: LocationRegion[] = [];
@@ -74,4 +76,17 @@ const fromRawCoordinatesToLatLng = (coordinatesRaw: string) => {
     });
   }
   return coordinates;
+};
+
+export const convertToHighscoreList = (data: HighscoreQuery) => {
+  const highscores: Item[] = [];
+  data.users.forEach((obj) =>
+    highscores.push({
+      id: obj.id,
+      name: obj.name,
+      score: obj.activities_aggregate.aggregate?.sum?.score,
+      picture: obj.picture,
+    } as Item),
+  );
+  return highscores;
 };
