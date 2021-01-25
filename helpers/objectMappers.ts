@@ -5,6 +5,7 @@ import { estimatedRadius } from './geoFenceCalculations';
 import { CircleGeoFence, GeoFence, GeoFenceCategory, GeoFenceVariant, PolygonGeoFence } from '../types/geoFenceTypes';
 import { Item } from '../components/Leaderboard';
 import { HighscoreQuery } from '../graphql/queries/Highscore.generated';
+import { CategoriesQuery } from '../graphql/queries/Categories.generated';
 
 export const convertToRegion = (data: GeofencesQuery): LocationRegion[] => {
   const geoFences: LocationRegion[] = [];
@@ -89,4 +90,21 @@ export const convertToHighscoreList = (data: HighscoreQuery) => {
     } as Item),
   );
   return highscores;
+};
+
+export type CategoryItem = {
+  value: string;
+  label: string;
+  key: string | number;
+};
+export const mapCategories = (data: CategoriesQuery) => {
+  const categories: CategoryItem[] = [];
+  data.categories.forEach((obj, index) =>
+    categories.push({
+      value: obj.name,
+      label: obj.name,
+      key: index,
+    } as CategoryItem),
+  );
+  return categories;
 };
