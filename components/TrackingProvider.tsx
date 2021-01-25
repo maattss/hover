@@ -4,7 +4,7 @@ import { GeoFence, TrackedActivity } from '../types/geoFenceTypes';
 import { convertToGeoFence } from '../helpers/objectMappers';
 import { useGeofencesQuery } from '../graphql/queries/Geofences.generated';
 import { usePermissions, LOCATION, PermissionResponse } from 'expo-permissions';
-import { startBackgroundUpdate } from '../tasks/locationBackgroundTasks';
+import { getLocationUpdate, startBackgroundUpdate } from '../tasks/locationBackgroundTasks';
 import { startGeofencing } from '../tasks/geofenceTasks';
 
 interface Props {
@@ -19,15 +19,14 @@ interface TrackingContextValues {
   completedActivities: TrackedActivity[];
   addCompletedActivity: ((activity: TrackedActivity) => void) | null;
   insideGeoFence: GeoFence | null;
-  setInsideGeoFence: React.Dispatch<React.SetStateAction<GeoFence | null>> | null;
   isTracking: boolean;
   setIsTracking: React.Dispatch<React.SetStateAction<boolean>> | null;
+  isTrackingPaused: boolean;
+  setIsTrackingPaused: React.Dispatch<React.SetStateAction<boolean>> | null;
   trackingStart: string;
   setTrackingStart: React.Dispatch<React.SetStateAction<string>> | null;
   score: number;
-  setScore: React.Dispatch<React.SetStateAction<number>> | null;
   duration: number;
-  setDuration: React.Dispatch<React.SetStateAction<number>> | null;
 }
 
 export const TrackingContext = React.createContext<TrackingContextValues>({
@@ -38,25 +37,16 @@ export const TrackingContext = React.createContext<TrackingContextValues>({
   completedActivities: [],
   addCompletedActivity: null,
   insideGeoFence: null,
-  setInsideGeoFence: null,
   isTracking: false,
   setIsTracking: null,
+  isTrackingPaused: true,
+  setIsTrackingPaused: null,
   trackingStart: '',
   setTrackingStart: null,
   score: 0,
-  setScore: null,
   duration: 0,
-  setDuration: null,
 });
 TrackingContext.displayName = 'TrackingContext';
-
-// const { data: data } = useGeofencesQuery();
-// // TODO: Remove
-// useEffect(() => {
-//   getLocationsPermissions();
-//   startBackgroundUpdate();
-//   if (data) startGeofencing(data);
-// }, [data]);
 
 export const TrackingProvider = ({ children }: Props) => {
   const [locationPermission] = usePermissions(LOCATION, { ask: true });
@@ -65,23 +55,30 @@ export const TrackingProvider = ({ children }: Props) => {
   const [completedActivities, setCompletedActivities] = useState<TrackedActivity[]>([]);
   const [insideGeoFence, setInsideGeoFence] = useState<GeoFence | null>(null);
   const [isTracking, setIsTracking] = useState(false);
+  const [isTrackingPaused, setIsTrackingPaused] = useState(false);
   const [trackingStart, setTrackingStart] = useState('');
   const [score, setScore] = useState(0);
   const [duration, setDuration] = useState(0);
 
   const { error: fetchError, data: data } = useGeofencesQuery();
+  // const location = await getLocationUpdate();
 
   useEffect(() => {
     if (locationPermission && locationPermission.status !== 'granted') {
       startBackgroundUpdate();
-      if (data) startGeofencing(data);
     }
-  }, [data, locationPermission]);
+  }, [locationPermission]);
 
   useEffect(() => {
     if (data) setGeoFences(convertToGeoFence(data));
     if (fetchError) console.error(fetchError.message);
   }, [data, fetchError]);
+
+  // useEffect(() => {
+  //   // setInsideGeofence
+  //   // setScore and setDuration if isTracking and not paused
+  //   //console.log('User location updated', location);
+  // }, [location]);
 
   const addCompletedActivity = (activity: TrackedActivity) =>
     setCompletedActivities([...completedActivities, activity]);
@@ -94,18 +91,17 @@ export const TrackingProvider = ({ children }: Props) => {
     completedActivities: completedActivities,
     addCompletedActivity: addCompletedActivity,
     insideGeoFence: insideGeoFence,
-    setInsideGeoFence: setInsideGeoFence,
     isTracking: isTracking,
     setIsTracking: setIsTracking,
+    isTrackingPaused: isTrackingPaused,
+    setIsTrackingPaused: setIsTrackingPaused,
     trackingStart: trackingStart,
     setTrackingStart: setTrackingStart,
     score: score,
-    setScore: setScore,
     duration: duration,
-    setDuration: setDuration,
   };
 
-  return <TrackingContext.Provider value={value}>{children}</TrackingContext.Provider>;
+  return <TrackingContext.Provider value={{ value }}>{children}</TrackingContext.Provider>;
 };
 
 export default TrackingProvider;

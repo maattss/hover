@@ -8,6 +8,7 @@ import SnackBar, { SnackBarVariant } from '../../components/SnackBar';
 import { getGeoFenceColor, insideGeoFences } from '../../helpers/geoFenceCalculations';
 import { useGeofencesQuery } from '../../graphql/queries/Geofences.generated';
 import { convertToGeoFence } from '../../helpers/objectMappers';
+import TrackingProvider from '../../components/TrackingProvider';
 
 const { width, height } = Dimensions.get('window');
 
