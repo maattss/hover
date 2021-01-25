@@ -6,6 +6,7 @@ import { CircleGeoFence, GeoFence, GeoFenceCategory, GeoFenceVariant, PolygonGeo
 import { Item } from '../components/Leaderboard';
 import { HighscoreQuery } from '../graphql/queries/Highscore.generated';
 import { CategoriesQuery } from '../graphql/queries/Categories.generated';
+import { PickerItemProps } from '@react-native-picker/picker/typings/Picker';
 
 export const convertToRegion = (data: GeofencesQuery): LocationRegion[] => {
   const geoFences: LocationRegion[] = [];
@@ -92,19 +93,13 @@ export const convertToHighscoreList = (data: HighscoreQuery) => {
   return highscores;
 };
 
-export type CategoryItem = {
-  value: string;
-  label: string;
-  key: string | number;
-};
 export const mapCategories = (data: CategoriesQuery) => {
-  const categories: CategoryItem[] = [];
-  data.categories.forEach((obj, index) =>
+  const categories: PickerItemProps[] = [];
+  data.categories.forEach((obj) =>
     categories.push({
       value: obj.name,
       label: obj.name,
-      key: index,
-    } as CategoryItem),
+    } as PickerItemProps),
   );
   return categories;
 };
