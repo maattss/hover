@@ -7,10 +7,10 @@ export const insideGeoFences = (userLocation: LatLng, geoFences: GeoFence[] | un
   if (geoFences) {
     for (const geoFence of geoFences) {
       if (geoFence.variant == GeoFenceVariant.CIRCLE) {
-        if (isInsideCircle(userLocation, geoFence as CircleGeoFence)) return geoFence.category;
+        if (isInsideCircle(userLocation, geoFence as CircleGeoFence)) return geoFence;
       }
       if (geoFence.variant == GeoFenceVariant.POLYGON) {
-        if (isInsidePolygon(userLocation, geoFence as PolygonGeoFence)) return geoFence.category;
+        if (isInsidePolygon(userLocation, geoFence as PolygonGeoFence)) return geoFence;
       }
     }
   }

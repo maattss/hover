@@ -16,6 +16,8 @@ import { useGeofencesQuery } from '../../graphql/queries/Geofences.generated';
 import { convertToGeoFence } from '../../helpers/objectMappers';
 import { useInterval } from '../../hooks/useInterval';
 import { useInsertActivityMutation } from '../../graphql/mutations/InsertActivity.generated';
+import useAuthentication from '../../hooks/useAuthentication';
+import { durationToTimestampString, getCurrentTimestamp } from '../../helpers/dateTimeHelpers';
 
 const { width, height } = Dimensions.get('window');
 
@@ -82,7 +84,8 @@ const TrackingScreen: React.FC = () => {
   const [inGeofence, setInGeoFence] = useState(false);
   const [isTracking, setIsTracking] = useState(false);
   const [counterRunning, setCounterRunning] = useState(false);
-  const [trackingCategory, setTrackingCategory] = useState<GeoFenceCategory>();
+  const [trackingGeoFence, setTrackingGeoFence] = useState<GeoFence>();
+  const [trackingStart, setTrackingStart] = useState('');
   const [score, setScore] = useState(0);
   const [duration, setDuration] = useState(0);
 
@@ -117,9 +120,9 @@ const TrackingScreen: React.FC = () => {
       longitude: location.nativeEvent.coordinate.longitude,
     };
     setUserLocation(newUserLocation);
-    setTrackingCategory(insideGeoFences(newUserLocation, geoFences));
+    setTrackingGeoFence(insideGeoFences(newUserLocation, geoFences));
 
-    if (trackingCategory) {
+    if (trackingGeoFence) {
       setInGeoFence(true);
     } else {
       setInGeoFence(false);
@@ -145,6 +148,7 @@ const TrackingScreen: React.FC = () => {
       setScore(0);
       setCounterRunning(true);
       setIsTracking(true);
+      setTrackingStart(getCurrentTimestamp());
     }
   };
 
@@ -156,11 +160,11 @@ const TrackingScreen: React.FC = () => {
       InsertActivity({
         variables: {
           activity: {
-            geofence_id: 9,
-            user_id: 'LqzKOPWaY9aiquOGu9SBItAfJUz2',
+            geofence_id: trackingGeoFence?.id,
+            user_id: useAuthentication().user?.uid,
             score: score,
-            started_at: '2021-01-24T18:00:00',
-            duration: '1:30:23',
+            started_at: trackingStart,
+            duration: durationToTimestampString(duration),
           },
         },
       });
@@ -187,7 +191,10 @@ const TrackingScreen: React.FC = () => {
 
   useInterval(
     () => {
-      if (trackingCategory) setScore(score + 1 * getGeoFenceScoreRatio(trackingCategory));
+      if (trackingGeoFence) {
+        setDuration(duration + 1);
+        setScore(score + 1 * getGeoFenceScoreRatio(trackingGeoFence.category));
+      }
     },
     counterRunning ? 1000 : null,
   );
@@ -225,7 +232,7 @@ const TrackingScreen: React.FC = () => {
       </Text>
       <Text style={{ ...Typography.bodyText, position: 'absolute', top: 35, left: 20, backgroundColor: 'black' }}>
         [isTracking={isTracking ? 'true' : 'false'}] [category=
-        {trackingCategory ? GeoFenceCategory[trackingCategory] : 'none'}]
+        {trackingGeoFence ? GeoFenceCategory[trackingGeoFence.category] : 'none'}]
       </Text>
       <View style={styles.trackingInfoContainer}>
         {/* Tracking */}
