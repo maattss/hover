@@ -5,6 +5,7 @@ query Highscore($timespan: timestamptz, $category: String) {
   ) {
     id
     name
+    picture
     activities_aggregate {
       aggregate {
         sum {
