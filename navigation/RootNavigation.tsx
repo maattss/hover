@@ -16,12 +16,12 @@ import { getLocationsPermissions } from '../helpers/permissions';
 export const RootStack = createStackNavigator<RootStackParamList>();
 
 const MainContainer: React.FC = () => {
-  // const { data: data } = useGeofencesQuery();
-  // useEffect(() => {
-  //   getLocationsPermissions();
-  //   startBackgroundUpdate();
-  //   if (data) startGeofencing(data);
-  // }, [data]);
+  const { data: data } = useGeofencesQuery();
+  useEffect(() => {
+    getLocationsPermissions();
+    startBackgroundUpdate();
+    if (data) startGeofencing(data);
+  }, [data]);
 
   return <TabNavigator />;
 };
