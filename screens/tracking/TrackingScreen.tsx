@@ -83,9 +83,9 @@ const TrackingScreen: React.FC = () => {
   // Tracking state
   const user_id = useAuthentication().user?.uid;
   const [inGeofence, setInGeoFence] = useState(false);
+  const [trackingGeoFence, setTrackingGeoFence] = useState<GeoFence>();
   const [isTracking, setIsTracking] = useState(false);
   const [counterRunning, setCounterRunning] = useState(false);
-  const [trackingGeoFence, setTrackingGeoFence] = useState<GeoFence>();
   const [trackingStart, setTrackingStart] = useState('');
   const [score, setScore] = useState(0);
   const [duration, setDuration] = useState(0);
