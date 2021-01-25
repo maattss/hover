@@ -17,7 +17,7 @@ import { convertToGeoFence } from '../../helpers/objectMappers';
 import { useInterval } from '../../hooks/useInterval';
 import { useInsertActivityMutation } from '../../graphql/mutations/InsertActivity.generated';
 import useAuthentication from '../../hooks/useAuthentication';
-import { durationToTimestampString, getCurrentTimestamp } from '../../helpers/dateTimeHelpers';
+import { durationToTimestamp, getCurrentTimestamp } from '../../helpers/dateTimeHelpers';
 
 const { width, height } = Dimensions.get('window');
 
@@ -81,6 +81,7 @@ const TrackingScreen: React.FC = () => {
   const [geoFences, setGeoFences] = useState<GeoFence[]>();
 
   // Tracking state
+  const user_id = useAuthentication().user?.uid;
   const [inGeofence, setInGeoFence] = useState(false);
   const [isTracking, setIsTracking] = useState(false);
   const [counterRunning, setCounterRunning] = useState(false);
@@ -90,11 +91,7 @@ const TrackingScreen: React.FC = () => {
   const [duration, setDuration] = useState(0);
 
   const { error: fetchError, data: data } = useGeofencesQuery();
-
-  const [
-    InsertActivity,
-    { loading: mutationLoading, error: mutationError, data: response },
-  ] = useInsertActivityMutation();
+  const [InsertActivity, { data: response }] = useInsertActivityMutation();
 
   useEffect(() => {
     if (data) setGeoFences(convertToGeoFence(data));
@@ -157,17 +154,19 @@ const TrackingScreen: React.FC = () => {
     setIsTracking(false);
 
     try {
+      const activity = {
+        geofence_id: trackingGeoFence?.id,
+        user_id: user_id,
+        score: score,
+        started_at: trackingStart,
+        duration: durationToTimestamp(duration),
+      };
       InsertActivity({
         variables: {
-          activity: {
-            geofence_id: trackingGeoFence?.id,
-            user_id: useAuthentication().user?.uid,
-            score: score,
-            started_at: trackingStart,
-            duration: durationToTimestampString(duration),
-          },
+          activity: activity,
         },
       });
+      console.log('Activity inserted to db', response);
     } catch (error) {
       console.error('Mutation error', error.message);
     }
@@ -193,7 +192,7 @@ const TrackingScreen: React.FC = () => {
     () => {
       if (trackingGeoFence) {
         setDuration(duration + 1);
-        setScore(score + 1 * getGeoFenceScoreRatio(trackingGeoFence.category));
+        setScore(Math.round(score + 1 * getGeoFenceScoreRatio(trackingGeoFence.category)));
       }
     },
     counterRunning ? 1000 : null,
@@ -257,7 +256,7 @@ const TrackingScreen: React.FC = () => {
         )}
         {/* Not tracking and user outside geo fence */}
         {!isTracking && !counterRunning && !inGeofence && (
-          <Text style={{ ...Typography.headerText, textAlign: 'center' }}>Move to hover zone to earning points!</Text>
+          <Text style={{ ...Typography.headerText, textAlign: 'center' }}>Move to hover zone to earn points!</Text>
         )}
       </View>
 
