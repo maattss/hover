@@ -4285,6 +4285,7 @@ export type Users = {
   readonly following_aggregate: Followings_Aggregate;
   readonly id: Scalars['String'];
   readonly name?: Maybe<Scalars['String']>;
+  readonly picture: Scalars['String'];
   /** A computed field, executes function "totalscore" */
   readonly totalScore?: Maybe<Scalars['bigint']>;
   readonly updated_at?: Maybe<Scalars['timestamptz']>;
@@ -4413,6 +4414,7 @@ export type Users_Bool_Exp = {
   readonly following?: Maybe<Followings_Bool_Exp>;
   readonly id?: Maybe<String_Comparison_Exp>;
   readonly name?: Maybe<String_Comparison_Exp>;
+  readonly picture?: Maybe<String_Comparison_Exp>;
   readonly updated_at?: Maybe<Timestamptz_Comparison_Exp>;
   readonly user_achievement?: Maybe<User_Achievement_Bool_Exp>;
 };
@@ -4437,6 +4439,7 @@ export type Users_Insert_Input = {
   readonly following?: Maybe<Followings_Arr_Rel_Insert_Input>;
   readonly id?: Maybe<Scalars['String']>;
   readonly name?: Maybe<Scalars['String']>;
+  readonly picture?: Maybe<Scalars['String']>;
   readonly updated_at?: Maybe<Scalars['timestamptz']>;
   readonly user_achievement?: Maybe<User_Achievement_Arr_Rel_Insert_Input>;
 };
@@ -4449,6 +4452,7 @@ export type Users_Max_Fields = {
   readonly email?: Maybe<Scalars['String']>;
   readonly id?: Maybe<Scalars['String']>;
   readonly name?: Maybe<Scalars['String']>;
+  readonly picture?: Maybe<Scalars['String']>;
   readonly updated_at?: Maybe<Scalars['timestamptz']>;
 };
 
@@ -4459,6 +4463,7 @@ export type Users_Max_Order_By = {
   readonly email?: Maybe<Order_By>;
   readonly id?: Maybe<Order_By>;
   readonly name?: Maybe<Order_By>;
+  readonly picture?: Maybe<Order_By>;
   readonly updated_at?: Maybe<Order_By>;
 };
 
@@ -4470,6 +4475,7 @@ export type Users_Min_Fields = {
   readonly email?: Maybe<Scalars['String']>;
   readonly id?: Maybe<Scalars['String']>;
   readonly name?: Maybe<Scalars['String']>;
+  readonly picture?: Maybe<Scalars['String']>;
   readonly updated_at?: Maybe<Scalars['timestamptz']>;
 };
 
@@ -4480,6 +4486,7 @@ export type Users_Min_Order_By = {
   readonly email?: Maybe<Order_By>;
   readonly id?: Maybe<Order_By>;
   readonly name?: Maybe<Order_By>;
+  readonly picture?: Maybe<Order_By>;
   readonly updated_at?: Maybe<Order_By>;
 };
 
@@ -4515,6 +4522,7 @@ export type Users_Order_By = {
   readonly following_aggregate?: Maybe<Followings_Aggregate_Order_By>;
   readonly id?: Maybe<Order_By>;
   readonly name?: Maybe<Order_By>;
+  readonly picture?: Maybe<Order_By>;
   readonly updated_at?: Maybe<Order_By>;
   readonly user_achievement_aggregate?: Maybe<User_Achievement_Aggregate_Order_By>;
 };
@@ -4537,6 +4545,8 @@ export enum Users_Select_Column {
   /** column name */
   Name = 'name',
   /** column name */
+  Picture = 'picture',
+  /** column name */
   UpdatedAt = 'updated_at',
 }
 
@@ -4547,6 +4557,7 @@ export type Users_Set_Input = {
   readonly email?: Maybe<Scalars['String']>;
   readonly id?: Maybe<Scalars['String']>;
   readonly name?: Maybe<Scalars['String']>;
+  readonly picture?: Maybe<Scalars['String']>;
   readonly updated_at?: Maybe<Scalars['timestamptz']>;
 };
 
@@ -4562,6 +4573,8 @@ export enum Users_Update_Column {
   Id = 'id',
   /** column name */
   Name = 'name',
+  /** column name */
+  Picture = 'picture',
   /** column name */
   UpdatedAt = 'updated_at',
 }

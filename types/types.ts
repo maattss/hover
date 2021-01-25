@@ -4281,6 +4281,7 @@ export type Users = {
   following_aggregate: Followings_Aggregate;
   id: Scalars['String'];
   name?: Maybe<Scalars['String']>;
+  picture: Scalars['String'];
   /** A computed field, executes function "totalscore" */
   totalScore?: Maybe<Scalars['bigint']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
@@ -4409,6 +4410,7 @@ export type Users_Bool_Exp = {
   following?: Maybe<Followings_Bool_Exp>;
   id?: Maybe<String_Comparison_Exp>;
   name?: Maybe<String_Comparison_Exp>;
+  picture?: Maybe<String_Comparison_Exp>;
   updated_at?: Maybe<Timestamptz_Comparison_Exp>;
   user_achievement?: Maybe<User_Achievement_Bool_Exp>;
 };
@@ -4433,6 +4435,7 @@ export type Users_Insert_Input = {
   following?: Maybe<Followings_Arr_Rel_Insert_Input>;
   id?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
+  picture?: Maybe<Scalars['String']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
   user_achievement?: Maybe<User_Achievement_Arr_Rel_Insert_Input>;
 };
@@ -4445,6 +4448,7 @@ export type Users_Max_Fields = {
   email?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
+  picture?: Maybe<Scalars['String']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
 };
 
@@ -4455,6 +4459,7 @@ export type Users_Max_Order_By = {
   email?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
   name?: Maybe<Order_By>;
+  picture?: Maybe<Order_By>;
   updated_at?: Maybe<Order_By>;
 };
 
@@ -4466,6 +4471,7 @@ export type Users_Min_Fields = {
   email?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
+  picture?: Maybe<Scalars['String']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
 };
 
@@ -4476,6 +4482,7 @@ export type Users_Min_Order_By = {
   email?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
   name?: Maybe<Order_By>;
+  picture?: Maybe<Order_By>;
   updated_at?: Maybe<Order_By>;
 };
 
@@ -4511,6 +4518,7 @@ export type Users_Order_By = {
   following_aggregate?: Maybe<Followings_Aggregate_Order_By>;
   id?: Maybe<Order_By>;
   name?: Maybe<Order_By>;
+  picture?: Maybe<Order_By>;
   updated_at?: Maybe<Order_By>;
   user_achievement_aggregate?: Maybe<User_Achievement_Aggregate_Order_By>;
 };
@@ -4533,6 +4541,8 @@ export enum Users_Select_Column {
   /** column name */
   Name = 'name',
   /** column name */
+  Picture = 'picture',
+  /** column name */
   UpdatedAt = 'updated_at',
 }
 
@@ -4543,6 +4553,7 @@ export type Users_Set_Input = {
   email?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
+  picture?: Maybe<Scalars['String']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
 };
 
@@ -4558,6 +4569,8 @@ export enum Users_Update_Column {
   Id = 'id',
   /** column name */
   Name = 'name',
+  /** column name */
+  Picture = 'picture',
   /** column name */
   UpdatedAt = 'updated_at',
 }
