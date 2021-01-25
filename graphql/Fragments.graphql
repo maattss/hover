@@ -27,6 +27,16 @@ fragment userFragment on users {
   }
 }
 
+fragment basicActivityFragment on activities {
+  activity_id
+  caption
+  duration
+  geofence_id
+  score
+  started_at
+  stopped
+}
+
 fragment activityFragment on activities {
   activity_id
   caption

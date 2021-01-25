@@ -91,7 +91,7 @@ const TrackingScreen: React.FC = () => {
   const [duration, setDuration] = useState(0);
 
   const { error: fetchError, data: data } = useGeofencesQuery();
-  const [InsertActivity, { data: response }] = useInsertActivityMutation();
+  const [InsertActivity] = useInsertActivityMutation();
 
   useEffect(() => {
     if (data) setGeoFences(convertToGeoFence(data));
@@ -149,7 +149,7 @@ const TrackingScreen: React.FC = () => {
     }
   };
 
-  const stopTracking = () => {
+  const stopTracking = async () => {
     setCounterRunning(false);
     setIsTracking(false);
 
@@ -161,28 +161,16 @@ const TrackingScreen: React.FC = () => {
         started_at: trackingStart,
         duration: durationToTimestamp(duration),
       };
-      InsertActivity({
+      const response = await InsertActivity({
         variables: {
           activity: activity,
         },
       });
       console.log('Activity inserted to db', response);
+      Alert.alert('Upload complete', 'Activity uploaded successfully!', [{ text: 'Cancel' }, { text: 'OK' }]);
     } catch (error) {
       console.error('Mutation error', error.message);
     }
-
-    Alert.alert(
-      'Upload complete',
-      'Activity uploaded successfully!',
-      [
-        {
-          text: 'Cancel',
-          onPress: () => console.log('Cancel Pressed'),
-        },
-        { text: 'OK', onPress: () => console.log('OK Pressed') },
-      ],
-      { cancelable: false },
-    );
   };
   const pauseTracking = () => {
     setCounterRunning(false);
@@ -226,29 +214,20 @@ const TrackingScreen: React.FC = () => {
           </TouchableOpacity>
         </View>
       </View>
-      <Text style={{ ...Typography.bodyText, position: 'absolute', top: 15, left: 20, backgroundColor: 'black' }}>
-        [InGeoFence={inGeofence ? 'true' : 'false'}] [counterRunning={counterRunning ? 'true' : 'false'}]
-      </Text>
-      <Text style={{ ...Typography.bodyText, position: 'absolute', top: 35, left: 20, backgroundColor: 'black' }}>
-        [isTracking={isTracking ? 'true' : 'false'}] [category=
-        {trackingGeoFence ? GeoFenceCategory[trackingGeoFence.category] : 'none'}]
-      </Text>
       <View style={styles.trackingInfoContainer}>
         {/* Tracking */}
         {isTracking && counterRunning && (
-          <View>
-            <Text style={{ ...Typography.headerText, marginTop: Spacing.base }}>Hovering...</Text>
-            <Text style={{ ...Typography.headerText, marginTop: Spacing.base }}>Score: {score.toFixed(0)}</Text>
+          <>
+            <Text style={styles.scoreText}>Score: {score.toFixed(0)}</Text>
             <ActivityIndicator size={'large'} color={Colors.blue} style={{ marginTop: Spacing.base }} />
-          </View>
+          </>
         )}
         {/* Tracking paused */}
         {isTracking && !counterRunning && (
-          <View>
-            <Text style={{ ...Typography.headerText, marginTop: Spacing.base }}>Paused</Text>
-            <Text style={{ ...Typography.largeBodyText }}>Resume to earn more points!</Text>
-            <Text style={{ ...Typography.headerText, marginTop: Spacing.base }}>Score: {score.toFixed(0)}</Text>
-          </View>
+          <>
+            <Text style={styles.scoreText}>Score: {score.toFixed(0)}</Text>
+            <Text style={{ ...Typography.largeBodyText, marginTop: Spacing.base }}>Resume to earn more points!</Text>
+          </>
         )}
         {/* Not tracking and user in geo fence */}
         {!isTracking && !counterRunning && inGeofence && (
@@ -359,6 +338,10 @@ const styles = StyleSheet.create({
   icon: {
     fontSize: Typography.icon.fontSize,
     color: Colors.blue,
+  },
+  scoreText: {
+    ...Typography.headerText,
+    marginTop: Spacing.base,
   },
 });
 
