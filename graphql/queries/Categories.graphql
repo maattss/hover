@@ -1,0 +1,5 @@
+query Categories {
+  categories(order_by: { name: asc }) {
+    name
+  }
+}
