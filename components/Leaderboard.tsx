@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { FlatList, Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Colors, Typography } from '../theme';
 
 interface SortParam {
@@ -20,12 +20,15 @@ interface LeaderboardProps {
   avatarStyle?: Record<string, unknown>;
   oddRowColor?: string;
   evenRowColor?: string;
+  refreshing: boolean;
+  onRefresh: () => Promise<void>;
 }
 
 export type Item = {
+  id: string;
   name: string;
   score: number | null;
-  icon?: string;
+  picture?: string;
 };
 
 const Leaderboard = (props: LeaderboardProps) => {
@@ -42,13 +45,13 @@ const Leaderboard = (props: LeaderboardProps) => {
     const rowColor = index % 2 === 0 ? evenColor : oddColor;
 
     const rowJSx = (
-      <View style={[styles.row, props.rowStyle, { backgroundColor: rowColor }]}>
+      <View key={item.id} style={[styles.row, props.rowStyle, { backgroundColor: rowColor }]}>
         <View style={styles.left}>
           <Text
             style={[styles.text, styles.rank, props.rankStyle, index < 9 ? styles.singleDidget : styles.doubleDidget]}>
             {index + 1}
           </Text>
-          {item.icon && <Image source={{ uri: item.icon }} style={[styles.avatar, props.avatarStyle]} />}
+          {item.picture && <Image source={{ uri: item.picture }} style={[styles.avatar, props.avatarStyle]} />}
           <Text style={[styles.text, styles.label, props.labelStyle]} numberOfLines={1}>
             {item.name}
           </Text>
@@ -68,11 +71,15 @@ const Leaderboard = (props: LeaderboardProps) => {
     props.renderItem ? props.renderItem(item, index) : defaultRenderItem(item, index);
 
   return (
-    <FlatList
-      data={sortedData}
-      keyExtractor={(item, index) => index.toString()}
-      renderItem={({ item, index }) => renderItemS(item, index)}
-    />
+    <SafeAreaView style={styles.container}>
+      <FlatList
+        data={sortedData}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={({ item, index }) => renderItemS(item, index)}
+        refreshing={props.refreshing}
+        onRefresh={() => props.onRefresh()}
+      />
+    </SafeAreaView>
   );
 };
 
@@ -93,6 +100,11 @@ export const sortData = (sortParam: SortParam) => {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1,
+  },
   row: {
     paddingTop: 15,
     paddingBottom: 15,
