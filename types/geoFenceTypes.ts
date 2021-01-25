@@ -1,6 +1,7 @@
 import { LatLng } from 'react-native-maps';
 
 export interface CircleGeoFence {
+  id: number;
   name: string;
   description: string;
   latitude: number;
@@ -10,6 +11,7 @@ export interface CircleGeoFence {
   radius: number;
 }
 export interface PolygonGeoFence {
+  id: number;
   name: string;
   description: string;
   latitude: number;

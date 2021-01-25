@@ -17,7 +17,6 @@ export const RootStack = createStackNavigator<RootStackParamList>();
 
 const MainContainer: React.FC = () => {
   const { data: data } = useGeofencesQuery();
-
   useEffect(() => {
     getLocationsPermissions();
     startBackgroundUpdate();

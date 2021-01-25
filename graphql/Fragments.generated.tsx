@@ -13,7 +13,10 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  bigint: any;
   float8: any;
+  interval: any;
+  json: any;
   timestamp: any;
   timestamptz: any;
 };
@@ -50,19 +53,497 @@ export type String_Comparison_Exp = {
   readonly _similar?: Maybe<Scalars['String']>;
 };
 
+/** columns and relationships of "achievement" */
+export type Achievement = {
+  readonly __typename: 'achievement';
+  /** An object relationship */
+  readonly achievementTypeByAchievementType?: Maybe<Achievement_Type>;
+  readonly achievement_type?: Maybe<Scalars['String']>;
+  readonly created_at?: Maybe<Scalars['timestamptz']>;
+  readonly description?: Maybe<Scalars['String']>;
+  readonly id: Scalars['Int'];
+  readonly name: Scalars['String'];
+  readonly rule: Scalars['json'];
+  /** An array relationship */
+  readonly user_achievements: ReadonlyArray<User_Achievement>;
+  /** An aggregated array relationship */
+  readonly user_achievements_aggregate: User_Achievement_Aggregate;
+};
+
+/** columns and relationships of "achievement" */
+export type AchievementRuleArgs = {
+  path?: Maybe<Scalars['String']>;
+};
+
+/** columns and relationships of "achievement" */
+export type AchievementUser_AchievementsArgs = {
+  distinct_on?: Maybe<ReadonlyArray<User_Achievement_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<ReadonlyArray<User_Achievement_Order_By>>;
+  where?: Maybe<User_Achievement_Bool_Exp>;
+};
+
+/** columns and relationships of "achievement" */
+export type AchievementUser_Achievements_AggregateArgs = {
+  distinct_on?: Maybe<ReadonlyArray<User_Achievement_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<ReadonlyArray<User_Achievement_Order_By>>;
+  where?: Maybe<User_Achievement_Bool_Exp>;
+};
+
+/** aggregated selection of "achievement" */
+export type Achievement_Aggregate = {
+  readonly __typename: 'achievement_aggregate';
+  readonly aggregate?: Maybe<Achievement_Aggregate_Fields>;
+  readonly nodes: ReadonlyArray<Achievement>;
+};
+
+/** aggregate fields of "achievement" */
+export type Achievement_Aggregate_Fields = {
+  readonly __typename: 'achievement_aggregate_fields';
+  readonly avg?: Maybe<Achievement_Avg_Fields>;
+  readonly count?: Maybe<Scalars['Int']>;
+  readonly max?: Maybe<Achievement_Max_Fields>;
+  readonly min?: Maybe<Achievement_Min_Fields>;
+  readonly stddev?: Maybe<Achievement_Stddev_Fields>;
+  readonly stddev_pop?: Maybe<Achievement_Stddev_Pop_Fields>;
+  readonly stddev_samp?: Maybe<Achievement_Stddev_Samp_Fields>;
+  readonly sum?: Maybe<Achievement_Sum_Fields>;
+  readonly var_pop?: Maybe<Achievement_Var_Pop_Fields>;
+  readonly var_samp?: Maybe<Achievement_Var_Samp_Fields>;
+  readonly variance?: Maybe<Achievement_Variance_Fields>;
+};
+
+/** aggregate fields of "achievement" */
+export type Achievement_Aggregate_FieldsCountArgs = {
+  columns?: Maybe<ReadonlyArray<Achievement_Select_Column>>;
+  distinct?: Maybe<Scalars['Boolean']>;
+};
+
+/** order by aggregate values of table "achievement" */
+export type Achievement_Aggregate_Order_By = {
+  readonly avg?: Maybe<Achievement_Avg_Order_By>;
+  readonly count?: Maybe<Order_By>;
+  readonly max?: Maybe<Achievement_Max_Order_By>;
+  readonly min?: Maybe<Achievement_Min_Order_By>;
+  readonly stddev?: Maybe<Achievement_Stddev_Order_By>;
+  readonly stddev_pop?: Maybe<Achievement_Stddev_Pop_Order_By>;
+  readonly stddev_samp?: Maybe<Achievement_Stddev_Samp_Order_By>;
+  readonly sum?: Maybe<Achievement_Sum_Order_By>;
+  readonly var_pop?: Maybe<Achievement_Var_Pop_Order_By>;
+  readonly var_samp?: Maybe<Achievement_Var_Samp_Order_By>;
+  readonly variance?: Maybe<Achievement_Variance_Order_By>;
+};
+
+/** input type for inserting array relation for remote table "achievement" */
+export type Achievement_Arr_Rel_Insert_Input = {
+  readonly data: ReadonlyArray<Achievement_Insert_Input>;
+  readonly on_conflict?: Maybe<Achievement_On_Conflict>;
+};
+
+/** aggregate avg on columns */
+export type Achievement_Avg_Fields = {
+  readonly __typename: 'achievement_avg_fields';
+  readonly id?: Maybe<Scalars['Float']>;
+};
+
+/** order by avg() on columns of table "achievement" */
+export type Achievement_Avg_Order_By = {
+  readonly id?: Maybe<Order_By>;
+};
+
+/** Boolean expression to filter rows from the table "achievement". All fields are combined with a logical 'AND'. */
+export type Achievement_Bool_Exp = {
+  readonly _and?: Maybe<ReadonlyArray<Maybe<Achievement_Bool_Exp>>>;
+  readonly _not?: Maybe<Achievement_Bool_Exp>;
+  readonly _or?: Maybe<ReadonlyArray<Maybe<Achievement_Bool_Exp>>>;
+  readonly achievementTypeByAchievementType?: Maybe<Achievement_Type_Bool_Exp>;
+  readonly achievement_type?: Maybe<String_Comparison_Exp>;
+  readonly created_at?: Maybe<Timestamptz_Comparison_Exp>;
+  readonly description?: Maybe<String_Comparison_Exp>;
+  readonly id?: Maybe<Int_Comparison_Exp>;
+  readonly name?: Maybe<String_Comparison_Exp>;
+  readonly rule?: Maybe<Json_Comparison_Exp>;
+  readonly user_achievements?: Maybe<User_Achievement_Bool_Exp>;
+};
+
+/** unique or primary key constraints on table "achievement" */
+export enum Achievement_Constraint {
+  /** unique or primary key constraint */
+  AcheivementNameKey = 'Acheivement_name_key',
+  /** unique or primary key constraint */
+  AcheivementPkey = 'Acheivement_pkey',
+}
+
+/** input type for incrementing integer column in table "achievement" */
+export type Achievement_Inc_Input = {
+  readonly id?: Maybe<Scalars['Int']>;
+};
+
+/** input type for inserting data into table "achievement" */
+export type Achievement_Insert_Input = {
+  readonly achievementTypeByAchievementType?: Maybe<Achievement_Type_Obj_Rel_Insert_Input>;
+  readonly achievement_type?: Maybe<Scalars['String']>;
+  readonly created_at?: Maybe<Scalars['timestamptz']>;
+  readonly description?: Maybe<Scalars['String']>;
+  readonly id?: Maybe<Scalars['Int']>;
+  readonly name?: Maybe<Scalars['String']>;
+  readonly rule?: Maybe<Scalars['json']>;
+  readonly user_achievements?: Maybe<User_Achievement_Arr_Rel_Insert_Input>;
+};
+
+/** aggregate max on columns */
+export type Achievement_Max_Fields = {
+  readonly __typename: 'achievement_max_fields';
+  readonly achievement_type?: Maybe<Scalars['String']>;
+  readonly created_at?: Maybe<Scalars['timestamptz']>;
+  readonly description?: Maybe<Scalars['String']>;
+  readonly id?: Maybe<Scalars['Int']>;
+  readonly name?: Maybe<Scalars['String']>;
+};
+
+/** order by max() on columns of table "achievement" */
+export type Achievement_Max_Order_By = {
+  readonly achievement_type?: Maybe<Order_By>;
+  readonly created_at?: Maybe<Order_By>;
+  readonly description?: Maybe<Order_By>;
+  readonly id?: Maybe<Order_By>;
+  readonly name?: Maybe<Order_By>;
+};
+
+/** aggregate min on columns */
+export type Achievement_Min_Fields = {
+  readonly __typename: 'achievement_min_fields';
+  readonly achievement_type?: Maybe<Scalars['String']>;
+  readonly created_at?: Maybe<Scalars['timestamptz']>;
+  readonly description?: Maybe<Scalars['String']>;
+  readonly id?: Maybe<Scalars['Int']>;
+  readonly name?: Maybe<Scalars['String']>;
+};
+
+/** order by min() on columns of table "achievement" */
+export type Achievement_Min_Order_By = {
+  readonly achievement_type?: Maybe<Order_By>;
+  readonly created_at?: Maybe<Order_By>;
+  readonly description?: Maybe<Order_By>;
+  readonly id?: Maybe<Order_By>;
+  readonly name?: Maybe<Order_By>;
+};
+
+/** response of any mutation on the table "achievement" */
+export type Achievement_Mutation_Response = {
+  readonly __typename: 'achievement_mutation_response';
+  /** number of affected rows by the mutation */
+  readonly affected_rows: Scalars['Int'];
+  /** data of the affected rows by the mutation */
+  readonly returning: ReadonlyArray<Achievement>;
+};
+
+/** input type for inserting object relation for remote table "achievement" */
+export type Achievement_Obj_Rel_Insert_Input = {
+  readonly data: Achievement_Insert_Input;
+  readonly on_conflict?: Maybe<Achievement_On_Conflict>;
+};
+
+/** on conflict condition type for table "achievement" */
+export type Achievement_On_Conflict = {
+  readonly constraint: Achievement_Constraint;
+  readonly update_columns: ReadonlyArray<Achievement_Update_Column>;
+  readonly where?: Maybe<Achievement_Bool_Exp>;
+};
+
+/** ordering options when selecting data from "achievement" */
+export type Achievement_Order_By = {
+  readonly achievementTypeByAchievementType?: Maybe<Achievement_Type_Order_By>;
+  readonly achievement_type?: Maybe<Order_By>;
+  readonly created_at?: Maybe<Order_By>;
+  readonly description?: Maybe<Order_By>;
+  readonly id?: Maybe<Order_By>;
+  readonly name?: Maybe<Order_By>;
+  readonly rule?: Maybe<Order_By>;
+  readonly user_achievements_aggregate?: Maybe<User_Achievement_Aggregate_Order_By>;
+};
+
+/** primary key columns input for table: "achievement" */
+export type Achievement_Pk_Columns_Input = {
+  readonly id: Scalars['Int'];
+};
+
+/** select columns of table "achievement" */
+export enum Achievement_Select_Column {
+  /** column name */
+  AchievementType = 'achievement_type',
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  Description = 'description',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  Name = 'name',
+  /** column name */
+  Rule = 'rule',
+}
+
+/** input type for updating data in table "achievement" */
+export type Achievement_Set_Input = {
+  readonly achievement_type?: Maybe<Scalars['String']>;
+  readonly created_at?: Maybe<Scalars['timestamptz']>;
+  readonly description?: Maybe<Scalars['String']>;
+  readonly id?: Maybe<Scalars['Int']>;
+  readonly name?: Maybe<Scalars['String']>;
+  readonly rule?: Maybe<Scalars['json']>;
+};
+
+/** aggregate stddev on columns */
+export type Achievement_Stddev_Fields = {
+  readonly __typename: 'achievement_stddev_fields';
+  readonly id?: Maybe<Scalars['Float']>;
+};
+
+/** order by stddev() on columns of table "achievement" */
+export type Achievement_Stddev_Order_By = {
+  readonly id?: Maybe<Order_By>;
+};
+
+/** aggregate stddev_pop on columns */
+export type Achievement_Stddev_Pop_Fields = {
+  readonly __typename: 'achievement_stddev_pop_fields';
+  readonly id?: Maybe<Scalars['Float']>;
+};
+
+/** order by stddev_pop() on columns of table "achievement" */
+export type Achievement_Stddev_Pop_Order_By = {
+  readonly id?: Maybe<Order_By>;
+};
+
+/** aggregate stddev_samp on columns */
+export type Achievement_Stddev_Samp_Fields = {
+  readonly __typename: 'achievement_stddev_samp_fields';
+  readonly id?: Maybe<Scalars['Float']>;
+};
+
+/** order by stddev_samp() on columns of table "achievement" */
+export type Achievement_Stddev_Samp_Order_By = {
+  readonly id?: Maybe<Order_By>;
+};
+
+/** aggregate sum on columns */
+export type Achievement_Sum_Fields = {
+  readonly __typename: 'achievement_sum_fields';
+  readonly id?: Maybe<Scalars['Int']>;
+};
+
+/** order by sum() on columns of table "achievement" */
+export type Achievement_Sum_Order_By = {
+  readonly id?: Maybe<Order_By>;
+};
+
+/** columns and relationships of "achievement_type" */
+export type Achievement_Type = {
+  readonly __typename: 'achievement_type';
+  readonly description?: Maybe<Scalars['String']>;
+  readonly name: Scalars['String'];
+};
+
+/** aggregated selection of "achievement_type" */
+export type Achievement_Type_Aggregate = {
+  readonly __typename: 'achievement_type_aggregate';
+  readonly aggregate?: Maybe<Achievement_Type_Aggregate_Fields>;
+  readonly nodes: ReadonlyArray<Achievement_Type>;
+};
+
+/** aggregate fields of "achievement_type" */
+export type Achievement_Type_Aggregate_Fields = {
+  readonly __typename: 'achievement_type_aggregate_fields';
+  readonly count?: Maybe<Scalars['Int']>;
+  readonly max?: Maybe<Achievement_Type_Max_Fields>;
+  readonly min?: Maybe<Achievement_Type_Min_Fields>;
+};
+
+/** aggregate fields of "achievement_type" */
+export type Achievement_Type_Aggregate_FieldsCountArgs = {
+  columns?: Maybe<ReadonlyArray<Achievement_Type_Select_Column>>;
+  distinct?: Maybe<Scalars['Boolean']>;
+};
+
+/** order by aggregate values of table "achievement_type" */
+export type Achievement_Type_Aggregate_Order_By = {
+  readonly count?: Maybe<Order_By>;
+  readonly max?: Maybe<Achievement_Type_Max_Order_By>;
+  readonly min?: Maybe<Achievement_Type_Min_Order_By>;
+};
+
+/** input type for inserting array relation for remote table "achievement_type" */
+export type Achievement_Type_Arr_Rel_Insert_Input = {
+  readonly data: ReadonlyArray<Achievement_Type_Insert_Input>;
+  readonly on_conflict?: Maybe<Achievement_Type_On_Conflict>;
+};
+
+/** Boolean expression to filter rows from the table "achievement_type". All fields are combined with a logical 'AND'. */
+export type Achievement_Type_Bool_Exp = {
+  readonly _and?: Maybe<ReadonlyArray<Maybe<Achievement_Type_Bool_Exp>>>;
+  readonly _not?: Maybe<Achievement_Type_Bool_Exp>;
+  readonly _or?: Maybe<ReadonlyArray<Maybe<Achievement_Type_Bool_Exp>>>;
+  readonly description?: Maybe<String_Comparison_Exp>;
+  readonly name?: Maybe<String_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "achievement_type" */
+export enum Achievement_Type_Constraint {
+  /** unique or primary key constraint */
+  AchievementTypePkey = 'achievement_type_pkey',
+}
+
+/** input type for inserting data into table "achievement_type" */
+export type Achievement_Type_Insert_Input = {
+  readonly description?: Maybe<Scalars['String']>;
+  readonly name?: Maybe<Scalars['String']>;
+};
+
+/** aggregate max on columns */
+export type Achievement_Type_Max_Fields = {
+  readonly __typename: 'achievement_type_max_fields';
+  readonly description?: Maybe<Scalars['String']>;
+  readonly name?: Maybe<Scalars['String']>;
+};
+
+/** order by max() on columns of table "achievement_type" */
+export type Achievement_Type_Max_Order_By = {
+  readonly description?: Maybe<Order_By>;
+  readonly name?: Maybe<Order_By>;
+};
+
+/** aggregate min on columns */
+export type Achievement_Type_Min_Fields = {
+  readonly __typename: 'achievement_type_min_fields';
+  readonly description?: Maybe<Scalars['String']>;
+  readonly name?: Maybe<Scalars['String']>;
+};
+
+/** order by min() on columns of table "achievement_type" */
+export type Achievement_Type_Min_Order_By = {
+  readonly description?: Maybe<Order_By>;
+  readonly name?: Maybe<Order_By>;
+};
+
+/** response of any mutation on the table "achievement_type" */
+export type Achievement_Type_Mutation_Response = {
+  readonly __typename: 'achievement_type_mutation_response';
+  /** number of affected rows by the mutation */
+  readonly affected_rows: Scalars['Int'];
+  /** data of the affected rows by the mutation */
+  readonly returning: ReadonlyArray<Achievement_Type>;
+};
+
+/** input type for inserting object relation for remote table "achievement_type" */
+export type Achievement_Type_Obj_Rel_Insert_Input = {
+  readonly data: Achievement_Type_Insert_Input;
+  readonly on_conflict?: Maybe<Achievement_Type_On_Conflict>;
+};
+
+/** on conflict condition type for table "achievement_type" */
+export type Achievement_Type_On_Conflict = {
+  readonly constraint: Achievement_Type_Constraint;
+  readonly update_columns: ReadonlyArray<Achievement_Type_Update_Column>;
+  readonly where?: Maybe<Achievement_Type_Bool_Exp>;
+};
+
+/** ordering options when selecting data from "achievement_type" */
+export type Achievement_Type_Order_By = {
+  readonly description?: Maybe<Order_By>;
+  readonly name?: Maybe<Order_By>;
+};
+
+/** primary key columns input for table: "achievement_type" */
+export type Achievement_Type_Pk_Columns_Input = {
+  readonly name: Scalars['String'];
+};
+
+/** select columns of table "achievement_type" */
+export enum Achievement_Type_Select_Column {
+  /** column name */
+  Description = 'description',
+  /** column name */
+  Name = 'name',
+}
+
+/** input type for updating data in table "achievement_type" */
+export type Achievement_Type_Set_Input = {
+  readonly description?: Maybe<Scalars['String']>;
+  readonly name?: Maybe<Scalars['String']>;
+};
+
+/** update columns of table "achievement_type" */
+export enum Achievement_Type_Update_Column {
+  /** column name */
+  Description = 'description',
+  /** column name */
+  Name = 'name',
+}
+
+/** update columns of table "achievement" */
+export enum Achievement_Update_Column {
+  /** column name */
+  AchievementType = 'achievement_type',
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  Description = 'description',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  Name = 'name',
+  /** column name */
+  Rule = 'rule',
+}
+
+/** aggregate var_pop on columns */
+export type Achievement_Var_Pop_Fields = {
+  readonly __typename: 'achievement_var_pop_fields';
+  readonly id?: Maybe<Scalars['Float']>;
+};
+
+/** order by var_pop() on columns of table "achievement" */
+export type Achievement_Var_Pop_Order_By = {
+  readonly id?: Maybe<Order_By>;
+};
+
+/** aggregate var_samp on columns */
+export type Achievement_Var_Samp_Fields = {
+  readonly __typename: 'achievement_var_samp_fields';
+  readonly id?: Maybe<Scalars['Float']>;
+};
+
+/** order by var_samp() on columns of table "achievement" */
+export type Achievement_Var_Samp_Order_By = {
+  readonly id?: Maybe<Order_By>;
+};
+
+/** aggregate variance on columns */
+export type Achievement_Variance_Fields = {
+  readonly __typename: 'achievement_variance_fields';
+  readonly id?: Maybe<Scalars['Float']>;
+};
+
+/** order by variance() on columns of table "achievement" */
+export type Achievement_Variance_Order_By = {
+  readonly id?: Maybe<Order_By>;
+};
+
 /** columns and relationships of "activities" */
 export type Activities = {
   readonly __typename: 'activities';
-  /** An object relationship */
-  readonly activityByCategory: Categories;
   readonly activity_id: Scalars['Int'];
   readonly caption?: Maybe<Scalars['String']>;
-  readonly category: Categories_Enum;
   /** An array relationship */
   readonly comments: ReadonlyArray<Comments>;
   /** An aggregated array relationship */
   readonly comments_aggregate: Comments_Aggregate;
   readonly created_at?: Maybe<Scalars['timestamptz']>;
+  readonly duration: Scalars['interval'];
   /** An object relationship */
   readonly geofence: Geofences;
   readonly geofence_id: Scalars['Int'];
@@ -70,6 +551,10 @@ export type Activities = {
   readonly likes: ReadonlyArray<Likes>;
   /** An aggregated array relationship */
   readonly likes_aggregate: Likes_Aggregate;
+  readonly score?: Maybe<Scalars['Int']>;
+  readonly started_at: Scalars['timestamptz'];
+  /** A computed field, executes function "stopped_at" */
+  readonly stopped_at?: Maybe<Scalars['timestamptz']>;
   readonly updated_at?: Maybe<Scalars['timestamptz']>;
   /** An object relationship */
   readonly user: Users;
@@ -167,12 +652,14 @@ export type Activities_Avg_Fields = {
   readonly __typename: 'activities_avg_fields';
   readonly activity_id?: Maybe<Scalars['Float']>;
   readonly geofence_id?: Maybe<Scalars['Float']>;
+  readonly score?: Maybe<Scalars['Float']>;
 };
 
 /** order by avg() on columns of table "activities" */
 export type Activities_Avg_Order_By = {
   readonly activity_id?: Maybe<Order_By>;
   readonly geofence_id?: Maybe<Order_By>;
+  readonly score?: Maybe<Order_By>;
 };
 
 /** Boolean expression to filter rows from the table "activities". All fields are combined with a logical 'AND'. */
@@ -180,15 +667,16 @@ export type Activities_Bool_Exp = {
   readonly _and?: Maybe<ReadonlyArray<Maybe<Activities_Bool_Exp>>>;
   readonly _not?: Maybe<Activities_Bool_Exp>;
   readonly _or?: Maybe<ReadonlyArray<Maybe<Activities_Bool_Exp>>>;
-  readonly activityByCategory?: Maybe<Categories_Bool_Exp>;
   readonly activity_id?: Maybe<Int_Comparison_Exp>;
   readonly caption?: Maybe<String_Comparison_Exp>;
-  readonly category?: Maybe<Categories_Enum_Comparison_Exp>;
   readonly comments?: Maybe<Comments_Bool_Exp>;
   readonly created_at?: Maybe<Timestamptz_Comparison_Exp>;
+  readonly duration?: Maybe<Interval_Comparison_Exp>;
   readonly geofence?: Maybe<Geofences_Bool_Exp>;
   readonly geofence_id?: Maybe<Int_Comparison_Exp>;
   readonly likes?: Maybe<Likes_Bool_Exp>;
+  readonly score?: Maybe<Int_Comparison_Exp>;
+  readonly started_at?: Maybe<Timestamptz_Comparison_Exp>;
   readonly updated_at?: Maybe<Timestamptz_Comparison_Exp>;
   readonly user?: Maybe<Users_Bool_Exp>;
   readonly user_id?: Maybe<String_Comparison_Exp>;
@@ -204,19 +692,21 @@ export enum Activities_Constraint {
 export type Activities_Inc_Input = {
   readonly activity_id?: Maybe<Scalars['Int']>;
   readonly geofence_id?: Maybe<Scalars['Int']>;
+  readonly score?: Maybe<Scalars['Int']>;
 };
 
 /** input type for inserting data into table "activities" */
 export type Activities_Insert_Input = {
-  readonly activityByCategory?: Maybe<Categories_Obj_Rel_Insert_Input>;
   readonly activity_id?: Maybe<Scalars['Int']>;
   readonly caption?: Maybe<Scalars['String']>;
-  readonly category?: Maybe<Categories_Enum>;
   readonly comments?: Maybe<Comments_Arr_Rel_Insert_Input>;
   readonly created_at?: Maybe<Scalars['timestamptz']>;
+  readonly duration?: Maybe<Scalars['interval']>;
   readonly geofence?: Maybe<Geofences_Obj_Rel_Insert_Input>;
   readonly geofence_id?: Maybe<Scalars['Int']>;
   readonly likes?: Maybe<Likes_Arr_Rel_Insert_Input>;
+  readonly score?: Maybe<Scalars['Int']>;
+  readonly started_at?: Maybe<Scalars['timestamptz']>;
   readonly updated_at?: Maybe<Scalars['timestamptz']>;
   readonly user?: Maybe<Users_Obj_Rel_Insert_Input>;
   readonly user_id?: Maybe<Scalars['String']>;
@@ -229,6 +719,8 @@ export type Activities_Max_Fields = {
   readonly caption?: Maybe<Scalars['String']>;
   readonly created_at?: Maybe<Scalars['timestamptz']>;
   readonly geofence_id?: Maybe<Scalars['Int']>;
+  readonly score?: Maybe<Scalars['Int']>;
+  readonly started_at?: Maybe<Scalars['timestamptz']>;
   readonly updated_at?: Maybe<Scalars['timestamptz']>;
   readonly user_id?: Maybe<Scalars['String']>;
 };
@@ -239,6 +731,8 @@ export type Activities_Max_Order_By = {
   readonly caption?: Maybe<Order_By>;
   readonly created_at?: Maybe<Order_By>;
   readonly geofence_id?: Maybe<Order_By>;
+  readonly score?: Maybe<Order_By>;
+  readonly started_at?: Maybe<Order_By>;
   readonly updated_at?: Maybe<Order_By>;
   readonly user_id?: Maybe<Order_By>;
 };
@@ -250,6 +744,8 @@ export type Activities_Min_Fields = {
   readonly caption?: Maybe<Scalars['String']>;
   readonly created_at?: Maybe<Scalars['timestamptz']>;
   readonly geofence_id?: Maybe<Scalars['Int']>;
+  readonly score?: Maybe<Scalars['Int']>;
+  readonly started_at?: Maybe<Scalars['timestamptz']>;
   readonly updated_at?: Maybe<Scalars['timestamptz']>;
   readonly user_id?: Maybe<Scalars['String']>;
 };
@@ -260,6 +756,8 @@ export type Activities_Min_Order_By = {
   readonly caption?: Maybe<Order_By>;
   readonly created_at?: Maybe<Order_By>;
   readonly geofence_id?: Maybe<Order_By>;
+  readonly score?: Maybe<Order_By>;
+  readonly started_at?: Maybe<Order_By>;
   readonly updated_at?: Maybe<Order_By>;
   readonly user_id?: Maybe<Order_By>;
 };
@@ -288,15 +786,16 @@ export type Activities_On_Conflict = {
 
 /** ordering options when selecting data from "activities" */
 export type Activities_Order_By = {
-  readonly activityByCategory?: Maybe<Categories_Order_By>;
   readonly activity_id?: Maybe<Order_By>;
   readonly caption?: Maybe<Order_By>;
-  readonly category?: Maybe<Order_By>;
   readonly comments_aggregate?: Maybe<Comments_Aggregate_Order_By>;
   readonly created_at?: Maybe<Order_By>;
+  readonly duration?: Maybe<Order_By>;
   readonly geofence?: Maybe<Geofences_Order_By>;
   readonly geofence_id?: Maybe<Order_By>;
   readonly likes_aggregate?: Maybe<Likes_Aggregate_Order_By>;
+  readonly score?: Maybe<Order_By>;
+  readonly started_at?: Maybe<Order_By>;
   readonly updated_at?: Maybe<Order_By>;
   readonly user?: Maybe<Users_Order_By>;
   readonly user_id?: Maybe<Order_By>;
@@ -314,11 +813,15 @@ export enum Activities_Select_Column {
   /** column name */
   Caption = 'caption',
   /** column name */
-  Category = 'category',
-  /** column name */
   CreatedAt = 'created_at',
   /** column name */
+  Duration = 'duration',
+  /** column name */
   GeofenceId = 'geofence_id',
+  /** column name */
+  Score = 'score',
+  /** column name */
+  StartedAt = 'started_at',
   /** column name */
   UpdatedAt = 'updated_at',
   /** column name */
@@ -329,9 +832,11 @@ export enum Activities_Select_Column {
 export type Activities_Set_Input = {
   readonly activity_id?: Maybe<Scalars['Int']>;
   readonly caption?: Maybe<Scalars['String']>;
-  readonly category?: Maybe<Categories_Enum>;
   readonly created_at?: Maybe<Scalars['timestamptz']>;
+  readonly duration?: Maybe<Scalars['interval']>;
   readonly geofence_id?: Maybe<Scalars['Int']>;
+  readonly score?: Maybe<Scalars['Int']>;
+  readonly started_at?: Maybe<Scalars['timestamptz']>;
   readonly updated_at?: Maybe<Scalars['timestamptz']>;
   readonly user_id?: Maybe<Scalars['String']>;
 };
@@ -341,12 +846,14 @@ export type Activities_Stddev_Fields = {
   readonly __typename: 'activities_stddev_fields';
   readonly activity_id?: Maybe<Scalars['Float']>;
   readonly geofence_id?: Maybe<Scalars['Float']>;
+  readonly score?: Maybe<Scalars['Float']>;
 };
 
 /** order by stddev() on columns of table "activities" */
 export type Activities_Stddev_Order_By = {
   readonly activity_id?: Maybe<Order_By>;
   readonly geofence_id?: Maybe<Order_By>;
+  readonly score?: Maybe<Order_By>;
 };
 
 /** aggregate stddev_pop on columns */
@@ -354,12 +861,14 @@ export type Activities_Stddev_Pop_Fields = {
   readonly __typename: 'activities_stddev_pop_fields';
   readonly activity_id?: Maybe<Scalars['Float']>;
   readonly geofence_id?: Maybe<Scalars['Float']>;
+  readonly score?: Maybe<Scalars['Float']>;
 };
 
 /** order by stddev_pop() on columns of table "activities" */
 export type Activities_Stddev_Pop_Order_By = {
   readonly activity_id?: Maybe<Order_By>;
   readonly geofence_id?: Maybe<Order_By>;
+  readonly score?: Maybe<Order_By>;
 };
 
 /** aggregate stddev_samp on columns */
@@ -367,12 +876,14 @@ export type Activities_Stddev_Samp_Fields = {
   readonly __typename: 'activities_stddev_samp_fields';
   readonly activity_id?: Maybe<Scalars['Float']>;
   readonly geofence_id?: Maybe<Scalars['Float']>;
+  readonly score?: Maybe<Scalars['Float']>;
 };
 
 /** order by stddev_samp() on columns of table "activities" */
 export type Activities_Stddev_Samp_Order_By = {
   readonly activity_id?: Maybe<Order_By>;
   readonly geofence_id?: Maybe<Order_By>;
+  readonly score?: Maybe<Order_By>;
 };
 
 /** aggregate sum on columns */
@@ -380,12 +891,14 @@ export type Activities_Sum_Fields = {
   readonly __typename: 'activities_sum_fields';
   readonly activity_id?: Maybe<Scalars['Int']>;
   readonly geofence_id?: Maybe<Scalars['Int']>;
+  readonly score?: Maybe<Scalars['Int']>;
 };
 
 /** order by sum() on columns of table "activities" */
 export type Activities_Sum_Order_By = {
   readonly activity_id?: Maybe<Order_By>;
   readonly geofence_id?: Maybe<Order_By>;
+  readonly score?: Maybe<Order_By>;
 };
 
 /** update columns of table "activities" */
@@ -395,11 +908,15 @@ export enum Activities_Update_Column {
   /** column name */
   Caption = 'caption',
   /** column name */
-  Category = 'category',
-  /** column name */
   CreatedAt = 'created_at',
   /** column name */
+  Duration = 'duration',
+  /** column name */
   GeofenceId = 'geofence_id',
+  /** column name */
+  Score = 'score',
+  /** column name */
+  StartedAt = 'started_at',
   /** column name */
   UpdatedAt = 'updated_at',
   /** column name */
@@ -411,12 +928,14 @@ export type Activities_Var_Pop_Fields = {
   readonly __typename: 'activities_var_pop_fields';
   readonly activity_id?: Maybe<Scalars['Float']>;
   readonly geofence_id?: Maybe<Scalars['Float']>;
+  readonly score?: Maybe<Scalars['Float']>;
 };
 
 /** order by var_pop() on columns of table "activities" */
 export type Activities_Var_Pop_Order_By = {
   readonly activity_id?: Maybe<Order_By>;
   readonly geofence_id?: Maybe<Order_By>;
+  readonly score?: Maybe<Order_By>;
 };
 
 /** aggregate var_samp on columns */
@@ -424,12 +943,14 @@ export type Activities_Var_Samp_Fields = {
   readonly __typename: 'activities_var_samp_fields';
   readonly activity_id?: Maybe<Scalars['Float']>;
   readonly geofence_id?: Maybe<Scalars['Float']>;
+  readonly score?: Maybe<Scalars['Float']>;
 };
 
 /** order by var_samp() on columns of table "activities" */
 export type Activities_Var_Samp_Order_By = {
   readonly activity_id?: Maybe<Order_By>;
   readonly geofence_id?: Maybe<Order_By>;
+  readonly score?: Maybe<Order_By>;
 };
 
 /** aggregate variance on columns */
@@ -437,12 +958,14 @@ export type Activities_Variance_Fields = {
   readonly __typename: 'activities_variance_fields';
   readonly activity_id?: Maybe<Scalars['Float']>;
   readonly geofence_id?: Maybe<Scalars['Float']>;
+  readonly score?: Maybe<Scalars['Float']>;
 };
 
 /** order by variance() on columns of table "activities" */
 export type Activities_Variance_Order_By = {
   readonly activity_id?: Maybe<Order_By>;
   readonly geofence_id?: Maybe<Order_By>;
+  readonly score?: Maybe<Order_By>;
 };
 
 /** columns and relationships of "categories" */
@@ -450,6 +973,7 @@ export type Categories = {
   readonly __typename: 'categories';
   readonly description?: Maybe<Scalars['String']>;
   readonly name: Scalars['String'];
+  readonly points_per_minute: Scalars['Int'];
 };
 
 /** aggregated selection of "categories" */
@@ -462,9 +986,17 @@ export type Categories_Aggregate = {
 /** aggregate fields of "categories" */
 export type Categories_Aggregate_Fields = {
   readonly __typename: 'categories_aggregate_fields';
+  readonly avg?: Maybe<Categories_Avg_Fields>;
   readonly count?: Maybe<Scalars['Int']>;
   readonly max?: Maybe<Categories_Max_Fields>;
   readonly min?: Maybe<Categories_Min_Fields>;
+  readonly stddev?: Maybe<Categories_Stddev_Fields>;
+  readonly stddev_pop?: Maybe<Categories_Stddev_Pop_Fields>;
+  readonly stddev_samp?: Maybe<Categories_Stddev_Samp_Fields>;
+  readonly sum?: Maybe<Categories_Sum_Fields>;
+  readonly var_pop?: Maybe<Categories_Var_Pop_Fields>;
+  readonly var_samp?: Maybe<Categories_Var_Samp_Fields>;
+  readonly variance?: Maybe<Categories_Variance_Fields>;
 };
 
 /** aggregate fields of "categories" */
@@ -475,15 +1007,34 @@ export type Categories_Aggregate_FieldsCountArgs = {
 
 /** order by aggregate values of table "categories" */
 export type Categories_Aggregate_Order_By = {
+  readonly avg?: Maybe<Categories_Avg_Order_By>;
   readonly count?: Maybe<Order_By>;
   readonly max?: Maybe<Categories_Max_Order_By>;
   readonly min?: Maybe<Categories_Min_Order_By>;
+  readonly stddev?: Maybe<Categories_Stddev_Order_By>;
+  readonly stddev_pop?: Maybe<Categories_Stddev_Pop_Order_By>;
+  readonly stddev_samp?: Maybe<Categories_Stddev_Samp_Order_By>;
+  readonly sum?: Maybe<Categories_Sum_Order_By>;
+  readonly var_pop?: Maybe<Categories_Var_Pop_Order_By>;
+  readonly var_samp?: Maybe<Categories_Var_Samp_Order_By>;
+  readonly variance?: Maybe<Categories_Variance_Order_By>;
 };
 
 /** input type for inserting array relation for remote table "categories" */
 export type Categories_Arr_Rel_Insert_Input = {
   readonly data: ReadonlyArray<Categories_Insert_Input>;
   readonly on_conflict?: Maybe<Categories_On_Conflict>;
+};
+
+/** aggregate avg on columns */
+export type Categories_Avg_Fields = {
+  readonly __typename: 'categories_avg_fields';
+  readonly points_per_minute?: Maybe<Scalars['Float']>;
+};
+
+/** order by avg() on columns of table "categories" */
+export type Categories_Avg_Order_By = {
+  readonly points_per_minute?: Maybe<Order_By>;
 };
 
 /** Boolean expression to filter rows from the table "categories". All fields are combined with a logical 'AND'. */
@@ -493,6 +1044,7 @@ export type Categories_Bool_Exp = {
   readonly _or?: Maybe<ReadonlyArray<Maybe<Categories_Bool_Exp>>>;
   readonly description?: Maybe<String_Comparison_Exp>;
   readonly name?: Maybe<String_Comparison_Exp>;
+  readonly points_per_minute?: Maybe<Int_Comparison_Exp>;
 };
 
 /** unique or primary key constraints on table "categories" */
@@ -503,30 +1055,16 @@ export enum Categories_Constraint {
   CategoriesPkey = 'categories_pkey',
 }
 
-export enum Categories_Enum {
-  /** The culture category */
-  Culture = 'CULTURE',
-  /** The education category */
-  Education = 'EDUCATION',
-  /** The exercise category */
-  Exercise = 'EXERCISE',
-  /** The social category */
-  Social = 'SOCIAL',
-}
-
-/** expression to compare columns of type categories_enum. All fields are combined with logical 'AND'. */
-export type Categories_Enum_Comparison_Exp = {
-  readonly _eq?: Maybe<Categories_Enum>;
-  readonly _in?: Maybe<ReadonlyArray<Categories_Enum>>;
-  readonly _is_null?: Maybe<Scalars['Boolean']>;
-  readonly _neq?: Maybe<Categories_Enum>;
-  readonly _nin?: Maybe<ReadonlyArray<Categories_Enum>>;
+/** input type for incrementing integer column in table "categories" */
+export type Categories_Inc_Input = {
+  readonly points_per_minute?: Maybe<Scalars['Int']>;
 };
 
 /** input type for inserting data into table "categories" */
 export type Categories_Insert_Input = {
   readonly description?: Maybe<Scalars['String']>;
   readonly name?: Maybe<Scalars['String']>;
+  readonly points_per_minute?: Maybe<Scalars['Int']>;
 };
 
 /** aggregate max on columns */
@@ -534,12 +1072,14 @@ export type Categories_Max_Fields = {
   readonly __typename: 'categories_max_fields';
   readonly description?: Maybe<Scalars['String']>;
   readonly name?: Maybe<Scalars['String']>;
+  readonly points_per_minute?: Maybe<Scalars['Int']>;
 };
 
 /** order by max() on columns of table "categories" */
 export type Categories_Max_Order_By = {
   readonly description?: Maybe<Order_By>;
   readonly name?: Maybe<Order_By>;
+  readonly points_per_minute?: Maybe<Order_By>;
 };
 
 /** aggregate min on columns */
@@ -547,12 +1087,14 @@ export type Categories_Min_Fields = {
   readonly __typename: 'categories_min_fields';
   readonly description?: Maybe<Scalars['String']>;
   readonly name?: Maybe<Scalars['String']>;
+  readonly points_per_minute?: Maybe<Scalars['Int']>;
 };
 
 /** order by min() on columns of table "categories" */
 export type Categories_Min_Order_By = {
   readonly description?: Maybe<Order_By>;
   readonly name?: Maybe<Order_By>;
+  readonly points_per_minute?: Maybe<Order_By>;
 };
 
 /** response of any mutation on the table "categories" */
@@ -581,6 +1123,7 @@ export type Categories_On_Conflict = {
 export type Categories_Order_By = {
   readonly description?: Maybe<Order_By>;
   readonly name?: Maybe<Order_By>;
+  readonly points_per_minute?: Maybe<Order_By>;
 };
 
 /** primary key columns input for table: "categories" */
@@ -594,12 +1137,59 @@ export enum Categories_Select_Column {
   Description = 'description',
   /** column name */
   Name = 'name',
+  /** column name */
+  PointsPerMinute = 'points_per_minute',
 }
 
 /** input type for updating data in table "categories" */
 export type Categories_Set_Input = {
   readonly description?: Maybe<Scalars['String']>;
   readonly name?: Maybe<Scalars['String']>;
+  readonly points_per_minute?: Maybe<Scalars['Int']>;
+};
+
+/** aggregate stddev on columns */
+export type Categories_Stddev_Fields = {
+  readonly __typename: 'categories_stddev_fields';
+  readonly points_per_minute?: Maybe<Scalars['Float']>;
+};
+
+/** order by stddev() on columns of table "categories" */
+export type Categories_Stddev_Order_By = {
+  readonly points_per_minute?: Maybe<Order_By>;
+};
+
+/** aggregate stddev_pop on columns */
+export type Categories_Stddev_Pop_Fields = {
+  readonly __typename: 'categories_stddev_pop_fields';
+  readonly points_per_minute?: Maybe<Scalars['Float']>;
+};
+
+/** order by stddev_pop() on columns of table "categories" */
+export type Categories_Stddev_Pop_Order_By = {
+  readonly points_per_minute?: Maybe<Order_By>;
+};
+
+/** aggregate stddev_samp on columns */
+export type Categories_Stddev_Samp_Fields = {
+  readonly __typename: 'categories_stddev_samp_fields';
+  readonly points_per_minute?: Maybe<Scalars['Float']>;
+};
+
+/** order by stddev_samp() on columns of table "categories" */
+export type Categories_Stddev_Samp_Order_By = {
+  readonly points_per_minute?: Maybe<Order_By>;
+};
+
+/** aggregate sum on columns */
+export type Categories_Sum_Fields = {
+  readonly __typename: 'categories_sum_fields';
+  readonly points_per_minute?: Maybe<Scalars['Int']>;
+};
+
+/** order by sum() on columns of table "categories" */
+export type Categories_Sum_Order_By = {
+  readonly points_per_minute?: Maybe<Order_By>;
 };
 
 /** update columns of table "categories" */
@@ -608,7 +1198,42 @@ export enum Categories_Update_Column {
   Description = 'description',
   /** column name */
   Name = 'name',
+  /** column name */
+  PointsPerMinute = 'points_per_minute',
 }
+
+/** aggregate var_pop on columns */
+export type Categories_Var_Pop_Fields = {
+  readonly __typename: 'categories_var_pop_fields';
+  readonly points_per_minute?: Maybe<Scalars['Float']>;
+};
+
+/** order by var_pop() on columns of table "categories" */
+export type Categories_Var_Pop_Order_By = {
+  readonly points_per_minute?: Maybe<Order_By>;
+};
+
+/** aggregate var_samp on columns */
+export type Categories_Var_Samp_Fields = {
+  readonly __typename: 'categories_var_samp_fields';
+  readonly points_per_minute?: Maybe<Scalars['Float']>;
+};
+
+/** order by var_samp() on columns of table "categories" */
+export type Categories_Var_Samp_Order_By = {
+  readonly points_per_minute?: Maybe<Order_By>;
+};
+
+/** aggregate variance on columns */
+export type Categories_Variance_Fields = {
+  readonly __typename: 'categories_variance_fields';
+  readonly points_per_minute?: Maybe<Scalars['Float']>;
+};
+
+/** order by variance() on columns of table "categories" */
+export type Categories_Variance_Order_By = {
+  readonly points_per_minute?: Maybe<Order_By>;
+};
 
 /** columns and relationships of "comments" */
 export type Comments = {
@@ -1325,7 +1950,7 @@ export type Geofences = {
   readonly activities: ReadonlyArray<Activities>;
   /** An aggregated array relationship */
   readonly activities_aggregate: Activities_Aggregate;
-  readonly category: Categories_Enum;
+  readonly category: Scalars['String'];
   /** Only for polygons */
   readonly coordinates?: Maybe<Scalars['String']>;
   readonly created_at: Scalars['timestamptz'];
@@ -1434,7 +2059,7 @@ export type Geofences_Bool_Exp = {
   readonly _not?: Maybe<Geofences_Bool_Exp>;
   readonly _or?: Maybe<ReadonlyArray<Maybe<Geofences_Bool_Exp>>>;
   readonly activities?: Maybe<Activities_Bool_Exp>;
-  readonly category?: Maybe<Categories_Enum_Comparison_Exp>;
+  readonly category?: Maybe<String_Comparison_Exp>;
   readonly coordinates?: Maybe<String_Comparison_Exp>;
   readonly created_at?: Maybe<Timestamptz_Comparison_Exp>;
   readonly description?: Maybe<String_Comparison_Exp>;
@@ -1466,7 +2091,7 @@ export type Geofences_Inc_Input = {
 /** input type for inserting data into table "geofences" */
 export type Geofences_Insert_Input = {
   readonly activities?: Maybe<Activities_Arr_Rel_Insert_Input>;
-  readonly category?: Maybe<Categories_Enum>;
+  readonly category?: Maybe<Scalars['String']>;
   readonly coordinates?: Maybe<Scalars['String']>;
   readonly created_at?: Maybe<Scalars['timestamptz']>;
   readonly description?: Maybe<Scalars['String']>;
@@ -1484,6 +2109,7 @@ export type Geofences_Insert_Input = {
 /** aggregate max on columns */
 export type Geofences_Max_Fields = {
   readonly __typename: 'geofences_max_fields';
+  readonly category?: Maybe<Scalars['String']>;
   readonly coordinates?: Maybe<Scalars['String']>;
   readonly created_at?: Maybe<Scalars['timestamptz']>;
   readonly description?: Maybe<Scalars['String']>;
@@ -1497,6 +2123,7 @@ export type Geofences_Max_Fields = {
 
 /** order by max() on columns of table "geofences" */
 export type Geofences_Max_Order_By = {
+  readonly category?: Maybe<Order_By>;
   readonly coordinates?: Maybe<Order_By>;
   readonly created_at?: Maybe<Order_By>;
   readonly description?: Maybe<Order_By>;
@@ -1511,6 +2138,7 @@ export type Geofences_Max_Order_By = {
 /** aggregate min on columns */
 export type Geofences_Min_Fields = {
   readonly __typename: 'geofences_min_fields';
+  readonly category?: Maybe<Scalars['String']>;
   readonly coordinates?: Maybe<Scalars['String']>;
   readonly created_at?: Maybe<Scalars['timestamptz']>;
   readonly description?: Maybe<Scalars['String']>;
@@ -1524,6 +2152,7 @@ export type Geofences_Min_Fields = {
 
 /** order by min() on columns of table "geofences" */
 export type Geofences_Min_Order_By = {
+  readonly category?: Maybe<Order_By>;
   readonly coordinates?: Maybe<Order_By>;
   readonly created_at?: Maybe<Order_By>;
   readonly description?: Maybe<Order_By>;
@@ -1608,7 +2237,7 @@ export enum Geofences_Select_Column {
 
 /** input type for updating data in table "geofences" */
 export type Geofences_Set_Input = {
-  readonly category?: Maybe<Categories_Enum>;
+  readonly category?: Maybe<Scalars['String']>;
   readonly coordinates?: Maybe<Scalars['String']>;
   readonly created_at?: Maybe<Scalars['timestamptz']>;
   readonly description?: Maybe<Scalars['String']>;
@@ -1764,6 +2393,32 @@ export type Geofences_Variance_Order_By = {
   readonly latitude?: Maybe<Order_By>;
   readonly longitude?: Maybe<Order_By>;
   readonly radius?: Maybe<Order_By>;
+};
+
+/** expression to compare columns of type interval. All fields are combined with logical 'AND'. */
+export type Interval_Comparison_Exp = {
+  readonly _eq?: Maybe<Scalars['interval']>;
+  readonly _gt?: Maybe<Scalars['interval']>;
+  readonly _gte?: Maybe<Scalars['interval']>;
+  readonly _in?: Maybe<ReadonlyArray<Scalars['interval']>>;
+  readonly _is_null?: Maybe<Scalars['Boolean']>;
+  readonly _lt?: Maybe<Scalars['interval']>;
+  readonly _lte?: Maybe<Scalars['interval']>;
+  readonly _neq?: Maybe<Scalars['interval']>;
+  readonly _nin?: Maybe<ReadonlyArray<Scalars['interval']>>;
+};
+
+/** expression to compare columns of type json. All fields are combined with logical 'AND'. */
+export type Json_Comparison_Exp = {
+  readonly _eq?: Maybe<Scalars['json']>;
+  readonly _gt?: Maybe<Scalars['json']>;
+  readonly _gte?: Maybe<Scalars['json']>;
+  readonly _in?: Maybe<ReadonlyArray<Scalars['json']>>;
+  readonly _is_null?: Maybe<Scalars['Boolean']>;
+  readonly _lt?: Maybe<Scalars['json']>;
+  readonly _lte?: Maybe<Scalars['json']>;
+  readonly _neq?: Maybe<Scalars['json']>;
+  readonly _nin?: Maybe<ReadonlyArray<Scalars['json']>>;
 };
 
 /** columns and relationships of "likes" */
@@ -2060,6 +2715,14 @@ export type Likes_Variance_Order_By = {
 /** mutation root */
 export type Mutation_Root = {
   readonly __typename: 'mutation_root';
+  /** delete data from the table: "achievement" */
+  readonly delete_achievement?: Maybe<Achievement_Mutation_Response>;
+  /** delete single row from the table: "achievement" */
+  readonly delete_achievement_by_pk?: Maybe<Achievement>;
+  /** delete data from the table: "achievement_type" */
+  readonly delete_achievement_type?: Maybe<Achievement_Type_Mutation_Response>;
+  /** delete single row from the table: "achievement_type" */
+  readonly delete_achievement_type_by_pk?: Maybe<Achievement_Type>;
   /** delete data from the table: "activities" */
   readonly delete_activities?: Maybe<Activities_Mutation_Response>;
   /** delete single row from the table: "activities" */
@@ -2090,8 +2753,20 @@ export type Mutation_Root = {
   readonly delete_likes_by_pk?: Maybe<Likes>;
   /** delete single row from the table: "users" */
   readonly delete_user?: Maybe<Users>;
+  /** delete data from the table: "user_achievement" */
+  readonly delete_user_achievement?: Maybe<User_Achievement_Mutation_Response>;
+  /** delete single row from the table: "user_achievement" */
+  readonly delete_user_achievement_by_pk?: Maybe<User_Achievement>;
   /** delete data from the table: "users" */
   readonly delete_users?: Maybe<Users_Mutation_Response>;
+  /** insert data into the table: "achievement" */
+  readonly insert_achievement?: Maybe<Achievement_Mutation_Response>;
+  /** insert a single row into the table: "achievement" */
+  readonly insert_achievement_one?: Maybe<Achievement>;
+  /** insert data into the table: "achievement_type" */
+  readonly insert_achievement_type?: Maybe<Achievement_Type_Mutation_Response>;
+  /** insert a single row into the table: "achievement_type" */
+  readonly insert_achievement_type_one?: Maybe<Achievement_Type>;
   /** insert data into the table: "activities" */
   readonly insert_activities?: Maybe<Activities_Mutation_Response>;
   /** insert a single row into the table: "activities" */
@@ -2122,8 +2797,20 @@ export type Mutation_Root = {
   readonly insert_likes_one?: Maybe<Likes>;
   /** insert a single row into the table: "users" */
   readonly insert_user?: Maybe<Users>;
+  /** insert data into the table: "user_achievement" */
+  readonly insert_user_achievement?: Maybe<User_Achievement_Mutation_Response>;
+  /** insert a single row into the table: "user_achievement" */
+  readonly insert_user_achievement_one?: Maybe<User_Achievement>;
   /** insert data into the table: "users" */
   readonly insert_users?: Maybe<Users_Mutation_Response>;
+  /** update data of the table: "achievement" */
+  readonly update_achievement?: Maybe<Achievement_Mutation_Response>;
+  /** update single row of the table: "achievement" */
+  readonly update_achievement_by_pk?: Maybe<Achievement>;
+  /** update data of the table: "achievement_type" */
+  readonly update_achievement_type?: Maybe<Achievement_Type_Mutation_Response>;
+  /** update single row of the table: "achievement_type" */
+  readonly update_achievement_type_by_pk?: Maybe<Achievement_Type>;
   /** update data of the table: "activities" */
   readonly update_activities?: Maybe<Activities_Mutation_Response>;
   /** update single row of the table: "activities" */
@@ -2154,8 +2841,32 @@ export type Mutation_Root = {
   readonly update_likes_by_pk?: Maybe<Likes>;
   /** update single row of the table: "users" */
   readonly update_user?: Maybe<Users>;
+  /** update data of the table: "user_achievement" */
+  readonly update_user_achievement?: Maybe<User_Achievement_Mutation_Response>;
+  /** update single row of the table: "user_achievement" */
+  readonly update_user_achievement_by_pk?: Maybe<User_Achievement>;
   /** update data of the table: "users" */
   readonly update_users?: Maybe<Users_Mutation_Response>;
+};
+
+/** mutation root */
+export type Mutation_RootDelete_AchievementArgs = {
+  where: Achievement_Bool_Exp;
+};
+
+/** mutation root */
+export type Mutation_RootDelete_Achievement_By_PkArgs = {
+  id: Scalars['Int'];
+};
+
+/** mutation root */
+export type Mutation_RootDelete_Achievement_TypeArgs = {
+  where: Achievement_Type_Bool_Exp;
+};
+
+/** mutation root */
+export type Mutation_RootDelete_Achievement_Type_By_PkArgs = {
+  name: Scalars['String'];
 };
 
 /** mutation root */
@@ -2236,8 +2947,43 @@ export type Mutation_RootDelete_UserArgs = {
 };
 
 /** mutation root */
+export type Mutation_RootDelete_User_AchievementArgs = {
+  where: User_Achievement_Bool_Exp;
+};
+
+/** mutation root */
+export type Mutation_RootDelete_User_Achievement_By_PkArgs = {
+  achievement_id: Scalars['Int'];
+  user_id: Scalars['String'];
+};
+
+/** mutation root */
 export type Mutation_RootDelete_UsersArgs = {
   where: Users_Bool_Exp;
+};
+
+/** mutation root */
+export type Mutation_RootInsert_AchievementArgs = {
+  objects: ReadonlyArray<Achievement_Insert_Input>;
+  on_conflict?: Maybe<Achievement_On_Conflict>;
+};
+
+/** mutation root */
+export type Mutation_RootInsert_Achievement_OneArgs = {
+  object: Achievement_Insert_Input;
+  on_conflict?: Maybe<Achievement_On_Conflict>;
+};
+
+/** mutation root */
+export type Mutation_RootInsert_Achievement_TypeArgs = {
+  objects: ReadonlyArray<Achievement_Type_Insert_Input>;
+  on_conflict?: Maybe<Achievement_Type_On_Conflict>;
+};
+
+/** mutation root */
+export type Mutation_RootInsert_Achievement_Type_OneArgs = {
+  object: Achievement_Type_Insert_Input;
+  on_conflict?: Maybe<Achievement_Type_On_Conflict>;
 };
 
 /** mutation root */
@@ -2331,9 +3077,47 @@ export type Mutation_RootInsert_UserArgs = {
 };
 
 /** mutation root */
+export type Mutation_RootInsert_User_AchievementArgs = {
+  objects: ReadonlyArray<User_Achievement_Insert_Input>;
+  on_conflict?: Maybe<User_Achievement_On_Conflict>;
+};
+
+/** mutation root */
+export type Mutation_RootInsert_User_Achievement_OneArgs = {
+  object: User_Achievement_Insert_Input;
+  on_conflict?: Maybe<User_Achievement_On_Conflict>;
+};
+
+/** mutation root */
 export type Mutation_RootInsert_UsersArgs = {
   objects: ReadonlyArray<Users_Insert_Input>;
   on_conflict?: Maybe<Users_On_Conflict>;
+};
+
+/** mutation root */
+export type Mutation_RootUpdate_AchievementArgs = {
+  _inc?: Maybe<Achievement_Inc_Input>;
+  _set?: Maybe<Achievement_Set_Input>;
+  where: Achievement_Bool_Exp;
+};
+
+/** mutation root */
+export type Mutation_RootUpdate_Achievement_By_PkArgs = {
+  _inc?: Maybe<Achievement_Inc_Input>;
+  _set?: Maybe<Achievement_Set_Input>;
+  pk_columns: Achievement_Pk_Columns_Input;
+};
+
+/** mutation root */
+export type Mutation_RootUpdate_Achievement_TypeArgs = {
+  _set?: Maybe<Achievement_Type_Set_Input>;
+  where: Achievement_Type_Bool_Exp;
+};
+
+/** mutation root */
+export type Mutation_RootUpdate_Achievement_Type_By_PkArgs = {
+  _set?: Maybe<Achievement_Type_Set_Input>;
+  pk_columns: Achievement_Type_Pk_Columns_Input;
 };
 
 /** mutation root */
@@ -2352,12 +3136,14 @@ export type Mutation_RootUpdate_Activities_By_PkArgs = {
 
 /** mutation root */
 export type Mutation_RootUpdate_CategoriesArgs = {
+  _inc?: Maybe<Categories_Inc_Input>;
   _set?: Maybe<Categories_Set_Input>;
   where: Categories_Bool_Exp;
 };
 
 /** mutation root */
 export type Mutation_RootUpdate_Categories_By_PkArgs = {
+  _inc?: Maybe<Categories_Inc_Input>;
   _set?: Maybe<Categories_Set_Input>;
   pk_columns: Categories_Pk_Columns_Input;
 };
@@ -2435,6 +3221,20 @@ export type Mutation_RootUpdate_UserArgs = {
 };
 
 /** mutation root */
+export type Mutation_RootUpdate_User_AchievementArgs = {
+  _inc?: Maybe<User_Achievement_Inc_Input>;
+  _set?: Maybe<User_Achievement_Set_Input>;
+  where: User_Achievement_Bool_Exp;
+};
+
+/** mutation root */
+export type Mutation_RootUpdate_User_Achievement_By_PkArgs = {
+  _inc?: Maybe<User_Achievement_Inc_Input>;
+  _set?: Maybe<User_Achievement_Set_Input>;
+  pk_columns: User_Achievement_Pk_Columns_Input;
+};
+
+/** mutation root */
 export type Mutation_RootUpdate_UsersArgs = {
   _set?: Maybe<Users_Set_Input>;
   where: Users_Bool_Exp;
@@ -2459,6 +3259,18 @@ export enum Order_By {
 /** query root */
 export type Query_Root = {
   readonly __typename: 'query_root';
+  /** fetch data from the table: "achievement" */
+  readonly achievement: ReadonlyArray<Achievement>;
+  /** fetch aggregated fields from the table: "achievement" */
+  readonly achievement_aggregate: Achievement_Aggregate;
+  /** fetch data from the table: "achievement" using primary key columns */
+  readonly achievement_by_pk?: Maybe<Achievement>;
+  /** fetch data from the table: "achievement_type" */
+  readonly achievement_type: ReadonlyArray<Achievement_Type>;
+  /** fetch aggregated fields from the table: "achievement_type" */
+  readonly achievement_type_aggregate: Achievement_Type_Aggregate;
+  /** fetch data from the table: "achievement_type" using primary key columns */
+  readonly achievement_type_by_pk?: Maybe<Achievement_Type>;
   /** fetch data from the table: "activities" */
   readonly activities: ReadonlyArray<Activities>;
   /** fetch aggregated fields from the table: "activities" */
@@ -2501,12 +3313,68 @@ export type Query_Root = {
   readonly likes_aggregate: Likes_Aggregate;
   /** fetch data from the table: "likes" using primary key columns */
   readonly likes_by_pk?: Maybe<Likes>;
+  /** execute function "unachievedachievements" which returns "achievement" */
+  readonly unachievedachievements: ReadonlyArray<Achievement>;
+  /** execute function "unachievedachievements" and query aggregates on result of table type "achievement" */
+  readonly unachievedachievements_aggregate: Achievement_Aggregate;
   /** fetch data from the table: "users" using primary key columns */
   readonly user?: Maybe<Users>;
+  /** fetch data from the table: "user_achievement" */
+  readonly user_achievement: ReadonlyArray<User_Achievement>;
+  /** fetch aggregated fields from the table: "user_achievement" */
+  readonly user_achievement_aggregate: User_Achievement_Aggregate;
+  /** fetch data from the table: "user_achievement" using primary key columns */
+  readonly user_achievement_by_pk?: Maybe<User_Achievement>;
   /** fetch data from the table: "users" */
   readonly users: ReadonlyArray<Users>;
   /** fetch aggregated fields from the table: "users" */
   readonly users_aggregate: Users_Aggregate;
+};
+
+/** query root */
+export type Query_RootAchievementArgs = {
+  distinct_on?: Maybe<ReadonlyArray<Achievement_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<ReadonlyArray<Achievement_Order_By>>;
+  where?: Maybe<Achievement_Bool_Exp>;
+};
+
+/** query root */
+export type Query_RootAchievement_AggregateArgs = {
+  distinct_on?: Maybe<ReadonlyArray<Achievement_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<ReadonlyArray<Achievement_Order_By>>;
+  where?: Maybe<Achievement_Bool_Exp>;
+};
+
+/** query root */
+export type Query_RootAchievement_By_PkArgs = {
+  id: Scalars['Int'];
+};
+
+/** query root */
+export type Query_RootAchievement_TypeArgs = {
+  distinct_on?: Maybe<ReadonlyArray<Achievement_Type_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<ReadonlyArray<Achievement_Type_Order_By>>;
+  where?: Maybe<Achievement_Type_Bool_Exp>;
+};
+
+/** query root */
+export type Query_RootAchievement_Type_AggregateArgs = {
+  distinct_on?: Maybe<ReadonlyArray<Achievement_Type_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<ReadonlyArray<Achievement_Type_Order_By>>;
+  where?: Maybe<Achievement_Type_Bool_Exp>;
+};
+
+/** query root */
+export type Query_RootAchievement_Type_By_PkArgs = {
+  name: Scalars['String'];
 };
 
 /** query root */
@@ -2673,8 +3541,52 @@ export type Query_RootLikes_By_PkArgs = {
 };
 
 /** query root */
+export type Query_RootUnachievedachievementsArgs = {
+  args: Unachievedachievements_Args;
+  distinct_on?: Maybe<ReadonlyArray<Achievement_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<ReadonlyArray<Achievement_Order_By>>;
+  where?: Maybe<Achievement_Bool_Exp>;
+};
+
+/** query root */
+export type Query_RootUnachievedachievements_AggregateArgs = {
+  args: Unachievedachievements_Args;
+  distinct_on?: Maybe<ReadonlyArray<Achievement_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<ReadonlyArray<Achievement_Order_By>>;
+  where?: Maybe<Achievement_Bool_Exp>;
+};
+
+/** query root */
 export type Query_RootUserArgs = {
   id: Scalars['String'];
+};
+
+/** query root */
+export type Query_RootUser_AchievementArgs = {
+  distinct_on?: Maybe<ReadonlyArray<User_Achievement_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<ReadonlyArray<User_Achievement_Order_By>>;
+  where?: Maybe<User_Achievement_Bool_Exp>;
+};
+
+/** query root */
+export type Query_RootUser_Achievement_AggregateArgs = {
+  distinct_on?: Maybe<ReadonlyArray<User_Achievement_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<ReadonlyArray<User_Achievement_Order_By>>;
+  where?: Maybe<User_Achievement_Bool_Exp>;
+};
+
+/** query root */
+export type Query_RootUser_Achievement_By_PkArgs = {
+  achievement_id: Scalars['Int'];
+  user_id: Scalars['String'];
 };
 
 /** query root */
@@ -2698,6 +3610,18 @@ export type Query_RootUsers_AggregateArgs = {
 /** subscription root */
 export type Subscription_Root = {
   readonly __typename: 'subscription_root';
+  /** fetch data from the table: "achievement" */
+  readonly achievement: ReadonlyArray<Achievement>;
+  /** fetch aggregated fields from the table: "achievement" */
+  readonly achievement_aggregate: Achievement_Aggregate;
+  /** fetch data from the table: "achievement" using primary key columns */
+  readonly achievement_by_pk?: Maybe<Achievement>;
+  /** fetch data from the table: "achievement_type" */
+  readonly achievement_type: ReadonlyArray<Achievement_Type>;
+  /** fetch aggregated fields from the table: "achievement_type" */
+  readonly achievement_type_aggregate: Achievement_Type_Aggregate;
+  /** fetch data from the table: "achievement_type" using primary key columns */
+  readonly achievement_type_by_pk?: Maybe<Achievement_Type>;
   /** fetch data from the table: "activities" */
   readonly activities: ReadonlyArray<Activities>;
   /** fetch aggregated fields from the table: "activities" */
@@ -2740,12 +3664,68 @@ export type Subscription_Root = {
   readonly likes_aggregate: Likes_Aggregate;
   /** fetch data from the table: "likes" using primary key columns */
   readonly likes_by_pk?: Maybe<Likes>;
+  /** execute function "unachievedachievements" which returns "achievement" */
+  readonly unachievedachievements: ReadonlyArray<Achievement>;
+  /** execute function "unachievedachievements" and query aggregates on result of table type "achievement" */
+  readonly unachievedachievements_aggregate: Achievement_Aggregate;
   /** fetch data from the table: "users" using primary key columns */
   readonly user?: Maybe<Users>;
+  /** fetch data from the table: "user_achievement" */
+  readonly user_achievement: ReadonlyArray<User_Achievement>;
+  /** fetch aggregated fields from the table: "user_achievement" */
+  readonly user_achievement_aggregate: User_Achievement_Aggregate;
+  /** fetch data from the table: "user_achievement" using primary key columns */
+  readonly user_achievement_by_pk?: Maybe<User_Achievement>;
   /** fetch data from the table: "users" */
   readonly users: ReadonlyArray<Users>;
   /** fetch aggregated fields from the table: "users" */
   readonly users_aggregate: Users_Aggregate;
+};
+
+/** subscription root */
+export type Subscription_RootAchievementArgs = {
+  distinct_on?: Maybe<ReadonlyArray<Achievement_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<ReadonlyArray<Achievement_Order_By>>;
+  where?: Maybe<Achievement_Bool_Exp>;
+};
+
+/** subscription root */
+export type Subscription_RootAchievement_AggregateArgs = {
+  distinct_on?: Maybe<ReadonlyArray<Achievement_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<ReadonlyArray<Achievement_Order_By>>;
+  where?: Maybe<Achievement_Bool_Exp>;
+};
+
+/** subscription root */
+export type Subscription_RootAchievement_By_PkArgs = {
+  id: Scalars['Int'];
+};
+
+/** subscription root */
+export type Subscription_RootAchievement_TypeArgs = {
+  distinct_on?: Maybe<ReadonlyArray<Achievement_Type_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<ReadonlyArray<Achievement_Type_Order_By>>;
+  where?: Maybe<Achievement_Type_Bool_Exp>;
+};
+
+/** subscription root */
+export type Subscription_RootAchievement_Type_AggregateArgs = {
+  distinct_on?: Maybe<ReadonlyArray<Achievement_Type_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<ReadonlyArray<Achievement_Type_Order_By>>;
+  where?: Maybe<Achievement_Type_Bool_Exp>;
+};
+
+/** subscription root */
+export type Subscription_RootAchievement_Type_By_PkArgs = {
+  name: Scalars['String'];
 };
 
 /** subscription root */
@@ -2912,8 +3892,52 @@ export type Subscription_RootLikes_By_PkArgs = {
 };
 
 /** subscription root */
+export type Subscription_RootUnachievedachievementsArgs = {
+  args: Unachievedachievements_Args;
+  distinct_on?: Maybe<ReadonlyArray<Achievement_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<ReadonlyArray<Achievement_Order_By>>;
+  where?: Maybe<Achievement_Bool_Exp>;
+};
+
+/** subscription root */
+export type Subscription_RootUnachievedachievements_AggregateArgs = {
+  args: Unachievedachievements_Args;
+  distinct_on?: Maybe<ReadonlyArray<Achievement_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<ReadonlyArray<Achievement_Order_By>>;
+  where?: Maybe<Achievement_Bool_Exp>;
+};
+
+/** subscription root */
 export type Subscription_RootUserArgs = {
   id: Scalars['String'];
+};
+
+/** subscription root */
+export type Subscription_RootUser_AchievementArgs = {
+  distinct_on?: Maybe<ReadonlyArray<User_Achievement_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<ReadonlyArray<User_Achievement_Order_By>>;
+  where?: Maybe<User_Achievement_Bool_Exp>;
+};
+
+/** subscription root */
+export type Subscription_RootUser_Achievement_AggregateArgs = {
+  distinct_on?: Maybe<ReadonlyArray<User_Achievement_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<ReadonlyArray<User_Achievement_Order_By>>;
+  where?: Maybe<User_Achievement_Bool_Exp>;
+};
+
+/** subscription root */
+export type Subscription_RootUser_Achievement_By_PkArgs = {
+  achievement_id: Scalars['Int'];
+  user_id: Scalars['String'];
 };
 
 /** subscription root */
@@ -2960,6 +3984,286 @@ export type Timestamptz_Comparison_Exp = {
   readonly _nin?: Maybe<ReadonlyArray<Scalars['timestamptz']>>;
 };
 
+export type Unachievedachievements_Args = {
+  readonly uid?: Maybe<Scalars['String']>;
+};
+
+/** columns and relationships of "user_achievement" */
+export type User_Achievement = {
+  readonly __typename: 'user_achievement';
+  /** An object relationship */
+  readonly achievement: Achievement;
+  readonly achievement_id: Scalars['Int'];
+  readonly created_at: Scalars['timestamptz'];
+  /** An object relationship */
+  readonly user: Users;
+  readonly user_id: Scalars['String'];
+};
+
+/** aggregated selection of "user_achievement" */
+export type User_Achievement_Aggregate = {
+  readonly __typename: 'user_achievement_aggregate';
+  readonly aggregate?: Maybe<User_Achievement_Aggregate_Fields>;
+  readonly nodes: ReadonlyArray<User_Achievement>;
+};
+
+/** aggregate fields of "user_achievement" */
+export type User_Achievement_Aggregate_Fields = {
+  readonly __typename: 'user_achievement_aggregate_fields';
+  readonly avg?: Maybe<User_Achievement_Avg_Fields>;
+  readonly count?: Maybe<Scalars['Int']>;
+  readonly max?: Maybe<User_Achievement_Max_Fields>;
+  readonly min?: Maybe<User_Achievement_Min_Fields>;
+  readonly stddev?: Maybe<User_Achievement_Stddev_Fields>;
+  readonly stddev_pop?: Maybe<User_Achievement_Stddev_Pop_Fields>;
+  readonly stddev_samp?: Maybe<User_Achievement_Stddev_Samp_Fields>;
+  readonly sum?: Maybe<User_Achievement_Sum_Fields>;
+  readonly var_pop?: Maybe<User_Achievement_Var_Pop_Fields>;
+  readonly var_samp?: Maybe<User_Achievement_Var_Samp_Fields>;
+  readonly variance?: Maybe<User_Achievement_Variance_Fields>;
+};
+
+/** aggregate fields of "user_achievement" */
+export type User_Achievement_Aggregate_FieldsCountArgs = {
+  columns?: Maybe<ReadonlyArray<User_Achievement_Select_Column>>;
+  distinct?: Maybe<Scalars['Boolean']>;
+};
+
+/** order by aggregate values of table "user_achievement" */
+export type User_Achievement_Aggregate_Order_By = {
+  readonly avg?: Maybe<User_Achievement_Avg_Order_By>;
+  readonly count?: Maybe<Order_By>;
+  readonly max?: Maybe<User_Achievement_Max_Order_By>;
+  readonly min?: Maybe<User_Achievement_Min_Order_By>;
+  readonly stddev?: Maybe<User_Achievement_Stddev_Order_By>;
+  readonly stddev_pop?: Maybe<User_Achievement_Stddev_Pop_Order_By>;
+  readonly stddev_samp?: Maybe<User_Achievement_Stddev_Samp_Order_By>;
+  readonly sum?: Maybe<User_Achievement_Sum_Order_By>;
+  readonly var_pop?: Maybe<User_Achievement_Var_Pop_Order_By>;
+  readonly var_samp?: Maybe<User_Achievement_Var_Samp_Order_By>;
+  readonly variance?: Maybe<User_Achievement_Variance_Order_By>;
+};
+
+/** input type for inserting array relation for remote table "user_achievement" */
+export type User_Achievement_Arr_Rel_Insert_Input = {
+  readonly data: ReadonlyArray<User_Achievement_Insert_Input>;
+  readonly on_conflict?: Maybe<User_Achievement_On_Conflict>;
+};
+
+/** aggregate avg on columns */
+export type User_Achievement_Avg_Fields = {
+  readonly __typename: 'user_achievement_avg_fields';
+  readonly achievement_id?: Maybe<Scalars['Float']>;
+};
+
+/** order by avg() on columns of table "user_achievement" */
+export type User_Achievement_Avg_Order_By = {
+  readonly achievement_id?: Maybe<Order_By>;
+};
+
+/** Boolean expression to filter rows from the table "user_achievement". All fields are combined with a logical 'AND'. */
+export type User_Achievement_Bool_Exp = {
+  readonly _and?: Maybe<ReadonlyArray<Maybe<User_Achievement_Bool_Exp>>>;
+  readonly _not?: Maybe<User_Achievement_Bool_Exp>;
+  readonly _or?: Maybe<ReadonlyArray<Maybe<User_Achievement_Bool_Exp>>>;
+  readonly achievement?: Maybe<Achievement_Bool_Exp>;
+  readonly achievement_id?: Maybe<Int_Comparison_Exp>;
+  readonly created_at?: Maybe<Timestamptz_Comparison_Exp>;
+  readonly user?: Maybe<Users_Bool_Exp>;
+  readonly user_id?: Maybe<String_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "user_achievement" */
+export enum User_Achievement_Constraint {
+  /** unique or primary key constraint */
+  UserAchievmentPkey = 'user_achievment_pkey',
+}
+
+/** input type for incrementing integer column in table "user_achievement" */
+export type User_Achievement_Inc_Input = {
+  readonly achievement_id?: Maybe<Scalars['Int']>;
+};
+
+/** input type for inserting data into table "user_achievement" */
+export type User_Achievement_Insert_Input = {
+  readonly achievement?: Maybe<Achievement_Obj_Rel_Insert_Input>;
+  readonly achievement_id?: Maybe<Scalars['Int']>;
+  readonly created_at?: Maybe<Scalars['timestamptz']>;
+  readonly user?: Maybe<Users_Obj_Rel_Insert_Input>;
+  readonly user_id?: Maybe<Scalars['String']>;
+};
+
+/** aggregate max on columns */
+export type User_Achievement_Max_Fields = {
+  readonly __typename: 'user_achievement_max_fields';
+  readonly achievement_id?: Maybe<Scalars['Int']>;
+  readonly created_at?: Maybe<Scalars['timestamptz']>;
+  readonly user_id?: Maybe<Scalars['String']>;
+};
+
+/** order by max() on columns of table "user_achievement" */
+export type User_Achievement_Max_Order_By = {
+  readonly achievement_id?: Maybe<Order_By>;
+  readonly created_at?: Maybe<Order_By>;
+  readonly user_id?: Maybe<Order_By>;
+};
+
+/** aggregate min on columns */
+export type User_Achievement_Min_Fields = {
+  readonly __typename: 'user_achievement_min_fields';
+  readonly achievement_id?: Maybe<Scalars['Int']>;
+  readonly created_at?: Maybe<Scalars['timestamptz']>;
+  readonly user_id?: Maybe<Scalars['String']>;
+};
+
+/** order by min() on columns of table "user_achievement" */
+export type User_Achievement_Min_Order_By = {
+  readonly achievement_id?: Maybe<Order_By>;
+  readonly created_at?: Maybe<Order_By>;
+  readonly user_id?: Maybe<Order_By>;
+};
+
+/** response of any mutation on the table "user_achievement" */
+export type User_Achievement_Mutation_Response = {
+  readonly __typename: 'user_achievement_mutation_response';
+  /** number of affected rows by the mutation */
+  readonly affected_rows: Scalars['Int'];
+  /** data of the affected rows by the mutation */
+  readonly returning: ReadonlyArray<User_Achievement>;
+};
+
+/** input type for inserting object relation for remote table "user_achievement" */
+export type User_Achievement_Obj_Rel_Insert_Input = {
+  readonly data: User_Achievement_Insert_Input;
+  readonly on_conflict?: Maybe<User_Achievement_On_Conflict>;
+};
+
+/** on conflict condition type for table "user_achievement" */
+export type User_Achievement_On_Conflict = {
+  readonly constraint: User_Achievement_Constraint;
+  readonly update_columns: ReadonlyArray<User_Achievement_Update_Column>;
+  readonly where?: Maybe<User_Achievement_Bool_Exp>;
+};
+
+/** ordering options when selecting data from "user_achievement" */
+export type User_Achievement_Order_By = {
+  readonly achievement?: Maybe<Achievement_Order_By>;
+  readonly achievement_id?: Maybe<Order_By>;
+  readonly created_at?: Maybe<Order_By>;
+  readonly user?: Maybe<Users_Order_By>;
+  readonly user_id?: Maybe<Order_By>;
+};
+
+/** primary key columns input for table: "user_achievement" */
+export type User_Achievement_Pk_Columns_Input = {
+  readonly achievement_id: Scalars['Int'];
+  readonly user_id: Scalars['String'];
+};
+
+/** select columns of table "user_achievement" */
+export enum User_Achievement_Select_Column {
+  /** column name */
+  AchievementId = 'achievement_id',
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  UserId = 'user_id',
+}
+
+/** input type for updating data in table "user_achievement" */
+export type User_Achievement_Set_Input = {
+  readonly achievement_id?: Maybe<Scalars['Int']>;
+  readonly created_at?: Maybe<Scalars['timestamptz']>;
+  readonly user_id?: Maybe<Scalars['String']>;
+};
+
+/** aggregate stddev on columns */
+export type User_Achievement_Stddev_Fields = {
+  readonly __typename: 'user_achievement_stddev_fields';
+  readonly achievement_id?: Maybe<Scalars['Float']>;
+};
+
+/** order by stddev() on columns of table "user_achievement" */
+export type User_Achievement_Stddev_Order_By = {
+  readonly achievement_id?: Maybe<Order_By>;
+};
+
+/** aggregate stddev_pop on columns */
+export type User_Achievement_Stddev_Pop_Fields = {
+  readonly __typename: 'user_achievement_stddev_pop_fields';
+  readonly achievement_id?: Maybe<Scalars['Float']>;
+};
+
+/** order by stddev_pop() on columns of table "user_achievement" */
+export type User_Achievement_Stddev_Pop_Order_By = {
+  readonly achievement_id?: Maybe<Order_By>;
+};
+
+/** aggregate stddev_samp on columns */
+export type User_Achievement_Stddev_Samp_Fields = {
+  readonly __typename: 'user_achievement_stddev_samp_fields';
+  readonly achievement_id?: Maybe<Scalars['Float']>;
+};
+
+/** order by stddev_samp() on columns of table "user_achievement" */
+export type User_Achievement_Stddev_Samp_Order_By = {
+  readonly achievement_id?: Maybe<Order_By>;
+};
+
+/** aggregate sum on columns */
+export type User_Achievement_Sum_Fields = {
+  readonly __typename: 'user_achievement_sum_fields';
+  readonly achievement_id?: Maybe<Scalars['Int']>;
+};
+
+/** order by sum() on columns of table "user_achievement" */
+export type User_Achievement_Sum_Order_By = {
+  readonly achievement_id?: Maybe<Order_By>;
+};
+
+/** update columns of table "user_achievement" */
+export enum User_Achievement_Update_Column {
+  /** column name */
+  AchievementId = 'achievement_id',
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  UserId = 'user_id',
+}
+
+/** aggregate var_pop on columns */
+export type User_Achievement_Var_Pop_Fields = {
+  readonly __typename: 'user_achievement_var_pop_fields';
+  readonly achievement_id?: Maybe<Scalars['Float']>;
+};
+
+/** order by var_pop() on columns of table "user_achievement" */
+export type User_Achievement_Var_Pop_Order_By = {
+  readonly achievement_id?: Maybe<Order_By>;
+};
+
+/** aggregate var_samp on columns */
+export type User_Achievement_Var_Samp_Fields = {
+  readonly __typename: 'user_achievement_var_samp_fields';
+  readonly achievement_id?: Maybe<Scalars['Float']>;
+};
+
+/** order by var_samp() on columns of table "user_achievement" */
+export type User_Achievement_Var_Samp_Order_By = {
+  readonly achievement_id?: Maybe<Order_By>;
+};
+
+/** aggregate variance on columns */
+export type User_Achievement_Variance_Fields = {
+  readonly __typename: 'user_achievement_variance_fields';
+  readonly achievement_id?: Maybe<Scalars['Float']>;
+};
+
+/** order by variance() on columns of table "user_achievement" */
+export type User_Achievement_Variance_Order_By = {
+  readonly achievement_id?: Maybe<Order_By>;
+};
+
 /** columns and relationships of "users" */
 export type Users = {
   readonly __typename: 'users';
@@ -2980,7 +4284,13 @@ export type Users = {
   readonly following_aggregate: Followings_Aggregate;
   readonly id: Scalars['String'];
   readonly name?: Maybe<Scalars['String']>;
+  /** A computed field, executes function "totalscore" */
+  readonly totalScore?: Maybe<Scalars['bigint']>;
   readonly updated_at?: Maybe<Scalars['timestamptz']>;
+  /** An array relationship */
+  readonly user_achievement: ReadonlyArray<User_Achievement>;
+  /** An aggregated array relationship */
+  readonly user_achievement_aggregate: User_Achievement_Aggregate;
 };
 
 /** columns and relationships of "users" */
@@ -3037,6 +4347,24 @@ export type UsersFollowing_AggregateArgs = {
   where?: Maybe<Followings_Bool_Exp>;
 };
 
+/** columns and relationships of "users" */
+export type UsersUser_AchievementArgs = {
+  distinct_on?: Maybe<ReadonlyArray<User_Achievement_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<ReadonlyArray<User_Achievement_Order_By>>;
+  where?: Maybe<User_Achievement_Bool_Exp>;
+};
+
+/** columns and relationships of "users" */
+export type UsersUser_Achievement_AggregateArgs = {
+  distinct_on?: Maybe<ReadonlyArray<User_Achievement_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<ReadonlyArray<User_Achievement_Order_By>>;
+  where?: Maybe<User_Achievement_Bool_Exp>;
+};
+
 /** aggregated selection of "users" */
 export type Users_Aggregate = {
   readonly __typename: 'users_aggregate';
@@ -3085,6 +4413,7 @@ export type Users_Bool_Exp = {
   readonly id?: Maybe<String_Comparison_Exp>;
   readonly name?: Maybe<String_Comparison_Exp>;
   readonly updated_at?: Maybe<Timestamptz_Comparison_Exp>;
+  readonly user_achievement?: Maybe<User_Achievement_Bool_Exp>;
 };
 
 /** unique or primary key constraints on table "users" */
@@ -3108,6 +4437,7 @@ export type Users_Insert_Input = {
   readonly id?: Maybe<Scalars['String']>;
   readonly name?: Maybe<Scalars['String']>;
   readonly updated_at?: Maybe<Scalars['timestamptz']>;
+  readonly user_achievement?: Maybe<User_Achievement_Arr_Rel_Insert_Input>;
 };
 
 /** aggregate max on columns */
@@ -3185,6 +4515,7 @@ export type Users_Order_By = {
   readonly id?: Maybe<Order_By>;
   readonly name?: Maybe<Order_By>;
   readonly updated_at?: Maybe<Order_By>;
+  readonly user_achievement_aggregate?: Maybe<User_Achievement_Aggregate_Order_By>;
 };
 
 /** primary key columns input for table: "users" */
@@ -3260,7 +4591,7 @@ export type UserFragmentFragment = { readonly __typename: 'users' } & {
 
 export type ActivityFragmentFragment = { readonly __typename: 'activities' } & Pick<
   Types.Activities,
-  'activity_id' | 'category' | 'caption' | 'created_at'
+  'activity_id' | 'caption' | 'created_at'
 > & {
     readonly comments: ReadonlyArray<{ readonly __typename: 'comments' } & CommentFragmentFragment>;
     readonly geofence: { readonly __typename: 'geofences' } & GeofenceFragmentFragment;
@@ -3311,7 +4642,6 @@ export const GeofenceFragmentFragmentDoc = gql`
 export const ActivityFragmentFragmentDoc = gql`
   fragment activityFragment on activities {
     activity_id
-    category
     caption
     created_at
     comments {

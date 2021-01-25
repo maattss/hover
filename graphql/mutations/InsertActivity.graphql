@@ -1,0 +1,5 @@
+mutation InsertActivity($activity: activities_insert_input!) {
+  insert_activities_one(object: $activity) {
+    ...basicActivityFragment
+  }
+}

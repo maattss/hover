@@ -1,18 +1,19 @@
 import { LatLng } from 'react-native-maps';
-import { PolygonGeoFence, CircleGeoFence, GeoFence, GeoFenceVariant } from '../types/geoFenceTypes';
+import { Colors } from '../theme';
+import { hexToRGB } from '../theme/colors';
+import { PolygonGeoFence, CircleGeoFence, GeoFence, GeoFenceVariant, GeoFenceCategory } from '../types/geoFenceTypes';
 
-export const isInsideGeoFences = (userLocation: LatLng, geoFences: GeoFence[] | undefined) => {
+export const insideGeoFences = (userLocation: LatLng, geoFences: GeoFence[] | undefined) => {
   if (geoFences) {
     for (const geoFence of geoFences) {
       if (geoFence.variant == GeoFenceVariant.CIRCLE) {
-        if (isInsideCircle(userLocation, geoFence as CircleGeoFence)) return true;
+        if (isInsideCircle(userLocation, geoFence as CircleGeoFence)) return geoFence;
       }
       if (geoFence.variant == GeoFenceVariant.POLYGON) {
-        if (isInsidePolygon(userLocation, geoFence as PolygonGeoFence)) return true;
+        if (isInsidePolygon(userLocation, geoFence as PolygonGeoFence)) return geoFence;
       }
     }
   }
-  return false;
 };
 
 const isInsideCircle = (userLocation: LatLng, geoFence: CircleGeoFence) => {
@@ -65,4 +66,34 @@ export const estimatedRadius = (coordinates: LatLng[]) => {
     });
   });
   return Math.sqrt(biggestLength);
+};
+
+export const getGeoFenceColor = (category: GeoFenceCategory, opacity: number) => {
+  switch (category) {
+    case GeoFenceCategory.EDUCATION:
+      return hexToRGB(Colors.red, opacity);
+    case GeoFenceCategory.CULTURE:
+      return hexToRGB(Colors.green, opacity);
+    case GeoFenceCategory.EXERCISE:
+      return hexToRGB(Colors.blue, opacity);
+    case GeoFenceCategory.SOCIAL:
+      return hexToRGB(Colors.orange, opacity);
+    default:
+      return hexToRGB(Colors.almostBlack, opacity);
+  }
+};
+
+export const getGeoFenceScoreRatio = (category: GeoFenceCategory) => {
+  switch (category) {
+    case GeoFenceCategory.EDUCATION:
+      return 1 / 60;
+    case GeoFenceCategory.CULTURE:
+      return 1 / 12;
+    case GeoFenceCategory.EXERCISE:
+      return 1 / 12;
+    case GeoFenceCategory.SOCIAL:
+      return 1 / 60;
+    default:
+      return 1 / 60;
+  }
 };

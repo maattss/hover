@@ -1,6 +1,6 @@
 import React, { useState, createRef, useEffect } from 'react';
 import MapView, { Circle, EventUserLocation, LatLng, MapTypes, Polygon } from 'react-native-maps';
-import { StyleSheet, Dimensions, Text, View, TouchableOpacity, Alert } from 'react-native';
+import { StyleSheet, Dimensions, Text, View, Alert, TouchableOpacity, ActivityIndicator } from 'react-native';
 import {
   GeoFence,
   GeoFenceVariant,
@@ -11,9 +11,13 @@ import {
 import { Colors, Spacing, Typography, Buttons } from '../../theme';
 import { hexToRGB } from '../../theme/colors';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
-import { isInsideGeoFences } from '../../helpers/geoFenceCalculations';
+import { getGeoFenceScoreRatio, insideGeoFences } from '../../helpers/geoFenceCalculations';
 import { useGeofencesQuery } from '../../graphql/queries/Geofences.generated';
 import { convertToGeoFence } from '../../helpers/objectMappers';
+import { useInterval } from '../../hooks/useInterval';
+import { useInsertActivityMutation } from '../../graphql/mutations/InsertActivity.generated';
+import useAuthentication from '../../hooks/useAuthentication';
+import { durationToTimestamp, getCurrentTimestamp } from '../../helpers/dateTimeHelpers';
 
 const { width, height } = Dimensions.get('window');
 
@@ -70,14 +74,24 @@ const drawGeoFences = (geoFences: GeoFence[] | undefined) => {
 };
 
 const TrackingScreen: React.FC = () => {
+  // Map state
   const [userLocation, setUserLocation] = useState<LatLng>();
   const [chosenMapType, setChosenMapType] = useState<MapTypes>('standard');
   const [centreOnUser, setCentreOnUser] = useState(false);
-  const [inGeofence, setInGeoFence] = useState(false);
-
   const [geoFences, setGeoFences] = useState<GeoFence[]>();
 
+  // Tracking state
+  const user_id = useAuthentication().user?.uid;
+  const [inGeofence, setInGeoFence] = useState(false);
+  const [isTracking, setIsTracking] = useState(false);
+  const [counterRunning, setCounterRunning] = useState(false);
+  const [trackingGeoFence, setTrackingGeoFence] = useState<GeoFence>();
+  const [trackingStart, setTrackingStart] = useState('');
+  const [score, setScore] = useState(0);
+  const [duration, setDuration] = useState(0);
+
   const { error: fetchError, data: data } = useGeofencesQuery();
+  const [InsertActivity] = useInsertActivityMutation();
 
   useEffect(() => {
     if (data) setGeoFences(convertToGeoFence(data));
@@ -103,8 +117,9 @@ const TrackingScreen: React.FC = () => {
       longitude: location.nativeEvent.coordinate.longitude,
     };
     setUserLocation(newUserLocation);
+    setTrackingGeoFence(insideGeoFences(newUserLocation, geoFences));
 
-    if (isInsideGeoFences(newUserLocation, geoFences)) {
+    if (trackingGeoFence) {
       setInGeoFence(true);
     } else {
       setInGeoFence(false);
@@ -124,6 +139,52 @@ const TrackingScreen: React.FC = () => {
       1000,
     );
   };
+
+  const startTracking = () => {
+    if (inGeofence) {
+      setScore(0);
+      setCounterRunning(true);
+      setIsTracking(true);
+      setTrackingStart(getCurrentTimestamp());
+    }
+  };
+
+  const stopTracking = async () => {
+    setCounterRunning(false);
+    setIsTracking(false);
+
+    try {
+      const activity = {
+        geofence_id: trackingGeoFence?.id,
+        user_id: user_id,
+        score: score,
+        started_at: trackingStart,
+        duration: durationToTimestamp(duration),
+      };
+      const response = await InsertActivity({
+        variables: {
+          activity: activity,
+        },
+      });
+      console.log('Activity inserted to db', response);
+      Alert.alert('Upload complete', 'Activity uploaded successfully!', [{ text: 'Cancel' }, { text: 'OK' }]);
+    } catch (error) {
+      console.error('Mutation error', error.message);
+    }
+  };
+  const pauseTracking = () => {
+    setCounterRunning(false);
+  };
+
+  useInterval(
+    () => {
+      if (trackingGeoFence) {
+        setDuration(duration + 1);
+        setScore(Math.round(score + 1 * getGeoFenceScoreRatio(trackingGeoFence.category)));
+      }
+    },
+    counterRunning ? 1000 : null,
+  );
 
   if (fetchError) {
     console.error('Error:', fetchError);
@@ -153,9 +214,62 @@ const TrackingScreen: React.FC = () => {
           </TouchableOpacity>
         </View>
       </View>
-      <View style={styles.trackingContainer}>
-        <Text style={{ ...Typography.largeBodyText }}>InGeoFence: {inGeofence ? 'true' : 'false'}</Text>
+      <View style={styles.trackingInfoContainer}>
+        {/* Tracking */}
+        {isTracking && counterRunning && (
+          <>
+            <Text style={styles.scoreText}>Score: {score.toFixed(0)}</Text>
+            <ActivityIndicator size={'large'} color={Colors.blue} style={{ marginTop: Spacing.base }} />
+          </>
+        )}
+        {/* Tracking paused */}
+        {isTracking && !counterRunning && (
+          <>
+            <Text style={styles.scoreText}>Score: {score.toFixed(0)}</Text>
+            <Text style={{ ...Typography.largeBodyText, marginTop: Spacing.base }}>Resume to earn more points!</Text>
+          </>
+        )}
+        {/* Not tracking and user in geo fence */}
+        {!isTracking && !counterRunning && inGeofence && (
+          <Text style={{ ...Typography.headerText, textAlign: 'center' }}>Start hovering to earn points!</Text>
+        )}
+        {/* Not tracking and user outside geo fence */}
+        {!isTracking && !counterRunning && !inGeofence && (
+          <Text style={{ ...Typography.headerText, textAlign: 'center' }}>Move to hover zone to earn points!</Text>
+        )}
       </View>
+
+      {/* Tracking stopped / not started and user in geo fence */}
+      {!isTracking && !counterRunning && inGeofence && (
+        <View style={styles.startButtonContainer}>
+          <TouchableOpacity style={[styles.trackingButton, { backgroundColor: Colors.green }]} onPress={startTracking}>
+            <Text style={styles.trackingButtonText}>Start</Text>
+          </TouchableOpacity>
+        </View>
+      )}
+
+      {/* Tracking paused */}
+      {isTracking && !counterRunning && (
+        <View style={styles.startButtonContainer}>
+          <TouchableOpacity style={[styles.trackingButton, { backgroundColor: Colors.green }]} onPress={startTracking}>
+            <Text style={styles.trackingButtonText}>Resume</Text>
+          </TouchableOpacity>
+        </View>
+      )}
+
+      {/* Tracking */}
+      {isTracking && counterRunning && (
+        <View style={styles.stopButtonContainer}>
+          <TouchableOpacity style={[styles.trackingButton, { backgroundColor: Colors.red }]} onPress={stopTracking}>
+            <Text style={styles.trackingButtonText}>Stop</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.trackingButton, { backgroundColor: Colors.gray800 }]}
+            onPress={pauseTracking}>
+            <Text style={styles.trackingButtonText}>Pause</Text>
+          </TouchableOpacity>
+        </View>
+      )}
     </View>
   );
 };
@@ -166,15 +280,16 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   mapContainer: {
-    width: '100%',
-    height: '40%',
+    height: '60%',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  trackingContainer: {
-    width: '100%',
-    height: '60%',
+  trackingInfoContainer: {
+    height: '20%',
     padding: Spacing.base,
+    justifyContent: 'center',
+    alignItems: 'center',
+    textAlign: 'center',
   },
   mapStyle: {
     width: '98%',
@@ -195,9 +310,38 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.almostBlack,
     marginTop: Spacing.smallest,
   },
+  startButtonContainer: {
+    height: '30%',
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  stopButtonContainer: {
+    height: '30%',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginLeft: Spacing.extraLarge,
+    marginRight: Spacing.extraLarge,
+  },
+  trackingButton: {
+    padding: Spacing.smallest,
+    borderRadius: 50,
+    width: 100,
+    height: 100,
+    margin: Spacing.base,
+    justifyContent: 'center',
+  },
+  trackingButtonText: {
+    ...Buttons.buttonText,
+    fontSize: 24,
+    textAlign: 'center',
+  },
   icon: {
     fontSize: Typography.icon.fontSize,
     color: Colors.blue,
+  },
+  scoreText: {
+    ...Typography.headerText,
+    marginTop: Spacing.base,
   },
 });
 

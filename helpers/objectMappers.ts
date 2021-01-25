@@ -36,6 +36,7 @@ export const convertToGeoFence = (data: GeofencesQuery) => {
   for (const obj of data.geofences) {
     if (obj.variant === 'CIRCLE') {
       geoFences.push({
+        id: obj.id,
         name: obj.name,
         description: obj.description ? obj.description : '',
         latitude: obj.latitude,
@@ -47,6 +48,7 @@ export const convertToGeoFence = (data: GeofencesQuery) => {
     } else if (obj.variant === 'POLYGON') {
       const coordinates = obj.coordinates ? fromRawCoordinatesToLatLng(obj.coordinates) : [];
       geoFences.push({
+        id: obj.id,
         name: obj.name,
         description: obj.description ? obj.description : '',
         latitude: obj.latitude,
