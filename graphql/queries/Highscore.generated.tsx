@@ -1,7 +1,8 @@
 /* eslint-disable */
-import * as Types from '../types/types';
+import * as Types from '../../types/types';
 
 import { gql } from '@apollo/client';
+import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
@@ -4565,133 +4566,70 @@ export enum Users_Update_Column {
   UpdatedAt = 'updated_at',
 }
 
-export type BasicUserFragmentFragment = { readonly __typename: 'users' } & Pick<
-  Types.Users,
-  'id' | 'email' | 'name' | 'bio'
->;
+export type HighscoreQueryVariables = Types.Exact<{
+  timespan?: Types.Maybe<Types.Scalars['timestamptz']>;
+  category?: Types.Maybe<Types.Scalars['String']>;
+}>;
 
-export type UserFragmentFragment = { readonly __typename: 'users' } & {
-  readonly followers: ReadonlyArray<
-    { readonly __typename: 'followings' } & {
-      readonly follower: { readonly __typename: 'users' } & BasicUserFragmentFragment;
-    }
+export type HighscoreQuery = { readonly __typename: 'query_root' } & {
+  readonly users: ReadonlyArray<
+    { readonly __typename: 'users' } & Pick<Types.Users, 'id' | 'name'> & {
+        readonly activities_aggregate: { readonly __typename: 'activities_aggregate' } & {
+          readonly aggregate?: Types.Maybe<
+            { readonly __typename: 'activities_aggregate_fields' } & {
+              readonly sum?: Types.Maybe<
+                { readonly __typename: 'activities_sum_fields' } & Pick<Types.Activities_Sum_Fields, 'score'>
+              >;
+            }
+          >;
+        };
+      }
   >;
-  readonly followers_aggregate: { readonly __typename: 'followings_aggregate' } & {
-    readonly aggregate?: Types.Maybe<
-      { readonly __typename: 'followings_aggregate_fields' } & Pick<Types.Followings_Aggregate_Fields, 'count'>
-    >;
-  };
-  readonly following: ReadonlyArray<
-    { readonly __typename: 'followings' } & {
-      readonly user: { readonly __typename: 'users' } & BasicUserFragmentFragment;
-    }
-  >;
-  readonly activities: ReadonlyArray<{ readonly __typename: 'activities' } & ActivityFragmentFragment>;
-} & BasicUserFragmentFragment;
+};
 
-export type BasicActivityFragmentFragment = { readonly __typename: 'activities' } & Pick<
-  Types.Activities,
-  'activity_id' | 'caption' | 'duration' | 'geofence_id' | 'score' | 'started_at' | 'stopped_at'
->;
-
-export type ActivityFragmentFragment = { readonly __typename: 'activities' } & Pick<
-  Types.Activities,
-  'activity_id' | 'caption' | 'created_at'
-> & {
-    readonly comments: ReadonlyArray<{ readonly __typename: 'comments' } & CommentFragmentFragment>;
-    readonly geofence: { readonly __typename: 'geofences' } & GeofenceFragmentFragment;
-  };
-
-export type CommentFragmentFragment = { readonly __typename: 'comments' } & Pick<
-  Types.Comments,
-  'comment_id' | 'activity_id' | 'content'
-> & { readonly user: { readonly __typename: 'users' } & BasicUserFragmentFragment };
-
-export type GeofenceFragmentFragment = { readonly __typename: 'geofences' } & Pick<
-  Types.Geofences,
-  'id' | 'name' | 'category' | 'coordinates' | 'description' | 'latitude' | 'longitude' | 'radius' | 'variant'
->;
-
-export const BasicUserFragmentFragmentDoc = gql`
-  fragment basicUserFragment on users {
-    id
-    email
-    name
-    bio
-  }
-`;
-export const CommentFragmentFragmentDoc = gql`
-  fragment commentFragment on comments {
-    comment_id
-    activity_id
-    content
-    user {
-      ...basicUserFragment
-    }
-  }
-  ${BasicUserFragmentFragmentDoc}
-`;
-export const GeofenceFragmentFragmentDoc = gql`
-  fragment geofenceFragment on geofences {
-    id
-    name
-    category
-    coordinates
-    description
-    latitude
-    longitude
-    radius
-    variant
-  }
-`;
-export const ActivityFragmentFragmentDoc = gql`
-  fragment activityFragment on activities {
-    activity_id
-    caption
-    created_at
-    comments {
-      ...commentFragment
-    }
-    geofence {
-      ...geofenceFragment
-    }
-  }
-  ${CommentFragmentFragmentDoc}
-  ${GeofenceFragmentFragmentDoc}
-`;
-export const UserFragmentFragmentDoc = gql`
-  fragment userFragment on users {
-    ...basicUserFragment
-    followers {
-      follower {
-        ...basicUserFragment
+export const HighscoreDocument = gql`
+  query Highscore($timespan: timestamptz, $category: String) {
+    users(
+      order_by: { activities_aggregate: { sum: { score: desc } } }
+      where: { activities: { started_at: { _lt: $timespan }, geofence: { category: { _eq: $category } } } }
+    ) {
+      id
+      name
+      activities_aggregate {
+        aggregate {
+          sum {
+            score
+          }
+        }
       }
     }
-    followers_aggregate {
-      aggregate {
-        count(distinct: true, columns: user_id)
-      }
-    }
-    following {
-      user {
-        ...basicUserFragment
-      }
-    }
-    activities {
-      ...activityFragment
-    }
-  }
-  ${BasicUserFragmentFragmentDoc}
-  ${ActivityFragmentFragmentDoc}
-`;
-export const BasicActivityFragmentFragmentDoc = gql`
-  fragment basicActivityFragment on activities {
-    activity_id
-    caption
-    duration
-    geofence_id
-    score
-    started_at
-    stopped_at
   }
 `;
+
+/**
+ * __useHighscoreQuery__
+ *
+ * To run a query within a React component, call `useHighscoreQuery` and pass it any options that fit your needs.
+ * When your component renders, `useHighscoreQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useHighscoreQuery({
+ *   variables: {
+ *      timespan: // value for 'timespan'
+ *      category: // value for 'category'
+ *   },
+ * });
+ */
+export function useHighscoreQuery(baseOptions?: Apollo.QueryHookOptions<HighscoreQuery, HighscoreQueryVariables>) {
+  return Apollo.useQuery<HighscoreQuery, HighscoreQueryVariables>(HighscoreDocument, baseOptions);
+}
+export function useHighscoreLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<HighscoreQuery, HighscoreQueryVariables>,
+) {
+  return Apollo.useLazyQuery<HighscoreQuery, HighscoreQueryVariables>(HighscoreDocument, baseOptions);
+}
+export type HighscoreQueryHookResult = ReturnType<typeof useHighscoreQuery>;
+export type HighscoreLazyQueryHookResult = ReturnType<typeof useHighscoreLazyQuery>;

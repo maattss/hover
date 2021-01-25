@@ -1,0 +1,16 @@
+query Highscore($timespan: timestamptz, $category: String) {
+  users(
+    order_by: { activities_aggregate: { sum: { score: desc } } }
+    where: { activities: { started_at: { _lt: $timespan }, geofence: { category: { _eq: $category } } } }
+  ) {
+    id
+    name
+    activities_aggregate {
+      aggregate {
+        sum {
+          score
+        }
+      }
+    }
+  }
+}
