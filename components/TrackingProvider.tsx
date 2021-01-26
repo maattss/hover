@@ -2,7 +2,6 @@ import React, { useState, ReactNode, useEffect } from 'react';
 import { LatLng } from 'react-native-maps';
 import { GeoFence, TrackedActivity } from '../types/geoFenceTypes';
 import { convertToGeoFence } from '../helpers/objectMappers';
-import { useGeofencesQuery } from '../graphql/queries/Geofences.generated';
 import { usePermissions, LOCATION, PermissionResponse } from 'expo-permissions';
 import { getLocationUpdate, startBackgroundUpdate } from '../tasks/locationBackgroundTasks';
 import { startGeofencing } from '../tasks/geofenceTasks';
@@ -60,8 +59,8 @@ export const TrackingProvider = ({ children }: Props) => {
   const [score, setScore] = useState(0);
   const [duration, setDuration] = useState(0);
 
-  const { error: fetchError, data: data } = useGeofencesQuery();
-  // const location = await getLocationUpdate();
+  //const { error: fetchError, data: data } = useGeofencesQuery();
+  const location = getLocationUpdate(); // should be await
 
   useEffect(() => {
     if (locationPermission && locationPermission.status !== 'granted') {
@@ -69,16 +68,16 @@ export const TrackingProvider = ({ children }: Props) => {
     }
   }, [locationPermission]);
 
-  useEffect(() => {
-    if (data) setGeoFences(convertToGeoFence(data));
-    if (fetchError) console.error(fetchError.message);
-  }, [data, fetchError]);
-
   // useEffect(() => {
-  //   // setInsideGeofence
-  //   // setScore and setDuration if isTracking and not paused
-  //   //console.log('User location updated', location);
-  // }, [location]);
+  //   if (data) setGeoFences(convertToGeoFence(data));
+  //   if (fetchError) console.error(fetchError.message);
+  // }, [data, fetchError]);
+
+  useEffect(() => {
+    // setInsideGeofence
+    // setScore and setDuration if isTracking and not paused
+    //console.log('User location updated', location);
+  }, [location]);
 
   const addCompletedActivity = (activity: TrackedActivity) =>
     setCompletedActivities([...completedActivities, activity]);
@@ -101,7 +100,7 @@ export const TrackingProvider = ({ children }: Props) => {
     duration: duration,
   };
 
-  return <TrackingContext.Provider value={{ value }}>{children}</TrackingContext.Provider>;
+  return <TrackingContext.Provider value={value}>{children}</TrackingContext.Provider>;
 };
 
 export default TrackingProvider;
