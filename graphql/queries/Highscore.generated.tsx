@@ -4607,7 +4607,7 @@ export const HighscoreDocument = gql`
       name
       picture
       activities_aggregate(
-        where: { geofence: { category: { _eq: $category } } }
+        where: { started_at: { _gt: $timespan }, geofence: { category: { _eq: $category } } }
         order_by: { score: desc_nulls_last }
       ) {
         aggregate {
