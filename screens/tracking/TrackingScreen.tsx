@@ -1,6 +1,6 @@
-import React, { useState, createRef, useEffect } from 'react';
-import MapView, { Circle, EventUserLocation, LatLng, MapTypes, Polygon } from 'react-native-maps';
-import { StyleSheet, Dimensions, Text, View, Alert, TouchableOpacity, ActivityIndicator } from 'react-native';
+import React, { useState, createRef } from 'react';
+import MapView, { Circle, LatLng, MapTypes, Polygon } from 'react-native-maps';
+import { StyleSheet, Dimensions, Text, View, TouchableOpacity, ActivityIndicator } from 'react-native';
 import {
   GeoFence,
   GeoFenceVariant,
@@ -11,13 +11,6 @@ import {
 import { Colors, Spacing, Typography, Buttons } from '../../theme';
 import { hexToRGB } from '../../theme/colors';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
-import { getGeoFenceScoreRatio, insideGeoFences } from '../../helpers/geoFenceCalculations';
-import { useGeofencesQuery } from '../../graphql/queries/Geofences.generated';
-import { convertToGeoFence } from '../../helpers/objectMappers';
-import { useInterval } from '../../hooks/useInterval';
-import { useInsertActivityMutation } from '../../graphql/mutations/InsertActivity.generated';
-import useAuthentication from '../../hooks/useAuthentication';
-import { durationToTimestamp, getCurrentTimestamp } from '../../helpers/dateTimeHelpers';
 import useTracking from '../../hooks/useTracking';
 
 const { width, height } = Dimensions.get('window');
@@ -132,31 +125,31 @@ const TrackingScreen: React.FC = () => {
         </View>
       </View>
       <View style={styles.trackingInfoContainer}>
-        {/* Tracking */}
+        {/* Info: Tracking */}
         {tracking.isTracking && !tracking.isTrackingPaused && (
           <>
             <Text style={styles.scoreText}>Score: {tracking.score.toFixed(0)}</Text>
             <ActivityIndicator size={'large'} color={Colors.blue} style={{ marginTop: Spacing.base }} />
           </>
         )}
-        {/* Tracking paused */}
+        {/* Info: Tracking paused */}
         {tracking.isTracking && tracking.isTrackingPaused && (
           <>
             <Text style={styles.scoreText}>Score: {tracking.score.toFixed(0)}</Text>
             <Text style={{ ...Typography.largeBodyText, marginTop: Spacing.base }}>Resume to earn more points!</Text>
           </>
         )}
-        {/* Not tracking and user in geo fence */}
+        {/* Info: Not tracking and user in geo fence */}
         {!tracking.isTracking && tracking.isTrackingPaused && tracking.insideGeoFence && (
           <Text style={{ ...Typography.headerText, textAlign: 'center' }}>Start hovering to earn points!</Text>
         )}
-        {/* Not tracking and user outside geo fence */}
+        {/* Info: Not tracking and user outside geo fence */}
         {!tracking.isTracking && tracking.isTrackingPaused && !tracking.insideGeoFence && (
           <Text style={{ ...Typography.headerText, textAlign: 'center' }}>Move to hover zone to earn points!</Text>
         )}
       </View>
 
-      {/* Tracking stopped / not started and user in geo fence */}
+      {/* Button: Tracking stopped / not started and user in geo fence */}
       {!tracking.isTracking && tracking.isTrackingPaused && tracking.insideGeoFence && (
         <View style={styles.startButtonContainer}>
           <TouchableOpacity
@@ -167,7 +160,7 @@ const TrackingScreen: React.FC = () => {
         </View>
       )}
 
-      {/* Tracking paused */}
+      {/* Button: Tracking paused */}
       {tracking.isTracking && tracking.isTrackingPaused && (
         <View style={styles.startButtonContainer}>
           <TouchableOpacity
@@ -178,7 +171,7 @@ const TrackingScreen: React.FC = () => {
         </View>
       )}
 
-      {/* Tracking */}
+      {/* Button: Tracking */}
       {tracking.isTracking && !tracking.isTrackingPaused && (
         <View style={styles.stopButtonContainer}>
           <TouchableOpacity

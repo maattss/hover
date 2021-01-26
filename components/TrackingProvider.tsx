@@ -131,6 +131,7 @@ export const TrackingProvider = ({ children }: Props) => {
 
   // Tracking
   const startTracking = () => {
+    console.log('Start tracking');
     if (insideGeoFence) {
       setScore(0);
       setIsTrackingPaused(false);
@@ -139,9 +140,11 @@ export const TrackingProvider = ({ children }: Props) => {
     }
   };
   const pauseTracking = () => {
+    console.log('Pause tracking');
     setIsTrackingPaused(true);
   };
   const stopTracking = async () => {
+    console.log('Stop tracking');
     setIsTrackingPaused(true);
     setIsTracking(false);
     const activity = {
