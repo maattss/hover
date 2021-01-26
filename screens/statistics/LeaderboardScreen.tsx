@@ -1,13 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import Leaderboard, { Item } from '../../components/Leaderboard';
-import { ActivityIndicator, StyleSheet, Text, View, TouchableOpacity, TextStyle, ViewStyle } from 'react-native';
+import {
+  ActivityIndicator,
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  TextStyle,
+  ViewStyle,
+  Platform,
+} from 'react-native';
 import { HighscoreQueryVariables, useHighscoreQuery } from '../../graphql/queries/Highscore.generated';
 import { Buttons, Colors, Spacing, Typography } from '../../theme';
 import { convertToHighscoreList } from '../../helpers/objectMappers';
 import { Picker } from '@react-native-picker/picker';
 import { PickerItemProps } from '@react-native-picker/picker/typings/Picker';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
-import { red } from '../../theme/colors';
 
 const STATIC_CATEGORIES: PickerItemProps[] = [
   { label: 'All Categories', value: '' },
@@ -47,65 +55,97 @@ const LeaderboardScreen: React.FC = () => {
 
   if (highscoreLoading) return <ActivityIndicator size={'large'} color={Colors.blue} />;
   if (highscoreError) return <Text style={styles.infoText}>{highscoreError.message}</Text>;
-
-  return (
-    <View style={styles.container}>
-      <View style={styles.filterContainer}>
-        {setCategory && (
-          <TouchableOpacity
-            style={styles.filterButton}
-            onPress={() => {
-              setEditCategory(true);
-              setEditTimespan(false);
-            }}>
-            <Text style={{ ...Buttons.buttonText }}>
-              {STATIC_CATEGORIES.find((obj) => obj.value === category)?.label}
-            </Text>
-            <FAIcon name="arrow-down" style={styles.filterIcon} />
-          </TouchableOpacity>
-        )}
-        {setTimespan && (
-          <TouchableOpacity
-            style={styles.filterButton}
-            onPress={() => {
-              setEditTimespan(true);
+  if (Platform.OS == 'android') {
+    return (
+      <View style={styles.container}>
+        <View style={styles.filterContainer}>
+          {setCategory && (
+            <FilterPickerAndriod
+              items={STATIC_CATEGORIES}
+              selectedValue={category}
+              onValueChange={(value) => {
+                setCategory(value);
+                refetch();
+                setEditCategory(false);
+              }}
+            />
+          )}
+          {setTimespan && (
+            <FilterPickerAndriod
+              items={STATIC_TIMESPAN}
+              selectedValue={timespan}
+              onValueChange={(value) => {
+                setTimespan(value);
+                refetch();
+                setEditTimespan(false);
+              }}
+            />
+          )}
+        </View>
+        <View style={styles.leaderboardContainer}>
+          {highscores && <Leaderboard data={highscores} refetch={refetch} />}
+        </View>
+      </View>
+    );
+  } else {
+    return (
+      <View style={styles.container}>
+        <View style={styles.filterContainer}>
+          {setCategory && (
+            <TouchableOpacity
+              style={styles.filterButton}
+              onPress={() => {
+                setEditCategory(true);
+                setEditTimespan(false);
+              }}>
+              <Text style={{ ...Buttons.buttonText }}>
+                {STATIC_CATEGORIES.find((obj) => obj.value === category)?.label}
+              </Text>
+              <FAIcon name="arrow-down" style={styles.filterIcon} />
+            </TouchableOpacity>
+          )}
+          {setTimespan && (
+            <TouchableOpacity
+              style={styles.filterButton}
+              onPress={() => {
+                setEditTimespan(true);
+                setEditCategory(false);
+              }}>
+              <Text style={{ ...Buttons.buttonText }}>
+                {STATIC_TIMESPAN.find((obj) => obj.value === timespan)?.label}
+              </Text>
+              <FAIcon name="arrow-down" style={styles.filterIcon} />
+            </TouchableOpacity>
+          )}
+        </View>
+        <View style={styles.leaderboardContainer}>
+          {highscores && <Leaderboard data={highscores} refetch={refetch} />}
+        </View>
+        {editCategory && !editTimespan && (
+          <FilterPickerIos
+            items={STATIC_CATEGORIES}
+            selectedValue={category}
+            onValueChange={(value) => {
+              setCategory(value);
+              refetch();
               setEditCategory(false);
-            }}>
-            <Text style={{ ...Buttons.buttonText }}>
-              {STATIC_TIMESPAN.find((obj) => obj.value === timespan)?.label}
-            </Text>
-            <FAIcon name="arrow-down" style={styles.filterIcon} />
-          </TouchableOpacity>
+            }}
+          />
+        )}
+        {editTimespan && !editCategory && (
+          <FilterPickerIos
+            items={STATIC_TIMESPAN}
+            selectedValue={timespan}
+            onValueChange={(value) => {
+              setTimespan(value);
+              refetch();
+              setEditTimespan(false);
+            }}
+          />
         )}
       </View>
-      <View style={styles.leaderboardContainer}>
-        {highscores && <Leaderboard data={highscores} refetch={refetch} />}
-      </View>
-
-      {editCategory && !editTimespan && (
-        <FilterPicker
-          items={STATIC_CATEGORIES}
-          selectedValue={category}
-          onValueChange={(value) => {
-            setCategory(value);
-            refetch();
-            setEditCategory(false);
-          }}
-        />
-      )}
-      {editTimespan && !editCategory && (
-        <FilterPicker
-          items={STATIC_TIMESPAN}
-          selectedValue={timespan}
-          onValueChange={(value) => {
-            setTimespan(value);
-            refetch();
-            setEditTimespan(false);
-          }}
-        />
-      )}
-    </View>
-  );
+    );
+  }
 };
 
 export default LeaderboardScreen;
@@ -116,7 +156,7 @@ interface PickerProps {
   onValueChange: (value: number | string) => void;
 }
 
-const FilterPicker = ({ items, selectedValue, onValueChange }: PickerProps) => {
+const FilterPickerIos = ({ items, selectedValue, onValueChange }: PickerProps) => {
   return (
     <View style={styles.pickerContainer}>
       <Picker
@@ -133,6 +173,21 @@ const FilterPicker = ({ items, selectedValue, onValueChange }: PickerProps) => {
   );
 };
 
+const FilterPickerAndriod = ({ items, selectedValue, onValueChange }: PickerProps) => {
+  return (
+    <Picker
+      mode="dropdown"
+      prompt="Choose a filter"
+      style={styles.picker}
+      selectedValue={selectedValue}
+      onValueChange={(itemValue) => onValueChange(itemValue)}>
+      {items.map((item) => (
+        <Picker.Item key={item.value} color={Colors.white} label={item.label} value={item.value} />
+      ))}
+    </Picker>
+  );
+};
+
 interface StylesProps {
   container: ViewStyle;
   filterContainer: ViewStyle;
@@ -145,6 +200,7 @@ interface StylesProps {
   filterIcon: TextStyle;
   refreshButton: ViewStyle;
 }
+
 const styles: StylesProps = StyleSheet.create({
   container: {
     flex: 1,
@@ -170,6 +226,13 @@ const styles: StylesProps = StyleSheet.create({
     alignItems: 'center',
     textAlign: 'center',
   },
+  pickerContainerAndroid: {
+    flex: 1,
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    textAlign: 'center',
+  },
   refreshContainer: {
     marginHorizontal: Spacing.base,
     alignItems: 'center',
@@ -182,6 +245,7 @@ const styles: StylesProps = StyleSheet.create({
   picker: {
     paddingTop: Spacing.base,
     width: '100%',
+    backgroundColor: Colors.transparent,
     flex: 1,
   },
   filterButton: {
