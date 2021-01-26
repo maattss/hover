@@ -5,8 +5,6 @@ import { estimatedRadius } from './geoFenceCalculations';
 import { CircleGeoFence, GeoFence, GeoFenceCategory, GeoFenceVariant, PolygonGeoFence } from '../types/geoFenceTypes';
 import { Item } from '../components/Leaderboard';
 import { HighscoreQuery } from '../graphql/queries/Highscore.generated';
-import { CategoriesQuery } from '../graphql/queries/Categories.generated';
-import { PickerItemProps } from '@react-native-picker/picker/typings/Picker';
 
 export const convertToRegion = (data: GeofencesQuery): LocationRegion[] => {
   const geoFences: LocationRegion[] = [];
@@ -91,15 +89,4 @@ export const convertToHighscoreList = (data: HighscoreQuery) => {
     } as Item),
   );
   return highscores;
-};
-
-export const mapCategories = (data: CategoriesQuery) => {
-  const categories: PickerItemProps[] = [];
-  data.categories.forEach((obj) =>
-    categories.push({
-      value: obj.name,
-      label: obj.name,
-    } as PickerItemProps),
-  );
-  return categories;
 };

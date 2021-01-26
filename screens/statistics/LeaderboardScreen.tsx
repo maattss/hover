@@ -1,66 +1,155 @@
-import React, { useEffect, useState } from 'react';
+import React, { Dispatch, ReactText, SetStateAction, useEffect, useState } from 'react';
 import Leaderboard, { Item } from '../../components/Leaderboard';
-import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, StyleSheet, Text, View, TouchableOpacity, TextStyle, ViewStyle } from 'react-native';
 import { HighscoreQueryVariables, useHighscoreQuery } from '../../graphql/queries/Highscore.generated';
-import { Spacing, Typography } from '../../theme';
-import { convertToHighscoreList, mapCategories } from '../../helpers/objectMappers';
-import { Colors } from 'react-native/Libraries/NewAppScreen';
-import { useCategoriesQuery } from '../../graphql/queries/Categories.generated';
+import { Buttons, Colors, Spacing, Typography } from '../../theme';
+import { convertToHighscoreList } from '../../helpers/objectMappers';
 import { Picker } from '@react-native-picker/picker';
 import { PickerItemProps } from '@react-native-picker/picker/typings/Picker';
 
+const STATIC_CATEGORIES = [
+  { label: 'All Categories', value: '' },
+  { label: 'Culture', value: 'CULTURE' },
+  { label: 'Education', value: 'EDUCATION' },
+  { label: 'Exercise', value: 'EXERCISE' },
+  { label: 'Social', value: 'SOCIAL' },
+];
+
 const LeaderboardScreen: React.FC = () => {
-  const [category, setCategory] = useState<string | number>();
-  const [timespan, setTimespan] = useState();
-  const { data: categoryData, loading: categoryLoading, error: categoryError } = useCategoriesQuery();
+  const [category, setCategory] = useState<number | string>('');
+  const [editCategory, setEditCategory] = useState(false);
+
   const { data: highscoreData, loading: highscoreLoading, error: highscoreError, refetch } = useHighscoreQuery({
-    variables: { category, timespan } as HighscoreQueryVariables,
+    variables: { category: category !== '' ? category : null } as HighscoreQueryVariables,
   });
   const [highscores, setHighscores] = useState<Item[]>([]);
-  const [allCategories, setAllCategories] = useState<PickerItemProps[]>();
+  const [allCategories] = useState<PickerItemProps[]>(STATIC_CATEGORIES);
+
   useEffect(() => {
     if (highscoreData) {
       setHighscores(convertToHighscoreList(highscoreData));
     }
-    if (categoryData) {
-      setAllCategories(mapCategories(categoryData));
-    }
-    console.log('categoryData', categoryData);
-  }, [highscoreData, categoryData]);
+  }, [highscoreData]);
 
-  if (categoryLoading || highscoreLoading) return <ActivityIndicator size={'large'} color={Colors.blue} />;
-  if (categoryError) return <Text style={styles.infoText}>{categoryError.message}</Text>;
+  if (highscoreLoading) return <ActivityIndicator size={'large'} color={Colors.blue} />;
   if (highscoreError) return <Text style={styles.infoText}>{highscoreError.message}</Text>;
 
   return (
     <View style={styles.container}>
-      <Picker style={{ backgroundColor: Colors.red, width: 150 }} onValueChange={(itemValue) => setCategory(itemValue)}>
-        <Picker.Item color="white" label="All Categories" value={'null'} />
-        {allCategories && allCategories.forEach((item) => <Picker.Item {...item} />)}
-      </Picker>
-      {highscores && <Leaderboard data={highscores} refetch={refetch} />}
+      <View style={styles.buttonsContainer}>
+        {setCategory && (
+          <TouchableOpacity style={styles.categoryButton} onPress={() => setEditCategory(true)}>
+            <Text style={{ ...Buttons.buttonText }}>{allCategories.find((obj) => obj.value === category)?.label}</Text>
+          </TouchableOpacity>
+        )}
+      </View>
+      <View style={styles.leaderboardContainer}>
+        {highscores && <Leaderboard data={highscores} refetch={refetch} />}
+      </View>
+
+      {editCategory && (
+        <CategoryPicker
+          items={allCategories}
+          selectedValue={category}
+          onValueChange={(value) => {
+            setCategory(value);
+            refetch();
+            setEditCategory(false);
+          }}
+        />
+      )}
     </View>
   );
 };
 
 export default LeaderboardScreen;
 
-const styles = StyleSheet.create({
+interface PickerProps {
+  items: PickerItemProps[];
+  selectedValue: number | string;
+  onValueChange: (value: number | string) => void;
+  setCategory?: Dispatch<SetStateAction<ReactText>>;
+}
+
+const CategoryPicker = ({ items, selectedValue, onValueChange }: PickerProps) => {
+  return (
+    <View style={styles.pickerContainer}>
+      <Picker
+        mode="dialog"
+        style={[styles.infoText, { width: 150 }]}
+        selectedValue={selectedValue}
+        onValueChange={(itemValue) => onValueChange(itemValue)}>
+        {items.map((item) => (
+          <Picker.Item key={item.value} color={Colors.white} label={item.label} value={item.value} />
+        ))}
+      </Picker>
+    </View>
+  );
+};
+
+interface StylesProps {
+  container: ViewStyle;
+  buttonsContainer: ViewStyle;
+  leaderboardContainer: ViewStyle;
+  pickerContainer: ViewStyle;
+  refreshContainer: ViewStyle;
+  infoText: TextStyle;
+  picker: TextStyle;
+  categoryButton: ViewStyle;
+  refreshButton: ViewStyle;
+}
+const styles: StylesProps = StyleSheet.create({
   container: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
     height: '100%',
     width: '100%',
-    paddingBottom: '50%',
     flex: 1,
+  },
+  buttonsContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    backgroundColor: Colors.red,
+  },
+  leaderboardContainer: {
+    height: '60%',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  pickerContainer: {
+    height: '20%',
+    padding: Spacing.base,
+    justifyContent: 'center',
+    alignItems: 'center',
+    textAlign: 'center',
+  },
+  refreshContainer: {
+    marginHorizontal: Spacing.base,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   infoText: {
     ...Typography.bodyText,
     paddingTop: Spacing.base,
   },
-  loading: {
-    flex: 1,
-    marginVertical: Spacing.smaller,
+  picker: {
+    ...Typography.bodyText,
+    paddingTop: Spacing.base,
+  },
+  pickerItem: {
+    ...Typography.bodyText,
+    paddingTop: Spacing.base,
+  },
+  categoryButton: {
+    ...Buttons.button,
+    backgroundColor: Colors.red,
+    width: '100%',
+    marginTop: Spacing.base,
+    marginBottom: Spacing.base,
+  },
+  refreshButton: {
+    ...Buttons.button,
+    backgroundColor: Colors.red,
+    width: '100%',
+    marginTop: Spacing.base,
+    marginBottom: Spacing.base,
   },
 });
