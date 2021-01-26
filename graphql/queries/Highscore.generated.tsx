@@ -4602,14 +4602,14 @@ export type HighscoreQuery = { readonly __typename: 'query_root' } & {
 
 export const HighscoreDocument = gql`
   query Highscore($timespan: timestamptz, $category: String) {
-    users(
-      order_by: { activities_aggregate: { sum: { score: desc } } }
-      where: { activities: { started_at: { _lt: $timespan }, geofence: { category: { _eq: $category } } } }
-    ) {
+    users {
       id
       name
       picture
-      activities_aggregate {
+      activities_aggregate(
+        where: { geofence: { category: { _eq: $category } } }
+        order_by: { score: desc_nulls_last }
+      ) {
         aggregate {
           sum {
             score
