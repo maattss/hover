@@ -18,6 +18,7 @@ import { useInterval } from '../../hooks/useInterval';
 import { useInsertActivityMutation } from '../../graphql/mutations/InsertActivity.generated';
 import useAuthentication from '../../hooks/useAuthentication';
 import { durationToTimestamp, getCurrentTimestamp } from '../../helpers/dateTimeHelpers';
+import useTracking from '../../hooks/useTracking';
 
 const { width, height } = Dimensions.get('window');
 
@@ -75,27 +76,9 @@ const drawGeoFences = (geoFences: GeoFence[] | undefined) => {
 
 const TrackingScreen: React.FC = () => {
   // Map state
-  const [userLocation, setUserLocation] = useState<LatLng>();
   const [chosenMapType, setChosenMapType] = useState<MapTypes>('standard');
   const [centreOnUser, setCentreOnUser] = useState(false);
-  const [geoFences, setGeoFences] = useState<GeoFence[]>();
-
-  // Tracking state
-  const user_id = useAuthentication().user?.uid;
-  const [inGeofence, setInGeoFence] = useState(false);
-  const [trackingGeoFence, setTrackingGeoFence] = useState<GeoFence>();
-  const [isTracking, setIsTracking] = useState(false);
-  const [counterRunning, setCounterRunning] = useState(false);
-  const [trackingStart, setTrackingStart] = useState('');
-  const [score, setScore] = useState(0);
-  const [duration, setDuration] = useState(0);
-
-  const { error: fetchError, data: data } = useGeofencesQuery();
-  const [InsertActivity] = useInsertActivityMutation();
-
-  useEffect(() => {
-    if (data) setGeoFences(convertToGeoFence(data));
-  }, [data]);
+  const tracking = useTracking();
 
   // Dynamic styles
   const mapTypeIconStyle = {
@@ -107,32 +90,17 @@ const TrackingScreen: React.FC = () => {
     color: centreOnUser ? Colors.blue : Colors.white,
   };
 
-  // Map event listner functions
+  // Map event listner functions. TODO: Remove
   const toggleMapType = () =>
     chosenMapType === 'satellite' ? setChosenMapType('standard') : setChosenMapType('satellite');
 
-  const userChange = (location: EventUserLocation) => {
-    const newUserLocation: LatLng = {
-      latitude: location.nativeEvent.coordinate.latitude,
-      longitude: location.nativeEvent.coordinate.longitude,
-    };
-    setUserLocation(newUserLocation);
-    setTrackingGeoFence(insideGeoFences(newUserLocation, geoFences));
-
-    if (trackingGeoFence) {
-      setInGeoFence(true);
-    } else {
-      setInGeoFence(false);
-    }
-  };
-
   const mapView = createRef<MapView>();
   const animateMapToUserPos = () => {
-    if (userLocation) setCentreOnUser(true);
+    if (tracking.userLocation) setCentreOnUser(true);
     mapView.current?.animateToRegion(
       {
-        longitude: userLocation ? userLocation.longitude : defaultLocation.longitude,
-        latitude: userLocation ? userLocation.latitude : defaultLocation.latitude,
+        longitude: tracking.userLocation ? tracking.userLocation.coords.longitude : defaultLocation.longitude,
+        latitude: tracking.userLocation ? tracking.userLocation.coords.latitude : defaultLocation.latitude,
         latitudeDelta: 0.01,
         longitudeDelta: 0.01 * (width / height),
       },
@@ -140,56 +108,6 @@ const TrackingScreen: React.FC = () => {
     );
   };
 
-  const startTracking = () => {
-    if (inGeofence) {
-      setScore(0);
-      setCounterRunning(true);
-      setIsTracking(true);
-      setTrackingStart(getCurrentTimestamp());
-    }
-  };
-
-  const stopTracking = async () => {
-    setCounterRunning(false);
-    setIsTracking(false);
-
-    try {
-      const activity = {
-        geofence_id: trackingGeoFence?.id,
-        user_id: user_id,
-        score: score,
-        started_at: trackingStart,
-        duration: durationToTimestamp(duration),
-      };
-      const response = await InsertActivity({
-        variables: {
-          activity: activity,
-        },
-      });
-      console.log('Activity inserted to db', response);
-      Alert.alert('Upload complete', 'Activity uploaded successfully!', [{ text: 'Cancel' }, { text: 'OK' }]);
-    } catch (error) {
-      console.error('Mutation error', error.message);
-    }
-  };
-  const pauseTracking = () => {
-    setCounterRunning(false);
-  };
-
-  useInterval(
-    () => {
-      if (trackingGeoFence) {
-        setDuration(duration + 1);
-        setScore(Math.round(score + 1 * getGeoFenceScoreRatio(trackingGeoFence.category)));
-      }
-    },
-    counterRunning ? 1000 : null,
-  );
-
-  if (fetchError) {
-    console.error('Error:', fetchError);
-    Alert.alert('Error', fetchError.message);
-  }
   return (
     <View style={styles.container}>
       <View style={styles.mapContainer}>
@@ -198,11 +116,10 @@ const TrackingScreen: React.FC = () => {
           mapType={chosenMapType}
           showsUserLocation
           style={styles.mapStyle}
-          onUserLocationChange={(location) => userChange(location)}
           onMapReady={animateMapToUserPos}
           onDoublePress={() => setCentreOnUser(false)}
           onPanDrag={() => setCentreOnUser(false)}>
-          {drawGeoFences(geoFences)}
+          {drawGeoFences(tracking.geoFences)}
         </MapView>
 
         <View style={styles.infoContainer}>
@@ -216,56 +133,62 @@ const TrackingScreen: React.FC = () => {
       </View>
       <View style={styles.trackingInfoContainer}>
         {/* Tracking */}
-        {isTracking && counterRunning && (
+        {tracking.isTracking && !tracking.isTrackingPaused && (
           <>
-            <Text style={styles.scoreText}>Score: {score.toFixed(0)}</Text>
+            <Text style={styles.scoreText}>Score: {tracking.score.toFixed(0)}</Text>
             <ActivityIndicator size={'large'} color={Colors.blue} style={{ marginTop: Spacing.base }} />
           </>
         )}
         {/* Tracking paused */}
-        {isTracking && !counterRunning && (
+        {tracking.isTracking && tracking.isTrackingPaused && (
           <>
-            <Text style={styles.scoreText}>Score: {score.toFixed(0)}</Text>
+            <Text style={styles.scoreText}>Score: {tracking.score.toFixed(0)}</Text>
             <Text style={{ ...Typography.largeBodyText, marginTop: Spacing.base }}>Resume to earn more points!</Text>
           </>
         )}
         {/* Not tracking and user in geo fence */}
-        {!isTracking && !counterRunning && inGeofence && (
+        {!tracking.isTracking && tracking.isTrackingPaused && tracking.insideGeoFence && (
           <Text style={{ ...Typography.headerText, textAlign: 'center' }}>Start hovering to earn points!</Text>
         )}
         {/* Not tracking and user outside geo fence */}
-        {!isTracking && !counterRunning && !inGeofence && (
+        {!tracking.isTracking && tracking.isTrackingPaused && !tracking.insideGeoFence && (
           <Text style={{ ...Typography.headerText, textAlign: 'center' }}>Move to hover zone to earn points!</Text>
         )}
       </View>
 
       {/* Tracking stopped / not started and user in geo fence */}
-      {!isTracking && !counterRunning && inGeofence && (
+      {!tracking.isTracking && tracking.isTrackingPaused && tracking.insideGeoFence && (
         <View style={styles.startButtonContainer}>
-          <TouchableOpacity style={[styles.trackingButton, { backgroundColor: Colors.green }]} onPress={startTracking}>
+          <TouchableOpacity
+            style={[styles.trackingButton, { backgroundColor: Colors.green }]}
+            onPress={tracking.startTracking}>
             <Text style={styles.trackingButtonText}>Start</Text>
           </TouchableOpacity>
         </View>
       )}
 
       {/* Tracking paused */}
-      {isTracking && !counterRunning && (
+      {tracking.isTracking && tracking.isTrackingPaused && (
         <View style={styles.startButtonContainer}>
-          <TouchableOpacity style={[styles.trackingButton, { backgroundColor: Colors.green }]} onPress={startTracking}>
+          <TouchableOpacity
+            style={[styles.trackingButton, { backgroundColor: Colors.green }]}
+            onPress={tracking.startTracking}>
             <Text style={styles.trackingButtonText}>Resume</Text>
           </TouchableOpacity>
         </View>
       )}
 
       {/* Tracking */}
-      {isTracking && counterRunning && (
+      {tracking.isTracking && !tracking.isTrackingPaused && (
         <View style={styles.stopButtonContainer}>
-          <TouchableOpacity style={[styles.trackingButton, { backgroundColor: Colors.red }]} onPress={stopTracking}>
+          <TouchableOpacity
+            style={[styles.trackingButton, { backgroundColor: Colors.red }]}
+            onPress={tracking.stopTracking}>
             <Text style={styles.trackingButtonText}>Stop</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={[styles.trackingButton, { backgroundColor: Colors.gray800 }]}
-            onPress={pauseTracking}>
+            onPress={tracking.pauseTracking}>
             <Text style={styles.trackingButtonText}>Pause</Text>
           </TouchableOpacity>
         </View>
