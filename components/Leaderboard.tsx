@@ -90,8 +90,6 @@ const Leaderboard = (props: LeaderboardProps) => {
           <RefreshControl
             refreshing={refreshing}
             onRefresh={() => onRefresh()}
-            title={'Loading...'}
-            titleColor={Colors.almostWhite}
             tintColor={Colors.blue}
             colors={[Colors.blue]}
             progressBackgroundColor={Colors.transparent}

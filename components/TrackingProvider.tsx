@@ -3,14 +3,16 @@ import { LatLng } from 'react-native-maps';
 import { GeoFence, TrackedActivity } from '../types/geoFenceTypes';
 import { convertToGeoFence } from '../helpers/objectMappers';
 import { usePermissions, LOCATION, PermissionResponse } from 'expo-permissions';
-import { getLocationUpdate, startBackgroundUpdate } from '../tasks/locationBackgroundTasks';
-import { startGeofencing } from '../tasks/geofenceTasks';
+import { startBackgroundUpdate, stopBackgroundUpdate } from '../tasks/locationBackgroundTasks';
 import { useGeofencesQuery } from '../graphql/queries/Geofences.generated';
 import { useInsertActivityMutation } from '../graphql/mutations/InsertActivity.generated';
 import { Alert } from 'react-native';
 import { durationToTimestamp, getCurrentTimestamp } from '../helpers/dateTimeHelpers';
-import { getGeoFenceScoreRatio } from '../helpers/geoFenceCalculations';
+import { getGeoFenceScoreRatio, insideGeoFences } from '../helpers/geoFenceCalculations';
 import { useInterval } from '../hooks/useInterval';
+import * as Location from 'expo-location';
+import { LocationObject } from 'expo-location';
+import useAuthentication from '../hooks/useAuthentication';
 
 interface Props {
   children: ReactNode;
@@ -18,8 +20,7 @@ interface Props {
 
 interface TrackingContextValues {
   locationPermission: PermissionResponse | undefined;
-  userLocation: LatLng | null;
-  setUserLocation: React.Dispatch<React.SetStateAction<LatLng | null>> | null;
+  userLocation: LocationObject | null;
   geoFences: GeoFence[];
   completedActivities: TrackedActivity[];
   insideGeoFence: GeoFence | null;
@@ -36,7 +37,6 @@ interface TrackingContextValues {
 export const TrackingContext = React.createContext<TrackingContextValues>({
   locationPermission: undefined,
   userLocation: null,
-  setUserLocation: null,
   geoFences: [],
   completedActivities: [],
   insideGeoFence: null,
@@ -58,8 +58,9 @@ export const TrackingContext = React.createContext<TrackingContextValues>({
 TrackingContext.displayName = 'TrackingContext';
 
 export const TrackingProvider = ({ children }: Props) => {
+  const userId = useAuthentication().user?.uid;
   const [locationPermission] = usePermissions(LOCATION, { ask: true });
-  const [userLocation, setUserLocation] = useState<LatLng | null>(null);
+  const [userLocation, setUserLocation] = useState<LocationObject | null>(null);
   const [geoFences, setGeoFences] = useState<GeoFence[]>([]);
   const [completedActivities, setCompletedActivities] = useState<TrackedActivity[]>([]);
   const [insideGeoFence, setInsideGeoFence] = useState<GeoFence | null>(null);
@@ -79,20 +80,50 @@ export const TrackingProvider = ({ children }: Props) => {
   }, [geoFenceData, geoFenceFetchError]);
 
   useEffect(() => {
-    if (locationPermission && locationPermission.status !== 'granted') {
+    if (locationPermission && locationPermission.status === 'granted') {
       console.log('Start background update');
       startBackgroundUpdate();
+    } else if (locationPermission && locationPermission.status !== 'granted') {
+      console.log('Stopped background update. Permission not accepted');
+      stopBackgroundUpdate();
     }
   }, [locationPermission]);
 
+  const getLocation = async () => {
+    return await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Highest });
+  };
+
   // Update user location every second
   const [ticking] = useState(true);
+  const [counter, setCounter] = useState(0);
   useInterval(
     async () => {
-      console.log('Updating...');
-      console.log(await getLocationUpdate());
+      const newUserLocation = await getLocation();
+      console.log('Checking user location...');
+      setCounter(counter + 1);
+      const differentLatitude = newUserLocation.coords.latitude !== userLocation?.coords.latitude;
+      const differentLongitude = newUserLocation.coords.longitude !== userLocation?.coords.longitude;
+
+      if (differentLatitude || differentLongitude) {
+        console.log(
+          'Updated user location... [' + newUserLocation.coords.latitude + ',' + newUserLocation.coords.longitude + ']',
+        );
+        setUserLocation(newUserLocation);
+        // TODO: Rewrite insideGeofences helper to accept LocationObject and remove this const. After TrackingScreen and Mapscreen rewrite
+        const tempLocationObject: LatLng | null = newUserLocation
+          ? { latitude: newUserLocation?.coords.latitude, longitude: newUserLocation?.coords.longitude }
+          : null;
+
+        if (tempLocationObject) {
+          const insideGeoFenceCheck = insideGeoFences(tempLocationObject, geoFences);
+          if (insideGeoFenceCheck) {
+            setInsideGeoFence(insideGeoFenceCheck);
+            console.log('Inside geo fence!');
+          }
+        }
+      }
     },
-    ticking ? 1000 : null,
+    ticking ? 5000 : null,
   );
 
   const addCompletedActivity = (activity: TrackedActivity) =>
@@ -101,7 +132,6 @@ export const TrackingProvider = ({ children }: Props) => {
   // Tracking
   const startTracking = () => {
     if (insideGeoFence) {
-      // TODO: Stop geofencing
       setScore(0);
       setIsTrackingPaused(false);
       setIsTracking(true);
@@ -114,27 +144,41 @@ export const TrackingProvider = ({ children }: Props) => {
   const stopTracking = async () => {
     setIsTrackingPaused(true);
     setIsTracking(false);
+    const activity = {
+      geofence_id: insideGeoFence?.id,
+      user_id: userId ?? '0', // TODO: Add real user_id
+      score: score,
+      started_at: trackingStart,
+      duration: durationToTimestamp(duration),
+    };
 
     try {
-      const activity = {
-        geofence_id: insideGeoFence?.id,
-        user_id: '123', // TODO: Add real user_id
-        score: score,
-        started_at: trackingStart,
-        duration: durationToTimestamp(duration),
-      };
       const response = await InsertActivity({
         variables: {
           activity: activity,
         },
       });
-      // TODO: Add to complete activity list
+      addCompletedActivity({
+        caption: '',
+        geofenceId: activity.geofence_id ?? 0,
+        score: activity.score,
+        startedAt: activity.started_at,
+        duration: activity.duration,
+        uploadedToDb: true,
+      });
+
       console.log('Activity inserted to db', response);
       Alert.alert('Upload complete', 'Activity uploaded successfully!', [{ text: 'Cancel' }, { text: 'OK' }]);
-
-      // TODO: Start geofencing
     } catch (error) {
       console.error('Mutation error', error.message);
+      addCompletedActivity({
+        caption: '',
+        geofenceId: activity.geofence_id ?? 0,
+        score: activity.score,
+        startedAt: activity.started_at,
+        duration: activity.duration,
+        uploadedToDb: false,
+      });
     }
   };
 
@@ -153,7 +197,6 @@ export const TrackingProvider = ({ children }: Props) => {
   const value: TrackingContextValues = {
     locationPermission: locationPermission,
     userLocation: userLocation,
-    setUserLocation: setUserLocation,
     geoFences: geoFences,
     completedActivities: completedActivities,
     insideGeoFence: insideGeoFence,
@@ -166,8 +209,6 @@ export const TrackingProvider = ({ children }: Props) => {
     pauseTracking: pauseTracking,
     stopTracking: stopTracking,
   };
-
-  console.log('Tracking provider values updated', value);
   return <TrackingContext.Provider value={value}>{children}</TrackingContext.Provider>;
 };
 
