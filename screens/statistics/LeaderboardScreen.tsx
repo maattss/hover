@@ -16,6 +16,7 @@ import { convertToHighscoreList } from '../../helpers/objectMappers';
 import { Picker } from '@react-native-picker/picker';
 import { PickerItemProps } from '@react-native-picker/picker/typings/Picker';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
+import moment from 'moment';
 
 const STATIC_CATEGORIES: PickerItemProps[] = [
   { label: 'All Categories', value: '' },
@@ -27,10 +28,9 @@ const STATIC_CATEGORIES: PickerItemProps[] = [
 
 const STATIC_TIMESPAN: PickerItemProps[] = [
   { label: 'All Time', value: '' },
-  { label: 'Today', value: Date() },
-  { label: 'This Week', value: Date() },
-  { label: 'This Month', value: Date() },
-  { label: 'This Year', value: Date() },
+  { label: 'Today', value: moment().utc().startOf('day').toISOString() },
+  { label: 'Past 7 days', value: moment().utc().subtract(1, 'week').startOf('day').toISOString() },
+  { label: 'Past 30 days', value: moment().utc().subtract(1, 'month').startOf('day').toISOString() },
 ];
 
 const LeaderboardScreen: React.FC = () => {
