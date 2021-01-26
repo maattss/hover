@@ -2,10 +2,11 @@ import { LatLng } from 'react-native-maps';
 
 export interface TrackedActivity {
   caption: string;
-  geofence_id: number;
+  geofenceId: number;
   score: number;
-  started_at: string;
+  startedAt: string;
   duration: string;
+  uploadedToDb: boolean;
 }
 
 export interface CircleGeoFence {

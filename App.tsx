@@ -29,7 +29,7 @@ const httpLink = new HttpLink({
 export const apolloClient = new ApolloClient({
   cache: cache,
   link: asyncAuthLink.concat(httpLink),
-  defaultOptions: { watchQuery: { fetchPolicy: 'cache-and-network' } },
+  defaultOptions: { watchQuery: { fetchPolicy: 'cache-first' } },
 });
 
 export default function App() {
@@ -51,14 +51,14 @@ export default function App() {
   }
   return (
     <AuthProvider>
-      <TrackingProvider>
-        <ApolloProvider client={apolloClient}>
+      <ApolloProvider client={apolloClient}>
+        <TrackingProvider>
           <SafeAreaProvider>
             <AppNavigation />
             <StatusBar animated barStyle={'light-content'} />
           </SafeAreaProvider>
-        </ApolloProvider>
-      </TrackingProvider>
+        </TrackingProvider>
+      </ApolloProvider>
     </AuthProvider>
   );
 }
