@@ -103,6 +103,7 @@ const TrackingScreen: React.FC = () => {
 
   return (
     <View style={styles.container}>
+      {/* Map */}
       <View style={styles.mapContainer}>
         <MapView
           ref={mapView}
@@ -124,68 +125,73 @@ const TrackingScreen: React.FC = () => {
           </TouchableOpacity>
         </View>
       </View>
+
+      {/* Tracking information */}
       <View style={styles.trackingInfoContainer}>
-        {/* Info: Tracking */}
+        {/* Currently tracking */}
         {tracking.isTracking && !tracking.isTrackingPaused && (
           <>
-            <Text style={styles.scoreText}>Score: {tracking.score.toFixed(0)}</Text>
+            <Text style={styles.scoreText}>Score: {Math.floor(tracking.score)}</Text>
             <ActivityIndicator size={'large'} color={Colors.blue} style={{ marginTop: Spacing.base }} />
           </>
         )}
-        {/* Info: Tracking paused */}
+        {/* Tracking paused */}
         {tracking.isTracking && tracking.isTrackingPaused && (
           <>
-            <Text style={styles.scoreText}>Score: {tracking.score.toFixed(0)}</Text>
+            <Text style={styles.scoreText}>Score: {Math.floor(tracking.score)}</Text>
             <Text style={{ ...Typography.largeBodyText, marginTop: Spacing.base }}>Resume to earn more points!</Text>
           </>
         )}
-        {/* Info: Not tracking and user in geo fence */}
+        {/* Not tracking and user in geo fence */}
         {!tracking.isTracking && tracking.isTrackingPaused && tracking.insideGeoFence && (
           <Text style={{ ...Typography.headerText, textAlign: 'center' }}>Start hovering to earn points!</Text>
         )}
-        {/* Info: Not tracking and user outside geo fence */}
+        {/* Not tracking and user outside geo fence */}
         {!tracking.isTracking && tracking.isTrackingPaused && !tracking.insideGeoFence && (
           <Text style={{ ...Typography.headerText, textAlign: 'center' }}>Move to hover zone to earn points!</Text>
         )}
       </View>
 
-      {/* Button: Tracking stopped / not started and user in geo fence */}
-      {!tracking.isTracking && tracking.isTrackingPaused && tracking.insideGeoFence && (
-        <View style={styles.startButtonContainer}>
-          <TouchableOpacity
-            style={[styles.trackingButton, { backgroundColor: Colors.green }]}
-            onPress={tracking.startTracking}>
-            <Text style={styles.trackingButtonText}>Start</Text>
-          </TouchableOpacity>
-        </View>
-      )}
+      {/* Tracking controls */}
+      <View style={styles.trackingControlsContainer}>
+        {/* Tracking stopped / not started and user in geo fence */}
+        {!tracking.isTracking && tracking.isTrackingPaused && tracking.insideGeoFence && (
+          <View style={styles.startButtonContainer}>
+            <TouchableOpacity
+              style={[styles.trackingButton, { backgroundColor: Colors.green }]}
+              onPress={tracking.startTracking}>
+              <Text style={styles.trackingButtonText}>Start</Text>
+            </TouchableOpacity>
+          </View>
+        )}
 
-      {/* Button: Tracking paused */}
-      {tracking.isTracking && tracking.isTrackingPaused && (
-        <View style={styles.startButtonContainer}>
-          <TouchableOpacity
-            style={[styles.trackingButton, { backgroundColor: Colors.green }]}
-            onPress={tracking.startTracking}>
-            <Text style={styles.trackingButtonText}>Resume</Text>
-          </TouchableOpacity>
-        </View>
-      )}
+        {/* Tracking paused */}
+        {tracking.isTracking && tracking.isTrackingPaused && (
+          <View style={styles.startButtonContainer}>
+            <TouchableOpacity
+              style={[styles.trackingButton, { backgroundColor: Colors.green }]}
+              onPress={tracking.startTracking}>
+              <Text style={styles.trackingButtonText}>Resume</Text>
+            </TouchableOpacity>
+          </View>
+        )}
 
-      {/* Button: Tracking */}
-      {tracking.isTracking && !tracking.isTrackingPaused && (
-        <View style={styles.stopButtonContainer}>
-          <TouchableOpacity
-            style={[styles.trackingButton, { backgroundColor: Colors.red }]}
-            onPress={tracking.stopTracking}>
-            <Text style={styles.trackingButtonText}>Stop</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.trackingButton, { backgroundColor: Colors.gray800 }]}
-            onPress={tracking.pauseTracking}>
-            <Text style={styles.trackingButtonText}>Pause</Text>
-          </TouchableOpacity>
-        </View>
-      )}
+        {/* Currently Tracking */}
+        {tracking.isTracking && !tracking.isTrackingPaused && (
+          <View style={styles.stopButtonContainer}>
+            <TouchableOpacity
+              style={[styles.trackingButton, { backgroundColor: Colors.red }]}
+              onPress={tracking.stopTracking}>
+              <Text style={styles.trackingButtonText}>Stop</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.trackingButton, { backgroundColor: Colors.gray800 }]}
+              onPress={tracking.pauseTracking}>
+              <Text style={styles.trackingButtonText}>Pause</Text>
+            </TouchableOpacity>
+          </View>
+        )}
+      </View>
     </View>
   );
 };
@@ -203,10 +209,14 @@ const styles = StyleSheet.create({
   trackingInfoContainer: {
     height: '20%',
     padding: Spacing.base,
+    margin: Spacing.base,
     justifyContent: 'center',
     alignItems: 'center',
     textAlign: 'center',
+    backgroundColor: Colors.gray900,
+    borderRadius: Spacing.smaller,
   },
+  trackingControlsContainer: {},
   mapStyle: {
     width: '98%',
     height: '95%',

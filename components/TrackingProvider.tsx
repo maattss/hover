@@ -22,7 +22,7 @@ interface TrackingContextValues {
   locationPermission: PermissionResponse | undefined;
   userLocation: LocationObject | null;
   geoFences: GeoFence[];
-  completedActivities: TrackedActivity[];
+  unUploadedActivities: TrackedActivity[];
   insideGeoFence: GeoFence | null;
   isTracking: boolean;
   isTrackingPaused: boolean;
@@ -38,7 +38,7 @@ export const TrackingContext = React.createContext<TrackingContextValues>({
   locationPermission: undefined,
   userLocation: null,
   geoFences: [],
-  completedActivities: [],
+  unUploadedActivities: [],
   insideGeoFence: null,
   isTracking: false,
   isTrackingPaused: true,
@@ -62,7 +62,7 @@ export const TrackingProvider = ({ children }: Props) => {
   const [locationPermission] = usePermissions(LOCATION, { ask: true });
   const [userLocation, setUserLocation] = useState<LocationObject | null>(null);
   const [geoFences, setGeoFences] = useState<GeoFence[]>([]);
-  const [completedActivities, setCompletedActivities] = useState<TrackedActivity[]>([]);
+  const [unUploadedActivities, setUnUploadedActivities] = useState<TrackedActivity[]>([]);
   const [insideGeoFence, setInsideGeoFence] = useState<GeoFence | null>(null);
   const [isTracking, setIsTracking] = useState(false);
   const [isTrackingPaused, setIsTrackingPaused] = useState(true);
@@ -126,12 +126,11 @@ export const TrackingProvider = ({ children }: Props) => {
     ticking ? 5000 : null,
   );
 
-  const addCompletedActivity = (activity: TrackedActivity) =>
-    setCompletedActivities([...completedActivities, activity]);
+  const addUnUploadedActivity = (activity: TrackedActivity) =>
+    setUnUploadedActivities([...unUploadedActivities, activity]);
 
   // Tracking
   const startTracking = () => {
-    console.log('Start tracking');
     if (insideGeoFence) {
       setScore(0);
       setIsTrackingPaused(false);
@@ -140,17 +139,15 @@ export const TrackingProvider = ({ children }: Props) => {
     }
   };
   const pauseTracking = () => {
-    console.log('Pause tracking');
     setIsTrackingPaused(true);
   };
   const stopTracking = async () => {
-    console.log('Stop tracking');
     setIsTrackingPaused(true);
     setIsTracking(false);
     const activity = {
       geofence_id: insideGeoFence?.id,
-      user_id: userId ?? '0', // TODO: Add real user_id
-      score: score,
+      user_id: userId ?? '0',
+      score: Math.floor(score),
       started_at: trackingStart,
       duration: durationToTimestamp(duration),
     };
@@ -161,37 +158,33 @@ export const TrackingProvider = ({ children }: Props) => {
           activity: activity,
         },
       });
-      addCompletedActivity({
-        caption: '',
-        geofenceId: activity.geofence_id ?? 0,
-        score: activity.score,
-        startedAt: activity.started_at,
-        duration: activity.duration,
-        uploadedToDb: true,
-      });
 
       console.log('Activity inserted to db', response);
       Alert.alert('Upload complete', 'Activity uploaded successfully!', [{ text: 'Cancel' }, { text: 'OK' }]);
     } catch (error) {
       console.error('Mutation error', error.message);
-      addCompletedActivity({
+      addUnUploadedActivity({
         caption: '',
         geofenceId: activity.geofence_id ?? 0,
         score: activity.score,
         startedAt: activity.started_at,
         duration: activity.duration,
-        uploadedToDb: false,
       });
     }
   };
 
-  // Update score and duration every second. May need to move this to task?
+  // Update score and duration every second
   useInterval(
     () => {
       console.log('Tracking...');
       if (insideGeoFence) {
         setDuration(duration + 1);
-        setScore(Math.round(score + 1 * getGeoFenceScoreRatio(insideGeoFence.category)));
+        const scoreRatio = getGeoFenceScoreRatio(insideGeoFence.category);
+        console.log('Score ratio:', scoreRatio);
+        const newScore = score + 1 * scoreRatio;
+        const roundedScore = Math.round(newScore);
+        console.log('New score: ' + newScore + ', Rounded: ' + roundedScore);
+        setScore(score + 1 * getGeoFenceScoreRatio(insideGeoFence.category));
       }
     },
     isTrackingPaused ? null : 1000,
@@ -201,7 +194,7 @@ export const TrackingProvider = ({ children }: Props) => {
     locationPermission: locationPermission,
     userLocation: userLocation,
     geoFences: geoFences,
-    completedActivities: completedActivities,
+    unUploadedActivities: unUploadedActivities,
     insideGeoFence: insideGeoFence,
     isTracking: isTracking,
     isTrackingPaused: isTrackingPaused,

@@ -6,7 +6,6 @@ export interface TrackedActivity {
   score: number;
   startedAt: string;
   duration: string;
-  uploadedToDb: boolean;
 }
 
 export interface CircleGeoFence {
