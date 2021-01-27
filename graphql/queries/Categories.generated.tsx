@@ -4579,71 +4579,42 @@ export enum Users_Update_Column {
   UpdatedAt = 'updated_at',
 }
 
-export type HighscoreQueryVariables = Types.Exact<{
-  timespan?: Types.Maybe<Types.Scalars['timestamptz']>;
-  category?: Types.Maybe<Types.Scalars['String']>;
-}>;
+export type CategoriesQueryVariables = Types.Exact<{ [key: string]: never }>;
 
-export type HighscoreQuery = { readonly __typename: 'query_root' } & {
-  readonly users: ReadonlyArray<
-    { readonly __typename: 'users' } & Pick<Types.Users, 'id' | 'name' | 'picture'> & {
-        readonly activities_aggregate: { readonly __typename: 'activities_aggregate' } & {
-          readonly aggregate?: Types.Maybe<
-            { readonly __typename: 'activities_aggregate_fields' } & {
-              readonly sum?: Types.Maybe<
-                { readonly __typename: 'activities_sum_fields' } & Pick<Types.Activities_Sum_Fields, 'score'>
-              >;
-            }
-          >;
-        };
-      }
-  >;
+export type CategoriesQuery = { readonly __typename: 'query_root' } & {
+  readonly categories: ReadonlyArray<{ readonly __typename: 'categories' } & Pick<Types.Categories, 'name'>>;
 };
 
-export const HighscoreDocument = gql`
-  query Highscore($timespan: timestamptz, $category: String) {
-    users {
-      id
+export const CategoriesDocument = gql`
+  query Categories {
+    categories(order_by: { name: asc }) {
       name
-      picture
-      activities_aggregate(
-        where: { started_at: { _gt: $timespan }, geofence: { category: { _eq: $category } } }
-        order_by: { score: desc_nulls_last }
-      ) {
-        aggregate {
-          sum {
-            score
-          }
-        }
-      }
     }
   }
 `;
 
 /**
- * __useHighscoreQuery__
+ * __useCategoriesQuery__
  *
- * To run a query within a React component, call `useHighscoreQuery` and pass it any options that fit your needs.
- * When your component renders, `useHighscoreQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useCategoriesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCategoriesQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useHighscoreQuery({
+ * const { data, loading, error } = useCategoriesQuery({
  *   variables: {
- *      timespan: // value for 'timespan'
- *      category: // value for 'category'
  *   },
  * });
  */
-export function useHighscoreQuery(baseOptions?: Apollo.QueryHookOptions<HighscoreQuery, HighscoreQueryVariables>) {
-  return Apollo.useQuery<HighscoreQuery, HighscoreQueryVariables>(HighscoreDocument, baseOptions);
+export function useCategoriesQuery(baseOptions?: Apollo.QueryHookOptions<CategoriesQuery, CategoriesQueryVariables>) {
+  return Apollo.useQuery<CategoriesQuery, CategoriesQueryVariables>(CategoriesDocument, baseOptions);
 }
-export function useHighscoreLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<HighscoreQuery, HighscoreQueryVariables>,
+export function useCategoriesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<CategoriesQuery, CategoriesQueryVariables>,
 ) {
-  return Apollo.useLazyQuery<HighscoreQuery, HighscoreQueryVariables>(HighscoreDocument, baseOptions);
+  return Apollo.useLazyQuery<CategoriesQuery, CategoriesQueryVariables>(CategoriesDocument, baseOptions);
 }
-export type HighscoreQueryHookResult = ReturnType<typeof useHighscoreQuery>;
-export type HighscoreLazyQueryHookResult = ReturnType<typeof useHighscoreLazyQuery>;
+export type CategoriesQueryHookResult = ReturnType<typeof useCategoriesQuery>;
+export type CategoriesLazyQueryHookResult = ReturnType<typeof useCategoriesLazyQuery>;

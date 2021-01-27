@@ -11,6 +11,7 @@ import { persistCache } from 'apollo3-cache-persist';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AuthProvider from './components/AuthProvider';
 import TrackingProvider from './components/TrackingProvider';
+import { GRAPHQL_API_URL } from './lib/config';
 
 const asyncAuthLink = setContext(async () => {
   return {
@@ -23,7 +24,7 @@ const asyncAuthLink = setContext(async () => {
 const cache = new InMemoryCache();
 
 const httpLink = new HttpLink({
-  uri: 'https://hover.hasura.app/v1/graphql',
+  uri: GRAPHQL_API_URL,
 });
 
 export const apolloClient = new ApolloClient({
