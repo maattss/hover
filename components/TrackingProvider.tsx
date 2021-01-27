@@ -109,17 +109,13 @@ export const TrackingProvider = ({ children }: Props) => {
           'Updated user location... [' + newUserLocation.coords.latitude + ',' + newUserLocation.coords.longitude + ']',
         );
         setUserLocation(newUserLocation);
-        // TODO: Rewrite insideGeofences helper to accept LocationObject and remove this const. After TrackingScreen and Mapscreen rewrite
-        const tempLocationObject: LatLng | null = newUserLocation
-          ? { latitude: newUserLocation?.coords.latitude, longitude: newUserLocation?.coords.longitude }
-          : null;
 
-        if (tempLocationObject) {
-          const insideGeoFenceCheck = insideGeoFences(tempLocationObject, geoFences);
-          if (insideGeoFenceCheck) {
-            setInsideGeoFence(insideGeoFenceCheck);
-            console.log('Inside geo fence!');
-          }
+        const insideGeoFenceCheck = insideGeoFences(newUserLocation, geoFences);
+        if (insideGeoFenceCheck) {
+          setInsideGeoFence(insideGeoFenceCheck);
+          console.log('Inside geo fence!');
+        } else {
+          console.log('Outside geofence!');
         }
       }
     },
