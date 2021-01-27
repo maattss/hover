@@ -2,10 +2,10 @@ import React from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 import { Typography, Spacing } from '../../theme';
 
-const FollowingFeedScreen: React.FC = () => {
+const FeedScreen: React.FC = () => {
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Followers&apos; Activites</Text>
+      <Text style={styles.header}>Feed</Text>
     </View>
   );
 };
@@ -21,4 +21,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default FollowingFeedScreen;
+export default FeedScreen;

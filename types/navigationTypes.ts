@@ -39,8 +39,3 @@ export type SettingsNavigationStackParamList = {
   'User Settings': undefined;
   About: undefined;
 };
-
-export type FeedTopTabStackParamList = {
-  Following: undefined;
-  You: undefined;
-};
