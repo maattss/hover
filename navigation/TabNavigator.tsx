@@ -50,7 +50,7 @@ const TabNavigator: React.FC = () => {
           component={TrackingNavigator}
           options={{
             tabBarIcon: tabIconTracking,
-            tabBarBadge: tracking.isTracking ? '' : undefined,
+            tabBarBadge: tracking.isTracking && !tracking.isTrackingPaused ? '' : undefined,
           }}
         />
 

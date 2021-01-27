@@ -149,14 +149,13 @@ export const TrackingProvider = ({ children }: Props) => {
     };
 
     try {
-      const response = await InsertActivity({
-        variables: {
-          activity: activity,
-        },
-      });
-
-      console.log('Activity inserted to db', response);
-      Alert.alert('Upload complete', 'Activity uploaded successfully!', [{ text: 'Cancel' }, { text: 'OK' }]);
+      // const response = await InsertActivity({
+      //   variables: {
+      //     activity: activity,
+      //   },
+      // });
+      // console.log('Activity inserted to db', response);
+      // Alert.alert('Upload complete', 'Activity uploaded successfully!', [{ text: 'Cancel' }, { text: 'OK' }]);
     } catch (error) {
       console.error('Mutation error', error.message);
       addUnUploadedActivity({

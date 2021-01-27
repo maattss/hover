@@ -139,16 +139,16 @@ const TrackingScreen: React.FC = () => {
         {tracking.isTracking && tracking.isTrackingPaused && (
           <>
             <Text style={styles.scoreText}>Score: {Math.floor(tracking.score)}</Text>
-            <Text style={{ ...Typography.largeBodyText, marginTop: Spacing.base }}>Resume to earn more points!</Text>
+            <Text style={{ ...Typography.largeBodyText }}>Resume to earn more points!</Text>
           </>
         )}
         {/* Not tracking and user in geo fence */}
         {!tracking.isTracking && tracking.isTrackingPaused && tracking.insideGeoFence && (
-          <Text style={{ ...Typography.headerText, textAlign: 'center' }}>Start hovering to earn points!</Text>
+          <Text style={styles.headerInfoText}>Start hovering to earn points!</Text>
         )}
         {/* Not tracking and user outside geo fence */}
         {!tracking.isTracking && tracking.isTrackingPaused && !tracking.insideGeoFence && (
-          <Text style={{ ...Typography.headerText, textAlign: 'center' }}>Move to hover zone to earn points!</Text>
+          <Text style={styles.headerInfoText}>Move to hover zone to earn points!</Text>
         )}
       </View>
 
@@ -202,24 +202,31 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   mapContainer: {
-    height: '60%',
+    height: '50%',
     alignItems: 'center',
     justifyContent: 'center',
+    marginHorizontal: Spacing.smaller,
+    marginVertical: Spacing.smallest,
   },
   trackingInfoContainer: {
-    height: '20%',
-    padding: Spacing.base,
-    margin: Spacing.base,
+    height: '25%',
+    padding: Spacing.smallest,
+    marginHorizontal: Spacing.smaller,
+    marginVertical: Spacing.smallest,
     justifyContent: 'center',
     alignItems: 'center',
     textAlign: 'center',
     backgroundColor: Colors.gray900,
     borderRadius: Spacing.smaller,
   },
-  trackingControlsContainer: {},
+  trackingControlsContainer: {
+    height: '25%',
+    padding: Spacing.base,
+    marginHorizontal: Spacing.smaller,
+  },
   mapStyle: {
-    width: '98%',
-    height: '95%',
+    width: '100%',
+    height: '100%',
     borderRadius: Spacing.smaller,
   },
   infoContainer: {
@@ -268,6 +275,11 @@ const styles = StyleSheet.create({
   scoreText: {
     ...Typography.headerText,
     marginTop: Spacing.base,
+    marginBottom: Spacing.base,
+  },
+  headerInfoText: {
+    ...Typography.headerText,
+    textAlign: 'center',
   },
 });
 
