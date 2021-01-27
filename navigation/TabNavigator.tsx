@@ -9,6 +9,7 @@ import FeedNavigator from './FeedNavigator';
 import StatisticsNavigator from './StatisticsNavigator';
 import TrackingNavigator from './TrackingNavigator';
 import ProfileNavigator from './ProfileNavigator';
+import useTracking from '../hooks/useTracking';
 
 const TabIcon = (props: { name: string; color: string }) => {
   return <FAIcon style={styles.tabicon} {...props} />;
@@ -17,6 +18,8 @@ const TabIcon = (props: { name: string; color: string }) => {
 const Tab = createBottomTabNavigator<RootTabParamList>();
 
 const TabNavigator: React.FC = () => {
+  const tracking = useTracking();
+
   const tabIconHome = ({ color = '' as string }) => <TabIcon name="home" color={color} />;
   const tabIconExplore = ({ color = '' as string }) => <TabIcon name="map" color={color} />;
   const tabIconStatistics = ({ color = '' as string }) => <TabIcon name="chart-bar" color={color} />;
@@ -47,6 +50,7 @@ const TabNavigator: React.FC = () => {
           component={TrackingNavigator}
           options={{
             tabBarIcon: tabIconTracking,
+            tabBarBadge: tracking.isTracking && !tracking.isTrackingPaused ? '' : undefined,
           }}
         />
 

@@ -21,7 +21,6 @@ TaskManager.defineTask(LOCATION_BACKGROUND_TRACKING, async ({ data: { locations 
   if (locations) {
     const { coords, timestamp } = locations[0];
     const { latitude, longitude } = coords;
-
     console.log(`[Background update] ${timestamp}:  ${latitude}, ${longitude}`);
   }
 });

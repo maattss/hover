@@ -1,13 +1,12 @@
 import React, { useState, createRef, useEffect } from 'react';
-import MapView, { Circle, EventUserLocation, LatLng, MapTypes, Polygon, Region } from 'react-native-maps';
-import { StyleSheet, Dimensions, Text, View, TouchableOpacity, Alert } from 'react-native';
+import MapView, { Circle, LatLng, MapTypes, Polygon, Region } from 'react-native-maps';
+import { StyleSheet, Dimensions, Text, View, TouchableOpacity } from 'react-native';
 import { GeoFence, GeoFenceVariant, CircleGeoFence, PolygonGeoFence } from '../../types/geoFenceTypes';
 import { Colors, Spacing, Typography, Buttons } from '../../theme';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import SnackBar, { SnackBarVariant } from '../../components/SnackBar';
-import { getGeoFenceColor, insideGeoFences } from '../../helpers/geoFenceCalculations';
-import { useGeofencesQuery } from '../../graphql/queries/Geofences.generated';
-import { convertToGeoFence } from '../../helpers/objectMappers';
+import { getGeoFenceColor } from '../../helpers/geoFenceCalculations';
+import useTracking from '../../hooks/useTracking';
 
 const { width, height } = Dimensions.get('window');
 
@@ -50,17 +49,10 @@ const drawGeoFences = (geoFences: GeoFence[] | undefined) => {
 
 const MapScreen: React.FC = () => {
   const [mapRegion, setMapRegion] = useState<LatLng>();
-  const [userLocation, setUserLocation] = useState<LatLng>();
   const [chosenMapType, setChosenMapType] = useState<MapTypes>('standard');
   const [centreOnUser, setCentreOnUser] = useState(false);
   const [showSnackbar, setShowSnackbar] = useState(false);
-  const [geoFences, setGeoFences] = useState<GeoFence[]>();
-
-  const { error: fetchError, data: data } = useGeofencesQuery();
-
-  useEffect(() => {
-    if (data) setGeoFences(convertToGeoFence(data));
-  }, [data]);
+  const tracking = useTracking();
 
   // Dynamic styles
   const mapTypeIconStyle = {
@@ -79,39 +71,28 @@ const MapScreen: React.FC = () => {
   const regionChange = (region: Region) => {
     setMapRegion(region);
   };
-
-  const userChange = (location: EventUserLocation) => {
-    const newUserLocation: LatLng = {
-      latitude: location.nativeEvent.coordinate.latitude,
-      longitude: location.nativeEvent.coordinate.longitude,
-    };
-    setUserLocation(newUserLocation);
-
-    if (insideGeoFences(newUserLocation, geoFences)) {
+  useEffect(() => {
+    if (tracking.insideGeoFence) {
       setShowSnackbar(true);
     } else {
       setShowSnackbar(false);
     }
-  };
+  }, [tracking.insideGeoFence]);
 
   const mapView = createRef<MapView>();
   const animateMapToUserPos = () => {
-    if (userLocation) setCentreOnUser(true);
+    if (tracking.userLocation) setCentreOnUser(true);
     mapView.current?.animateToRegion(
       {
-        longitude: userLocation ? userLocation.longitude : defaultLocation.longitude,
-        latitude: userLocation ? userLocation.latitude : defaultLocation.latitude,
-        latitudeDelta: 0.04,
-        longitudeDelta: 0.04 * (width / height),
+        longitude: tracking.userLocation ? tracking.userLocation.coords.longitude : defaultLocation.longitude,
+        latitude: tracking.userLocation ? tracking.userLocation.coords.latitude : defaultLocation.latitude,
+        latitudeDelta: 0.01,
+        longitudeDelta: 0.01 * (width / height),
       },
       1000,
     );
   };
 
-  if (fetchError) {
-    console.error('Error:', fetchError);
-    Alert.alert('Error', fetchError.message);
-  }
   return (
     <View style={styles.container}>
       <MapView
@@ -121,17 +102,16 @@ const MapScreen: React.FC = () => {
         style={styles.mapStyle}
         onRegionChange={(region) => regionChange(region)}
         onRegionChangeComplete={(region) => regionChange(region)}
-        onUserLocationChange={(location) => userChange(location)}
         onMapReady={animateMapToUserPos}
         onDoublePress={() => setCentreOnUser(false)}
         onPanDrag={() => setCentreOnUser(false)}>
-        {drawGeoFences(geoFences)}
+        {drawGeoFences(tracking.geoFences)}
       </MapView>
 
       <View style={styles.positionContainer}>
         <Text style={styles.infoText}>
-          User location: ({userLocation ? userLocation.latitude.toPrecision(5) : 'Unknown'},{' '}
-          {userLocation ? userLocation.longitude.toPrecision(5) : 'Unknown'})
+          User location: ({tracking.userLocation ? tracking.userLocation.coords.latitude.toPrecision(5) : 'Unknown'},{' '}
+          {tracking.userLocation ? tracking.userLocation.coords.longitude.toPrecision(5) : 'Unknown'})
         </Text>
         <Text style={styles.infoText}>
           Map region: ({mapRegion ? mapRegion.latitude.toPrecision(5) : ''},{' '}

@@ -2,7 +2,7 @@
 # yarn lockfile v1
 
 
-"@apollo/client@^3.0.0-beta.23", "@apollo/client@^3.3.4":
+"@apollo/client@^3.0.0-beta.23", "@apollo/client@^3.3.7":
   version "3.3.7"
   resolved "https://registry.yarnpkg.com/@apollo/client/-/client-3.3.7.tgz#f15bf961dc0c2bee37a47bf86b8881fdc6183810"
   integrity sha512-Cb0OqqvlehlRHtHIXRIS/Pe5WYU4hHl1FznXTRSxBAN42WmBUM3zy/Unvw183RdWMyV6Kc2pFKOEuaG1K7JTAQ==
@@ -2925,6 +2925,13 @@
   resolved "https://registry.yarnpkg.com/@protobufjs/utf8/-/utf8-1.1.0.tgz#a777360b5b39a1a2e5106f8e858f2fd2d060c570"
   integrity sha1-p3c2C1s5oaLlEG+OhY8v0tBgxXA=
 
+"@react-native-async-storage/async-storage@^1.13.3":
+  version "1.13.3"
+  resolved "https://registry.yarnpkg.com/@react-native-async-storage/async-storage/-/async-storage-1.13.3.tgz#bba0c69541de4da12f3a47fe07698fda84b16135"
+  integrity sha512-s/7KyzFxS3WesYn5RrfRg1Pyz5EYDZAJxIxIuzmJZ1FlvpvaZGAZq9xJmVN2OG6S6NhfiY8Tszkau15hHreRag==
+  dependencies:
+    deep-assign "^3.0.0"
+
 "@react-native-community/cli-debugger-ui@^4.13.1":
   version "4.13.1"
   resolved "https://registry.yarnpkg.com/@react-native-community/cli-debugger-ui/-/cli-debugger-ui-4.13.1.tgz#07de6d4dab80ec49231de1f1fbf658b4ad39b32c"
@@ -4244,6 +4251,11 @@ anymatch@^3.0.3, anymatch@~3.1.1:
   dependencies:
     normalize-path "^3.0.0"
     picomatch "^2.0.4"
+
+apollo3-cache-persist@^0.9.1:
+  version "0.9.1"
+  resolved "https://registry.yarnpkg.com/apollo3-cache-persist/-/apollo3-cache-persist-0.9.1.tgz#191d9d93666a31b8921cce1b2d61ac0b6578540f"
+  integrity sha512-A6/SdCJmGLMLrL+mlsIijP3G+V7NvyG6likhkmTQBibU/+69UWxVs2qb7peYGOdiPT5QsxcaujDVCEgLzqC2OA==
 
 aproba@^1.0.3, aproba@^1.1.1:
   version "1.2.0"
@@ -14499,15 +14511,6 @@ react-is@^16.12.0, react-is@^16.13.0, react-is@^16.7.0, react-is@^16.8.1, react-
   version "17.0.1"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-17.0.1.tgz#5b3531bd76a645a4c9fb6e693ed36419e3301339"
   integrity sha512-NAnt2iGDXohE5LI7uBnLnqvLQMtzhkiAOLXTmv+qnF9Ky7xAPcX8Up/xWIhxvLVGJvuLiNc4xQLtuqDRzb4fSA==
-
-react-native-appearance@~0.3.3:
-  version "0.3.4"
-  resolved "https://registry.yarnpkg.com/react-native-appearance/-/react-native-appearance-0.3.4.tgz#2cbcbc5142cdc1898c116684f519b16c879cbec2"
-  integrity sha512-Vz3zdJbAEiMDwuw6wH98TT1WVfBvWjvANutYtkIbl16KGRCigtSgt6IIiLsF3/TSS3y3FtHhWDelFeGw/rtuig==
-  dependencies:
-    fbemitter "^2.1.1"
-    invariant "^2.2.4"
-    use-subscription "^1.0.0"
 
 react-native-gesture-handler@~1.8.0:
   version "1.8.0"

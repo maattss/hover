@@ -1,9 +1,10 @@
-import { LatLng } from 'react-native-maps';
 import { Colors } from '../theme';
 import { hexToRGB } from '../theme/colors';
 import { PolygonGeoFence, CircleGeoFence, GeoFence, GeoFenceVariant, GeoFenceCategory } from '../types/geoFenceTypes';
+import { LocationObject } from 'expo-location';
+import { LatLng } from 'react-native-maps';
 
-export const insideGeoFences = (userLocation: LatLng, geoFences: GeoFence[] | undefined) => {
+export const insideGeoFences = (userLocation: LocationObject, geoFences: GeoFence[] | undefined) => {
   if (geoFences) {
     for (const geoFence of geoFences) {
       if (geoFence.variant == GeoFenceVariant.CIRCLE) {
@@ -16,10 +17,10 @@ export const insideGeoFences = (userLocation: LatLng, geoFences: GeoFence[] | un
   }
 };
 
-const isInsideCircle = (userLocation: LatLng, geoFence: CircleGeoFence) => {
+const isInsideCircle = (userLocation: LocationObject, geoFence: CircleGeoFence) => {
   const distance = measureCircleDistance(
-    userLocation.latitude,
-    userLocation.longitude,
+    userLocation.coords.latitude,
+    userLocation.coords.longitude,
     geoFence.latitude,
     geoFence.longitude,
   );
@@ -27,13 +28,13 @@ const isInsideCircle = (userLocation: LatLng, geoFence: CircleGeoFence) => {
   return false;
 };
 
-const isInsidePolygon = (userLocation: LatLng, geoFence: PolygonGeoFence) => {
+const isInsidePolygon = (userLocation: LocationObject, geoFence: PolygonGeoFence) => {
   // eslint-disable-next-line @typescript-eslint/no-var-requires
   const classifyPoint = require('robust-point-in-polygon'); // Exactly determines if a point is contained in a 2D polygon.
   const polygon = geoFence.coordinates.map((coordinate) => {
     return [coordinate.latitude, coordinate.longitude];
   });
-  const insidePolygon = classifyPoint(polygon, [userLocation.latitude, userLocation.longitude]);
+  const insidePolygon = classifyPoint(polygon, [userLocation.coords.latitude, userLocation.coords.longitude]);
   if (insidePolygon === -1 || insidePolygon === 0) return true;
   return false;
 };
