@@ -174,11 +174,6 @@ export const TrackingProvider = ({ children }: Props) => {
       console.log('Tracking...');
       if (insideGeoFence) {
         setDuration(duration + 1);
-        const scoreRatio = getGeoFenceScoreRatio(insideGeoFence.category);
-        console.log('Score ratio:', scoreRatio);
-        const newScore = score + 1 * scoreRatio;
-        const roundedScore = Math.round(newScore);
-        console.log('New score: ' + newScore + ', Rounded: ' + roundedScore);
         setScore(score + 1 * getGeoFenceScoreRatio(insideGeoFence.category));
       }
     },
