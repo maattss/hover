@@ -1,5 +1,4 @@
 import React, { useState, ReactNode, useEffect } from 'react';
-import { LatLng } from 'react-native-maps';
 import { GeoFence, TrackedActivity } from '../types/geoFenceTypes';
 import { convertToGeoFence } from '../helpers/objectMappers';
 import { usePermissions, LOCATION, PermissionResponse } from 'expo-permissions';
