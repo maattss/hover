@@ -83,7 +83,6 @@ const TrackingScreen: React.FC = () => {
     color: centreOnUser ? Colors.blue : Colors.white,
   };
 
-  // Map event listner functions. TODO: Remove
   const toggleMapType = () =>
     chosenMapType === 'satellite' ? setChosenMapType('standard') : setChosenMapType('satellite');
 
@@ -132,7 +131,7 @@ const TrackingScreen: React.FC = () => {
         {tracking.isTracking && !tracking.isTrackingPaused && (
           <>
             <Text style={styles.scoreText}>Score: {Math.floor(tracking.score)}</Text>
-            <ActivityIndicator size={'large'} color={Colors.blue} style={{ marginTop: Spacing.base }} />
+            <ActivityIndicator size={'large'} color={Colors.blue} />
           </>
         )}
         {/* Tracking paused */}
@@ -144,11 +143,11 @@ const TrackingScreen: React.FC = () => {
         )}
         {/* Not tracking and user in geo fence */}
         {!tracking.isTracking && tracking.isTrackingPaused && tracking.insideGeoFence && (
-          <Text style={styles.headerInfoText}>Start hovering to earn points!</Text>
+          <Text style={styles.headerInfoText}>Start hovering {'\n'} to earn points!</Text>
         )}
         {/* Not tracking and user outside geo fence */}
         {!tracking.isTracking && tracking.isTrackingPaused && !tracking.insideGeoFence && (
-          <Text style={styles.headerInfoText}>Move to hover zone to earn points!</Text>
+          <Text style={styles.headerInfoText}>Move to hover zone {'\n'} to earn points!</Text>
         )}
       </View>
 
@@ -215,7 +214,6 @@ const styles = StyleSheet.create({
     marginVertical: Spacing.smallest,
     justifyContent: 'center',
     alignItems: 'center',
-    textAlign: 'center',
     backgroundColor: Colors.gray900,
     borderRadius: Spacing.smaller,
   },
@@ -231,8 +229,8 @@ const styles = StyleSheet.create({
   },
   infoContainer: {
     position: 'absolute',
-    top: '6%',
-    right: '2%',
+    bottom: '1%',
+    right: '1%',
   },
   mapStyleButton: {
     ...Buttons.iconButton,
