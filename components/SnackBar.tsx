@@ -49,7 +49,7 @@ const getColor = (variant: SnackBarVariant) => {
   }
 };
 
-const SnackBar = (props: SnackBarProps) => {
+const SnackBar: React.FC<SnackBarProps> = (props: SnackBarProps) => {
   const snackBarBgColor = {
     backgroundColor: getBackgroundColor(props.variant),
   };

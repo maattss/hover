@@ -199,6 +199,7 @@ interface StylesProps {
   filterButton: ViewStyle;
   filterIcon: TextStyle;
   refreshButton: ViewStyle;
+  refreshIcon: ViewStyle;
 }
 
 const styles: StylesProps = StyleSheet.create({
