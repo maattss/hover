@@ -55,7 +55,7 @@ export type Achievement = {
   __typename?: 'achievement';
   /** An object relationship */
   achievementTypeByAchievementType?: Maybe<Achievement_Type>;
-  achievement_type?: Maybe<Scalars['String']>;
+  achievement_type?: Maybe<Achievement_Type_Enum>;
   created_at?: Maybe<Scalars['timestamptz']>;
   description?: Maybe<Scalars['String']>;
   id: Scalars['Int'];
@@ -157,7 +157,7 @@ export type Achievement_Bool_Exp = {
   _not?: Maybe<Achievement_Bool_Exp>;
   _or?: Maybe<Array<Maybe<Achievement_Bool_Exp>>>;
   achievementTypeByAchievementType?: Maybe<Achievement_Type_Bool_Exp>;
-  achievement_type?: Maybe<String_Comparison_Exp>;
+  achievement_type?: Maybe<Achievement_Type_Enum_Comparison_Exp>;
   created_at?: Maybe<Timestamptz_Comparison_Exp>;
   description?: Maybe<String_Comparison_Exp>;
   id?: Maybe<Int_Comparison_Exp>;
@@ -182,7 +182,7 @@ export type Achievement_Inc_Input = {
 /** input type for inserting data into table "achievement" */
 export type Achievement_Insert_Input = {
   achievementTypeByAchievementType?: Maybe<Achievement_Type_Obj_Rel_Insert_Input>;
-  achievement_type?: Maybe<Scalars['String']>;
+  achievement_type?: Maybe<Achievement_Type_Enum>;
   created_at?: Maybe<Scalars['timestamptz']>;
   description?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['Int']>;
@@ -194,7 +194,6 @@ export type Achievement_Insert_Input = {
 /** aggregate max on columns */
 export type Achievement_Max_Fields = {
   __typename?: 'achievement_max_fields';
-  achievement_type?: Maybe<Scalars['String']>;
   created_at?: Maybe<Scalars['timestamptz']>;
   description?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['Int']>;
@@ -203,7 +202,6 @@ export type Achievement_Max_Fields = {
 
 /** order by max() on columns of table "achievement" */
 export type Achievement_Max_Order_By = {
-  achievement_type?: Maybe<Order_By>;
   created_at?: Maybe<Order_By>;
   description?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
@@ -213,7 +211,6 @@ export type Achievement_Max_Order_By = {
 /** aggregate min on columns */
 export type Achievement_Min_Fields = {
   __typename?: 'achievement_min_fields';
-  achievement_type?: Maybe<Scalars['String']>;
   created_at?: Maybe<Scalars['timestamptz']>;
   description?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['Int']>;
@@ -222,7 +219,6 @@ export type Achievement_Min_Fields = {
 
 /** order by min() on columns of table "achievement" */
 export type Achievement_Min_Order_By = {
-  achievement_type?: Maybe<Order_By>;
   created_at?: Maybe<Order_By>;
   description?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
@@ -286,7 +282,7 @@ export enum Achievement_Select_Column {
 
 /** input type for updating data in table "achievement" */
 export type Achievement_Set_Input = {
-  achievement_type?: Maybe<Scalars['String']>;
+  achievement_type?: Maybe<Achievement_Type_Enum>;
   created_at?: Maybe<Scalars['timestamptz']>;
   description?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['Int']>;
@@ -341,8 +337,30 @@ export type Achievement_Sum_Order_By = {
 /** columns and relationships of "achievement_type" */
 export type Achievement_Type = {
   __typename?: 'achievement_type';
+  /** An array relationship */
+  achievements: Array<Achievement>;
+  /** An aggregated array relationship */
+  achievements_aggregate: Achievement_Aggregate;
   description?: Maybe<Scalars['String']>;
   name: Scalars['String'];
+};
+
+/** columns and relationships of "achievement_type" */
+export type Achievement_TypeAchievementsArgs = {
+  distinct_on?: Maybe<Array<Achievement_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Achievement_Order_By>>;
+  where?: Maybe<Achievement_Bool_Exp>;
+};
+
+/** columns and relationships of "achievement_type" */
+export type Achievement_TypeAchievements_AggregateArgs = {
+  distinct_on?: Maybe<Array<Achievement_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Achievement_Order_By>>;
+  where?: Maybe<Achievement_Bool_Exp>;
 };
 
 /** aggregated selection of "achievement_type" */
@@ -384,6 +402,7 @@ export type Achievement_Type_Bool_Exp = {
   _and?: Maybe<Array<Maybe<Achievement_Type_Bool_Exp>>>;
   _not?: Maybe<Achievement_Type_Bool_Exp>;
   _or?: Maybe<Array<Maybe<Achievement_Type_Bool_Exp>>>;
+  achievements?: Maybe<Achievement_Bool_Exp>;
   description?: Maybe<String_Comparison_Exp>;
   name?: Maybe<String_Comparison_Exp>;
 };
@@ -394,8 +413,22 @@ export enum Achievement_Type_Constraint {
   AchievementTypePkey = 'achievement_type_pkey',
 }
 
+export enum Achievement_Type_Enum {
+  Score = 'SCORE',
+}
+
+/** expression to compare columns of type achievement_type_enum. All fields are combined with logical 'AND'. */
+export type Achievement_Type_Enum_Comparison_Exp = {
+  _eq?: Maybe<Achievement_Type_Enum>;
+  _in?: Maybe<Array<Achievement_Type_Enum>>;
+  _is_null?: Maybe<Scalars['Boolean']>;
+  _neq?: Maybe<Achievement_Type_Enum>;
+  _nin?: Maybe<Array<Achievement_Type_Enum>>;
+};
+
 /** input type for inserting data into table "achievement_type" */
 export type Achievement_Type_Insert_Input = {
+  achievements?: Maybe<Achievement_Arr_Rel_Insert_Input>;
   description?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
 };
@@ -450,6 +483,7 @@ export type Achievement_Type_On_Conflict = {
 
 /** ordering options when selecting data from "achievement_type" */
 export type Achievement_Type_Order_By = {
+  achievements_aggregate?: Maybe<Achievement_Aggregate_Order_By>;
   description?: Maybe<Order_By>;
   name?: Maybe<Order_By>;
 };
