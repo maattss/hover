@@ -8,6 +8,7 @@ import { GeoFenceCategory } from '../types/geoFenceTypes';
 interface ActivityFeedCardProps {
   activity: ActivityFeedData;
 }
+
 const getCategoryIconName = (category: GeoFenceCategory) => {
   switch (category) {
     case GeoFenceCategory.CULTURE:
@@ -26,17 +27,31 @@ const getCategoryIconName = (category: GeoFenceCategory) => {
 const ActivityFeedCard: React.FC<ActivityFeedCardProps> = (props: ActivityFeedCardProps) => {
   return (
     <View style={styles.card}>
-      <Image source={{ uri: props.activity.picture }} style={styles.avatar} />
-      <Text style={{ ...Typography.largeBodyText }}>Feed card</Text>
-      <Text style={{ ...Typography.largeBodyText }}>{props.activity.name}</Text>
-      <Text style={{ ...Typography.largeBodyText }}>{props.activity.caption}</Text>
-      <Text style={{ ...Typography.largeBodyText }}>{props.activity.score}</Text>
-      <FAIcon style={styles.categoryIcon} name={getCategoryIconName(props.activity.geoFence.category)} />
+      <View style={styles.topBar}>
+        <Text style={{ ...Typography.largeBodyText }}>{props.activity.name}</Text>
+        <Image source={{ uri: props.activity.picture }} style={styles.avatar} />
+        <Text style={{ ...Typography.largeBodyText }}>{props.activity.caption}</Text>
+      </View>
+      <View style={styles.main}>
+        <View style={styles.category}>
+          <FAIcon style={styles.categoryIcon} name={getCategoryIconName(props.activity.geoFence.category)} />
+          <Text style={{ ...Typography.largeBodyText }}>{props.activity.score}</Text>
+        </View>
+        <View style={styles.map}></View>
+      </View>
+      <View style={styles.footer}>
+        <Text style={{ ...Typography.largeBodyText }}>{props.activity.startedAt}</Text>
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  topBar: {},
+  main: {},
+  category: {},
+  map: {},
+  footer: {},
   card: {
     backgroundColor: Colors.gray900,
     height: 150,
