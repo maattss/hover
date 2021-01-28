@@ -53,7 +53,7 @@ const LeaderboardScreen: React.FC = () => {
     }
   }, [highscoreData]);
 
-  if (highscoreLoading) return <ActivityIndicator size={'large'} color={Colors.blue} />;
+  if (highscoreLoading) return <ActivityIndicator size={'large'} color={Colors.blue} style={styles.refreshIcon} />;
   if (highscoreError) return <Text style={styles.infoText}>{highscoreError.message}</Text>;
   if (Platform.OS == 'android') {
     return (
@@ -262,5 +262,8 @@ const styles: StylesProps = StyleSheet.create({
     backgroundColor: Colors.red,
     marginTop: Spacing.base,
     marginBottom: Spacing.base,
+  },
+  refreshIcon: {
+    marginTop: '5%',
   },
 });

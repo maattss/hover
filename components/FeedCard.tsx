@@ -10,7 +10,11 @@ export enum FeedCategory {
 }
 
 const FeedCard = () => {
-  return <View style={styles.card}>Feed card</View>;
+  return (
+    <View style={styles.card}>
+      <Text>Feed card</Text>
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({
