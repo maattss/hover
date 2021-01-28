@@ -22,11 +22,14 @@ const FeedScreen: React.FC = () => {
     geoFence: testGeoFence,
     startedAt: '2021-01-24T18:00:00+00:00',
     picture: 'https://www.kindpng.com/picc/m/78-785827_user-profile-avatar-login-account-male-user-icon.png',
+    score: 200,
   };
 
   return (
     <View style={styles.container}>
       {/* TODO: Replace feedcard examples with refreshable list with data from API */}
+      <ActivityFeedCard activity={testActivity} />
+      <ActivityFeedCard activity={testActivity} />
       <ActivityFeedCard activity={testActivity} />
     </View>
   );

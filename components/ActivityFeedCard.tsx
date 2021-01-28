@@ -3,10 +3,25 @@ import { StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native';
 import { Buttons, Colors, Typography, Spacing } from '../theme';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import { ActivityFeedData } from '../types/feedTypes';
+import { GeoFenceCategory } from '../types/geoFenceTypes';
 
 interface ActivityFeedCardProps {
   activity: ActivityFeedData;
 }
+const getCategoryIconName = (category: GeoFenceCategory) => {
+  switch (category) {
+    case GeoFenceCategory.CULTURE:
+      return 'theater-masks';
+    case GeoFenceCategory.SOCIAL:
+      return 'users';
+    case GeoFenceCategory.EXERCISE:
+      return 'dumbbell';
+    case GeoFenceCategory.EDUCATION:
+      return 'graduation-cap';
+    default:
+      return 'question-circle';
+  }
+};
 
 const ActivityFeedCard: React.FC<ActivityFeedCardProps> = (props: ActivityFeedCardProps) => {
   return (
@@ -14,10 +29,9 @@ const ActivityFeedCard: React.FC<ActivityFeedCardProps> = (props: ActivityFeedCa
       <Image source={{ uri: props.activity.picture }} style={styles.avatar} />
       <Text style={{ ...Typography.largeBodyText }}>Feed card</Text>
       <Text style={{ ...Typography.largeBodyText }}>{props.activity.name}</Text>
-      <FAIcon style={styles.categoryIcon} name={'graduation-cap'} />
-      <FAIcon style={styles.categoryIcon} name={'dumbbell'} />
-      <FAIcon style={styles.categoryIcon} name={'users'} />
-      <FAIcon style={styles.categoryIcon} name={'theater-masks'} />
+      <Text style={{ ...Typography.largeBodyText }}>{props.activity.caption}</Text>
+      <Text style={{ ...Typography.largeBodyText }}>{props.activity.score}</Text>
+      <FAIcon style={styles.categoryIcon} name={getCategoryIconName(props.activity.geoFence.category)} />
     </View>
   );
 };
