@@ -1,7 +1,7 @@
 module.exports = {
   schema: [
     {
-      'https://hover.hasura.app/v1/graphql': {
+      'https://hover-server.herokuapp.com/v1/graphql': {
         headers: {
           'X-Hasura-Admin-Secret': process.env.ADMIN_SECRET,
         },

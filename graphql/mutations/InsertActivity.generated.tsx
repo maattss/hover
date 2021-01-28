@@ -61,7 +61,7 @@ export type Achievement = {
   readonly __typename: 'achievement';
   /** An object relationship */
   readonly achievementTypeByAchievementType?: Maybe<Achievement_Type>;
-  readonly achievement_type?: Maybe<Scalars['String']>;
+  readonly achievement_type?: Maybe<Achievement_Type_Enum>;
   readonly created_at?: Maybe<Scalars['timestamptz']>;
   readonly description?: Maybe<Scalars['String']>;
   readonly id: Scalars['Int'];
@@ -163,7 +163,7 @@ export type Achievement_Bool_Exp = {
   readonly _not?: Maybe<Achievement_Bool_Exp>;
   readonly _or?: Maybe<ReadonlyArray<Maybe<Achievement_Bool_Exp>>>;
   readonly achievementTypeByAchievementType?: Maybe<Achievement_Type_Bool_Exp>;
-  readonly achievement_type?: Maybe<String_Comparison_Exp>;
+  readonly achievement_type?: Maybe<Achievement_Type_Enum_Comparison_Exp>;
   readonly created_at?: Maybe<Timestamptz_Comparison_Exp>;
   readonly description?: Maybe<String_Comparison_Exp>;
   readonly id?: Maybe<Int_Comparison_Exp>;
@@ -188,7 +188,7 @@ export type Achievement_Inc_Input = {
 /** input type for inserting data into table "achievement" */
 export type Achievement_Insert_Input = {
   readonly achievementTypeByAchievementType?: Maybe<Achievement_Type_Obj_Rel_Insert_Input>;
-  readonly achievement_type?: Maybe<Scalars['String']>;
+  readonly achievement_type?: Maybe<Achievement_Type_Enum>;
   readonly created_at?: Maybe<Scalars['timestamptz']>;
   readonly description?: Maybe<Scalars['String']>;
   readonly id?: Maybe<Scalars['Int']>;
@@ -200,7 +200,6 @@ export type Achievement_Insert_Input = {
 /** aggregate max on columns */
 export type Achievement_Max_Fields = {
   readonly __typename: 'achievement_max_fields';
-  readonly achievement_type?: Maybe<Scalars['String']>;
   readonly created_at?: Maybe<Scalars['timestamptz']>;
   readonly description?: Maybe<Scalars['String']>;
   readonly id?: Maybe<Scalars['Int']>;
@@ -209,7 +208,6 @@ export type Achievement_Max_Fields = {
 
 /** order by max() on columns of table "achievement" */
 export type Achievement_Max_Order_By = {
-  readonly achievement_type?: Maybe<Order_By>;
   readonly created_at?: Maybe<Order_By>;
   readonly description?: Maybe<Order_By>;
   readonly id?: Maybe<Order_By>;
@@ -219,7 +217,6 @@ export type Achievement_Max_Order_By = {
 /** aggregate min on columns */
 export type Achievement_Min_Fields = {
   readonly __typename: 'achievement_min_fields';
-  readonly achievement_type?: Maybe<Scalars['String']>;
   readonly created_at?: Maybe<Scalars['timestamptz']>;
   readonly description?: Maybe<Scalars['String']>;
   readonly id?: Maybe<Scalars['Int']>;
@@ -228,7 +225,6 @@ export type Achievement_Min_Fields = {
 
 /** order by min() on columns of table "achievement" */
 export type Achievement_Min_Order_By = {
-  readonly achievement_type?: Maybe<Order_By>;
   readonly created_at?: Maybe<Order_By>;
   readonly description?: Maybe<Order_By>;
   readonly id?: Maybe<Order_By>;
@@ -292,7 +288,7 @@ export enum Achievement_Select_Column {
 
 /** input type for updating data in table "achievement" */
 export type Achievement_Set_Input = {
-  readonly achievement_type?: Maybe<Scalars['String']>;
+  readonly achievement_type?: Maybe<Achievement_Type_Enum>;
   readonly created_at?: Maybe<Scalars['timestamptz']>;
   readonly description?: Maybe<Scalars['String']>;
   readonly id?: Maybe<Scalars['Int']>;
@@ -347,8 +343,30 @@ export type Achievement_Sum_Order_By = {
 /** columns and relationships of "achievement_type" */
 export type Achievement_Type = {
   readonly __typename: 'achievement_type';
+  /** An array relationship */
+  readonly achievements: ReadonlyArray<Achievement>;
+  /** An aggregated array relationship */
+  readonly achievements_aggregate: Achievement_Aggregate;
   readonly description?: Maybe<Scalars['String']>;
   readonly name: Scalars['String'];
+};
+
+/** columns and relationships of "achievement_type" */
+export type Achievement_TypeAchievementsArgs = {
+  distinct_on?: Maybe<ReadonlyArray<Achievement_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<ReadonlyArray<Achievement_Order_By>>;
+  where?: Maybe<Achievement_Bool_Exp>;
+};
+
+/** columns and relationships of "achievement_type" */
+export type Achievement_TypeAchievements_AggregateArgs = {
+  distinct_on?: Maybe<ReadonlyArray<Achievement_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<ReadonlyArray<Achievement_Order_By>>;
+  where?: Maybe<Achievement_Bool_Exp>;
 };
 
 /** aggregated selection of "achievement_type" */
@@ -390,6 +408,7 @@ export type Achievement_Type_Bool_Exp = {
   readonly _and?: Maybe<ReadonlyArray<Maybe<Achievement_Type_Bool_Exp>>>;
   readonly _not?: Maybe<Achievement_Type_Bool_Exp>;
   readonly _or?: Maybe<ReadonlyArray<Maybe<Achievement_Type_Bool_Exp>>>;
+  readonly achievements?: Maybe<Achievement_Bool_Exp>;
   readonly description?: Maybe<String_Comparison_Exp>;
   readonly name?: Maybe<String_Comparison_Exp>;
 };
@@ -400,8 +419,22 @@ export enum Achievement_Type_Constraint {
   AchievementTypePkey = 'achievement_type_pkey',
 }
 
+export enum Achievement_Type_Enum {
+  Score = 'SCORE',
+}
+
+/** expression to compare columns of type achievement_type_enum. All fields are combined with logical 'AND'. */
+export type Achievement_Type_Enum_Comparison_Exp = {
+  readonly _eq?: Maybe<Achievement_Type_Enum>;
+  readonly _in?: Maybe<ReadonlyArray<Achievement_Type_Enum>>;
+  readonly _is_null?: Maybe<Scalars['Boolean']>;
+  readonly _neq?: Maybe<Achievement_Type_Enum>;
+  readonly _nin?: Maybe<ReadonlyArray<Achievement_Type_Enum>>;
+};
+
 /** input type for inserting data into table "achievement_type" */
 export type Achievement_Type_Insert_Input = {
+  readonly achievements?: Maybe<Achievement_Arr_Rel_Insert_Input>;
   readonly description?: Maybe<Scalars['String']>;
   readonly name?: Maybe<Scalars['String']>;
 };
@@ -456,6 +489,7 @@ export type Achievement_Type_On_Conflict = {
 
 /** ordering options when selecting data from "achievement_type" */
 export type Achievement_Type_Order_By = {
+  readonly achievements_aggregate?: Maybe<Achievement_Aggregate_Order_By>;
   readonly description?: Maybe<Order_By>;
   readonly name?: Maybe<Order_By>;
 };
