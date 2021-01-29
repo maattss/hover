@@ -16,14 +16,18 @@ const AchievementFeedCard: React.FC<AchievementFeedCardProps> = (props: Achievem
         <Image source={{ uri: props.achievement.picture }} style={styles.avatar} />
         <Text style={styles.nameText}>{props.achievement.userName}</Text>
       </View>
-      <View style={styles.trophy}>
-        <FAIcon style={styles.trophyIcon} name={'award'} />
-      </View>
+
       <View style={styles.main}>
-        <Text style={styles.descriptionText}>{props.achievement.description}</Text>
+        <View style={styles.description}>
+          <Text style={styles.descriptionText}>{props.achievement.description}</Text>
+        </View>
+        <View style={styles.trophy}>
+          <FAIcon style={styles.trophyIcon} name={'award'} />
+        </View>
       </View>
+
       <View style={styles.footer}>
-        <Text style={styles.timeStamp}>{timeStampToPresentable(props.achievement.createdAt)}</Text>
+        <Text style={styles.footerText}>{timeStampToPresentable(props.achievement.createdAt)}</Text>
       </View>
     </View>
   );
@@ -31,9 +35,6 @@ const AchievementFeedCard: React.FC<AchievementFeedCardProps> = (props: Achievem
 
 const styles = StyleSheet.create({
   topBar: {
-    position: 'absolute',
-    left: Spacing.base,
-    top: Spacing.base,
     flexDirection: 'row',
     justifyContent: 'flex-start',
   },
@@ -42,19 +43,22 @@ const styles = StyleSheet.create({
     fontSize: 20,
     lineHeight: 50,
   },
+  description: {
+    width: '80%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   descriptionText: {
     ...Typography.headerText,
-    fontSize: 28,
+    fontSize: 24,
+    paddingRight: Spacing.smallest,
   },
   main: {
-    marginTop: 55,
     flexDirection: 'row',
     justifyContent: 'flex-start',
+    marginBottom: Spacing.smaller,
   },
   trophy: {
-    position: 'absolute',
-    right: Spacing.base,
-    top: Spacing.base,
     borderRadius: 70 / 2,
     height: 70,
     width: 70,
@@ -67,12 +71,14 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   footer: {
-    position: 'absolute',
-    left: Spacing.base,
-    bottom: Spacing.base,
     flexDirection: 'row',
-    justifyContent: 'flex-start',
+    justifyContent: 'flex-end',
+    width: '100%',
+  },
+  footerText: {
+    color: Colors.almostWhite,
     fontStyle: 'italic',
+    fontSize: 14,
   },
   card: {
     backgroundColor: Colors.gray900,

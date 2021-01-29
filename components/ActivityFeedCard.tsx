@@ -25,7 +25,7 @@ const getCategoryIconName = (category: GeoFenceCategory) => {
       return 'question-circle';
   }
 };
-const getBackgroundColor = (category: GeoFenceCategory) => {
+const getColor = (category: GeoFenceCategory) => {
   switch (category) {
     case GeoFenceCategory.CULTURE:
       return Colors.almostWhite;
@@ -41,8 +41,8 @@ const getBackgroundColor = (category: GeoFenceCategory) => {
 };
 
 const ActivityFeedCard: React.FC<ActivityFeedCardProps> = (props: ActivityFeedCardProps) => {
-  const categoryBgColor = {
-    color: getBackgroundColor(props.activity.geoFence.category),
+  const categoryColor = {
+    color: getColor(props.activity.geoFence.category),
   };
   const mapRegion: Region = {
     latitude: props.activity.geoFence.latitude,
@@ -66,7 +66,7 @@ const ActivityFeedCard: React.FC<ActivityFeedCardProps> = (props: ActivityFeedCa
       <View style={styles.main}>
         <View style={styles.category}>
           <FAIcon
-            style={[styles.categoryIcon, categoryBgColor]}
+            style={[styles.categoryIcon, categoryColor]}
             name={getCategoryIconName(props.activity.geoFence.category)}
           />
           <Text style={styles.scoreText}>{props.activity.score} points</Text>
