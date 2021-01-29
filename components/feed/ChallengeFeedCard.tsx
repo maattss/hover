@@ -10,7 +10,7 @@ interface ChallengeFeedCardProps {
   challenge: ChallengeFeedData;
 }
 
-const ChallengeFeedCard: React.FC<ChallengeFeedCardProps> = (props: ChallengeFeedCardProps) => {
+const ChallengeFeedCard: React.FC<ChallengeFeedCardProps> = ({ challenge }: ChallengeFeedCardProps) => {
   return (
     <View style={styles.card}>
       <View style={styles.topBar}>
@@ -18,20 +18,20 @@ const ChallengeFeedCard: React.FC<ChallengeFeedCardProps> = (props: ChallengeFee
       </View>
 
       <View style={styles.avatarContainer}>
-        <Image source={{ uri: props.challenge.userPicture1 }} style={styles.avatar} />
-        <Image source={{ uri: props.challenge.userPicture2 }} style={styles.avatar} />
+        <Image source={{ uri: challenge.userPicture1 }} style={styles.avatar} />
+        <Image source={{ uri: challenge.userPicture2 }} style={styles.avatar} />
       </View>
 
       <View style={styles.nameContainer}>
-        <Text style={styles.nameText}>{props.challenge.userName1}</Text>
+        <Text style={styles.nameText}>{challenge.userName1}</Text>
         <Text style={styles.nameText}>vs</Text>
-        <Text style={styles.nameText}>{props.challenge.userName2}</Text>
+        <Text style={styles.nameText}>{challenge.userName2}</Text>
       </View>
       <Divider />
-      <Text style={styles.challengeText}>{props.challenge.description}</Text>
+      <Text style={styles.challengeText}>{challenge.description}</Text>
 
       <View style={styles.footer}>
-        <Text style={styles.footerText}>{timeStampToPresentable(props.challenge.createdAt)}</Text>
+        <Text style={styles.footerText}>{timeStampToPresentable(challenge.createdAt)}</Text>
       </View>
     </View>
   );

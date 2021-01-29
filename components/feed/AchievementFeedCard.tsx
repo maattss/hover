@@ -9,17 +9,17 @@ interface AchievementFeedCardProps {
   achievement: AchievementFeedData;
 }
 
-const AchievementFeedCard: React.FC<AchievementFeedCardProps> = (props: AchievementFeedCardProps) => {
+const AchievementFeedCard: React.FC<AchievementFeedCardProps> = ({ achievement }: AchievementFeedCardProps) => {
   return (
     <View style={styles.card}>
       <View style={styles.topBar}>
-        <Image source={{ uri: props.achievement.picture }} style={styles.avatar} />
-        <Text style={styles.nameText}>{props.achievement.userName}</Text>
+        <Image source={{ uri: achievement.picture }} style={styles.avatar} />
+        <Text style={styles.nameText}>{achievement.userName}</Text>
       </View>
 
       <View style={styles.main}>
         <View style={styles.description}>
-          <Text style={styles.descriptionText}>{props.achievement.description}</Text>
+          <Text style={styles.descriptionText}>{achievement.description}</Text>
         </View>
         <View style={styles.trophy}>
           <FAIcon style={styles.trophyIcon} name={'award'} />
@@ -27,7 +27,7 @@ const AchievementFeedCard: React.FC<AchievementFeedCardProps> = (props: Achievem
       </View>
 
       <View style={styles.footer}>
-        <Text style={styles.footerText}>{timeStampToPresentable(props.achievement.createdAt)}</Text>
+        <Text style={styles.footerText}>{timeStampToPresentable(achievement.createdAt)}</Text>
       </View>
     </View>
   );

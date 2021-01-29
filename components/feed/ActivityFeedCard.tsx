@@ -41,47 +41,44 @@ const getColor = (category: GeoFenceCategory) => {
   }
 };
 
-const ActivityFeedCard: React.FC<ActivityFeedCardProps> = (props: ActivityFeedCardProps) => {
+const ActivityFeedCard: React.FC<ActivityFeedCardProps> = ({ activity }: ActivityFeedCardProps) => {
   const categoryColor = {
-    color: getColor(props.activity.geoFence.category),
+    color: getColor(activity.geoFence.category),
   };
   const mapRegion: Region = {
-    latitude: props.activity.geoFence.latitude,
-    longitude: props.activity.geoFence.longitude,
+    latitude: activity.geoFence.latitude,
+    longitude: activity.geoFence.longitude,
     latitudeDelta: 0.01,
     longitudeDelta: 0.01,
   };
   const markerCoordinate: LatLng = {
-    latitude: props.activity.geoFence.latitude,
-    longitude: props.activity.geoFence.longitude,
+    latitude: activity.geoFence.latitude,
+    longitude: activity.geoFence.longitude,
   };
   return (
     <View style={styles.card}>
       <View style={styles.topBar}>
-        <Image source={{ uri: props.activity.picture }} style={styles.avatar} />
+        <Image source={{ uri: activity.picture }} style={styles.avatar} />
         <View>
-          <Text style={styles.nameText}>{props.activity.userName}</Text>
-          <Text style={styles.captionText}>{props.activity.caption}</Text>
+          <Text style={styles.nameText}>{activity.userName}</Text>
+          <Text style={styles.captionText}>{activity.caption}</Text>
         </View>
       </View>
       <View style={styles.main}>
         <View style={styles.category}>
-          <FAIcon
-            style={[styles.categoryIcon, categoryColor]}
-            name={getCategoryIconName(props.activity.geoFence.category)}
-          />
-          <Text style={styles.scoreText}>{props.activity.score} points</Text>
+          <FAIcon style={[styles.categoryIcon, categoryColor]} name={getCategoryIconName(activity.geoFence.category)} />
+          <Text style={styles.scoreText}>{activity.score} points</Text>
         </View>
         <MapView style={styles.map} initialRegion={mapRegion}>
           <Marker
             coordinate={markerCoordinate}
-            title={props.activity.geoFence.name}
-            description={props.activity.geoFence.description}
+            title={activity.geoFence.name}
+            description={activity.geoFence.description}
           />
         </MapView>
       </View>
       <View style={styles.footer}>
-        <Text style={styles.footerText}>{timeStampToPresentable(props.activity.startedAt)}</Text>
+        <Text style={styles.footerText}>{timeStampToPresentable(activity.startedAt)}</Text>
       </View>
     </View>
   );
