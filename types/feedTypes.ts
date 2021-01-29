@@ -16,6 +16,7 @@ export type ActivityFeedData = {
 };
 export type AchievementFeedData = {
   name: string;
+  picture: string;
 };
 
 export type ChallengeFeedData = {
