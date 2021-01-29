@@ -4,6 +4,7 @@ import { Colors, Typography, Spacing } from '../../theme';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import { ChallengeFeedData } from '../../types/feedTypes';
 import { timeStampToPresentable } from '../../helpers/dateTimeHelpers';
+import Divider from '../Divider';
 
 interface ChallengeFeedCardProps {
   challenge: ChallengeFeedData;
@@ -26,7 +27,7 @@ const ChallengeFeedCard: React.FC<ChallengeFeedCardProps> = (props: ChallengeFee
         <Text style={styles.nameText}>vs</Text>
         <Text style={styles.nameText}>{props.challenge.userName2}</Text>
       </View>
-
+      <Divider />
       <Text style={styles.challengeText}>{props.challenge.description}</Text>
 
       <View style={styles.footer}>
@@ -82,6 +83,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-end',
     width: '100%',
+    marginTop: Spacing.smaller,
   },
   footerText: {
     color: Colors.almostWhite,
