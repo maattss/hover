@@ -5,6 +5,7 @@ import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import { ActivityFeedData } from '../types/feedTypes';
 import { GeoFenceCategory } from '../types/geoFenceTypes';
 import { timeStampToPresentable } from '../helpers/dateTimeHelpers';
+import MapView, { LatLng, Marker, Region } from 'react-native-maps';
 
 interface ActivityFeedCardProps {
   activity: ActivityFeedData;
@@ -24,25 +25,62 @@ const getCategoryIconName = (category: GeoFenceCategory) => {
       return 'question-circle';
   }
 };
+const getBackgroundColor = (category: GeoFenceCategory) => {
+  switch (category) {
+    case GeoFenceCategory.CULTURE:
+      return Colors.almostWhite;
+    case GeoFenceCategory.SOCIAL:
+      return Colors.blue;
+    case GeoFenceCategory.EXERCISE:
+      return Colors.green;
+    case GeoFenceCategory.EDUCATION:
+      return Colors.red;
+    default:
+      return Colors.gray800;
+  }
+};
 
 const ActivityFeedCard: React.FC<ActivityFeedCardProps> = (props: ActivityFeedCardProps) => {
+  const categoryBgColor = {
+    color: getBackgroundColor(props.activity.geoFence.category),
+  };
+  const mapRegion: Region = {
+    latitude: props.activity.geoFence.latitude,
+    longitude: props.activity.geoFence.longitude,
+    latitudeDelta: 0.01,
+    longitudeDelta: 0.01,
+  };
+  const markerCoordinate: LatLng = {
+    latitude: props.activity.geoFence.latitude,
+    longitude: props.activity.geoFence.longitude,
+  };
   return (
     <View style={styles.card}>
       <View style={styles.topBar}>
         <Image source={{ uri: props.activity.picture }} style={styles.avatar} />
-        <Text style={styles.nameText}>{props.activity.userName}</Text>
-
-        <Text style={{ ...Typography.largeBodyText }}>{props.activity.caption}</Text>
+        <View>
+          <Text style={styles.nameText}>{props.activity.userName}</Text>
+          <Text style={styles.captionText}>{props.activity.caption}</Text>
+        </View>
       </View>
       <View style={styles.main}>
         <View style={styles.category}>
-          <FAIcon style={styles.categoryIcon} name={getCategoryIconName(props.activity.geoFence.category)} />
-          <Text style={{ ...Typography.largeBodyText }}>{props.activity.score}</Text>
+          <FAIcon
+            style={[styles.categoryIcon, categoryBgColor]}
+            name={getCategoryIconName(props.activity.geoFence.category)}
+          />
+          <Text style={styles.scoreText}>{props.activity.score} points</Text>
         </View>
-        <View style={styles.map}></View>
+        <MapView style={styles.map} initialRegion={mapRegion}>
+          <Marker
+            coordinate={markerCoordinate}
+            title={props.activity.geoFence.name}
+            description={props.activity.geoFence.description}
+          />
+        </MapView>
       </View>
       <View style={styles.footer}>
-        <Text style={{ ...Typography.largeBodyText }}>{timeStampToPresentable(props.activity.startedAt)}</Text>
+        <Text style={styles.footerText}>{timeStampToPresentable(props.activity.startedAt)}</Text>
       </View>
     </View>
   );
@@ -55,27 +93,66 @@ const styles = StyleSheet.create({
   },
   nameText: {
     ...Typography.headerText,
-    lineHeight: 60,
+    fontSize: 20,
+    lineHeight: 30,
   },
-  main: {},
-  category: {},
-  map: {},
-  footer: {},
+  captionText: {
+    color: Colors.almostWhite,
+    fontSize: 12,
+    fontStyle: 'italic',
+  },
+  main: {
+    marginVertical: Spacing.smaller,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  category: {
+    width: '30%',
+    display: 'flex',
+    textAlign: 'center',
+    justifyContent: 'center',
+    flexDirection: 'column',
+    paddingRight: Spacing.base,
+  },
+  map: {
+    width: '70%',
+    height: 110,
+    borderRadius: Spacing.smallest,
+  },
+  footer: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    width: '100%',
+  },
+  footerText: {
+    color: Colors.almostWhite,
+    fontStyle: 'italic',
+    fontSize: 14,
+  },
   card: {
     backgroundColor: Colors.gray900,
-    height: 150,
     width: '100%',
     borderRadius: Spacing.smaller,
     padding: Spacing.base,
     marginHorizontal: Spacing.smaller,
     marginVertical: Spacing.smallest,
   },
-  categoryIcon: {},
+  categoryIcon: {
+    color: Colors.almostWhite,
+    fontSize: 40,
+    textAlign: 'center',
+    marginVertical: Spacing.smallest,
+  },
   avatar: {
-    height: 50,
-    width: 50,
-    borderRadius: 50 / 2,
+    height: 45,
+    width: 45,
+    borderRadius: 45 / 2,
     marginRight: Spacing.small,
+  },
+  scoreText: {
+    color: Colors.almostWhite,
+    fontSize: 24,
+    textAlign: 'center',
   },
 });
 

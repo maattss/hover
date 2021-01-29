@@ -39,10 +39,12 @@ const styles = StyleSheet.create({
   },
   nameText: {
     ...Typography.headerText,
-    lineHeight: 60,
+    fontSize: 20,
+    lineHeight: 50,
   },
   descriptionText: {
     ...Typography.headerText,
+    fontSize: 28,
   },
   main: {
     marginTop: 55,
@@ -74,7 +76,6 @@ const styles = StyleSheet.create({
   },
   card: {
     backgroundColor: Colors.gray900,
-    height: 140,
     width: '100%',
     borderRadius: Spacing.smaller,
     padding: Spacing.base,
@@ -82,9 +83,9 @@ const styles = StyleSheet.create({
     marginVertical: Spacing.smallest,
   },
   avatar: {
-    height: 50,
-    width: 50,
-    borderRadius: 50 / 2,
+    height: 45,
+    width: 45,
+    borderRadius: 45 / 2,
     marginRight: Spacing.small,
   },
   timeStamp: {
