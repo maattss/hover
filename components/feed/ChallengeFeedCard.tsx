@@ -78,6 +78,7 @@ const styles = StyleSheet.create({
   challengeText: {
     color: Colors.almostWhite,
     fontSize: 16,
+    textAlign: 'center',
   },
   footer: {
     flexDirection: 'row',

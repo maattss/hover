@@ -47,9 +47,9 @@ const FeedScreen: React.FC = () => {
   return (
     <View style={styles.container}>
       {/* TODO: Replace examples with refreshable list with data from API */}
+      <AchievementFeedCard achievement={testAchievement} />
       <ChallengeFeedCard challenge={testChallenge} />
       <ActivityFeedCard activity={testActivity} />
-      <AchievementFeedCard achievement={testAchievement} />
     </View>
   );
 };

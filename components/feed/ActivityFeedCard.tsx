@@ -6,6 +6,7 @@ import { ActivityFeedData } from '../../types/feedTypes';
 import { GeoFenceCategory } from '../../types/geoFenceTypes';
 import { timeStampToPresentable } from '../../helpers/dateTimeHelpers';
 import MapView, { LatLng, Marker, Region } from 'react-native-maps';
+import Divider from '../Divider';
 
 interface ActivityFeedCardProps {
   activity: ActivityFeedData;
@@ -102,7 +103,7 @@ const styles = StyleSheet.create({
     fontStyle: 'italic',
   },
   main: {
-    marginVertical: Spacing.smaller,
+    marginVertical: Spacing.small,
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
