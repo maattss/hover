@@ -38,6 +38,14 @@ const ChallengeFeedCard: React.FC<ChallengeFeedCardProps> = ({ challenge }: Chal
 };
 
 const styles = StyleSheet.create({
+  card: {
+    backgroundColor: Colors.gray900,
+    width: '100%',
+    borderRadius: Spacing.smaller,
+    padding: Spacing.base,
+    marginHorizontal: Spacing.smaller,
+    marginVertical: Spacing.smallest,
+  },
   topBar: {
     flexDirection: 'row',
     justifyContent: 'center',
@@ -90,19 +98,6 @@ const styles = StyleSheet.create({
     color: Colors.almostWhite,
     fontStyle: 'italic',
     fontSize: 14,
-  },
-  card: {
-    backgroundColor: Colors.gray900,
-    width: '100%',
-    borderRadius: Spacing.smaller,
-    padding: Spacing.base,
-    marginHorizontal: Spacing.smaller,
-    marginVertical: Spacing.smallest,
-  },
-
-  timeStamp: {
-    ...Typography.largeBodyText,
-    fontStyle: 'italic',
   },
 });
 

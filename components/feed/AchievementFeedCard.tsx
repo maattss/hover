@@ -34,6 +34,14 @@ const AchievementFeedCard: React.FC<AchievementFeedCardProps> = ({ achievement }
 };
 
 const styles = StyleSheet.create({
+  card: {
+    backgroundColor: Colors.gray900,
+    width: '100%',
+    borderRadius: Spacing.smaller,
+    padding: Spacing.base,
+    marginHorizontal: Spacing.smaller,
+    marginVertical: Spacing.smallest,
+  },
   topBar: {
     flexDirection: 'row',
     justifyContent: 'flex-start',
@@ -80,23 +88,11 @@ const styles = StyleSheet.create({
     fontStyle: 'italic',
     fontSize: 14,
   },
-  card: {
-    backgroundColor: Colors.gray900,
-    width: '100%',
-    borderRadius: Spacing.smaller,
-    padding: Spacing.base,
-    marginHorizontal: Spacing.smaller,
-    marginVertical: Spacing.smallest,
-  },
   avatar: {
     height: 45,
     width: 45,
     borderRadius: 45 / 2,
     marginRight: Spacing.small,
-  },
-  timeStamp: {
-    ...Typography.largeBodyText,
-    fontStyle: 'italic',
   },
 });
 

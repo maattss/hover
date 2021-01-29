@@ -85,6 +85,14 @@ const ActivityFeedCard: React.FC<ActivityFeedCardProps> = ({ activity }: Activit
 };
 
 const styles = StyleSheet.create({
+  card: {
+    backgroundColor: Colors.gray900,
+    width: '100%',
+    borderRadius: Spacing.smaller,
+    padding: Spacing.base,
+    marginHorizontal: Spacing.smaller,
+    marginVertical: Spacing.smallest,
+  },
   topBar: {
     flexDirection: 'row',
     justifyContent: 'flex-start',
@@ -99,6 +107,11 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontStyle: 'italic',
   },
+  scoreText: {
+    color: Colors.almostWhite,
+    fontSize: 24,
+    textAlign: 'center',
+  },
   main: {
     marginVertical: Spacing.small,
     flexDirection: 'row',
@@ -111,6 +124,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flexDirection: 'column',
     paddingRight: Spacing.base,
+  },
+  categoryIcon: {
+    color: Colors.almostWhite,
+    fontSize: 40,
+    textAlign: 'center',
+    marginVertical: Spacing.smallest,
   },
   map: {
     width: '70%',
@@ -127,30 +146,11 @@ const styles = StyleSheet.create({
     fontStyle: 'italic',
     fontSize: 14,
   },
-  card: {
-    backgroundColor: Colors.gray900,
-    width: '100%',
-    borderRadius: Spacing.smaller,
-    padding: Spacing.base,
-    marginHorizontal: Spacing.smaller,
-    marginVertical: Spacing.smallest,
-  },
-  categoryIcon: {
-    color: Colors.almostWhite,
-    fontSize: 40,
-    textAlign: 'center',
-    marginVertical: Spacing.smallest,
-  },
   avatar: {
     height: 45,
     width: 45,
     borderRadius: 45 / 2,
     marginRight: Spacing.small,
-  },
-  scoreText: {
-    color: Colors.almostWhite,
-    fontSize: 24,
-    textAlign: 'center',
   },
 });
 
