@@ -1,8 +1,9 @@
 import React from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 import ActivityFeedCard from '../../components/ActivityFeedCard';
+import AchievementFeedCard from '../../components/AchievementFeedCard';
 import { Typography, Spacing } from '../../theme';
-import { ActivityFeedData } from '../../types/feedTypes';
+import { ActivityFeedData, AchievementFeedData } from '../../types/feedTypes';
 import { CircleGeoFence, GeoFenceCategory, GeoFenceVariant } from '../../types/geoFenceTypes';
 
 const FeedScreen: React.FC = () => {
@@ -24,12 +25,16 @@ const FeedScreen: React.FC = () => {
     picture: 'https://www.kindpng.com/picc/m/78-785827_user-profile-avatar-login-account-male-user-icon.png',
     score: 200,
   };
+  const testAchievement: AchievementFeedData = {
+    name: 'Ola Nordmann',
+    picture: 'https://www.kindpng.com/picc/m/78-785827_user-profile-avatar-login-account-male-user-icon.png',
+  };
 
   return (
     <View style={styles.container}>
-      {/* TODO: Replace feedcard examples with refreshable list with data from API */}
+      {/* TODO: Replace examples with refreshable list with data from API */}
       <ActivityFeedCard activity={testActivity} />
-      <ActivityFeedCard activity={testActivity} />
+      <AchievementFeedCard achievement={testAchievement} />
       <ActivityFeedCard activity={testActivity} />
     </View>
   );

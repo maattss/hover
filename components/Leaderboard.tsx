@@ -32,7 +32,7 @@ export type Item = {
   picture?: string;
 };
 
-const Leaderboard = (props: LeaderboardProps) => {
+const Leaderboard: React.FC<LeaderboardProps> = (props: LeaderboardProps) => {
   const [sortedData, setSortedData] = useState<Item[]>([]);
   const [refreshing, setRefreshing] = useState(false);
 

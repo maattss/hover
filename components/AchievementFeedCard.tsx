@@ -12,12 +12,11 @@ const AchievementFeedCard: React.FC<AchievementFeedCardProps> = (props: Achievem
   return (
     <View style={styles.card}>
       <View style={styles.topBar}>
-        <Text style={{ ...Typography.largeBodyText }}>{props.achievement.name}</Text>
         <Image source={{ uri: props.achievement.picture }} style={styles.avatar} />
+        <Text style={styles.nameText}>{props.achievement.name}</Text>
       </View>
       <View style={styles.main}>
         <View style={styles.trophy}>
-          <FAIcon style={styles.trophyIcon} name={'trophy'} />
           <FAIcon style={styles.trophyIcon} name={'award'} />
         </View>
       </View>
@@ -29,10 +28,30 @@ const AchievementFeedCard: React.FC<AchievementFeedCardProps> = (props: Achievem
 };
 
 const styles = StyleSheet.create({
-  topBar: {},
-  main: {},
-  trophy: {},
-  trophyIcon: {},
+  topBar: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+  },
+  nameText: {
+    ...Typography.headerText,
+    lineHeight: 40,
+  },
+  main: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+  },
+  trophy: {
+    padding: Spacing.base,
+    borderRadius: 30,
+    height: 60,
+    width: 60,
+    marginRight: 10,
+    backgroundColor: Colors.blue,
+    justifyContent: 'center',
+  },
+  trophyIcon: {
+    ...Typography.icon,
+  },
   map: {},
   footer: {},
   card: {
@@ -40,7 +59,7 @@ const styles = StyleSheet.create({
     height: 100,
     width: '100%',
     borderRadius: Spacing.smaller,
-    padding: Spacing.small,
+    padding: Spacing.base,
     marginHorizontal: Spacing.smaller,
     marginVertical: Spacing.smallest,
   },
