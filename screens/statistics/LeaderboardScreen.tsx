@@ -54,9 +54,9 @@ const LeaderboardScreen: React.FC = () => {
     }
   }, [highscoreData]);
 
-  if (highscoreLoading) return <ActivityIndicator size={'large'} color={Colors.blue} style={styles.refreshIcon} />;
-  if (highscoreError) return <Text style={styles.infoText}>{highscoreError.message}</Text>;
   if (Platform.OS == 'android') {
+    if (highscoreLoading) return <ActivityIndicator size={'large'} color={Colors.blue} style={styles.refreshIcon} />;
+    if (highscoreError) return <Text style={styles.infoText}>{highscoreError.message}</Text>;
     return (
       <View style={styles.container}>
         <View style={styles.filterContainer}>
@@ -69,6 +69,7 @@ const LeaderboardScreen: React.FC = () => {
                 refetch();
                 setEditCategory(false);
               }}
+              closePicker={() => setEditCategory(false)}
             />
           )}
           {setTimespan && (
@@ -80,6 +81,7 @@ const LeaderboardScreen: React.FC = () => {
                 refetch();
                 setEditTimespan(false);
               }}
+              closePicker={() => setEditTimespan(false)}
             />
           )}
         </View>
@@ -120,7 +122,9 @@ const LeaderboardScreen: React.FC = () => {
           )}
         </View>
         <View style={styles.leaderboardContainer}>
-          {highscores && <Leaderboard data={highscores} refetch={refetch} />}
+          {highscoreLoading && <ActivityIndicator size={'large'} color={Colors.blue} style={styles.refreshIcon} />}
+          {highscoreError && <Text style={styles.infoText}>{highscoreError.message}</Text>}
+          {!highscoreLoading && !highscoreError && highscores && <Leaderboard data={highscores} refetch={refetch} />}
         </View>
         {editCategory && !editTimespan && (
           <FilterPickerIos
@@ -129,7 +133,6 @@ const LeaderboardScreen: React.FC = () => {
             onValueChange={(value) => {
               setCategory(value);
               refetch();
-              setEditCategory(false);
             }}
             closePicker={() => setEditCategory(false)}
           />
@@ -141,7 +144,6 @@ const LeaderboardScreen: React.FC = () => {
             onValueChange={(value) => {
               setTimespan(value);
               refetch();
-              setEditTimespan(false);
             }}
             closePicker={() => setEditTimespan(false)}
           />
@@ -276,6 +278,6 @@ const styles: StylesProps = StyleSheet.create({
     marginBottom: Spacing.base,
   },
   refreshIcon: {
-    marginTop: '5%',
+    marginTop: '2%',
   },
 });
