@@ -1,12 +1,11 @@
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native';
-import { Buttons, Colors, Typography, Spacing } from '../../theme';
+import { StyleSheet, Text, View, Image } from 'react-native';
+import { Colors, Typography, Spacing } from '../../theme';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import { ActivityFeedData } from '../../types/feedTypes';
 import { GeoFenceCategory } from '../../types/geoFenceTypes';
 import { timeStampToPresentable } from '../../helpers/dateTimeHelpers';
 import MapView, { LatLng, Marker, Region } from 'react-native-maps';
-import Divider from '../Divider';
 
 interface ActivityFeedCardProps {
   activity: ActivityFeedData;

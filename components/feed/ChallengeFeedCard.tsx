@@ -1,7 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
 import { Colors, Typography, Spacing } from '../../theme';
-import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import { ChallengeFeedData } from '../../types/feedTypes';
 import { timeStampToPresentable } from '../../helpers/dateTimeHelpers';
 import Divider from '../Divider';
