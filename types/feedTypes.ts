@@ -26,7 +26,12 @@ export type AchievementFeedData = {
   type: AchievementType;
   createdAt: string;
 };
-
 export type ChallengeFeedData = {
   name: string;
+  userPicture1: string;
+  userPicture2: string;
+  userName1: string;
+  userName2: string;
+  description: string;
+  createdAt: string;
 };
