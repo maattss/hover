@@ -29,6 +29,9 @@ const AchievementFeedCard: React.FC<AchievementFeedCardProps> = (props: Achievem
 
 const styles = StyleSheet.create({
   topBar: {
+    position: 'absolute',
+    left: Spacing.base,
+    top: Spacing.base,
     flexDirection: 'row',
     justifyContent: 'flex-start',
   },
@@ -41,19 +44,24 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   trophy: {
-    padding: Spacing.base,
-    borderRadius: 30,
-    height: 60,
-    width: 60,
-    marginRight: 10,
+    borderRadius: 70 / 2,
+    height: 70,
+    width: 70,
     backgroundColor: Colors.blue,
     justifyContent: 'center',
   },
   trophyIcon: {
-    ...Typography.icon,
+    color: Colors.almostWhite,
+    fontSize: 40,
+    textAlign: 'center',
   },
-  map: {},
-  footer: {},
+  footer: {
+    position: 'absolute',
+    left: Spacing.base,
+    bottom: Spacing.base,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+  },
   card: {
     backgroundColor: Colors.gray900,
     height: 100,
