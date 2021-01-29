@@ -4,6 +4,7 @@ import { Buttons, Colors, Typography, Spacing } from '../theme';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import { ActivityFeedData } from '../types/feedTypes';
 import { GeoFenceCategory } from '../types/geoFenceTypes';
+import { timeStampToPresentable } from '../helpers/dateTimeHelpers';
 
 interface ActivityFeedCardProps {
   activity: ActivityFeedData;
@@ -28,8 +29,9 @@ const ActivityFeedCard: React.FC<ActivityFeedCardProps> = (props: ActivityFeedCa
   return (
     <View style={styles.card}>
       <View style={styles.topBar}>
-        <Text style={{ ...Typography.largeBodyText }}>{props.activity.name}</Text>
         <Image source={{ uri: props.activity.picture }} style={styles.avatar} />
+        <Text style={styles.nameText}>{props.activity.userName}</Text>
+
         <Text style={{ ...Typography.largeBodyText }}>{props.activity.caption}</Text>
       </View>
       <View style={styles.main}>
@@ -40,14 +42,21 @@ const ActivityFeedCard: React.FC<ActivityFeedCardProps> = (props: ActivityFeedCa
         <View style={styles.map}></View>
       </View>
       <View style={styles.footer}>
-        <Text style={{ ...Typography.largeBodyText }}>{props.activity.startedAt}</Text>
+        <Text style={{ ...Typography.largeBodyText }}>{timeStampToPresentable(props.activity.startedAt)}</Text>
       </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  topBar: {},
+  topBar: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+  },
+  nameText: {
+    ...Typography.headerText,
+    lineHeight: 60,
+  },
   main: {},
   category: {},
   map: {},
@@ -57,16 +66,16 @@ const styles = StyleSheet.create({
     height: 150,
     width: '100%',
     borderRadius: Spacing.smaller,
-    padding: Spacing.small,
+    padding: Spacing.base,
     marginHorizontal: Spacing.smaller,
     marginVertical: Spacing.smallest,
   },
   categoryIcon: {},
   avatar: {
-    height: 30,
-    width: 30,
-    borderRadius: 30 / 2,
-    marginRight: 10,
+    height: 50,
+    width: 50,
+    borderRadius: 50 / 2,
+    marginRight: Spacing.small,
   },
 });
 

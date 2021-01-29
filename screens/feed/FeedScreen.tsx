@@ -3,7 +3,7 @@ import { Text, View, StyleSheet } from 'react-native';
 import ActivityFeedCard from '../../components/ActivityFeedCard';
 import AchievementFeedCard from '../../components/AchievementFeedCard';
 import { Typography, Spacing } from '../../theme';
-import { ActivityFeedData, AchievementFeedData } from '../../types/feedTypes';
+import { ActivityFeedData, AchievementFeedData, AchievementType } from '../../types/feedTypes';
 import { CircleGeoFence, GeoFenceCategory, GeoFenceVariant } from '../../types/geoFenceTypes';
 
 const FeedScreen: React.FC = () => {
@@ -18,16 +18,20 @@ const FeedScreen: React.FC = () => {
     description: 'Test description',
   };
   const testActivity: ActivityFeedData = {
-    name: 'Ola Nordmann',
+    userName: 'Siri Mykland',
     caption: 'Very nice workout!',
     geoFence: testGeoFence,
-    startedAt: '2021-01-24T18:00:00+00:00',
+    startedAt: '2021-01-29T10:00:00+01:00',
     picture: 'https://www.kindpng.com/picc/m/78-785827_user-profile-avatar-login-account-male-user-icon.png',
     score: 200,
   };
   const testAchievement: AchievementFeedData = {
-    name: 'Ola Nordmann',
+    userName: 'Mats Tyldum',
     picture: 'https://www.kindpng.com/picc/m/78-785827_user-profile-avatar-login-account-male-user-icon.png',
+    description: 'Achieved 200 points!',
+    name: '200XP',
+    type: AchievementType.SCORE,
+    createdAt: '2021-01-28T09:00:00+01:00',
   };
 
   return (

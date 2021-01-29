@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, Image } from 'react-native';
 import { Colors, Typography, Spacing } from '../theme';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import { AchievementFeedData } from '../types/feedTypes';
+import { timeStampToPresentable } from '../helpers/dateTimeHelpers';
 
 interface AchievementFeedCardProps {
   achievement: AchievementFeedData;
@@ -13,15 +14,16 @@ const AchievementFeedCard: React.FC<AchievementFeedCardProps> = (props: Achievem
     <View style={styles.card}>
       <View style={styles.topBar}>
         <Image source={{ uri: props.achievement.picture }} style={styles.avatar} />
-        <Text style={styles.nameText}>{props.achievement.name}</Text>
+        <Text style={styles.nameText}>{props.achievement.userName}</Text>
+      </View>
+      <View style={styles.trophy}>
+        <FAIcon style={styles.trophyIcon} name={'award'} />
       </View>
       <View style={styles.main}>
-        <View style={styles.trophy}>
-          <FAIcon style={styles.trophyIcon} name={'award'} />
-        </View>
+        <Text style={styles.descriptionText}>{props.achievement.description}</Text>
       </View>
       <View style={styles.footer}>
-        <Text style={{ ...Typography.largeBodyText }}>21.01.21 12.00</Text>
+        <Text style={styles.timeStamp}>{timeStampToPresentable(props.achievement.createdAt)}</Text>
       </View>
     </View>
   );
@@ -37,17 +39,24 @@ const styles = StyleSheet.create({
   },
   nameText: {
     ...Typography.headerText,
-    lineHeight: 40,
+    lineHeight: 60,
+  },
+  descriptionText: {
+    ...Typography.headerText,
   },
   main: {
+    marginTop: 55,
     flexDirection: 'row',
-    justifyContent: 'flex-end',
+    justifyContent: 'flex-start',
   },
   trophy: {
+    position: 'absolute',
+    right: Spacing.base,
+    top: Spacing.base,
     borderRadius: 70 / 2,
     height: 70,
     width: 70,
-    backgroundColor: Colors.blue,
+    backgroundColor: Colors.red,
     justifyContent: 'center',
   },
   trophyIcon: {
@@ -61,10 +70,11 @@ const styles = StyleSheet.create({
     bottom: Spacing.base,
     flexDirection: 'row',
     justifyContent: 'flex-start',
+    fontStyle: 'italic',
   },
   card: {
     backgroundColor: Colors.gray900,
-    height: 100,
+    height: 140,
     width: '100%',
     borderRadius: Spacing.smaller,
     padding: Spacing.base,
@@ -72,10 +82,14 @@ const styles = StyleSheet.create({
     marginVertical: Spacing.smallest,
   },
   avatar: {
-    height: 30,
-    width: 30,
-    borderRadius: 30 / 2,
-    marginRight: 10,
+    height: 50,
+    width: 50,
+    borderRadius: 50 / 2,
+    marginRight: Spacing.small,
+  },
+  timeStamp: {
+    ...Typography.largeBodyText,
+    fontStyle: 'italic',
   },
 });
 

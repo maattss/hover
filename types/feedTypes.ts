@@ -6,8 +6,12 @@ export enum FeedCategory {
   CHALLENGE,
 }
 
+export enum AchievementType {
+  SCORE,
+}
+
 export type ActivityFeedData = {
-  name: string;
+  userName: string;
   picture: string;
   caption: string;
   geoFence: GeoFence;
@@ -15,8 +19,12 @@ export type ActivityFeedData = {
   score: number;
 };
 export type AchievementFeedData = {
-  name: string;
+  userName: string;
   picture: string;
+  description: string;
+  name: string;
+  type: AchievementType;
+  createdAt: string;
 };
 
 export type ChallengeFeedData = {
