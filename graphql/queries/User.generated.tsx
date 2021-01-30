@@ -2114,6 +2114,12 @@ export type Geofences_Bool_Exp = {
 /** unique or primary key constraints on table "geofences" */
 export enum Geofences_Constraint {
   /** unique or primary key constraint */
+  GeofencesCoordinatesKey = 'geofences_coordinates_key',
+  /** unique or primary key constraint */
+  GeofencesLatitudeLongitudeKey = 'geofences_latitude_longitude_key',
+  /** unique or primary key constraint */
+  GeofencesNameKey = 'geofences_name_key',
+  /** unique or primary key constraint */
   GeofencesPkey = 'geofences_pkey',
 }
 
