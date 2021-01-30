@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 export const durationToTimestamp = (duration: number) => {
   const finalDuration = new Date(0);
   finalDuration.setSeconds(duration);
@@ -6,4 +8,7 @@ export const durationToTimestamp = (duration: number) => {
 
 export const getCurrentTimestamp = () => {
   return new Date().toISOString();
+};
+export const timeStampToPresentable = (timestamp: string) => {
+  return moment(timestamp).fromNow().toString();
 };

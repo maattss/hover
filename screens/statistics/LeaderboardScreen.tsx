@@ -9,6 +9,7 @@ import {
   TextStyle,
   ViewStyle,
   Platform,
+  Button,
 } from 'react-native';
 import { HighscoreQueryVariables, useHighscoreQuery } from '../../graphql/queries/Highscore.generated';
 import { Buttons, Colors, Spacing, Typography } from '../../theme';
@@ -53,9 +54,9 @@ const LeaderboardScreen: React.FC = () => {
     }
   }, [highscoreData]);
 
-  if (highscoreLoading) return <ActivityIndicator size={'large'} color={Colors.blue} />;
-  if (highscoreError) return <Text style={styles.infoText}>{highscoreError.message}</Text>;
   if (Platform.OS == 'android') {
+    if (highscoreLoading) return <ActivityIndicator size={'large'} color={Colors.blue} style={styles.refreshIcon} />;
+    if (highscoreError) return <Text style={styles.infoText}>{highscoreError.message}</Text>;
     return (
       <View style={styles.container}>
         <View style={styles.filterContainer}>
@@ -68,6 +69,7 @@ const LeaderboardScreen: React.FC = () => {
                 refetch();
                 setEditCategory(false);
               }}
+              closePicker={() => setEditCategory(false)}
             />
           )}
           {setTimespan && (
@@ -79,6 +81,7 @@ const LeaderboardScreen: React.FC = () => {
                 refetch();
                 setEditTimespan(false);
               }}
+              closePicker={() => setEditTimespan(false)}
             />
           )}
         </View>
@@ -101,7 +104,7 @@ const LeaderboardScreen: React.FC = () => {
               <Text style={{ ...Buttons.buttonText }}>
                 {STATIC_CATEGORIES.find((obj) => obj.value === category)?.label}
               </Text>
-              <FAIcon name="arrow-down" style={styles.filterIcon} />
+              <FAIcon name="filter" style={styles.filterIcon} />
             </TouchableOpacity>
           )}
           {setTimespan && (
@@ -114,12 +117,14 @@ const LeaderboardScreen: React.FC = () => {
               <Text style={{ ...Buttons.buttonText }}>
                 {STATIC_TIMESPAN.find((obj) => obj.value === timespan)?.label}
               </Text>
-              <FAIcon name="arrow-down" style={styles.filterIcon} />
+              <FAIcon name="clock" style={styles.filterIcon} />
             </TouchableOpacity>
           )}
         </View>
         <View style={styles.leaderboardContainer}>
-          {highscores && <Leaderboard data={highscores} refetch={refetch} />}
+          {highscoreLoading && <ActivityIndicator size={'large'} color={Colors.blue} style={styles.refreshIcon} />}
+          {highscoreError && <Text style={styles.infoText}>{highscoreError.message}</Text>}
+          {!highscoreLoading && !highscoreError && highscores && <Leaderboard data={highscores} refetch={refetch} />}
         </View>
         {editCategory && !editTimespan && (
           <FilterPickerIos
@@ -128,8 +133,8 @@ const LeaderboardScreen: React.FC = () => {
             onValueChange={(value) => {
               setCategory(value);
               refetch();
-              setEditCategory(false);
             }}
+            closePicker={() => setEditCategory(false)}
           />
         )}
         {editTimespan && !editCategory && (
@@ -139,8 +144,8 @@ const LeaderboardScreen: React.FC = () => {
             onValueChange={(value) => {
               setTimespan(value);
               refetch();
-              setEditTimespan(false);
             }}
+            closePicker={() => setEditTimespan(false)}
           />
         )}
       </View>
@@ -154,11 +159,16 @@ interface PickerProps {
   items: PickerItemProps[];
   selectedValue: number | string;
   onValueChange: (value: number | string) => void;
+  closePicker: () => void;
 }
 
-const FilterPickerIos = ({ items, selectedValue, onValueChange }: PickerProps) => {
+const FilterPickerIos = ({ items, selectedValue, onValueChange, closePicker }: PickerProps) => {
   return (
     <View style={styles.pickerContainer}>
+      <View style={styles.pickerButton}>
+        <Button onPress={closePicker} title="Done" color={Colors.blue} />
+      </View>
+
       <Picker
         mode="dropdown"
         prompt="Choose a filter"
@@ -199,6 +209,8 @@ interface StylesProps {
   filterButton: ViewStyle;
   filterIcon: TextStyle;
   refreshButton: ViewStyle;
+  refreshIcon: ViewStyle;
+  pickerButton: ViewStyle;
 }
 
 const styles: StylesProps = StyleSheet.create({
@@ -219,12 +231,19 @@ const styles: StylesProps = StyleSheet.create({
     justifyContent: 'center',
   },
   pickerContainer: {
-    flex: 1,
+    width: '96%',
+    marginBottom: Spacing.smaller,
+    backgroundColor: Colors.almostBlack,
+    borderRadius: Spacing.base,
+    alignItems: 'flex-end',
+  },
+  picker: {
     width: '100%',
-    backgroundColor: Colors.gray500,
-    justifyContent: 'center',
-    alignItems: 'center',
-    textAlign: 'center',
+    backgroundColor: Colors.almostBlack,
+    borderRadius: Spacing.base,
+  },
+  pickerButton: {
+    padding: Spacing.smaller,
   },
   pickerContainerAndroid: {
     flex: 1,
@@ -242,12 +261,7 @@ const styles: StylesProps = StyleSheet.create({
     ...Typography.bodyText,
     paddingTop: Spacing.base,
   },
-  picker: {
-    paddingTop: Spacing.base,
-    width: '100%',
-    backgroundColor: Colors.transparent,
-    flex: 1,
-  },
+
   filterButton: {
     ...Buttons.button,
     backgroundColor: Colors.transparent,
@@ -262,5 +276,8 @@ const styles: StylesProps = StyleSheet.create({
     backgroundColor: Colors.red,
     marginTop: Spacing.base,
     marginBottom: Spacing.base,
+  },
+  refreshIcon: {
+    marginTop: '2%',
   },
 });
