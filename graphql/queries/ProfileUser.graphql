@@ -1,0 +1,18 @@
+query ProfileUser($id: String!) {
+  user(id: $id) {
+    bio
+    created_at
+    email
+    name
+    picture
+    totalScore
+    user_achievement {
+      achievement {
+        description
+        name
+        achievement_type
+        created_at
+      }
+    }
+  }
+}

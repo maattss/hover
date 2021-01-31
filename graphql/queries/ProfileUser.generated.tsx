@@ -1,9 +1,7 @@
 /* eslint-disable */
 import * as Types from '../../types/types';
 
-import { BasicActivityFragmentFragment } from '../Fragments.generated';
 import { gql } from '@apollo/client';
-import { BasicActivityFragmentFragmentDoc } from '../Fragments.generated';
 import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -4621,46 +4619,72 @@ export enum Users_Update_Column {
   UpdatedAt = 'updated_at',
 }
 
-export type InsertActivityMutationVariables = Types.Exact<{
-  activity: Types.Activities_Insert_Input;
+export type ProfileUserQueryVariables = Types.Exact<{
+  id: Types.Scalars['String'];
 }>;
 
-export type InsertActivityMutation = { readonly __typename: 'mutation_root' } & {
-  readonly insert_activities_one?: Types.Maybe<{ readonly __typename: 'activities' } & BasicActivityFragmentFragment>;
+export type ProfileUserQuery = { readonly __typename: 'query_root' } & {
+  readonly user?: Types.Maybe<
+    { readonly __typename: 'users' } & Pick<
+      Types.Users,
+      'bio' | 'created_at' | 'email' | 'name' | 'picture' | 'totalScore'
+    > & {
+        readonly user_achievement: ReadonlyArray<
+          { readonly __typename: 'user_achievement' } & {
+            readonly achievement: { readonly __typename: 'achievement' } & Pick<
+              Types.Achievement,
+              'description' | 'name' | 'achievement_type' | 'created_at'
+            >;
+          }
+        >;
+      }
+  >;
 };
 
-export const InsertActivityDocument = gql`
-  mutation InsertActivity($activity: activities_insert_input!) {
-    insert_activities_one(object: $activity) {
-      ...basicActivityFragment
+export const ProfileUserDocument = gql`
+  query ProfileUser($id: String!) {
+    user(id: $id) {
+      bio
+      created_at
+      email
+      name
+      picture
+      totalScore
+      user_achievement {
+        achievement {
+          description
+          name
+          achievement_type
+          created_at
+        }
+      }
     }
   }
-  ${BasicActivityFragmentFragmentDoc}
 `;
 
 /**
- * __useInsertActivityMutation__
+ * __useProfileUserQuery__
  *
- * To run a mutation, you first call `useInsertActivityMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useInsertActivityMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
+ * To run a query within a React component, call `useProfileUserQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProfileUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
  *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const [insertActivityMutation, { data, loading, error }] = useInsertActivityMutation({
+ * const { data, loading, error } = useProfileUserQuery({
  *   variables: {
- *      activity: // value for 'activity'
+ *      id: // value for 'id'
  *   },
  * });
  */
-export function useInsertActivityMutation(
-  baseOptions?: Apollo.MutationHookOptions<InsertActivityMutation, InsertActivityMutationVariables>,
-) {
-  return Apollo.useMutation<InsertActivityMutation, InsertActivityMutationVariables>(
-    InsertActivityDocument,
-    baseOptions,
-  );
+export function useProfileUserQuery(baseOptions: Apollo.QueryHookOptions<ProfileUserQuery, ProfileUserQueryVariables>) {
+  return Apollo.useQuery<ProfileUserQuery, ProfileUserQueryVariables>(ProfileUserDocument, baseOptions);
 }
-export type InsertActivityMutationHookResult = ReturnType<typeof useInsertActivityMutation>;
+export function useProfileUserLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<ProfileUserQuery, ProfileUserQueryVariables>,
+) {
+  return Apollo.useLazyQuery<ProfileUserQuery, ProfileUserQueryVariables>(ProfileUserDocument, baseOptions);
+}
+export type ProfileUserQueryHookResult = ReturnType<typeof useProfileUserQuery>;
+export type ProfileUserLazyQueryHookResult = ReturnType<typeof useProfileUserLazyQuery>;
