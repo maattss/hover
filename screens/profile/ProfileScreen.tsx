@@ -88,7 +88,6 @@ const ProfileScreen: React.FC = () => {
         .filter((key) => !isNaN(Number(GeoFenceCategory[key as keyof typeof GeoFenceCategory])))
         .map((category, index) => {
           const categoryEnum: GeoFenceCategory = GeoFenceCategory[category as keyof typeof GeoFenceCategory];
-          console.log(GeoFenceCategory[index]);
           return (
             <View key={index} style={styles.score}>
               <FAIcon

@@ -92,14 +92,3 @@ export const convertToHighscoreList = (data: HighscoreQuery) => {
   );
   return highscores;
 };
-
-export const convertToProfileUser = (data: ProfileUserQuery) => {
-  return {
-    bio: data.user?.bio ?? '',
-    email: data.user?.email ?? '',
-    name: data.user?.name ?? '',
-    picture: data.user?.picture ?? '',
-    totalScore: data.user?.totalScore,
-    achievements: [],
-  };
-};

@@ -6,6 +6,10 @@ export type UserProfile = {
   name: string;
   picture: string;
   totalScore: number;
+  educationScore: number;
+  cultureScore: number;
+  socialScore: number;
+  exerciseScore: number;
   achievements: Achievement[];
 };
 

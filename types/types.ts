@@ -68,8 +68,8 @@ export type String_Comparison_Exp = {
 export type Achievement = {
   __typename?: 'achievement';
   /** An object relationship */
-  achievementTypeByAchievementType?: Maybe<Achievement_Type>;
-  achievement_type?: Maybe<Achievement_Type_Enum>;
+  achievementTypeByAchievementType: Achievement_Type;
+  achievement_type: Achievement_Type_Enum;
   created_at?: Maybe<Scalars['timestamptz']>;
   description?: Maybe<Scalars['String']>;
   id: Scalars['Int'];
@@ -450,7 +450,10 @@ export enum Achievement_Type_Constraint {
 }
 
 export enum Achievement_Type_Enum {
+  /** First activity on the app */
+  FirstActivity = 'FIRST_ACTIVITY',
   Score = 'SCORE',
+  ScoreInCategory = 'SCORE_IN_CATEGORY',
 }
 
 /** expression to compare columns of type achievement_type_enum. All fields are combined with logical 'AND'. */
@@ -1310,17 +1313,513 @@ export type Categories_Variance_Order_By = {
   points_per_minute?: Maybe<Order_By>;
 };
 
+/** columns and relationships of "challenge" */
+export type Challenge = {
+  __typename?: 'challenge';
+  /** An object relationship */
+  challengeTypeByChallengeType: Challenge_Type;
+  challenge_type: Challenge_Type_Enum;
+  created_at: Scalars['timestamptz'];
+  daterange?: Maybe<Scalars['daterange']>;
+  id: Scalars['Int'];
+  is_active: Scalars['Boolean'];
+  rules?: Maybe<Scalars['json']>;
+};
+
+/** columns and relationships of "challenge" */
+export type ChallengeRulesArgs = {
+  path?: Maybe<Scalars['String']>;
+};
+
+/** aggregated selection of "challenge" */
+export type Challenge_Aggregate = {
+  __typename?: 'challenge_aggregate';
+  aggregate?: Maybe<Challenge_Aggregate_Fields>;
+  nodes: Array<Challenge>;
+};
+
+/** aggregate fields of "challenge" */
+export type Challenge_Aggregate_Fields = {
+  __typename?: 'challenge_aggregate_fields';
+  avg?: Maybe<Challenge_Avg_Fields>;
+  count?: Maybe<Scalars['Int']>;
+  max?: Maybe<Challenge_Max_Fields>;
+  min?: Maybe<Challenge_Min_Fields>;
+  stddev?: Maybe<Challenge_Stddev_Fields>;
+  stddev_pop?: Maybe<Challenge_Stddev_Pop_Fields>;
+  stddev_samp?: Maybe<Challenge_Stddev_Samp_Fields>;
+  sum?: Maybe<Challenge_Sum_Fields>;
+  var_pop?: Maybe<Challenge_Var_Pop_Fields>;
+  var_samp?: Maybe<Challenge_Var_Samp_Fields>;
+  variance?: Maybe<Challenge_Variance_Fields>;
+};
+
+/** aggregate fields of "challenge" */
+export type Challenge_Aggregate_FieldsCountArgs = {
+  columns?: Maybe<Array<Challenge_Select_Column>>;
+  distinct?: Maybe<Scalars['Boolean']>;
+};
+
+/** order by aggregate values of table "challenge" */
+export type Challenge_Aggregate_Order_By = {
+  avg?: Maybe<Challenge_Avg_Order_By>;
+  count?: Maybe<Order_By>;
+  max?: Maybe<Challenge_Max_Order_By>;
+  min?: Maybe<Challenge_Min_Order_By>;
+  stddev?: Maybe<Challenge_Stddev_Order_By>;
+  stddev_pop?: Maybe<Challenge_Stddev_Pop_Order_By>;
+  stddev_samp?: Maybe<Challenge_Stddev_Samp_Order_By>;
+  sum?: Maybe<Challenge_Sum_Order_By>;
+  var_pop?: Maybe<Challenge_Var_Pop_Order_By>;
+  var_samp?: Maybe<Challenge_Var_Samp_Order_By>;
+  variance?: Maybe<Challenge_Variance_Order_By>;
+};
+
+/** input type for inserting array relation for remote table "challenge" */
+export type Challenge_Arr_Rel_Insert_Input = {
+  data: Array<Challenge_Insert_Input>;
+  on_conflict?: Maybe<Challenge_On_Conflict>;
+};
+
+/** aggregate avg on columns */
+export type Challenge_Avg_Fields = {
+  __typename?: 'challenge_avg_fields';
+  id?: Maybe<Scalars['Float']>;
+};
+
+/** order by avg() on columns of table "challenge" */
+export type Challenge_Avg_Order_By = {
+  id?: Maybe<Order_By>;
+};
+
+/** Boolean expression to filter rows from the table "challenge". All fields are combined with a logical 'AND'. */
+export type Challenge_Bool_Exp = {
+  _and?: Maybe<Array<Maybe<Challenge_Bool_Exp>>>;
+  _not?: Maybe<Challenge_Bool_Exp>;
+  _or?: Maybe<Array<Maybe<Challenge_Bool_Exp>>>;
+  challengeTypeByChallengeType?: Maybe<Challenge_Type_Bool_Exp>;
+  challenge_type?: Maybe<Challenge_Type_Enum_Comparison_Exp>;
+  created_at?: Maybe<Timestamptz_Comparison_Exp>;
+  daterange?: Maybe<Daterange_Comparison_Exp>;
+  id?: Maybe<Int_Comparison_Exp>;
+  is_active?: Maybe<Boolean_Comparison_Exp>;
+  rules?: Maybe<Json_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "challenge" */
+export enum Challenge_Constraint {
+  /** unique or primary key constraint */
+  UserChallengePkey = 'user_challenge_pkey',
+}
+
+/** input type for incrementing integer column in table "challenge" */
+export type Challenge_Inc_Input = {
+  id?: Maybe<Scalars['Int']>;
+};
+
+/** input type for inserting data into table "challenge" */
+export type Challenge_Insert_Input = {
+  challengeTypeByChallengeType?: Maybe<Challenge_Type_Obj_Rel_Insert_Input>;
+  challenge_type?: Maybe<Challenge_Type_Enum>;
+  created_at?: Maybe<Scalars['timestamptz']>;
+  daterange?: Maybe<Scalars['daterange']>;
+  id?: Maybe<Scalars['Int']>;
+  is_active?: Maybe<Scalars['Boolean']>;
+  rules?: Maybe<Scalars['json']>;
+};
+
+/** aggregate max on columns */
+export type Challenge_Max_Fields = {
+  __typename?: 'challenge_max_fields';
+  created_at?: Maybe<Scalars['timestamptz']>;
+  id?: Maybe<Scalars['Int']>;
+};
+
+/** order by max() on columns of table "challenge" */
+export type Challenge_Max_Order_By = {
+  created_at?: Maybe<Order_By>;
+  id?: Maybe<Order_By>;
+};
+
+/** aggregate min on columns */
+export type Challenge_Min_Fields = {
+  __typename?: 'challenge_min_fields';
+  created_at?: Maybe<Scalars['timestamptz']>;
+  id?: Maybe<Scalars['Int']>;
+};
+
+/** order by min() on columns of table "challenge" */
+export type Challenge_Min_Order_By = {
+  created_at?: Maybe<Order_By>;
+  id?: Maybe<Order_By>;
+};
+
+/** response of any mutation on the table "challenge" */
+export type Challenge_Mutation_Response = {
+  __typename?: 'challenge_mutation_response';
+  /** number of affected rows by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data of the affected rows by the mutation */
+  returning: Array<Challenge>;
+};
+
+/** input type for inserting object relation for remote table "challenge" */
+export type Challenge_Obj_Rel_Insert_Input = {
+  data: Challenge_Insert_Input;
+  on_conflict?: Maybe<Challenge_On_Conflict>;
+};
+
+/** on conflict condition type for table "challenge" */
+export type Challenge_On_Conflict = {
+  constraint: Challenge_Constraint;
+  update_columns: Array<Challenge_Update_Column>;
+  where?: Maybe<Challenge_Bool_Exp>;
+};
+
+/** ordering options when selecting data from "challenge" */
+export type Challenge_Order_By = {
+  challengeTypeByChallengeType?: Maybe<Challenge_Type_Order_By>;
+  challenge_type?: Maybe<Order_By>;
+  created_at?: Maybe<Order_By>;
+  daterange?: Maybe<Order_By>;
+  id?: Maybe<Order_By>;
+  is_active?: Maybe<Order_By>;
+  rules?: Maybe<Order_By>;
+};
+
+/** columns and relationships of "challenge_participant" */
+export type Challenge_Participant = {
+  __typename?: 'challenge_participant';
+  challenge_id: Scalars['Int'];
+  user_id: Scalars['String'];
+};
+
+/** aggregated selection of "challenge_participant" */
+export type Challenge_Participant_Aggregate = {
+  __typename?: 'challenge_participant_aggregate';
+  aggregate?: Maybe<Challenge_Participant_Aggregate_Fields>;
+  nodes: Array<Challenge_Participant>;
+};
+
+/** aggregate fields of "challenge_participant" */
+export type Challenge_Participant_Aggregate_Fields = {
+  __typename?: 'challenge_participant_aggregate_fields';
+  avg?: Maybe<Challenge_Participant_Avg_Fields>;
+  count?: Maybe<Scalars['Int']>;
+  max?: Maybe<Challenge_Participant_Max_Fields>;
+  min?: Maybe<Challenge_Participant_Min_Fields>;
+  stddev?: Maybe<Challenge_Participant_Stddev_Fields>;
+  stddev_pop?: Maybe<Challenge_Participant_Stddev_Pop_Fields>;
+  stddev_samp?: Maybe<Challenge_Participant_Stddev_Samp_Fields>;
+  sum?: Maybe<Challenge_Participant_Sum_Fields>;
+  var_pop?: Maybe<Challenge_Participant_Var_Pop_Fields>;
+  var_samp?: Maybe<Challenge_Participant_Var_Samp_Fields>;
+  variance?: Maybe<Challenge_Participant_Variance_Fields>;
+};
+
+/** aggregate fields of "challenge_participant" */
+export type Challenge_Participant_Aggregate_FieldsCountArgs = {
+  columns?: Maybe<Array<Challenge_Participant_Select_Column>>;
+  distinct?: Maybe<Scalars['Boolean']>;
+};
+
+/** order by aggregate values of table "challenge_participant" */
+export type Challenge_Participant_Aggregate_Order_By = {
+  avg?: Maybe<Challenge_Participant_Avg_Order_By>;
+  count?: Maybe<Order_By>;
+  max?: Maybe<Challenge_Participant_Max_Order_By>;
+  min?: Maybe<Challenge_Participant_Min_Order_By>;
+  stddev?: Maybe<Challenge_Participant_Stddev_Order_By>;
+  stddev_pop?: Maybe<Challenge_Participant_Stddev_Pop_Order_By>;
+  stddev_samp?: Maybe<Challenge_Participant_Stddev_Samp_Order_By>;
+  sum?: Maybe<Challenge_Participant_Sum_Order_By>;
+  var_pop?: Maybe<Challenge_Participant_Var_Pop_Order_By>;
+  var_samp?: Maybe<Challenge_Participant_Var_Samp_Order_By>;
+  variance?: Maybe<Challenge_Participant_Variance_Order_By>;
+};
+
+/** input type for inserting array relation for remote table "challenge_participant" */
+export type Challenge_Participant_Arr_Rel_Insert_Input = {
+  data: Array<Challenge_Participant_Insert_Input>;
+  on_conflict?: Maybe<Challenge_Participant_On_Conflict>;
+};
+
+/** aggregate avg on columns */
+export type Challenge_Participant_Avg_Fields = {
+  __typename?: 'challenge_participant_avg_fields';
+  challenge_id?: Maybe<Scalars['Float']>;
+};
+
+/** order by avg() on columns of table "challenge_participant" */
+export type Challenge_Participant_Avg_Order_By = {
+  challenge_id?: Maybe<Order_By>;
+};
+
+/** Boolean expression to filter rows from the table "challenge_participant". All fields are combined with a logical 'AND'. */
+export type Challenge_Participant_Bool_Exp = {
+  _and?: Maybe<Array<Maybe<Challenge_Participant_Bool_Exp>>>;
+  _not?: Maybe<Challenge_Participant_Bool_Exp>;
+  _or?: Maybe<Array<Maybe<Challenge_Participant_Bool_Exp>>>;
+  challenge_id?: Maybe<Int_Comparison_Exp>;
+  user_id?: Maybe<String_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "challenge_participant" */
+export enum Challenge_Participant_Constraint {
+  /** unique or primary key constraint */
+  ChallengeParticipantsPkey = 'challenge_participants_pkey',
+}
+
+/** input type for incrementing integer column in table "challenge_participant" */
+export type Challenge_Participant_Inc_Input = {
+  challenge_id?: Maybe<Scalars['Int']>;
+};
+
+/** input type for inserting data into table "challenge_participant" */
+export type Challenge_Participant_Insert_Input = {
+  challenge_id?: Maybe<Scalars['Int']>;
+  user_id?: Maybe<Scalars['String']>;
+};
+
+/** aggregate max on columns */
+export type Challenge_Participant_Max_Fields = {
+  __typename?: 'challenge_participant_max_fields';
+  challenge_id?: Maybe<Scalars['Int']>;
+  user_id?: Maybe<Scalars['String']>;
+};
+
+/** order by max() on columns of table "challenge_participant" */
+export type Challenge_Participant_Max_Order_By = {
+  challenge_id?: Maybe<Order_By>;
+  user_id?: Maybe<Order_By>;
+};
+
+/** aggregate min on columns */
+export type Challenge_Participant_Min_Fields = {
+  __typename?: 'challenge_participant_min_fields';
+  challenge_id?: Maybe<Scalars['Int']>;
+  user_id?: Maybe<Scalars['String']>;
+};
+
+/** order by min() on columns of table "challenge_participant" */
+export type Challenge_Participant_Min_Order_By = {
+  challenge_id?: Maybe<Order_By>;
+  user_id?: Maybe<Order_By>;
+};
+
+/** response of any mutation on the table "challenge_participant" */
+export type Challenge_Participant_Mutation_Response = {
+  __typename?: 'challenge_participant_mutation_response';
+  /** number of affected rows by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data of the affected rows by the mutation */
+  returning: Array<Challenge_Participant>;
+};
+
+/** input type for inserting object relation for remote table "challenge_participant" */
+export type Challenge_Participant_Obj_Rel_Insert_Input = {
+  data: Challenge_Participant_Insert_Input;
+  on_conflict?: Maybe<Challenge_Participant_On_Conflict>;
+};
+
+/** on conflict condition type for table "challenge_participant" */
+export type Challenge_Participant_On_Conflict = {
+  constraint: Challenge_Participant_Constraint;
+  update_columns: Array<Challenge_Participant_Update_Column>;
+  where?: Maybe<Challenge_Participant_Bool_Exp>;
+};
+
+/** ordering options when selecting data from "challenge_participant" */
+export type Challenge_Participant_Order_By = {
+  challenge_id?: Maybe<Order_By>;
+  user_id?: Maybe<Order_By>;
+};
+
+/** primary key columns input for table: "challenge_participant" */
+export type Challenge_Participant_Pk_Columns_Input = {
+  challenge_id: Scalars['Int'];
+  user_id: Scalars['String'];
+};
+
+/** select columns of table "challenge_participant" */
+export enum Challenge_Participant_Select_Column {
+  /** column name */
+  ChallengeId = 'challenge_id',
+  /** column name */
+  UserId = 'user_id',
+}
+
+/** input type for updating data in table "challenge_participant" */
+export type Challenge_Participant_Set_Input = {
+  challenge_id?: Maybe<Scalars['Int']>;
+  user_id?: Maybe<Scalars['String']>;
+};
+
+/** aggregate stddev on columns */
+export type Challenge_Participant_Stddev_Fields = {
+  __typename?: 'challenge_participant_stddev_fields';
+  challenge_id?: Maybe<Scalars['Float']>;
+};
+
+/** order by stddev() on columns of table "challenge_participant" */
+export type Challenge_Participant_Stddev_Order_By = {
+  challenge_id?: Maybe<Order_By>;
+};
+
+/** aggregate stddev_pop on columns */
+export type Challenge_Participant_Stddev_Pop_Fields = {
+  __typename?: 'challenge_participant_stddev_pop_fields';
+  challenge_id?: Maybe<Scalars['Float']>;
+};
+
+/** order by stddev_pop() on columns of table "challenge_participant" */
+export type Challenge_Participant_Stddev_Pop_Order_By = {
+  challenge_id?: Maybe<Order_By>;
+};
+
+/** aggregate stddev_samp on columns */
+export type Challenge_Participant_Stddev_Samp_Fields = {
+  __typename?: 'challenge_participant_stddev_samp_fields';
+  challenge_id?: Maybe<Scalars['Float']>;
+};
+
+/** order by stddev_samp() on columns of table "challenge_participant" */
+export type Challenge_Participant_Stddev_Samp_Order_By = {
+  challenge_id?: Maybe<Order_By>;
+};
+
+/** aggregate sum on columns */
+export type Challenge_Participant_Sum_Fields = {
+  __typename?: 'challenge_participant_sum_fields';
+  challenge_id?: Maybe<Scalars['Int']>;
+};
+
+/** order by sum() on columns of table "challenge_participant" */
+export type Challenge_Participant_Sum_Order_By = {
+  challenge_id?: Maybe<Order_By>;
+};
+
+/** update columns of table "challenge_participant" */
+export enum Challenge_Participant_Update_Column {
+  /** column name */
+  ChallengeId = 'challenge_id',
+  /** column name */
+  UserId = 'user_id',
+}
+
+/** aggregate var_pop on columns */
+export type Challenge_Participant_Var_Pop_Fields = {
+  __typename?: 'challenge_participant_var_pop_fields';
+  challenge_id?: Maybe<Scalars['Float']>;
+};
+
+/** order by var_pop() on columns of table "challenge_participant" */
+export type Challenge_Participant_Var_Pop_Order_By = {
+  challenge_id?: Maybe<Order_By>;
+};
+
+/** aggregate var_samp on columns */
+export type Challenge_Participant_Var_Samp_Fields = {
+  __typename?: 'challenge_participant_var_samp_fields';
+  challenge_id?: Maybe<Scalars['Float']>;
+};
+
+/** order by var_samp() on columns of table "challenge_participant" */
+export type Challenge_Participant_Var_Samp_Order_By = {
+  challenge_id?: Maybe<Order_By>;
+};
+
+/** aggregate variance on columns */
+export type Challenge_Participant_Variance_Fields = {
+  __typename?: 'challenge_participant_variance_fields';
+  challenge_id?: Maybe<Scalars['Float']>;
+};
+
+/** order by variance() on columns of table "challenge_participant" */
+export type Challenge_Participant_Variance_Order_By = {
+  challenge_id?: Maybe<Order_By>;
+};
+
+/** primary key columns input for table: "challenge" */
+export type Challenge_Pk_Columns_Input = {
+  id: Scalars['Int'];
+};
+
+/** select columns of table "challenge" */
+export enum Challenge_Select_Column {
+  /** column name */
+  ChallengeType = 'challenge_type',
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  Daterange = 'daterange',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  IsActive = 'is_active',
+  /** column name */
+  Rules = 'rules',
+}
+
+/** input type for updating data in table "challenge" */
+export type Challenge_Set_Input = {
+  challenge_type?: Maybe<Challenge_Type_Enum>;
+  created_at?: Maybe<Scalars['timestamptz']>;
+  daterange?: Maybe<Scalars['daterange']>;
+  id?: Maybe<Scalars['Int']>;
+  is_active?: Maybe<Scalars['Boolean']>;
+  rules?: Maybe<Scalars['json']>;
+};
+
+/** aggregate stddev on columns */
+export type Challenge_Stddev_Fields = {
+  __typename?: 'challenge_stddev_fields';
+  id?: Maybe<Scalars['Float']>;
+};
+
+/** order by stddev() on columns of table "challenge" */
+export type Challenge_Stddev_Order_By = {
+  id?: Maybe<Order_By>;
+};
+
+/** aggregate stddev_pop on columns */
+export type Challenge_Stddev_Pop_Fields = {
+  __typename?: 'challenge_stddev_pop_fields';
+  id?: Maybe<Scalars['Float']>;
+};
+
+/** order by stddev_pop() on columns of table "challenge" */
+export type Challenge_Stddev_Pop_Order_By = {
+  id?: Maybe<Order_By>;
+};
+
+/** aggregate stddev_samp on columns */
+export type Challenge_Stddev_Samp_Fields = {
+  __typename?: 'challenge_stddev_samp_fields';
+  id?: Maybe<Scalars['Float']>;
+};
+
+/** order by stddev_samp() on columns of table "challenge" */
+export type Challenge_Stddev_Samp_Order_By = {
+  id?: Maybe<Order_By>;
+};
+
+/** aggregate sum on columns */
+export type Challenge_Sum_Fields = {
+  __typename?: 'challenge_sum_fields';
+  id?: Maybe<Scalars['Int']>;
+};
+
+/** order by sum() on columns of table "challenge" */
+export type Challenge_Sum_Order_By = {
+  id?: Maybe<Order_By>;
+};
+
 /** columns and relationships of "challenge_type" */
 export type Challenge_Type = {
   __typename?: 'challenge_type';
   description?: Maybe<Scalars['String']>;
   name: Scalars['String'];
-  rules?: Maybe<Scalars['json']>;
-};
-
-/** columns and relationships of "challenge_type" */
-export type Challenge_TypeRulesArgs = {
-  path?: Maybe<Scalars['String']>;
 };
 
 /** aggregated selection of "challenge_type" */
@@ -1364,7 +1863,6 @@ export type Challenge_Type_Bool_Exp = {
   _or?: Maybe<Array<Maybe<Challenge_Type_Bool_Exp>>>;
   description?: Maybe<String_Comparison_Exp>;
   name?: Maybe<String_Comparison_Exp>;
-  rules?: Maybe<Json_Comparison_Exp>;
 };
 
 /** unique or primary key constraints on table "challenge_type" */
@@ -1375,11 +1873,23 @@ export enum Challenge_Type_Constraint {
   ChallengeTypePkey = 'challenge_type_pkey',
 }
 
+export enum Challenge_Type_Enum {
+  Score = 'SCORE',
+}
+
+/** expression to compare columns of type challenge_type_enum. All fields are combined with logical 'AND'. */
+export type Challenge_Type_Enum_Comparison_Exp = {
+  _eq?: Maybe<Challenge_Type_Enum>;
+  _in?: Maybe<Array<Challenge_Type_Enum>>;
+  _is_null?: Maybe<Scalars['Boolean']>;
+  _neq?: Maybe<Challenge_Type_Enum>;
+  _nin?: Maybe<Array<Challenge_Type_Enum>>;
+};
+
 /** input type for inserting data into table "challenge_type" */
 export type Challenge_Type_Insert_Input = {
   description?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
-  rules?: Maybe<Scalars['json']>;
 };
 
 /** aggregate max on columns */
@@ -1434,7 +1944,6 @@ export type Challenge_Type_On_Conflict = {
 export type Challenge_Type_Order_By = {
   description?: Maybe<Order_By>;
   name?: Maybe<Order_By>;
-  rules?: Maybe<Order_By>;
 };
 
 /** primary key columns input for table: "challenge_type" */
@@ -1448,15 +1957,12 @@ export enum Challenge_Type_Select_Column {
   Description = 'description',
   /** column name */
   Name = 'name',
-  /** column name */
-  Rules = 'rules',
 }
 
 /** input type for updating data in table "challenge_type" */
 export type Challenge_Type_Set_Input = {
   description?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
-  rules?: Maybe<Scalars['json']>;
 };
 
 /** update columns of table "challenge_type" */
@@ -1465,9 +1971,56 @@ export enum Challenge_Type_Update_Column {
   Description = 'description',
   /** column name */
   Name = 'name',
+}
+
+/** update columns of table "challenge" */
+export enum Challenge_Update_Column {
+  /** column name */
+  ChallengeType = 'challenge_type',
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  Daterange = 'daterange',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  IsActive = 'is_active',
   /** column name */
   Rules = 'rules',
 }
+
+/** aggregate var_pop on columns */
+export type Challenge_Var_Pop_Fields = {
+  __typename?: 'challenge_var_pop_fields';
+  id?: Maybe<Scalars['Float']>;
+};
+
+/** order by var_pop() on columns of table "challenge" */
+export type Challenge_Var_Pop_Order_By = {
+  id?: Maybe<Order_By>;
+};
+
+/** aggregate var_samp on columns */
+export type Challenge_Var_Samp_Fields = {
+  __typename?: 'challenge_var_samp_fields';
+  id?: Maybe<Scalars['Float']>;
+};
+
+/** order by var_samp() on columns of table "challenge" */
+export type Challenge_Var_Samp_Order_By = {
+  id?: Maybe<Order_By>;
+};
+
+/** aggregate variance on columns */
+export type Challenge_Variance_Fields = {
+  __typename?: 'challenge_variance_fields';
+  id?: Maybe<Scalars['Float']>;
+};
+
+/** order by variance() on columns of table "challenge" */
+export type Challenge_Variance_Order_By = {
+  id?: Maybe<Order_By>;
+};
 
 /** columns and relationships of "comments" */
 export type Comments = {
@@ -2984,6 +3537,14 @@ export type Mutation_Root = {
   delete_categories?: Maybe<Categories_Mutation_Response>;
   /** delete single row from the table: "categories" */
   delete_categories_by_pk?: Maybe<Categories>;
+  /** delete data from the table: "challenge" */
+  delete_challenge?: Maybe<Challenge_Mutation_Response>;
+  /** delete single row from the table: "challenge" */
+  delete_challenge_by_pk?: Maybe<Challenge>;
+  /** delete data from the table: "challenge_participant" */
+  delete_challenge_participant?: Maybe<Challenge_Participant_Mutation_Response>;
+  /** delete single row from the table: "challenge_participant" */
+  delete_challenge_participant_by_pk?: Maybe<Challenge_Participant>;
   /** delete data from the table: "challenge_type" */
   delete_challenge_type?: Maybe<Challenge_Type_Mutation_Response>;
   /** delete single row from the table: "challenge_type" */
@@ -3014,10 +3575,6 @@ export type Mutation_Root = {
   delete_user_achievement?: Maybe<User_Achievement_Mutation_Response>;
   /** delete single row from the table: "user_achievement" */
   delete_user_achievement_by_pk?: Maybe<User_Achievement>;
-  /** delete data from the table: "user_challenge" */
-  delete_user_challenge?: Maybe<User_Challenge_Mutation_Response>;
-  /** delete single row from the table: "user_challenge" */
-  delete_user_challenge_by_pk?: Maybe<User_Challenge>;
   /** delete data from the table: "users" */
   delete_users?: Maybe<Users_Mutation_Response>;
   /** insert data into the table: "achievement" */
@@ -3036,6 +3593,14 @@ export type Mutation_Root = {
   insert_categories?: Maybe<Categories_Mutation_Response>;
   /** insert a single row into the table: "categories" */
   insert_categories_one?: Maybe<Categories>;
+  /** insert data into the table: "challenge" */
+  insert_challenge?: Maybe<Challenge_Mutation_Response>;
+  /** insert a single row into the table: "challenge" */
+  insert_challenge_one?: Maybe<Challenge>;
+  /** insert data into the table: "challenge_participant" */
+  insert_challenge_participant?: Maybe<Challenge_Participant_Mutation_Response>;
+  /** insert a single row into the table: "challenge_participant" */
+  insert_challenge_participant_one?: Maybe<Challenge_Participant>;
   /** insert data into the table: "challenge_type" */
   insert_challenge_type?: Maybe<Challenge_Type_Mutation_Response>;
   /** insert a single row into the table: "challenge_type" */
@@ -3066,10 +3631,6 @@ export type Mutation_Root = {
   insert_user_achievement?: Maybe<User_Achievement_Mutation_Response>;
   /** insert a single row into the table: "user_achievement" */
   insert_user_achievement_one?: Maybe<User_Achievement>;
-  /** insert data into the table: "user_challenge" */
-  insert_user_challenge?: Maybe<User_Challenge_Mutation_Response>;
-  /** insert a single row into the table: "user_challenge" */
-  insert_user_challenge_one?: Maybe<User_Challenge>;
   /** insert data into the table: "users" */
   insert_users?: Maybe<Users_Mutation_Response>;
   /** update data of the table: "achievement" */
@@ -3088,6 +3649,14 @@ export type Mutation_Root = {
   update_categories?: Maybe<Categories_Mutation_Response>;
   /** update single row of the table: "categories" */
   update_categories_by_pk?: Maybe<Categories>;
+  /** update data of the table: "challenge" */
+  update_challenge?: Maybe<Challenge_Mutation_Response>;
+  /** update single row of the table: "challenge" */
+  update_challenge_by_pk?: Maybe<Challenge>;
+  /** update data of the table: "challenge_participant" */
+  update_challenge_participant?: Maybe<Challenge_Participant_Mutation_Response>;
+  /** update single row of the table: "challenge_participant" */
+  update_challenge_participant_by_pk?: Maybe<Challenge_Participant>;
   /** update data of the table: "challenge_type" */
   update_challenge_type?: Maybe<Challenge_Type_Mutation_Response>;
   /** update single row of the table: "challenge_type" */
@@ -3118,10 +3687,6 @@ export type Mutation_Root = {
   update_user_achievement?: Maybe<User_Achievement_Mutation_Response>;
   /** update single row of the table: "user_achievement" */
   update_user_achievement_by_pk?: Maybe<User_Achievement>;
-  /** update data of the table: "user_challenge" */
-  update_user_challenge?: Maybe<User_Challenge_Mutation_Response>;
-  /** update single row of the table: "user_challenge" */
-  update_user_challenge_by_pk?: Maybe<User_Challenge>;
   /** update data of the table: "users" */
   update_users?: Maybe<Users_Mutation_Response>;
 };
@@ -3164,6 +3729,27 @@ export type Mutation_RootDelete_CategoriesArgs = {
 /** mutation root */
 export type Mutation_RootDelete_Categories_By_PkArgs = {
   name: Scalars['String'];
+};
+
+/** mutation root */
+export type Mutation_RootDelete_ChallengeArgs = {
+  where: Challenge_Bool_Exp;
+};
+
+/** mutation root */
+export type Mutation_RootDelete_Challenge_By_PkArgs = {
+  id: Scalars['Int'];
+};
+
+/** mutation root */
+export type Mutation_RootDelete_Challenge_ParticipantArgs = {
+  where: Challenge_Participant_Bool_Exp;
+};
+
+/** mutation root */
+export type Mutation_RootDelete_Challenge_Participant_By_PkArgs = {
+  challenge_id: Scalars['Int'];
+  user_id: Scalars['String'];
 };
 
 /** mutation root */
@@ -3245,16 +3831,6 @@ export type Mutation_RootDelete_User_Achievement_By_PkArgs = {
 };
 
 /** mutation root */
-export type Mutation_RootDelete_User_ChallengeArgs = {
-  where: User_Challenge_Bool_Exp;
-};
-
-/** mutation root */
-export type Mutation_RootDelete_User_Challenge_By_PkArgs = {
-  id: Scalars['Int'];
-};
-
-/** mutation root */
 export type Mutation_RootDelete_UsersArgs = {
   where: Users_Bool_Exp;
 };
@@ -3305,6 +3881,30 @@ export type Mutation_RootInsert_CategoriesArgs = {
 export type Mutation_RootInsert_Categories_OneArgs = {
   object: Categories_Insert_Input;
   on_conflict?: Maybe<Categories_On_Conflict>;
+};
+
+/** mutation root */
+export type Mutation_RootInsert_ChallengeArgs = {
+  objects: Array<Challenge_Insert_Input>;
+  on_conflict?: Maybe<Challenge_On_Conflict>;
+};
+
+/** mutation root */
+export type Mutation_RootInsert_Challenge_OneArgs = {
+  object: Challenge_Insert_Input;
+  on_conflict?: Maybe<Challenge_On_Conflict>;
+};
+
+/** mutation root */
+export type Mutation_RootInsert_Challenge_ParticipantArgs = {
+  objects: Array<Challenge_Participant_Insert_Input>;
+  on_conflict?: Maybe<Challenge_Participant_On_Conflict>;
+};
+
+/** mutation root */
+export type Mutation_RootInsert_Challenge_Participant_OneArgs = {
+  object: Challenge_Participant_Insert_Input;
+  on_conflict?: Maybe<Challenge_Participant_On_Conflict>;
 };
 
 /** mutation root */
@@ -3398,18 +3998,6 @@ export type Mutation_RootInsert_User_Achievement_OneArgs = {
 };
 
 /** mutation root */
-export type Mutation_RootInsert_User_ChallengeArgs = {
-  objects: Array<User_Challenge_Insert_Input>;
-  on_conflict?: Maybe<User_Challenge_On_Conflict>;
-};
-
-/** mutation root */
-export type Mutation_RootInsert_User_Challenge_OneArgs = {
-  object: User_Challenge_Insert_Input;
-  on_conflict?: Maybe<User_Challenge_On_Conflict>;
-};
-
-/** mutation root */
 export type Mutation_RootInsert_UsersArgs = {
   objects: Array<Users_Insert_Input>;
   on_conflict?: Maybe<Users_On_Conflict>;
@@ -3467,6 +4055,34 @@ export type Mutation_RootUpdate_Categories_By_PkArgs = {
   _inc?: Maybe<Categories_Inc_Input>;
   _set?: Maybe<Categories_Set_Input>;
   pk_columns: Categories_Pk_Columns_Input;
+};
+
+/** mutation root */
+export type Mutation_RootUpdate_ChallengeArgs = {
+  _inc?: Maybe<Challenge_Inc_Input>;
+  _set?: Maybe<Challenge_Set_Input>;
+  where: Challenge_Bool_Exp;
+};
+
+/** mutation root */
+export type Mutation_RootUpdate_Challenge_By_PkArgs = {
+  _inc?: Maybe<Challenge_Inc_Input>;
+  _set?: Maybe<Challenge_Set_Input>;
+  pk_columns: Challenge_Pk_Columns_Input;
+};
+
+/** mutation root */
+export type Mutation_RootUpdate_Challenge_ParticipantArgs = {
+  _inc?: Maybe<Challenge_Participant_Inc_Input>;
+  _set?: Maybe<Challenge_Participant_Set_Input>;
+  where: Challenge_Participant_Bool_Exp;
+};
+
+/** mutation root */
+export type Mutation_RootUpdate_Challenge_Participant_By_PkArgs = {
+  _inc?: Maybe<Challenge_Participant_Inc_Input>;
+  _set?: Maybe<Challenge_Participant_Set_Input>;
+  pk_columns: Challenge_Participant_Pk_Columns_Input;
 };
 
 /** mutation root */
@@ -3568,20 +4184,6 @@ export type Mutation_RootUpdate_User_Achievement_By_PkArgs = {
 };
 
 /** mutation root */
-export type Mutation_RootUpdate_User_ChallengeArgs = {
-  _inc?: Maybe<User_Challenge_Inc_Input>;
-  _set?: Maybe<User_Challenge_Set_Input>;
-  where: User_Challenge_Bool_Exp;
-};
-
-/** mutation root */
-export type Mutation_RootUpdate_User_Challenge_By_PkArgs = {
-  _inc?: Maybe<User_Challenge_Inc_Input>;
-  _set?: Maybe<User_Challenge_Set_Input>;
-  pk_columns: User_Challenge_Pk_Columns_Input;
-};
-
-/** mutation root */
 export type Mutation_RootUpdate_UsersArgs = {
   _set?: Maybe<Users_Set_Input>;
   where: Users_Bool_Exp;
@@ -3630,6 +4232,18 @@ export type Query_Root = {
   categories_aggregate: Categories_Aggregate;
   /** fetch data from the table: "categories" using primary key columns */
   categories_by_pk?: Maybe<Categories>;
+  /** fetch data from the table: "challenge" */
+  challenge: Array<Challenge>;
+  /** fetch aggregated fields from the table: "challenge" */
+  challenge_aggregate: Challenge_Aggregate;
+  /** fetch data from the table: "challenge" using primary key columns */
+  challenge_by_pk?: Maybe<Challenge>;
+  /** fetch data from the table: "challenge_participant" */
+  challenge_participant: Array<Challenge_Participant>;
+  /** fetch aggregated fields from the table: "challenge_participant" */
+  challenge_participant_aggregate: Challenge_Participant_Aggregate;
+  /** fetch data from the table: "challenge_participant" using primary key columns */
+  challenge_participant_by_pk?: Maybe<Challenge_Participant>;
   /** fetch data from the table: "challenge_type" */
   challenge_type: Array<Challenge_Type>;
   /** fetch aggregated fields from the table: "challenge_type" */
@@ -3678,12 +4292,6 @@ export type Query_Root = {
   user_achievement_aggregate: User_Achievement_Aggregate;
   /** fetch data from the table: "user_achievement" using primary key columns */
   user_achievement_by_pk?: Maybe<User_Achievement>;
-  /** fetch data from the table: "user_challenge" */
-  user_challenge: Array<User_Challenge>;
-  /** fetch aggregated fields from the table: "user_challenge" */
-  user_challenge_aggregate: User_Challenge_Aggregate;
-  /** fetch data from the table: "user_challenge" using primary key columns */
-  user_challenge_by_pk?: Maybe<User_Challenge>;
   /** fetch data from the table: "users" */
   users: Array<Users>;
   /** fetch aggregated fields from the table: "users" */
@@ -3780,6 +4388,53 @@ export type Query_RootCategories_AggregateArgs = {
 /** query root */
 export type Query_RootCategories_By_PkArgs = {
   name: Scalars['String'];
+};
+
+/** query root */
+export type Query_RootChallengeArgs = {
+  distinct_on?: Maybe<Array<Challenge_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Challenge_Order_By>>;
+  where?: Maybe<Challenge_Bool_Exp>;
+};
+
+/** query root */
+export type Query_RootChallenge_AggregateArgs = {
+  distinct_on?: Maybe<Array<Challenge_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Challenge_Order_By>>;
+  where?: Maybe<Challenge_Bool_Exp>;
+};
+
+/** query root */
+export type Query_RootChallenge_By_PkArgs = {
+  id: Scalars['Int'];
+};
+
+/** query root */
+export type Query_RootChallenge_ParticipantArgs = {
+  distinct_on?: Maybe<Array<Challenge_Participant_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Challenge_Participant_Order_By>>;
+  where?: Maybe<Challenge_Participant_Bool_Exp>;
+};
+
+/** query root */
+export type Query_RootChallenge_Participant_AggregateArgs = {
+  distinct_on?: Maybe<Array<Challenge_Participant_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Challenge_Participant_Order_By>>;
+  where?: Maybe<Challenge_Participant_Bool_Exp>;
+};
+
+/** query root */
+export type Query_RootChallenge_Participant_By_PkArgs = {
+  challenge_id: Scalars['Int'];
+  user_id: Scalars['String'];
 };
 
 /** query root */
@@ -3972,29 +4627,6 @@ export type Query_RootUser_Achievement_By_PkArgs = {
 };
 
 /** query root */
-export type Query_RootUser_ChallengeArgs = {
-  distinct_on?: Maybe<Array<User_Challenge_Select_Column>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  order_by?: Maybe<Array<User_Challenge_Order_By>>;
-  where?: Maybe<User_Challenge_Bool_Exp>;
-};
-
-/** query root */
-export type Query_RootUser_Challenge_AggregateArgs = {
-  distinct_on?: Maybe<Array<User_Challenge_Select_Column>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  order_by?: Maybe<Array<User_Challenge_Order_By>>;
-  where?: Maybe<User_Challenge_Bool_Exp>;
-};
-
-/** query root */
-export type Query_RootUser_Challenge_By_PkArgs = {
-  id: Scalars['Int'];
-};
-
-/** query root */
 export type Query_RootUsersArgs = {
   distinct_on?: Maybe<Array<Users_Select_Column>>;
   limit?: Maybe<Scalars['Int']>;
@@ -4039,6 +4671,18 @@ export type Subscription_Root = {
   categories_aggregate: Categories_Aggregate;
   /** fetch data from the table: "categories" using primary key columns */
   categories_by_pk?: Maybe<Categories>;
+  /** fetch data from the table: "challenge" */
+  challenge: Array<Challenge>;
+  /** fetch aggregated fields from the table: "challenge" */
+  challenge_aggregate: Challenge_Aggregate;
+  /** fetch data from the table: "challenge" using primary key columns */
+  challenge_by_pk?: Maybe<Challenge>;
+  /** fetch data from the table: "challenge_participant" */
+  challenge_participant: Array<Challenge_Participant>;
+  /** fetch aggregated fields from the table: "challenge_participant" */
+  challenge_participant_aggregate: Challenge_Participant_Aggregate;
+  /** fetch data from the table: "challenge_participant" using primary key columns */
+  challenge_participant_by_pk?: Maybe<Challenge_Participant>;
   /** fetch data from the table: "challenge_type" */
   challenge_type: Array<Challenge_Type>;
   /** fetch aggregated fields from the table: "challenge_type" */
@@ -4087,12 +4731,6 @@ export type Subscription_Root = {
   user_achievement_aggregate: User_Achievement_Aggregate;
   /** fetch data from the table: "user_achievement" using primary key columns */
   user_achievement_by_pk?: Maybe<User_Achievement>;
-  /** fetch data from the table: "user_challenge" */
-  user_challenge: Array<User_Challenge>;
-  /** fetch aggregated fields from the table: "user_challenge" */
-  user_challenge_aggregate: User_Challenge_Aggregate;
-  /** fetch data from the table: "user_challenge" using primary key columns */
-  user_challenge_by_pk?: Maybe<User_Challenge>;
   /** fetch data from the table: "users" */
   users: Array<Users>;
   /** fetch aggregated fields from the table: "users" */
@@ -4189,6 +4827,53 @@ export type Subscription_RootCategories_AggregateArgs = {
 /** subscription root */
 export type Subscription_RootCategories_By_PkArgs = {
   name: Scalars['String'];
+};
+
+/** subscription root */
+export type Subscription_RootChallengeArgs = {
+  distinct_on?: Maybe<Array<Challenge_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Challenge_Order_By>>;
+  where?: Maybe<Challenge_Bool_Exp>;
+};
+
+/** subscription root */
+export type Subscription_RootChallenge_AggregateArgs = {
+  distinct_on?: Maybe<Array<Challenge_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Challenge_Order_By>>;
+  where?: Maybe<Challenge_Bool_Exp>;
+};
+
+/** subscription root */
+export type Subscription_RootChallenge_By_PkArgs = {
+  id: Scalars['Int'];
+};
+
+/** subscription root */
+export type Subscription_RootChallenge_ParticipantArgs = {
+  distinct_on?: Maybe<Array<Challenge_Participant_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Challenge_Participant_Order_By>>;
+  where?: Maybe<Challenge_Participant_Bool_Exp>;
+};
+
+/** subscription root */
+export type Subscription_RootChallenge_Participant_AggregateArgs = {
+  distinct_on?: Maybe<Array<Challenge_Participant_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Challenge_Participant_Order_By>>;
+  where?: Maybe<Challenge_Participant_Bool_Exp>;
+};
+
+/** subscription root */
+export type Subscription_RootChallenge_Participant_By_PkArgs = {
+  challenge_id: Scalars['Int'];
+  user_id: Scalars['String'];
 };
 
 /** subscription root */
@@ -4378,29 +5063,6 @@ export type Subscription_RootUser_Achievement_AggregateArgs = {
 export type Subscription_RootUser_Achievement_By_PkArgs = {
   achievement_id: Scalars['Int'];
   user_id: Scalars['String'];
-};
-
-/** subscription root */
-export type Subscription_RootUser_ChallengeArgs = {
-  distinct_on?: Maybe<Array<User_Challenge_Select_Column>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  order_by?: Maybe<Array<User_Challenge_Order_By>>;
-  where?: Maybe<User_Challenge_Bool_Exp>;
-};
-
-/** subscription root */
-export type Subscription_RootUser_Challenge_AggregateArgs = {
-  distinct_on?: Maybe<Array<User_Challenge_Select_Column>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  order_by?: Maybe<Array<User_Challenge_Order_By>>;
-  where?: Maybe<User_Challenge_Bool_Exp>;
-};
-
-/** subscription root */
-export type Subscription_RootUser_Challenge_By_PkArgs = {
-  id: Scalars['Int'];
 };
 
 /** subscription root */
@@ -4725,329 +5387,6 @@ export type User_Achievement_Variance_Fields = {
 /** order by variance() on columns of table "user_achievement" */
 export type User_Achievement_Variance_Order_By = {
   achievement_id?: Maybe<Order_By>;
-};
-
-/** columns and relationships of "user_challenge" */
-export type User_Challenge = {
-  __typename?: 'user_challenge';
-  challenge_type: Scalars['String'];
-  challenger_uid: Scalars['String'];
-  created_at: Scalars['timestamptz'];
-  daterange?: Maybe<Scalars['daterange']>;
-  id: Scalars['Int'];
-  is_active: Scalars['Boolean'];
-  receiver_uid: Scalars['String'];
-  rules?: Maybe<Scalars['json']>;
-};
-
-/** columns and relationships of "user_challenge" */
-export type User_ChallengeRulesArgs = {
-  path?: Maybe<Scalars['String']>;
-};
-
-/** aggregated selection of "user_challenge" */
-export type User_Challenge_Aggregate = {
-  __typename?: 'user_challenge_aggregate';
-  aggregate?: Maybe<User_Challenge_Aggregate_Fields>;
-  nodes: Array<User_Challenge>;
-};
-
-/** aggregate fields of "user_challenge" */
-export type User_Challenge_Aggregate_Fields = {
-  __typename?: 'user_challenge_aggregate_fields';
-  avg?: Maybe<User_Challenge_Avg_Fields>;
-  count?: Maybe<Scalars['Int']>;
-  max?: Maybe<User_Challenge_Max_Fields>;
-  min?: Maybe<User_Challenge_Min_Fields>;
-  stddev?: Maybe<User_Challenge_Stddev_Fields>;
-  stddev_pop?: Maybe<User_Challenge_Stddev_Pop_Fields>;
-  stddev_samp?: Maybe<User_Challenge_Stddev_Samp_Fields>;
-  sum?: Maybe<User_Challenge_Sum_Fields>;
-  var_pop?: Maybe<User_Challenge_Var_Pop_Fields>;
-  var_samp?: Maybe<User_Challenge_Var_Samp_Fields>;
-  variance?: Maybe<User_Challenge_Variance_Fields>;
-};
-
-/** aggregate fields of "user_challenge" */
-export type User_Challenge_Aggregate_FieldsCountArgs = {
-  columns?: Maybe<Array<User_Challenge_Select_Column>>;
-  distinct?: Maybe<Scalars['Boolean']>;
-};
-
-/** order by aggregate values of table "user_challenge" */
-export type User_Challenge_Aggregate_Order_By = {
-  avg?: Maybe<User_Challenge_Avg_Order_By>;
-  count?: Maybe<Order_By>;
-  max?: Maybe<User_Challenge_Max_Order_By>;
-  min?: Maybe<User_Challenge_Min_Order_By>;
-  stddev?: Maybe<User_Challenge_Stddev_Order_By>;
-  stddev_pop?: Maybe<User_Challenge_Stddev_Pop_Order_By>;
-  stddev_samp?: Maybe<User_Challenge_Stddev_Samp_Order_By>;
-  sum?: Maybe<User_Challenge_Sum_Order_By>;
-  var_pop?: Maybe<User_Challenge_Var_Pop_Order_By>;
-  var_samp?: Maybe<User_Challenge_Var_Samp_Order_By>;
-  variance?: Maybe<User_Challenge_Variance_Order_By>;
-};
-
-/** input type for inserting array relation for remote table "user_challenge" */
-export type User_Challenge_Arr_Rel_Insert_Input = {
-  data: Array<User_Challenge_Insert_Input>;
-  on_conflict?: Maybe<User_Challenge_On_Conflict>;
-};
-
-/** aggregate avg on columns */
-export type User_Challenge_Avg_Fields = {
-  __typename?: 'user_challenge_avg_fields';
-  id?: Maybe<Scalars['Float']>;
-};
-
-/** order by avg() on columns of table "user_challenge" */
-export type User_Challenge_Avg_Order_By = {
-  id?: Maybe<Order_By>;
-};
-
-/** Boolean expression to filter rows from the table "user_challenge". All fields are combined with a logical 'AND'. */
-export type User_Challenge_Bool_Exp = {
-  _and?: Maybe<Array<Maybe<User_Challenge_Bool_Exp>>>;
-  _not?: Maybe<User_Challenge_Bool_Exp>;
-  _or?: Maybe<Array<Maybe<User_Challenge_Bool_Exp>>>;
-  challenge_type?: Maybe<String_Comparison_Exp>;
-  challenger_uid?: Maybe<String_Comparison_Exp>;
-  created_at?: Maybe<Timestamptz_Comparison_Exp>;
-  daterange?: Maybe<Daterange_Comparison_Exp>;
-  id?: Maybe<Int_Comparison_Exp>;
-  is_active?: Maybe<Boolean_Comparison_Exp>;
-  receiver_uid?: Maybe<String_Comparison_Exp>;
-  rules?: Maybe<Json_Comparison_Exp>;
-};
-
-/** unique or primary key constraints on table "user_challenge" */
-export enum User_Challenge_Constraint {
-  /** unique or primary key constraint */
-  UserChallengePkey = 'user_challenge_pkey',
-}
-
-/** input type for incrementing integer column in table "user_challenge" */
-export type User_Challenge_Inc_Input = {
-  id?: Maybe<Scalars['Int']>;
-};
-
-/** input type for inserting data into table "user_challenge" */
-export type User_Challenge_Insert_Input = {
-  challenge_type?: Maybe<Scalars['String']>;
-  challenger_uid?: Maybe<Scalars['String']>;
-  created_at?: Maybe<Scalars['timestamptz']>;
-  daterange?: Maybe<Scalars['daterange']>;
-  id?: Maybe<Scalars['Int']>;
-  is_active?: Maybe<Scalars['Boolean']>;
-  receiver_uid?: Maybe<Scalars['String']>;
-  rules?: Maybe<Scalars['json']>;
-};
-
-/** aggregate max on columns */
-export type User_Challenge_Max_Fields = {
-  __typename?: 'user_challenge_max_fields';
-  challenge_type?: Maybe<Scalars['String']>;
-  challenger_uid?: Maybe<Scalars['String']>;
-  created_at?: Maybe<Scalars['timestamptz']>;
-  id?: Maybe<Scalars['Int']>;
-  receiver_uid?: Maybe<Scalars['String']>;
-};
-
-/** order by max() on columns of table "user_challenge" */
-export type User_Challenge_Max_Order_By = {
-  challenge_type?: Maybe<Order_By>;
-  challenger_uid?: Maybe<Order_By>;
-  created_at?: Maybe<Order_By>;
-  id?: Maybe<Order_By>;
-  receiver_uid?: Maybe<Order_By>;
-};
-
-/** aggregate min on columns */
-export type User_Challenge_Min_Fields = {
-  __typename?: 'user_challenge_min_fields';
-  challenge_type?: Maybe<Scalars['String']>;
-  challenger_uid?: Maybe<Scalars['String']>;
-  created_at?: Maybe<Scalars['timestamptz']>;
-  id?: Maybe<Scalars['Int']>;
-  receiver_uid?: Maybe<Scalars['String']>;
-};
-
-/** order by min() on columns of table "user_challenge" */
-export type User_Challenge_Min_Order_By = {
-  challenge_type?: Maybe<Order_By>;
-  challenger_uid?: Maybe<Order_By>;
-  created_at?: Maybe<Order_By>;
-  id?: Maybe<Order_By>;
-  receiver_uid?: Maybe<Order_By>;
-};
-
-/** response of any mutation on the table "user_challenge" */
-export type User_Challenge_Mutation_Response = {
-  __typename?: 'user_challenge_mutation_response';
-  /** number of affected rows by the mutation */
-  affected_rows: Scalars['Int'];
-  /** data of the affected rows by the mutation */
-  returning: Array<User_Challenge>;
-};
-
-/** input type for inserting object relation for remote table "user_challenge" */
-export type User_Challenge_Obj_Rel_Insert_Input = {
-  data: User_Challenge_Insert_Input;
-  on_conflict?: Maybe<User_Challenge_On_Conflict>;
-};
-
-/** on conflict condition type for table "user_challenge" */
-export type User_Challenge_On_Conflict = {
-  constraint: User_Challenge_Constraint;
-  update_columns: Array<User_Challenge_Update_Column>;
-  where?: Maybe<User_Challenge_Bool_Exp>;
-};
-
-/** ordering options when selecting data from "user_challenge" */
-export type User_Challenge_Order_By = {
-  challenge_type?: Maybe<Order_By>;
-  challenger_uid?: Maybe<Order_By>;
-  created_at?: Maybe<Order_By>;
-  daterange?: Maybe<Order_By>;
-  id?: Maybe<Order_By>;
-  is_active?: Maybe<Order_By>;
-  receiver_uid?: Maybe<Order_By>;
-  rules?: Maybe<Order_By>;
-};
-
-/** primary key columns input for table: "user_challenge" */
-export type User_Challenge_Pk_Columns_Input = {
-  id: Scalars['Int'];
-};
-
-/** select columns of table "user_challenge" */
-export enum User_Challenge_Select_Column {
-  /** column name */
-  ChallengeType = 'challenge_type',
-  /** column name */
-  ChallengerUid = 'challenger_uid',
-  /** column name */
-  CreatedAt = 'created_at',
-  /** column name */
-  Daterange = 'daterange',
-  /** column name */
-  Id = 'id',
-  /** column name */
-  IsActive = 'is_active',
-  /** column name */
-  ReceiverUid = 'receiver_uid',
-  /** column name */
-  Rules = 'rules',
-}
-
-/** input type for updating data in table "user_challenge" */
-export type User_Challenge_Set_Input = {
-  challenge_type?: Maybe<Scalars['String']>;
-  challenger_uid?: Maybe<Scalars['String']>;
-  created_at?: Maybe<Scalars['timestamptz']>;
-  daterange?: Maybe<Scalars['daterange']>;
-  id?: Maybe<Scalars['Int']>;
-  is_active?: Maybe<Scalars['Boolean']>;
-  receiver_uid?: Maybe<Scalars['String']>;
-  rules?: Maybe<Scalars['json']>;
-};
-
-/** aggregate stddev on columns */
-export type User_Challenge_Stddev_Fields = {
-  __typename?: 'user_challenge_stddev_fields';
-  id?: Maybe<Scalars['Float']>;
-};
-
-/** order by stddev() on columns of table "user_challenge" */
-export type User_Challenge_Stddev_Order_By = {
-  id?: Maybe<Order_By>;
-};
-
-/** aggregate stddev_pop on columns */
-export type User_Challenge_Stddev_Pop_Fields = {
-  __typename?: 'user_challenge_stddev_pop_fields';
-  id?: Maybe<Scalars['Float']>;
-};
-
-/** order by stddev_pop() on columns of table "user_challenge" */
-export type User_Challenge_Stddev_Pop_Order_By = {
-  id?: Maybe<Order_By>;
-};
-
-/** aggregate stddev_samp on columns */
-export type User_Challenge_Stddev_Samp_Fields = {
-  __typename?: 'user_challenge_stddev_samp_fields';
-  id?: Maybe<Scalars['Float']>;
-};
-
-/** order by stddev_samp() on columns of table "user_challenge" */
-export type User_Challenge_Stddev_Samp_Order_By = {
-  id?: Maybe<Order_By>;
-};
-
-/** aggregate sum on columns */
-export type User_Challenge_Sum_Fields = {
-  __typename?: 'user_challenge_sum_fields';
-  id?: Maybe<Scalars['Int']>;
-};
-
-/** order by sum() on columns of table "user_challenge" */
-export type User_Challenge_Sum_Order_By = {
-  id?: Maybe<Order_By>;
-};
-
-/** update columns of table "user_challenge" */
-export enum User_Challenge_Update_Column {
-  /** column name */
-  ChallengeType = 'challenge_type',
-  /** column name */
-  ChallengerUid = 'challenger_uid',
-  /** column name */
-  CreatedAt = 'created_at',
-  /** column name */
-  Daterange = 'daterange',
-  /** column name */
-  Id = 'id',
-  /** column name */
-  IsActive = 'is_active',
-  /** column name */
-  ReceiverUid = 'receiver_uid',
-  /** column name */
-  Rules = 'rules',
-}
-
-/** aggregate var_pop on columns */
-export type User_Challenge_Var_Pop_Fields = {
-  __typename?: 'user_challenge_var_pop_fields';
-  id?: Maybe<Scalars['Float']>;
-};
-
-/** order by var_pop() on columns of table "user_challenge" */
-export type User_Challenge_Var_Pop_Order_By = {
-  id?: Maybe<Order_By>;
-};
-
-/** aggregate var_samp on columns */
-export type User_Challenge_Var_Samp_Fields = {
-  __typename?: 'user_challenge_var_samp_fields';
-  id?: Maybe<Scalars['Float']>;
-};
-
-/** order by var_samp() on columns of table "user_challenge" */
-export type User_Challenge_Var_Samp_Order_By = {
-  id?: Maybe<Order_By>;
-};
-
-/** aggregate variance on columns */
-export type User_Challenge_Variance_Fields = {
-  __typename?: 'user_challenge_variance_fields';
-  id?: Maybe<Scalars['Float']>;
-};
-
-/** order by variance() on columns of table "user_challenge" */
-export type User_Challenge_Variance_Order_By = {
-  id?: Maybe<Order_By>;
 };
 
 /** columns and relationships of "users" */
