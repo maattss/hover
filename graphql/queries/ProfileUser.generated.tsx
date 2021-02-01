@@ -5749,7 +5749,7 @@ export type ProfileUserQuery = { readonly __typename: 'query_root' } & {
             }
           >;
         };
-        readonly health_score: { readonly __typename: 'activities_aggregate' } & {
+        readonly exercise_score: { readonly __typename: 'activities_aggregate' } & {
           readonly aggregate?: Types.Maybe<
             { readonly __typename: 'activities_aggregate_fields' } & {
               readonly sum?: Types.Maybe<
@@ -5800,7 +5800,7 @@ export const ProfileUserDocument = gql`
           }
         }
       }
-      health_score: activities_aggregate(where: { geofence: { category: { _eq: "HEALTH" } } }) {
+      exercise_score: activities_aggregate(where: { geofence: { category: { _eq: "EXERCISE" } } }) {
         aggregate {
           sum {
             score

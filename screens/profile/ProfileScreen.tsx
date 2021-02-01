@@ -20,6 +20,10 @@ const ProfileScreen: React.FC = () => {
     email: '',
     picture: Asset.fromModule(require('../../assets/images/user.png')).uri, // Default picture
     totalScore: 0,
+    educationScore: 0,
+    cultureScore: 0,
+    socialScore: 0,
+    exerciseScore: 0,
     achievements: [],
   });
 
@@ -48,6 +52,10 @@ const ProfileScreen: React.FC = () => {
             email: data.user.email ?? user.email,
             picture: data.user.picture ?? user.picture,
             totalScore: data.user.totalScore ?? user.totalScore,
+            educationScore: data.user.education_score.aggregate?.sum?.score ?? user.educationScore,
+            cultureScore: data.user.culture_score.aggregate?.sum?.score ?? user.cultureScore,
+            socialScore: data.user.social_score.aggregate?.sum?.score ?? user.socialScore,
+            exerciseScore: data.user.exercise_score.aggregate?.sum?.score ?? user.exerciseScore,
             achievements: achievements,
           });
         }
@@ -77,6 +85,20 @@ const ProfileScreen: React.FC = () => {
         );
       });
     };
+    const getScore = (category: GeoFenceCategory) => {
+      switch (category) {
+        case GeoFenceCategory.CULTURE:
+          return user.cultureScore;
+        case GeoFenceCategory.SOCIAL:
+          return user.socialScore;
+        case GeoFenceCategory.EXERCISE:
+          return user.exerciseScore;
+        case GeoFenceCategory.EDUCATION:
+          return user.educationScore;
+        default:
+          return 0;
+      }
+    };
     const renderScore = () => {
       const categoryColor = (category: GeoFenceCategory) => {
         return {
@@ -94,7 +116,7 @@ const ProfileScreen: React.FC = () => {
                 style={[styles.categoryIcon, categoryColor(categoryEnum)]}
                 name={getCategoryIconName(categoryEnum)}
               />
-              <Text style={{ ...Typography.headerText, textAlign: 'center' }}>200</Text>
+              <Text style={{ ...Typography.headerText, textAlign: 'center' }}>{getScore(categoryEnum)}</Text>
             </View>
           );
         });
@@ -207,7 +229,7 @@ const styles = StyleSheet.create({
     height: 80,
     width: 80,
     justifyContent: 'center',
-    backgroundColor: Colors.gold,
+    backgroundColor: Colors.bronze,
     borderRadius: Spacing.extraLarge,
     margin: Spacing.smaller,
   },
