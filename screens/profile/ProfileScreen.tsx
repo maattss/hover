@@ -8,6 +8,7 @@ import { convertToProfileUser } from '../../helpers/objectMappers';
 import useAuthentication from '../../hooks/useAuthentication';
 import { Colors, Spacing, Typography } from '../../theme';
 import { UserProfile, Achievement } from '../../types/profileTypes';
+import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 
 const ProfileScreen: React.FC = () => {
   const id = useAuthentication().user?.uid;
@@ -66,11 +67,15 @@ const ProfileScreen: React.FC = () => {
       return user.achievements.map((achievement, index) => {
         return (
           <View key={index} style={styles.achievement}>
+            <View style={styles.achievementTrophy}>
+              <FAIcon name={'star'} style={styles.achievementIcon}></FAIcon>
+            </View>
             <Text style={{ ...Typography.largeBodyText }}>{achievement.name}</Text>
           </View>
         );
       });
     };
+
     return (
       <ScrollView style={styles.container}>
         <View style={styles.topContainer}>
@@ -82,7 +87,7 @@ const ProfileScreen: React.FC = () => {
         </View>
         <View style={styles.scoreContainer}>
           <Text style={styles.score}>Score</Text>
-          <Text style={styles.score}>{user.totalScore}</Text>
+          <Text style={styles.score}>Total: {user.totalScore}</Text>
         </View>
         <Text style={styles.score}>Achievements</Text>
         <ScrollView style={styles.achievementsContainer} horizontal={true}>
@@ -132,23 +137,29 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   scoreContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
     marginVertical: Spacing.small,
   },
   score: {
     ...Typography.headerText,
   },
   achievementsContainer: {
-    height: 100,
+    height: 120,
+  },
+  achievementTrophy: {
+    height: 80,
+    width: 80,
+    justifyContent: 'center',
+    backgroundColor: Colors.gold,
+    borderRadius: Spacing.extraLarge,
+    margin: Spacing.smaller,
   },
   achievement: {
-    height: 100,
-    width: 100,
-    padding: Spacing.smallest,
-    backgroundColor: Colors.gray900,
-    borderRadius: Spacing.extraLarge,
-    marginRight: Spacing.small,
+    alignItems: 'center',
+  },
+  achievementIcon: {
+    fontSize: 45,
+    textAlign: 'center',
+    color: Colors.almostWhite,
   },
 });
 
