@@ -5,11 +5,13 @@ query ProfileUser($id: String!) {
     name
     picture
     totalScore
-    user_achievement {
+    user_achievement(order_by: { created_at: asc }) {
       achievement {
         description
         name
         achievement_type
+        level
+        created_at
       }
     }
   }

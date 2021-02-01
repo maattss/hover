@@ -14,7 +14,7 @@ const ProfileScreen: React.FC = () => {
     name: '',
     bio: '',
     email: '',
-    picture: '',
+    picture: 'https://www.kindpng.com/picc/m/78-785827_user-profile-avatar-login-account-male-user-icon.png', // Default picture
     totalScore: 0,
     achievements: [],
   });
@@ -28,20 +28,23 @@ const ProfileScreen: React.FC = () => {
     useEffect(() => {
       if (data) {
         if (data.user) {
+          const achievements: Achievement[] = [];
+          data.user.user_achievement.forEach((obj) => {
+            achievements.push({
+              description: obj.achievement.description ?? '',
+              name: obj.achievement.name ?? '',
+              level: obj.achievement.level ?? 3,
+              createdAt: obj.achievement.created_at ?? '',
+              achievementType: obj.achievement.achievement_type ?? '',
+            });
+          });
           setUser({
             name: data.user.name ?? user.name,
             bio: data.user.bio ?? user.bio,
             email: data.user.email ?? user.email,
             picture: data.user.picture ?? user.picture,
             totalScore: data.user.totalScore ?? user.totalScore,
-            achievements: [],
-          });
-          const achievements: Achievement[] = [];
-          data.user.user_achievement.forEach((obj) => {
-            achievements.push({
-              description: obj.achievement.description ?? '',
-              name: obj.achievement.name ?? '',
-            });
+            achievements: achievements,
           });
         }
         // achivementType: obj.achievement.achievement_type,
@@ -58,7 +61,15 @@ const ProfileScreen: React.FC = () => {
           <ActivityIndicator size={'large'} color={Colors.blue} />
         </View>
       );
-
+    const renderAchievements = () => {
+      return user.achievements.map((achievement, index) => {
+        return (
+          <View key={index} style={styles.achievement}>
+            <Text style={{ ...Typography.largeBodyText }}>{achievement.name}</Text>
+          </View>
+        );
+      });
+    };
     return (
       <ScrollView style={styles.container}>
         <View style={styles.topContainer}>
@@ -70,10 +81,12 @@ const ProfileScreen: React.FC = () => {
         </View>
         <View style={styles.scoreContainer}>
           <Text style={styles.score}>Score: {user.totalScore}</Text>
+          <Text style={styles.score}>Score: {user.totalScore}</Text>
         </View>
-        <View style={styles.achievementsContainer}>
-          <Text style={styles.score}>Achievements</Text>
-        </View>
+        <Text style={styles.score}>Achievements</Text>
+        <ScrollView style={styles.achievementsContainer} horizontal={true}>
+          {renderAchievements()}
+        </ScrollView>
       </ScrollView>
     );
   }
@@ -124,7 +137,17 @@ const styles = StyleSheet.create({
   score: {
     ...Typography.headerText,
   },
-  achievementsContainer: {},
+  achievementsContainer: {
+    height: 100,
+  },
+  achievement: {
+    height: 100,
+    width: 100,
+    padding: Spacing.smallest,
+    backgroundColor: Colors.gray900,
+    borderRadius: Spacing.extraLarge,
+    marginRight: Spacing.small,
+  },
 });
 
 export default ProfileScreen;

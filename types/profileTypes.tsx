@@ -12,6 +12,7 @@ export type UserProfile = {
 export type Achievement = {
   description: string;
   name: string;
-  achievementType?: AchievementType;
+  achievementType?: string;
   createdAt?: string;
+  level: number;
 };

@@ -15,11 +15,25 @@ export type Scalars = {
   Int: number;
   Float: number;
   bigint: any;
+  daterange: any;
   float8: any;
   interval: any;
   json: any;
   timestamp: any;
   timestamptz: any;
+};
+
+/** expression to compare columns of type Boolean. All fields are combined with logical 'AND'. */
+export type Boolean_Comparison_Exp = {
+  readonly _eq?: Maybe<Scalars['Boolean']>;
+  readonly _gt?: Maybe<Scalars['Boolean']>;
+  readonly _gte?: Maybe<Scalars['Boolean']>;
+  readonly _in?: Maybe<ReadonlyArray<Scalars['Boolean']>>;
+  readonly _is_null?: Maybe<Scalars['Boolean']>;
+  readonly _lt?: Maybe<Scalars['Boolean']>;
+  readonly _lte?: Maybe<Scalars['Boolean']>;
+  readonly _neq?: Maybe<Scalars['Boolean']>;
+  readonly _nin?: Maybe<ReadonlyArray<Scalars['Boolean']>>;
 };
 
 /** expression to compare columns of type Int. All fields are combined with logical 'AND'. */
@@ -63,6 +77,7 @@ export type Achievement = {
   readonly created_at?: Maybe<Scalars['timestamptz']>;
   readonly description?: Maybe<Scalars['String']>;
   readonly id: Scalars['Int'];
+  readonly level: Scalars['Int'];
   readonly name: Scalars['String'];
   readonly rule: Scalars['json'];
   /** An array relationship */
@@ -148,11 +163,13 @@ export type Achievement_Arr_Rel_Insert_Input = {
 export type Achievement_Avg_Fields = {
   readonly __typename: 'achievement_avg_fields';
   readonly id?: Maybe<Scalars['Float']>;
+  readonly level?: Maybe<Scalars['Float']>;
 };
 
 /** order by avg() on columns of table "achievement" */
 export type Achievement_Avg_Order_By = {
   readonly id?: Maybe<Order_By>;
+  readonly level?: Maybe<Order_By>;
 };
 
 /** Boolean expression to filter rows from the table "achievement". All fields are combined with a logical 'AND'. */
@@ -165,6 +182,7 @@ export type Achievement_Bool_Exp = {
   readonly created_at?: Maybe<Timestamptz_Comparison_Exp>;
   readonly description?: Maybe<String_Comparison_Exp>;
   readonly id?: Maybe<Int_Comparison_Exp>;
+  readonly level?: Maybe<Int_Comparison_Exp>;
   readonly name?: Maybe<String_Comparison_Exp>;
   readonly rule?: Maybe<Json_Comparison_Exp>;
   readonly user_achievements?: Maybe<User_Achievement_Bool_Exp>;
@@ -181,6 +199,7 @@ export enum Achievement_Constraint {
 /** input type for incrementing integer column in table "achievement" */
 export type Achievement_Inc_Input = {
   readonly id?: Maybe<Scalars['Int']>;
+  readonly level?: Maybe<Scalars['Int']>;
 };
 
 /** input type for inserting data into table "achievement" */
@@ -190,6 +209,7 @@ export type Achievement_Insert_Input = {
   readonly created_at?: Maybe<Scalars['timestamptz']>;
   readonly description?: Maybe<Scalars['String']>;
   readonly id?: Maybe<Scalars['Int']>;
+  readonly level?: Maybe<Scalars['Int']>;
   readonly name?: Maybe<Scalars['String']>;
   readonly rule?: Maybe<Scalars['json']>;
   readonly user_achievements?: Maybe<User_Achievement_Arr_Rel_Insert_Input>;
@@ -201,6 +221,7 @@ export type Achievement_Max_Fields = {
   readonly created_at?: Maybe<Scalars['timestamptz']>;
   readonly description?: Maybe<Scalars['String']>;
   readonly id?: Maybe<Scalars['Int']>;
+  readonly level?: Maybe<Scalars['Int']>;
   readonly name?: Maybe<Scalars['String']>;
 };
 
@@ -209,6 +230,7 @@ export type Achievement_Max_Order_By = {
   readonly created_at?: Maybe<Order_By>;
   readonly description?: Maybe<Order_By>;
   readonly id?: Maybe<Order_By>;
+  readonly level?: Maybe<Order_By>;
   readonly name?: Maybe<Order_By>;
 };
 
@@ -218,6 +240,7 @@ export type Achievement_Min_Fields = {
   readonly created_at?: Maybe<Scalars['timestamptz']>;
   readonly description?: Maybe<Scalars['String']>;
   readonly id?: Maybe<Scalars['Int']>;
+  readonly level?: Maybe<Scalars['Int']>;
   readonly name?: Maybe<Scalars['String']>;
 };
 
@@ -226,6 +249,7 @@ export type Achievement_Min_Order_By = {
   readonly created_at?: Maybe<Order_By>;
   readonly description?: Maybe<Order_By>;
   readonly id?: Maybe<Order_By>;
+  readonly level?: Maybe<Order_By>;
   readonly name?: Maybe<Order_By>;
 };
 
@@ -258,6 +282,7 @@ export type Achievement_Order_By = {
   readonly created_at?: Maybe<Order_By>;
   readonly description?: Maybe<Order_By>;
   readonly id?: Maybe<Order_By>;
+  readonly level?: Maybe<Order_By>;
   readonly name?: Maybe<Order_By>;
   readonly rule?: Maybe<Order_By>;
   readonly user_achievements_aggregate?: Maybe<User_Achievement_Aggregate_Order_By>;
@@ -279,6 +304,8 @@ export enum Achievement_Select_Column {
   /** column name */
   Id = 'id',
   /** column name */
+  Level = 'level',
+  /** column name */
   Name = 'name',
   /** column name */
   Rule = 'rule',
@@ -290,6 +317,7 @@ export type Achievement_Set_Input = {
   readonly created_at?: Maybe<Scalars['timestamptz']>;
   readonly description?: Maybe<Scalars['String']>;
   readonly id?: Maybe<Scalars['Int']>;
+  readonly level?: Maybe<Scalars['Int']>;
   readonly name?: Maybe<Scalars['String']>;
   readonly rule?: Maybe<Scalars['json']>;
 };
@@ -298,44 +326,52 @@ export type Achievement_Set_Input = {
 export type Achievement_Stddev_Fields = {
   readonly __typename: 'achievement_stddev_fields';
   readonly id?: Maybe<Scalars['Float']>;
+  readonly level?: Maybe<Scalars['Float']>;
 };
 
 /** order by stddev() on columns of table "achievement" */
 export type Achievement_Stddev_Order_By = {
   readonly id?: Maybe<Order_By>;
+  readonly level?: Maybe<Order_By>;
 };
 
 /** aggregate stddev_pop on columns */
 export type Achievement_Stddev_Pop_Fields = {
   readonly __typename: 'achievement_stddev_pop_fields';
   readonly id?: Maybe<Scalars['Float']>;
+  readonly level?: Maybe<Scalars['Float']>;
 };
 
 /** order by stddev_pop() on columns of table "achievement" */
 export type Achievement_Stddev_Pop_Order_By = {
   readonly id?: Maybe<Order_By>;
+  readonly level?: Maybe<Order_By>;
 };
 
 /** aggregate stddev_samp on columns */
 export type Achievement_Stddev_Samp_Fields = {
   readonly __typename: 'achievement_stddev_samp_fields';
   readonly id?: Maybe<Scalars['Float']>;
+  readonly level?: Maybe<Scalars['Float']>;
 };
 
 /** order by stddev_samp() on columns of table "achievement" */
 export type Achievement_Stddev_Samp_Order_By = {
   readonly id?: Maybe<Order_By>;
+  readonly level?: Maybe<Order_By>;
 };
 
 /** aggregate sum on columns */
 export type Achievement_Sum_Fields = {
   readonly __typename: 'achievement_sum_fields';
   readonly id?: Maybe<Scalars['Int']>;
+  readonly level?: Maybe<Scalars['Int']>;
 };
 
 /** order by sum() on columns of table "achievement" */
 export type Achievement_Sum_Order_By = {
   readonly id?: Maybe<Order_By>;
+  readonly level?: Maybe<Order_By>;
 };
 
 /** columns and relationships of "achievement_type" */
@@ -530,6 +566,8 @@ export enum Achievement_Update_Column {
   /** column name */
   Id = 'id',
   /** column name */
+  Level = 'level',
+  /** column name */
   Name = 'name',
   /** column name */
   Rule = 'rule',
@@ -539,33 +577,39 @@ export enum Achievement_Update_Column {
 export type Achievement_Var_Pop_Fields = {
   readonly __typename: 'achievement_var_pop_fields';
   readonly id?: Maybe<Scalars['Float']>;
+  readonly level?: Maybe<Scalars['Float']>;
 };
 
 /** order by var_pop() on columns of table "achievement" */
 export type Achievement_Var_Pop_Order_By = {
   readonly id?: Maybe<Order_By>;
+  readonly level?: Maybe<Order_By>;
 };
 
 /** aggregate var_samp on columns */
 export type Achievement_Var_Samp_Fields = {
   readonly __typename: 'achievement_var_samp_fields';
   readonly id?: Maybe<Scalars['Float']>;
+  readonly level?: Maybe<Scalars['Float']>;
 };
 
 /** order by var_samp() on columns of table "achievement" */
 export type Achievement_Var_Samp_Order_By = {
   readonly id?: Maybe<Order_By>;
+  readonly level?: Maybe<Order_By>;
 };
 
 /** aggregate variance on columns */
 export type Achievement_Variance_Fields = {
   readonly __typename: 'achievement_variance_fields';
   readonly id?: Maybe<Scalars['Float']>;
+  readonly level?: Maybe<Scalars['Float']>;
 };
 
 /** order by variance() on columns of table "achievement" */
 export type Achievement_Variance_Order_By = {
   readonly id?: Maybe<Order_By>;
+  readonly level?: Maybe<Order_By>;
 };
 
 /** columns and relationships of "activities" */
@@ -1270,6 +1314,165 @@ export type Categories_Variance_Order_By = {
   readonly points_per_minute?: Maybe<Order_By>;
 };
 
+/** columns and relationships of "challenge_type" */
+export type Challenge_Type = {
+  readonly __typename: 'challenge_type';
+  readonly description?: Maybe<Scalars['String']>;
+  readonly name: Scalars['String'];
+  readonly rules?: Maybe<Scalars['json']>;
+};
+
+/** columns and relationships of "challenge_type" */
+export type Challenge_TypeRulesArgs = {
+  path?: Maybe<Scalars['String']>;
+};
+
+/** aggregated selection of "challenge_type" */
+export type Challenge_Type_Aggregate = {
+  readonly __typename: 'challenge_type_aggregate';
+  readonly aggregate?: Maybe<Challenge_Type_Aggregate_Fields>;
+  readonly nodes: ReadonlyArray<Challenge_Type>;
+};
+
+/** aggregate fields of "challenge_type" */
+export type Challenge_Type_Aggregate_Fields = {
+  readonly __typename: 'challenge_type_aggregate_fields';
+  readonly count?: Maybe<Scalars['Int']>;
+  readonly max?: Maybe<Challenge_Type_Max_Fields>;
+  readonly min?: Maybe<Challenge_Type_Min_Fields>;
+};
+
+/** aggregate fields of "challenge_type" */
+export type Challenge_Type_Aggregate_FieldsCountArgs = {
+  columns?: Maybe<ReadonlyArray<Challenge_Type_Select_Column>>;
+  distinct?: Maybe<Scalars['Boolean']>;
+};
+
+/** order by aggregate values of table "challenge_type" */
+export type Challenge_Type_Aggregate_Order_By = {
+  readonly count?: Maybe<Order_By>;
+  readonly max?: Maybe<Challenge_Type_Max_Order_By>;
+  readonly min?: Maybe<Challenge_Type_Min_Order_By>;
+};
+
+/** input type for inserting array relation for remote table "challenge_type" */
+export type Challenge_Type_Arr_Rel_Insert_Input = {
+  readonly data: ReadonlyArray<Challenge_Type_Insert_Input>;
+  readonly on_conflict?: Maybe<Challenge_Type_On_Conflict>;
+};
+
+/** Boolean expression to filter rows from the table "challenge_type". All fields are combined with a logical 'AND'. */
+export type Challenge_Type_Bool_Exp = {
+  readonly _and?: Maybe<ReadonlyArray<Maybe<Challenge_Type_Bool_Exp>>>;
+  readonly _not?: Maybe<Challenge_Type_Bool_Exp>;
+  readonly _or?: Maybe<ReadonlyArray<Maybe<Challenge_Type_Bool_Exp>>>;
+  readonly description?: Maybe<String_Comparison_Exp>;
+  readonly name?: Maybe<String_Comparison_Exp>;
+  readonly rules?: Maybe<Json_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "challenge_type" */
+export enum Challenge_Type_Constraint {
+  /** unique or primary key constraint */
+  ChallengeTypeDescriptionKey = 'challenge_type_description_key',
+  /** unique or primary key constraint */
+  ChallengeTypePkey = 'challenge_type_pkey',
+}
+
+/** input type for inserting data into table "challenge_type" */
+export type Challenge_Type_Insert_Input = {
+  readonly description?: Maybe<Scalars['String']>;
+  readonly name?: Maybe<Scalars['String']>;
+  readonly rules?: Maybe<Scalars['json']>;
+};
+
+/** aggregate max on columns */
+export type Challenge_Type_Max_Fields = {
+  readonly __typename: 'challenge_type_max_fields';
+  readonly description?: Maybe<Scalars['String']>;
+  readonly name?: Maybe<Scalars['String']>;
+};
+
+/** order by max() on columns of table "challenge_type" */
+export type Challenge_Type_Max_Order_By = {
+  readonly description?: Maybe<Order_By>;
+  readonly name?: Maybe<Order_By>;
+};
+
+/** aggregate min on columns */
+export type Challenge_Type_Min_Fields = {
+  readonly __typename: 'challenge_type_min_fields';
+  readonly description?: Maybe<Scalars['String']>;
+  readonly name?: Maybe<Scalars['String']>;
+};
+
+/** order by min() on columns of table "challenge_type" */
+export type Challenge_Type_Min_Order_By = {
+  readonly description?: Maybe<Order_By>;
+  readonly name?: Maybe<Order_By>;
+};
+
+/** response of any mutation on the table "challenge_type" */
+export type Challenge_Type_Mutation_Response = {
+  readonly __typename: 'challenge_type_mutation_response';
+  /** number of affected rows by the mutation */
+  readonly affected_rows: Scalars['Int'];
+  /** data of the affected rows by the mutation */
+  readonly returning: ReadonlyArray<Challenge_Type>;
+};
+
+/** input type for inserting object relation for remote table "challenge_type" */
+export type Challenge_Type_Obj_Rel_Insert_Input = {
+  readonly data: Challenge_Type_Insert_Input;
+  readonly on_conflict?: Maybe<Challenge_Type_On_Conflict>;
+};
+
+/** on conflict condition type for table "challenge_type" */
+export type Challenge_Type_On_Conflict = {
+  readonly constraint: Challenge_Type_Constraint;
+  readonly update_columns: ReadonlyArray<Challenge_Type_Update_Column>;
+  readonly where?: Maybe<Challenge_Type_Bool_Exp>;
+};
+
+/** ordering options when selecting data from "challenge_type" */
+export type Challenge_Type_Order_By = {
+  readonly description?: Maybe<Order_By>;
+  readonly name?: Maybe<Order_By>;
+  readonly rules?: Maybe<Order_By>;
+};
+
+/** primary key columns input for table: "challenge_type" */
+export type Challenge_Type_Pk_Columns_Input = {
+  readonly name: Scalars['String'];
+};
+
+/** select columns of table "challenge_type" */
+export enum Challenge_Type_Select_Column {
+  /** column name */
+  Description = 'description',
+  /** column name */
+  Name = 'name',
+  /** column name */
+  Rules = 'rules',
+}
+
+/** input type for updating data in table "challenge_type" */
+export type Challenge_Type_Set_Input = {
+  readonly description?: Maybe<Scalars['String']>;
+  readonly name?: Maybe<Scalars['String']>;
+  readonly rules?: Maybe<Scalars['json']>;
+};
+
+/** update columns of table "challenge_type" */
+export enum Challenge_Type_Update_Column {
+  /** column name */
+  Description = 'description',
+  /** column name */
+  Name = 'name',
+  /** column name */
+  Rules = 'rules',
+}
+
 /** columns and relationships of "comments" */
 export type Comments = {
   readonly __typename: 'comments';
@@ -1599,6 +1802,19 @@ export type Comments_Variance_Fields = {
 export type Comments_Variance_Order_By = {
   readonly activity_id?: Maybe<Order_By>;
   readonly comment_id?: Maybe<Order_By>;
+};
+
+/** expression to compare columns of type daterange. All fields are combined with logical 'AND'. */
+export type Daterange_Comparison_Exp = {
+  readonly _eq?: Maybe<Scalars['daterange']>;
+  readonly _gt?: Maybe<Scalars['daterange']>;
+  readonly _gte?: Maybe<Scalars['daterange']>;
+  readonly _in?: Maybe<ReadonlyArray<Scalars['daterange']>>;
+  readonly _is_null?: Maybe<Scalars['Boolean']>;
+  readonly _lt?: Maybe<Scalars['daterange']>;
+  readonly _lte?: Maybe<Scalars['daterange']>;
+  readonly _neq?: Maybe<Scalars['daterange']>;
+  readonly _nin?: Maybe<ReadonlyArray<Scalars['daterange']>>;
 };
 
 /** expression to compare columns of type float8. All fields are combined with logical 'AND'. */
@@ -2772,6 +2988,10 @@ export type Mutation_Root = {
   readonly delete_categories?: Maybe<Categories_Mutation_Response>;
   /** delete single row from the table: "categories" */
   readonly delete_categories_by_pk?: Maybe<Categories>;
+  /** delete data from the table: "challenge_type" */
+  readonly delete_challenge_type?: Maybe<Challenge_Type_Mutation_Response>;
+  /** delete single row from the table: "challenge_type" */
+  readonly delete_challenge_type_by_pk?: Maybe<Challenge_Type>;
   /** delete single row from the table: "comments" */
   readonly delete_comment?: Maybe<Comments>;
   /** delete data from the table: "comments" */
@@ -2798,6 +3018,10 @@ export type Mutation_Root = {
   readonly delete_user_achievement?: Maybe<User_Achievement_Mutation_Response>;
   /** delete single row from the table: "user_achievement" */
   readonly delete_user_achievement_by_pk?: Maybe<User_Achievement>;
+  /** delete data from the table: "user_challenge" */
+  readonly delete_user_challenge?: Maybe<User_Challenge_Mutation_Response>;
+  /** delete single row from the table: "user_challenge" */
+  readonly delete_user_challenge_by_pk?: Maybe<User_Challenge>;
   /** delete data from the table: "users" */
   readonly delete_users?: Maybe<Users_Mutation_Response>;
   /** insert data into the table: "achievement" */
@@ -2816,6 +3040,10 @@ export type Mutation_Root = {
   readonly insert_categories?: Maybe<Categories_Mutation_Response>;
   /** insert a single row into the table: "categories" */
   readonly insert_categories_one?: Maybe<Categories>;
+  /** insert data into the table: "challenge_type" */
+  readonly insert_challenge_type?: Maybe<Challenge_Type_Mutation_Response>;
+  /** insert a single row into the table: "challenge_type" */
+  readonly insert_challenge_type_one?: Maybe<Challenge_Type>;
   /** insert a single row into the table: "comments" */
   readonly insert_comment?: Maybe<Comments>;
   /** insert data into the table: "comments" */
@@ -2842,6 +3070,10 @@ export type Mutation_Root = {
   readonly insert_user_achievement?: Maybe<User_Achievement_Mutation_Response>;
   /** insert a single row into the table: "user_achievement" */
   readonly insert_user_achievement_one?: Maybe<User_Achievement>;
+  /** insert data into the table: "user_challenge" */
+  readonly insert_user_challenge?: Maybe<User_Challenge_Mutation_Response>;
+  /** insert a single row into the table: "user_challenge" */
+  readonly insert_user_challenge_one?: Maybe<User_Challenge>;
   /** insert data into the table: "users" */
   readonly insert_users?: Maybe<Users_Mutation_Response>;
   /** update data of the table: "achievement" */
@@ -2860,6 +3092,10 @@ export type Mutation_Root = {
   readonly update_categories?: Maybe<Categories_Mutation_Response>;
   /** update single row of the table: "categories" */
   readonly update_categories_by_pk?: Maybe<Categories>;
+  /** update data of the table: "challenge_type" */
+  readonly update_challenge_type?: Maybe<Challenge_Type_Mutation_Response>;
+  /** update single row of the table: "challenge_type" */
+  readonly update_challenge_type_by_pk?: Maybe<Challenge_Type>;
   /** update single row of the table: "comments" */
   readonly update_comment?: Maybe<Comments>;
   /** update data of the table: "comments" */
@@ -2886,6 +3122,10 @@ export type Mutation_Root = {
   readonly update_user_achievement?: Maybe<User_Achievement_Mutation_Response>;
   /** update single row of the table: "user_achievement" */
   readonly update_user_achievement_by_pk?: Maybe<User_Achievement>;
+  /** update data of the table: "user_challenge" */
+  readonly update_user_challenge?: Maybe<User_Challenge_Mutation_Response>;
+  /** update single row of the table: "user_challenge" */
+  readonly update_user_challenge_by_pk?: Maybe<User_Challenge>;
   /** update data of the table: "users" */
   readonly update_users?: Maybe<Users_Mutation_Response>;
 };
@@ -2927,6 +3167,16 @@ export type Mutation_RootDelete_CategoriesArgs = {
 
 /** mutation root */
 export type Mutation_RootDelete_Categories_By_PkArgs = {
+  name: Scalars['String'];
+};
+
+/** mutation root */
+export type Mutation_RootDelete_Challenge_TypeArgs = {
+  where: Challenge_Type_Bool_Exp;
+};
+
+/** mutation root */
+export type Mutation_RootDelete_Challenge_Type_By_PkArgs = {
   name: Scalars['String'];
 };
 
@@ -2999,6 +3249,16 @@ export type Mutation_RootDelete_User_Achievement_By_PkArgs = {
 };
 
 /** mutation root */
+export type Mutation_RootDelete_User_ChallengeArgs = {
+  where: User_Challenge_Bool_Exp;
+};
+
+/** mutation root */
+export type Mutation_RootDelete_User_Challenge_By_PkArgs = {
+  id: Scalars['Int'];
+};
+
+/** mutation root */
 export type Mutation_RootDelete_UsersArgs = {
   where: Users_Bool_Exp;
 };
@@ -3049,6 +3309,18 @@ export type Mutation_RootInsert_CategoriesArgs = {
 export type Mutation_RootInsert_Categories_OneArgs = {
   object: Categories_Insert_Input;
   on_conflict?: Maybe<Categories_On_Conflict>;
+};
+
+/** mutation root */
+export type Mutation_RootInsert_Challenge_TypeArgs = {
+  objects: ReadonlyArray<Challenge_Type_Insert_Input>;
+  on_conflict?: Maybe<Challenge_Type_On_Conflict>;
+};
+
+/** mutation root */
+export type Mutation_RootInsert_Challenge_Type_OneArgs = {
+  object: Challenge_Type_Insert_Input;
+  on_conflict?: Maybe<Challenge_Type_On_Conflict>;
 };
 
 /** mutation root */
@@ -3130,6 +3402,18 @@ export type Mutation_RootInsert_User_Achievement_OneArgs = {
 };
 
 /** mutation root */
+export type Mutation_RootInsert_User_ChallengeArgs = {
+  objects: ReadonlyArray<User_Challenge_Insert_Input>;
+  on_conflict?: Maybe<User_Challenge_On_Conflict>;
+};
+
+/** mutation root */
+export type Mutation_RootInsert_User_Challenge_OneArgs = {
+  object: User_Challenge_Insert_Input;
+  on_conflict?: Maybe<User_Challenge_On_Conflict>;
+};
+
+/** mutation root */
 export type Mutation_RootInsert_UsersArgs = {
   objects: ReadonlyArray<Users_Insert_Input>;
   on_conflict?: Maybe<Users_On_Conflict>;
@@ -3187,6 +3471,18 @@ export type Mutation_RootUpdate_Categories_By_PkArgs = {
   _inc?: Maybe<Categories_Inc_Input>;
   _set?: Maybe<Categories_Set_Input>;
   pk_columns: Categories_Pk_Columns_Input;
+};
+
+/** mutation root */
+export type Mutation_RootUpdate_Challenge_TypeArgs = {
+  _set?: Maybe<Challenge_Type_Set_Input>;
+  where: Challenge_Type_Bool_Exp;
+};
+
+/** mutation root */
+export type Mutation_RootUpdate_Challenge_Type_By_PkArgs = {
+  _set?: Maybe<Challenge_Type_Set_Input>;
+  pk_columns: Challenge_Type_Pk_Columns_Input;
 };
 
 /** mutation root */
@@ -3276,6 +3572,20 @@ export type Mutation_RootUpdate_User_Achievement_By_PkArgs = {
 };
 
 /** mutation root */
+export type Mutation_RootUpdate_User_ChallengeArgs = {
+  _inc?: Maybe<User_Challenge_Inc_Input>;
+  _set?: Maybe<User_Challenge_Set_Input>;
+  where: User_Challenge_Bool_Exp;
+};
+
+/** mutation root */
+export type Mutation_RootUpdate_User_Challenge_By_PkArgs = {
+  _inc?: Maybe<User_Challenge_Inc_Input>;
+  _set?: Maybe<User_Challenge_Set_Input>;
+  pk_columns: User_Challenge_Pk_Columns_Input;
+};
+
+/** mutation root */
 export type Mutation_RootUpdate_UsersArgs = {
   _set?: Maybe<Users_Set_Input>;
   where: Users_Bool_Exp;
@@ -3324,6 +3634,12 @@ export type Query_Root = {
   readonly categories_aggregate: Categories_Aggregate;
   /** fetch data from the table: "categories" using primary key columns */
   readonly categories_by_pk?: Maybe<Categories>;
+  /** fetch data from the table: "challenge_type" */
+  readonly challenge_type: ReadonlyArray<Challenge_Type>;
+  /** fetch aggregated fields from the table: "challenge_type" */
+  readonly challenge_type_aggregate: Challenge_Type_Aggregate;
+  /** fetch data from the table: "challenge_type" using primary key columns */
+  readonly challenge_type_by_pk?: Maybe<Challenge_Type>;
   /** fetch data from the table: "comments" using primary key columns */
   readonly comment?: Maybe<Comments>;
   /** fetch data from the table: "comments" */
@@ -3366,6 +3682,12 @@ export type Query_Root = {
   readonly user_achievement_aggregate: User_Achievement_Aggregate;
   /** fetch data from the table: "user_achievement" using primary key columns */
   readonly user_achievement_by_pk?: Maybe<User_Achievement>;
+  /** fetch data from the table: "user_challenge" */
+  readonly user_challenge: ReadonlyArray<User_Challenge>;
+  /** fetch aggregated fields from the table: "user_challenge" */
+  readonly user_challenge_aggregate: User_Challenge_Aggregate;
+  /** fetch data from the table: "user_challenge" using primary key columns */
+  readonly user_challenge_by_pk?: Maybe<User_Challenge>;
   /** fetch data from the table: "users" */
   readonly users: ReadonlyArray<Users>;
   /** fetch aggregated fields from the table: "users" */
@@ -3461,6 +3783,29 @@ export type Query_RootCategories_AggregateArgs = {
 
 /** query root */
 export type Query_RootCategories_By_PkArgs = {
+  name: Scalars['String'];
+};
+
+/** query root */
+export type Query_RootChallenge_TypeArgs = {
+  distinct_on?: Maybe<ReadonlyArray<Challenge_Type_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<ReadonlyArray<Challenge_Type_Order_By>>;
+  where?: Maybe<Challenge_Type_Bool_Exp>;
+};
+
+/** query root */
+export type Query_RootChallenge_Type_AggregateArgs = {
+  distinct_on?: Maybe<ReadonlyArray<Challenge_Type_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<ReadonlyArray<Challenge_Type_Order_By>>;
+  where?: Maybe<Challenge_Type_Bool_Exp>;
+};
+
+/** query root */
+export type Query_RootChallenge_Type_By_PkArgs = {
   name: Scalars['String'];
 };
 
@@ -3631,6 +3976,29 @@ export type Query_RootUser_Achievement_By_PkArgs = {
 };
 
 /** query root */
+export type Query_RootUser_ChallengeArgs = {
+  distinct_on?: Maybe<ReadonlyArray<User_Challenge_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<ReadonlyArray<User_Challenge_Order_By>>;
+  where?: Maybe<User_Challenge_Bool_Exp>;
+};
+
+/** query root */
+export type Query_RootUser_Challenge_AggregateArgs = {
+  distinct_on?: Maybe<ReadonlyArray<User_Challenge_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<ReadonlyArray<User_Challenge_Order_By>>;
+  where?: Maybe<User_Challenge_Bool_Exp>;
+};
+
+/** query root */
+export type Query_RootUser_Challenge_By_PkArgs = {
+  id: Scalars['Int'];
+};
+
+/** query root */
 export type Query_RootUsersArgs = {
   distinct_on?: Maybe<ReadonlyArray<Users_Select_Column>>;
   limit?: Maybe<Scalars['Int']>;
@@ -3675,6 +4043,12 @@ export type Subscription_Root = {
   readonly categories_aggregate: Categories_Aggregate;
   /** fetch data from the table: "categories" using primary key columns */
   readonly categories_by_pk?: Maybe<Categories>;
+  /** fetch data from the table: "challenge_type" */
+  readonly challenge_type: ReadonlyArray<Challenge_Type>;
+  /** fetch aggregated fields from the table: "challenge_type" */
+  readonly challenge_type_aggregate: Challenge_Type_Aggregate;
+  /** fetch data from the table: "challenge_type" using primary key columns */
+  readonly challenge_type_by_pk?: Maybe<Challenge_Type>;
   /** fetch data from the table: "comments" using primary key columns */
   readonly comment?: Maybe<Comments>;
   /** fetch data from the table: "comments" */
@@ -3717,6 +4091,12 @@ export type Subscription_Root = {
   readonly user_achievement_aggregate: User_Achievement_Aggregate;
   /** fetch data from the table: "user_achievement" using primary key columns */
   readonly user_achievement_by_pk?: Maybe<User_Achievement>;
+  /** fetch data from the table: "user_challenge" */
+  readonly user_challenge: ReadonlyArray<User_Challenge>;
+  /** fetch aggregated fields from the table: "user_challenge" */
+  readonly user_challenge_aggregate: User_Challenge_Aggregate;
+  /** fetch data from the table: "user_challenge" using primary key columns */
+  readonly user_challenge_by_pk?: Maybe<User_Challenge>;
   /** fetch data from the table: "users" */
   readonly users: ReadonlyArray<Users>;
   /** fetch aggregated fields from the table: "users" */
@@ -3812,6 +4192,29 @@ export type Subscription_RootCategories_AggregateArgs = {
 
 /** subscription root */
 export type Subscription_RootCategories_By_PkArgs = {
+  name: Scalars['String'];
+};
+
+/** subscription root */
+export type Subscription_RootChallenge_TypeArgs = {
+  distinct_on?: Maybe<ReadonlyArray<Challenge_Type_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<ReadonlyArray<Challenge_Type_Order_By>>;
+  where?: Maybe<Challenge_Type_Bool_Exp>;
+};
+
+/** subscription root */
+export type Subscription_RootChallenge_Type_AggregateArgs = {
+  distinct_on?: Maybe<ReadonlyArray<Challenge_Type_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<ReadonlyArray<Challenge_Type_Order_By>>;
+  where?: Maybe<Challenge_Type_Bool_Exp>;
+};
+
+/** subscription root */
+export type Subscription_RootChallenge_Type_By_PkArgs = {
   name: Scalars['String'];
 };
 
@@ -3979,6 +4382,29 @@ export type Subscription_RootUser_Achievement_AggregateArgs = {
 export type Subscription_RootUser_Achievement_By_PkArgs = {
   achievement_id: Scalars['Int'];
   user_id: Scalars['String'];
+};
+
+/** subscription root */
+export type Subscription_RootUser_ChallengeArgs = {
+  distinct_on?: Maybe<ReadonlyArray<User_Challenge_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<ReadonlyArray<User_Challenge_Order_By>>;
+  where?: Maybe<User_Challenge_Bool_Exp>;
+};
+
+/** subscription root */
+export type Subscription_RootUser_Challenge_AggregateArgs = {
+  distinct_on?: Maybe<ReadonlyArray<User_Challenge_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<ReadonlyArray<User_Challenge_Order_By>>;
+  where?: Maybe<User_Challenge_Bool_Exp>;
+};
+
+/** subscription root */
+export type Subscription_RootUser_Challenge_By_PkArgs = {
+  id: Scalars['Int'];
 };
 
 /** subscription root */
@@ -4303,6 +4729,329 @@ export type User_Achievement_Variance_Fields = {
 /** order by variance() on columns of table "user_achievement" */
 export type User_Achievement_Variance_Order_By = {
   readonly achievement_id?: Maybe<Order_By>;
+};
+
+/** columns and relationships of "user_challenge" */
+export type User_Challenge = {
+  readonly __typename: 'user_challenge';
+  readonly challenge_type: Scalars['String'];
+  readonly challenger_uid: Scalars['String'];
+  readonly created_at: Scalars['timestamptz'];
+  readonly daterange?: Maybe<Scalars['daterange']>;
+  readonly id: Scalars['Int'];
+  readonly is_active: Scalars['Boolean'];
+  readonly receiver_uid: Scalars['String'];
+  readonly rules?: Maybe<Scalars['json']>;
+};
+
+/** columns and relationships of "user_challenge" */
+export type User_ChallengeRulesArgs = {
+  path?: Maybe<Scalars['String']>;
+};
+
+/** aggregated selection of "user_challenge" */
+export type User_Challenge_Aggregate = {
+  readonly __typename: 'user_challenge_aggregate';
+  readonly aggregate?: Maybe<User_Challenge_Aggregate_Fields>;
+  readonly nodes: ReadonlyArray<User_Challenge>;
+};
+
+/** aggregate fields of "user_challenge" */
+export type User_Challenge_Aggregate_Fields = {
+  readonly __typename: 'user_challenge_aggregate_fields';
+  readonly avg?: Maybe<User_Challenge_Avg_Fields>;
+  readonly count?: Maybe<Scalars['Int']>;
+  readonly max?: Maybe<User_Challenge_Max_Fields>;
+  readonly min?: Maybe<User_Challenge_Min_Fields>;
+  readonly stddev?: Maybe<User_Challenge_Stddev_Fields>;
+  readonly stddev_pop?: Maybe<User_Challenge_Stddev_Pop_Fields>;
+  readonly stddev_samp?: Maybe<User_Challenge_Stddev_Samp_Fields>;
+  readonly sum?: Maybe<User_Challenge_Sum_Fields>;
+  readonly var_pop?: Maybe<User_Challenge_Var_Pop_Fields>;
+  readonly var_samp?: Maybe<User_Challenge_Var_Samp_Fields>;
+  readonly variance?: Maybe<User_Challenge_Variance_Fields>;
+};
+
+/** aggregate fields of "user_challenge" */
+export type User_Challenge_Aggregate_FieldsCountArgs = {
+  columns?: Maybe<ReadonlyArray<User_Challenge_Select_Column>>;
+  distinct?: Maybe<Scalars['Boolean']>;
+};
+
+/** order by aggregate values of table "user_challenge" */
+export type User_Challenge_Aggregate_Order_By = {
+  readonly avg?: Maybe<User_Challenge_Avg_Order_By>;
+  readonly count?: Maybe<Order_By>;
+  readonly max?: Maybe<User_Challenge_Max_Order_By>;
+  readonly min?: Maybe<User_Challenge_Min_Order_By>;
+  readonly stddev?: Maybe<User_Challenge_Stddev_Order_By>;
+  readonly stddev_pop?: Maybe<User_Challenge_Stddev_Pop_Order_By>;
+  readonly stddev_samp?: Maybe<User_Challenge_Stddev_Samp_Order_By>;
+  readonly sum?: Maybe<User_Challenge_Sum_Order_By>;
+  readonly var_pop?: Maybe<User_Challenge_Var_Pop_Order_By>;
+  readonly var_samp?: Maybe<User_Challenge_Var_Samp_Order_By>;
+  readonly variance?: Maybe<User_Challenge_Variance_Order_By>;
+};
+
+/** input type for inserting array relation for remote table "user_challenge" */
+export type User_Challenge_Arr_Rel_Insert_Input = {
+  readonly data: ReadonlyArray<User_Challenge_Insert_Input>;
+  readonly on_conflict?: Maybe<User_Challenge_On_Conflict>;
+};
+
+/** aggregate avg on columns */
+export type User_Challenge_Avg_Fields = {
+  readonly __typename: 'user_challenge_avg_fields';
+  readonly id?: Maybe<Scalars['Float']>;
+};
+
+/** order by avg() on columns of table "user_challenge" */
+export type User_Challenge_Avg_Order_By = {
+  readonly id?: Maybe<Order_By>;
+};
+
+/** Boolean expression to filter rows from the table "user_challenge". All fields are combined with a logical 'AND'. */
+export type User_Challenge_Bool_Exp = {
+  readonly _and?: Maybe<ReadonlyArray<Maybe<User_Challenge_Bool_Exp>>>;
+  readonly _not?: Maybe<User_Challenge_Bool_Exp>;
+  readonly _or?: Maybe<ReadonlyArray<Maybe<User_Challenge_Bool_Exp>>>;
+  readonly challenge_type?: Maybe<String_Comparison_Exp>;
+  readonly challenger_uid?: Maybe<String_Comparison_Exp>;
+  readonly created_at?: Maybe<Timestamptz_Comparison_Exp>;
+  readonly daterange?: Maybe<Daterange_Comparison_Exp>;
+  readonly id?: Maybe<Int_Comparison_Exp>;
+  readonly is_active?: Maybe<Boolean_Comparison_Exp>;
+  readonly receiver_uid?: Maybe<String_Comparison_Exp>;
+  readonly rules?: Maybe<Json_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "user_challenge" */
+export enum User_Challenge_Constraint {
+  /** unique or primary key constraint */
+  UserChallengePkey = 'user_challenge_pkey',
+}
+
+/** input type for incrementing integer column in table "user_challenge" */
+export type User_Challenge_Inc_Input = {
+  readonly id?: Maybe<Scalars['Int']>;
+};
+
+/** input type for inserting data into table "user_challenge" */
+export type User_Challenge_Insert_Input = {
+  readonly challenge_type?: Maybe<Scalars['String']>;
+  readonly challenger_uid?: Maybe<Scalars['String']>;
+  readonly created_at?: Maybe<Scalars['timestamptz']>;
+  readonly daterange?: Maybe<Scalars['daterange']>;
+  readonly id?: Maybe<Scalars['Int']>;
+  readonly is_active?: Maybe<Scalars['Boolean']>;
+  readonly receiver_uid?: Maybe<Scalars['String']>;
+  readonly rules?: Maybe<Scalars['json']>;
+};
+
+/** aggregate max on columns */
+export type User_Challenge_Max_Fields = {
+  readonly __typename: 'user_challenge_max_fields';
+  readonly challenge_type?: Maybe<Scalars['String']>;
+  readonly challenger_uid?: Maybe<Scalars['String']>;
+  readonly created_at?: Maybe<Scalars['timestamptz']>;
+  readonly id?: Maybe<Scalars['Int']>;
+  readonly receiver_uid?: Maybe<Scalars['String']>;
+};
+
+/** order by max() on columns of table "user_challenge" */
+export type User_Challenge_Max_Order_By = {
+  readonly challenge_type?: Maybe<Order_By>;
+  readonly challenger_uid?: Maybe<Order_By>;
+  readonly created_at?: Maybe<Order_By>;
+  readonly id?: Maybe<Order_By>;
+  readonly receiver_uid?: Maybe<Order_By>;
+};
+
+/** aggregate min on columns */
+export type User_Challenge_Min_Fields = {
+  readonly __typename: 'user_challenge_min_fields';
+  readonly challenge_type?: Maybe<Scalars['String']>;
+  readonly challenger_uid?: Maybe<Scalars['String']>;
+  readonly created_at?: Maybe<Scalars['timestamptz']>;
+  readonly id?: Maybe<Scalars['Int']>;
+  readonly receiver_uid?: Maybe<Scalars['String']>;
+};
+
+/** order by min() on columns of table "user_challenge" */
+export type User_Challenge_Min_Order_By = {
+  readonly challenge_type?: Maybe<Order_By>;
+  readonly challenger_uid?: Maybe<Order_By>;
+  readonly created_at?: Maybe<Order_By>;
+  readonly id?: Maybe<Order_By>;
+  readonly receiver_uid?: Maybe<Order_By>;
+};
+
+/** response of any mutation on the table "user_challenge" */
+export type User_Challenge_Mutation_Response = {
+  readonly __typename: 'user_challenge_mutation_response';
+  /** number of affected rows by the mutation */
+  readonly affected_rows: Scalars['Int'];
+  /** data of the affected rows by the mutation */
+  readonly returning: ReadonlyArray<User_Challenge>;
+};
+
+/** input type for inserting object relation for remote table "user_challenge" */
+export type User_Challenge_Obj_Rel_Insert_Input = {
+  readonly data: User_Challenge_Insert_Input;
+  readonly on_conflict?: Maybe<User_Challenge_On_Conflict>;
+};
+
+/** on conflict condition type for table "user_challenge" */
+export type User_Challenge_On_Conflict = {
+  readonly constraint: User_Challenge_Constraint;
+  readonly update_columns: ReadonlyArray<User_Challenge_Update_Column>;
+  readonly where?: Maybe<User_Challenge_Bool_Exp>;
+};
+
+/** ordering options when selecting data from "user_challenge" */
+export type User_Challenge_Order_By = {
+  readonly challenge_type?: Maybe<Order_By>;
+  readonly challenger_uid?: Maybe<Order_By>;
+  readonly created_at?: Maybe<Order_By>;
+  readonly daterange?: Maybe<Order_By>;
+  readonly id?: Maybe<Order_By>;
+  readonly is_active?: Maybe<Order_By>;
+  readonly receiver_uid?: Maybe<Order_By>;
+  readonly rules?: Maybe<Order_By>;
+};
+
+/** primary key columns input for table: "user_challenge" */
+export type User_Challenge_Pk_Columns_Input = {
+  readonly id: Scalars['Int'];
+};
+
+/** select columns of table "user_challenge" */
+export enum User_Challenge_Select_Column {
+  /** column name */
+  ChallengeType = 'challenge_type',
+  /** column name */
+  ChallengerUid = 'challenger_uid',
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  Daterange = 'daterange',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  IsActive = 'is_active',
+  /** column name */
+  ReceiverUid = 'receiver_uid',
+  /** column name */
+  Rules = 'rules',
+}
+
+/** input type for updating data in table "user_challenge" */
+export type User_Challenge_Set_Input = {
+  readonly challenge_type?: Maybe<Scalars['String']>;
+  readonly challenger_uid?: Maybe<Scalars['String']>;
+  readonly created_at?: Maybe<Scalars['timestamptz']>;
+  readonly daterange?: Maybe<Scalars['daterange']>;
+  readonly id?: Maybe<Scalars['Int']>;
+  readonly is_active?: Maybe<Scalars['Boolean']>;
+  readonly receiver_uid?: Maybe<Scalars['String']>;
+  readonly rules?: Maybe<Scalars['json']>;
+};
+
+/** aggregate stddev on columns */
+export type User_Challenge_Stddev_Fields = {
+  readonly __typename: 'user_challenge_stddev_fields';
+  readonly id?: Maybe<Scalars['Float']>;
+};
+
+/** order by stddev() on columns of table "user_challenge" */
+export type User_Challenge_Stddev_Order_By = {
+  readonly id?: Maybe<Order_By>;
+};
+
+/** aggregate stddev_pop on columns */
+export type User_Challenge_Stddev_Pop_Fields = {
+  readonly __typename: 'user_challenge_stddev_pop_fields';
+  readonly id?: Maybe<Scalars['Float']>;
+};
+
+/** order by stddev_pop() on columns of table "user_challenge" */
+export type User_Challenge_Stddev_Pop_Order_By = {
+  readonly id?: Maybe<Order_By>;
+};
+
+/** aggregate stddev_samp on columns */
+export type User_Challenge_Stddev_Samp_Fields = {
+  readonly __typename: 'user_challenge_stddev_samp_fields';
+  readonly id?: Maybe<Scalars['Float']>;
+};
+
+/** order by stddev_samp() on columns of table "user_challenge" */
+export type User_Challenge_Stddev_Samp_Order_By = {
+  readonly id?: Maybe<Order_By>;
+};
+
+/** aggregate sum on columns */
+export type User_Challenge_Sum_Fields = {
+  readonly __typename: 'user_challenge_sum_fields';
+  readonly id?: Maybe<Scalars['Int']>;
+};
+
+/** order by sum() on columns of table "user_challenge" */
+export type User_Challenge_Sum_Order_By = {
+  readonly id?: Maybe<Order_By>;
+};
+
+/** update columns of table "user_challenge" */
+export enum User_Challenge_Update_Column {
+  /** column name */
+  ChallengeType = 'challenge_type',
+  /** column name */
+  ChallengerUid = 'challenger_uid',
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  Daterange = 'daterange',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  IsActive = 'is_active',
+  /** column name */
+  ReceiverUid = 'receiver_uid',
+  /** column name */
+  Rules = 'rules',
+}
+
+/** aggregate var_pop on columns */
+export type User_Challenge_Var_Pop_Fields = {
+  readonly __typename: 'user_challenge_var_pop_fields';
+  readonly id?: Maybe<Scalars['Float']>;
+};
+
+/** order by var_pop() on columns of table "user_challenge" */
+export type User_Challenge_Var_Pop_Order_By = {
+  readonly id?: Maybe<Order_By>;
+};
+
+/** aggregate var_samp on columns */
+export type User_Challenge_Var_Samp_Fields = {
+  readonly __typename: 'user_challenge_var_samp_fields';
+  readonly id?: Maybe<Scalars['Float']>;
+};
+
+/** order by var_samp() on columns of table "user_challenge" */
+export type User_Challenge_Var_Samp_Order_By = {
+  readonly id?: Maybe<Order_By>;
+};
+
+/** aggregate variance on columns */
+export type User_Challenge_Variance_Fields = {
+  readonly __typename: 'user_challenge_variance_fields';
+  readonly id?: Maybe<Scalars['Float']>;
+};
+
+/** order by variance() on columns of table "user_challenge" */
+export type User_Challenge_Variance_Order_By = {
+  readonly id?: Maybe<Order_By>;
 };
 
 /** columns and relationships of "users" */
@@ -4630,7 +5379,7 @@ export type ProfileUserQuery = { readonly __typename: 'query_root' } & {
           { readonly __typename: 'user_achievement' } & {
             readonly achievement: { readonly __typename: 'achievement' } & Pick<
               Types.Achievement,
-              'description' | 'name' | 'achievement_type'
+              'description' | 'name' | 'achievement_type' | 'level' | 'created_at'
             >;
           }
         >;
@@ -4646,11 +5395,13 @@ export const ProfileUserDocument = gql`
       name
       picture
       totalScore
-      user_achievement {
+      user_achievement(order_by: { created_at: asc }) {
         achievement {
           description
           name
           achievement_type
+          level
+          created_at
         }
       }
     }
