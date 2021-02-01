@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, Alert, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Alert, StyleSheet, Text, View, Image } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 import { useProfileUserQuery } from '../../graphql/queries/ProfileUser.generated';
 import { convertToProfileUser } from '../../helpers/objectMappers';
 import useAuthentication from '../../hooks/useAuthentication';
@@ -59,10 +60,21 @@ const ProfileScreen: React.FC = () => {
       );
 
     return (
-      <View style={styles.container}>
-        <Text style={styles.name}>Name {user.name}</Text>
-        <Text style={styles.bio}>Bio {user.bio}</Text>
-      </View>
+      <ScrollView style={styles.container}>
+        <View style={styles.topContainer}>
+          <Image source={{ uri: user.picture }} style={styles.avatar} />
+          <View style={styles.infoContainer}>
+            <Text style={styles.name}>{user.name}</Text>
+            <Text style={styles.bio}>{user.bio}</Text>
+          </View>
+        </View>
+        <View style={styles.scoreContainer}>
+          <Text style={styles.score}>Score: {user.totalScore}</Text>
+        </View>
+        <View style={styles.achievementsContainer}>
+          <Text style={styles.score}>Achievements</Text>
+        </View>
+      </ScrollView>
     );
   }
   return <></>;
@@ -72,7 +84,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: Spacing.base,
-    backgroundColor: 'green',
   },
   name: {
     ...Typography.headerText,
@@ -89,6 +100,31 @@ const styles = StyleSheet.create({
     width: '100%',
     marginTop: '20%',
   },
+  avatar: {
+    height: 80,
+    width: 80,
+    borderRadius: 80 / 2,
+    margin: Spacing.small,
+  },
+  topContainer: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    backgroundColor: Colors.gray900,
+    borderRadius: Spacing.smaller,
+  },
+  infoContainer: {
+    padding: Spacing.base,
+    justifyContent: 'center',
+  },
+  scoreContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginVertical: Spacing.small,
+  },
+  score: {
+    ...Typography.headerText,
+  },
+  achievementsContainer: {},
 });
 
 export default ProfileScreen;
