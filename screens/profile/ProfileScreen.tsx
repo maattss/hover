@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
+import { Asset } from 'expo-asset';
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, Alert, StyleSheet, Text, View, Image } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -5,8 +7,7 @@ import { useProfileUserQuery } from '../../graphql/queries/ProfileUser.generated
 import { convertToProfileUser } from '../../helpers/objectMappers';
 import useAuthentication from '../../hooks/useAuthentication';
 import { Colors, Spacing, Typography } from '../../theme';
-import { UserProfile } from '../../types/profileTypes';
-import { Achievement } from '../../types/profileTypes';
+import { UserProfile, Achievement } from '../../types/profileTypes';
 
 const ProfileScreen: React.FC = () => {
   const id = useAuthentication().user?.uid;
@@ -14,7 +15,7 @@ const ProfileScreen: React.FC = () => {
     name: '',
     bio: '',
     email: '',
-    picture: 'https://www.kindpng.com/picc/m/78-785827_user-profile-avatar-login-account-male-user-icon.png', // Default picture
+    picture: Asset.fromModule(require('../../assets/images/user.png')).uri, // Default picture
     totalScore: 0,
     achievements: [],
   });
@@ -80,8 +81,8 @@ const ProfileScreen: React.FC = () => {
           </View>
         </View>
         <View style={styles.scoreContainer}>
-          <Text style={styles.score}>Score: {user.totalScore}</Text>
-          <Text style={styles.score}>Score: {user.totalScore}</Text>
+          <Text style={styles.score}>Score</Text>
+          <Text style={styles.score}>{user.totalScore}</Text>
         </View>
         <Text style={styles.score}>Achievements</Text>
         <ScrollView style={styles.achievementsContainer} horizontal={true}>
@@ -118,6 +119,7 @@ const styles = StyleSheet.create({
     width: 80,
     borderRadius: 80 / 2,
     margin: Spacing.small,
+    backgroundColor: Colors.white, // Default color
   },
   topContainer: {
     flexDirection: 'row',

@@ -23,12 +23,12 @@ const FeedScreen: React.FC = () => {
     caption: 'Very nice workout!',
     geoFence: testGeoFence,
     startedAt: '2021-01-29T10:00:00+01:00',
-    picture: 'https://www.kindpng.com/picc/m/78-785827_user-profile-avatar-login-account-male-user-icon.png',
+    picture: 'https://api.multiavatar.com/Kuninori%20Bun%20Lord.png',
     score: 200,
   };
   const testAchievement: AchievementFeedData = {
     userName: 'Mats Tyldum',
-    picture: 'https://www.kindpng.com/picc/m/78-785827_user-profile-avatar-login-account-male-user-icon.png',
+    picture: 'https://api.multiavatar.com/c68e82f2fb46979b85.png',
     description: 'Achieved 1000 points!',
     name: '200XP',
     type: AchievementType.SCORE,
@@ -38,8 +38,8 @@ const FeedScreen: React.FC = () => {
     name: 'MaxPoints7Days',
     userName1: 'Mats Tyldum',
     userName2: 'Siri Mykland',
-    userPicture1: 'https://www.kindpng.com/picc/m/78-785827_user-profile-avatar-login-account-male-user-icon.png',
-    userPicture2: 'https://www.kindpng.com/picc/m/78-785827_user-profile-avatar-login-account-male-user-icon.png',
+    userPicture1: 'https://api.multiavatar.com/c68e82f2fb46979b85.png',
+    userPicture2: 'https://api.multiavatar.com/Kuninori%20Bun%20Lord.png',
     createdAt: '2021-01-29T13:00:00+01:00',
     description: 'Highest amount of points in the next 7 days.',
   };
