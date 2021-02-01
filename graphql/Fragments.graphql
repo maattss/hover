@@ -2,6 +2,7 @@ fragment basicUserFragment on users {
   id
   email
   name
+  picture
   bio
 }
 
@@ -68,4 +69,12 @@ fragment geofenceFragment on geofences {
   longitude
   radius
   variant
+}
+
+fragment challengeFragment on challenge {
+  id
+  challenge_type
+  start_date
+  end_date
+  is_active
 }
