@@ -11,7 +11,7 @@ interface ActivityFeedCardProps {
   activity: ActivityFeedData;
 }
 
-const getCategoryIconName = (category: GeoFenceCategory) => {
+export const getCategoryIconName = (category: GeoFenceCategory) => {
   switch (category) {
     case GeoFenceCategory.CULTURE:
       return 'theater-masks';
@@ -25,7 +25,7 @@ const getCategoryIconName = (category: GeoFenceCategory) => {
       return 'question-circle';
   }
 };
-const getColor = (category: GeoFenceCategory) => {
+export const getCategoryColor = (category: GeoFenceCategory) => {
   switch (category) {
     case GeoFenceCategory.CULTURE:
       return Colors.almostWhite;
@@ -42,7 +42,7 @@ const getColor = (category: GeoFenceCategory) => {
 
 const ActivityFeedCard: React.FC<ActivityFeedCardProps> = ({ activity }: ActivityFeedCardProps) => {
   const categoryColor = {
-    color: getColor(activity.geoFence.category),
+    color: getCategoryColor(activity.geoFence.category),
   };
   const mapRegion: Region = {
     latitude: activity.geoFence.latitude,

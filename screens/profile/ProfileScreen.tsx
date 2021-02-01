@@ -9,6 +9,8 @@ import useAuthentication from '../../hooks/useAuthentication';
 import { Colors, Spacing, Typography } from '../../theme';
 import { UserProfile, Achievement } from '../../types/profileTypes';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
+import { GeoFenceCategory } from '../../types/geoFenceTypes';
+import { getCategoryIconName, getCategoryColor } from '../../components/feed/ActivityFeedCard';
 
 const ProfileScreen: React.FC = () => {
   const id = useAuthentication().user?.uid;
@@ -75,6 +77,29 @@ const ProfileScreen: React.FC = () => {
         );
       });
     };
+    const renderScore = () => {
+      const categoryColor = (category: GeoFenceCategory) => {
+        return {
+          color: getCategoryColor(category),
+        };
+      };
+
+      return Object.keys(GeoFenceCategory)
+        .filter((key) => !isNaN(Number(GeoFenceCategory[key as keyof typeof GeoFenceCategory])))
+        .map((category, index) => {
+          const categoryEnum: GeoFenceCategory = GeoFenceCategory[category as keyof typeof GeoFenceCategory];
+          console.log(GeoFenceCategory[index]);
+          return (
+            <View key={index} style={styles.score}>
+              <FAIcon
+                style={[styles.categoryIcon, categoryColor(categoryEnum)]}
+                name={getCategoryIconName(categoryEnum)}
+              />
+              <Text style={{ ...Typography.headerText, textAlign: 'center' }}>200</Text>
+            </View>
+          );
+        });
+    };
 
     return (
       <ScrollView style={styles.container}>
@@ -85,13 +110,21 @@ const ProfileScreen: React.FC = () => {
             <Text style={styles.bio}>{user.bio}</Text>
           </View>
         </View>
-        <View style={styles.scoreContainer}>
-          <Text style={styles.score}>Score</Text>
-          <Text style={styles.score}>Total: {user.totalScore}</Text>
-        </View>
-        <Text style={styles.score}>Achievements</Text>
+
+        <Text style={styles.header}>Achievements</Text>
         <ScrollView style={styles.achievementsContainer} horizontal={true}>
           {renderAchievements()}
+        </ScrollView>
+
+        <Text style={styles.header}>Score</Text>
+        <View style={styles.categoryScore}>{renderScore()}</View>
+        <View style={styles.totalScoreContainer}>
+          <Text style={styles.totalScore}>Total: {user.totalScore}</Text>
+        </View>
+
+        <Text style={styles.header}>Activities</Text>
+        <ScrollView style={styles.activitiesContainer} horizontal={true}>
+          <Text style={{ ...Typography.largeBodyText }}>Insert activities</Text>
         </ScrollView>
       </ScrollView>
     );
@@ -102,7 +135,7 @@ const ProfileScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: Spacing.base,
+    padding: Spacing.smaller,
   },
   name: {
     ...Typography.headerText,
@@ -132,6 +165,12 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.gray900,
     borderRadius: Spacing.smaller,
   },
+  header: {
+    ...Typography.headerText,
+    marginTop: Spacing.base,
+    marginBottom: Spacing.smaller,
+    marginLeft: Spacing.smaller,
+  },
   infoContainer: {
     padding: Spacing.base,
     justifyContent: 'center',
@@ -141,6 +180,26 @@ const styles = StyleSheet.create({
   },
   score: {
     ...Typography.headerText,
+    backgroundColor: Colors.gray900,
+    borderRadius: Spacing.smaller,
+    padding: Spacing.base,
+    margin: Spacing.smallest,
+    width: '47.5%',
+  },
+  totalScoreContainer: {
+    backgroundColor: Colors.gray900,
+    borderRadius: Spacing.smaller,
+    margin: Spacing.smallest,
+    padding: Spacing.base,
+  },
+  totalScore: {
+    ...Typography.headerText,
+    textAlign: 'center',
+  },
+  categoryScore: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
   },
   achievementsContainer: {
     height: 120,
@@ -160,6 +219,15 @@ const styles = StyleSheet.create({
     fontSize: 45,
     textAlign: 'center',
     color: Colors.almostWhite,
+  },
+  activitiesContainer: {
+    height: 240,
+  },
+  categoryIcon: {
+    color: Colors.almostWhite,
+    fontSize: 40,
+    textAlign: 'center',
+    marginVertical: Spacing.smallest,
   },
 });
 
