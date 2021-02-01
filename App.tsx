@@ -30,7 +30,7 @@ const httpLink = new HttpLink({
 export const apolloClient = new ApolloClient({
   cache: cache,
   link: asyncAuthLink.concat(httpLink),
-  defaultOptions: { watchQuery: { fetchPolicy: 'cache-first' } },
+  defaultOptions: { watchQuery: { fetchPolicy: 'cache-and-network' } },
 });
 
 export default function App() {
