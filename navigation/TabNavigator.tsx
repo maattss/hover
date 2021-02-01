@@ -10,6 +10,7 @@ import StatisticsNavigator from './StatisticsNavigator';
 import TrackingNavigator from './TrackingNavigator';
 import ProfileNavigator from './ProfileNavigator';
 import useTracking from '../hooks/useTracking';
+import ChallengeNavigator from './ChallengeNavigator';
 
 const TabIcon = (props: { name: string; color: string }) => {
   return <FAIcon style={styles.tabicon} {...props} />;
@@ -22,6 +23,7 @@ const TabNavigator: React.FC = () => {
 
   const tabIconHome = ({ color = '' as string }) => <TabIcon name="home" color={color} />;
   const tabIconExplore = ({ color = '' as string }) => <TabIcon name="map" color={color} />;
+  const tabIconChallenge = ({ color = '' as string }) => <TabIcon name="map" color={color} />;
   const tabIconStatistics = ({ color = '' as string }) => <TabIcon name="chart-bar" color={color} />;
   const tabIconTracking = ({ color = '' as string }) => <TabIcon name="location-arrow" color={color} />;
   const tabIconProfile = ({ color = '' as string }) => <TabIcon name="user" color={color} />;
@@ -44,7 +46,13 @@ const TabNavigator: React.FC = () => {
             tabBarIcon: tabIconExplore,
           }}
         />
-
+        <Tab.Screen
+          name="Challenge"
+          component={ChallengeNavigator}
+          options={{
+            tabBarIcon: tabIconChallenge,
+          }}
+        />
         <Tab.Screen
           name="Hover"
           component={TrackingNavigator}
