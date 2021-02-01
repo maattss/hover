@@ -4625,15 +4625,12 @@ export type ProfileUserQueryVariables = Types.Exact<{
 
 export type ProfileUserQuery = { readonly __typename: 'query_root' } & {
   readonly user?: Types.Maybe<
-    { readonly __typename: 'users' } & Pick<
-      Types.Users,
-      'bio' | 'created_at' | 'email' | 'name' | 'picture' | 'totalScore'
-    > & {
+    { readonly __typename: 'users' } & Pick<Types.Users, 'bio' | 'email' | 'name' | 'picture' | 'totalScore'> & {
         readonly user_achievement: ReadonlyArray<
           { readonly __typename: 'user_achievement' } & {
             readonly achievement: { readonly __typename: 'achievement' } & Pick<
               Types.Achievement,
-              'description' | 'name' | 'achievement_type' | 'created_at'
+              'description' | 'name' | 'achievement_type'
             >;
           }
         >;
@@ -4645,7 +4642,6 @@ export const ProfileUserDocument = gql`
   query ProfileUser($id: String!) {
     user(id: $id) {
       bio
-      created_at
       email
       name
       picture
@@ -4655,7 +4651,6 @@ export const ProfileUserDocument = gql`
           description
           name
           achievement_type
-          created_at
         }
       }
     }

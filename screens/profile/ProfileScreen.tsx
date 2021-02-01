@@ -1,14 +1,22 @@
-import { QueryResult } from '@apollo/client';
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, Alert, StyleSheet, Text, View } from 'react-native';
 import { useProfileUserQuery } from '../../graphql/queries/ProfileUser.generated';
+import { convertToProfileUser } from '../../helpers/objectMappers';
 import useAuthentication from '../../hooks/useAuthentication';
 import { Colors, Spacing, Typography } from '../../theme';
 import { UserProfile } from '../../types/profileTypes';
+import { Achievement } from '../../types/profileTypes';
 
 const ProfileScreen: React.FC = () => {
   const id = useAuthentication().user?.uid;
-  const [user, setUser] = useState<UserProfile>();
+  const [user, setUser] = useState<UserProfile>({
+    name: '',
+    bio: '',
+    email: '',
+    picture: '',
+    totalScore: 0,
+    achievements: [],
+  });
 
   if (id) {
     const { loading: loading, error: error, data: data } = useProfileUserQuery({
@@ -19,8 +27,23 @@ const ProfileScreen: React.FC = () => {
     useEffect(() => {
       if (data) {
         if (data.user) {
-          console.log(data.user);
+          setUser({
+            name: data.user.name ?? user.name,
+            bio: data.user.bio ?? user.bio,
+            email: data.user.email ?? user.email,
+            picture: data.user.picture ?? user.picture,
+            totalScore: data.user.totalScore ?? user.totalScore,
+            achievements: [],
+          });
+          const achievements: Achievement[] = [];
+          data.user.user_achievement.forEach((obj) => {
+            achievements.push({
+              description: obj.achievement.description ?? '',
+              name: obj.achievement.name ?? '',
+            });
+          });
         }
+        // achivementType: obj.achievement.achievement_type,
       }
     }, [data]);
 
@@ -37,8 +60,8 @@ const ProfileScreen: React.FC = () => {
 
     return (
       <View style={styles.container}>
-        <Text style={styles.name}>Name</Text>
-        <Text style={styles.bio}>Bio</Text>
+        <Text style={styles.name}>Name {user.name}</Text>
+        <Text style={styles.bio}>Bio {user.bio}</Text>
       </View>
     );
   }
@@ -48,12 +71,11 @@ const ProfileScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    padding: Spacing.base,
+    backgroundColor: 'green',
   },
   name: {
     ...Typography.headerText,
-    marginTop: Spacing.base,
   },
   bio: {
     ...Typography.largeBodyText,

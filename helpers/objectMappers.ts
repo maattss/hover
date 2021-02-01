@@ -6,6 +6,7 @@ import { CircleGeoFence, GeoFence, GeoFenceCategory, GeoFenceVariant, PolygonGeo
 import { Item } from '../components/Leaderboard';
 import { HighscoreQuery } from '../graphql/queries/Highscore.generated';
 import { ProfileUserQuery } from '../graphql/queries/ProfileUser.generated';
+import { UserProfile } from '../types/profileTypes';
 
 export const convertToRegion = (data: GeofencesQuery): LocationRegion[] => {
   const geoFences: LocationRegion[] = [];
@@ -93,6 +94,12 @@ export const convertToHighscoreList = (data: HighscoreQuery) => {
 };
 
 export const convertToProfileUser = (data: ProfileUserQuery) => {
-  // TODO: Implement
-  return null;
+  return {
+    bio: data.user?.bio ?? '',
+    email: data.user?.email ?? '',
+    name: data.user?.name ?? '',
+    picture: data.user?.picture ?? '',
+    totalScore: data.user?.totalScore,
+    achievements: [],
+  };
 };

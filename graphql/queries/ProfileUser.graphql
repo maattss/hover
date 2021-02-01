@@ -1,7 +1,6 @@
 query ProfileUser($id: String!) {
   user(id: $id) {
     bio
-    created_at
     email
     name
     picture
@@ -11,7 +10,6 @@ query ProfileUser($id: String!) {
         description
         name
         achievement_type
-        created_at
       }
     }
   }
