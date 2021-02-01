@@ -23,7 +23,7 @@ const TabNavigator: React.FC = () => {
 
   const tabIconHome = ({ color = '' as string }) => <TabIcon name="home" color={color} />;
   const tabIconExplore = ({ color = '' as string }) => <TabIcon name="map" color={color} />;
-  const tabIconChallenge = ({ color = '' as string }) => <TabIcon name="map" color={color} />;
+  const tabIconChallenge = ({ color = '' as string }) => <TabIcon name="users" color={color} />;
   const tabIconStatistics = ({ color = '' as string }) => <TabIcon name="chart-bar" color={color} />;
   const tabIconTracking = ({ color = '' as string }) => <TabIcon name="location-arrow" color={color} />;
   const tabIconProfile = ({ color = '' as string }) => <TabIcon name="user" color={color} />;
