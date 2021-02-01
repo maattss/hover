@@ -14,8 +14,21 @@ query GetChallenges($user_id: String!) {
         }
       }
     }
-    accepted_challenges: challenge_participants(
+    ongoing_challenges: challenge_participants(
       where: { accepted: { _eq: true }, challenge: { is_active: { _eq: true } } }
+    ) {
+      challenge {
+        ...challengeFragment
+        opponents: challenge_participants(where: { user_id: { _neq: $user_id } }) {
+          accepted
+          user {
+            ...basicUserFragment
+          }
+        }
+      }
+    }
+    finished_challenges: challenge_participants(
+      where: { accepted: { _eq: true }, challenge: { is_active: { _eq: false } } }
     ) {
       challenge {
         ...challengeFragment

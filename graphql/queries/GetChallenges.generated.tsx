@@ -23,7 +23,18 @@ export type GetChallengesQuery = { readonly __typename: 'query_root' } & {
             } & ChallengeFragmentFragment;
           }
         >;
-        readonly accepted_challenges: ReadonlyArray<
+        readonly ongoing_challenges: ReadonlyArray<
+          { readonly __typename: 'challenge_participant' } & {
+            readonly challenge: { readonly __typename: 'challenge' } & {
+              readonly opponents: ReadonlyArray<
+                { readonly __typename: 'challenge_participant' } & Pick<Types.Challenge_Participant, 'accepted'> & {
+                    readonly user: { readonly __typename: 'users' } & BasicUserFragmentFragment;
+                  }
+              >;
+            } & ChallengeFragmentFragment;
+          }
+        >;
+        readonly finished_challenges: ReadonlyArray<
           { readonly __typename: 'challenge_participant' } & {
             readonly challenge: { readonly __typename: 'challenge' } & {
               readonly opponents: ReadonlyArray<
@@ -55,8 +66,21 @@ export const GetChallengesDocument = gql`
           }
         }
       }
-      accepted_challenges: challenge_participants(
+      ongoing_challenges: challenge_participants(
         where: { accepted: { _eq: true }, challenge: { is_active: { _eq: true } } }
+      ) {
+        challenge {
+          ...challengeFragment
+          opponents: challenge_participants(where: { user_id: { _neq: $user_id } }) {
+            accepted
+            user {
+              ...basicUserFragment
+            }
+          }
+        }
+      }
+      finished_challenges: challenge_participants(
+        where: { accepted: { _eq: true }, challenge: { is_active: { _eq: false } } }
       ) {
         challenge {
           ...challengeFragment
