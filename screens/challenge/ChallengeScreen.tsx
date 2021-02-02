@@ -101,7 +101,7 @@ const renderPendingChallenges = (
       {pendingChallenges.length > 1 && (
         <TouchableOpacity
           style={styles.challengeButton}
-          onPress={() => navigation.push('Pending challenges', { pendingChallenges, refetch })}>
+          onPress={() => navigation.push('PendingChallenges', { pendingChallenges, refetch })}>
           <Text style={{ ...Buttons.buttonText }}>View all</Text>
         </TouchableOpacity>
       )}

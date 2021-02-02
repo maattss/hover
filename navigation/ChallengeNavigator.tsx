@@ -3,17 +3,27 @@ import { ChallengeStackParamList } from '../types/navigationTypes';
 import { createStackNavigator } from '@react-navigation/stack';
 import ChallengeScreen from '../screens/challenge/ChallengeScreen';
 import PendingChallengesScreen from '../screens/challenge/PendingChallengesScreen';
+import { HeaderIcon } from './FeedNavigator';
 
 const ChallengeStack = createStackNavigator<ChallengeStackParamList>();
 
 const ChallengeNavigator: React.FC = () => {
   return (
-    <ChallengeStack.Navigator screenOptions={{ headerShown: false }}>
-      <ChallengeStack.Screen name="Challenge" component={ChallengeScreen} />
+    <ChallengeStack.Navigator>
       <ChallengeStack.Screen
-        name="Pending challenges"
+        name="Challenge"
+        component={ChallengeScreen}
+        options={({ navigation }) => ({
+          // eslint-disable-next-line react/display-name
+          headerRight: () => <HeaderIcon name="users" onPress={() => navigation.navigate('Notifications')} />,
+        })}
+      />
+      <ChallengeStack.Screen
+        name="PendingChallenges"
         component={PendingChallengesScreen}
-        options={{ headerShown: true }}
+        options={() => ({
+          headerTitle: 'Pending',
+        })}
       />
     </ChallengeStack.Navigator>
   );

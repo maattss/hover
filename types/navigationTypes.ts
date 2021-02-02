@@ -29,7 +29,8 @@ export type ExploreStackParamList = {
 };
 export type ChallengeStackParamList = {
   Challenge: undefined;
-  'Pending challenges': PendingChallengesScreenProps;
+  PendingChallenges: PendingChallengesScreenProps;
+  NewChallenge: undefined;
 };
 export type StatisticsStackParamList = {
   Leaderboard: undefined;

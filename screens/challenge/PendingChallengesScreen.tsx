@@ -11,7 +11,7 @@ export interface PendingChallengesScreenProps {
   refetch: () => void;
 }
 
-type ProfileScreenRouteProp = RouteProp<ChallengeStackParamList, 'Pending challenges'>;
+type ProfileScreenRouteProp = RouteProp<ChallengeStackParamList, 'PendingChallenges'>;
 
 type Props = {
   route: ProfileScreenRouteProp;
