@@ -5,7 +5,7 @@ import { estimatedRadius } from './geoFenceCalculations';
 import { CircleGeoFence, GeoFence, GeoFenceCategory, GeoFenceVariant, PolygonGeoFence } from '../types/geoFenceTypes';
 import { Item } from '../components/Leaderboard';
 import { HighscoreQuery } from '../graphql/queries/Highscore.generated';
-import { Opponent, PendingChallenge } from '../types/challengeTypes';
+import { ChallengeUser, OngoingChallenge, Opponent, PendingChallenge } from '../types/challengeTypes';
 import { GetChallengesQuery } from '../graphql/queries/GetChallenges.generated';
 import { Challenge_Participant, Challenge_Type_Enum } from '../types/types';
 import { BasicUserFragmentFragment } from '../graphql/Fragments.generated';
@@ -96,9 +96,11 @@ export const convertToHighscoreList = (data: HighscoreQuery) => {
 };
 type UserChallenges = {
   pendingChallenges: PendingChallenge[];
+  ongoingChallenges: OngoingChallenge[];
 };
 export const convertChallenge = (challengeData: GetChallengesQuery) => {
   const pendingChallenges: PendingChallenge[] = [];
+  const ongoingChallenges: OngoingChallenge[] = [];
   if (challengeData && challengeData.user && challengeData.user?.pending_challenges) {
     challengeData.user.pending_challenges.forEach((obj) => {
       const opponents = convertOpponent(obj.challenge.opponents);
@@ -106,6 +108,7 @@ export const convertChallenge = (challengeData: GetChallengesQuery) => {
         pendingChallenges.push({
           id: obj.challenge.id,
           challenge_type: obj.challenge.challenge_type as Challenge_Type_Enum,
+          created_at: obj.challenge.created_at,
           end_date: new Date(obj.challenge.end_date),
           is_active: obj.challenge.is_active,
           start_date: new Date(obj.challenge.start_date),
@@ -114,7 +117,23 @@ export const convertChallenge = (challengeData: GetChallengesQuery) => {
       }
     });
   }
-  return { pendingChallenges } as UserChallenges;
+  if (challengeData && challengeData.user && challengeData.user?.ongoing_challenges) {
+    const user: ChallengeUser = challengeData.user;
+    challengeData.user.ongoing_challenges.forEach((obj) => {
+      const opponents = convertOpponent(obj.challenge.opponents);
+      ongoingChallenges.push({
+        user: user,
+        id: obj.challenge.id,
+        challenge_type: obj.challenge.challenge_type as Challenge_Type_Enum,
+        created_at: obj.challenge.created_at,
+        end_date: new Date(obj.challenge.end_date),
+        is_active: obj.challenge.is_active,
+        start_date: new Date(obj.challenge.start_date),
+        opponents: opponents,
+      });
+    });
+  }
+  return { pendingChallenges, ongoingChallenges } as UserChallenges;
 };
 
 export const convertOpponent = (opponentData: OpponentQueryData) => {

@@ -3,13 +3,13 @@ import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from 'rea
 import { useGetChallengesQuery } from '../../graphql/queries/GetChallenges.generated';
 import { Buttons, Colors, Spacing, Typography } from '../../theme';
 import useAuthentication from '../../hooks/useAuthentication';
-import { PendingChallenge } from '../../types/challengeTypes';
+import { OngoingChallenge, PendingChallenge } from '../../types/challengeTypes';
 import { convertChallenge } from '../../helpers/objectMappers';
-import PendingChallengeList from '../../components/challenge/PendingChallengesList';
 import { ScrollView } from 'react-native-gesture-handler';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { ChallengeStackParamList } from '../../types/navigationTypes';
 import PendingChallengeCard from '../../components/challenge/PendingChallengeCard';
+import OngoingChallengesList from '../../components/challenge/OngoingChallengesList';
 
 type NavigationProp = StackNavigationProp<ChallengeStackParamList>;
 
@@ -32,7 +32,7 @@ const ChallengeScreen: React.FC<ChallengesProps> = (props: ChallengesProps) => {
   }); */
 
   const [pendingChallenges, setPendingChallenges] = useState<PendingChallenge[]>();
-  const [ongoingChallenges, setOngoingChallenges] = useState<PendingChallenge[]>();
+  const [ongoingChallenges, setOngoingChallenges] = useState<OngoingChallenge[]>();
 
   const { data: challengeData, loading, error, refetch } = useGetChallengesQuery({
     variables: { user_id: user_id ? user_id : '' },
@@ -63,13 +63,8 @@ const ChallengeScreen: React.FC<ChallengesProps> = (props: ChallengesProps) => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
+      {ongoingChallenges && renderOngoingChallenges(ongoingChallenges, refetch)}
       {pendingChallenges && renderPendingChallenges(props, pendingChallenges, refetch)}
-
-      {challengeData?.user && challengeData.user?.ongoing_challenges && (
-        <View style={styles.box}>
-          <Text style={{ ...Typography.headerText, marginTop: Spacing.base }}>Ongoing Challenges</Text>
-        </View>
-      )}
 
       <View style={styles.box}>
         <Text style={{ ...Typography.headerText, marginTop: Spacing.base }}>Create new Challenge</Text>
@@ -102,10 +97,21 @@ const renderPendingChallenges = (
     </View>
   );
 };
+const renderOngoingChallenges = (ongoingChallenges: OngoingChallenge[], refetch: () => void) => {
+  return (
+    <View style={styles.box}>
+      <View style={styles.box}>
+        <Text style={{ ...Typography.headerText, marginTop: Spacing.base }}>Ongoing Challenges</Text>
+        <OngoingChallengesList challenges={ongoingChallenges} refetch={refetch} />
+      </View>
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    padding: 5,
     alignItems: 'center',
     justifyContent: 'space-between',
   },
