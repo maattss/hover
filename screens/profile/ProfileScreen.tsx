@@ -7,7 +7,8 @@ import { Colors, Spacing, Typography } from '../../theme';
 import { UserProfile } from '../../types/profileTypes';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import { GeoFenceCategory } from '../../types/geoFenceTypes';
-import ActivityFeedCard, { getCategoryIconName, getCategoryColor } from '../../components/feed/ActivityFeedCard';
+import { getCategoryIconName, getCategoryColor } from '../../components/feed/ActivityFeedCard';
+import ProfileActivityCard from '../../components/ProfileActivityCard';
 import Achievement from '../../components/Achievement';
 import { convertToUserProfile, defaultUserProfile } from '../../helpers/objectMappers';
 
@@ -85,7 +86,7 @@ const ProfileScreen: React.FC = () => {
         });
     };
     const renderActivities = () => {
-      return userProfile.activities.map((activity, index) => <ActivityFeedCard key={index} activity={activity} />);
+      return userProfile.activities.map((activity, index) => <ProfileActivityCard key={index} activity={activity} />);
     };
 
     if (error) {
