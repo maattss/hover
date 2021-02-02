@@ -5471,7 +5471,7 @@ export type Users = {
   /** An aggregated array relationship */
   following_aggregate: Followings_Aggregate;
   id: Scalars['String'];
-  name?: Maybe<Scalars['String']>;
+  name: Scalars['String'];
   picture: Scalars['String'];
   /** A computed field, executes function "totalscore" */
   totalScore?: Maybe<Scalars['bigint']>;
