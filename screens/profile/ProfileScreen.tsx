@@ -8,10 +8,11 @@ import useAuthentication from '../../hooks/useAuthentication';
 import { Colors, Spacing, Typography } from '../../theme';
 import { UserProfile, Achievement as AchievementType, AchievementVariant } from '../../types/profileTypes';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
-import { GeoFenceCategory } from '../../types/geoFenceTypes';
+import { GeoFence, GeoFenceCategory } from '../../types/geoFenceTypes';
 import { getCategoryIconName, getCategoryColor } from '../../components/feed/ActivityFeedCard';
 import Achievement from '../../components/Achievement';
 import { ActivityFeedData } from '../../types/feedTypes';
+import { convertToGeoFence } from '../../helpers/objectMappers';
 
 const ProfileScreen: React.FC = () => {
   const id = useAuthentication().user?.uid;
@@ -38,6 +39,7 @@ const ProfileScreen: React.FC = () => {
     useEffect(() => {
       if (data) {
         if (data.user) {
+          // TODO: Move mapping to helper file
           const achievements: AchievementType[] = [];
           data.user.user_achievement.forEach((obj) => {
             achievements.push({
@@ -52,12 +54,12 @@ const ProfileScreen: React.FC = () => {
           const activitites: ActivityFeedData[] = [];
           data.user.activities.forEach((obj) => {
             activitites.push({
-              userName: data.user.name ?? user.name,
+              userName: data.user ? data.user.name : user.name,
               startedAt: obj.started_at,
-              score: obj.score,
-              picture: data.user.picture ?? user.picture,
-              geoFence: obj.geofence,
-              caption: obj.caption,
+              score: obj.score ?? 0,
+              picture: data.user ? data.user.picture : user.picture,
+              geoFence: convertToGeoFence(obj.geofence),
+              caption: obj.caption ?? '',
               duration: obj.duration,
             });
           });
@@ -72,6 +74,7 @@ const ProfileScreen: React.FC = () => {
             socialScore: data.user.social_score.aggregate?.sum?.score ?? user.socialScore,
             exerciseScore: data.user.exercise_score.aggregate?.sum?.score ?? user.exerciseScore,
             achievements: achievements,
+            activities: activitites,
           });
         }
       }
@@ -143,6 +146,7 @@ const ProfileScreen: React.FC = () => {
           <ActivityIndicator size={'large'} color={Colors.blue} />
         </View>
       );
+
     return (
       <ScrollView
         style={styles.container}

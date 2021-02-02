@@ -11,7 +11,7 @@ export type ActivityFeedData = {
   userName: string;
   picture: string;
   caption: string;
-  geoFence: GeoFence;
+  geoFence: GeoFence | undefined;
   startedAt: string;
   score: number;
   duration: number;

@@ -7,6 +7,7 @@ import { Item } from '../components/Leaderboard';
 import { HighscoreQuery } from '../graphql/queries/Highscore.generated';
 import { ProfileUserQuery } from '../graphql/queries/ProfileUser.generated';
 import { UserProfile } from '../types/profileTypes';
+import { Geofences } from '../types/types';
 
 export const convertToRegion = (data: GeofencesQuery): LocationRegion[] => {
   const geoFences: LocationRegion[] = [];
@@ -35,36 +36,45 @@ export const convertToRegion = (data: GeofencesQuery): LocationRegion[] => {
   return geoFences;
 };
 
-export const convertToGeoFence = (data: GeofencesQuery) => {
+export const convertToGeoFences = (data: GeofencesQuery) => {
   const geoFences: GeoFence[] = [];
   for (const obj of data.geofences) {
-    if (obj.variant === 'CIRCLE') {
-      geoFences.push({
-        id: obj.id,
-        name: obj.name,
-        description: obj.description ? obj.description : '',
-        latitude: obj.latitude,
-        longitude: obj.longitude,
-        category: GeoFenceCategory[obj.category as keyof typeof GeoFenceCategory],
-        variant: GeoFenceVariant[obj.variant as keyof typeof GeoFenceVariant],
-        radius: obj.radius,
-      } as CircleGeoFence);
+    if (obj && obj.variant === 'CIRCLE') {
+      const geo = convertToGeoFence(obj);
+      if (geo) geoFences.push(geo);
     } else if (obj.variant === 'POLYGON') {
-      const coordinates = obj.coordinates ? fromRawCoordinatesToLatLng(obj.coordinates) : [];
-      geoFences.push({
-        id: obj.id,
-        name: obj.name,
-        description: obj.description ? obj.description : '',
-        latitude: obj.latitude,
-        longitude: obj.longitude,
-        category: GeoFenceCategory[obj.category as keyof typeof GeoFenceCategory],
-        variant: GeoFenceVariant[obj.variant as keyof typeof GeoFenceVariant],
-        radius: obj.radius,
-        coordinates: coordinates,
-      } as PolygonGeoFence);
+      const geo = convertToGeoFence(obj);
+      if (geo) geoFences.push(geo);
     }
   }
   return geoFences;
+};
+export const convertToGeoFence = (geofence: any) => {
+  if (geofence.variant === 'CIRCLE') {
+    return {
+      id: geofence.id,
+      name: geofence.name,
+      description: geofence.description ? geofence.description : '',
+      latitude: geofence.latitude,
+      longitude: geofence.longitude,
+      category: GeoFenceCategory[geofence.category as keyof typeof GeoFenceCategory],
+      variant: GeoFenceVariant[geofence.variant as keyof typeof GeoFenceVariant],
+      radius: geofence.radius,
+    } as CircleGeoFence;
+  } else if (geofence.variant === 'POLYGON') {
+    const coordinates = geofence.coordinates ? fromRawCoordinatesToLatLng(geofence.coordinates) : [];
+    return {
+      id: geofence.id,
+      name: geofence.name,
+      description: geofence.description ? geofence.description : '',
+      latitude: geofence.latitude,
+      longitude: geofence.longitude,
+      category: GeoFenceCategory[geofence.category as keyof typeof GeoFenceCategory],
+      variant: GeoFenceVariant[geofence.variant as keyof typeof GeoFenceVariant],
+      radius: geofence.radius,
+      coordinates: coordinates,
+    } as PolygonGeoFence;
+  }
 };
 
 const fromRawCoordinatesToLatLng = (coordinatesRaw: string) => {
