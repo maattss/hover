@@ -1,5 +1,14 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { ActivityIndicator, RefreshControl, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  ActivityIndicator,
+  ListView,
+  RefreshControl,
+  SectionList,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { useGetChallengesQuery } from '../../graphql/queries/GetChallenges.generated';
 import { Buttons, Colors, Spacing, Typography } from '../../theme';
 import useAuthentication from '../../hooks/useAuthentication';
@@ -58,24 +67,43 @@ const ChallengeScreen: React.FC<ChallengesProps> = (props: ChallengesProps) => {
       </View>
     );
   }
+  type ItemProp = { section: string; data: [] };
+  const sections: ItemProp[] = [
+    { section: 'Pending', data: [] },
+    { section: 'Ongoing', data: [] },
+    { section: 'NewChallenge', data: [] },
+  ];
+
+  const Item = ({ section }: ItemProp) => {
+    if (section === 'Pending' && pendingChallenges) {
+      return renderPendingChallenges(props, pendingChallenges, refetch);
+    }
+    if (section === 'Ongoing' && ongoingChallenges) {
+      return renderOngoingChallenges(ongoingChallenges);
+    }
+    if (section === 'NewChallenge' && pendingChallenges) {
+      return (
+        <View style={styles.box}>
+          <Text style={{ ...Typography.headerText, marginTop: Spacing.base }}>Want a new challenge?</Text>
+          <Text style={{ ...Typography.bodyText, marginTop: Spacing.base }}>
+            Create a challenge for you and your friends!
+          </Text>
+          <TouchableOpacity style={styles.challengeButton} onPress={() => props.navigation.push('NewChallenge')}>
+            <Text style={{ ...Buttons.buttonText }}>Create new challenge</Text>
+          </TouchableOpacity>
+        </View>
+      );
+    }
+    return <Text style={{ ...Typography.bodyText }}>{section}</Text>;
+  };
 
   return (
-    <ScrollView
-      contentContainerStyle={styles.container}
-      refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
-      {ongoingChallenges && renderOngoingChallenges(ongoingChallenges)}
-      {pendingChallenges && renderPendingChallenges(props, pendingChallenges, refetch)}
-
-      <View style={styles.box}>
-        <Text style={{ ...Typography.headerText, marginTop: Spacing.base }}>Want a new challenge?</Text>
-        <Text style={{ ...Typography.bodyText, marginTop: Spacing.base }}>
-          Create a challenge for you and your friends!
-        </Text>
-        <TouchableOpacity style={styles.challengeButton} onPress={() => props.navigation.push('NewChallenge')}>
-          <Text style={{ ...Buttons.buttonText }}>Create new challenge</Text>
-        </TouchableOpacity>
-      </View>
-    </ScrollView>
+    <View style={styles.container}>
+      <SectionList
+        sections={sections}
+        renderItem={({ item }) => <Item section={item} />}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}></SectionList>
+    </View>
   );
 };
 

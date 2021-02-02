@@ -10,7 +10,7 @@ const ChallengeScreen: React.FC = () => {
   const [challengeType, setChallengeType] = useState<Challenge_Type_Enum>(Challenge_Type_Enum.Score);
   const [endDate, setEndDate] = useState<Date>(new Date('2021-02-11'));
   const [participants, setParticipants] = useState<Challenge_Participant_Insert_Input[]>([
-    { user_id: 'vFRT8aC4F0bCqSJoQcHZ1xXUdEo1', accepted: true },
+    { user_id: user_id, accepted: true },
     { user_id: 'LqzKOPWaY9aiquOGu9SBItAfJUz2' },
   ]);
 
