@@ -25,7 +25,15 @@ export type ProfileUserQuery = { readonly __typename: 'query_root' } & {
           > & {
               readonly geofence: { readonly __typename: 'geofences' } & Pick<
                 Types.Geofences,
-                'category' | 'description' | 'name' | 'variant'
+                | 'category'
+                | 'description'
+                | 'name'
+                | 'variant'
+                | 'latitude'
+                | 'longitude'
+                | 'id'
+                | 'radius'
+                | 'coordinates'
               >;
             }
         >;
@@ -96,6 +104,11 @@ export const ProfileUserDocument = gql`
           description
           name
           variant
+          latitude
+          longitude
+          id
+          radius
+          coordinates
         }
         score
         started_at

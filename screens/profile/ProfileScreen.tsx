@@ -7,13 +7,13 @@ import { Colors, Spacing, Typography } from '../../theme';
 import { UserProfile } from '../../types/profileTypes';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import { GeoFenceCategory } from '../../types/geoFenceTypes';
-import { getCategoryIconName, getCategoryColor } from '../../components/feed/ActivityFeedCard';
+import ActivityFeedCard, { getCategoryIconName, getCategoryColor } from '../../components/feed/ActivityFeedCard';
 import Achievement from '../../components/Achievement';
 import { convertToUserProfile, defaultUserProfile } from '../../helpers/objectMappers';
 
 const ProfileScreen: React.FC = () => {
   const id = useAuthentication().user?.uid;
-  const [user, setUser] = useState<UserProfile>(defaultUserProfile);
+  const [userProfile, setUserProfile] = useState<UserProfile>(defaultUserProfile);
   if (id) {
     const [refreshing, setRefreshing] = useState(false);
     const onRefresh = useCallback(async () => {
@@ -31,20 +31,20 @@ const ProfileScreen: React.FC = () => {
     useEffect(() => {
       if (data && data.user) {
         const userData = convertToUserProfile(data);
-        if (userData) setUser(userData);
+        if (userData) setUserProfile(userData);
       }
     }, [data]);
 
     const getScore = (category: GeoFenceCategory) => {
       switch (category) {
         case GeoFenceCategory.CULTURE:
-          return user.cultureScore;
+          return userProfile.cultureScore;
         case GeoFenceCategory.SOCIAL:
-          return user.socialScore;
+          return userProfile.socialScore;
         case GeoFenceCategory.EXERCISE:
-          return user.exerciseScore;
+          return userProfile.exerciseScore;
         case GeoFenceCategory.EDUCATION:
-          return user.educationScore;
+          return userProfile.educationScore;
         default:
           return 0;
       }
@@ -73,7 +73,8 @@ const ProfileScreen: React.FC = () => {
         });
     };
     const renderAchievements = () => {
-      return user.achievements
+      console.log('activities', userProfile.activities);
+      return userProfile.achievements
         .slice(0)
         .reverse()
         .map((achievement, index) => {
@@ -85,9 +86,7 @@ const ProfileScreen: React.FC = () => {
         });
     };
     const renderActivities = () => {
-      return user.activities.map((activity, index) => {
-        <Text key={index}>{activity.startedAt}</Text>;
-      });
+      return userProfile.activities.map((activity, index) => <ActivityFeedCard key={index} activity={activity} />);
     };
 
     if (error) {
@@ -100,7 +99,7 @@ const ProfileScreen: React.FC = () => {
           <ActivityIndicator size={'large'} color={Colors.blue} />
         </View>
       );
-    console.log('activities', user.activities);
+
     return (
       <ScrollView
         style={styles.container}
@@ -114,10 +113,10 @@ const ProfileScreen: React.FC = () => {
           />
         }>
         <View style={styles.topContainer}>
-          <Image source={{ uri: user.picture }} style={styles.avatar} />
+          <Image source={{ uri: userProfile.picture }} style={styles.avatar} />
           <View style={styles.infoContainer}>
-            <Text style={styles.name}>{user.name}</Text>
-            <Text style={styles.bio}>{user.bio}</Text>
+            <Text style={styles.name}>{userProfile.name}</Text>
+            <Text style={styles.bio}>{userProfile.bio}</Text>
           </View>
         </View>
 
@@ -129,13 +128,11 @@ const ProfileScreen: React.FC = () => {
         <Text style={styles.header}>Score</Text>
         <View style={styles.categoryScore}>{renderScore()}</View>
         <View style={styles.totalScoreContainer}>
-          <Text style={styles.totalScore}>Total: {user.totalScore}</Text>
+          <Text style={styles.totalScore}>Total: {userProfile.totalScore}</Text>
         </View>
 
         <Text style={styles.header}>Activities</Text>
-        <ScrollView style={styles.activitiesContainer} horizontal={true}>
-          {renderActivities()}
-        </ScrollView>
+        <View style={styles.activitiesContainer}>{renderActivities()}</View>
       </ScrollView>
     );
   }
@@ -219,7 +216,6 @@ const styles = StyleSheet.create({
     marginHorizontal: Spacing.smallest,
   },
   activitiesContainer: {
-    height: 240,
     paddingHorizontal: Spacing.smaller,
   },
   categoryIcon: {

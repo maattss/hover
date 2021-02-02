@@ -24,6 +24,11 @@ query ProfileUser($id: String!) {
         description
         name
         variant
+        latitude
+        longitude
+        id
+        radius
+        coordinates
       }
       score
       started_at
