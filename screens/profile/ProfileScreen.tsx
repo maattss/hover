@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, Alert, StyleSheet, Text, View, Image } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useProfileUserQuery } from '../../graphql/queries/ProfileUser.generated';
-import { convertToProfileUser } from '../../helpers/objectMappers';
 import useAuthentication from '../../hooks/useAuthentication';
 import { Colors, Spacing, Typography } from '../../theme';
 import { UserProfile, Achievement } from '../../types/profileTypes';
