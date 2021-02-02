@@ -6,8 +6,17 @@ import useAuthentication from '../../hooks/useAuthentication';
 import { PendingChallenge } from '../../types/challengeTypes';
 import { convertChallenge } from '../../helpers/objectMappers';
 import PendingChallengeList from '../../components/challenge/PendingChallengesList';
+import { ScrollView } from 'react-native-gesture-handler';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { ChallengeStackParamList } from '../../types/navigationTypes';
 
-const ChallengeScreen: React.FC = () => {
+type NavigationProp = StackNavigationProp<ChallengeStackParamList>;
+
+export type ChallengesProps = {
+  navigation: NavigationProp;
+};
+
+const ChallengeScreen: React.FC<ChallengesProps> = (props: ChallengesProps) => {
   const user_id = useAuthentication().user?.uid;
   // const [refreshing, setRefreshing] = useState(false);
   // const [challengeType, setChallengeType] = useState<Challenge_Type_Enum>(Challenge_Type_Enum.Score);
@@ -53,20 +62,10 @@ const ChallengeScreen: React.FC = () => {
       </View>
     );
   }
+
   return (
-    <View style={styles.container}>
-      {pendingChallenges && (
-        <View style={styles.box}>
-          <Text style={{ ...Typography.headerText, marginTop: Spacing.base }}>Pending challenges</Text>
-          <Text style={{ ...Typography.bodyText, marginTop: Spacing.base }}>
-            Accept challenegs to compete with other players
-          </Text>
-          <PendingChallengeList challenges={pendingChallenges} refetch={refetch} />
-        </View>
-      )}
-      <TouchableOpacity style={styles.challengeButton} onPress={() => refetch}>
-        <Text style={{ ...Buttons.buttonText }}>Refresh</Text>
-      </TouchableOpacity>
+    <ScrollView contentContainerStyle={styles.container}>
+      {pendingChallenges && renderPendingChallenges(props, pendingChallenges, refetch)}
 
       {challengeData?.user && challengeData.user?.ongoing_challenges && (
         <View style={styles.box}>
@@ -80,6 +79,26 @@ const ChallengeScreen: React.FC = () => {
           <Text style={{ ...Buttons.buttonText }}>Create challenge</Text>
         </TouchableOpacity>
       </View>
+    </ScrollView>
+  );
+};
+const renderPendingChallenges = (
+  { navigation }: ChallengesProps,
+  pendingChallenges: PendingChallenge[],
+  refetch: () => void,
+) => {
+  return (
+    <View style={styles.box}>
+      <Text style={{ ...Typography.headerText, marginTop: Spacing.base }}>Pending challenges</Text>
+      <Text style={{ ...Typography.bodyText, marginTop: Spacing.base }}>
+        Accept challenegs to compete with other players
+      </Text>
+      <PendingChallengeList challenges={pendingChallenges} refetch={refetch} />
+      <TouchableOpacity
+        style={styles.challengeButton}
+        onPress={() => navigation.push('PendingChallenges', { pendingChallenges, refetch })}>
+        <Text style={{ ...Buttons.buttonText }}>View all</Text>
+      </TouchableOpacity>
     </View>
   );
 };

@@ -1,3 +1,5 @@
+import { PendingChallengesScreenProps } from '../screens/challenge/PendingChallengesScreen';
+
 export type RootStackParamList = {
   Main: undefined;
   Signup: undefined;
@@ -27,6 +29,7 @@ export type ExploreStackParamList = {
 };
 export type ChallengeStackParamList = {
   Challenge: undefined;
+  PendingChallenges: PendingChallengesScreenProps;
 };
 export type StatisticsStackParamList = {
   Leaderboard: undefined;
