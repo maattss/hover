@@ -1,12 +1,12 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { FlatList, RefreshControl, SafeAreaView } from 'react-native';
+import { FlatList, RefreshControl, View, StyleSheet } from 'react-native';
 import { Colors } from '../../theme';
 import { OngoingChallenge } from '../../types/challengeTypes';
 import OngoingChallengeCard from './OngoingChallengeCard';
 
 interface OngoingChallengesListProps {
   challenges: OngoingChallenge[];
-  refetch: () => void;
+  refetch?: () => void;
 }
 
 const OngoingChallengesList: React.FC<OngoingChallengesListProps> = (props: OngoingChallengesListProps) => {
@@ -27,23 +27,33 @@ const OngoingChallengesList: React.FC<OngoingChallengesListProps> = (props: Ongo
   }, [refreshing]);
   const renderItem = (item: OngoingChallenge) => <OngoingChallengeCard challenge={item} />;
   return (
-    <SafeAreaView>
+    <View style={styles.container}>
       <FlatList
         data={challengeData}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({ item }) => renderItem(item)}
         refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={() => onRefresh()}
-            tintColor={Colors.blue}
-            colors={[Colors.blue]}
-            progressBackgroundColor={Colors.transparent}
-          />
+          props.refetch && (
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={() => onRefresh()}
+              tintColor={Colors.blue}
+              colors={[Colors.blue]}
+              progressBackgroundColor={Colors.transparent}
+            />
+          )
         }
       />
-    </SafeAreaView>
+    </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1,
+  },
+});
 
 export default OngoingChallengesList;

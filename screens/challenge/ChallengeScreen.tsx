@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { useCallback, useEffect, useState } from 'react';
+import { ActivityIndicator, RefreshControl, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useGetChallengesQuery } from '../../graphql/queries/GetChallenges.generated';
 import { Buttons, Colors, Spacing, Typography } from '../../theme';
 import useAuthentication from '../../hooks/useAuthentication';
@@ -19,7 +19,7 @@ export type ChallengesProps = {
 
 const ChallengeScreen: React.FC<ChallengesProps> = (props: ChallengesProps) => {
   const user_id = useAuthentication().user?.uid;
-  // const [refreshing, setRefreshing] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
   // const [challengeType, setChallengeType] = useState<Challenge_Type_Enum>(Challenge_Type_Enum.Score);
   //const [endDate, setEndDate] = useState<Date>(new Date('2021-02-11'));
   /* const [participants, setParticipants] = useState<Challenge_Participant_Insert_Input[]>([
@@ -46,6 +46,14 @@ const ChallengeScreen: React.FC<ChallengesProps> = (props: ChallengesProps) => {
     }
   }, [challengeData]);
 
+  const onRefresh = useCallback(async () => {
+    if (refetch) {
+      setRefreshing(true);
+      await refetch();
+      setRefreshing(false);
+    }
+  }, [refreshing]);
+
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
@@ -62,19 +70,22 @@ const ChallengeScreen: React.FC<ChallengesProps> = (props: ChallengesProps) => {
   }
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      {ongoingChallenges && renderOngoingChallenges(ongoingChallenges, refetch)}
-      {pendingChallenges && renderPendingChallenges(props, pendingChallenges, refetch)}
+    <View style={styles.container}>
+      <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
+        {ongoingChallenges && renderOngoingChallenges(ongoingChallenges)}
+        {pendingChallenges && renderPendingChallenges(props, pendingChallenges, refetch)}
 
-      <View style={styles.box}>
-        <Text style={{ ...Typography.headerText, marginTop: Spacing.base }}>Create new Challenge</Text>
-        <TouchableOpacity style={styles.challengeButton}>
-          <Text style={{ ...Buttons.buttonText }}>Create challenge</Text>
-        </TouchableOpacity>
-      </View>
-    </ScrollView>
+        <View style={styles.box}>
+          <Text style={{ ...Typography.headerText, marginTop: Spacing.base }}>Create new Challenge</Text>
+          <TouchableOpacity style={styles.challengeButton}>
+            <Text style={{ ...Buttons.buttonText }}>Create challenge</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+    </View>
   );
 };
+
 const renderPendingChallenges = (
   { navigation }: ChallengesProps,
   pendingChallenges: PendingChallenge[],
@@ -97,13 +108,11 @@ const renderPendingChallenges = (
     </View>
   );
 };
-const renderOngoingChallenges = (ongoingChallenges: OngoingChallenge[], refetch: () => void) => {
+const renderOngoingChallenges = (ongoingChallenges: OngoingChallenge[]) => {
   return (
     <View style={styles.box}>
-      <View style={styles.box}>
-        <Text style={{ ...Typography.headerText, marginTop: Spacing.base }}>Ongoing Challenges</Text>
-        <OngoingChallengesList challenges={ongoingChallenges} refetch={refetch} />
-      </View>
+      <Text style={{ ...Typography.headerText, marginTop: Spacing.base }}>Ongoing Challenges</Text>
+      <OngoingChallengesList challenges={ongoingChallenges} />
     </View>
   );
 };

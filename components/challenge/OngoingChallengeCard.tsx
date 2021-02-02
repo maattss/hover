@@ -39,10 +39,6 @@ const OngoingChallengeCard: React.FC<OngoingChallengeCardProps> = ({ challenge }
   } else {
     return (
       <View style={styles.card}>
-        <View style={styles.topBar}>
-          <Text style={styles.titleText}>Challenge accepted!</Text>
-        </View>
-
         <View style={styles.avatarContainer}>
           <Image source={{ uri: challenge.user.picture }} style={styles.avatar} />
           {challenge.opponents.map((opponent) => (
