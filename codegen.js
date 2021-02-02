@@ -1,4 +1,5 @@
 module.exports = {
+  overwrite: true,
   schema: [
     {
       'https://hover-server.herokuapp.com/v1/graphql': {
@@ -9,33 +10,32 @@ module.exports = {
     },
   ],
   documents: 'graphql/**/*.graphql',
-  overwrite: true,
   hooks: {
     afterOneFileWrite: 'prettier --write',
     afterAllFileWrite: 'prettier --write',
   },
   generates: {
+    './types/fragmentMatcher.ts': {
+      plugins: ['fragment-matcher'],
+      config: {
+        apolloClientVersion: 3,
+      },
+    },
     'types/types.ts': {
       plugins: [{ add: { content: '/* eslint-disable */' } }, 'typescript'],
     },
-    'types/': {
+    './': {
       preset: 'near-operation-file',
       presetConfig: {
         extension: '.generated.tsx',
-        baseTypesPath: 'types.ts',
+        baseTypesPath: 'types/types.ts',
       },
-      plugins: [
-        { add: { content: '/* eslint-disable */' } },
-        'typescript',
-        'typescript-operations',
-        'typescript-react-apollo',
-      ],
+      plugins: [{ add: { content: '/* eslint-disable */' } }, 'typescript-operations', 'typescript-react-apollo'],
       config: {
         gqlImport: '@apollo/client#gql',
-        skipTypename: false,
-        withHooks: true,
         withHOC: false,
         withComponent: false,
+        withHooks: true,
         immutableTypes: true,
         nonOptionalTypename: true,
         reactApolloVersion: 3,
