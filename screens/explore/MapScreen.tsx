@@ -53,6 +53,7 @@ const MapScreen: React.FC = () => {
   const [centreOnUser, setCentreOnUser] = useState(false);
   const [showSnackbar, setShowSnackbar] = useState(false);
   const tracking = useTracking();
+  tracking.refetchGeofences();
 
   // Dynamic styles
   const mapTypeIconStyle = {

@@ -12,6 +12,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import AuthProvider from './components/AuthProvider';
 import TrackingProvider from './components/TrackingProvider';
 import { GRAPHQL_API_URL } from './lib/config';
+import fragmentMatcher from './types/fragmentMatcher';
 
 const asyncAuthLink = setContext(async () => {
   return {
@@ -21,7 +22,7 @@ const asyncAuthLink = setContext(async () => {
   };
 });
 
-const cache = new InMemoryCache();
+const cache = new InMemoryCache({ possibleTypes: fragmentMatcher.possibleTypes });
 
 const httpLink = new HttpLink({
   uri: GRAPHQL_API_URL,
@@ -30,7 +31,7 @@ const httpLink = new HttpLink({
 export const apolloClient = new ApolloClient({
   cache: cache,
   link: asyncAuthLink.concat(httpLink),
-  defaultOptions: { watchQuery: { fetchPolicy: 'cache-first' } },
+  defaultOptions: { watchQuery: { fetchPolicy: 'cache-and-network' } },
 });
 
 export default function App() {

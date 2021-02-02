@@ -8,6 +8,7 @@ export type RootStackParamList = {
 export type RootTabParamList = {
   Feed: undefined;
   Explore: undefined;
+  Challenge: undefined;
   Hover: undefined;
   Profile: undefined;
   Leaderboard: undefined;
@@ -23,6 +24,9 @@ export type NotificationsStackParamList = {
 
 export type ExploreStackParamList = {
   Explore: undefined;
+};
+export type ChallengeStackParamList = {
+  Challenge: undefined;
 };
 export type StatisticsStackParamList = {
   Leaderboard: undefined;

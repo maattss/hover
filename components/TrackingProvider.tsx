@@ -21,6 +21,7 @@ interface TrackingContextValues {
   locationPermission: PermissionResponse | undefined;
   userLocation: LocationObject | null;
   geoFences: GeoFence[];
+  refetchGeofences: () => void;
   unUploadedActivities: TrackedActivity[];
   insideGeoFence: GeoFence | null;
   isTracking: boolean;
@@ -37,6 +38,9 @@ export const TrackingContext = React.createContext<TrackingContextValues>({
   locationPermission: undefined,
   userLocation: null,
   geoFences: [],
+  refetchGeofences: () => {
+    console.error('Function not initialized');
+  },
   unUploadedActivities: [],
   insideGeoFence: null,
   isTracking: false,
@@ -70,7 +74,7 @@ export const TrackingProvider = ({ children }: Props) => {
   const [duration, setDuration] = useState(0);
 
   const [InsertActivity] = useInsertActivityMutation();
-  const { data: geoFenceData, error: geoFenceFetchError } = useGeofencesQuery();
+  const { data: geoFenceData, error: geoFenceFetchError, refetch } = useGeofencesQuery();
   useEffect(() => {
     if (geoFenceData) {
       setGeoFences(convertToGeoFence(geoFenceData));
@@ -183,6 +187,7 @@ export const TrackingProvider = ({ children }: Props) => {
     locationPermission: locationPermission,
     userLocation: userLocation,
     geoFences: geoFences,
+    refetchGeofences: refetch,
     unUploadedActivities: unUploadedActivities,
     insideGeoFence: insideGeoFence,
     isTracking: isTracking,

@@ -11,7 +11,7 @@ export type Scalars = {
   Int: number;
   Float: number;
   bigint: any;
-  daterange: any;
+  date: any;
   float8: any;
   interval: any;
   json: any;
@@ -1318,12 +1318,35 @@ export type Challenge = {
   __typename?: 'challenge';
   /** An object relationship */
   challengeTypeByChallengeType: Challenge_Type;
+  /** An array relationship */
+  challenge_participants: Array<Challenge_Participant>;
+  /** An aggregated array relationship */
+  challenge_participants_aggregate: Challenge_Participant_Aggregate;
   challenge_type: Challenge_Type_Enum;
   created_at: Scalars['timestamptz'];
-  daterange?: Maybe<Scalars['daterange']>;
+  end_date: Scalars['date'];
   id: Scalars['Int'];
   is_active: Scalars['Boolean'];
   rules?: Maybe<Scalars['json']>;
+  start_date: Scalars['date'];
+};
+
+/** columns and relationships of "challenge" */
+export type ChallengeChallenge_ParticipantsArgs = {
+  distinct_on?: Maybe<Array<Challenge_Participant_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Challenge_Participant_Order_By>>;
+  where?: Maybe<Challenge_Participant_Bool_Exp>;
+};
+
+/** columns and relationships of "challenge" */
+export type ChallengeChallenge_Participants_AggregateArgs = {
+  distinct_on?: Maybe<Array<Challenge_Participant_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Challenge_Participant_Order_By>>;
+  where?: Maybe<Challenge_Participant_Bool_Exp>;
 };
 
 /** columns and relationships of "challenge" */
@@ -1398,12 +1421,14 @@ export type Challenge_Bool_Exp = {
   _not?: Maybe<Challenge_Bool_Exp>;
   _or?: Maybe<Array<Maybe<Challenge_Bool_Exp>>>;
   challengeTypeByChallengeType?: Maybe<Challenge_Type_Bool_Exp>;
+  challenge_participants?: Maybe<Challenge_Participant_Bool_Exp>;
   challenge_type?: Maybe<Challenge_Type_Enum_Comparison_Exp>;
   created_at?: Maybe<Timestamptz_Comparison_Exp>;
-  daterange?: Maybe<Daterange_Comparison_Exp>;
+  end_date?: Maybe<Date_Comparison_Exp>;
   id?: Maybe<Int_Comparison_Exp>;
   is_active?: Maybe<Boolean_Comparison_Exp>;
   rules?: Maybe<Json_Comparison_Exp>;
+  start_date?: Maybe<Date_Comparison_Exp>;
 };
 
 /** unique or primary key constraints on table "challenge" */
@@ -1420,38 +1445,48 @@ export type Challenge_Inc_Input = {
 /** input type for inserting data into table "challenge" */
 export type Challenge_Insert_Input = {
   challengeTypeByChallengeType?: Maybe<Challenge_Type_Obj_Rel_Insert_Input>;
+  challenge_participants?: Maybe<Challenge_Participant_Arr_Rel_Insert_Input>;
   challenge_type?: Maybe<Challenge_Type_Enum>;
   created_at?: Maybe<Scalars['timestamptz']>;
-  daterange?: Maybe<Scalars['daterange']>;
+  end_date?: Maybe<Scalars['date']>;
   id?: Maybe<Scalars['Int']>;
   is_active?: Maybe<Scalars['Boolean']>;
   rules?: Maybe<Scalars['json']>;
+  start_date?: Maybe<Scalars['date']>;
 };
 
 /** aggregate max on columns */
 export type Challenge_Max_Fields = {
   __typename?: 'challenge_max_fields';
   created_at?: Maybe<Scalars['timestamptz']>;
+  end_date?: Maybe<Scalars['date']>;
   id?: Maybe<Scalars['Int']>;
+  start_date?: Maybe<Scalars['date']>;
 };
 
 /** order by max() on columns of table "challenge" */
 export type Challenge_Max_Order_By = {
   created_at?: Maybe<Order_By>;
+  end_date?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
+  start_date?: Maybe<Order_By>;
 };
 
 /** aggregate min on columns */
 export type Challenge_Min_Fields = {
   __typename?: 'challenge_min_fields';
   created_at?: Maybe<Scalars['timestamptz']>;
+  end_date?: Maybe<Scalars['date']>;
   id?: Maybe<Scalars['Int']>;
+  start_date?: Maybe<Scalars['date']>;
 };
 
 /** order by min() on columns of table "challenge" */
 export type Challenge_Min_Order_By = {
   created_at?: Maybe<Order_By>;
+  end_date?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
+  start_date?: Maybe<Order_By>;
 };
 
 /** response of any mutation on the table "challenge" */
@@ -1479,18 +1514,24 @@ export type Challenge_On_Conflict = {
 /** ordering options when selecting data from "challenge" */
 export type Challenge_Order_By = {
   challengeTypeByChallengeType?: Maybe<Challenge_Type_Order_By>;
+  challenge_participants_aggregate?: Maybe<Challenge_Participant_Aggregate_Order_By>;
   challenge_type?: Maybe<Order_By>;
   created_at?: Maybe<Order_By>;
-  daterange?: Maybe<Order_By>;
+  end_date?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
   is_active?: Maybe<Order_By>;
   rules?: Maybe<Order_By>;
+  start_date?: Maybe<Order_By>;
 };
 
 /** columns and relationships of "challenge_participant" */
 export type Challenge_Participant = {
   __typename?: 'challenge_participant';
+  /** An object relationship */
+  challenge: Challenge;
   challenge_id: Scalars['Int'];
+  /** An object relationship */
+  user: Users;
   user_id: Scalars['String'];
 };
 
@@ -1560,7 +1601,9 @@ export type Challenge_Participant_Bool_Exp = {
   _and?: Maybe<Array<Maybe<Challenge_Participant_Bool_Exp>>>;
   _not?: Maybe<Challenge_Participant_Bool_Exp>;
   _or?: Maybe<Array<Maybe<Challenge_Participant_Bool_Exp>>>;
+  challenge?: Maybe<Challenge_Bool_Exp>;
   challenge_id?: Maybe<Int_Comparison_Exp>;
+  user?: Maybe<Users_Bool_Exp>;
   user_id?: Maybe<String_Comparison_Exp>;
 };
 
@@ -1577,7 +1620,9 @@ export type Challenge_Participant_Inc_Input = {
 
 /** input type for inserting data into table "challenge_participant" */
 export type Challenge_Participant_Insert_Input = {
+  challenge?: Maybe<Challenge_Obj_Rel_Insert_Input>;
   challenge_id?: Maybe<Scalars['Int']>;
+  user?: Maybe<Users_Obj_Rel_Insert_Input>;
   user_id?: Maybe<Scalars['String']>;
 };
 
@@ -1631,7 +1676,9 @@ export type Challenge_Participant_On_Conflict = {
 
 /** ordering options when selecting data from "challenge_participant" */
 export type Challenge_Participant_Order_By = {
+  challenge?: Maybe<Challenge_Order_By>;
   challenge_id?: Maybe<Order_By>;
+  user?: Maybe<Users_Order_By>;
   user_id?: Maybe<Order_By>;
 };
 
@@ -1752,23 +1799,26 @@ export enum Challenge_Select_Column {
   /** column name */
   CreatedAt = 'created_at',
   /** column name */
-  Daterange = 'daterange',
+  EndDate = 'end_date',
   /** column name */
   Id = 'id',
   /** column name */
   IsActive = 'is_active',
   /** column name */
   Rules = 'rules',
+  /** column name */
+  StartDate = 'start_date',
 }
 
 /** input type for updating data in table "challenge" */
 export type Challenge_Set_Input = {
   challenge_type?: Maybe<Challenge_Type_Enum>;
   created_at?: Maybe<Scalars['timestamptz']>;
-  daterange?: Maybe<Scalars['daterange']>;
+  end_date?: Maybe<Scalars['date']>;
   id?: Maybe<Scalars['Int']>;
   is_active?: Maybe<Scalars['Boolean']>;
   rules?: Maybe<Scalars['json']>;
+  start_date?: Maybe<Scalars['date']>;
 };
 
 /** aggregate stddev on columns */
@@ -1980,13 +2030,15 @@ export enum Challenge_Update_Column {
   /** column name */
   CreatedAt = 'created_at',
   /** column name */
-  Daterange = 'daterange',
+  EndDate = 'end_date',
   /** column name */
   Id = 'id',
   /** column name */
   IsActive = 'is_active',
   /** column name */
   Rules = 'rules',
+  /** column name */
+  StartDate = 'start_date',
 }
 
 /** aggregate var_pop on columns */
@@ -2353,17 +2405,17 @@ export type Comments_Variance_Order_By = {
   comment_id?: Maybe<Order_By>;
 };
 
-/** expression to compare columns of type daterange. All fields are combined with logical 'AND'. */
-export type Daterange_Comparison_Exp = {
-  _eq?: Maybe<Scalars['daterange']>;
-  _gt?: Maybe<Scalars['daterange']>;
-  _gte?: Maybe<Scalars['daterange']>;
-  _in?: Maybe<Array<Scalars['daterange']>>;
+/** expression to compare columns of type date. All fields are combined with logical 'AND'. */
+export type Date_Comparison_Exp = {
+  _eq?: Maybe<Scalars['date']>;
+  _gt?: Maybe<Scalars['date']>;
+  _gte?: Maybe<Scalars['date']>;
+  _in?: Maybe<Array<Scalars['date']>>;
   _is_null?: Maybe<Scalars['Boolean']>;
-  _lt?: Maybe<Scalars['daterange']>;
-  _lte?: Maybe<Scalars['daterange']>;
-  _neq?: Maybe<Scalars['daterange']>;
-  _nin?: Maybe<Array<Scalars['daterange']>>;
+  _lt?: Maybe<Scalars['date']>;
+  _lte?: Maybe<Scalars['date']>;
+  _neq?: Maybe<Scalars['date']>;
+  _nin?: Maybe<Array<Scalars['date']>>;
 };
 
 /** expression to compare columns of type float8. All fields are combined with logical 'AND'. */
@@ -5397,6 +5449,10 @@ export type Users = {
   /** An aggregated array relationship */
   activities_aggregate: Activities_Aggregate;
   bio?: Maybe<Scalars['String']>;
+  /** An array relationship */
+  challenge_participants: Array<Challenge_Participant>;
+  /** An aggregated array relationship */
+  challenge_participants_aggregate: Challenge_Participant_Aggregate;
   created_at?: Maybe<Scalars['timestamptz']>;
   email: Scalars['String'];
   /** An array relationship */
@@ -5435,6 +5491,24 @@ export type UsersActivities_AggregateArgs = {
   offset?: Maybe<Scalars['Int']>;
   order_by?: Maybe<Array<Activities_Order_By>>;
   where?: Maybe<Activities_Bool_Exp>;
+};
+
+/** columns and relationships of "users" */
+export type UsersChallenge_ParticipantsArgs = {
+  distinct_on?: Maybe<Array<Challenge_Participant_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Challenge_Participant_Order_By>>;
+  where?: Maybe<Challenge_Participant_Bool_Exp>;
+};
+
+/** columns and relationships of "users" */
+export type UsersChallenge_Participants_AggregateArgs = {
+  distinct_on?: Maybe<Array<Challenge_Participant_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Challenge_Participant_Order_By>>;
+  where?: Maybe<Challenge_Participant_Bool_Exp>;
 };
 
 /** columns and relationships of "users" */
@@ -5532,6 +5606,7 @@ export type Users_Bool_Exp = {
   _or?: Maybe<Array<Maybe<Users_Bool_Exp>>>;
   activities?: Maybe<Activities_Bool_Exp>;
   bio?: Maybe<String_Comparison_Exp>;
+  challenge_participants?: Maybe<Challenge_Participant_Bool_Exp>;
   created_at?: Maybe<Timestamptz_Comparison_Exp>;
   email?: Maybe<String_Comparison_Exp>;
   followers?: Maybe<Followings_Bool_Exp>;
@@ -5557,6 +5632,7 @@ export enum Users_Constraint {
 export type Users_Insert_Input = {
   activities?: Maybe<Activities_Arr_Rel_Insert_Input>;
   bio?: Maybe<Scalars['String']>;
+  challenge_participants?: Maybe<Challenge_Participant_Arr_Rel_Insert_Input>;
   created_at?: Maybe<Scalars['timestamptz']>;
   email?: Maybe<Scalars['String']>;
   followers?: Maybe<Followings_Arr_Rel_Insert_Input>;
@@ -5640,6 +5716,7 @@ export type Users_On_Conflict = {
 export type Users_Order_By = {
   activities_aggregate?: Maybe<Activities_Aggregate_Order_By>;
   bio?: Maybe<Order_By>;
+  challenge_participants_aggregate?: Maybe<Challenge_Participant_Aggregate_Order_By>;
   created_at?: Maybe<Order_By>;
   email?: Maybe<Order_By>;
   followers_aggregate?: Maybe<Followings_Aggregate_Order_By>;
