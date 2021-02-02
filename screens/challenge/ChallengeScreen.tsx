@@ -1,28 +1,25 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { ActivityIndicator, RefreshControl, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { useInsertChallengeMutation } from '../../graphql/mutations/InsertChallenge.generated';
+import React, { useEffect, useState } from 'react';
+import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useGetChallengesQuery } from '../../graphql/queries/GetChallenges.generated';
 import { Buttons, Colors, Spacing, Typography } from '../../theme';
 import useAuthentication from '../../hooks/useAuthentication';
-import { Challenge_Participant_Insert_Input, Challenge_Type_Enum } from '../../types/types';
 import { PendingChallenge } from '../../types/challengeTypes';
-import PendingChallengeCard from '../../components/challenge/PendingChallengeCard';
 import { convertChallenge } from '../../helpers/objectMappers';
-import { FlatList } from 'react-native-gesture-handler';
+import PendingChallengeList from '../../components/challenge/PendingChallengesList';
 
 const ChallengeScreen: React.FC = () => {
   const user_id = useAuthentication().user?.uid;
-  const [refreshing, setRefreshing] = useState(false);
-  const [challengeType, setChallengeType] = useState<Challenge_Type_Enum>(Challenge_Type_Enum.Score);
-  const [endDate, setEndDate] = useState<Date>(new Date('2021-02-11'));
-  const [participants, setParticipants] = useState<Challenge_Participant_Insert_Input[]>([
+  // const [refreshing, setRefreshing] = useState(false);
+  // const [challengeType, setChallengeType] = useState<Challenge_Type_Enum>(Challenge_Type_Enum.Score);
+  //const [endDate, setEndDate] = useState<Date>(new Date('2021-02-11'));
+  /* const [participants, setParticipants] = useState<Challenge_Participant_Insert_Input[]>([
     { user_id: 'vFRT8aC4F0bCqSJoQcHZ1xXUdEo1', accepted: true },
     { user_id: 'LqzKOPWaY9aiquOGu9SBItAfJUz2' },
-  ]);
+  ]); */
 
-  const [createChallenge, { data }] = useInsertChallengeMutation({
+  /*const [createChallenge, { data }] = useInsertChallengeMutation({
     variables: { challenge_type: challengeType, end_date: endDate, participants: participants },
-  });
+  }); */
 
   const [pendingChallenges, setPendingChallenges] = useState<PendingChallenge[]>();
   // const [ongoingChallenges, setOngoingChallenges] = useState<PendingChallenge[]>();
@@ -37,19 +34,10 @@ const ChallengeScreen: React.FC = () => {
       console.log('challengeData', challengeData.user);
       console.log('pendingChallenges', pendingChallenges);
       setPendingChallenges(pendingChallenges);
-      console.error(pendingChallenges, challengeData);
+      console.log('pendingChallenges', pendingChallenges);
     }
+    console.log('pendingChallenges', pendingChallenges, '\nchallengeData', challengeData);
   }, [challengeData]);
-
-  const onRefresh = useCallback(async () => {
-    if (refetch) {
-      setRefreshing(true);
-      await refetch();
-      setRefreshing(false);
-    }
-  }, [refreshing]);
-
-  const renderItem = (item: PendingChallenge) => <PendingChallengeCard challenge={item} />;
 
   if (loading) {
     return (
@@ -61,8 +49,7 @@ const ChallengeScreen: React.FC = () => {
   if (error) {
     return (
       <View style={styles.loadingContainer}>
-        <Text>{error.message}</Text>
-        {console.error(error.message)}
+        <Text style={{ ...Typography.bodyText, marginTop: Spacing.base }}>{error.message}</Text>
       </View>
     );
   }
@@ -70,7 +57,11 @@ const ChallengeScreen: React.FC = () => {
     <View style={styles.container}>
       {pendingChallenges && (
         <View style={styles.box}>
-          <Text style={{ ...Typography.headerText, marginTop: Spacing.base }}>Pending Challenge screen</Text>
+          <Text style={{ ...Typography.headerText, marginTop: Spacing.base }}>Pending challenges</Text>
+          <Text style={{ ...Typography.bodyText, marginTop: Spacing.base }}>
+            Accept challenegs to compete with other players
+          </Text>
+          <PendingChallengeList challenges={pendingChallenges} refetch={refetch} />
         </View>
       )}
       <TouchableOpacity style={styles.challengeButton} onPress={() => refetch}>
@@ -85,7 +76,7 @@ const ChallengeScreen: React.FC = () => {
 
       <View style={styles.box}>
         <Text style={{ ...Typography.headerText, marginTop: Spacing.base }}>Create new Challenge</Text>
-        <TouchableOpacity style={styles.challengeButton} onPress={() => createChallenge}>
+        <TouchableOpacity style={styles.challengeButton}>
           <Text style={{ ...Buttons.buttonText }}>Create challenge</Text>
         </TouchableOpacity>
       </View>
