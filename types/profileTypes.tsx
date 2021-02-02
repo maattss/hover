@@ -1,5 +1,8 @@
 export enum AchievementVariant {
+  DEFAULT,
   SCORE,
+  FIRST_ACTIVITY,
+  SCORE_IN_CATEGORY,
 }
 
 export type UserProfile = {
@@ -18,7 +21,7 @@ export type UserProfile = {
 export type Achievement = {
   description: string;
   name: string;
-  type: string;
+  type: AchievementVariant;
   createdAt: string;
   level: number;
 };

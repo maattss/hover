@@ -1,30 +1,27 @@
 import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import { Colors, Spacing } from '../theme';
-import { GeoFenceCategory } from '../types/geoFenceTypes';
-import { Achievement as AchievementType } from '../types/profileTypes';
+import { Achievement as AchievementType, AchievementVariant } from '../types/profileTypes';
 import { Typography } from '../theme';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 
 interface AchievementProps {
   achievement: AchievementType;
 }
-export const getAchievementIcon = (name: string) => {
-  switch (name) {
-    case GeoFenceCategory.CULTURE:
-      return 'theater-masks';
-    case GeoFenceCategory.SOCIAL:
-      return 'users';
-    case GeoFenceCategory.EXERCISE:
-      return 'dumbbell';
-    case GeoFenceCategory.EDUCATION:
-      return 'graduation-cap';
+export const getAchievementIcon = (variant: AchievementVariant) => {
+  switch (variant) {
+    case AchievementVariant.SCORE:
+      return 'star';
+    case AchievementVariant.SCORE_IN_CATEGORY:
+      return 'star-half';
+    case AchievementVariant.FIRST_ACTIVITY:
+      return 'award';
     default:
-      return 'question-circle';
+      return 'medal';
   }
 };
 
-export const getAchievementColor = (level: number) => {
+export const getAchievementBgColor = (level: number) => {
   switch (level) {
     case 1:
       return Colors.gold;
@@ -36,12 +33,30 @@ export const getAchievementColor = (level: number) => {
       return Colors.gray800;
   }
 };
+export const getAchievementColor = (level: number) => {
+  switch (level) {
+    case 1:
+      return Colors.almostBlack;
+    case 2:
+      return Colors.almostBlack;
+    case 3:
+      return Colors.almostWhite;
+    default:
+      return Colors.almostWhite;
+  }
+};
 
 const Achievement: React.FC<AchievementProps> = ({ achievement }: AchievementProps) => {
+  const trophyBgColor = {
+    backgroundColor: getAchievementBgColor(achievement.level),
+  };
+  const iconColor = {
+    color: getAchievementColor(achievement.level),
+  };
   return (
     <View style={styles.achievement}>
-      <View style={styles.trophy}>
-        <FAIcon name={'star'} style={styles.icon}></FAIcon>
+      <View style={[styles.trophy, trophyBgColor]}>
+        <FAIcon name={getAchievementIcon(achievement.type)} style={[styles.icon, iconColor]}></FAIcon>
       </View>
       <Text style={styles.text}>{achievement.name}</Text>
     </View>
@@ -53,7 +68,6 @@ const styles = StyleSheet.create({
     height: 80,
     width: 80,
     justifyContent: 'center',
-    backgroundColor: Colors.bronze,
     borderRadius: Spacing.extraLarge,
     margin: Spacing.smaller,
   },

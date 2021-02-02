@@ -6,7 +6,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { useProfileUserQuery } from '../../graphql/queries/ProfileUser.generated';
 import useAuthentication from '../../hooks/useAuthentication';
 import { Colors, Spacing, Typography } from '../../theme';
-import { UserProfile, Achievement as AchievementType } from '../../types/profileTypes';
+import { UserProfile, Achievement as AchievementType, AchievementVariant } from '../../types/profileTypes';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import { GeoFenceCategory } from '../../types/geoFenceTypes';
 import { getCategoryIconName, getCategoryColor } from '../../components/feed/ActivityFeedCard';
@@ -43,7 +43,7 @@ const ProfileScreen: React.FC = () => {
               name: obj.achievement.name ?? '',
               level: obj.achievement.level ?? 3,
               createdAt: obj.achievement.created_at ?? '',
-              achievementType: obj.achievement.achievement_type ?? '',
+              type: AchievementVariant[obj.achievement.achievement_type as keyof typeof AchievementVariant],
             });
           });
           setUser({

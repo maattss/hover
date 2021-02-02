@@ -6,6 +6,7 @@ import { Typography, Spacing } from '../../theme';
 import { ActivityFeedData, AchievementFeedData, ChallengeFeedData } from '../../types/feedTypes';
 import { CircleGeoFence, GeoFenceCategory, GeoFenceVariant } from '../../types/geoFenceTypes';
 import ChallengeFeedCard from '../../components/feed/ChallengeFeedCard';
+import { AchievementVariant } from '../../types/profileTypes';
 
 const FeedScreen: React.FC = () => {
   const testGeoFence: CircleGeoFence = {
@@ -30,9 +31,9 @@ const FeedScreen: React.FC = () => {
     userName: 'Mats Tyldum',
     picture: 'https://api.multiavatar.com/c68e82f2fb46979b85.png',
     achievement: {
-      name: 'asd',
+      name: '1000 points',
       description: 'Achieved 1000 points!',
-      type: 'score',
+      type: AchievementVariant.SCORE,
       createdAt: '2021-01-28T09:00:00+01:00',
       level: 1,
     },
