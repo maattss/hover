@@ -73,7 +73,6 @@ const ProfileScreen: React.FC = () => {
         });
     };
     const renderAchievements = () => {
-      console.log('activities', userProfile.activities);
       return userProfile.achievements
         .slice(0)
         .reverse()
@@ -141,7 +140,6 @@ const ProfileScreen: React.FC = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     padding: Spacing.smaller,
   },
   name: {
@@ -216,7 +214,7 @@ const styles = StyleSheet.create({
     marginHorizontal: Spacing.smallest,
   },
   activitiesContainer: {
-    paddingHorizontal: Spacing.smaller,
+    marginBottom: Spacing.base,
   },
   categoryIcon: {
     color: Colors.almostWhite,
