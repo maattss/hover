@@ -10,7 +10,11 @@ const ChallengeNavigator: React.FC = () => {
   return (
     <ChallengeStack.Navigator screenOptions={{ headerShown: false }}>
       <ChallengeStack.Screen name="Challenge" component={ChallengeScreen} />
-      <ChallengeStack.Screen name="PendingChallenges" component={PendingChallengesScreen} />
+      <ChallengeStack.Screen
+        name="Pending challenges"
+        component={PendingChallengesScreen}
+        options={{ headerShown: true }}
+      />
     </ChallengeStack.Navigator>
   );
 };

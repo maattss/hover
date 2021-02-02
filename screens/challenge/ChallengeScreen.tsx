@@ -9,6 +9,7 @@ import PendingChallengeList from '../../components/challenge/PendingChallengesLi
 import { ScrollView } from 'react-native-gesture-handler';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { ChallengeStackParamList } from '../../types/navigationTypes';
+import PendingChallengeCard from '../../components/challenge/PendingChallengeCard';
 
 type NavigationProp = StackNavigationProp<ChallengeStackParamList>;
 
@@ -31,7 +32,7 @@ const ChallengeScreen: React.FC<ChallengesProps> = (props: ChallengesProps) => {
   }); */
 
   const [pendingChallenges, setPendingChallenges] = useState<PendingChallenge[]>();
-  // const [ongoingChallenges, setOngoingChallenges] = useState<PendingChallenge[]>();
+  const [ongoingChallenges, setOngoingChallenges] = useState<PendingChallenge[]>();
 
   const { data: challengeData, loading, error, refetch } = useGetChallengesQuery({
     variables: { user_id: user_id ? user_id : '' },
@@ -39,13 +40,10 @@ const ChallengeScreen: React.FC<ChallengesProps> = (props: ChallengesProps) => {
 
   useEffect(() => {
     if (challengeData && challengeData.user) {
-      const { pendingChallenges } = convertChallenge(challengeData);
-      console.log('challengeData', challengeData.user);
-      console.log('pendingChallenges', pendingChallenges);
+      const { pendingChallenges, ongoingChallenges } = convertChallenge(challengeData);
       setPendingChallenges(pendingChallenges);
-      console.log('pendingChallenges', pendingChallenges);
+      setOngoingChallenges(ongoingChallenges);
     }
-    console.log('pendingChallenges', pendingChallenges, '\nchallengeData', challengeData);
   }, [challengeData]);
 
   if (loading) {
@@ -91,14 +89,16 @@ const renderPendingChallenges = (
     <View style={styles.box}>
       <Text style={{ ...Typography.headerText, marginTop: Spacing.base }}>Pending challenges</Text>
       <Text style={{ ...Typography.bodyText, marginTop: Spacing.base }}>
-        Accept challenegs to compete with other players
+        Accept the challenges to compete with other players.
       </Text>
-      <PendingChallengeList challenges={pendingChallenges} refetch={refetch} />
-      <TouchableOpacity
-        style={styles.challengeButton}
-        onPress={() => navigation.push('PendingChallenges', { pendingChallenges, refetch })}>
-        <Text style={{ ...Buttons.buttonText }}>View all</Text>
-      </TouchableOpacity>
+      <PendingChallengeCard challenge={pendingChallenges[0]} />
+      {pendingChallenges.length > 1 && (
+        <TouchableOpacity
+          style={styles.challengeButton}
+          onPress={() => navigation.push('Pending challenges', { pendingChallenges, refetch })}>
+          <Text style={{ ...Buttons.buttonText }}>View all</Text>
+        </TouchableOpacity>
+      )}
     </View>
   );
 };

@@ -11,7 +11,7 @@ export interface PendingChallengesScreenProps {
   refetch: () => void;
 }
 
-type ProfileScreenRouteProp = RouteProp<ChallengeStackParamList, 'PendingChallenges'>;
+type ProfileScreenRouteProp = RouteProp<ChallengeStackParamList, 'Pending challenges'>;
 
 type Props = {
   route: ProfileScreenRouteProp;
@@ -22,7 +22,7 @@ const PendingChallengesScreen: React.FC<Props> = ({ route }: Props) => {
     <View style={styles.container}>
       <Text style={{ ...Typography.headerText, marginTop: Spacing.base }}>Pending challenges</Text>
       <Text style={{ ...Typography.bodyText, marginTop: Spacing.base }}>
-        Accept challenegs to compete with other players
+        Accept challenges to compete with other players
       </Text>
       <PendingChallengeList challenges={route.params.pendingChallenges} refetch={route.params.refetch} />
     </View>
@@ -32,6 +32,7 @@ const PendingChallengesScreen: React.FC<Props> = ({ route }: Props) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    padding: 5,
     alignItems: 'center',
     justifyContent: 'space-between',
   },
