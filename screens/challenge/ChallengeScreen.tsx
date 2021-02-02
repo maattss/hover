@@ -20,16 +20,6 @@ export type ChallengesProps = {
 const ChallengeScreen: React.FC<ChallengesProps> = (props: ChallengesProps) => {
   const user_id = useAuthentication().user?.uid;
   const [refreshing, setRefreshing] = useState(false);
-  // const [challengeType, setChallengeType] = useState<Challenge_Type_Enum>(Challenge_Type_Enum.Score);
-  //const [endDate, setEndDate] = useState<Date>(new Date('2021-02-11'));
-  /* const [participants, setParticipants] = useState<Challenge_Participant_Insert_Input[]>([
-    { user_id: 'vFRT8aC4F0bCqSJoQcHZ1xXUdEo1', accepted: true },
-    { user_id: 'LqzKOPWaY9aiquOGu9SBItAfJUz2' },
-  ]); */
-
-  /*const [createChallenge, { data }] = useInsertChallengeMutation({
-    variables: { challenge_type: challengeType, end_date: endDate, participants: participants },
-  }); */
 
   const [pendingChallenges, setPendingChallenges] = useState<PendingChallenge[]>();
   const [ongoingChallenges, setOngoingChallenges] = useState<OngoingChallenge[]>();
@@ -77,9 +67,12 @@ const ChallengeScreen: React.FC<ChallengesProps> = (props: ChallengesProps) => {
       {pendingChallenges && renderPendingChallenges(props, pendingChallenges, refetch)}
 
       <View style={styles.box}>
-        <Text style={{ ...Typography.headerText, marginTop: Spacing.base }}>Create new Challenge</Text>
-        <TouchableOpacity style={styles.challengeButton}>
-          <Text style={{ ...Buttons.buttonText }}>Create challenge</Text>
+        <Text style={{ ...Typography.headerText, marginTop: Spacing.base }}>Want a new challenge?</Text>
+        <Text style={{ ...Typography.bodyText, marginTop: Spacing.base }}>
+          Create a challenge for you and your friends!
+        </Text>
+        <TouchableOpacity style={styles.challengeButton} onPress={() => props.navigation.push('NewChallenge')}>
+          <Text style={{ ...Buttons.buttonText }}>Create new challenge</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>
