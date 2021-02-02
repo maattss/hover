@@ -9,9 +9,8 @@ import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 interface AchievementProps {
   achievement: AchievementType;
 }
-
-export const getCategoryIconName = (category: GeoFenceCategory) => {
-  switch (category) {
+export const getAchievementIcon = (name: string) => {
+  switch (name) {
     case GeoFenceCategory.CULTURE:
       return 'theater-masks';
     case GeoFenceCategory.SOCIAL:
@@ -24,16 +23,15 @@ export const getCategoryIconName = (category: GeoFenceCategory) => {
       return 'question-circle';
   }
 };
-export const getCategoryColor = (category: GeoFenceCategory) => {
-  switch (category) {
-    case GeoFenceCategory.CULTURE:
-      return Colors.almostWhite;
-    case GeoFenceCategory.SOCIAL:
-      return Colors.blue;
-    case GeoFenceCategory.EXERCISE:
-      return Colors.green;
-    case GeoFenceCategory.EDUCATION:
-      return Colors.red;
+
+export const getAchievementColor = (level: number) => {
+  switch (level) {
+    case 1:
+      return Colors.gold;
+    case 2:
+      return Colors.silver;
+    case 3:
+      return Colors.bronze;
     default:
       return Colors.gray800;
   }

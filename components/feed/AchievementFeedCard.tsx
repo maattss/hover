@@ -4,30 +4,29 @@ import { Colors, Typography, Spacing } from '../../theme';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import { AchievementFeedData } from '../../types/feedTypes';
 import { timeStampToPresentable } from '../../helpers/dateTimeHelpers';
+import Achievement from '../Achievement';
 
 interface AchievementFeedCardProps {
-  achievement: AchievementFeedData;
+  data: AchievementFeedData;
 }
 
-const AchievementFeedCard: React.FC<AchievementFeedCardProps> = ({ achievement }: AchievementFeedCardProps) => {
+const AchievementFeedCard: React.FC<AchievementFeedCardProps> = ({ data }: AchievementFeedCardProps) => {
   return (
     <View style={styles.card}>
       <View style={styles.topBar}>
-        <Image source={{ uri: achievement.picture }} style={styles.avatar} />
-        <Text style={styles.nameText}>{achievement.userName}</Text>
+        <Image source={{ uri: data.picture }} style={styles.avatar} />
+        <Text style={styles.nameText}>{data.userName}</Text>
       </View>
 
       <View style={styles.main}>
         <View style={styles.description}>
-          <Text style={styles.descriptionText}>{achievement.description}</Text>
+          <Text style={styles.descriptionText}>{data.achievement.description}</Text>
         </View>
-        <View style={styles.trophy}>
-          <FAIcon style={styles.trophyIcon} name={'award'} />
-        </View>
+        <Achievement achievement={data.achievement} />
       </View>
 
       <View style={styles.footer}>
-        <Text style={styles.footerText}>{timeStampToPresentable(achievement.createdAt)}</Text>
+        <Text style={styles.footerText}>{timeStampToPresentable(data.achievement.createdAt)}</Text>
       </View>
     </View>
   );

@@ -1,4 +1,6 @@
-import { AchievementType } from './feedTypes';
+export enum AchievementVariant {
+  SCORE,
+}
 
 export type UserProfile = {
   bio: string;
@@ -16,7 +18,7 @@ export type UserProfile = {
 export type Achievement = {
   description: string;
   name: string;
-  achievementType?: string;
-  createdAt?: string;
+  type: string;
+  createdAt: string;
   level: number;
 };

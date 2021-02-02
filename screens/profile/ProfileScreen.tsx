@@ -221,6 +221,9 @@ const styles = StyleSheet.create({
   achievementsContainer: {
     height: 120,
   },
+  achievement: {
+    alignItems: 'center',
+  },
   activitiesContainer: {
     height: 240,
   },
