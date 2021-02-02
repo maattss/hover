@@ -1,6 +1,6 @@
 query GetChallenges($user_id: String!) {
   user(id: $user_id) {
-    id
+    ...basicUserFragment
     pending_challenges: challenge_participants(
       where: { accepted: { _eq: false }, challenge: { is_active: { _eq: true } } }
     ) {

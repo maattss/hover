@@ -51,7 +51,7 @@ export type GeofenceFragmentFragment = { readonly __typename: 'geofences' } & Pi
 
 export type ChallengeFragmentFragment = { readonly __typename: 'challenge' } & Pick<
   Types.Challenge,
-  'id' | 'challenge_type' | 'start_date' | 'end_date' | 'is_active'
+  'id' | 'challenge_type' | 'created_at' | 'start_date' | 'end_date' | 'is_active'
 >;
 
 export const BasicUserFragmentFragmentDoc = gql`
@@ -142,6 +142,7 @@ export const ChallengeFragmentFragmentDoc = gql`
   fragment challengeFragment on challenge {
     id
     challenge_type
+    created_at
     start_date
     end_date
     is_active

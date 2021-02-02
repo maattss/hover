@@ -74,6 +74,7 @@ fragment geofenceFragment on geofences {
 fragment challengeFragment on challenge {
   id
   challenge_type
+  created_at
   start_date
   end_date
   is_active

@@ -1,9 +1,9 @@
 /* eslint-disable */
 import * as Types from '../../types/types';
 
-import { ChallengeFragmentFragment, BasicUserFragmentFragment } from '../Fragments.generated';
+import { BasicUserFragmentFragment, ChallengeFragmentFragment } from '../Fragments.generated';
 import { gql } from '@apollo/client';
-import { ChallengeFragmentFragmentDoc, BasicUserFragmentFragmentDoc } from '../Fragments.generated';
+import { BasicUserFragmentFragmentDoc, ChallengeFragmentFragmentDoc } from '../Fragments.generated';
 import * as Apollo from '@apollo/client';
 export type GetChallengesQueryVariables = Types.Exact<{
   user_id: Types.Scalars['String'];
@@ -11,48 +11,48 @@ export type GetChallengesQueryVariables = Types.Exact<{
 
 export type GetChallengesQuery = { readonly __typename: 'query_root' } & {
   readonly user?: Types.Maybe<
-    { readonly __typename: 'users' } & Pick<Types.Users, 'id'> & {
-        readonly pending_challenges: ReadonlyArray<
-          { readonly __typename: 'challenge_participant' } & {
-            readonly challenge: { readonly __typename: 'challenge' } & {
-              readonly opponents: ReadonlyArray<
-                { readonly __typename: 'challenge_participant' } & Pick<Types.Challenge_Participant, 'accepted'> & {
-                    readonly user: { readonly __typename: 'users' } & BasicUserFragmentFragment;
-                  }
-              >;
-            } & ChallengeFragmentFragment;
-          }
-        >;
-        readonly ongoing_challenges: ReadonlyArray<
-          { readonly __typename: 'challenge_participant' } & {
-            readonly challenge: { readonly __typename: 'challenge' } & {
-              readonly opponents: ReadonlyArray<
-                { readonly __typename: 'challenge_participant' } & Pick<Types.Challenge_Participant, 'accepted'> & {
-                    readonly user: { readonly __typename: 'users' } & BasicUserFragmentFragment;
-                  }
-              >;
-            } & ChallengeFragmentFragment;
-          }
-        >;
-        readonly finished_challenges: ReadonlyArray<
-          { readonly __typename: 'challenge_participant' } & {
-            readonly challenge: { readonly __typename: 'challenge' } & {
-              readonly opponents: ReadonlyArray<
-                { readonly __typename: 'challenge_participant' } & Pick<Types.Challenge_Participant, 'accepted'> & {
-                    readonly user: { readonly __typename: 'users' } & BasicUserFragmentFragment;
-                  }
-              >;
-            } & ChallengeFragmentFragment;
-          }
-        >;
-      }
+    { readonly __typename: 'users' } & {
+      readonly pending_challenges: ReadonlyArray<
+        { readonly __typename: 'challenge_participant' } & {
+          readonly challenge: { readonly __typename: 'challenge' } & {
+            readonly opponents: ReadonlyArray<
+              { readonly __typename: 'challenge_participant' } & Pick<Types.Challenge_Participant, 'accepted'> & {
+                  readonly user: { readonly __typename: 'users' } & BasicUserFragmentFragment;
+                }
+            >;
+          } & ChallengeFragmentFragment;
+        }
+      >;
+      readonly ongoing_challenges: ReadonlyArray<
+        { readonly __typename: 'challenge_participant' } & {
+          readonly challenge: { readonly __typename: 'challenge' } & {
+            readonly opponents: ReadonlyArray<
+              { readonly __typename: 'challenge_participant' } & Pick<Types.Challenge_Participant, 'accepted'> & {
+                  readonly user: { readonly __typename: 'users' } & BasicUserFragmentFragment;
+                }
+            >;
+          } & ChallengeFragmentFragment;
+        }
+      >;
+      readonly finished_challenges: ReadonlyArray<
+        { readonly __typename: 'challenge_participant' } & {
+          readonly challenge: { readonly __typename: 'challenge' } & {
+            readonly opponents: ReadonlyArray<
+              { readonly __typename: 'challenge_participant' } & Pick<Types.Challenge_Participant, 'accepted'> & {
+                  readonly user: { readonly __typename: 'users' } & BasicUserFragmentFragment;
+                }
+            >;
+          } & ChallengeFragmentFragment;
+        }
+      >;
+    } & BasicUserFragmentFragment
   >;
 };
 
 export const GetChallengesDocument = gql`
   query GetChallenges($user_id: String!) {
     user(id: $user_id) {
-      id
+      ...basicUserFragment
       pending_challenges: challenge_participants(
         where: { accepted: { _eq: false }, challenge: { is_active: { _eq: true } } }
       ) {
@@ -94,8 +94,8 @@ export const GetChallengesDocument = gql`
       }
     }
   }
-  ${ChallengeFragmentFragmentDoc}
   ${BasicUserFragmentFragmentDoc}
+  ${ChallengeFragmentFragmentDoc}
 `;
 
 /**
