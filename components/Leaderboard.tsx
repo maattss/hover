@@ -89,7 +89,7 @@ const Leaderboard: React.FC<LeaderboardProps> = (props: LeaderboardProps) => {
         refreshControl={
           <RefreshControl
             refreshing={refreshing}
-            onRefresh={() => onRefresh()}
+            onRefresh={onRefresh}
             tintColor={Colors.blue}
             colors={[Colors.blue]}
             progressBackgroundColor={Colors.transparent}

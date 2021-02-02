@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { Asset } from 'expo-asset';
-import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, Alert, StyleSheet, Text, View, Image } from 'react-native';
+import React, { useCallback, useEffect, useState } from 'react';
+import { ActivityIndicator, Alert, StyleSheet, Text, View, Image, RefreshControl } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useProfileUserQuery } from '../../graphql/queries/ProfileUser.generated';
 import useAuthentication from '../../hooks/useAuthentication';
@@ -26,12 +26,13 @@ const ProfileScreen: React.FC = () => {
     exerciseScore: 0,
     achievements: [],
   });
-
+  console.log('rerender');
   if (id) {
-    const { loading: loading, error: error, data: data } = useProfileUserQuery({
+    const { loading: loading, error: error, data: data, refetch } = useProfileUserQuery({
       variables: {
         id: id,
       },
+      fetchPolicy: 'network-only',
     });
     useEffect(() => {
       if (data) {
@@ -63,16 +64,6 @@ const ProfileScreen: React.FC = () => {
       }
     }, [data]);
 
-    if (error) {
-      console.error(error);
-      Alert.alert('Error', error?.message);
-    }
-    if (loading)
-      return (
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator size={'large'} color={Colors.blue} />
-        </View>
-      );
     const renderAchievements = () => {
       return user.achievements
         .slice(0)
@@ -122,8 +113,35 @@ const ProfileScreen: React.FC = () => {
         });
     };
 
+    const [refreshing, setRefreshing] = useState(false);
+    const onRefresh = useCallback(async () => {
+      setRefreshing(true);
+      await refetch();
+      setRefreshing(false);
+    }, []);
+
+    if (error) {
+      console.error(error);
+      Alert.alert('Error', error?.message);
+    }
+    if (loading && !refreshing)
+      return (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size={'large'} color={Colors.blue} />
+        </View>
+      );
     return (
-      <ScrollView style={styles.container}>
+      <ScrollView
+        style={styles.container}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            tintColor={Colors.blue}
+            colors={[Colors.blue]}
+            progressBackgroundColor={Colors.transparent}
+          />
+        }>
         <View style={styles.topContainer}>
           <Image source={{ uri: user.picture }} style={styles.avatar} />
           <View style={styles.infoContainer}>

@@ -49,13 +49,11 @@ const LeaderboardScreen: React.FC = () => {
   const [highscores, setHighscores] = useState<Item[]>([]);
 
   useEffect(() => {
-    if (highscoreData) {
-      setHighscores(convertToHighscoreList(highscoreData));
-    }
+    if (highscoreData) setHighscores(convertToHighscoreList(highscoreData));
   }, [highscoreData]);
 
   if (Platform.OS == 'android') {
-    if (highscoreLoading) return <ActivityIndicator size={'large'} color={Colors.blue} style={styles.refreshIcon} />;
+    if (highscoreLoading) return <ActivityIndicator size={'large'} color={Colors.blue} />;
     if (highscoreError) return <Text style={styles.infoText}>{highscoreError.message}</Text>;
     return (
       <View style={styles.container}>
@@ -122,7 +120,7 @@ const LeaderboardScreen: React.FC = () => {
           )}
         </View>
         <View style={styles.leaderboardContainer}>
-          {highscoreLoading && <ActivityIndicator size={'large'} color={Colors.blue} style={styles.refreshIcon} />}
+          {highscoreLoading && <ActivityIndicator size={'large'} color={Colors.blue} />}
           {highscoreError && <Text style={styles.infoText}>{highscoreError.message}</Text>}
           {!highscoreLoading && !highscoreError && highscores && <Leaderboard data={highscores} refetch={refetch} />}
         </View>
@@ -209,7 +207,6 @@ interface StylesProps {
   filterButton: ViewStyle;
   filterIcon: TextStyle;
   refreshButton: ViewStyle;
-  refreshIcon: ViewStyle;
   pickerButton: ViewStyle;
 }
 
@@ -276,8 +273,5 @@ const styles: StylesProps = StyleSheet.create({
     backgroundColor: Colors.red,
     marginTop: Spacing.base,
     marginBottom: Spacing.base,
-  },
-  refreshIcon: {
-    marginTop: '2%',
   },
 });
