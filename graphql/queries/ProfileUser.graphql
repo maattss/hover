@@ -12,6 +12,7 @@ query ProfileUser($id: String!) {
         achievement_type
         level
         created_at
+        rule
       }
     }
     education_score: activities_aggregate(where: { geofence: { category: { _eq: "EDUCATION" } } }) {

@@ -4,16 +4,19 @@ import { Colors, Spacing } from '../theme';
 import { Achievement as AchievementType, AchievementVariant } from '../types/profileTypes';
 import { Typography } from '../theme';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
+import { GeoFenceCategory } from '../types/geoFenceTypes';
+import { getCategoryIconName } from './feed/ActivityFeedCard';
 
 interface AchievementProps {
   achievement: AchievementType;
 }
-export const getAchievementIcon = (variant: AchievementVariant) => {
-  switch (variant) {
+export const getAchievementIcon = (achievement: AchievementType) => {
+  switch (achievement.type) {
     case AchievementVariant.SCORE:
-      return 'star';
+      return 'trophy';
     case AchievementVariant.SCORE_IN_CATEGORY:
-      return 'star-half';
+      const category = GeoFenceCategory[achievement.rule.category as keyof typeof GeoFenceCategory];
+      return getCategoryIconName(category);
     case AchievementVariant.FIRST_ACTIVITY:
       return 'award';
     default:
@@ -56,7 +59,7 @@ const Achievement: React.FC<AchievementProps> = ({ achievement }: AchievementPro
   return (
     <View style={styles.achievement}>
       <View style={[styles.trophy, trophyBgColor]}>
-        <FAIcon name={getAchievementIcon(achievement.type)} style={[styles.icon, iconColor]}></FAIcon>
+        <FAIcon name={getAchievementIcon(achievement)} style={[styles.icon, iconColor]}></FAIcon>
       </View>
       <Text style={styles.text}>{achievement.name}</Text>
     </View>
@@ -76,6 +79,7 @@ const styles = StyleSheet.create({
   },
   achievement: {
     alignItems: 'center',
+    padding: Spacing.smallest,
   },
   icon: {
     fontSize: 45,

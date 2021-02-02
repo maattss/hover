@@ -14,7 +14,7 @@ export type ProfileUserQuery = { readonly __typename: 'query_root' } & {
           { readonly __typename: 'user_achievement' } & {
             readonly achievement: { readonly __typename: 'achievement' } & Pick<
               Types.Achievement,
-              'description' | 'name' | 'achievement_type' | 'level' | 'created_at'
+              'description' | 'name' | 'achievement_type' | 'level' | 'created_at' | 'rule'
             >;
           }
         >;
@@ -73,6 +73,7 @@ export const ProfileUserDocument = gql`
           achievement_type
           level
           created_at
+          rule
         }
       }
       education_score: activities_aggregate(where: { geofence: { category: { _eq: "EDUCATION" } } }) {

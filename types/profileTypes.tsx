@@ -4,6 +4,10 @@ export enum AchievementVariant {
   FIRST_ACTIVITY,
   SCORE_IN_CATEGORY,
 }
+export type AchievementRule = {
+  category: string;
+  score: number;
+};
 
 export type UserProfile = {
   bio: string;
@@ -24,4 +28,5 @@ export type Achievement = {
   type: AchievementVariant;
   createdAt: string;
   level: number;
+  rule: AchievementRule;
 };

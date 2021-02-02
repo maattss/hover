@@ -44,6 +44,7 @@ const ProfileScreen: React.FC = () => {
               level: obj.achievement.level ?? 3,
               createdAt: obj.achievement.created_at ?? '',
               type: AchievementVariant[obj.achievement.achievement_type as keyof typeof AchievementVariant],
+              rule: obj.achievement.rule ?? '{}',
             });
           });
           setUser({
@@ -73,13 +74,16 @@ const ProfileScreen: React.FC = () => {
         </View>
       );
     const renderAchievements = () => {
-      return user.achievements.map((achievement, index) => {
-        return (
-          <View key={index} style={styles.achievement}>
-            <Achievement achievement={achievement} />
-          </View>
-        );
-      });
+      return user.achievements
+        .slice(0)
+        .reverse()
+        .map((achievement, index) => {
+          return (
+            <View key={index} style={styles.achievement}>
+              <Achievement achievement={achievement} key={index} />
+            </View>
+          );
+        });
     };
     const getScore = (category: GeoFenceCategory) => {
       switch (category) {
@@ -141,7 +145,7 @@ const ProfileScreen: React.FC = () => {
 
         <Text style={styles.header}>Activities</Text>
         <ScrollView style={styles.activitiesContainer} horizontal={true}>
-          <Text style={{ ...Typography.largeBodyText }}>Insert activities</Text>
+          <Text style={{ ...Typography.largeBodyText }}>Insert activities here</Text>
         </ScrollView>
       </ScrollView>
     );
@@ -222,10 +226,11 @@ const styles = StyleSheet.create({
     height: 120,
   },
   achievement: {
-    alignItems: 'center',
+    marginHorizontal: Spacing.smallest,
   },
   activitiesContainer: {
     height: 240,
+    paddingHorizontal: Spacing.smaller,
   },
   categoryIcon: {
     color: Colors.almostWhite,

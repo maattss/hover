@@ -50,31 +50,19 @@ const styles = StyleSheet.create({
     lineHeight: 50,
   },
   description: {
-    width: '80%',
+    width: '70%',
     justifyContent: 'center',
     alignItems: 'center',
   },
   descriptionText: {
     ...Typography.headerText,
     fontSize: 24,
-    paddingRight: Spacing.smallest,
+    flexWrap: 'wrap',
   },
   main: {
     flexDirection: 'row',
     justifyContent: 'flex-start',
     marginBottom: Spacing.smaller,
-  },
-  trophy: {
-    borderRadius: 70 / 2,
-    height: 70,
-    width: 70,
-    backgroundColor: Colors.red,
-    justifyContent: 'center',
-  },
-  trophyIcon: {
-    color: Colors.almostWhite,
-    fontSize: 40,
-    textAlign: 'center',
   },
   footer: {
     flexDirection: 'row',
