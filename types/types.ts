@@ -187,8 +187,6 @@ export type Achievement_Bool_Exp = {
 /** unique or primary key constraints on table "achievement" */
 export enum Achievement_Constraint {
   /** unique or primary key constraint */
-  AcheivementNameKey = 'Acheivement_name_key',
-  /** unique or primary key constraint */
   AcheivementPkey = 'Acheivement_pkey',
 }
 
