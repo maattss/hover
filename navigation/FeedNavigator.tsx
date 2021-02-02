@@ -7,7 +7,7 @@ import NotificationsScreen from '../screens/feed/NotificationsScreen';
 import { Typography } from '../theme';
 import FeedScreen from '../screens/feed/FeedScreen';
 
-const HeaderIcon = (props: { name: string; onPress: () => void }) => {
+export const HeaderIcon = (props: { name: string; onPress: () => void }) => {
   return <FAIcon style={styles.headericon} {...props} />;
 };
 const FeedStack = createStackNavigator<FeedStackParamList>();
