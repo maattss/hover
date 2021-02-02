@@ -99,17 +99,22 @@ type UserChallenges = {
 };
 export const convertChallenge = (challengeData: GetChallengesQuery) => {
   const pendingChallenges: PendingChallenge[] = [];
+  console.log('convertChallenge()');
   if (challengeData && challengeData.user && challengeData.user?.pending_challenges) {
-    challengeData.user.pending_challenges.forEach((obj) =>
-      pendingChallenges.push({
-        id: obj.challenge.id,
-        challenge_type: obj.challenge.challenge_type as Challenge_Type_Enum,
-        end_date: new Date(obj.challenge.end_date),
-        is_active: obj.challenge.is_active,
-        start_date: new Date(obj.challenge.start_date),
-        opponents: convertOpponent(obj.challenge.opponents),
-      } as PendingChallenge),
-    );
+    challengeData.user.pending_challenges.forEach((obj) => {
+      console.log('convertChallenge object', obj);
+      const opponents = convertOpponent(obj.challenge.opponents);
+      if (opponents.length >= 1) {
+        pendingChallenges.push({
+          id: obj.challenge.id,
+          challenge_type: obj.challenge.challenge_type as Challenge_Type_Enum,
+          end_date: new Date(obj.challenge.end_date),
+          is_active: obj.challenge.is_active,
+          start_date: new Date(obj.challenge.start_date),
+          opponents: opponents,
+        });
+      }
+    });
   }
   return { pendingChallenges } as UserChallenges;
 };
