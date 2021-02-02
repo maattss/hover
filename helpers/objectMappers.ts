@@ -99,10 +99,8 @@ type UserChallenges = {
 };
 export const convertChallenge = (challengeData: GetChallengesQuery) => {
   const pendingChallenges: PendingChallenge[] = [];
-  console.log('convertChallenge()');
   if (challengeData && challengeData.user && challengeData.user?.pending_challenges) {
     challengeData.user.pending_challenges.forEach((obj) => {
-      console.log('convertChallenge object', obj);
       const opponents = convertOpponent(obj.challenge.opponents);
       if (opponents.length >= 1) {
         pendingChallenges.push({
