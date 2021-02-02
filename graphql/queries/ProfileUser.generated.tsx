@@ -87,7 +87,7 @@ export const ProfileUserDocument = gql`
           rule
         }
       }
-      activities(limit: 3) {
+      activities(limit: 3, order_by: { created_at: desc }) {
         caption
         created_at
         duration

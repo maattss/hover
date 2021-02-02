@@ -146,7 +146,7 @@ const ProfileScreen: React.FC = () => {
           <ActivityIndicator size={'large'} color={Colors.blue} />
         </View>
       );
-
+    console.log('activities', user.activities);
     return (
       <ScrollView
         style={styles.container}
