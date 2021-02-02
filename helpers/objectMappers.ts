@@ -124,7 +124,7 @@ export const convertToProfileUser = (data: ProfileUserQuery | undefined) => {
         userName: data.user ? data.user.name : '',
         startedAt: obj.started_at,
         score: obj.score ?? 0,
-        picture: data.user ? data.user.picture : Asset.fromModule(require('../../assets/images/user.png')).uri, // Default picture
+        picture: data.user ? data.user.picture : Asset.fromModule(require('../assets/images/user.png')).uri, // Default picture
         geoFence: convertToGeoFence(obj.geofence),
         caption: obj.caption ?? '',
         duration: obj.duration,
@@ -134,7 +134,7 @@ export const convertToProfileUser = (data: ProfileUserQuery | undefined) => {
       name: data.user.name ?? '',
       bio: data.user.bio ?? '',
       email: data.user.email ?? '',
-      picture: data.user.picture ?? Asset.fromModule(require('../../assets/images/user.png')).uri, // Default picture
+      picture: data.user.picture ?? Asset.fromModule(require('../assets/images/user.png')).uri, // Default picture
       totalScore: data.user.totalScore ?? '0',
       educationScore: data.user.education_score.aggregate?.sum?.score ?? '0',
       cultureScore: data.user.culture_score.aggregate?.sum?.score ?? '0',
