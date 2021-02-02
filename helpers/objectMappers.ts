@@ -11,6 +11,12 @@ import { UserProfile, Achievement as AchievementType, AchievementVariant } from 
 import { ActivityFeedData } from '../types/feedTypes';
 import { Asset } from 'expo-asset';
 
+// Default location NTNU Trondheim
+export const defaultMapLocation: LatLng = {
+  latitude: 63.419,
+  longitude: 10.4025,
+};
+
 export const convertToRegion = (data: GeofencesQuery): LocationRegion[] => {
   const geoFences: LocationRegion[] = [];
   for (const obj of data.geofences) {

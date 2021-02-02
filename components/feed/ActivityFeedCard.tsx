@@ -6,12 +6,13 @@ import { ActivityFeedData } from '../../types/feedTypes';
 import { GeoFenceCategory } from '../../types/geoFenceTypes';
 import { timeStampToPresentable } from '../../helpers/dateTimeHelpers';
 import MapView, { LatLng, Marker, Region } from 'react-native-maps';
+import { defaultMapLocation } from '../../helpers/objectMappers';
 
 interface ActivityFeedCardProps {
   activity: ActivityFeedData;
 }
 
-export const getCategoryIconName = (category: GeoFenceCategory) => {
+export const getCategoryIconName = (category: GeoFenceCategory | undefined) => {
   switch (category) {
     case GeoFenceCategory.CULTURE:
       return 'theater-masks';
@@ -25,7 +26,7 @@ export const getCategoryIconName = (category: GeoFenceCategory) => {
       return 'question-circle';
   }
 };
-export const getCategoryColor = (category: GeoFenceCategory) => {
+export const getCategoryColor = (category: GeoFenceCategory | undefined) => {
   switch (category) {
     case GeoFenceCategory.CULTURE:
       return Colors.almostWhite;
@@ -42,17 +43,17 @@ export const getCategoryColor = (category: GeoFenceCategory) => {
 
 const ActivityFeedCard: React.FC<ActivityFeedCardProps> = ({ activity }: ActivityFeedCardProps) => {
   const categoryColor = {
-    color: getCategoryColor(activity.geoFence.category),
+    color: getCategoryColor(activity.geoFence ? activity.geoFence.category : undefined),
   };
   const mapRegion: Region = {
-    latitude: activity.geoFence.latitude,
-    longitude: activity.geoFence.longitude,
+    latitude: activity.geoFence ? activity.geoFence.latitude : defaultMapLocation.latitude,
+    longitude: activity.geoFence ? activity.geoFence.longitude : defaultMapLocation.latitude,
     latitudeDelta: 0.01,
     longitudeDelta: 0.01,
   };
   const markerCoordinate: LatLng = {
-    latitude: activity.geoFence.latitude,
-    longitude: activity.geoFence.longitude,
+    latitude: activity.geoFence ? activity.geoFence.latitude : defaultMapLocation.latitude,
+    longitude: activity.geoFence ? activity.geoFence.longitude : defaultMapLocation.latitude,
   };
   return (
     <View style={styles.card}>
@@ -65,14 +66,22 @@ const ActivityFeedCard: React.FC<ActivityFeedCardProps> = ({ activity }: Activit
       </View>
       <View style={styles.main}>
         <View style={styles.category}>
-          <FAIcon style={[styles.categoryIcon, categoryColor]} name={getCategoryIconName(activity.geoFence.category)} />
+          <FAIcon
+            style={[styles.categoryIcon, categoryColor]}
+            name={getCategoryIconName(activity.geoFence ? activity.geoFence.category : undefined)}
+          />
           <Text style={styles.scoreText}>{activity.score} points</Text>
         </View>
-        <MapView style={styles.map} initialRegion={mapRegion}>
+        <MapView
+          style={styles.map}
+          initialRegion={mapRegion}
+          rotateEnabled={false}
+          scrollEnabled={false}
+          pitchEnabled={false}>
           <Marker
             coordinate={markerCoordinate}
-            title={activity.geoFence.name}
-            description={activity.geoFence.description}
+            title={activity.geoFence ? activity.geoFence.name : 'No name'}
+            description={activity.geoFence ? activity.geoFence.description : 'No description'}
           />
         </MapView>
       </View>

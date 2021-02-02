@@ -7,14 +7,9 @@ import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import SnackBar, { SnackBarVariant } from '../../components/SnackBar';
 import { getGeoFenceColor } from '../../helpers/geoFenceCalculations';
 import useTracking from '../../hooks/useTracking';
+import { defaultMapLocation } from '../../helpers/objectMappers';
 
 const { width, height } = Dimensions.get('window');
-
-// Default location NTNU Trondheim
-const defaultLocation: LatLng = {
-  latitude: 63.419,
-  longitude: 10.4025,
-};
 
 const drawGeoFences = (geoFences: GeoFence[] | undefined) => {
   if (geoFences) {
@@ -85,8 +80,8 @@ const MapScreen: React.FC = () => {
     if (tracking.userLocation) setCentreOnUser(true);
     mapView.current?.animateToRegion(
       {
-        longitude: tracking.userLocation ? tracking.userLocation.coords.longitude : defaultLocation.longitude,
-        latitude: tracking.userLocation ? tracking.userLocation.coords.latitude : defaultLocation.latitude,
+        longitude: tracking.userLocation ? tracking.userLocation.coords.longitude : defaultMapLocation.longitude,
+        latitude: tracking.userLocation ? tracking.userLocation.coords.latitude : defaultMapLocation.latitude,
         latitudeDelta: 0.01,
         longitudeDelta: 0.01 * (width / height),
       },
