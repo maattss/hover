@@ -5,6 +5,10 @@ import { estimatedRadius } from './geoFenceCalculations';
 import { CircleGeoFence, GeoFence, GeoFenceCategory, GeoFenceVariant, PolygonGeoFence } from '../types/geoFenceTypes';
 import { Item } from '../components/Leaderboard';
 import { HighscoreQuery } from '../graphql/queries/Highscore.generated';
+import { Opponent, PendingChallenge } from '../types/challengeTypes';
+import { GetChallengesQuery } from '../graphql/queries/GetChallenges.generated';
+import { Challenge_Participant, Challenge_Type_Enum } from '../types/types';
+import { BasicUserFragmentFragment } from '../graphql/Fragments.generated';
 
 export const convertToRegion = (data: GeofencesQuery): LocationRegion[] => {
   const geoFences: LocationRegion[] = [];
@@ -90,3 +94,44 @@ export const convertToHighscoreList = (data: HighscoreQuery) => {
   );
   return highscores;
 };
+type UserChallenges = {
+  pendingChallenges: PendingChallenge[];
+};
+export const convertChallenge = (challengeData: GetChallengesQuery) => {
+  const pendingChallenges: PendingChallenge[] = [];
+  if (challengeData && challengeData.user && challengeData.user?.pending_challenges) {
+    challengeData.user.pending_challenges.forEach((obj) =>
+      pendingChallenges.push({
+        id: obj.challenge.id,
+        challenge_type: obj.challenge.challenge_type as Challenge_Type_Enum,
+        end_date: new Date(obj.challenge.end_date),
+        is_active: obj.challenge.is_active,
+        start_date: new Date(obj.challenge.start_date),
+        opponents: convertOpponent(obj.challenge.opponents),
+      } as PendingChallenge),
+    );
+  }
+  return { pendingChallenges } as UserChallenges;
+};
+
+export const convertOpponent = (opponentData: OpponentQueryData) => {
+  const opponents: Opponent[] = [];
+  if (opponentData) {
+    opponentData.forEach((obj) =>
+      opponents.push({
+        id: obj.user.id,
+        name: obj.user.name,
+        accepted: obj.accepted,
+        picture: obj.user.picture,
+        bio: obj.user.bio,
+      } as Opponent),
+    );
+  }
+  return opponents;
+};
+
+type OpponentQueryData = ReadonlyArray<
+  { readonly __typename: 'challenge_participant' } & Pick<Challenge_Participant, 'accepted'> & {
+      readonly user: { readonly __typename: 'users' } & BasicUserFragmentFragment;
+    }
+>;
