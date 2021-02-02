@@ -26,7 +26,6 @@ const ProfileScreen: React.FC = () => {
     exerciseScore: 0,
     achievements: [],
   });
-  console.log('rerender');
   if (id) {
     const { loading: loading, error: error, data: data, refetch } = useProfileUserQuery({
       variables: {

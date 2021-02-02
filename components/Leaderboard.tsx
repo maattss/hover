@@ -1,6 +1,6 @@
 import { ApolloQueryResult } from '@apollo/client';
 import React, { useState, useEffect, useCallback } from 'react';
-import { FlatList, Image, RefreshControl, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { FlatList, Image, RefreshControl, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { HighscoreQuery } from '../graphql/queries/Highscore.generated';
 import { Colors, Spacing, Typography } from '../theme';
 
@@ -48,7 +48,7 @@ const Leaderboard: React.FC<LeaderboardProps> = (props: LeaderboardProps) => {
       await props.refetch();
       props.setRefreshing(false);
     }
-  }, [props.refreshing]);
+  }, []);
 
   const defaultRenderItem = (item: Item, index: number) => {
     const evenColor = props.evenRowColor || Colors.black;

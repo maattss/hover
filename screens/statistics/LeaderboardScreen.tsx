@@ -52,11 +52,6 @@ const LeaderboardScreen: React.FC = () => {
   useEffect(() => {
     if (highscoreData) setHighscores(convertToHighscoreList(highscoreData));
   }, [highscoreData]);
-  const refetchData = async () => {
-    setRefreshing(true);
-    await refetch();
-    setRefreshing(false);
-  };
 
   if (Platform.OS == 'android') {
     if (highscoreLoading && !refreshing) return <ActivityIndicator size={'large'} color={Colors.blue} />;
@@ -71,7 +66,7 @@ const LeaderboardScreen: React.FC = () => {
               onValueChange={(value) => {
                 setCategory(value);
                 setEditCategory(false);
-                refetchData();
+                refetch();
               }}
               closePicker={() => setEditCategory(false)}
             />
@@ -83,7 +78,7 @@ const LeaderboardScreen: React.FC = () => {
               onValueChange={(value) => {
                 setTimespan(value);
                 setEditTimespan(false);
-                refetchData();
+                refetch();
               }}
               closePicker={() => setEditTimespan(false)}
             />
@@ -125,13 +120,18 @@ const LeaderboardScreen: React.FC = () => {
             </TouchableOpacity>
           )}
         </View>
+
+        {highscoreError && <Text style={styles.infoText}>{highscoreError.message}</Text>}
+        {highscoreLoading && !refreshing && (
+          <ActivityIndicator size={'large'} color={Colors.blue} style={styles.refreshIcon} />
+        )}
+
         <View style={styles.leaderboardContainer}>
-          {highscoreLoading && !refreshing && <ActivityIndicator size={'large'} color={Colors.blue} />}
-          {highscoreError && <Text style={styles.infoText}>{highscoreError.message}</Text>}
           {!highscoreLoading && !highscoreError && highscores && (
             <Leaderboard data={highscores} refetch={refetch} refreshing={refreshing} setRefreshing={setRefreshing} />
           )}
         </View>
+
         {editCategory && !editTimespan && (
           <FilterPickerIos
             items={STATIC_CATEGORIES}
@@ -216,6 +216,7 @@ interface StylesProps {
   filterIcon: TextStyle;
   refreshButton: ViewStyle;
   pickerButton: ViewStyle;
+  refreshIcon: ViewStyle;
 }
 
 const styles: StylesProps = StyleSheet.create({
@@ -281,5 +282,8 @@ const styles: StylesProps = StyleSheet.create({
     backgroundColor: Colors.red,
     marginTop: Spacing.base,
     marginBottom: Spacing.base,
+  },
+  refreshIcon: {
+    marginTop: Spacing.base,
   },
 });
