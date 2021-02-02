@@ -6,10 +6,11 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { useProfileUserQuery } from '../../graphql/queries/ProfileUser.generated';
 import useAuthentication from '../../hooks/useAuthentication';
 import { Colors, Spacing, Typography } from '../../theme';
-import { UserProfile, Achievement } from '../../types/profileTypes';
+import { UserProfile, Achievement as AchievementType } from '../../types/profileTypes';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import { GeoFenceCategory } from '../../types/geoFenceTypes';
 import { getCategoryIconName, getCategoryColor } from '../../components/feed/ActivityFeedCard';
+import Achievement from '../../components/Achievement';
 
 const ProfileScreen: React.FC = () => {
   const id = useAuthentication().user?.uid;
@@ -35,7 +36,7 @@ const ProfileScreen: React.FC = () => {
     useEffect(() => {
       if (data) {
         if (data.user) {
-          const achievements: Achievement[] = [];
+          const achievements: AchievementType[] = [];
           data.user.user_achievement.forEach((obj) => {
             achievements.push({
               description: obj.achievement.description ?? '',
@@ -58,7 +59,6 @@ const ProfileScreen: React.FC = () => {
             achievements: achievements,
           });
         }
-        // achivementType: obj.achievement.achievement_type,
       }
     }, [data]);
 
@@ -76,10 +76,7 @@ const ProfileScreen: React.FC = () => {
       return user.achievements.map((achievement, index) => {
         return (
           <View key={index} style={styles.achievement}>
-            <View style={styles.achievementTrophy}>
-              <FAIcon name={'star'} style={styles.achievementIcon}></FAIcon>
-            </View>
-            <Text style={{ ...Typography.largeBodyText }}>{achievement.name}</Text>
+            <Achievement achievement={achievement} />
           </View>
         );
       });
@@ -223,22 +220,6 @@ const styles = StyleSheet.create({
   },
   achievementsContainer: {
     height: 120,
-  },
-  achievementTrophy: {
-    height: 80,
-    width: 80,
-    justifyContent: 'center',
-    backgroundColor: Colors.bronze,
-    borderRadius: Spacing.extraLarge,
-    margin: Spacing.smaller,
-  },
-  achievement: {
-    alignItems: 'center',
-  },
-  achievementIcon: {
-    fontSize: 45,
-    textAlign: 'center',
-    color: Colors.almostWhite,
   },
   activitiesContainer: {
     height: 240,
