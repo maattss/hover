@@ -36,6 +36,7 @@ export type Item = {
 
 const Leaderboard: React.FC<LeaderboardProps> = (props: LeaderboardProps) => {
   const [sortedData, setSortedData] = useState<Item[]>([]);
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
     const { data, sort } = props;
@@ -48,7 +49,7 @@ const Leaderboard: React.FC<LeaderboardProps> = (props: LeaderboardProps) => {
       await props.refetch();
       props.setRefreshing(false);
     }
-  }, []);
+  }, [props]);
 
   const defaultRenderItem = (item: Item, index: number) => {
     const evenColor = props.evenRowColor || Colors.black;

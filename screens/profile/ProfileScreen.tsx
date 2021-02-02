@@ -11,6 +11,7 @@ import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import { GeoFenceCategory } from '../../types/geoFenceTypes';
 import { getCategoryIconName, getCategoryColor } from '../../components/feed/ActivityFeedCard';
 import Achievement from '../../components/Achievement';
+import { ActivityFeedData } from '../../types/feedTypes';
 
 const ProfileScreen: React.FC = () => {
   const id = useAuthentication().user?.uid;
@@ -25,6 +26,7 @@ const ProfileScreen: React.FC = () => {
     socialScore: 0,
     exerciseScore: 0,
     achievements: [],
+    activities: [],
   });
   if (id) {
     const { loading: loading, error: error, data: data, refetch } = useProfileUserQuery({
@@ -45,6 +47,18 @@ const ProfileScreen: React.FC = () => {
               createdAt: obj.achievement.created_at ?? '',
               type: AchievementVariant[obj.achievement.achievement_type as keyof typeof AchievementVariant],
               rule: obj.achievement.rule ?? '{}',
+            });
+          });
+          const activitites: ActivityFeedData[] = [];
+          data.user.activities.forEach((obj) => {
+            activitites.push({
+              userName: data.user.name ?? user.name,
+              startedAt: obj.started_at,
+              score: obj.score,
+              picture: data.user.picture ?? user.picture,
+              geoFence: obj.geofence,
+              caption: obj.caption,
+              duration: obj.duration,
             });
           });
           setUser({

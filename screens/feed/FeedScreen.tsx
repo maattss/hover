@@ -26,6 +26,7 @@ const FeedScreen: React.FC = () => {
     startedAt: '2021-01-29T10:00:00+01:00',
     picture: 'https://api.multiavatar.com/Kuninori%20Bun%20Lord.png',
     score: 200,
+    duration: 100,
   };
   const testAchievement: AchievementFeedData = {
     userName: 'Mats Tyldum',
@@ -36,6 +37,7 @@ const FeedScreen: React.FC = () => {
       type: AchievementVariant.SCORE,
       createdAt: '2021-01-28T09:00:00+01:00',
       level: 1,
+      rule: { score: 100, category: 'CULTURE' },
     },
   };
   const testChallenge: ChallengeFeedData = {

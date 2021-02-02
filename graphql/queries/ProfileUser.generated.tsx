@@ -18,6 +18,17 @@ export type ProfileUserQuery = { readonly __typename: 'query_root' } & {
             >;
           }
         >;
+        readonly activities: ReadonlyArray<
+          { readonly __typename: 'activities' } & Pick<
+            Types.Activities,
+            'caption' | 'created_at' | 'duration' | 'score' | 'started_at'
+          > & {
+              readonly geofence: { readonly __typename: 'geofences' } & Pick<
+                Types.Geofences,
+                'category' | 'description' | 'name' | 'variant'
+              >;
+            }
+        >;
         readonly education_score: { readonly __typename: 'activities_aggregate' } & {
           readonly aggregate?: Types.Maybe<
             { readonly __typename: 'activities_aggregate_fields' } & {
@@ -75,6 +86,19 @@ export const ProfileUserDocument = gql`
           created_at
           rule
         }
+      }
+      activities(limit: 3) {
+        caption
+        created_at
+        duration
+        geofence {
+          category
+          description
+          name
+          variant
+        }
+        score
+        started_at
       }
       education_score: activities_aggregate(where: { geofence: { category: { _eq: "EDUCATION" } } }) {
         aggregate {

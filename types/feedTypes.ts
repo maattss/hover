@@ -14,6 +14,7 @@ export type ActivityFeedData = {
   geoFence: GeoFence;
   startedAt: string;
   score: number;
+  duration: number;
 };
 export type AchievementFeedData = {
   userName: string;

@@ -1,3 +1,5 @@
+import { ActivityFeedData } from './feedTypes';
+
 export enum AchievementVariant {
   DEFAULT,
   SCORE,
@@ -20,6 +22,7 @@ export type UserProfile = {
   socialScore: number;
   exerciseScore: number;
   achievements: Achievement[];
+  activities: ActivityFeedData[];
 };
 
 export type Achievement = {
