@@ -90,7 +90,7 @@ const LeaderboardScreen: React.FC = () => {
           )}
         </View>
         <View style={styles.leaderboardContainer}>
-          {highscores && <Leaderboard data={highscores} refetch={refetch} re />}
+          {highscores && <Leaderboard data={highscores} refreshing={refreshing} setRefreshing={setRefreshing} />}
         </View>
       </View>
     );
@@ -126,7 +126,7 @@ const LeaderboardScreen: React.FC = () => {
           )}
         </View>
         <View style={styles.leaderboardContainer}>
-          {highscoreLoading && <ActivityIndicator size={'large'} color={Colors.blue} />}
+          {highscoreLoading && !refreshing && <ActivityIndicator size={'large'} color={Colors.blue} />}
           {highscoreError && <Text style={styles.infoText}>{highscoreError.message}</Text>}
           {!highscoreLoading && !highscoreError && highscores && (
             <Leaderboard data={highscores} refetch={refetch} refreshing={refreshing} setRefreshing={setRefreshing} />

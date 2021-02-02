@@ -82,7 +82,7 @@ const Leaderboard: React.FC<LeaderboardProps> = (props: LeaderboardProps) => {
     props.renderItem ? props.renderItem(item, index) : defaultRenderItem(item, index);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <FlatList
         data={sortedData}
         keyExtractor={(item, index) => index.toString()}
@@ -97,7 +97,7 @@ const Leaderboard: React.FC<LeaderboardProps> = (props: LeaderboardProps) => {
           />
         }
       />
-    </SafeAreaView>
+    </View>
   );
 };
 
