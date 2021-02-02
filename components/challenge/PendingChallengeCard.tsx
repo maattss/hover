@@ -1,7 +1,6 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image } from 'react-native';
-import { Colors, Typography, Spacing } from '../../theme';
-import Divider from '../Divider';
+import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
+import { Colors, Typography, Spacing, Buttons } from '../../theme';
 import { PendingChallenge } from '../../types/challengeTypes';
 
 interface PendingChallengeCardProps {
@@ -9,36 +8,66 @@ interface PendingChallengeCardProps {
 }
 
 const PendingChallengeCard: React.FC<PendingChallengeCardProps> = ({ challenge }: PendingChallengeCardProps) => {
-  if (challenge.opponents.length >= 1) {
+  if (challenge.opponents.length == 1) {
+    const opponent = challenge.opponents[0];
     return (
       <View style={styles.card}>
         <View style={styles.topBar}>
-          <Text style={styles.titleText}>Challenge accepted!</Text>
+          <Image source={{ uri: opponent.picture }} style={styles.avatar} />
+          <View>
+            <Text style={styles.nameText}>{opponent.name}</Text>
+            <Text style={styles.captionText}>{challenge.challenge_type}</Text>
+          </View>
         </View>
-        <View style={styles.avatarContainer}>
+
+        <View style={styles.buttonsContainer}>
+          <AcceptButton />
+          <DeclineButton />
+        </View>
+      </View>
+    );
+  } else if (challenge.opponents.length > 1) {
+    return (
+      <View style={styles.card}>
+        <View style={styles.topBar}>
           {challenge.opponents.map((opponent) => (
-            <Image key={opponent.id} source={{ uri: opponent.picture }} style={styles.avatar} />
+            <>
+              <Image key={opponent.id} source={{ uri: opponent.picture }} style={styles.avatar} />
+              <View>
+                <Text style={styles.nameText}>{opponent.name}</Text>
+                <Text style={styles.captionText}>{challenge.challenge_type}</Text>
+              </View>
+            </>
           ))}
         </View>
 
-        <View style={styles.nameContainer}>
-          {challenge.opponents.map((opponent, index) => (
-            <Text key={index} style={styles.nameText}>
+        <View>
+          {challenge.opponents.map((opponent) => (
+            <Text key={opponent.id} style={styles.nameText}>
               {opponent.name}
             </Text>
           ))}
         </View>
-        <Divider />
-        <Text style={styles.challengeText}>{challenge.challenge_type}</Text>
-
-        <View style={styles.footer}>
-          <Text style={styles.footerText}>{challenge.end_date.toString()}</Text>
+        <View style={styles.buttonsContainer}>
+          <AcceptButton />
+          <AcceptButton />
         </View>
       </View>
     );
-  } else return <Text style={styles.footerText}>{challenge.end_date.toString()}</Text>;
+  } else return <Text>{challenge.end_date.toString()}</Text>;
 };
 
+//const AcceptButton = (onPress?: () => void) => (
+const AcceptButton = () => (
+  <TouchableOpacity style={styles.acceptButton}>
+    <Text style={{ ...Buttons.buttonText }}>Accept</Text>
+  </TouchableOpacity>
+);
+const DeclineButton = () => (
+  <TouchableOpacity style={styles.declineButton}>
+    <Text style={[{ ...Buttons.buttonText }, { color: Colors.gray500 }]}>Decline</Text>
+  </TouchableOpacity>
+);
 const styles = StyleSheet.create({
   card: {
     backgroundColor: Colors.gray900,
@@ -50,56 +79,70 @@ const styles = StyleSheet.create({
   },
   topBar: {
     flexDirection: 'row',
-    justifyContent: 'center',
-  },
-  titleText: {
-    ...Typography.headerText,
-    fontSize: 28,
-    lineHeight: 35,
-  },
-  description: {
-    width: '80%',
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: 'flex-start',
   },
   nameText: {
     ...Typography.headerText,
     fontSize: 20,
-    paddingRight: Spacing.smallest,
+    lineHeight: 30,
   },
-  nameContainer: {
-    width: '100%',
-    justifyContent: 'space-evenly',
+  captionText: {
+    color: Colors.almostWhite,
+    fontSize: 12,
+    fontStyle: 'italic',
+  },
+  scoreText: {
+    color: Colors.almostWhite,
+    fontSize: 24,
+    textAlign: 'center',
+  },
+  main: {
+    marginVertical: Spacing.small,
     flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  category: {
+    width: '30%',
+    display: 'flex',
+    textAlign: 'center',
+    justifyContent: 'center',
+    flexDirection: 'column',
+    paddingRight: Spacing.base,
+  },
+  categoryIcon: {
+    color: Colors.almostWhite,
+    fontSize: 40,
+    textAlign: 'center',
     marginVertical: Spacing.smallest,
+  },
+  map: {
+    width: '70%',
+    height: 110,
+    borderRadius: Spacing.smallest,
   },
   avatar: {
     height: 45,
     width: 45,
     borderRadius: 45 / 2,
-    marginHorizontal: 75,
+    marginRight: Spacing.small,
   },
-  avatarContainer: {
-    width: '100%',
-    justifyContent: 'space-evenly',
+  buttonsContainer: {
     flexDirection: 'row',
-    marginTop: Spacing.smaller,
-  },
-  challengeText: {
-    color: Colors.almostWhite,
-    fontSize: 16,
-    textAlign: 'center',
-  },
-  footer: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
+    justifyContent: 'space-between',
     width: '100%',
-    marginTop: Spacing.smaller,
   },
-  footerText: {
-    color: Colors.almostWhite,
-    fontStyle: 'italic',
-    fontSize: 14,
+  acceptButton: {
+    width: '45%',
+    ...Buttons.button,
+    backgroundColor: Colors.blue,
+    marginVertical: Spacing.base,
+  },
+  declineButton: {
+    width: '45%',
+    ...Buttons.button,
+    backgroundColor: Colors.gray100,
+    marginTop: Spacing.base,
+    marginBottom: Spacing.base,
   },
 });
 

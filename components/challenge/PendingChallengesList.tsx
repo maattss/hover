@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Image, FlatList, RefreshControl } from 'react-native';
-import { Colors, Typography, Spacing } from '../../theme';
-import Divider from '../Divider';
+import { FlatList, RefreshControl, SafeAreaView } from 'react-native';
+import { Colors } from '../../theme';
 import { PendingChallenge } from '../../types/challengeTypes';
 import PendingChallengeCard from './PendingChallengeCard';
 
@@ -28,20 +27,22 @@ const PendingChallengeList: React.FC<PendingChallengeListProps> = (props: Pendin
   }, [refreshing]);
   const renderItem = (item: PendingChallenge) => <PendingChallengeCard challenge={item} />;
   return (
-    <FlatList
-      data={challengeData}
-      keyExtractor={(item, index) => index.toString()}
-      renderItem={({ item }) => renderItem(item)}
-      refreshControl={
-        <RefreshControl
-          refreshing={refreshing}
-          onRefresh={() => onRefresh()}
-          tintColor={Colors.blue}
-          colors={[Colors.blue]}
-          progressBackgroundColor={Colors.transparent}
-        />
-      }
-    />
+    <SafeAreaView>
+      <FlatList
+        data={challengeData}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={({ item }) => renderItem(item)}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={() => onRefresh()}
+            tintColor={Colors.blue}
+            colors={[Colors.blue]}
+            progressBackgroundColor={Colors.transparent}
+          />
+        }
+      />
+    </SafeAreaView>
   );
 };
 
