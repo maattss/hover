@@ -9,29 +9,37 @@ interface PendingChallengeCardProps {
 }
 
 const PendingChallengeCard: React.FC<PendingChallengeCardProps> = ({ challenge }: PendingChallengeCardProps) => {
-  return (
-    <View style={styles.card}>
-      <View style={styles.topBar}>
-        <Text style={styles.titleText}>Challenge accepted!</Text>
-      </View>
+  if (challenge.opponents.length >= 1) {
+    return (
+      <View style={styles.card}>
+        <View style={styles.topBar}>
+          <Text style={styles.titleText}>Challenge accepted!</Text>
+        </View>
 
-      <View style={styles.avatarContainer}>
-        <Image source={{ uri: challenge.opponents[0].picture }} style={styles.avatar} />
-      </View>
+        <View style={styles.avatarContainer}>
+          {challenge.opponents.map((opponent) => (
+            <Text key={opponent.id} style={styles.nameText}>
+              {opponent.picture}
+            </Text>
+          ))}
+        </View>
 
-      <View style={styles.nameContainer}>
-        <Text style={styles.nameText}>{challenge.opponents[0]}</Text>
-        <Text style={styles.nameText}>vs</Text>
-        <Text style={styles.nameText}>{challenge.opponents[0]}</Text>
-      </View>
-      <Divider />
-      <Text style={styles.challengeText}>{challenge}</Text>
+        <View style={styles.nameContainer}>
+          {challenge.opponents.map((opponent, index) => (
+            <Text key={index} style={styles.nameText}>
+              {opponent.name}
+            </Text>
+          ))}
+        </View>
+        <Divider />
+        <Text style={styles.challengeText}>{challenge.challenge_type}</Text>
 
-      <View style={styles.footer}>
-        <Text style={styles.footerText}>{challenge.end_date}</Text>
+        <View style={styles.footer}>
+          <Text style={styles.footerText}>{challenge.end_date.toString()}</Text>
+        </View>
       </View>
-    </View>
-  );
+    );
+  } else return <Text style={styles.footerText}>{challenge.end_date.toString()}</Text>;
 };
 
 const styles = StyleSheet.create({
