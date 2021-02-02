@@ -15,12 +15,9 @@ const PendingChallengeCard: React.FC<PendingChallengeCardProps> = ({ challenge }
         <View style={styles.topBar}>
           <Text style={styles.titleText}>Challenge accepted!</Text>
         </View>
-
         <View style={styles.avatarContainer}>
           {challenge.opponents.map((opponent) => (
-            <Text key={opponent.id} style={styles.nameText}>
-              {opponent.picture}
-            </Text>
+            <Image key={opponent.id} source={{ uri: opponent.picture }} style={styles.avatar} />
           ))}
         </View>
 
