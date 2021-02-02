@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 import { LocationRegion } from 'expo-location';
 import { GeofencesQuery } from '../graphql/queries/Geofences.generated';
 import { LatLng } from 'react-native-maps';
@@ -6,8 +7,9 @@ import { CircleGeoFence, GeoFence, GeoFenceCategory, GeoFenceVariant, PolygonGeo
 import { Item } from '../components/Leaderboard';
 import { HighscoreQuery } from '../graphql/queries/Highscore.generated';
 import { ProfileUserQuery } from '../graphql/queries/ProfileUser.generated';
-import { UserProfile } from '../types/profileTypes';
-import { Geofences } from '../types/types';
+import { UserProfile, Achievement as AchievementType, AchievementVariant } from '../types/profileTypes';
+import { ActivityFeedData } from '../types/feedTypes';
+import { Asset } from 'expo-asset';
 
 export const convertToRegion = (data: GeofencesQuery): LocationRegion[] => {
   const geoFences: LocationRegion[] = [];
@@ -101,4 +103,45 @@ export const convertToHighscoreList = (data: HighscoreQuery) => {
     } as Item),
   );
   return highscores;
+};
+
+export const convertToProfileUser = (data: ProfileUserQuery | undefined) => {
+  if (data && data.user) {
+    const achievements: AchievementType[] = [];
+    data.user.user_achievement.forEach((obj: any) => {
+      achievements.push({
+        description: obj.achievement.description ?? '',
+        name: obj.achievement.name ?? '',
+        level: obj.achievement.level ?? 3,
+        createdAt: obj.achievement.created_at ?? '',
+        type: AchievementVariant[obj.achievement.achievement_type as keyof typeof AchievementVariant],
+        rule: obj.achievement.rule ?? '{}',
+      });
+    });
+    const activitites: ActivityFeedData[] = [];
+    data.user.activities.forEach((obj: any) => {
+      activitites.push({
+        userName: data.user ? data.user.name : '',
+        startedAt: obj.started_at,
+        score: obj.score ?? 0,
+        picture: data.user ? data.user.picture : Asset.fromModule(require('../../assets/images/user.png')).uri, // Default picture
+        geoFence: convertToGeoFence(obj.geofence),
+        caption: obj.caption ?? '',
+        duration: obj.duration,
+      });
+    });
+    return {
+      name: data.user.name ?? '',
+      bio: data.user.bio ?? '',
+      email: data.user.email ?? '',
+      picture: data.user.picture ?? Asset.fromModule(require('../../assets/images/user.png')).uri, // Default picture
+      totalScore: data.user.totalScore ?? '0',
+      educationScore: data.user.education_score.aggregate?.sum?.score ?? '0',
+      cultureScore: data.user.culture_score.aggregate?.sum?.score ?? '0',
+      socialScore: data.user.social_score.aggregate?.sum?.score ?? '0',
+      exerciseScore: data.user.exercise_score.aggregate?.sum?.score ?? '0',
+      achievements: achievements,
+      activities: activitites,
+    } as UserProfile;
+  }
 };

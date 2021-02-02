@@ -12,7 +12,7 @@ import { GeoFence, GeoFenceCategory } from '../../types/geoFenceTypes';
 import { getCategoryIconName, getCategoryColor } from '../../components/feed/ActivityFeedCard';
 import Achievement from '../../components/Achievement';
 import { ActivityFeedData } from '../../types/feedTypes';
-import { convertToGeoFence } from '../../helpers/objectMappers';
+import { convertToGeoFence, convertToProfileUser } from '../../helpers/objectMappers';
 
 const ProfileScreen: React.FC = () => {
   const id = useAuthentication().user?.uid;
@@ -36,47 +36,50 @@ const ProfileScreen: React.FC = () => {
       },
       fetchPolicy: 'network-only',
     });
+
+    const objectMapper = (data: any) => {
+      const achievements: AchievementType[] = [];
+      data.user.user_achievement.forEach((obj: any) => {
+        achievements.push({
+          description: obj.achievement.description ?? '',
+          name: obj.achievement.name ?? '',
+          level: obj.achievement.level ?? 3,
+          createdAt: obj.achievement.created_at ?? '',
+          type: AchievementVariant[obj.achievement.achievement_type as keyof typeof AchievementVariant],
+          rule: obj.achievement.rule ?? '{}',
+        });
+      });
+      const activitites: ActivityFeedData[] = [];
+      data.user.activities.forEach((obj: any) => {
+        activitites.push({
+          userName: data.user ? data.user.name : user.name,
+          startedAt: obj.started_at,
+          score: obj.score ?? 0,
+          picture: data.user ? data.user.picture : user.picture,
+          geoFence: convertToGeoFence(obj.geofence),
+          caption: obj.caption ?? '',
+          duration: obj.duration,
+        });
+      });
+      return {
+        name: data.user.name ?? user.name,
+        bio: data.user.bio ?? user.bio,
+        email: data.user.email ?? user.email,
+        picture: data.user.picture ?? user.picture,
+        totalScore: data.user.totalScore ?? user.totalScore,
+        educationScore: data.user.education_score.aggregate?.sum?.score ?? user.educationScore,
+        cultureScore: data.user.culture_score.aggregate?.sum?.score ?? user.cultureScore,
+        socialScore: data.user.social_score.aggregate?.sum?.score ?? user.socialScore,
+        exerciseScore: data.user.exercise_score.aggregate?.sum?.score ?? user.exerciseScore,
+        achievements: achievements,
+        activities: activitites,
+      };
+    };
+
     useEffect(() => {
-      if (data) {
-        if (data.user) {
-          // TODO: Move mapping to helper file
-          const achievements: AchievementType[] = [];
-          data.user.user_achievement.forEach((obj) => {
-            achievements.push({
-              description: obj.achievement.description ?? '',
-              name: obj.achievement.name ?? '',
-              level: obj.achievement.level ?? 3,
-              createdAt: obj.achievement.created_at ?? '',
-              type: AchievementVariant[obj.achievement.achievement_type as keyof typeof AchievementVariant],
-              rule: obj.achievement.rule ?? '{}',
-            });
-          });
-          const activitites: ActivityFeedData[] = [];
-          data.user.activities.forEach((obj) => {
-            activitites.push({
-              userName: data.user ? data.user.name : user.name,
-              startedAt: obj.started_at,
-              score: obj.score ?? 0,
-              picture: data.user ? data.user.picture : user.picture,
-              geoFence: convertToGeoFence(obj.geofence),
-              caption: obj.caption ?? '',
-              duration: obj.duration,
-            });
-          });
-          setUser({
-            name: data.user.name ?? user.name,
-            bio: data.user.bio ?? user.bio,
-            email: data.user.email ?? user.email,
-            picture: data.user.picture ?? user.picture,
-            totalScore: data.user.totalScore ?? user.totalScore,
-            educationScore: data.user.education_score.aggregate?.sum?.score ?? user.educationScore,
-            cultureScore: data.user.culture_score.aggregate?.sum?.score ?? user.cultureScore,
-            socialScore: data.user.social_score.aggregate?.sum?.score ?? user.socialScore,
-            exerciseScore: data.user.exercise_score.aggregate?.sum?.score ?? user.exerciseScore,
-            achievements: achievements,
-            activities: activitites,
-          });
-        }
+      if (data && data.user) {
+        const userData = convertToProfileUser(data);
+        if (userData) setUser(userData);
       }
     }, [data]);
 
