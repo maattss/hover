@@ -70,19 +70,19 @@ const ChallengeScreen: React.FC<ChallengesProps> = (props: ChallengesProps) => {
   }
 
   return (
-    <View style={styles.container}>
-      <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
-        {ongoingChallenges && renderOngoingChallenges(ongoingChallenges)}
-        {pendingChallenges && renderPendingChallenges(props, pendingChallenges, refetch)}
+    <ScrollView
+      contentContainerStyle={styles.container}
+      refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
+      {ongoingChallenges && renderOngoingChallenges(ongoingChallenges)}
+      {pendingChallenges && renderPendingChallenges(props, pendingChallenges, refetch)}
 
-        <View style={styles.box}>
-          <Text style={{ ...Typography.headerText, marginTop: Spacing.base }}>Create new Challenge</Text>
-          <TouchableOpacity style={styles.challengeButton}>
-            <Text style={{ ...Buttons.buttonText }}>Create challenge</Text>
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
-    </View>
+      <View style={styles.box}>
+        <Text style={{ ...Typography.headerText, marginTop: Spacing.base }}>Create new Challenge</Text>
+        <TouchableOpacity style={styles.challengeButton}>
+          <Text style={{ ...Buttons.buttonText }}>Create challenge</Text>
+        </TouchableOpacity>
+      </View>
+    </ScrollView>
   );
 };
 
