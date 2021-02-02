@@ -47,13 +47,19 @@ const LeaderboardScreen: React.FC = () => {
     } as HighscoreQueryVariables,
   });
   const [highscores, setHighscores] = useState<Item[]>([]);
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
     if (highscoreData) setHighscores(convertToHighscoreList(highscoreData));
   }, [highscoreData]);
+  const refetchData = async () => {
+    setRefreshing(true);
+    await refetch();
+    setRefreshing(false);
+  };
 
   if (Platform.OS == 'android') {
-    if (highscoreLoading) return <ActivityIndicator size={'large'} color={Colors.blue} />;
+    if (highscoreLoading && !refreshing) return <ActivityIndicator size={'large'} color={Colors.blue} />;
     if (highscoreError) return <Text style={styles.infoText}>{highscoreError.message}</Text>;
     return (
       <View style={styles.container}>
@@ -64,8 +70,8 @@ const LeaderboardScreen: React.FC = () => {
               selectedValue={category}
               onValueChange={(value) => {
                 setCategory(value);
-                refetch();
                 setEditCategory(false);
+                refetchData();
               }}
               closePicker={() => setEditCategory(false)}
             />
@@ -76,15 +82,15 @@ const LeaderboardScreen: React.FC = () => {
               selectedValue={timespan}
               onValueChange={(value) => {
                 setTimespan(value);
-                refetch();
                 setEditTimespan(false);
+                refetchData();
               }}
               closePicker={() => setEditTimespan(false)}
             />
           )}
         </View>
         <View style={styles.leaderboardContainer}>
-          {highscores && <Leaderboard data={highscores} refetch={refetch} />}
+          {highscores && <Leaderboard data={highscores} refetch={refetch} re />}
         </View>
       </View>
     );
@@ -122,7 +128,9 @@ const LeaderboardScreen: React.FC = () => {
         <View style={styles.leaderboardContainer}>
           {highscoreLoading && <ActivityIndicator size={'large'} color={Colors.blue} />}
           {highscoreError && <Text style={styles.infoText}>{highscoreError.message}</Text>}
-          {!highscoreLoading && !highscoreError && highscores && <Leaderboard data={highscores} refetch={refetch} />}
+          {!highscoreLoading && !highscoreError && highscores && (
+            <Leaderboard data={highscores} refetch={refetch} refreshing={refreshing} setRefreshing={setRefreshing} />
+          )}
         </View>
         {editCategory && !editTimespan && (
           <FilterPickerIos

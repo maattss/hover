@@ -23,6 +23,8 @@ interface LeaderboardProps {
   oddRowColor?: string;
   evenRowColor?: string;
   refetch?: () => Promise<ApolloQueryResult<HighscoreQuery>>;
+  refreshing: boolean;
+  setRefreshing: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export type Item = {
@@ -34,7 +36,6 @@ export type Item = {
 
 const Leaderboard: React.FC<LeaderboardProps> = (props: LeaderboardProps) => {
   const [sortedData, setSortedData] = useState<Item[]>([]);
-  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
     const { data, sort } = props;
@@ -43,11 +44,11 @@ const Leaderboard: React.FC<LeaderboardProps> = (props: LeaderboardProps) => {
 
   const onRefresh = useCallback(async () => {
     if (props.refetch) {
-      setRefreshing(true);
+      props.setRefreshing(true);
       await props.refetch();
-      setRefreshing(false);
+      props.setRefreshing(false);
     }
-  }, [refreshing]);
+  }, [props.refreshing]);
 
   const defaultRenderItem = (item: Item, index: number) => {
     const evenColor = props.evenRowColor || Colors.black;
@@ -88,7 +89,7 @@ const Leaderboard: React.FC<LeaderboardProps> = (props: LeaderboardProps) => {
         renderItem={({ item, index }) => renderItemS(item, index)}
         refreshControl={
           <RefreshControl
-            refreshing={refreshing}
+            refreshing={props.refreshing}
             onRefresh={onRefresh}
             tintColor={Colors.blue}
             colors={[Colors.blue]}

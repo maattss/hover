@@ -182,6 +182,7 @@ const styles = StyleSheet.create({
   bio: {
     ...Typography.largeBodyText,
     fontStyle: 'italic',
+    marginTop: Spacing.smallest,
   },
   loadingContainer: {
     display: 'flex',
