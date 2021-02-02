@@ -105,7 +105,21 @@ export const convertToHighscoreList = (data: HighscoreQuery) => {
   return highscores;
 };
 
-export const convertToProfileUser = (data: ProfileUserQuery | undefined) => {
+export const defaultUserProfile: UserProfile = {
+  name: '',
+  bio: '',
+  email: '',
+  picture: Asset.fromModule(require('../assets/images/user.png')).uri, // Default picture
+  totalScore: 0,
+  educationScore: 0,
+  cultureScore: 0,
+  socialScore: 0,
+  exerciseScore: 0,
+  achievements: [],
+  activities: [],
+};
+
+export const convertToUserProfile = (data: ProfileUserQuery | undefined) => {
   if (data && data.user) {
     const achievements: AchievementType[] = [];
     data.user.user_achievement.forEach((obj: any) => {
@@ -121,25 +135,25 @@ export const convertToProfileUser = (data: ProfileUserQuery | undefined) => {
     const activitites: ActivityFeedData[] = [];
     data.user.activities.forEach((obj: any) => {
       activitites.push({
-        userName: data.user ? data.user.name : '',
+        userName: data.user ? data.user.name : defaultUserProfile.name,
         startedAt: obj.started_at,
         score: obj.score ?? 0,
-        picture: data.user ? data.user.picture : Asset.fromModule(require('../assets/images/user.png')).uri, // Default picture
+        picture: data.user ? data.user.picture : defaultUserProfile.picture,
         geoFence: convertToGeoFence(obj.geofence),
         caption: obj.caption ?? '',
         duration: obj.duration,
       });
     });
     return {
-      name: data.user.name ?? '',
-      bio: data.user.bio ?? '',
-      email: data.user.email ?? '',
+      name: data.user.name ?? defaultUserProfile.name,
+      bio: data.user.bio ?? defaultUserProfile.bio,
+      email: data.user.email ?? defaultUserProfile.email,
       picture: data.user.picture ?? Asset.fromModule(require('../assets/images/user.png')).uri, // Default picture
-      totalScore: data.user.totalScore ?? '0',
-      educationScore: data.user.education_score.aggregate?.sum?.score ?? '0',
-      cultureScore: data.user.culture_score.aggregate?.sum?.score ?? '0',
-      socialScore: data.user.social_score.aggregate?.sum?.score ?? '0',
-      exerciseScore: data.user.exercise_score.aggregate?.sum?.score ?? '0',
+      totalScore: data.user.totalScore ?? defaultUserProfile.totalScore,
+      educationScore: data.user.education_score.aggregate?.sum?.score ?? defaultUserProfile.educationScore,
+      cultureScore: data.user.culture_score.aggregate?.sum?.score ?? defaultUserProfile.cultureScore,
+      socialScore: data.user.social_score.aggregate?.sum?.score ?? defaultUserProfile.socialScore,
+      exerciseScore: data.user.exercise_score.aggregate?.sum?.score ?? defaultUserProfile.exerciseScore,
       achievements: achievements,
       activities: activitites,
     } as UserProfile;

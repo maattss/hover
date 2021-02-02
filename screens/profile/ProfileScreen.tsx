@@ -1,35 +1,26 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-import { Asset } from 'expo-asset';
 import React, { useCallback, useEffect, useState } from 'react';
 import { ActivityIndicator, Alert, StyleSheet, Text, View, Image, RefreshControl } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useProfileUserQuery } from '../../graphql/queries/ProfileUser.generated';
 import useAuthentication from '../../hooks/useAuthentication';
 import { Colors, Spacing, Typography } from '../../theme';
-import { UserProfile, Achievement as AchievementType, AchievementVariant } from '../../types/profileTypes';
+import { UserProfile } from '../../types/profileTypes';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
-import { GeoFence, GeoFenceCategory } from '../../types/geoFenceTypes';
+import { GeoFenceCategory } from '../../types/geoFenceTypes';
 import { getCategoryIconName, getCategoryColor } from '../../components/feed/ActivityFeedCard';
 import Achievement from '../../components/Achievement';
-import { ActivityFeedData } from '../../types/feedTypes';
-import { convertToGeoFence, convertToProfileUser } from '../../helpers/objectMappers';
+import { convertToUserProfile, defaultUserProfile } from '../../helpers/objectMappers';
 
 const ProfileScreen: React.FC = () => {
   const id = useAuthentication().user?.uid;
-  const [user, setUser] = useState<UserProfile>({
-    name: '',
-    bio: '',
-    email: '',
-    picture: Asset.fromModule(require('../../assets/images/user.png')).uri, // Default picture
-    totalScore: 0,
-    educationScore: 0,
-    cultureScore: 0,
-    socialScore: 0,
-    exerciseScore: 0,
-    achievements: [],
-    activities: [],
-  });
+  const [user, setUser] = useState<UserProfile>(defaultUserProfile);
   if (id) {
+    const [refreshing, setRefreshing] = useState(false);
+    const onRefresh = useCallback(async () => {
+      setRefreshing(true);
+      await refetch();
+      setRefreshing(false);
+    }, []);
     const { loading: loading, error: error, data: data, refetch } = useProfileUserQuery({
       variables: {
         id: id,
@@ -39,23 +30,11 @@ const ProfileScreen: React.FC = () => {
 
     useEffect(() => {
       if (data && data.user) {
-        const userData = convertToProfileUser(data);
+        const userData = convertToUserProfile(data);
         if (userData) setUser(userData);
       }
     }, [data]);
 
-    const renderAchievements = () => {
-      return user.achievements
-        .slice(0)
-        .reverse()
-        .map((achievement, index) => {
-          return (
-            <View key={index} style={styles.achievement}>
-              <Achievement achievement={achievement} key={index} />
-            </View>
-          );
-        });
-    };
     const getScore = (category: GeoFenceCategory) => {
       switch (category) {
         case GeoFenceCategory.CULTURE:
@@ -70,6 +49,7 @@ const ProfileScreen: React.FC = () => {
           return 0;
       }
     };
+
     const renderScore = () => {
       const categoryColor = (category: GeoFenceCategory) => {
         return {
@@ -92,13 +72,23 @@ const ProfileScreen: React.FC = () => {
           );
         });
     };
-
-    const [refreshing, setRefreshing] = useState(false);
-    const onRefresh = useCallback(async () => {
-      setRefreshing(true);
-      await refetch();
-      setRefreshing(false);
-    }, []);
+    const renderAchievements = () => {
+      return user.achievements
+        .slice(0)
+        .reverse()
+        .map((achievement, index) => {
+          return (
+            <View key={index} style={styles.achievement}>
+              <Achievement achievement={achievement} key={index} />
+            </View>
+          );
+        });
+    };
+    const renderActivities = () => {
+      return user.activities.map((activity, index) => {
+        <Text key={index}>{activity.startedAt}</Text>;
+      });
+    };
 
     if (error) {
       console.error(error);
@@ -144,7 +134,7 @@ const ProfileScreen: React.FC = () => {
 
         <Text style={styles.header}>Activities</Text>
         <ScrollView style={styles.activitiesContainer} horizontal={true}>
-          <Text style={{ ...Typography.largeBodyText }}>Insert activities here</Text>
+          {renderActivities()}
         </ScrollView>
       </ScrollView>
     );
