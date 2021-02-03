@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, ViewStyle } from 'react-native';
-import { Colors, Typography, Spacing } from '../theme';
+import { Colors, Spacing } from '../theme';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import { ActivityFeedData } from '../types/feedTypes';
 import { GeoFenceCategory } from '../types/geoFenceTypes';

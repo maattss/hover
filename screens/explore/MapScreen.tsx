@@ -1,5 +1,5 @@
 import React, { useState, createRef, useEffect } from 'react';
-import MapView, { Circle, LatLng, MapTypes, Polygon, Region } from 'react-native-maps';
+import MapView, { LatLng, MapTypes, Region } from 'react-native-maps';
 import { StyleSheet, Dimensions, Text, View, TouchableOpacity } from 'react-native';
 import { Colors, Spacing, Typography, Buttons } from '../../theme';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';

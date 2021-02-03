@@ -130,7 +130,7 @@ export const defaultUserProfile: UserProfile = {
   activities: [],
 };
 
-export const convertToUserProfile = (data: ProfileUserQuery | undefined, userId: string) => {
+export const convertToUserProfile = (data: ProfileUserQuery | undefined) => {
   if (data && data.user) {
     const achievements: AchievementType[] = [];
     data.user.user_achievement.forEach((obj: any) => {
