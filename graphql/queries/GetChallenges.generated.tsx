@@ -1,9 +1,19 @@
 /* eslint-disable */
 import * as Types from '../../types/types';
 
-import { BasicUserFragmentFragment, ChallengeFragmentFragment } from '../Fragments.generated';
+import {
+  BasicUserFragmentFragment,
+  ChallengeFragmentFragment,
+  AchievementFragmentFragment,
+  GeofenceFragmentFragment,
+} from '../Fragments.generated';
 import { gql } from '@apollo/client';
-import { BasicUserFragmentFragmentDoc, ChallengeFragmentFragmentDoc } from '../Fragments.generated';
+import {
+  BasicUserFragmentFragmentDoc,
+  ChallengeFragmentFragmentDoc,
+  AchievementFragmentFragmentDoc,
+  GeofenceFragmentFragmentDoc,
+} from '../Fragments.generated';
 import * as Apollo from '@apollo/client';
 export type GetChallengesQueryVariables = Types.Exact<{
   user_id: Types.Scalars['String'];
