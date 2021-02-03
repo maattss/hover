@@ -1,8 +1,10 @@
 mutation AcceptChallengeParticipation($challenge_id: Int!, $user_id: String!) {
   update_challenge_participant_by_pk(
     pk_columns: { challenge_id: $challenge_id, user_id: $user_id }
-    _set: { accepted: false }
+    _set: { accepted: true }
   ) {
     accepted
+    challenge_id
+    user_id
   }
 }

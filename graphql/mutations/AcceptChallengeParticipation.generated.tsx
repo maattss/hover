@@ -10,7 +10,10 @@ export type AcceptChallengeParticipationMutationVariables = Types.Exact<{
 
 export type AcceptChallengeParticipationMutation = { readonly __typename: 'mutation_root' } & {
   readonly update_challenge_participant_by_pk?: Types.Maybe<
-    { readonly __typename: 'challenge_participant' } & Pick<Types.Challenge_Participant, 'accepted'>
+    { readonly __typename: 'challenge_participant' } & Pick<
+      Types.Challenge_Participant,
+      'accepted' | 'challenge_id' | 'user_id'
+    >
   >;
 };
 
@@ -18,9 +21,11 @@ export const AcceptChallengeParticipationDocument = gql`
   mutation AcceptChallengeParticipation($challenge_id: Int!, $user_id: String!) {
     update_challenge_participant_by_pk(
       pk_columns: { challenge_id: $challenge_id, user_id: $user_id }
-      _set: { accepted: false }
+      _set: { accepted: true }
     ) {
       accepted
+      challenge_id
+      user_id
     }
   }
 `;

@@ -10,13 +10,17 @@ export type DeleteChallengeParticipationMutationVariables = Types.Exact<{
 
 export type DeleteChallengeParticipationMutation = { readonly __typename: 'mutation_root' } & {
   readonly delete_challenge_participant_by_pk?: Types.Maybe<
-    { readonly __typename: 'challenge_participant' } & Pick<Types.Challenge_Participant, 'challenge_id' | 'user_id'>
+    { readonly __typename: 'challenge_participant' } & Pick<
+      Types.Challenge_Participant,
+      'accepted' | 'challenge_id' | 'user_id'
+    >
   >;
 };
 
 export const DeleteChallengeParticipationDocument = gql`
   mutation DeleteChallengeParticipation($challenge_id: Int!, $user_id: String!) {
     delete_challenge_participant_by_pk(challenge_id: $challenge_id, user_id: $user_id) {
+      accepted
       challenge_id
       user_id
     }
