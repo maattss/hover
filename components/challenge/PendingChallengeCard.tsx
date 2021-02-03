@@ -59,13 +59,13 @@ const PendingChallengeCard: React.FC<PendingChallengeCardProps> = ({ challenge }
       case Challenge_Participant_State_Enum.Accepted:
         return (
           <View style={styles.buttonsContainer}>
-            <Text>You accepted the challenge</Text>
+            <Text style={styles.stateUpdateMessage}>You accepted the challenge</Text>
           </View>
         );
       case Challenge_Participant_State_Enum.Declined:
         return (
           <View style={styles.buttonsContainer}>
-            <Text>You declined the challenge</Text>
+            <Text style={styles.stateUpdateMessage}>You declined the challenge</Text>
           </View>
         );
     }
@@ -79,7 +79,7 @@ const PendingChallengeCard: React.FC<PendingChallengeCardProps> = ({ challenge }
           <Image source={{ uri: opponent.picture }} style={styles.avatar} />
           <View>
             <Text style={styles.nameText}>{opponent.name}</Text>
-            <Text style={styles.captionText}>{challenge.challenge_type}</Text>
+            <Text style={styles.challengeTypeText}>{challenge.challenge_type}</Text>
           </View>
         </View>
         <ParticipantButtonSwitch />
@@ -94,7 +94,7 @@ const PendingChallengeCard: React.FC<PendingChallengeCardProps> = ({ challenge }
               <Image key={opponent.id} source={{ uri: opponent.picture }} style={styles.avatar} />
               <View>
                 <Text style={styles.nameText}>{opponent.name}</Text>
-                <Text style={styles.captionText}>{challenge.challenge_type}</Text>
+                <Text style={styles.challengeTypeText}>{challenge.challenge_type}</Text>
               </View>
             </>
           ))}
@@ -134,39 +134,15 @@ const styles = StyleSheet.create({
     fontSize: 20,
     lineHeight: 30,
   },
-  captionText: {
+  challengeTypeText: {
     color: Colors.almostWhite,
     fontSize: 12,
     fontStyle: 'italic',
   },
-  scoreText: {
+  stateUpdateMessage: {
     color: Colors.almostWhite,
-    fontSize: 24,
-    textAlign: 'center',
-  },
-  main: {
-    marginVertical: Spacing.small,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  category: {
-    width: '30%',
-    display: 'flex',
-    textAlign: 'center',
-    justifyContent: 'center',
-    flexDirection: 'column',
-    paddingRight: Spacing.base,
-  },
-  categoryIcon: {
-    color: Colors.almostWhite,
-    fontSize: 40,
-    textAlign: 'center',
-    marginVertical: Spacing.smallest,
-  },
-  map: {
-    width: '70%',
-    height: 110,
-    borderRadius: Spacing.smallest,
+    fontSize: 12,
+    fontStyle: 'italic',
   },
   avatar: {
     height: 45,
