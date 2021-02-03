@@ -7,6 +7,7 @@ import { GeoFenceCategory } from '../types/geoFenceTypes';
 import { timeStampToPresentable } from '../helpers/dateTimeHelpers';
 import MapView, { LatLng, Marker, Region } from 'react-native-maps';
 import { defaultMapLocation } from '../helpers/objectMappers';
+import GeoFences from './GeoFences';
 
 interface ActivityFeedCardProps {
   activity: ActivityFeedData;
@@ -83,6 +84,7 @@ const ProfileActivityCard: React.FC<ActivityFeedCardProps> = ({ activity }: Acti
             title={activity.geoFence ? activity.geoFence.name : 'No name'}
             description={activity.geoFence ? activity.geoFence.description : 'No description'}
           />
+          <GeoFences geofences={activity.geoFence ? [activity.geoFence] : undefined} />
         </MapView>
       </View>
       <View style={styles.footer}>
