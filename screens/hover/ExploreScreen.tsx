@@ -3,7 +3,6 @@ import MapView, { LatLng, MapTypes, Region } from 'react-native-maps';
 import { StyleSheet, Dimensions, Text, View, TouchableOpacity } from 'react-native';
 import { Colors, Spacing, Typography, Buttons } from '../../theme';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
-import SnackBar, { SnackBarVariant } from '../../components/SnackBar';
 import useTracking from '../../hooks/useTracking';
 import { defaultMapLocation } from '../../helpers/objectMappers';
 import GeoFences from '../../components/GeoFences';
@@ -11,12 +10,14 @@ import GeoFences from '../../components/GeoFences';
 const { width, height } = Dimensions.get('window');
 
 const MapScreen: React.FC = () => {
-  const [mapRegion, setMapRegion] = useState<LatLng>();
   const [chosenMapType, setChosenMapType] = useState<MapTypes>('standard');
   const [centreOnUser, setCentreOnUser] = useState(false);
-  const [showSnackbar, setShowSnackbar] = useState(false);
+  const [disableTracking, setDisableTracking] = useState(true);
   const tracking = useTracking();
-  tracking.refetchGeofences();
+  // Refetch geofences on init render
+  useEffect(() => {
+    tracking.refetchGeofences();
+  }, []);
 
   // Dynamic styles
   const mapTypeIconStyle = {
@@ -32,14 +33,11 @@ const MapScreen: React.FC = () => {
   const toggleMapType = () =>
     chosenMapType === 'satellite' ? setChosenMapType('standard') : setChosenMapType('satellite');
 
-  const regionChange = (region: Region) => {
-    setMapRegion(region);
-  };
   useEffect(() => {
     if (tracking.insideGeoFence) {
-      setShowSnackbar(true);
+      setDisableTracking(false);
     } else {
-      setShowSnackbar(false);
+      setDisableTracking(true);
     }
   }, [tracking.insideGeoFence]);
 
@@ -64,24 +62,12 @@ const MapScreen: React.FC = () => {
         mapType={chosenMapType}
         showsUserLocation
         style={styles.mapStyle}
-        onRegionChange={(region) => regionChange(region)}
-        onRegionChangeComplete={(region) => regionChange(region)}
         onMapReady={animateMapToUserPos}
         onDoublePress={() => setCentreOnUser(false)}
         onPanDrag={() => setCentreOnUser(false)}>
         <GeoFences geofences={tracking.geoFences} />
       </MapView>
 
-      <View style={styles.positionContainer}>
-        <Text style={styles.infoText}>
-          User location: ({tracking.userLocation ? tracking.userLocation.coords.latitude.toPrecision(5) : 'Unknown'},{' '}
-          {tracking.userLocation ? tracking.userLocation.coords.longitude.toPrecision(5) : 'Unknown'})
-        </Text>
-        <Text style={styles.infoText}>
-          Map region: ({mapRegion ? mapRegion.latitude.toPrecision(5) : ''},{' '}
-          {mapRegion ? mapRegion.longitude.toPrecision(5) : ''})
-        </Text>
-      </View>
       <View style={styles.infoContainer}>
         <TouchableOpacity style={styles.mapStyleButton} onPress={toggleMapType}>
           <FAIcon style={mapTypeIconStyle} name="globe-europe" />
@@ -90,41 +76,20 @@ const MapScreen: React.FC = () => {
           <FAIcon style={centreOnUserIconStyle} name="crosshairs" />
         </TouchableOpacity>
       </View>
-      <SnackBar
-        variant={SnackBarVariant.INFO}
-        title={'Inside a Hover zone!'}
-        show={showSnackbar}
-        setShow={setShowSnackbar}
-        message={'Head over to the Hover screen to start tracking.'}
-      />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
+  container: {},
   mapStyle: {
     width,
     height,
   },
   infoContainer: {
     position: 'absolute',
-    top: '6%',
-    right: '0.5%',
-  },
-  positionContainer: {
-    backgroundColor: Colors.almostBlack,
-    alignItems: 'flex-start',
-    position: 'absolute',
-    top: '6%',
-    left: '0.5%',
-    padding: Spacing.smaller,
-    margin: 0,
-    borderRadius: 10,
+    top: Spacing.largest,
+    left: Spacing.smaller,
   },
   infoText: {
     ...Typography.bodyText,
