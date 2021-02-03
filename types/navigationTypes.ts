@@ -10,7 +10,6 @@ export type RootStackParamList = {
 
 export type RootTabParamList = {
   Feed: undefined;
-  Explore: undefined;
   Challenge: undefined;
   Hover: undefined;
   Profile: undefined;
@@ -24,21 +23,19 @@ export type FeedStackParamList = {
 export type NotificationsStackParamList = {
   Notifications: undefined;
 };
-
-export type ExploreStackParamList = {
-  Explore: undefined;
-};
 export type ChallengeStackParamList = {
   Challenge: undefined;
   PendingChallenges: PendingChallengesScreenProps;
   OngoingChallenges: OngoingChallengesScreenProps;
   NewChallenge: undefined;
 };
+export type HoverStackParamList = {
+  Explore: undefined;
+  Tracking: undefined;
+  Publish: undefined;
+};
 export type StatisticsStackParamList = {
   Leaderboard: undefined;
-};
-export type TrackingStackParamList = {
-  Hover: undefined;
 };
 export type ProfileStackParamList = {
   Profile: undefined;

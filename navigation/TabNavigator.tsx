@@ -6,7 +6,7 @@ import { Colors } from '../theme';
 import { RootTabParamList } from '../types/navigationTypes';
 import FeedNavigator from './FeedNavigator';
 import StatisticsNavigator from './LeaderboardNavigator';
-import TrackingNavigator from './HoverNavigator';
+import HoverNavigator from './HoverNavigator';
 import ProfileNavigator from './ProfileNavigator';
 import useTracking from '../hooks/useTracking';
 import ChallengeNavigator from './ChallengeNavigator';
@@ -44,7 +44,7 @@ const TabNavigator: React.FC = () => {
       />
       <Tab.Screen
         name="Hover"
-        component={TrackingNavigator}
+        component={HoverNavigator}
         options={{
           tabBarIcon: tabIconTracking,
           tabBarBadge: tracking.isTracking && !tracking.isTrackingPaused ? '' : undefined,

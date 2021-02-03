@@ -1,16 +1,20 @@
 import React from 'react';
-import { TrackingStackParamList } from '../types/navigationTypes';
+import { HoverStackParamList } from '../types/navigationTypes';
 import { createStackNavigator } from '@react-navigation/stack';
 import TrackingScreen from '../screens/hover/TrackingScreen';
+import ExploreScreen from '../screens/hover/ExploreScreen';
+import PublishScreen from '../screens/hover/PublishScreen';
 
-const ExploreStack = createStackNavigator<TrackingStackParamList>();
+const ExploreStack = createStackNavigator<HoverStackParamList>();
 
-const TrackingNavigator: React.FC = () => {
+const HoverNavigator: React.FC = () => {
   return (
     <ExploreStack.Navigator>
-      <ExploreStack.Screen name="Hover" component={TrackingScreen} />
+      <ExploreStack.Screen name="Explore" component={ExploreScreen} options={} />
+      <ExploreStack.Screen name="Tracking" component={TrackingScreen} />
+      <ExploreStack.Screen name="Publish" component={PublishScreen} />
     </ExploreStack.Navigator>
   );
 };
 
-export default TrackingNavigator;
+export default HoverNavigator;
