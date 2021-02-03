@@ -1,5 +1,5 @@
 import React, { useState, createRef } from 'react';
-import MapView, { Circle, LatLng, MapTypes, Polygon } from 'react-native-maps';
+import MapView, { Circle, MapTypes, Polygon } from 'react-native-maps';
 import { StyleSheet, Dimensions, Text, View, TouchableOpacity, ActivityIndicator } from 'react-native';
 import {
   GeoFence,
@@ -12,14 +12,9 @@ import { Colors, Spacing, Typography, Buttons } from '../../theme';
 import { hexToRGB } from '../../theme/colors';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import useTracking from '../../hooks/useTracking';
+import { defaultMapLocation } from '../../helpers/objectMappers';
 
 const { width, height } = Dimensions.get('window');
-
-// Default location NTNU Trondheim
-const defaultLocation: LatLng = {
-  latitude: 63.419,
-  longitude: 10.4025,
-};
 
 const getGeoFenceColor = (category: GeoFenceCategory, opacity: number) => {
   switch (category) {
@@ -91,8 +86,8 @@ const TrackingScreen: React.FC = () => {
     if (tracking.userLocation) setCentreOnUser(true);
     mapView.current?.animateToRegion(
       {
-        longitude: tracking.userLocation ? tracking.userLocation.coords.longitude : defaultLocation.longitude,
-        latitude: tracking.userLocation ? tracking.userLocation.coords.latitude : defaultLocation.latitude,
+        longitude: tracking.userLocation ? tracking.userLocation.coords.longitude : defaultMapLocation.longitude,
+        latitude: tracking.userLocation ? tracking.userLocation.coords.latitude : defaultMapLocation.latitude,
         latitudeDelta: 0.01,
         longitudeDelta: 0.01 * (width / height),
       },

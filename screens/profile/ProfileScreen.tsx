@@ -26,7 +26,7 @@ const ProfileScreen: React.FC = () => {
       variables: {
         id: id,
       },
-      fetchPolicy: 'network-only',
+      nextFetchPolicy: 'network-only',
     });
 
     useEffect(() => {
