@@ -12,9 +12,15 @@ export const gold = '#FFD700';
 export const silver = '#C0C0C0';
 export const bronze = '#CD7F32';
 
+// Transparent palette colors
+export const transparent = 'rgba(0, 0, 0, 0)';
+export const grayTransparent = 'rgba(66, 66, 66, 0.95)';
+export const greenTransparent = 'rgba(40, 167, 69, 0.95)';
+export const redTransparent = 'rgba(221, 46, 68, 0.95)';
+export const almostBlackTransparent = 'rgba(18, 18, 18, 0.95)';
+
 // Base colors
 export const black = '#000000';
-export const transparent = 'rgba(0, 0, 0, 0)';
 export const white = '#FFFFFF';
 export const gray100 = '#F5F5F5';
 export const gray200 = '#EEEEEE';

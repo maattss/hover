@@ -1,6 +1,6 @@
 import React, { useState, createRef, useEffect } from 'react';
 import MapView, { LatLng, MapTypes, Region } from 'react-native-maps';
-import { StyleSheet, Dimensions, Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, Dimensions, Text, View, TouchableOpacity, ViewStyle, ActivityIndicator } from 'react-native';
 import { Colors, Spacing, Typography, Buttons } from '../../theme';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import useTracking from '../../hooks/useTracking';
@@ -54,6 +54,23 @@ const MapScreen: React.FC = () => {
       1000,
     );
   };
+  const startTracking = () => {
+    if (!disableTracking) {
+      tracking.startTracking();
+      // TODO: Navigate to tracking screen
+    }
+  };
+  const getDynamicButtonStyles = () => {
+    if (disableTracking) {
+      return {
+        backgroundColor: Colors.grayTransparent,
+      } as ViewStyle;
+    } else {
+      return {
+        backgroundColor: Colors.greenTransparent,
+      } as ViewStyle;
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -74,6 +91,12 @@ const MapScreen: React.FC = () => {
         </TouchableOpacity>
         <TouchableOpacity style={styles.centreOnUserButton} onPress={animateMapToUserPos}>
           <FAIcon style={centreOnUserIconStyle} name="crosshairs" />
+        </TouchableOpacity>
+      </View>
+
+      <View style={styles.startButtonContainer}>
+        <TouchableOpacity style={[styles.startButton, getDynamicButtonStyles()]} onPress={startTracking}>
+          {disableTracking ? <ActivityIndicator /> : <Text style={styles.startButtonText}>Start</Text>}
         </TouchableOpacity>
       </View>
     </View>
@@ -99,16 +122,39 @@ const styles = StyleSheet.create({
   },
   mapStyleButton: {
     ...Buttons.iconButton,
-    backgroundColor: Colors.almostBlack,
+    backgroundColor: Colors.almostBlackTransparent,
   },
   centreOnUserButton: {
     ...Buttons.iconButton,
-    backgroundColor: Colors.almostBlack,
+    backgroundColor: Colors.almostBlackTransparent,
     marginTop: Spacing.smallest,
   },
   icon: {
     fontSize: Typography.icon.fontSize,
     color: Colors.blue,
+  },
+  startButtonContainer: {
+    position: 'absolute',
+    bottom: 55,
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  startButton: {
+    padding: Spacing.smallest,
+    borderRadius: 110 / 2,
+    width: 110,
+    height: 110,
+    justifyContent: 'center',
+    shadowOpacity: 0.2,
+    shadowRadius: 10,
+    shadowColor: Colors.almostBlack,
+    shadowOffset: { height: 0, width: 0 },
+  },
+  startButtonText: {
+    ...Buttons.buttonText,
+    fontSize: 24,
+    textAlign: 'center',
   },
 });
 
