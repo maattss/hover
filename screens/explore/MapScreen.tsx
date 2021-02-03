@@ -1,46 +1,14 @@
 import React, { useState, createRef, useEffect } from 'react';
 import MapView, { Circle, LatLng, MapTypes, Polygon, Region } from 'react-native-maps';
 import { StyleSheet, Dimensions, Text, View, TouchableOpacity } from 'react-native';
-import { GeoFence, GeoFenceVariant, CircleGeoFence, PolygonGeoFence } from '../../types/geoFenceTypes';
 import { Colors, Spacing, Typography, Buttons } from '../../theme';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import SnackBar, { SnackBarVariant } from '../../components/SnackBar';
-import { getGeoFenceColor } from '../../helpers/geoFenceCalculations';
 import useTracking from '../../hooks/useTracking';
 import { defaultMapLocation } from '../../helpers/objectMappers';
+import GeoFences from '../../components/GeoFences';
 
 const { width, height } = Dimensions.get('window');
-
-const drawGeoFences = (geoFences: GeoFence[] | undefined) => {
-  if (geoFences) {
-    return geoFences.map((geoFence, index) => {
-      if (geoFence.variant === GeoFenceVariant.CIRCLE) {
-        const currentGeoFence = geoFence as CircleGeoFence;
-        return (
-          <Circle
-            key={index}
-            center={{ latitude: currentGeoFence.latitude, longitude: currentGeoFence.longitude }}
-            radius={currentGeoFence.radius}
-            fillColor={getGeoFenceColor(currentGeoFence.category, 0.6)}
-            strokeColor={getGeoFenceColor(currentGeoFence.category, 1)}
-            strokeWidth={1}
-          />
-        );
-      } else if (geoFence.variant === GeoFenceVariant.POLYGON) {
-        const currentGeoFence = geoFence as PolygonGeoFence;
-        return (
-          <Polygon
-            key={index}
-            coordinates={currentGeoFence.coordinates}
-            fillColor={getGeoFenceColor(currentGeoFence.category, 0.6)}
-            strokeColor={getGeoFenceColor(currentGeoFence.category, 1)}
-            strokeWidth={1}
-          />
-        );
-      }
-    });
-  }
-};
 
 const MapScreen: React.FC = () => {
   const [mapRegion, setMapRegion] = useState<LatLng>();
@@ -101,7 +69,7 @@ const MapScreen: React.FC = () => {
         onMapReady={animateMapToUserPos}
         onDoublePress={() => setCentreOnUser(false)}
         onPanDrag={() => setCentreOnUser(false)}>
-        {drawGeoFences(tracking.geoFences)}
+        <GeoFences geofences={tracking.geoFences} />
       </MapView>
 
       <View style={styles.positionContainer}>
