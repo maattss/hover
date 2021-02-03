@@ -11,10 +11,10 @@ export interface PendingChallengesScreenProps {
   refetch: () => void;
 }
 
-type ProfileScreenRouteProp = RouteProp<ChallengeStackParamList, 'PendingChallenges'>;
+type ChallengeScreenRouteProp = RouteProp<ChallengeStackParamList, 'PendingChallenges'>;
 
 type Props = {
-  route: ProfileScreenRouteProp;
+  route: ChallengeScreenRouteProp;
 };
 
 const PendingChallengesScreen: React.FC<Props> = ({ route }: Props) => {
