@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { FlatList, RefreshControl, View, StyleSheet } from 'react-native';
+import { FlatList, RefreshControl, SafeAreaView } from 'react-native';
 import { Colors } from '../../theme';
 import { OngoingChallenge } from '../../types/challengeTypes';
 import OngoingChallengeCard from './OngoingChallengeCard';
@@ -27,7 +27,7 @@ const OngoingChallengesList: React.FC<OngoingChallengesListProps> = (props: Ongo
   }, [refreshing]);
   const renderItem = (item: OngoingChallenge) => <OngoingChallengeCard challenge={item} />;
   return (
-    <View style={styles.container}>
+    <SafeAreaView>
       <FlatList
         data={challengeData}
         keyExtractor={(item, index) => index.toString()}
@@ -44,16 +44,8 @@ const OngoingChallengesList: React.FC<OngoingChallengesListProps> = (props: Ongo
           )
         }
       />
-    </View>
+    </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    flex: 1,
-  },
-});
 
 export default OngoingChallengesList;
