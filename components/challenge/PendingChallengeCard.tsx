@@ -1,13 +1,76 @@
-import React from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, Text, View, Image, TouchableOpacity, TextStyle, ViewStyle } from 'react-native';
+import { useUpdateChallengeParticipationMutation } from '../../graphql/mutations/UpdateChallengeParticipation.generated';
 import { Colors, Typography, Spacing, Buttons } from '../../theme';
 import { PendingChallenge } from '../../types/challengeTypes';
+import { Challenge_Participant_State_Enum } from '../../types/types';
 
 interface PendingChallengeCardProps {
   challenge: PendingChallenge;
 }
 
 const PendingChallengeCard: React.FC<PendingChallengeCardProps> = ({ challenge }: PendingChallengeCardProps) => {
+  const [partcipationState, setPartcipationState] = useState<Challenge_Participant_State_Enum>(
+    Challenge_Participant_State_Enum.Pending,
+  );
+  console.log(challenge.user_id);
+  const [updateMutation] = useUpdateChallengeParticipationMutation();
+
+  const UpdateButton = ({
+    state,
+  }: {
+    state: Challenge_Participant_State_Enum.Accepted | Challenge_Participant_State_Enum.Declined;
+  }) => {
+    let buttonStyle: ViewStyle = styles.acceptButton;
+    const buttonTextStyle: TextStyle[] = [{ ...Buttons.buttonText }];
+    let buttonText = 'Accept';
+    if (state === Challenge_Participant_State_Enum.Declined) {
+      buttonStyle = styles.declineButton;
+      buttonTextStyle.push({ color: Colors.gray600 });
+      buttonText = 'Decline';
+    }
+
+    return (
+      <TouchableOpacity
+        style={buttonStyle}
+        onPress={() => {
+          updateMutation({
+            variables: {
+              challenge_id: challenge.id,
+              user_id: challenge.user_id,
+              state: state,
+            },
+          }).then(() => setPartcipationState(state));
+          console.log(state, 'challenge', challenge.id, challenge);
+        }}>
+        <Text style={buttonTextStyle}>{buttonText}</Text>
+      </TouchableOpacity>
+    );
+  };
+  const ParticipantButtonSwitch = () => {
+    switch (partcipationState) {
+      case Challenge_Participant_State_Enum.Pending:
+        return (
+          <View style={styles.buttonsContainer}>
+            <UpdateButton state={Challenge_Participant_State_Enum.Accepted} />
+            <UpdateButton state={Challenge_Participant_State_Enum.Declined} />
+          </View>
+        );
+      case Challenge_Participant_State_Enum.Accepted:
+        return (
+          <View style={styles.buttonsContainer}>
+            <Text>You accepted the challenge</Text>
+          </View>
+        );
+      case Challenge_Participant_State_Enum.Declined:
+        return (
+          <View style={styles.buttonsContainer}>
+            <Text>You declined the challenge</Text>
+          </View>
+        );
+    }
+  };
+
   if (challenge.opponents.length == 1) {
     const opponent = challenge.opponents[0];
     return (
@@ -19,11 +82,7 @@ const PendingChallengeCard: React.FC<PendingChallengeCardProps> = ({ challenge }
             <Text style={styles.captionText}>{challenge.challenge_type}</Text>
           </View>
         </View>
-
-        <View style={styles.buttonsContainer}>
-          <AcceptButton />
-          <DeclineButton />
-        </View>
+        <ParticipantButtonSwitch />
       </View>
     );
   } else if (challenge.opponents.length > 1) {
@@ -48,26 +107,12 @@ const PendingChallengeCard: React.FC<PendingChallengeCardProps> = ({ challenge }
             </Text>
           ))}
         </View>
-        <View style={styles.buttonsContainer}>
-          <AcceptButton />
-          <AcceptButton />
-        </View>
+        <ParticipantButtonSwitch />
       </View>
     );
   } else return <Text>{challenge.end_date.toString()}</Text>;
 };
 
-//const AcceptButton = (onPress?: () => void) => (
-const AcceptButton = () => (
-  <TouchableOpacity style={styles.acceptButton}>
-    <Text style={{ ...Buttons.buttonText }}>Accept</Text>
-  </TouchableOpacity>
-);
-const DeclineButton = () => (
-  <TouchableOpacity style={styles.declineButton}>
-    <Text style={[{ ...Buttons.buttonText }, { color: Colors.gray500 }]}>Decline</Text>
-  </TouchableOpacity>
-);
 const styles = StyleSheet.create({
   card: {
     backgroundColor: Colors.gray900,
