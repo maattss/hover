@@ -1,4 +1,4 @@
-query ProfileUser($id: String!) {
+query ProfileUser($id: String!, $limit: Int!) {
   user(id: $id) {
     bio
     email
@@ -15,7 +15,7 @@ query ProfileUser($id: String!) {
         rule
       }
     }
-    activities(limit: 3, order_by: { created_at: desc }) {
+    activities(limit: $limit, order_by: { created_at: desc }) {
       caption
       created_at
       duration

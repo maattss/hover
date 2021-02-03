@@ -5,6 +5,7 @@ import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 export type ProfileUserQueryVariables = Types.Exact<{
   id: Types.Scalars['String'];
+  limit: Types.Scalars['Int'];
 }>;
 
 export type ProfileUserQuery = { readonly __typename: 'query_root' } & {
@@ -78,7 +79,7 @@ export type ProfileUserQuery = { readonly __typename: 'query_root' } & {
 };
 
 export const ProfileUserDocument = gql`
-  query ProfileUser($id: String!) {
+  query ProfileUser($id: String!, $limit: Int!) {
     user(id: $id) {
       bio
       email
@@ -95,7 +96,7 @@ export const ProfileUserDocument = gql`
           rule
         }
       }
-      activities(limit: 3, order_by: { created_at: desc }) {
+      activities(limit: $limit, order_by: { created_at: desc }) {
         caption
         created_at
         duration
@@ -158,6 +159,7 @@ export const ProfileUserDocument = gql`
  * const { data, loading, error } = useProfileUserQuery({
  *   variables: {
  *      id: // value for 'id'
+ *      limit: // value for 'limit'
  *   },
  * });
  */

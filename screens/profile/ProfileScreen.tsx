@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { ActivityIndicator, Alert, StyleSheet, Text, View, Image, RefreshControl } from 'react-native';
+import { ActivityIndicator, Alert, StyleSheet, Text, View, Image, RefreshControl, Button } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useProfileUserQuery } from '../../graphql/queries/ProfileUser.generated';
 import useAuthentication from '../../hooks/useAuthentication';
-import { Colors, Spacing, Typography } from '../../theme';
+import { Buttons, Colors, Spacing, Typography } from '../../theme';
 import { UserProfile } from '../../types/profileTypes';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import { GeoFenceCategory } from '../../types/geoFenceTypes';
@@ -17,6 +17,7 @@ const ProfileScreen: React.FC = () => {
   const [userProfile, setUserProfile] = useState<UserProfile>(defaultUserProfile);
   if (id) {
     const [refreshing, setRefreshing] = useState(false);
+    const [limit, setLimit] = useState(3);
     const onRefresh = useCallback(async () => {
       setRefreshing(true);
       await refetch();
@@ -25,6 +26,7 @@ const ProfileScreen: React.FC = () => {
     const { loading: loading, error: error, data: data, refetch } = useProfileUserQuery({
       variables: {
         id: id,
+        limit: limit,
       },
       nextFetchPolicy: 'network-only',
     });
@@ -88,6 +90,10 @@ const ProfileScreen: React.FC = () => {
     const renderActivities = () => {
       return userProfile.activities.map((activity, index) => <ProfileActivityCard key={index} activity={activity} />);
     };
+    const loadMoreActivities = () => {
+      setLimit(limit + 3);
+      refetch();
+    };
 
     if (error) {
       console.error(error);
@@ -126,13 +132,23 @@ const ProfileScreen: React.FC = () => {
         </ScrollView>
 
         <Text style={styles.header}>Score</Text>
-        <View style={styles.categoryScore}>{renderScore()}</View>
-        <View style={styles.totalScoreContainer}>
-          <Text style={styles.totalScore}>Total: {userProfile.totalScore}</Text>
+        <View style={styles.scoreContainer}>
+          <View style={styles.categoryScore}>{renderScore()}</View>
+          <View style={styles.totalScoreContainer}>
+            <Text style={styles.totalScore}>Total: {userProfile.totalScore}</Text>
+          </View>
         </View>
 
         <Text style={styles.header}>Activities</Text>
-        <View style={styles.activitiesContainer}>{renderActivities()}</View>
+        <View style={styles.activitiesContainer}>
+          {renderActivities()}
+          <Button
+            title={'Load more...'}
+            onPress={() => {
+              loadMoreActivities();
+              console.log('load more');
+            }}></Button>
+        </View>
       </ScrollView>
     );
   }
@@ -183,7 +199,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   scoreContainer: {
-    marginVertical: Spacing.small,
+    marginHorizontal: -Spacing.smallest,
   },
   score: {
     ...Typography.headerText,
@@ -213,6 +229,7 @@ const styles = StyleSheet.create({
   },
   achievement: {
     marginHorizontal: Spacing.smallest,
+    marginBottom: Spacing.smaller,
   },
   activitiesContainer: {
     marginBottom: Spacing.base,
@@ -222,6 +239,10 @@ const styles = StyleSheet.create({
     fontSize: 40,
     textAlign: 'center',
     marginVertical: Spacing.smallest,
+  },
+  loadMoreButton: {
+    ...Buttons.button,
+    backgroundColor: Colors.blue,
   },
 });
 

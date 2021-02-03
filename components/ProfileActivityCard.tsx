@@ -99,8 +99,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.gray900,
     borderRadius: Spacing.smaller,
     padding: Spacing.base,
-    marginHorizontal: Spacing.smaller,
-    marginVertical: Spacing.smallest,
+    marginBottom: Spacing.smaller,
   },
   topBar: {
     flexDirection: 'row',
