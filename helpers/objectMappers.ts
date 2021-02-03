@@ -12,6 +12,8 @@ import { ActivityFeedData } from '../types/feedTypes';
 import { Asset } from 'expo-asset';
 import { Challenge_Participant, Challenge_Type_Enum, Geofences } from '../types/types';
 import { ChallengeUser, OngoingChallenge, Opponent, PendingChallenge } from '../types/challengeTypes';
+import { GetChallengesQuery } from '../graphql/queries/GetChallenges.generated';
+import { Challenge_Participant, Challenge_State_Enum, Challenge_Type_Enum } from '../types/types';
 import { BasicUserFragmentFragment } from '../graphql/Fragments.generated';
 import { GetChallengesQuery } from '../graphql/queries/GetChallenges.generated';
 
@@ -178,16 +180,18 @@ type UserChallenges = {
 export const convertChallenge = (challengeData: GetChallengesQuery) => {
   const pendingChallenges: PendingChallenge[] = [];
   const ongoingChallenges: OngoingChallenge[] = [];
-  if (challengeData && challengeData.user && challengeData.user?.pending_challenges) {
+  if (challengeData && challengeData.user && challengeData.user?.id && challengeData.user?.pending_challenges) {
+    const user_id = challengeData.user.id;
     challengeData.user.pending_challenges.forEach((obj) => {
       const opponents = convertOpponent(obj.challenge.opponents);
       if (opponents.length >= 1) {
         pendingChallenges.push({
+          user_id: user_id,
           id: obj.challenge.id,
           challenge_type: obj.challenge.challenge_type as Challenge_Type_Enum,
           created_at: obj.challenge.created_at,
           end_date: new Date(obj.challenge.end_date),
-          is_active: obj.challenge.is_active,
+          state: obj.challenge.state as Challenge_State_Enum,
           start_date: new Date(obj.challenge.start_date),
           opponents: opponents,
         });
@@ -204,7 +208,7 @@ export const convertChallenge = (challengeData: GetChallengesQuery) => {
         challenge_type: obj.challenge.challenge_type as Challenge_Type_Enum,
         created_at: obj.challenge.created_at,
         end_date: new Date(obj.challenge.end_date),
-        is_active: obj.challenge.is_active,
+        state: obj.challenge.state as Challenge_State_Enum,
         start_date: new Date(obj.challenge.start_date),
         opponents: opponents,
       });
@@ -220,7 +224,7 @@ export const convertOpponent = (opponentData: OpponentQueryData) => {
       opponents.push({
         id: obj.user.id,
         name: obj.user.name,
-        accepted: obj.accepted,
+        state: obj.state,
         picture: obj.user.picture,
         bio: obj.user.bio,
       } as Opponent),
@@ -230,7 +234,7 @@ export const convertOpponent = (opponentData: OpponentQueryData) => {
 };
 
 type OpponentQueryData = ReadonlyArray<
-  { readonly __typename: 'challenge_participant' } & Pick<Challenge_Participant, 'accepted'> & {
+  { readonly __typename: 'challenge_participant' } & Pick<Challenge_Participant, 'state'> & {
       readonly user: { readonly __typename: 'users' } & BasicUserFragmentFragment;
     }
 >;
