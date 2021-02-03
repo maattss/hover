@@ -1,6 +1,6 @@
 import React, { useState, ReactNode, useEffect } from 'react';
 import { GeoFence, TrackedActivity } from '../types/geoFenceTypes';
-import { convertToGeoFence } from '../helpers/objectMappers';
+import { convertToGeoFences } from '../helpers/objectMappers';
 import { usePermissions, LOCATION, PermissionResponse } from 'expo-permissions';
 import { startBackgroundUpdate, stopBackgroundUpdate } from '../tasks/locationBackgroundTasks';
 import { useGeofencesQuery } from '../graphql/queries/Geofences.generated';
@@ -74,10 +74,12 @@ export const TrackingProvider = ({ children }: Props) => {
   const [duration, setDuration] = useState(0);
 
   const [InsertActivity] = useInsertActivityMutation();
-  const { data: geoFenceData, error: geoFenceFetchError, refetch } = useGeofencesQuery();
+  const { data: geoFenceData, error: geoFenceFetchError, refetch } = useGeofencesQuery({
+    nextFetchPolicy: 'network-only',
+  });
   useEffect(() => {
     if (geoFenceData) {
-      setGeoFences(convertToGeoFence(geoFenceData));
+      setGeoFences(convertToGeoFences(geoFenceData));
     }
     if (geoFenceFetchError) console.error(geoFenceFetchError.message);
   }, [geoFenceData, geoFenceFetchError]);

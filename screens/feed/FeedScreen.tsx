@@ -3,9 +3,10 @@ import { View, StyleSheet } from 'react-native';
 import ActivityFeedCard from '../../components/feed/ActivityFeedCard';
 import AchievementFeedCard from '../../components/feed/AchievementFeedCard';
 import { Typography, Spacing } from '../../theme';
-import { ActivityFeedData, AchievementFeedData, AchievementType, ChallengeFeedData } from '../../types/feedTypes';
+import { ActivityFeedData, AchievementFeedData, ChallengeFeedData } from '../../types/feedTypes';
 import { CircleGeoFence, GeoFenceCategory, GeoFenceVariant } from '../../types/geoFenceTypes';
 import ChallengeFeedCard from '../../components/feed/ChallengeFeedCard';
+import { AchievementVariant } from '../../types/profileTypes';
 
 const FeedScreen: React.FC = () => {
   const testGeoFence: CircleGeoFence = {
@@ -23,23 +24,28 @@ const FeedScreen: React.FC = () => {
     caption: 'Very nice workout!',
     geoFence: testGeoFence,
     startedAt: '2021-01-29T10:00:00+01:00',
-    picture: 'https://www.kindpng.com/picc/m/78-785827_user-profile-avatar-login-account-male-user-icon.png',
+    picture: 'https://api.multiavatar.com/Kuninori%20Bun%20Lord.png',
     score: 200,
+    duration: 100,
   };
   const testAchievement: AchievementFeedData = {
     userName: 'Mats Tyldum',
-    picture: 'https://www.kindpng.com/picc/m/78-785827_user-profile-avatar-login-account-male-user-icon.png',
-    description: 'Achieved 1000 points!',
-    name: '200XP',
-    type: AchievementType.SCORE,
-    createdAt: '2021-01-28T09:00:00+01:00',
+    picture: 'https://api.multiavatar.com/c68e82f2fb46979b85.png',
+    achievement: {
+      name: '1000 points',
+      description: 'Achieved 1000 points!',
+      type: AchievementVariant.SCORE,
+      createdAt: '2021-01-28T09:00:00+01:00',
+      level: 1,
+      rule: { score: 100, category: 'CULTURE' },
+    },
   };
   const testChallenge: ChallengeFeedData = {
     name: 'MaxPoints7Days',
     userName1: 'Mats Tyldum',
     userName2: 'Siri Mykland',
-    userPicture1: 'https://www.kindpng.com/picc/m/78-785827_user-profile-avatar-login-account-male-user-icon.png',
-    userPicture2: 'https://www.kindpng.com/picc/m/78-785827_user-profile-avatar-login-account-male-user-icon.png',
+    userPicture1: 'https://api.multiavatar.com/c68e82f2fb46979b85.png',
+    userPicture2: 'https://api.multiavatar.com/Kuninori%20Bun%20Lord.png',
     createdAt: '2021-01-29T13:00:00+01:00',
     description: 'Highest amount of points in the next 7 days.',
   };
@@ -47,21 +53,32 @@ const FeedScreen: React.FC = () => {
   return (
     <View style={styles.container}>
       {/* TODO: Replace examples with refreshable list with data from API */}
-      <AchievementFeedCard achievement={testAchievement} />
-      <ChallengeFeedCard challenge={testChallenge} />
-      <ActivityFeedCard activity={testActivity} />
+      <View style={styles.element}>
+        <ActivityFeedCard activity={testActivity} />
+      </View>
+      <View style={styles.element}>
+        <AchievementFeedCard data={testAchievement} />
+      </View>
+      <View style={styles.element}>
+        <ChallengeFeedCard challenge={testChallenge} />
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    padding: 5,
+    padding: Spacing.smaller,
     alignItems: 'center',
+    width: '100%',
   },
   header: {
     ...Typography.headerText,
     paddingTop: Spacing.base,
+  },
+  element: {
+    marginBottom: Spacing.smaller,
+    width: '100%',
   },
 });
 

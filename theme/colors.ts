@@ -8,6 +8,9 @@ export const red = '#DD2E44';
 export const blue = '#0366d6';
 export const orange = '#CD5000';
 export const yellow = '#FBBD2D';
+export const gold = '#FFD700';
+export const silver = '#C0C0C0';
+export const bronze = '#CD7F32';
 
 // Base colors
 export const black = '#000000';

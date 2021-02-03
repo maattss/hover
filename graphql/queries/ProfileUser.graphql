@@ -1,0 +1,49 @@
+query ProfileUser($id: String!, $limit: Int!) {
+  user(id: $id) {
+    ..basicUserFragment
+    totalScore
+    user_achievement(order_by: { created_at: asc }) {
+      achievement {
+        ...activityFragment
+      }
+    }
+    activities(order_by: { created_at: desc }, limit: $limit) {
+      caption
+      created_at
+      duration
+      score
+      started_at
+      geofence {
+        ...geofenceFragment
+      }
+    }
+    education_score: activities_aggregate(where: { geofence: { category: { _eq: "EDUCATION" } } }) {
+      aggregate {
+        sum {
+          score
+        }
+      }
+    }
+    culture_score: activities_aggregate(where: { geofence: { category: { _eq: "CULTURE" } } }) {
+      aggregate {
+        sum {
+          score
+        }
+      }
+    }
+    social_score: activities_aggregate(where: { geofence: { category: { _eq: "SOCIAL" } } }) {
+      aggregate {
+        sum {
+          score
+        }
+      }
+    }
+    exercise_score: activities_aggregate(where: { geofence: { category: { _eq: "EXERCISE" } } }) {
+      aggregate {
+        sum {
+          score
+        }
+      }
+    }
+  }
+}

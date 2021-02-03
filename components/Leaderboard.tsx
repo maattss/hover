@@ -1,6 +1,6 @@
 import { ApolloQueryResult } from '@apollo/client';
-import React, { useState, useEffect, useCallback } from 'react';
-import { FlatList, Image, RefreshControl, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { HighscoreQuery } from '../graphql/queries/Highscore.generated';
 import { Colors, Spacing, Typography } from '../theme';
 
@@ -34,20 +34,11 @@ export type Item = {
 
 const Leaderboard: React.FC<LeaderboardProps> = (props: LeaderboardProps) => {
   const [sortedData, setSortedData] = useState<Item[]>([]);
-  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
     const { data, sort } = props;
     setSortedData(sortData({ data, sort }));
   }, [props.data]);
-
-  const onRefresh = useCallback(async () => {
-    if (props.refetch) {
-      setRefreshing(true);
-      await props.refetch();
-      setRefreshing(false);
-    }
-  }, [refreshing]);
 
   const defaultRenderItem = (item: Item, index: number) => {
     const evenColor = props.evenRowColor || Colors.black;
@@ -81,22 +72,13 @@ const Leaderboard: React.FC<LeaderboardProps> = (props: LeaderboardProps) => {
     props.renderItem ? props.renderItem(item, index) : defaultRenderItem(item, index);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <FlatList
         data={sortedData}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({ item, index }) => renderItemS(item, index)}
-        refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={() => onRefresh()}
-            tintColor={Colors.blue}
-            colors={[Colors.blue]}
-            progressBackgroundColor={Colors.transparent}
-          />
-        }
       />
-    </SafeAreaView>
+    </View>
   );
 };
 

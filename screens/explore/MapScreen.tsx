@@ -1,51 +1,14 @@
 import React, { useState, createRef, useEffect } from 'react';
-import MapView, { Circle, LatLng, MapTypes, Polygon, Region } from 'react-native-maps';
+import MapView, { LatLng, MapTypes, Region } from 'react-native-maps';
 import { StyleSheet, Dimensions, Text, View, TouchableOpacity } from 'react-native';
-import { GeoFence, GeoFenceVariant, CircleGeoFence, PolygonGeoFence } from '../../types/geoFenceTypes';
 import { Colors, Spacing, Typography, Buttons } from '../../theme';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import SnackBar, { SnackBarVariant } from '../../components/SnackBar';
-import { getGeoFenceColor } from '../../helpers/geoFenceCalculations';
 import useTracking from '../../hooks/useTracking';
+import { defaultMapLocation } from '../../helpers/objectMappers';
+import GeoFences from '../../components/GeoFences';
 
 const { width, height } = Dimensions.get('window');
-
-// Default location NTNU Trondheim
-const defaultLocation: LatLng = {
-  latitude: 63.419,
-  longitude: 10.4025,
-};
-
-const drawGeoFences = (geoFences: GeoFence[] | undefined) => {
-  if (geoFences) {
-    return geoFences.map((geoFence, index) => {
-      if (geoFence.variant === GeoFenceVariant.CIRCLE) {
-        const currentGeoFence = geoFence as CircleGeoFence;
-        return (
-          <Circle
-            key={index}
-            center={{ latitude: currentGeoFence.latitude, longitude: currentGeoFence.longitude }}
-            radius={currentGeoFence.radius}
-            fillColor={getGeoFenceColor(currentGeoFence.category, 0.6)}
-            strokeColor={getGeoFenceColor(currentGeoFence.category, 1)}
-            strokeWidth={1}
-          />
-        );
-      } else if (geoFence.variant === GeoFenceVariant.POLYGON) {
-        const currentGeoFence = geoFence as PolygonGeoFence;
-        return (
-          <Polygon
-            key={index}
-            coordinates={currentGeoFence.coordinates}
-            fillColor={getGeoFenceColor(currentGeoFence.category, 0.6)}
-            strokeColor={getGeoFenceColor(currentGeoFence.category, 1)}
-            strokeWidth={1}
-          />
-        );
-      }
-    });
-  }
-};
 
 const MapScreen: React.FC = () => {
   const [mapRegion, setMapRegion] = useState<LatLng>();
@@ -65,7 +28,7 @@ const MapScreen: React.FC = () => {
     color: centreOnUser ? Colors.blue : Colors.white,
   };
 
-  // Map event listner functions
+  // Map event listener functions
   const toggleMapType = () =>
     chosenMapType === 'satellite' ? setChosenMapType('standard') : setChosenMapType('satellite');
 
@@ -85,8 +48,8 @@ const MapScreen: React.FC = () => {
     if (tracking.userLocation) setCentreOnUser(true);
     mapView.current?.animateToRegion(
       {
-        longitude: tracking.userLocation ? tracking.userLocation.coords.longitude : defaultLocation.longitude,
-        latitude: tracking.userLocation ? tracking.userLocation.coords.latitude : defaultLocation.latitude,
+        longitude: tracking.userLocation ? tracking.userLocation.coords.longitude : defaultMapLocation.longitude,
+        latitude: tracking.userLocation ? tracking.userLocation.coords.latitude : defaultMapLocation.latitude,
         latitudeDelta: 0.01,
         longitudeDelta: 0.01 * (width / height),
       },
@@ -106,7 +69,7 @@ const MapScreen: React.FC = () => {
         onMapReady={animateMapToUserPos}
         onDoublePress={() => setCentreOnUser(false)}
         onPanDrag={() => setCentreOnUser(false)}>
-        {drawGeoFences(tracking.geoFences)}
+        <GeoFences geofences={tracking.geoFences} />
       </MapView>
 
       <View style={styles.positionContainer}>

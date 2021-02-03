@@ -49,13 +49,11 @@ const LeaderboardScreen: React.FC = () => {
   const [highscores, setHighscores] = useState<Item[]>([]);
 
   useEffect(() => {
-    if (highscoreData) {
-      setHighscores(convertToHighscoreList(highscoreData));
-    }
+    if (highscoreData) setHighscores(convertToHighscoreList(highscoreData));
   }, [highscoreData]);
 
   if (Platform.OS == 'android') {
-    if (highscoreLoading) return <ActivityIndicator size={'large'} color={Colors.blue} style={styles.refreshIcon} />;
+    if (highscoreLoading && !refreshing) return <ActivityIndicator size={'large'} color={Colors.blue} />;
     if (highscoreError) return <Text style={styles.infoText}>{highscoreError.message}</Text>;
     return (
       <View style={styles.container}>
@@ -66,8 +64,8 @@ const LeaderboardScreen: React.FC = () => {
               selectedValue={category}
               onValueChange={(value) => {
                 setCategory(value);
-                refetch();
                 setEditCategory(false);
+                refetch();
               }}
               closePicker={() => setEditCategory(false)}
             />
@@ -78,16 +76,14 @@ const LeaderboardScreen: React.FC = () => {
               selectedValue={timespan}
               onValueChange={(value) => {
                 setTimespan(value);
-                refetch();
                 setEditTimespan(false);
+                refetch();
               }}
               closePicker={() => setEditTimespan(false)}
             />
           )}
         </View>
-        <View style={styles.leaderboardContainer}>
-          {highscores && <Leaderboard data={highscores} refetch={refetch} />}
-        </View>
+        <View style={styles.leaderboardContainer}>{highscores && <Leaderboard data={highscores} />}</View>
       </View>
     );
   } else {
@@ -121,11 +117,14 @@ const LeaderboardScreen: React.FC = () => {
             </TouchableOpacity>
           )}
         </View>
+
+        {highscoreError && <Text style={styles.infoText}>{highscoreError.message}</Text>}
+        {highscoreLoading && <ActivityIndicator size={'large'} color={Colors.blue} style={styles.refreshIcon} />}
+
         <View style={styles.leaderboardContainer}>
-          {highscoreLoading && <ActivityIndicator size={'large'} color={Colors.blue} style={styles.refreshIcon} />}
-          {highscoreError && <Text style={styles.infoText}>{highscoreError.message}</Text>}
           {!highscoreLoading && !highscoreError && highscores && <Leaderboard data={highscores} refetch={refetch} />}
         </View>
+
         {editCategory && !editTimespan && (
           <FilterPickerIos
             items={STATIC_CATEGORIES}
@@ -209,8 +208,8 @@ interface StylesProps {
   filterButton: ViewStyle;
   filterIcon: TextStyle;
   refreshButton: ViewStyle;
-  refreshIcon: ViewStyle;
   pickerButton: ViewStyle;
+  refreshIcon: ViewStyle;
 }
 
 const styles: StylesProps = StyleSheet.create({
@@ -278,6 +277,6 @@ const styles: StylesProps = StyleSheet.create({
     marginBottom: Spacing.base,
   },
   refreshIcon: {
-    marginTop: '2%',
+    marginTop: Spacing.base,
   },
 });

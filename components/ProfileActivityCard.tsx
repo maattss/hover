@@ -1,13 +1,13 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image } from 'react-native';
-import { Colors, Typography, Spacing } from '../../theme';
+import { StyleSheet, Text, View, ViewStyle } from 'react-native';
+import { Colors, Spacing } from '../theme';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
-import { ActivityFeedData } from '../../types/feedTypes';
-import { GeoFenceCategory } from '../../types/geoFenceTypes';
-import { timeStampToPresentable } from '../../helpers/dateTimeHelpers';
+import { ActivityFeedData } from '../types/feedTypes';
+import { GeoFenceCategory } from '../types/geoFenceTypes';
+import { timeStampToPresentable } from '../helpers/dateTimeHelpers';
 import MapView, { LatLng, Marker, Region } from 'react-native-maps';
-import { defaultMapLocation } from '../../helpers/objectMappers';
-import GeoFences from '../GeoFences';
+import { defaultMapLocation } from '../helpers/objectMappers';
+import GeoFences from './GeoFences';
 
 interface ActivityFeedCardProps {
   activity: ActivityFeedData;
@@ -42,7 +42,7 @@ export const getCategoryColor = (category: GeoFenceCategory | undefined) => {
   }
 };
 
-const ActivityFeedCard: React.FC<ActivityFeedCardProps> = ({ activity }: ActivityFeedCardProps) => {
+const ProfileActivityCard: React.FC<ActivityFeedCardProps> = ({ activity }: ActivityFeedCardProps) => {
   const categoryColor = {
     color: getCategoryColor(activity.geoFence ? activity.geoFence.category : undefined),
   };
@@ -56,14 +56,14 @@ const ActivityFeedCard: React.FC<ActivityFeedCardProps> = ({ activity }: Activit
     latitude: activity.geoFence ? activity.geoFence.latitude : defaultMapLocation.latitude,
     longitude: activity.geoFence ? activity.geoFence.longitude : defaultMapLocation.latitude,
   };
+  const getTopBarDisplay = () => {
+    if (!activity.caption || activity.caption === '') return { display: 'none' } as ViewStyle;
+    return { display: 'flex' } as ViewStyle;
+  };
   return (
     <View style={styles.card}>
-      <View style={styles.topBar}>
-        <Image source={{ uri: activity.picture }} style={styles.avatar} />
-        <View>
-          <Text style={styles.nameText}>{activity.userName}</Text>
-          <Text style={styles.captionText}>{activity.caption}</Text>
-        </View>
+      <View style={[styles.topBar, getTopBarDisplay()]}>
+        <Text style={styles.captionText}>{activity.caption}</Text>
       </View>
       <View style={styles.main}>
         <View style={styles.category}>
@@ -98,22 +98,18 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: Colors.gray900,
     borderRadius: Spacing.smaller,
-    padding: Spacing.small,
+    padding: Spacing.base,
+    marginBottom: Spacing.smaller,
   },
   topBar: {
     flexDirection: 'row',
     justifyContent: 'flex-start',
-  },
-  nameText: {
-    ...Typography.headerText,
-    fontSize: 20,
-    lineHeight: 30,
+    marginBottom: Spacing.smaller,
   },
   captionText: {
     color: Colors.almostWhite,
-    fontSize: 12,
-    fontStyle: 'italic',
-    flexWrap: 'wrap',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
   scoreText: {
     color: Colors.almostWhite,
@@ -121,14 +117,13 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   main: {
-    marginVertical: Spacing.small,
+    marginBottom: Spacing.smaller,
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
   category: {
     width: '30%',
     display: 'flex',
-    textAlign: 'center',
     justifyContent: 'center',
     flexDirection: 'column',
     paddingRight: Spacing.base,
@@ -137,11 +132,12 @@ const styles = StyleSheet.create({
     color: Colors.almostWhite,
     fontSize: 40,
     textAlign: 'center',
+    width: '100%',
     marginVertical: Spacing.smallest,
   },
   map: {
     width: '70%',
-    height: 110,
+    height: 120,
     borderRadius: Spacing.smallest,
   },
   footer: {
@@ -154,12 +150,6 @@ const styles = StyleSheet.create({
     fontStyle: 'italic',
     fontSize: 14,
   },
-  avatar: {
-    height: 45,
-    width: 45,
-    borderRadius: 45 / 2,
-    marginRight: Spacing.small,
-  },
 });
 
-export default ActivityFeedCard;
+export default ProfileActivityCard;

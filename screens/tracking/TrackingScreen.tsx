@@ -1,71 +1,13 @@
 import React, { useState, createRef } from 'react';
-import MapView, { Circle, LatLng, MapTypes, Polygon } from 'react-native-maps';
+import MapView, { MapTypes } from 'react-native-maps';
 import { StyleSheet, Dimensions, Text, View, TouchableOpacity, ActivityIndicator } from 'react-native';
-import {
-  GeoFence,
-  GeoFenceVariant,
-  CircleGeoFence,
-  PolygonGeoFence,
-  GeoFenceCategory,
-} from '../../types/geoFenceTypes';
 import { Colors, Spacing, Typography, Buttons } from '../../theme';
-import { hexToRGB } from '../../theme/colors';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import useTracking from '../../hooks/useTracking';
+import { defaultMapLocation } from '../../helpers/objectMappers';
+import GeoFences from '../../components/GeoFences';
 
 const { width, height } = Dimensions.get('window');
-
-// Default location NTNU Trondheim
-const defaultLocation: LatLng = {
-  latitude: 63.419,
-  longitude: 10.4025,
-};
-
-const getGeoFenceColor = (category: GeoFenceCategory, opacity: number) => {
-  switch (category) {
-    case GeoFenceCategory.EDUCATION:
-      return hexToRGB(Colors.red, opacity);
-    case GeoFenceCategory.CULTURE:
-      return hexToRGB(Colors.green, opacity);
-    case GeoFenceCategory.EXERCISE:
-      return hexToRGB(Colors.blue, opacity);
-    case GeoFenceCategory.SOCIAL:
-      return hexToRGB(Colors.orange, opacity);
-    default:
-      return hexToRGB(Colors.almostBlack, opacity);
-  }
-};
-
-const drawGeoFences = (geoFences: GeoFence[] | undefined) => {
-  if (geoFences) {
-    return geoFences.map((geoFence, index) => {
-      if (geoFence.variant === GeoFenceVariant.CIRCLE) {
-        const currentGeoFence = geoFence as CircleGeoFence;
-        return (
-          <Circle
-            key={index}
-            center={{ latitude: currentGeoFence.latitude, longitude: currentGeoFence.longitude }}
-            radius={currentGeoFence.radius}
-            fillColor={getGeoFenceColor(currentGeoFence.category, 0.6)}
-            strokeColor={getGeoFenceColor(currentGeoFence.category, 1)}
-            strokeWidth={1}
-          />
-        );
-      } else if (geoFence.variant === GeoFenceVariant.POLYGON) {
-        const currentGeoFence = geoFence as PolygonGeoFence;
-        return (
-          <Polygon
-            key={index}
-            coordinates={currentGeoFence.coordinates}
-            fillColor={getGeoFenceColor(currentGeoFence.category, 0.6)}
-            strokeColor={getGeoFenceColor(currentGeoFence.category, 1)}
-            strokeWidth={1}
-          />
-        );
-      }
-    });
-  }
-};
 
 const TrackingScreen: React.FC = () => {
   // Map state
@@ -91,8 +33,8 @@ const TrackingScreen: React.FC = () => {
     if (tracking.userLocation) setCentreOnUser(true);
     mapView.current?.animateToRegion(
       {
-        longitude: tracking.userLocation ? tracking.userLocation.coords.longitude : defaultLocation.longitude,
-        latitude: tracking.userLocation ? tracking.userLocation.coords.latitude : defaultLocation.latitude,
+        longitude: tracking.userLocation ? tracking.userLocation.coords.longitude : defaultMapLocation.longitude,
+        latitude: tracking.userLocation ? tracking.userLocation.coords.latitude : defaultMapLocation.latitude,
         latitudeDelta: 0.01,
         longitudeDelta: 0.01 * (width / height),
       },
@@ -112,7 +54,7 @@ const TrackingScreen: React.FC = () => {
           onMapReady={animateMapToUserPos}
           onDoublePress={() => setCentreOnUser(false)}
           onPanDrag={() => setCentreOnUser(false)}>
-          {drawGeoFences(tracking.geoFences)}
+          <GeoFences geofences={tracking.geoFences} />
         </MapView>
 
         <View style={styles.infoContainer}>
