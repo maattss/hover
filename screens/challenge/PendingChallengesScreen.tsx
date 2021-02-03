@@ -17,22 +17,31 @@ type Props = {
   route: ChallengeScreenRouteProp;
 };
 
-const PendingChallengesScreen: React.FC<Props> = ({ route }: Props) => {
+const ListHeader = () => {
   return (
     <View style={styles.container}>
       <Text style={{ ...Typography.headerText, marginTop: Spacing.base }}>Pending challenges</Text>
       <Text style={{ ...Typography.bodyText, marginTop: Spacing.base }}>
         Accept challenges to compete with other players
       </Text>
-      <PendingChallengeList challenges={route.params.pendingChallenges} refetch={route.params.refetch} />
     </View>
+  );
+};
+
+const PendingChallengesScreen: React.FC<Props> = ({ route }: Props) => {
+  return (
+    <PendingChallengeList
+      challenges={route.params.pendingChallenges}
+      refetch={route.params.refetch}
+      listHeader={ListHeader}
+    />
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 5,
+    padding: Spacing.base,
     alignItems: 'center',
     justifyContent: 'space-between',
   },
