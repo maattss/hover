@@ -1,10 +1,10 @@
 query ProfileUser($id: String!, $limit: Int!) {
   user(id: $id) {
-    ..basicUserFragment
+    ...basicUserFragment
     totalScore
     user_achievement(order_by: { created_at: asc }) {
       achievement {
-        ...activityFragment
+        ...achievementFragment
       }
     }
     activities(order_by: { created_at: desc }, limit: $limit) {

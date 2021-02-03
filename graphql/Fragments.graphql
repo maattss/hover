@@ -77,10 +77,10 @@ fragment challengeFragment on challenge {
   created_at
   start_date
   end_date
-  is_active
+  state
 }
 
-fragment activityFragment on activities {
+fragment achievementFragment on achievement {
   description
   name
   achievement_type
