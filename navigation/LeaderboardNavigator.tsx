@@ -1,5 +1,5 @@
 import React from 'react';
-import LeaderboardScreen from '../screens/statistics/LeaderboardScreen';
+import LeaderboardScreen from '../screens/leaderboard/LeaderboardScreen';
 
 import { StatisticsStackParamList } from '../types/navigationTypes';
 import { createStackNavigator } from '@react-navigation/stack';

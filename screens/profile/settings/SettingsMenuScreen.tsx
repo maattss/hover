@@ -1,10 +1,10 @@
 import React from 'react';
 import { Alert, View, Text, TouchableOpacity, StyleSheet, FlatList } from 'react-native';
-import Firebase from '../../lib/firebase';
-import { Buttons, Spacing, Colors } from '../../theme';
+import Firebase from '../../../lib/firebase';
+import { Buttons, Spacing, Colors } from '../../../theme';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { SettingsNavigationStackParamList } from '../../types/navigationTypes';
+import { SettingsNavigationStackParamList } from '../../../types/navigationTypes';
 
 type NavigationProp = StackNavigationProp<SettingsNavigationStackParamList>;
 
