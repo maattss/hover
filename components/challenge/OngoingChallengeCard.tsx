@@ -70,6 +70,10 @@ const styles = StyleSheet.create({
     padding: Spacing.base,
     marginHorizontal: Spacing.smaller,
     marginVertical: Spacing.smallest,
+    shadowOpacity: 0.75,
+    shadowRadius: 3,
+    shadowColor: Colors.black,
+    shadowOffset: { height: 0, width: 0 },
   },
   topBar: {
     flexDirection: 'row',

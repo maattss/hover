@@ -78,10 +78,10 @@ const ChallengeScreen: React.FC<ChallengesProps> = (props: ChallengesProps) => {
         {pendingChallenges && renderPendingChallenges(props, pendingChallenges, refetch)}
         {ongoingChallenges && renderOngoingChallenges(props, ongoingChallenges, refetch)}
         <View style={styles.box}>
-          <Text style={{ ...Typography.headerText, marginTop: Spacing.base }}>Want a new challenge?</Text>
-          <Text style={{ ...Typography.bodyText, marginTop: Spacing.base }}>
-            Create a challenge for you and your friends!
-          </Text>
+          <View style={styles.boxTitle}>
+            <Text style={{ ...Typography.headerText }}>Want a new challenge?</Text>
+            <Text style={{ ...Typography.bodyText }}>Create a challenge for you and your friends!</Text>
+          </View>
           <TouchableOpacity style={styles.challengeButton} onPress={() => props.navigation.push('NewChallenge')}>
             <Text style={{ ...Buttons.buttonText }}>Create new challenge</Text>
           </TouchableOpacity>
@@ -98,10 +98,10 @@ const renderPendingChallenges = (
 ) => {
   return (
     <View style={styles.box}>
-      <Text style={{ ...Typography.headerText, marginTop: Spacing.base }}>Pending challenges</Text>
-      <Text style={{ ...Typography.bodyText, marginTop: Spacing.base }}>
-        Accept the challenges to compete with other players.
-      </Text>
+      <View style={styles.boxTitle}>
+        <Text style={{ ...Typography.headerText }}>Pending challenges</Text>
+        <Text style={{ ...Typography.bodyText }}>Accept the challenges to compete with other players.</Text>
+      </View>
       {pendingChallenges.slice(0, PREVIEW_SIZE).map((item, index) => (
         <PendingChallengeCard key={index} challenge={item} />
       ))}
@@ -122,7 +122,9 @@ const renderOngoingChallenges = (
 ) => {
   return (
     <View style={styles.box}>
-      <Text style={{ ...Typography.headerText, marginTop: Spacing.base }}>Ongoing Challenges</Text>
+      <View style={styles.boxTitle}>
+        <Text style={{ ...Typography.headerText }}>Ongoing Challenges</Text>
+      </View>
       {ongoingChallenges.slice(0, PREVIEW_SIZE).map((item, index) => (
         <OngoingChallengeCard key={index} challenge={item} />
       ))}
@@ -165,7 +167,10 @@ const styles = StyleSheet.create({
     borderRadius: Spacing.smaller,
     padding: Spacing.base,
     marginHorizontal: Spacing.smaller,
-    marginVertical: Spacing.smallest,
+    marginVertical: Spacing.smaller,
+  },
+  boxTitle: {
+    marginBottom: Spacing.base,
   },
   challengeButton: {
     ...Buttons.button,
