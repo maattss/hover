@@ -10,12 +10,10 @@ import { ProfileUserQuery } from '../graphql/queries/ProfileUser.generated';
 import { UserProfile, Achievement as AchievementType, AchievementVariant } from '../types/profileTypes';
 import { ActivityFeedData } from '../types/feedTypes';
 import { Asset } from 'expo-asset';
-import { Challenge_Participant, Challenge_Type_Enum, Geofences } from '../types/types';
+import { Challenge_Participant, Challenge_State_Enum, Challenge_Type_Enum, Geofences } from '../types/types';
 import { ChallengeUser, OngoingChallenge, Opponent, PendingChallenge } from '../types/challengeTypes';
 import { GetChallengesQuery } from '../graphql/queries/GetChallenges.generated';
-import { Challenge_Participant, Challenge_State_Enum, Challenge_Type_Enum } from '../types/types';
 import { BasicUserFragmentFragment } from '../graphql/Fragments.generated';
-import { GetChallengesQuery } from '../graphql/queries/GetChallenges.generated';
 
 // Default location NTNU Trondheim
 export const defaultMapLocation: LatLng = {
