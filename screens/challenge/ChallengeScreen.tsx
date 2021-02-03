@@ -1,5 +1,13 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { ActivityIndicator, RefreshControl, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  ActivityIndicator,
+  RefreshControl,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { useGetChallengesQuery } from '../../graphql/queries/GetChallenges.generated';
 import { Buttons, Colors, Spacing, Typography } from '../../theme';
 import useAuthentication from '../../hooks/useAuthentication';
@@ -62,21 +70,24 @@ const ChallengeScreen: React.FC<ChallengesProps> = (props: ChallengesProps) => {
   }
 
   return (
-    <ScrollView
-      contentContainerStyle={styles.container}
-      refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
-      {pendingChallenges && renderPendingChallenges(props, pendingChallenges, refetch)}
-      {ongoingChallenges && renderOngoingChallenges(props, ongoingChallenges, refetch)}
-      <View style={styles.box}>
-        <Text style={{ ...Typography.headerText, marginTop: Spacing.base }}>Want a new challenge?</Text>
-        <Text style={{ ...Typography.bodyText, marginTop: Spacing.base }}>
-          Create a challenge for you and your friends!
-        </Text>
-        <TouchableOpacity style={styles.challengeButton} onPress={() => props.navigation.push('NewChallenge')}>
-          <Text style={{ ...Buttons.buttonText }}>Create new challenge</Text>
-        </TouchableOpacity>
-      </View>
-    </ScrollView>
+    <SafeAreaView style={styles.container}>
+      <ScrollView
+        style={styles.scrollView}
+        contentContainerStyle={styles.scrollContentContainer}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
+        {pendingChallenges && renderPendingChallenges(props, pendingChallenges, refetch)}
+        {ongoingChallenges && renderOngoingChallenges(props, ongoingChallenges, refetch)}
+        <View style={styles.box}>
+          <Text style={{ ...Typography.headerText, marginTop: Spacing.base }}>Want a new challenge?</Text>
+          <Text style={{ ...Typography.bodyText, marginTop: Spacing.base }}>
+            Create a challenge for you and your friends!
+          </Text>
+          <TouchableOpacity style={styles.challengeButton} onPress={() => props.navigation.push('NewChallenge')}>
+            <Text style={{ ...Buttons.buttonText }}>Create new challenge</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
@@ -129,9 +140,15 @@ const renderOngoingChallenges = (
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 5,
+  },
+  scrollView: {
+    paddingHorizontal: Spacing.base,
+  },
+  scrollContentContainer: {
+    paddingTop: Spacing.base,
+    justifyContent: 'center',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    paddingBottom: Spacing.base,
   },
   loadingContainer: {
     display: 'flex',
