@@ -4,7 +4,7 @@ import * as Types from '../types/types';
 import { gql } from '@apollo/client';
 export type BasicUserFragmentFragment = { readonly __typename: 'users' } & Pick<
   Types.Users,
-  'id' | 'email' | 'name' | 'bio'
+  'id' | 'email' | 'name' | 'picture' | 'bio'
 >;
 
 export type UserFragmentFragment = { readonly __typename: 'users' } & {
@@ -49,11 +49,17 @@ export type GeofenceFragmentFragment = { readonly __typename: 'geofences' } & Pi
   'id' | 'name' | 'category' | 'coordinates' | 'description' | 'latitude' | 'longitude' | 'radius' | 'variant'
 >;
 
+export type ChallengeFragmentFragment = { readonly __typename: 'challenge' } & Pick<
+  Types.Challenge,
+  'id' | 'challenge_type' | 'created_at' | 'start_date' | 'end_date' | 'is_active'
+>;
+
 export const BasicUserFragmentFragmentDoc = gql`
   fragment basicUserFragment on users {
     id
     email
     name
+    picture
     bio
   }
 `;
@@ -130,5 +136,15 @@ export const BasicActivityFragmentFragmentDoc = gql`
     score
     started_at
     stopped_at
+  }
+`;
+export const ChallengeFragmentFragmentDoc = gql`
+  fragment challengeFragment on challenge {
+    id
+    challenge_type
+    created_at
+    start_date
+    end_date
+    is_active
   }
 `;

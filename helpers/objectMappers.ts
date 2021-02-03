@@ -10,6 +10,10 @@ import { ProfileUserQuery } from '../graphql/queries/ProfileUser.generated';
 import { UserProfile, Achievement as AchievementType, AchievementVariant } from '../types/profileTypes';
 import { ActivityFeedData } from '../types/feedTypes';
 import { Asset } from 'expo-asset';
+import { Challenge_Participant, Challenge_Type_Enum } from '../types/types';
+import { ChallengeUser, OngoingChallenge, Opponent, PendingChallenge } from '../types/challengeTypes';
+import { BasicUserFragmentFragment } from '../graphql/Fragments.generated';
+import { GetChallengesQuery } from '../graphql/queries/GetChallenges.generated';
 
 // Default location NTNU Trondheim
 export const defaultMapLocation: LatLng = {
@@ -167,3 +171,66 @@ export const convertToUserProfile = (data: ProfileUserQuery | undefined, userId:
     } as UserProfile;
   }
 };
+type UserChallenges = {
+  pendingChallenges: PendingChallenge[];
+  ongoingChallenges: OngoingChallenge[];
+};
+export const convertChallenge = (challengeData: GetChallengesQuery) => {
+  const pendingChallenges: PendingChallenge[] = [];
+  const ongoingChallenges: OngoingChallenge[] = [];
+  if (challengeData && challengeData.user && challengeData.user?.pending_challenges) {
+    challengeData.user.pending_challenges.forEach((obj) => {
+      const opponents = convertOpponent(obj.challenge.opponents);
+      if (opponents.length >= 1) {
+        pendingChallenges.push({
+          id: obj.challenge.id,
+          challenge_type: obj.challenge.challenge_type as Challenge_Type_Enum,
+          created_at: obj.challenge.created_at,
+          end_date: new Date(obj.challenge.end_date),
+          is_active: obj.challenge.is_active,
+          start_date: new Date(obj.challenge.start_date),
+          opponents: opponents,
+        });
+      }
+    });
+  }
+  if (challengeData && challengeData.user && challengeData.user?.ongoing_challenges) {
+    const user: ChallengeUser = challengeData.user;
+    challengeData.user.ongoing_challenges.forEach((obj) => {
+      const opponents = convertOpponent(obj.challenge.opponents);
+      ongoingChallenges.push({
+        user: user,
+        id: obj.challenge.id,
+        challenge_type: obj.challenge.challenge_type as Challenge_Type_Enum,
+        created_at: obj.challenge.created_at,
+        end_date: new Date(obj.challenge.end_date),
+        is_active: obj.challenge.is_active,
+        start_date: new Date(obj.challenge.start_date),
+        opponents: opponents,
+      });
+    });
+  }
+  return { pendingChallenges, ongoingChallenges } as UserChallenges;
+};
+
+export const convertOpponent = (opponentData: OpponentQueryData) => {
+  const opponents: Opponent[] = [];
+  if (opponentData) {
+    opponentData.forEach((obj) =>
+      opponents.push({
+        id: obj.user.id,
+        name: obj.user.name,
+        accepted: obj.accepted,
+        picture: obj.user.picture,
+        bio: obj.user.bio,
+      } as Opponent),
+    );
+  }
+  return opponents;
+};
+
+type OpponentQueryData = ReadonlyArray<
+  { readonly __typename: 'challenge_participant' } & Pick<Challenge_Participant, 'accepted'> & {
+      readonly user: { readonly __typename: 'users' } & BasicUserFragmentFragment;
+    }
+>;
