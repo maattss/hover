@@ -17,7 +17,7 @@ const ChallengeNavigator: React.FC = () => {
         options={({ navigation }) => ({
           headerTitle: 'Challenges',
           // eslint-disable-next-line react/display-name
-          headerRight: () => <HeaderIcon name="users" onPress={() => navigation.navigate('Notifications')} />,
+          headerRight: () => <HeaderIcon name="plus" onPress={() => navigation.navigate('NewChallenge')} />,
         })}
       />
       <ChallengeStack.Screen
