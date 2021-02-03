@@ -1,18 +1,19 @@
-import { Challenge_Type_Enum } from './types';
+import { Challenge_Participant_State_Enum, Challenge_State_Enum, Challenge_Type_Enum } from './types';
 
 export type PendingChallenge = {
+  user_id: string;
   id: number;
   challenge_type: Challenge_Type_Enum;
   created_at: string;
   rules?: string;
   end_date: Date;
-  is_active: boolean;
+  state: Challenge_State_Enum;
   start_date: Date;
   opponents: Opponent[];
 };
 
 export type Opponent = {
-  accepted: boolean;
+  state: Challenge_Participant_State_Enum;
 } & ChallengeUser;
 
 export type ChallengeUser = {
@@ -27,7 +28,7 @@ export type OngoingChallenge = {
   challenge_type: Challenge_Type_Enum;
   rules?: string;
   end_date: Date;
-  is_active: boolean;
+  state: Challenge_State_Enum;
   start_date: Date;
   created_at: string;
   opponents: Opponent[];

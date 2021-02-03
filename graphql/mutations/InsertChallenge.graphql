@@ -10,7 +10,7 @@ mutation InsertChallenge(
     challenge_type
     start_date
     end_date
-    is_active
+    state
     rules
     challenge_participants {
       user {

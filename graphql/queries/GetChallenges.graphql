@@ -2,41 +2,41 @@ query GetChallenges($user_id: String!) {
   user(id: $user_id) {
     ...basicUserFragment
     pending_challenges: challenge_participants(
-      where: { accepted: { _eq: false }, challenge: { is_active: { _eq: true } } }
+      where: { state: { _eq: PENDING }, challenge: { state: { _eq: ACTIVE } } }
     ) {
       challenge {
         ...challengeFragment
         opponents: challenge_participants(where: { user_id: { _neq: $user_id } }) {
-          accepted
           user {
             ...basicUserFragment
           }
+          state
         }
       }
     }
     ongoing_challenges: challenge_participants(
-      where: { accepted: { _eq: true }, challenge: { is_active: { _eq: true } } }
+      where: { state: { _eq: ACCEPTED }, challenge: { state: { _eq: ACTIVE } } }
     ) {
       challenge {
         ...challengeFragment
         opponents: challenge_participants(where: { user_id: { _neq: $user_id } }) {
-          accepted
           user {
             ...basicUserFragment
           }
+          state
         }
       }
     }
     finished_challenges: challenge_participants(
-      where: { accepted: { _eq: true }, challenge: { is_active: { _eq: false } } }
+      where: { state: { _eq: ACCEPTED }, challenge: { state: { _eq: FINISHED } } }
     ) {
       challenge {
         ...challengeFragment
         opponents: challenge_participants(where: { user_id: { _neq: $user_id } }) {
-          accepted
           user {
             ...basicUserFragment
           }
+          state
         }
       }
     }
