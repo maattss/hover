@@ -187,8 +187,6 @@ export type Achievement_Bool_Exp = {
 /** unique or primary key constraints on table "achievement" */
 export enum Achievement_Constraint {
   /** unique or primary key constraint */
-  AcheivementNameKey = 'Acheivement_name_key',
-  /** unique or primary key constraint */
   AcheivementPkey = 'Acheivement_pkey',
 }
 
@@ -1527,6 +1525,7 @@ export type Challenge_Order_By = {
 /** columns and relationships of "challenge_participant" */
 export type Challenge_Participant = {
   __typename?: 'challenge_participant';
+  accepted: Scalars['Boolean'];
   /** An object relationship */
   challenge: Challenge;
   challenge_id: Scalars['Int'];
@@ -1601,6 +1600,7 @@ export type Challenge_Participant_Bool_Exp = {
   _and?: Maybe<Array<Maybe<Challenge_Participant_Bool_Exp>>>;
   _not?: Maybe<Challenge_Participant_Bool_Exp>;
   _or?: Maybe<Array<Maybe<Challenge_Participant_Bool_Exp>>>;
+  accepted?: Maybe<Boolean_Comparison_Exp>;
   challenge?: Maybe<Challenge_Bool_Exp>;
   challenge_id?: Maybe<Int_Comparison_Exp>;
   user?: Maybe<Users_Bool_Exp>;
@@ -1620,6 +1620,7 @@ export type Challenge_Participant_Inc_Input = {
 
 /** input type for inserting data into table "challenge_participant" */
 export type Challenge_Participant_Insert_Input = {
+  accepted?: Maybe<Scalars['Boolean']>;
   challenge?: Maybe<Challenge_Obj_Rel_Insert_Input>;
   challenge_id?: Maybe<Scalars['Int']>;
   user?: Maybe<Users_Obj_Rel_Insert_Input>;
@@ -1676,6 +1677,7 @@ export type Challenge_Participant_On_Conflict = {
 
 /** ordering options when selecting data from "challenge_participant" */
 export type Challenge_Participant_Order_By = {
+  accepted?: Maybe<Order_By>;
   challenge?: Maybe<Challenge_Order_By>;
   challenge_id?: Maybe<Order_By>;
   user?: Maybe<Users_Order_By>;
@@ -1691,6 +1693,8 @@ export type Challenge_Participant_Pk_Columns_Input = {
 /** select columns of table "challenge_participant" */
 export enum Challenge_Participant_Select_Column {
   /** column name */
+  Accepted = 'accepted',
+  /** column name */
   ChallengeId = 'challenge_id',
   /** column name */
   UserId = 'user_id',
@@ -1698,6 +1702,7 @@ export enum Challenge_Participant_Select_Column {
 
 /** input type for updating data in table "challenge_participant" */
 export type Challenge_Participant_Set_Input = {
+  accepted?: Maybe<Scalars['Boolean']>;
   challenge_id?: Maybe<Scalars['Int']>;
   user_id?: Maybe<Scalars['String']>;
 };
@@ -1748,6 +1753,8 @@ export type Challenge_Participant_Sum_Order_By = {
 
 /** update columns of table "challenge_participant" */
 export enum Challenge_Participant_Update_Column {
+  /** column name */
+  Accepted = 'accepted',
   /** column name */
   ChallengeId = 'challenge_id',
   /** column name */
@@ -5464,7 +5471,7 @@ export type Users = {
   /** An aggregated array relationship */
   following_aggregate: Followings_Aggregate;
   id: Scalars['String'];
-  name?: Maybe<Scalars['String']>;
+  name: Scalars['String'];
   picture: Scalars['String'];
   /** A computed field, executes function "totalscore" */
   totalScore?: Maybe<Scalars['bigint']>;

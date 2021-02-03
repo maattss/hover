@@ -1,9 +1,9 @@
 /* eslint-disable */
 import * as Types from '../../types/types';
 
-import { BasicUserFragmentFragment } from '../Fragments.generated';
+import { BasicUserFragmentFragment, ChallengeFragmentFragment } from '../Fragments.generated';
 import { gql } from '@apollo/client';
-import { BasicUserFragmentFragmentDoc } from '../Fragments.generated';
+import { BasicUserFragmentFragmentDoc, ChallengeFragmentFragmentDoc } from '../Fragments.generated';
 import * as Apollo from '@apollo/client';
 export type UpdateUserMutationVariables = Types.Exact<{
   id: Types.Scalars['String'];
