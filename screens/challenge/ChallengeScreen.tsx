@@ -25,7 +25,7 @@ export type ChallengesProps = {
   navigation: NavigationProp;
 };
 
-const PREVIEW_SIZE = 3;
+const PREVIEW_SIZE = 2;
 
 const ChallengeScreen: React.FC<ChallengesProps> = (props: ChallengesProps) => {
   const user_id = useAuthentication().user?.uid;
@@ -62,9 +62,13 @@ const ChallengeScreen: React.FC<ChallengesProps> = (props: ChallengesProps) => {
     );
   }
   if (error) {
+    console.error(error);
     return (
       <View style={styles.loadingContainer}>
         <Text style={{ ...Typography.bodyText, marginTop: Spacing.base }}>{error.message}</Text>
+        <TouchableOpacity style={styles.challengeButton} onPress={() => onRefresh}>
+          <Text style={{ ...Buttons.buttonText }}>Refresh</Text>
+        </TouchableOpacity>
       </View>
     );
   }
@@ -74,7 +78,15 @@ const ChallengeScreen: React.FC<ChallengesProps> = (props: ChallengesProps) => {
       <ScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.scrollContentContainer}
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={() => onRefresh()}
+            tintColor={Colors.blue}
+            colors={[Colors.blue]}
+            progressBackgroundColor={Colors.transparent}
+          />
+        }>
         {pendingChallenges && renderPendingChallenges(props, pendingChallenges, refetch)}
         {ongoingChallenges && renderOngoingChallenges(props, ongoingChallenges, refetch)}
         <View style={styles.box}>
@@ -115,6 +127,7 @@ const renderPendingChallenges = (
     </View>
   );
 };
+
 const renderOngoingChallenges = (
   { navigation }: ChallengesProps,
   ongoingChallenges: OngoingChallenge[],
