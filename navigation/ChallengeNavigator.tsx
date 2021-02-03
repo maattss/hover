@@ -15,6 +15,7 @@ const ChallengeNavigator: React.FC = () => {
         name="Challenge"
         component={ChallengeScreen}
         options={({ navigation }) => ({
+          headerTitle: 'Challenges',
           // eslint-disable-next-line react/display-name
           headerRight: () => <HeaderIcon name="users" onPress={() => navigation.navigate('Notifications')} />,
         })}
@@ -30,7 +31,7 @@ const ChallengeNavigator: React.FC = () => {
         name="NewChallenge"
         component={NewChallengeScreen}
         options={() => ({
-          headerTitle: 'Pending',
+          headerTitle: 'Create challenge',
         })}
       />
     </ChallengeStack.Navigator>
