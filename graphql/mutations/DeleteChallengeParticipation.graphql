@@ -1,6 +1,6 @@
 mutation DeleteChallengeParticipation($challenge_id: Int!, $user_id: String!) {
   delete_challenge_participant_by_pk(challenge_id: $challenge_id, user_id: $user_id) {
-    accepted
+    state
     challenge_id
     user_id
   }

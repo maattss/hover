@@ -12,7 +12,7 @@ export type AcceptChallengeParticipationMutation = { readonly __typename: 'mutat
   readonly update_challenge_participant_by_pk?: Types.Maybe<
     { readonly __typename: 'challenge_participant' } & Pick<
       Types.Challenge_Participant,
-      'accepted' | 'challenge_id' | 'user_id'
+      'state' | 'challenge_id' | 'user_id'
     >
   >;
 };
@@ -21,9 +21,9 @@ export const AcceptChallengeParticipationDocument = gql`
   mutation AcceptChallengeParticipation($challenge_id: Int!, $user_id: String!) {
     update_challenge_participant_by_pk(
       pk_columns: { challenge_id: $challenge_id, user_id: $user_id }
-      _set: { accepted: true }
+      _set: { state: ACCEPTED }
     ) {
-      accepted
+      state
       challenge_id
       user_id
     }
