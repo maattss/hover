@@ -12,6 +12,7 @@ export type AchievementRule = {
 };
 
 export type UserProfile = {
+  id: string;
   bio: string;
   email: string;
   name: string;

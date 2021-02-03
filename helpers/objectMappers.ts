@@ -112,6 +112,7 @@ export const convertToHighscoreList = (data: HighscoreQuery) => {
 };
 
 export const defaultUserProfile: UserProfile = {
+  id: '',
   name: '',
   bio: '',
   email: '',
@@ -125,7 +126,7 @@ export const defaultUserProfile: UserProfile = {
   activities: [],
 };
 
-export const convertToUserProfile = (data: ProfileUserQuery | undefined) => {
+export const convertToUserProfile = (data: ProfileUserQuery | undefined, userId: string) => {
   if (data && data.user) {
     const achievements: AchievementType[] = [];
     data.user.user_achievement.forEach((obj: any) => {
@@ -151,6 +152,7 @@ export const convertToUserProfile = (data: ProfileUserQuery | undefined) => {
       });
     });
     return {
+      id: data.user.id ?? '',
       name: data.user.name ?? defaultUserProfile.name,
       bio: data.user.bio ?? defaultUserProfile.bio,
       email: data.user.email ?? defaultUserProfile.email,

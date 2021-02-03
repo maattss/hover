@@ -1,5 +1,6 @@
 query ProfileUser($id: String!, $limit: Int!) {
   user(id: $id) {
+    id
     bio
     email
     name
