@@ -47,7 +47,6 @@ const LeaderboardScreen: React.FC = () => {
     } as HighscoreQueryVariables,
   });
   const [highscores, setHighscores] = useState<Item[]>([]);
-  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
     if (highscoreData) setHighscores(convertToHighscoreList(highscoreData));
@@ -84,9 +83,7 @@ const LeaderboardScreen: React.FC = () => {
             />
           )}
         </View>
-        <View style={styles.leaderboardContainer}>
-          {highscores && <Leaderboard data={highscores} refreshing={refreshing} setRefreshing={setRefreshing} />}
-        </View>
+        <View style={styles.leaderboardContainer}>{highscores && <Leaderboard data={highscores} />}</View>
       </View>
     );
   } else {
@@ -122,14 +119,10 @@ const LeaderboardScreen: React.FC = () => {
         </View>
 
         {highscoreError && <Text style={styles.infoText}>{highscoreError.message}</Text>}
-        {highscoreLoading && !refreshing && (
-          <ActivityIndicator size={'large'} color={Colors.blue} style={styles.refreshIcon} />
-        )}
+        {highscoreLoading && <ActivityIndicator size={'large'} color={Colors.blue} style={styles.refreshIcon} />}
 
         <View style={styles.leaderboardContainer}>
-          {!highscoreLoading && !highscoreError && highscores && (
-            <Leaderboard data={highscores} refetch={refetch} refreshing={refreshing} setRefreshing={setRefreshing} />
-          )}
+          {!highscoreLoading && !highscoreError && highscores && <Leaderboard data={highscores} refetch={refetch} />}
         </View>
 
         {editCategory && !editTimespan && (

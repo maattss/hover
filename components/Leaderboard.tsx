@@ -1,6 +1,6 @@
 import { ApolloQueryResult } from '@apollo/client';
-import React, { useState, useEffect, useCallback } from 'react';
-import { FlatList, Image, RefreshControl, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { HighscoreQuery } from '../graphql/queries/Highscore.generated';
 import { Colors, Spacing, Typography } from '../theme';
 
@@ -23,8 +23,6 @@ interface LeaderboardProps {
   oddRowColor?: string;
   evenRowColor?: string;
   refetch?: () => Promise<ApolloQueryResult<HighscoreQuery>>;
-  refreshing: boolean;
-  setRefreshing: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export type Item = {
@@ -36,20 +34,11 @@ export type Item = {
 
 const Leaderboard: React.FC<LeaderboardProps> = (props: LeaderboardProps) => {
   const [sortedData, setSortedData] = useState<Item[]>([]);
-  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
     const { data, sort } = props;
     setSortedData(sortData({ data, sort }));
   }, [props.data]);
-
-  const onRefresh = useCallback(async () => {
-    if (props.refetch) {
-      props.setRefreshing(true);
-      await props.refetch();
-      props.setRefreshing(false);
-    }
-  }, [props]);
 
   const defaultRenderItem = (item: Item, index: number) => {
     const evenColor = props.evenRowColor || Colors.black;
@@ -88,15 +77,6 @@ const Leaderboard: React.FC<LeaderboardProps> = (props: LeaderboardProps) => {
         data={sortedData}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({ item, index }) => renderItemS(item, index)}
-        refreshControl={
-          <RefreshControl
-            refreshing={props.refreshing}
-            onRefresh={onRefresh}
-            tintColor={Colors.blue}
-            colors={[Colors.blue]}
-            progressBackgroundColor={Colors.transparent}
-          />
-        }
       />
     </View>
   );

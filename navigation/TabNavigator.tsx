@@ -4,7 +4,6 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { StyleSheet } from 'react-native';
 import { Colors } from '../theme';
 import { RootTabParamList } from '../types/navigationTypes';
-import ExploreNavigator from './ExploreNavigator';
 import FeedNavigator from './FeedNavigator';
 import StatisticsNavigator from './StatisticsNavigator';
 import TrackingNavigator from './TrackingNavigator';
