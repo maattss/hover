@@ -5,7 +5,7 @@ export type PendingChallenge = {
   id: number;
   challenge_type: Challenge_Type_Enum;
   created_at: string;
-  rules?: string;
+  rules: string;
   end_date: Date;
   state: Challenge_State_Enum;
   start_date: Date;
