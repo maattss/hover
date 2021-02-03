@@ -1307,6 +1307,8 @@ export type Challenge = {
   challenge_participants: Array<Challenge_Participant>;
   /** An aggregated array relationship */
   challenge_participants_aggregate: Challenge_Participant_Aggregate;
+  /** An object relationship */
+  challenge_state: Challenge_State;
   challenge_type: Challenge_Type_Enum;
   created_at: Scalars['timestamptz'];
   end_date: Scalars['date'];
@@ -1407,6 +1409,7 @@ export type Challenge_Bool_Exp = {
   _or?: Maybe<Array<Maybe<Challenge_Bool_Exp>>>;
   challengeTypeByChallengeType?: Maybe<Challenge_Type_Bool_Exp>;
   challenge_participants?: Maybe<Challenge_Participant_Bool_Exp>;
+  challenge_state?: Maybe<Challenge_State_Bool_Exp>;
   challenge_type?: Maybe<Challenge_Type_Enum_Comparison_Exp>;
   created_at?: Maybe<Timestamptz_Comparison_Exp>;
   end_date?: Maybe<Date_Comparison_Exp>;
@@ -1431,6 +1434,7 @@ export type Challenge_Inc_Input = {
 export type Challenge_Insert_Input = {
   challengeTypeByChallengeType?: Maybe<Challenge_Type_Obj_Rel_Insert_Input>;
   challenge_participants?: Maybe<Challenge_Participant_Arr_Rel_Insert_Input>;
+  challenge_state?: Maybe<Challenge_State_Obj_Rel_Insert_Input>;
   challenge_type?: Maybe<Challenge_Type_Enum>;
   created_at?: Maybe<Scalars['timestamptz']>;
   end_date?: Maybe<Scalars['date']>;
@@ -1500,6 +1504,7 @@ export type Challenge_On_Conflict = {
 export type Challenge_Order_By = {
   challengeTypeByChallengeType?: Maybe<Challenge_Type_Order_By>;
   challenge_participants_aggregate?: Maybe<Challenge_Participant_Aggregate_Order_By>;
+  challenge_state?: Maybe<Challenge_State_Order_By>;
   challenge_type?: Maybe<Order_By>;
   created_at?: Maybe<Order_By>;
   end_date?: Maybe<Order_By>;
@@ -1702,7 +1707,29 @@ export type Challenge_Participant_Set_Input = {
 /** columns and relationships of "challenge_participant_state" */
 export type Challenge_Participant_State = {
   __typename?: 'challenge_participant_state';
+  /** An array relationship */
+  challenge_participants: Array<Challenge_Participant>;
+  /** An aggregated array relationship */
+  challenge_participants_aggregate: Challenge_Participant_Aggregate;
   state: Scalars['String'];
+};
+
+/** columns and relationships of "challenge_participant_state" */
+export type Challenge_Participant_StateChallenge_ParticipantsArgs = {
+  distinct_on?: Maybe<Array<Challenge_Participant_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Challenge_Participant_Order_By>>;
+  where?: Maybe<Challenge_Participant_Bool_Exp>;
+};
+
+/** columns and relationships of "challenge_participant_state" */
+export type Challenge_Participant_StateChallenge_Participants_AggregateArgs = {
+  distinct_on?: Maybe<Array<Challenge_Participant_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Challenge_Participant_Order_By>>;
+  where?: Maybe<Challenge_Participant_Bool_Exp>;
 };
 
 /** aggregated selection of "challenge_participant_state" */
@@ -1744,6 +1771,7 @@ export type Challenge_Participant_State_Bool_Exp = {
   _and?: Maybe<Array<Maybe<Challenge_Participant_State_Bool_Exp>>>;
   _not?: Maybe<Challenge_Participant_State_Bool_Exp>;
   _or?: Maybe<Array<Maybe<Challenge_Participant_State_Bool_Exp>>>;
+  challenge_participants?: Maybe<Challenge_Participant_Bool_Exp>;
   state?: Maybe<String_Comparison_Exp>;
 };
 
@@ -1770,6 +1798,7 @@ export type Challenge_Participant_State_Enum_Comparison_Exp = {
 
 /** input type for inserting data into table "challenge_participant_state" */
 export type Challenge_Participant_State_Insert_Input = {
+  challenge_participants?: Maybe<Challenge_Participant_Arr_Rel_Insert_Input>;
   state?: Maybe<Scalars['String']>;
 };
 
@@ -1819,6 +1848,7 @@ export type Challenge_Participant_State_On_Conflict = {
 
 /** ordering options when selecting data from "challenge_participant_state" */
 export type Challenge_Participant_State_Order_By = {
+  challenge_participants_aggregate?: Maybe<Challenge_Participant_Aggregate_Order_By>;
   state?: Maybe<Order_By>;
 };
 
@@ -1968,7 +1998,29 @@ export type Challenge_Set_Input = {
 /** columns and relationships of "challenge_state" */
 export type Challenge_State = {
   __typename?: 'challenge_state';
+  /** An array relationship */
+  challenges: Array<Challenge>;
+  /** An aggregated array relationship */
+  challenges_aggregate: Challenge_Aggregate;
   state: Scalars['String'];
+};
+
+/** columns and relationships of "challenge_state" */
+export type Challenge_StateChallengesArgs = {
+  distinct_on?: Maybe<Array<Challenge_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Challenge_Order_By>>;
+  where?: Maybe<Challenge_Bool_Exp>;
+};
+
+/** columns and relationships of "challenge_state" */
+export type Challenge_StateChallenges_AggregateArgs = {
+  distinct_on?: Maybe<Array<Challenge_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Challenge_Order_By>>;
+  where?: Maybe<Challenge_Bool_Exp>;
 };
 
 /** aggregated selection of "challenge_state" */
@@ -2010,6 +2062,7 @@ export type Challenge_State_Bool_Exp = {
   _and?: Maybe<Array<Maybe<Challenge_State_Bool_Exp>>>;
   _not?: Maybe<Challenge_State_Bool_Exp>;
   _or?: Maybe<Array<Maybe<Challenge_State_Bool_Exp>>>;
+  challenges?: Maybe<Challenge_Bool_Exp>;
   state?: Maybe<String_Comparison_Exp>;
 };
 
@@ -2036,6 +2089,7 @@ export type Challenge_State_Enum_Comparison_Exp = {
 
 /** input type for inserting data into table "challenge_state" */
 export type Challenge_State_Insert_Input = {
+  challenges?: Maybe<Challenge_Arr_Rel_Insert_Input>;
   state?: Maybe<Scalars['String']>;
 };
 
@@ -2085,6 +2139,7 @@ export type Challenge_State_On_Conflict = {
 
 /** ordering options when selecting data from "challenge_state" */
 export type Challenge_State_Order_By = {
+  challenges_aggregate?: Maybe<Challenge_Aggregate_Order_By>;
   state?: Maybe<Order_By>;
 };
 
@@ -2157,8 +2212,30 @@ export type Challenge_Sum_Order_By = {
 /** columns and relationships of "challenge_type" */
 export type Challenge_Type = {
   __typename?: 'challenge_type';
+  /** An array relationship */
+  challenges: Array<Challenge>;
+  /** An aggregated array relationship */
+  challenges_aggregate: Challenge_Aggregate;
   description?: Maybe<Scalars['String']>;
   name: Scalars['String'];
+};
+
+/** columns and relationships of "challenge_type" */
+export type Challenge_TypeChallengesArgs = {
+  distinct_on?: Maybe<Array<Challenge_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Challenge_Order_By>>;
+  where?: Maybe<Challenge_Bool_Exp>;
+};
+
+/** columns and relationships of "challenge_type" */
+export type Challenge_TypeChallenges_AggregateArgs = {
+  distinct_on?: Maybe<Array<Challenge_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Challenge_Order_By>>;
+  where?: Maybe<Challenge_Bool_Exp>;
 };
 
 /** aggregated selection of "challenge_type" */
@@ -2200,6 +2277,7 @@ export type Challenge_Type_Bool_Exp = {
   _and?: Maybe<Array<Maybe<Challenge_Type_Bool_Exp>>>;
   _not?: Maybe<Challenge_Type_Bool_Exp>;
   _or?: Maybe<Array<Maybe<Challenge_Type_Bool_Exp>>>;
+  challenges?: Maybe<Challenge_Bool_Exp>;
   description?: Maybe<String_Comparison_Exp>;
   name?: Maybe<String_Comparison_Exp>;
 };
@@ -2227,6 +2305,7 @@ export type Challenge_Type_Enum_Comparison_Exp = {
 
 /** input type for inserting data into table "challenge_type" */
 export type Challenge_Type_Insert_Input = {
+  challenges?: Maybe<Challenge_Arr_Rel_Insert_Input>;
   description?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
 };
@@ -2281,6 +2360,7 @@ export type Challenge_Type_On_Conflict = {
 
 /** ordering options when selecting data from "challenge_type" */
 export type Challenge_Type_Order_By = {
+  challenges_aggregate?: Maybe<Challenge_Aggregate_Order_By>;
   description?: Maybe<Order_By>;
   name?: Maybe<Order_By>;
 };
