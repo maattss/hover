@@ -1,7 +1,7 @@
 import { PendingChallenge } from '../types/challengeTypes';
 import { Challenge_Type_Enum } from '../types/types';
 
-const generateDescription = (challenge: PendingChallenge) => {
+export const generateDescription = (challenge: PendingChallenge) => {
   let description = '';
   switch (challenge.challenge_type) {
     case Challenge_Type_Enum.Score:
@@ -11,10 +11,12 @@ const generateDescription = (challenge: PendingChallenge) => {
 };
 
 const scoreDescription = (challenge: PendingChallenge) => {
-  const rules = JSON.parse(challenge.rules);
+  console.log(challenge.rules);
+  const { score } = JSON.parse(challenge.rules);
   let description = '';
   description += challenge.opponents[0].name;
   description += ' challenge you to a Score challenge!';
-  description += ' Be the first person to reach ' + rules.score;
+
+  description += score ? ' Be the first person to reach ' + score + 'points.' : '';
   return description;
 };

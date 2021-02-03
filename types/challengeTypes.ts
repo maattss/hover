@@ -26,7 +26,7 @@ export type OngoingChallenge = {
   user: ChallengeUser;
   id: number;
   challenge_type: Challenge_Type_Enum;
-  rules?: string;
+  rules: string;
   end_date: Date;
   state: Challenge_State_Enum;
   start_date: Date;

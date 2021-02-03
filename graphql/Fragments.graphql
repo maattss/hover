@@ -78,6 +78,7 @@ fragment challengeFragment on challenge {
   start_date
   end_date
   state
+  rules
 }
 
 fragment achievementFragment on achievement {

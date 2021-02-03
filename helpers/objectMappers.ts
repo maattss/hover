@@ -192,6 +192,7 @@ export const convertChallenge = (challengeData: GetChallengesQuery) => {
           state: obj.challenge.state as Challenge_State_Enum,
           start_date: new Date(obj.challenge.start_date),
           opponents: opponents,
+          rules: obj.challenge.rules,
         });
       }
     });
@@ -209,6 +210,7 @@ export const convertChallenge = (challengeData: GetChallengesQuery) => {
         state: obj.challenge.state as Challenge_State_Enum,
         start_date: new Date(obj.challenge.start_date),
         opponents: opponents,
+        rules: obj.challenge.rules,
       });
     });
   }
