@@ -14,10 +14,6 @@ const OngoingChallengeCard: React.FC<OngoingChallengeCardProps> = ({ challenge }
     const opponent = challenge.opponents[0];
     return (
       <View style={styles.card}>
-        <View style={styles.topBar}>
-          <Text style={styles.titleText}>Challenge accepted!</Text>
-        </View>
-
         <View style={styles.avatarContainer}>
           <Image source={{ uri: challenge.user.picture }} style={styles.avatar} />
           <Image source={{ uri: opponent.picture }} style={styles.avatar} />

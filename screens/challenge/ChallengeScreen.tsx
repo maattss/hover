@@ -161,6 +161,7 @@ const styles = StyleSheet.create({
   box: {
     backgroundColor: Colors.gray900,
     width: '100%',
+    alignItems: 'center',
     borderRadius: Spacing.smaller,
     padding: Spacing.base,
     marginHorizontal: Spacing.smaller,
