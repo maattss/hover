@@ -48,7 +48,7 @@ const ChallengeScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 5,
+    padding: Spacing.base,
     alignItems: 'center',
     justifyContent: 'space-between',
   },
@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
     borderRadius: Spacing.smaller,
     padding: Spacing.base,
     marginHorizontal: Spacing.smaller,
-    marginVertical: Spacing.smallest,
+    marginVertical: Spacing.smaller,
   },
   challengeButton: {
     ...Buttons.button,
