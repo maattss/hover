@@ -53,7 +53,7 @@ const LeaderboardScreen: React.FC = () => {
   }, [highscoreData]);
 
   if (Platform.OS == 'android') {
-    if (highscoreLoading && !refreshing) return <ActivityIndicator size={'large'} color={Colors.blue} />;
+    if (highscoreLoading) return <ActivityIndicator size={'large'} color={Colors.blue} />;
     if (highscoreError) return <Text style={styles.infoText}>{highscoreError.message}</Text>;
     return (
       <View style={styles.container}>

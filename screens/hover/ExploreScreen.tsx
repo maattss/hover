@@ -6,10 +6,18 @@ import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import useTracking from '../../hooks/useTracking';
 import { defaultMapLocation } from '../../helpers/objectMappers';
 import GeoFences from '../../components/GeoFences';
+import { HoverStackParamList } from '../../types/navigationTypes';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 const { width, height } = Dimensions.get('window');
 
-const MapScreen: React.FC = () => {
+type NavigationProp = StackNavigationProp<HoverStackParamList>;
+
+type ExploreProps = {
+  navigation: NavigationProp;
+};
+
+const ExploreScreen: React.FC<ExploreProps> = ({ navigation }: ExploreProps) => {
   const [chosenMapType, setChosenMapType] = useState<MapTypes>('standard');
   const [centreOnUser, setCentreOnUser] = useState(false);
   const [disableTracking, setDisableTracking] = useState(true);
@@ -57,7 +65,7 @@ const MapScreen: React.FC = () => {
   const startTracking = () => {
     if (!disableTracking) {
       tracking.startTracking();
-      // TODO: Navigate to tracking screen
+      navigation.navigate('Tracking');
     }
   };
   const getDynamicButtonStyles = () => {
@@ -158,4 +166,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MapScreen;
+export default ExploreScreen;
