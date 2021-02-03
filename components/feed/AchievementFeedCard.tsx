@@ -49,18 +49,24 @@ const styles = StyleSheet.create({
     lineHeight: 50,
   },
   description: {
-    justifyContent: 'center',
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
     alignItems: 'center',
+    width: '65%',
   },
   descriptionText: {
     ...Typography.headerText,
     fontSize: 24,
     flexWrap: 'wrap',
-    width: '90%',
+    flexDirection: 'column',
+    maxWidth: '100%',
+    paddingLeft: Spacing.smaller,
   },
   main: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
     marginBottom: Spacing.smaller,
+    width: '100%',
   },
   footer: {
     flexDirection: 'row',
@@ -78,8 +84,8 @@ const styles = StyleSheet.create({
     marginRight: Spacing.small,
   },
   achievement: {
-    marginLeft: -20,
-    marginTop: -50,
+    marginTop: -40,
+    width: '35%',
   },
 });
 

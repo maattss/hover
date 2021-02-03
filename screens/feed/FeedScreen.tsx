@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
   container: {
     padding: Spacing.smaller,
     alignItems: 'center',
-    flex: 1,
+    width: '100%',
   },
   header: {
     ...Typography.headerText,
@@ -78,6 +78,7 @@ const styles = StyleSheet.create({
   },
   element: {
     marginBottom: Spacing.smaller,
+    width: '100%',
   },
 });
 

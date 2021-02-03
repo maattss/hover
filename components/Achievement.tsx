@@ -72,7 +72,6 @@ const styles = StyleSheet.create({
     width: 80,
     justifyContent: 'center',
     borderRadius: Spacing.extraLarge,
-    margin: Spacing.smaller,
   },
   text: {
     ...Typography.largeBodyText,
