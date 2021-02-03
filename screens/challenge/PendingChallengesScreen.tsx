@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { View, Text } from 'react-native';
 import { PendingChallenge } from '../../types/challengeTypes';
 import PendingChallengeList from '../../components/challenge/PendingChallengesList';
 import { RouteProp } from '@react-navigation/native';
@@ -17,34 +17,23 @@ type Props = {
   route: ChallengeScreenRouteProp;
 };
 
-const ListHeader = () => {
-  return (
-    <View style={styles.container}>
-      <Text style={{ ...Typography.headerText, marginTop: Spacing.base }}>Pending challenges</Text>
-      <Text style={{ ...Typography.bodyText, marginTop: Spacing.base }}>
-        Accept challenges to compete with other players
-      </Text>
-    </View>
-  );
-};
+const ListHeader = () => (
+  <View>
+    <Text style={{ ...Typography.headerText, marginTop: Spacing.base }}>Pending challenges</Text>
+    <Text style={{ ...Typography.bodyText, marginTop: Spacing.base }}>
+      Accept challenges to compete with other players
+    </Text>
+  </View>
+);
 
 const PendingChallengesScreen: React.FC<Props> = ({ route }: Props) => {
   return (
     <PendingChallengeList
       challenges={route.params.pendingChallenges}
       refetch={route.params.refetch}
-      listHeader={ListHeader}
+      listHeader={<ListHeader />}
     />
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: Spacing.base,
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-});
 
 export default PendingChallengesScreen;
