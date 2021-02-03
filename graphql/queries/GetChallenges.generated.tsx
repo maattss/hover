@@ -16,7 +16,7 @@ export type GetChallengesQuery = { readonly __typename: 'query_root' } & {
         { readonly __typename: 'challenge_participant' } & {
           readonly challenge: { readonly __typename: 'challenge' } & {
             readonly opponents: ReadonlyArray<
-              { readonly __typename: 'challenge_participant' } & Pick<Types.Challenge_Participant, 'accepted'> & {
+              { readonly __typename: 'challenge_participant' } & Pick<Types.Challenge_Participant, 'state'> & {
                   readonly user: { readonly __typename: 'users' } & BasicUserFragmentFragment;
                 }
             >;
@@ -27,7 +27,7 @@ export type GetChallengesQuery = { readonly __typename: 'query_root' } & {
         { readonly __typename: 'challenge_participant' } & {
           readonly challenge: { readonly __typename: 'challenge' } & {
             readonly opponents: ReadonlyArray<
-              { readonly __typename: 'challenge_participant' } & Pick<Types.Challenge_Participant, 'accepted'> & {
+              { readonly __typename: 'challenge_participant' } & Pick<Types.Challenge_Participant, 'state'> & {
                   readonly user: { readonly __typename: 'users' } & BasicUserFragmentFragment;
                 }
             >;
@@ -38,7 +38,7 @@ export type GetChallengesQuery = { readonly __typename: 'query_root' } & {
         { readonly __typename: 'challenge_participant' } & {
           readonly challenge: { readonly __typename: 'challenge' } & {
             readonly opponents: ReadonlyArray<
-              { readonly __typename: 'challenge_participant' } & Pick<Types.Challenge_Participant, 'accepted'> & {
+              { readonly __typename: 'challenge_participant' } & Pick<Types.Challenge_Participant, 'state'> & {
                   readonly user: { readonly __typename: 'users' } & BasicUserFragmentFragment;
                 }
             >;
@@ -54,41 +54,41 @@ export const GetChallengesDocument = gql`
     user(id: $user_id) {
       ...basicUserFragment
       pending_challenges: challenge_participants(
-        where: { accepted: { _eq: false }, challenge: { is_active: { _eq: true } } }
+        where: { state: { _eq: PENDING }, challenge: { state: { _eq: ACTIVE } } }
       ) {
         challenge {
           ...challengeFragment
           opponents: challenge_participants(where: { user_id: { _neq: $user_id } }) {
-            accepted
             user {
               ...basicUserFragment
             }
+            state
           }
         }
       }
       ongoing_challenges: challenge_participants(
-        where: { accepted: { _eq: true }, challenge: { is_active: { _eq: true } } }
+        where: { state: { _eq: ACCEPTED }, challenge: { state: { _eq: ACTIVE } } }
       ) {
         challenge {
           ...challengeFragment
           opponents: challenge_participants(where: { user_id: { _neq: $user_id } }) {
-            accepted
             user {
               ...basicUserFragment
             }
+            state
           }
         }
       }
       finished_challenges: challenge_participants(
-        where: { accepted: { _eq: true }, challenge: { is_active: { _eq: false } } }
+        where: { state: { _eq: ACCEPTED }, challenge: { state: { _eq: FINISHED } } }
       ) {
         challenge {
           ...challengeFragment
           opponents: challenge_participants(where: { user_id: { _neq: $user_id } }) {
-            accepted
             user {
               ...basicUserFragment
             }
+            state
           }
         }
       }

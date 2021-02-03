@@ -12,7 +12,7 @@ export type DeleteChallengeParticipationMutation = { readonly __typename: 'mutat
   readonly delete_challenge_participant_by_pk?: Types.Maybe<
     { readonly __typename: 'challenge_participant' } & Pick<
       Types.Challenge_Participant,
-      'accepted' | 'challenge_id' | 'user_id'
+      'state' | 'challenge_id' | 'user_id'
     >
   >;
 };
@@ -20,7 +20,7 @@ export type DeleteChallengeParticipationMutation = { readonly __typename: 'mutat
 export const DeleteChallengeParticipationDocument = gql`
   mutation DeleteChallengeParticipation($challenge_id: Int!, $user_id: String!) {
     delete_challenge_participant_by_pk(challenge_id: $challenge_id, user_id: $user_id) {
-      accepted
+      state
       challenge_id
       user_id
     }
