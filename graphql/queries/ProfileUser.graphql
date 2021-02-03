@@ -1,4 +1,4 @@
-query ProfileUser($id: String!, $limit: Int!) {
+query ProfileUser($id: String!, $limit: Int!, $offset: Int!) {
   user(id: $id) {
     id
     bio
@@ -16,7 +16,7 @@ query ProfileUser($id: String!, $limit: Int!) {
         rule
       }
     }
-    activities(limit: $limit, order_by: { created_at: desc }) {
+    activities(order_by: { created_at: desc }, offset: $offset, limit: $limit) {
       caption
       created_at
       duration

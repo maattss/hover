@@ -17,16 +17,18 @@ const ProfileScreen: React.FC = () => {
   const [userProfile, setUserProfile] = useState<UserProfile>(defaultUserProfile);
   if (id) {
     const [refreshing, setRefreshing] = useState(false);
-    const [limit, setLimit] = useState(3);
+    const [offset, setOffset] = useState(0);
+    const limit = 3;
     const onRefresh = useCallback(async () => {
       setRefreshing(true);
       await refetch();
       setRefreshing(false);
     }, []);
-    const { loading: loading, error: error, data: data, refetch } = useProfileUserQuery({
+    const { loading: loading, error: error, data: data, refetch, fetchMore } = useProfileUserQuery({
       variables: {
         id: id,
         limit: limit,
+        offset: offset,
       },
       nextFetchPolicy: 'network-only',
     });
@@ -91,8 +93,14 @@ const ProfileScreen: React.FC = () => {
       return userProfile.activities.map((activity, index) => <ProfileActivityCard key={index} activity={activity} />);
     };
     const loadMoreActivities = () => {
-      setLimit(limit + 3);
-      refetch();
+      const newOffset = offset + 3;
+      setOffset(newOffset);
+      fetchMore({
+        variables: {
+          offset: newOffset,
+          limit: limit,
+        },
+      });
     };
 
     if (error) {

@@ -28,7 +28,7 @@ const MapScreen: React.FC = () => {
     color: centreOnUser ? Colors.blue : Colors.white,
   };
 
-  // Map event listner functions
+  // Map event listener functions
   const toggleMapType = () =>
     chosenMapType === 'satellite' ? setChosenMapType('standard') : setChosenMapType('satellite');
 
