@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { FlatList, RefreshControl, SafeAreaView, StyleSheet, View } from 'react-native';
+import { FlatList, RefreshControl, SafeAreaView, StyleSheet } from 'react-native';
 import { Colors, Spacing } from '../../theme';
 import { OngoingChallenge } from '../../types/challengeTypes';
 import OngoingChallengeCard from './OngoingChallengeCard';
