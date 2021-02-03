@@ -8,6 +8,7 @@ import { defaultMapLocation } from '../../helpers/objectMappers';
 import GeoFences from '../../components/GeoFences';
 import { HoverStackParamList } from '../../types/navigationTypes';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const { width, height } = Dimensions.get('window');
 
@@ -119,7 +120,7 @@ const styles = StyleSheet.create({
   },
   infoContainer: {
     position: 'absolute',
-    top: Spacing.largest,
+    top: Spacing.extraLarge,
     left: Spacing.smaller,
   },
   infoText: {
@@ -143,7 +144,7 @@ const styles = StyleSheet.create({
   },
   startButtonContainer: {
     position: 'absolute',
-    bottom: 55,
+    bottom: '10%',
     width: '100%',
     flexDirection: 'row',
     justifyContent: 'center',
