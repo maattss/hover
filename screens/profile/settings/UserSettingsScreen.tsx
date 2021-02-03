@@ -11,11 +11,11 @@ import {
   Alert,
   ScrollView,
 } from 'react-native';
-import { Buttons, Colors, Spacing, Typography } from '../../theme';
+import { Buttons, Colors, Spacing, Typography } from '../../../theme';
 import { SettingsProps } from './SettingsMenuScreen';
-import { useUserQuery } from '../../graphql/queries/User.generated';
-import { useUpdateUserMutation } from '../../graphql/mutations/UpdateUser.generated';
-import useAuthentication from '../../hooks/useAuthentication';
+import { useUserQuery } from '../../../graphql/queries/User.generated';
+import { useUpdateUserMutation } from '../../../graphql/mutations/UpdateUser.generated';
+import useAuthentication from '../../../hooks/useAuthentication';
 
 const UserSettingsScreen: React.FC<SettingsProps> = ({ navigation }: SettingsProps) => {
   const id = useAuthentication().user?.uid;

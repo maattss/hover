@@ -1,7 +1,7 @@
 import React from 'react';
 import { TrackingStackParamList } from '../types/navigationTypes';
 import { createStackNavigator } from '@react-navigation/stack';
-import TrackingScreen from '../screens/tracking/TrackingScreen';
+import TrackingScreen from '../screens/hover/TrackingScreen';
 
 const ExploreStack = createStackNavigator<TrackingStackParamList>();
 
