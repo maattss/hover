@@ -107,8 +107,8 @@ const styles = StyleSheet.create({
   },
   captionText: {
     color: Colors.almostWhite,
-    fontSize: 12,
-    fontStyle: 'italic',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
   scoreText: {
     color: Colors.almostWhite,
