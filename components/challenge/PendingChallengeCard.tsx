@@ -116,7 +116,6 @@ const PendingChallengeCard: React.FC<PendingChallengeCardProps> = ({ challenge }
 const styles = StyleSheet.create({
   card: {
     backgroundColor: Colors.gray900,
-    width: '100%',
     borderRadius: Spacing.smaller,
     padding: Spacing.base,
     marginHorizontal: Spacing.smaller,

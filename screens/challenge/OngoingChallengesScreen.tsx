@@ -16,24 +16,22 @@ type ChallengeScreenRouteProp = RouteProp<ChallengeStackParamList, 'OngoingChall
 type Props = {
   route: ChallengeScreenRouteProp;
 };
-
-const OngoingChallengesScreen: React.FC<Props> = ({ route }: Props) => {
+const ListHeader = () => {
   return (
-    <View style={styles.container}>
+    <View>
       <Text style={{ ...Typography.headerText, marginTop: Spacing.base }}>Ongoing challenges</Text>
       <Text style={{ ...Typography.bodyText, marginTop: Spacing.base }}>Here are your active challenges.</Text>
-      <OngoingChallengesList challenges={route.params.ongoingChallenges} refetch={route.params.refetch} />
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 5,
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-});
+const OngoingChallengesScreen: React.FC<Props> = ({ route }: Props) => {
+  return (
+    <OngoingChallengesList
+      challenges={route.params.ongoingChallenges}
+      refetch={route.params.refetch}
+      listHeader={ListHeader}
+    />
+  );
+};
 
 export default OngoingChallengesScreen;
