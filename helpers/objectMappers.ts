@@ -10,7 +10,7 @@ import { ProfileUserQuery } from '../graphql/queries/ProfileUser.generated';
 import { UserProfile, Achievement as AchievementType, AchievementVariant } from '../types/profileTypes';
 import { ActivityFeedData } from '../types/feedTypes';
 import { Asset } from 'expo-asset';
-import { Challenge_Participant, Challenge_Type_Enum } from '../types/types';
+import { Achievement, Challenge_Participant, Challenge_Type_Enum, Geofences } from '../types/types';
 import { ChallengeUser, OngoingChallenge, Opponent, PendingChallenge } from '../types/challengeTypes';
 import { BasicUserFragmentFragment } from '../graphql/Fragments.generated';
 import { GetChallengesQuery } from '../graphql/queries/GetChallenges.generated';
@@ -61,7 +61,7 @@ export const convertToGeoFences = (data: GeofencesQuery) => {
   }
   return geoFences;
 };
-export const convertToGeoFence = (geofence: any) => {
+export const convertToGeoFence = (geofence: GeoFencesQuery) => {
   if (geofence.variant === 'CIRCLE') {
     return {
       id: geofence.id,
@@ -133,7 +133,7 @@ export const defaultUserProfile: UserProfile = {
 export const convertToUserProfile = (data: ProfileUserQuery | undefined) => {
   if (data && data.user) {
     const achievements: AchievementType[] = [];
-    data.user.user_achievement.forEach((obj: any) => {
+    data.user.user_achievement.forEach((obj) => {
       achievements.push({
         description: obj.achievement.description ?? '',
         name: obj.achievement.name ?? '',
@@ -144,7 +144,7 @@ export const convertToUserProfile = (data: ProfileUserQuery | undefined) => {
       });
     });
     const activitites: ActivityFeedData[] = [];
-    data.user.activities.forEach((obj: any) => {
+    data.user.activities.forEach((obj) => {
       activitites.push({
         userName: data.user ? data.user.name : defaultUserProfile.name,
         startedAt: obj.started_at,
@@ -233,4 +233,11 @@ type OpponentQueryData = ReadonlyArray<
   { readonly __typename: 'challenge_participant' } & Pick<Challenge_Participant, 'accepted'> & {
       readonly user: { readonly __typename: 'users' } & BasicUserFragmentFragment;
     }
+>;
+
+type GeoFencesQuery = {
+  readonly __typename: 'geofences';
+} & Pick<
+  Geofences,
+  'id' | 'name' | 'description' | 'category' | 'variant' | 'latitude' | 'longitude' | 'radius' | 'coordinates'
 >;

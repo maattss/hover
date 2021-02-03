@@ -79,3 +79,12 @@ fragment challengeFragment on challenge {
   end_date
   is_active
 }
+
+fragment activityFragment on activities {
+  description
+  name
+  achievement_type
+  level
+  created_at
+  rule
+}

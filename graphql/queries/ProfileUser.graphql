@@ -1,38 +1,21 @@
 query ProfileUser($id: String!, $limit: Int!) {
   user(id: $id) {
-    id
-    bio
-    email
-    name
-    picture
+    ..basicUserFragment
     totalScore
     user_achievement(order_by: { created_at: asc }) {
       achievement {
-        description
-        name
-        achievement_type
-        level
-        created_at
-        rule
+        ...activityFragment
       }
     }
     activities(order_by: { created_at: desc }, limit: $limit) {
       caption
       created_at
       duration
-      geofence {
-        category
-        description
-        name
-        variant
-        latitude
-        longitude
-        id
-        radius
-        coordinates
-      }
       score
       started_at
+      geofence {
+        ...geofenceFragment
+      }
     }
     education_score: activities_aggregate(where: { geofence: { category: { _eq: "EDUCATION" } } }) {
       aggregate {
