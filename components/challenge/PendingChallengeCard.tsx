@@ -13,7 +13,6 @@ const PendingChallengeCard: React.FC<PendingChallengeCardProps> = ({ challenge }
   const [partcipationState, setPartcipationState] = useState<Challenge_Participant_State_Enum>(
     Challenge_Participant_State_Enum.Pending,
   );
-  console.log(challenge.user_id);
   const [updateMutation] = useUpdateChallengeParticipationMutation();
 
   const UpdateButton = ({
@@ -140,8 +139,8 @@ const styles = StyleSheet.create({
     fontStyle: 'italic',
   },
   stateUpdateMessage: {
-    color: Colors.almostWhite,
-    fontSize: 12,
+    marginVertical: Spacing.base,
+    ...Typography.bodyText,
     fontStyle: 'italic',
   },
   avatar: {

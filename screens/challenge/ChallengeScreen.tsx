@@ -115,7 +115,9 @@ const renderPendingChallenges = (
         <Text style={{ ...Typography.bodyText }}>Accept the challenges to compete with other players.</Text>
       </View>
       {pendingChallenges.slice(0, PREVIEW_SIZE).map((item, index) => (
-        <PendingChallengeCard key={index} challenge={item} />
+        <View key={index} style={styles.previewContainer}>
+          <PendingChallengeCard challenge={item} />
+        </View>
       ))}
       {pendingChallenges.length > PREVIEW_SIZE && (
         <TouchableOpacity
@@ -156,6 +158,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  previewContainer: {
+    width: '100%',
+  },
   scrollView: {
     paddingHorizontal: Spacing.base,
   },
@@ -176,6 +181,7 @@ const styles = StyleSheet.create({
   box: {
     backgroundColor: Colors.gray900,
     width: '100%',
+    flex: 1,
     alignItems: 'center',
     borderRadius: Spacing.smaller,
     padding: Spacing.base,
