@@ -93,7 +93,7 @@ const ProfileScreen: React.FC = () => {
       console.error(error);
       Alert.alert('Error', error?.message);
     }
-    if (loading && !refreshing)
+    if (loading)
       return (
         <View style={styles.loadingContainer}>
           <ActivityIndicator size={'large'} color={Colors.blue} />

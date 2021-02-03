@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, ViewStyle } from 'react-native';
 import { Colors, Typography, Spacing } from '../theme';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import { ActivityFeedData } from '../types/feedTypes';
@@ -55,9 +55,13 @@ const ProfileActivityCard: React.FC<ActivityFeedCardProps> = ({ activity }: Acti
     latitude: activity.geoFence ? activity.geoFence.latitude : defaultMapLocation.latitude,
     longitude: activity.geoFence ? activity.geoFence.longitude : defaultMapLocation.latitude,
   };
+  const getTopBarDisplay = () => {
+    if (!activity.caption || activity.caption === '') return { display: 'none' } as ViewStyle;
+    return { display: 'flex' } as ViewStyle;
+  };
   return (
     <View style={styles.card}>
-      <View style={styles.topBar}>
+      <View style={[styles.topBar, getTopBarDisplay()]}>
         <Text style={styles.captionText}>{activity.caption}</Text>
       </View>
       <View style={styles.main}>
@@ -99,11 +103,7 @@ const styles = StyleSheet.create({
   topBar: {
     flexDirection: 'row',
     justifyContent: 'flex-start',
-  },
-  nameText: {
-    ...Typography.headerText,
-    fontSize: 20,
-    lineHeight: 30,
+    marginBottom: Spacing.smaller,
   },
   captionText: {
     color: Colors.almostWhite,
@@ -116,14 +116,13 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   main: {
-    marginVertical: Spacing.small,
+    marginBottom: Spacing.smaller,
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
   category: {
     width: '30%',
     display: 'flex',
-    textAlign: 'center',
     justifyContent: 'center',
     flexDirection: 'column',
     paddingRight: Spacing.base,
@@ -132,11 +131,12 @@ const styles = StyleSheet.create({
     color: Colors.almostWhite,
     fontSize: 40,
     textAlign: 'center',
+    width: '100%',
     marginVertical: Spacing.smallest,
   },
   map: {
     width: '70%',
-    height: 110,
+    height: 120,
     borderRadius: Spacing.smallest,
   },
   footer: {
