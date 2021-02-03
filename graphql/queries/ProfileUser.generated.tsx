@@ -1,7 +1,17 @@
 /* eslint-disable */
 import * as Types from '../../types/types';
 
+import {
+  BasicUserFragmentFragment,
+  AchievementFragmentFragment,
+  GeofenceFragmentFragment,
+} from '../Fragments.generated';
 import { gql } from '@apollo/client';
+import {
+  BasicUserFragmentFragmentDoc,
+  AchievementFragmentFragmentDoc,
+  GeofenceFragmentFragmentDoc,
+} from '../Fragments.generated';
 import * as Apollo from '@apollo/client';
 export type ProfileUserQueryVariables = Types.Exact<{
   id: Types.Scalars['String'];
@@ -10,33 +20,17 @@ export type ProfileUserQueryVariables = Types.Exact<{
 
 export type ProfileUserQuery = { readonly __typename: 'query_root' } & {
   readonly user?: Types.Maybe<
-    { readonly __typename: 'users' } & Pick<Types.Users, 'id' | 'bio' | 'email' | 'name' | 'picture' | 'totalScore'> & {
+    { readonly __typename: 'users' } & Pick<Types.Users, 'totalScore'> & {
         readonly user_achievement: ReadonlyArray<
           { readonly __typename: 'user_achievement' } & {
-            readonly achievement: { readonly __typename: 'achievement' } & Pick<
-              Types.Achievement,
-              'description' | 'name' | 'achievement_type' | 'level' | 'created_at' | 'rule'
-            >;
+            readonly achievement: { readonly __typename: 'achievement' } & AchievementFragmentFragment;
           }
         >;
         readonly activities: ReadonlyArray<
           { readonly __typename: 'activities' } & Pick<
             Types.Activities,
             'caption' | 'created_at' | 'duration' | 'score' | 'started_at'
-          > & {
-              readonly geofence: { readonly __typename: 'geofences' } & Pick<
-                Types.Geofences,
-                | 'category'
-                | 'description'
-                | 'name'
-                | 'variant'
-                | 'latitude'
-                | 'longitude'
-                | 'id'
-                | 'radius'
-                | 'coordinates'
-              >;
-            }
+          > & { readonly geofence: { readonly __typename: 'geofences' } & GeofenceFragmentFragment }
         >;
         readonly education_score: { readonly __typename: 'activities_aggregate' } & {
           readonly aggregate?: Types.Maybe<
@@ -74,46 +68,29 @@ export type ProfileUserQuery = { readonly __typename: 'query_root' } & {
             }
           >;
         };
-      }
+      } & BasicUserFragmentFragment
   >;
 };
 
 export const ProfileUserDocument = gql`
   query ProfileUser($id: String!, $limit: Int!) {
     user(id: $id) {
-      id
-      bio
-      email
-      name
-      picture
+      ...basicUserFragment
       totalScore
       user_achievement(order_by: { created_at: asc }) {
         achievement {
-          description
-          name
-          achievement_type
-          level
-          created_at
-          rule
+          ...achievementFragment
         }
       }
       activities(order_by: { created_at: desc }, limit: $limit) {
         caption
         created_at
         duration
-        geofence {
-          category
-          description
-          name
-          variant
-          latitude
-          longitude
-          id
-          radius
-          coordinates
-        }
         score
         started_at
+        geofence {
+          ...geofenceFragment
+        }
       }
       education_score: activities_aggregate(where: { geofence: { category: { _eq: "EDUCATION" } } }) {
         aggregate {
@@ -145,6 +122,9 @@ export const ProfileUserDocument = gql`
       }
     }
   }
+  ${BasicUserFragmentFragmentDoc}
+  ${AchievementFragmentFragmentDoc}
+  ${GeofenceFragmentFragmentDoc}
 `;
 
 /**
