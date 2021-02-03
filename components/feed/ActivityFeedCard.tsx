@@ -96,9 +96,7 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: Colors.gray900,
     borderRadius: Spacing.smaller,
-    padding: Spacing.base,
-    marginHorizontal: Spacing.smaller,
-    marginVertical: Spacing.smallest,
+    padding: Spacing.small,
   },
   topBar: {
     flexDirection: 'row',
@@ -113,6 +111,7 @@ const styles = StyleSheet.create({
     color: Colors.almostWhite,
     fontSize: 12,
     fontStyle: 'italic',
+    flexWrap: 'wrap',
   },
   scoreText: {
     color: Colors.almostWhite,

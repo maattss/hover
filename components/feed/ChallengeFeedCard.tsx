@@ -39,11 +39,8 @@ const ChallengeFeedCard: React.FC<ChallengeFeedCardProps> = ({ challenge }: Chal
 const styles = StyleSheet.create({
   card: {
     backgroundColor: Colors.gray900,
-    width: '100%',
     borderRadius: Spacing.smaller,
-    padding: Spacing.base,
-    marginHorizontal: Spacing.smaller,
-    marginVertical: Spacing.smallest,
+    padding: Spacing.small,
   },
   topBar: {
     flexDirection: 'row',

@@ -53,21 +53,31 @@ const FeedScreen: React.FC = () => {
   return (
     <View style={styles.container}>
       {/* TODO: Replace examples with refreshable list with data from API */}
-      <AchievementFeedCard data={testAchievement} />
-      <ChallengeFeedCard challenge={testChallenge} />
-      <ActivityFeedCard activity={testActivity} />
+      <View style={styles.element}>
+        <ActivityFeedCard activity={testActivity} />
+      </View>
+      <View style={styles.element}>
+        <AchievementFeedCard data={testAchievement} />
+      </View>
+      <View style={styles.element}>
+        <ChallengeFeedCard challenge={testChallenge} />
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    padding: 5,
+    padding: Spacing.smaller,
     alignItems: 'center',
+    flex: 1,
   },
   header: {
     ...Typography.headerText,
     paddingTop: Spacing.base,
+  },
+  element: {
+    marginBottom: Spacing.smaller,
   },
 });
 

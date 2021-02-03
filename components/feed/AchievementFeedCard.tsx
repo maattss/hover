@@ -21,7 +21,9 @@ const AchievementFeedCard: React.FC<AchievementFeedCardProps> = ({ data }: Achie
         <View style={styles.description}>
           <Text style={styles.descriptionText}>{data.achievement.description}</Text>
         </View>
-        <Achievement achievement={data.achievement} />
+        <View style={styles.achievement}>
+          <Achievement achievement={data.achievement} />
+        </View>
       </View>
 
       <View style={styles.footer}>
@@ -34,11 +36,8 @@ const AchievementFeedCard: React.FC<AchievementFeedCardProps> = ({ data }: Achie
 const styles = StyleSheet.create({
   card: {
     backgroundColor: Colors.gray900,
-    width: '100%',
     borderRadius: Spacing.smaller,
-    padding: Spacing.base,
-    marginHorizontal: Spacing.smaller,
-    marginVertical: Spacing.smallest,
+    padding: Spacing.small,
   },
   topBar: {
     flexDirection: 'row',
@@ -50,7 +49,6 @@ const styles = StyleSheet.create({
     lineHeight: 50,
   },
   description: {
-    width: '70%',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -58,16 +56,15 @@ const styles = StyleSheet.create({
     ...Typography.headerText,
     fontSize: 24,
     flexWrap: 'wrap',
+    width: '90%',
   },
   main: {
     flexDirection: 'row',
-    justifyContent: 'flex-start',
     marginBottom: Spacing.smaller,
   },
   footer: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
-    width: '100%',
   },
   footerText: {
     color: Colors.almostWhite,
@@ -79,6 +76,10 @@ const styles = StyleSheet.create({
     width: 45,
     borderRadius: 45 / 2,
     marginRight: Spacing.small,
+  },
+  achievement: {
+    marginLeft: -20,
+    marginTop: -50,
   },
 });
 
