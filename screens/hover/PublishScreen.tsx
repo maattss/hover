@@ -50,7 +50,7 @@ const PublishScreen: React.FC<ExploreProps> = ({ navigation }: ExploreProps) => 
     <SafeAreaView style={styles.container}>
       <View style={styles.topBar}>
         <View style={styles.topBarIcon}>
-          <FAIcon name={'question'} style={styles.questionIcon} />
+          <FAIcon name={'info-circle'} style={styles.questionIcon} />
         </View>
 
         <View style={styles.resumeDiscardContainer}>
@@ -167,17 +167,15 @@ const styles = StyleSheet.create({
     marginTop: Spacing.small,
     backgroundColor: Colors.gray900,
     borderRadius: Spacing.smaller,
-    padding: Spacing.small,
+    paddingVertical: Spacing.small,
+    paddingHorizontal: Spacing.base,
   },
   topBarIcon: {
-    padding: Spacing.base,
-    alignItems: 'center',
     justifyContent: 'center',
-    width: '25%',
+    marginLeft: Spacing.base,
   },
   resumeDiscardContainer: {
-    width: '75%',
-    alignItems: 'center',
+    alignItems: 'flex-start',
   },
   resumeDiscardButtons: {
     marginTop: Spacing.smaller,
@@ -193,7 +191,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.red,
   },
   questionIcon: {
-    fontSize: 40,
+    fontSize: 60,
     color: Colors.almostWhite,
   },
 });
