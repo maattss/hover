@@ -10,8 +10,8 @@ const ExploreStack = createStackNavigator<HoverStackParamList>();
 const HoverNavigator: React.FC = () => {
   return (
     <ExploreStack.Navigator screenOptions={{ headerShown: false }}>
-      <ExploreStack.Screen name="Tracking" component={TrackingScreen} />
       <ExploreStack.Screen name="Explore" component={ExploreScreen} />
+      <ExploreStack.Screen name="Tracking" component={TrackingScreen} />
       <ExploreStack.Screen name="Publish" component={PublishScreen} />
     </ExploreStack.Navigator>
   );

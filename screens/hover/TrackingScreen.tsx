@@ -1,6 +1,6 @@
-import React, { useState, createRef, useEffect } from 'react';
+import React, { useState, createRef } from 'react';
 import MapView, { MapTypes, Region } from 'react-native-maps';
-import { StyleSheet, Dimensions, Text, View, TouchableOpacity, ActivityIndicator, SafeAreaView } from 'react-native';
+import { StyleSheet, Dimensions, Text, View, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { Colors, Spacing, Typography, Buttons } from '../../theme';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import useTracking from '../../hooks/useTracking';
@@ -74,15 +74,15 @@ const TrackingScreen: React.FC<ExploreProps> = ({ navigation }: ExploreProps) =>
       </View>
 
       <View style={styles.trackingContainer}>
+        <View style={styles.trackingInfo}>
+          <ActivityIndicator size={'large'} color={Colors.blue} />
+          <Text style={styles.scoreText}>Points: {Math.floor(tracking.score)}</Text>
+        </View>
         <View style={styles.stopButtonContainer}>
           <TouchableOpacity style={styles.stopButton} onPress={stopTracking}>
             <Text style={styles.stopButtonText}>Stop</Text>
           </TouchableOpacity>
-        </View>
-        <View style={styles.trackingInfo}>
-          <Text style={styles.scoreText}>Hovering...</Text>
-          <Text style={styles.scoreText}>Points: {Math.floor(tracking.score)}</Text>
-          <ActivityIndicator size={'large'} color={Colors.blue} />
+          <View />
         </View>
       </View>
     </View>
@@ -90,6 +90,25 @@ const TrackingScreen: React.FC<ExploreProps> = ({ navigation }: ExploreProps) =>
 };
 
 const styles = StyleSheet.create({
+  trackingContainer: {
+    position: 'absolute',
+    bottom: '1%',
+    left: '1%',
+    width: '98%',
+    backgroundColor: Colors.almostBlackTransparent,
+    borderRadius: Spacing.smaller,
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    paddingVertical: Spacing.base,
+  },
+  trackingInfo: {
+    justifyContent: 'center',
+    paddingHorizontal: Spacing.smaller,
+  },
+  stopButtonContainer: {
+    justifyContent: 'center',
+    paddingHorizontal: Spacing.smaller,
+  },
   container: {
     width: '100%',
     height: '100%',
@@ -99,24 +118,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginHorizontal: Spacing.smaller,
     marginTop: Spacing.smaller,
-  },
-  trackingContainer: {
-    position: 'absolute',
-    bottom: '1%',
-    left: '1%',
-    width: '98%',
-  },
-  trackingInfo: {
-    padding: Spacing.smallest,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: Colors.almostBlackTransparent,
-    borderRadius: Spacing.smaller,
-  },
-  trackingControlsContainer: {
-    height: '25%',
-    padding: Spacing.base,
-    marginHorizontal: Spacing.smaller,
   },
   mapStyle: {
     width: '100%',
@@ -136,11 +137,6 @@ const styles = StyleSheet.create({
     ...Buttons.iconButton,
     backgroundColor: Colors.almostBlack,
     marginTop: Spacing.smallest,
-  },
-  stopButtonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    marginBottom: Spacing.small,
   },
   stopButton: {
     padding: Spacing.smallest,

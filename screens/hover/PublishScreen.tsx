@@ -9,7 +9,7 @@ import { FontAwesome as FAIcon } from '@expo/vector-icons';
 import { FontAwesome5 as FA5Icon } from '@expo/vector-icons';
 import { getCategoryColor, getCategoryIconName } from '../../components/feed/ActivityFeedCard';
 import { GeoFenceCategory } from '../../types/geoFenceTypes';
-import { fromSecondsToHours, timeStampToHours } from '../../helpers/dateTimeHelpers';
+import { durationToTimestamp, timeStampToHours } from '../../helpers/dateTimeHelpers';
 
 type NavigationProp = StackNavigationProp<HoverStackParamList>;
 
@@ -67,10 +67,10 @@ const PublishScreen: React.FC<ExploreProps> = ({ navigation }: ExploreProps) => 
       </View>
 
       <View style={styles.trackingInfoContainer}>
-        <Text style={styles.infoScore}>{Math.floor(tracking.score)} points!</Text>
+        <Text style={styles.infoScore}>{Math.floor(tracking.score)} points</Text>
         <View style={styles.infoContainer}>
           <Text style={styles.infoText}>Duration</Text>
-          <Text style={styles.infoTextSmall}>{fromSecondsToHours(tracking.duration)}</Text>
+          <Text style={styles.infoTextSmall}>{durationToTimestamp(tracking.duration)}</Text>
         </View>
         <View style={styles.infoContainer}>
           <Text style={styles.infoText}>Started at</Text>
@@ -127,6 +127,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: Spacing.small,
+    alignItems: 'center',
   },
   infoText: {
     ...Typography.largeBodyText,
@@ -135,7 +136,7 @@ const styles = StyleSheet.create({
   },
   infoTextSmall: {
     ...Typography.largeBodyText,
-    fontSize: 20,
+    fontSize: 18,
   },
   infoScore: {
     ...Typography.headerText,
@@ -168,7 +169,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.gray900,
     borderRadius: Spacing.smaller,
     paddingVertical: Spacing.small,
-    paddingHorizontal: Spacing.base,
+    paddingHorizontal: Spacing.large,
   },
   topBarIcon: {
     justifyContent: 'center',
@@ -184,10 +185,12 @@ const styles = StyleSheet.create({
   },
   resumeButton: {
     ...Buttons.button,
+    padding: Spacing.small,
     marginRight: Spacing.smaller,
   },
   discardButton: {
     ...Buttons.button,
+    padding: Spacing.small,
     backgroundColor: Colors.red,
   },
   questionIcon: {

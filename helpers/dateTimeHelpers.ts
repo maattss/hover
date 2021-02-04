@@ -16,9 +16,6 @@ export const timeStampToHours = (timestamp: string) => {
   if (timestamp === '') {
     return moment(getCurrentTimestamp()).format('HH:mm');
   } else {
-    return moment(timestamp).format('HH:mm');
+    return moment(timestamp).format('HH:mm:ss');
   }
-};
-export const fromSecondsToHours = (duration: number) => {
-  return moment({}).seconds(duration).format('HH:mm:ss');
 };

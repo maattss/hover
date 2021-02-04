@@ -27,6 +27,12 @@ const ExploreScreen: React.FC<ExploreProps> = ({ navigation }: ExploreProps) => 
     tracking.refetchGeofences();
   }, []);
 
+  const defaultRegion: Region = {
+    longitude: tracking.userLocation ? tracking.userLocation.coords.longitude : defaultMapLocation.longitude,
+    latitude: tracking.userLocation ? tracking.userLocation.coords.latitude : defaultMapLocation.latitude,
+    latitudeDelta: 0.01,
+    longitudeDelta: 0.01 * (width / height),
+  };
   // Dynamic styles
   const mapTypeIconStyle = {
     fontSize: Typography.icon.fontSize,
@@ -52,15 +58,7 @@ const ExploreScreen: React.FC<ExploreProps> = ({ navigation }: ExploreProps) => 
   const mapView = createRef<MapView>();
   const animateMapToUserPos = () => {
     if (tracking.userLocation) setCentreOnUser(true);
-    mapView.current?.animateToRegion(
-      {
-        longitude: tracking.userLocation ? tracking.userLocation.coords.longitude : defaultMapLocation.longitude,
-        latitude: tracking.userLocation ? tracking.userLocation.coords.latitude : defaultMapLocation.latitude,
-        latitudeDelta: 0.01,
-        longitudeDelta: 0.01 * (width / height),
-      },
-      1000,
-    );
+    mapView.current?.animateToRegion(defaultRegion, 1000);
   };
   const startTracking = () => {
     if (!disableTracking) {
@@ -85,9 +83,9 @@ const ExploreScreen: React.FC<ExploreProps> = ({ navigation }: ExploreProps) => 
       <MapView
         ref={mapView}
         mapType={chosenMapType}
+        initialRegion={defaultRegion}
         showsUserLocation
         style={styles.mapStyle}
-        onMapReady={animateMapToUserPos}
         onDoublePress={() => setCentreOnUser(false)}
         onPanDrag={() => setCentreOnUser(false)}>
         <GeoFences geofences={tracking.geoFences} />
