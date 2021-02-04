@@ -140,7 +140,7 @@ export const convertToUserProfile = (data: ProfileUserQuery | undefined) => {
         level: obj.achievement.level ?? 3,
         createdAt: obj.achievement.created_at ?? '',
         type: AchievementVariant[obj.achievement.achievement_type as keyof typeof AchievementVariant],
-        rule: obj.achievement.rule ?? '{}',
+        rule: obj.achievement.rule ?? {},
       });
     });
     const activitites: ActivityFeedData[] = [];
@@ -188,11 +188,11 @@ export const convertChallenge = (challengeData: GetChallengesQuery) => {
           id: obj.challenge.id,
           challenge_type: obj.challenge.challenge_type as Challenge_Type_Enum,
           created_at: obj.challenge.created_at,
-          end_date: new Date(obj.challenge.end_date),
+          end_date: obj.challenge.end_date,
           state: obj.challenge.state as Challenge_State_Enum,
-          start_date: new Date(obj.challenge.start_date),
+          start_date: obj.challenge.start_date,
           opponents: opponents,
-          rules: obj.challenge.rules,
+          rules: obj.challenge.rules ?? {},
         });
       }
     });
@@ -206,11 +206,11 @@ export const convertChallenge = (challengeData: GetChallengesQuery) => {
         id: obj.challenge.id,
         challenge_type: obj.challenge.challenge_type as Challenge_Type_Enum,
         created_at: obj.challenge.created_at,
-        end_date: new Date(obj.challenge.end_date),
+        end_date: obj.challenge.end_date,
         state: obj.challenge.state as Challenge_State_Enum,
-        start_date: new Date(obj.challenge.start_date),
+        start_date: obj.challenge.start_date,
         opponents: opponents,
-        rules: obj.challenge.rules,
+        rules: obj.challenge.rules ?? {},
       });
     });
   }

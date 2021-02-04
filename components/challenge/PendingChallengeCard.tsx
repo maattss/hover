@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity, TextStyle, ViewStyle } from 'react-native';
 import { useUpdateChallengeParticipationMutation } from '../../graphql/mutations/UpdateChallengeParticipation.generated';
+import { generateDescription } from '../../helpers/decriptionHelper';
 import { Colors, Typography, Spacing, Buttons } from '../../theme';
 import { PendingChallenge } from '../../types/challengeTypes';
 import { Challenge_Participant_State_Enum } from '../../types/types';
@@ -78,7 +79,7 @@ const PendingChallengeCard: React.FC<PendingChallengeCardProps> = ({ challenge }
           <Image source={{ uri: opponent.picture }} style={styles.avatar} />
           <View>
             <Text style={styles.nameText}>{opponent.name}</Text>
-            <Text style={styles.challengeTypeText}>{challenge.challenge_type}</Text>
+            <Text style={styles.challengeTypeText}>{generateDescription(challenge)}</Text>
           </View>
         </View>
         <ParticipantButtonSwitch />

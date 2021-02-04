@@ -7,8 +7,8 @@ export enum AchievementVariant {
   SCORE_IN_CATEGORY,
 }
 export type AchievementRule = {
-  category: string;
-  score: number;
+  category?: string;
+  score?: number;
 };
 
 export type UserProfile = {

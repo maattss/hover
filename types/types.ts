@@ -2292,6 +2292,7 @@ export enum Challenge_Type_Constraint {
 
 export enum Challenge_Type_Enum {
   Score = 'SCORE',
+  ScoreCategory = 'SCORE_CATEGORY',
 }
 
 /** expression to compare columns of type challenge_type_enum. All fields are combined with logical 'AND'. */

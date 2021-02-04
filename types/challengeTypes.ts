@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-types */
 import { Challenge_Participant_State_Enum, Challenge_State_Enum, Challenge_Type_Enum } from './types';
 
 export type PendingChallenge = {
@@ -5,7 +6,7 @@ export type PendingChallenge = {
   id: number;
   challenge_type: Challenge_Type_Enum;
   created_at: string;
-  rules: string;
+  rules: ChallengeRules;
   end_date: Date;
   state: Challenge_State_Enum;
   start_date: Date;
@@ -26,10 +27,15 @@ export type OngoingChallenge = {
   user: ChallengeUser;
   id: number;
   challenge_type: Challenge_Type_Enum;
-  rules: string;
+  rules: ChallengeRules;
   end_date: Date;
   state: Challenge_State_Enum;
   start_date: Date;
   created_at: string;
   opponents: Opponent[];
+};
+
+export type ChallengeRules = {
+  category?: string;
+  score?: number;
 };
