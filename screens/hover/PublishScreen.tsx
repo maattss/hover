@@ -8,6 +8,7 @@ import { HoverStackParamList } from '../../types/navigationTypes';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import { getCategoryColor, getCategoryIconName } from '../../components/feed/ActivityFeedCard';
 import { GeoFenceCategory } from '../../types/geoFenceTypes';
+import { getCurrentTimestamp, timeStampToHours, timeStampToPresentable } from '../../helpers/dateTimeHelpers';
 
 type NavigationProp = StackNavigationProp<HoverStackParamList>;
 
@@ -21,14 +22,14 @@ const PublishScreen: React.FC<ExploreProps> = ({ navigation }: ExploreProps) => 
 
   const resumeTracking = () => {
     tracking.startTracking();
-    navigation.goBack();
+    navigation.navigate('Tracking');
   };
 
   const discardActivity = () => {
     Alert.alert('Discard activity', 'Are you sure you want to discard this activity? It will be lost forever.', [
       { text: 'No' },
       {
-        text: "Yes, I don{'}t care",
+        text: "Yes, I don't care",
         onPress: () => {
           tracking.discardActivity();
           navigation.navigate('Explore');
@@ -43,45 +44,44 @@ const PublishScreen: React.FC<ExploreProps> = ({ navigation }: ExploreProps) => 
   const categoryColor = {
     color: getCategoryColor(GeoFenceCategory.EDUCATION),
   };
-
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.resumeButtonContainer}>
-        <TouchableOpacity style={[styles.trackingButton, { backgroundColor: Colors.green }]} onPress={resumeTracking}>
-          <Text style={styles.trackingButtonText}>Resume</Text>
+      <View style={styles.resumeDiscardContainer}>
+        <TouchableOpacity style={[styles.resumeButton, { backgroundColor: Colors.green }]} onPress={resumeTracking}>
+          <Text style={styles.resumeButtonText}>Resume</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.discardButton} onPress={discardActivity}>
           <FAIcon name={'trash'} color={Colors.almostWhite} style={{ fontSize: 25 }} />
         </TouchableOpacity>
       </View>
+
       <View style={styles.trackingInfoContainer}>
+        <Text style={{ ...Typography.headerText, textAlign: 'center', marginBottom: Spacing.base }}>Summary</Text>
         <View style={styles.infoContainer}>
-          <Text style={{ ...Typography.headerText }}>Started</Text>
-          <Text style={{ ...Typography.headerText }}>{tracking.trackingStart}</Text>
-        </View>
-        <View style={styles.infoContainer}>
-          <Text style={{ ...Typography.headerText }}>Duration</Text>
-          <Text style={styles.infoNumber}>{tracking.duration}</Text>
-        </View>
-        <View style={styles.infoContainer}>
-          <Text style={{ ...Typography.headerText }}>Score</Text>
+          <Text style={styles.infoText}>Score</Text>
           <Text style={styles.infoNumber}>{Math.floor(tracking.score)}</Text>
         </View>
         <View style={styles.infoContainer}>
-          <Text style={{ ...Typography.headerText }}>Category</Text>
+          <Text style={styles.infoText}>Duration</Text>
+          <Text style={styles.infoNumber}>{tracking.duration}</Text>
+        </View>
+        <View style={styles.infoContainer}>
+          <Text style={styles.infoText}>Started at</Text>
+          <Text style={styles.infoText}>{timeStampToHours(tracking.trackingStart)}</Text>
+        </View>
+        <View style={[styles.infoContainer, { marginBottom: 0 }]}>
+          <Text style={styles.infoText}>Category</Text>
           <FAIcon style={[styles.categoryIcon, categoryColor]} name={getCategoryIconName(GeoFenceCategory.EDUCATION)} />
         </View>
-        <View>
-          <Text style={{ ...Typography.headerText }}>Caption</Text>
-          <TextInput
-            placeholder="Insert a funny text that describes the activity!"
-            placeholderTextColor={Colors.gray600}
-            onChangeText={(val) => setCaption(val)}
-            style={styles.formField}
-            numberOfLines={3}>
-            {caption}
-          </TextInput>
-        </View>
+        <TextInput
+          placeholder="Insert a funny text that describes the activity!"
+          placeholderTextColor={Colors.gray600}
+          onChangeText={(val) => setCaption(val)}
+          style={styles.formField}
+          numberOfLines={3}
+          multiline>
+          {caption}
+        </TextInput>
       </View>
 
       <View style={styles.publishButtonContainer}>
@@ -101,51 +101,64 @@ const styles = StyleSheet.create({
   },
   categoryIcon: {
     color: Colors.almostWhite,
-    fontSize: 40,
+    fontSize: 42,
     textAlign: 'center',
-    width: '100%',
-    marginVertical: Spacing.smallest,
+    paddingRight: Spacing.smallest,
   },
   trackingInfoContainer: {
     padding: Spacing.base,
     marginBottom: Spacing.smallest,
-    // backgroundColor: Colors.gray900,
-    borderRadius: Spacing.smaller,
   },
   infoContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: Spacing.small,
   },
+  infoText: {
+    ...Typography.largeBodyText,
+    fontSize: 26,
+    fontWeight: 'bold',
+  },
   infoNumber: {
     ...Typography.headerText,
     marginRight: Spacing.base,
+    paddingRight: Spacing.smallest,
   },
-  resumeButtonContainer: {
+  formField: {
+    ...Buttons.button,
+    ...Typography.bodyText,
+    paddingTop: Spacing.small,
+    marginVertical: Spacing.base,
+    backgroundColor: Colors.gray900,
+  },
+  publishButtonContainer: {
+    padding: Spacing.base,
+  },
+  publishButton: {
+    ...Buttons.button,
+    paddingHorizontal: Spacing.extraLarge,
+  },
+  publishButtonText: {
+    ...Buttons.buttonText,
+    fontSize: 24,
+    textAlign: 'center',
+  },
+  resumeDiscardContainer: {
     flexDirection: 'row',
-    justifyContent: 'center',
-    margin: Spacing.base,
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
   },
-  trackingButton: {
+  resumeButton: {
     padding: Spacing.smallest,
     borderRadius: 110 / 2,
     width: 110,
     height: 110,
     justifyContent: 'center',
   },
-  trackingButtonText: {
+  resumeButtonText: {
     ...Buttons.buttonText,
     fontSize: 24,
     textAlign: 'center',
-  },
-  publishButtonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-evenly',
-    margin: Spacing.base,
-  },
-  publishButton: {
-    ...Buttons.button,
-    paddingHorizontal: Spacing.extraLarge,
   },
   discardButton: {
     padding: Spacing.smallest,
@@ -156,18 +169,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: Colors.red,
-  },
-  publishButtonText: {
-    ...Buttons.buttonText,
-    fontSize: 24,
-    textAlign: 'center',
-  },
-  formField: {
-    ...Buttons.button,
-    ...Typography.bodyText,
-    padding: Spacing.small,
-    marginBottom: Spacing.base,
-    backgroundColor: Colors.gray900,
   },
 });
 

@@ -1,5 +1,5 @@
 import React, { useState, createRef, useEffect } from 'react';
-import MapView, { MapTypes } from 'react-native-maps';
+import MapView, { MapTypes, Region } from 'react-native-maps';
 import { StyleSheet, Dimensions, Text, View, TouchableOpacity, ActivityIndicator, SafeAreaView } from 'react-native';
 import { Colors, Spacing, Typography, Buttons } from '../../theme';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
@@ -36,17 +36,15 @@ const TrackingScreen: React.FC<ExploreProps> = ({ navigation }: ExploreProps) =>
     chosenMapType === 'satellite' ? setChosenMapType('standard') : setChosenMapType('satellite');
 
   const mapView = createRef<MapView>();
+  const defaultRegion: Region = {
+    longitude: tracking.userLocation ? tracking.userLocation.coords.longitude : defaultMapLocation.longitude,
+    latitude: tracking.userLocation ? tracking.userLocation.coords.latitude : defaultMapLocation.latitude,
+    latitudeDelta: 0.01,
+    longitudeDelta: 0.01 * (width / height),
+  };
   const animateMapToUserPos = () => {
     if (tracking.userLocation) setCentreOnUser(true);
-    mapView.current?.animateToRegion(
-      {
-        longitude: tracking.userLocation ? tracking.userLocation.coords.longitude : defaultMapLocation.longitude,
-        latitude: tracking.userLocation ? tracking.userLocation.coords.latitude : defaultMapLocation.latitude,
-        latitudeDelta: 0.01,
-        longitudeDelta: 0.01 * (width / height),
-      },
-      1000,
-    );
+    mapView.current?.animateToRegion(defaultRegion, 1000);
   };
   const stopTracking = () => {
     tracking.pauseTracking();
@@ -62,7 +60,7 @@ const TrackingScreen: React.FC<ExploreProps> = ({ navigation }: ExploreProps) =>
           mapType={chosenMapType}
           showsUserLocation
           style={styles.mapStyle}
-          onMapReady={animateMapToUserPos}
+          initialRegion={defaultRegion}
           onDoublePress={() => setCentreOnUser(false)}
           onPanDrag={() => setCentreOnUser(false)}>
           <GeoFences geofences={tracking.geoFences} />

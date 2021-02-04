@@ -12,3 +12,11 @@ export const getCurrentTimestamp = () => {
 export const timeStampToPresentable = (timestamp: string) => {
   return moment(timestamp).fromNow().toString();
 };
+export const timeStampToHours = (timestamp: string) => {
+  if (timestamp === '') {
+    const current = getCurrentTimestamp();
+    return moment(current).hours() + ':' + moment(current).minutes();
+  } else {
+    return moment(timestamp).hours() + ':' + moment(timestamp).minutes();
+  }
+};
