@@ -1,5 +1,5 @@
 import React, { useState, createRef, useEffect } from 'react';
-import MapView, { LatLng, MapTypes, Region } from 'react-native-maps';
+import MapView, { MapTypes } from 'react-native-maps';
 import { StyleSheet, Dimensions, Text, View, TouchableOpacity, ViewStyle, ActivityIndicator } from 'react-native';
 import { Colors, Spacing, Typography, Buttons } from '../../theme';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
@@ -79,7 +79,7 @@ const ExploreScreen: React.FC<ExploreProps> = ({ navigation }: ExploreProps) => 
       } as ViewStyle;
     }
   };
-
+  // TODO: Handle if user is not inside geofence
   return (
     <View style={styles.container}>
       <MapView
