@@ -76,10 +76,12 @@ const PendingChallengeCard: React.FC<PendingChallengeCardProps> = ({ challenge }
     return (
       <View style={styles.card}>
         <View style={styles.topBar}>
-          <Image source={{ uri: opponent.picture }} style={styles.avatar} />
-          <View>
+          <View style={styles.topBarAvatar}>
+            <Image source={{ uri: opponent.picture }} style={styles.avatar} />
+          </View>
+          <View style={styles.topBarText}>
             <Text style={styles.nameText}>{opponent.name}</Text>
-            <Text style={styles.challengeTypeText}>{generateDescription(challenge)}</Text>
+            <Text style={styles.descriptionText}>{generateDescription(challenge)}</Text>
           </View>
         </View>
         <ParticipantButtonSwitch />
@@ -92,19 +94,11 @@ const PendingChallengeCard: React.FC<PendingChallengeCardProps> = ({ challenge }
           {challenge.opponents.map((opponent) => (
             <>
               <Image key={opponent.id} source={{ uri: opponent.picture }} style={styles.avatar} />
-              <View>
+              <View style={styles.topBarText}>
                 <Text style={styles.nameText}>{opponent.name}</Text>
-                <Text style={styles.challengeTypeText}>{challenge.challenge_type}</Text>
+                <Text style={styles.descriptionText}>{challenge.challenge_type}</Text>
               </View>
             </>
-          ))}
-        </View>
-
-        <View>
-          {challenge.opponents.map((opponent) => (
-            <Text key={opponent.id} style={styles.nameText}>
-              {opponent.name}
-            </Text>
           ))}
         </View>
         <ParticipantButtonSwitch />
@@ -129,12 +123,24 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-start',
   },
+  topBarAvatar: {
+    width: '20%',
+  },
+  avatar: {
+    height: 45,
+    width: 45,
+    borderRadius: 45 / 2,
+    marginRight: Spacing.small,
+  },
+  topBarText: {
+    width: '80%',
+  },
   nameText: {
     ...Typography.headerText,
     fontSize: 20,
     lineHeight: 30,
   },
-  challengeTypeText: {
+  descriptionText: {
     color: Colors.almostWhite,
     fontSize: 12,
     fontStyle: 'italic',
@@ -143,12 +149,7 @@ const styles = StyleSheet.create({
     marginVertical: Spacing.base,
     ...Typography.bodyText,
     fontStyle: 'italic',
-  },
-  avatar: {
-    height: 45,
-    width: 45,
-    borderRadius: 45 / 2,
-    marginRight: Spacing.small,
+    width: '100%',
   },
   buttonsContainer: {
     flexDirection: 'row',
