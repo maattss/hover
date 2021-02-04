@@ -38,7 +38,7 @@ const TrackingScreen: React.FC<ExploreProps> = ({ navigation }: ExploreProps) =>
   const mapView = createRef<MapView>();
   const defaultRegion: Region = {
     longitude: tracking.userLocation ? tracking.userLocation.coords.longitude : defaultMapLocation.longitude,
-    latitude: tracking.userLocation ? tracking.userLocation.coords.latitude : defaultMapLocation.latitude,
+    latitude: (tracking.userLocation ? tracking.userLocation.coords.latitude : defaultMapLocation.latitude) - 0.003,
     latitudeDelta: 0.01,
     longitudeDelta: 0.01 * (width / height),
   };
@@ -52,44 +52,40 @@ const TrackingScreen: React.FC<ExploreProps> = ({ navigation }: ExploreProps) =>
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      {/* Map */}
-      <View style={styles.mapContainer}>
-        <MapView
-          ref={mapView}
-          mapType={chosenMapType}
-          showsUserLocation
-          style={styles.mapStyle}
-          initialRegion={defaultRegion}
-          onDoublePress={() => setCentreOnUser(false)}
-          onPanDrag={() => setCentreOnUser(false)}>
-          <GeoFences geofences={tracking.geoFences} />
-        </MapView>
+    <View style={styles.container}>
+      <MapView
+        ref={mapView}
+        mapType={chosenMapType}
+        showsUserLocation
+        style={styles.mapStyle}
+        initialRegion={defaultRegion}
+        onDoublePress={() => setCentreOnUser(false)}
+        onPanDrag={() => setCentreOnUser(false)}>
+        <GeoFences geofences={tracking.geoFences} />
+      </MapView>
 
-        <View style={styles.infoContainer}>
-          <TouchableOpacity style={styles.mapStyleButton} onPress={toggleMapType}>
-            <FAIcon style={mapTypeIconStyle} name="globe-europe" />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.centreOnUserButton} onPress={animateMapToUserPos}>
-            <FAIcon style={centreOnUserIconStyle} name="crosshairs" />
-          </TouchableOpacity>
-        </View>
+      <View style={styles.mapInfo}>
+        <TouchableOpacity style={styles.mapStyleButton} onPress={toggleMapType}>
+          <FAIcon style={mapTypeIconStyle} name="globe-europe" />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.centreOnUserButton} onPress={animateMapToUserPos}>
+          <FAIcon style={centreOnUserIconStyle} name="crosshairs" />
+        </TouchableOpacity>
       </View>
 
-      <View style={styles.trackingInfoContainer}>
-        <Text style={styles.scoreText}>Duration: {tracking.duration}</Text>
-        <Text style={styles.scoreText}>Score: {Math.floor(tracking.score)}</Text>
-        <ActivityIndicator size={'large'} color={Colors.blue} />
-      </View>
-
-      <View style={styles.trackingControlsContainer}>
+      <View style={styles.trackingContainer}>
         <View style={styles.stopButtonContainer}>
-          <TouchableOpacity style={[styles.trackingButton, { backgroundColor: Colors.red }]} onPress={stopTracking}>
-            <Text style={styles.trackingButtonText}>Stop</Text>
+          <TouchableOpacity style={styles.stopButton} onPress={stopTracking}>
+            <Text style={styles.stopButtonText}>Stop</Text>
           </TouchableOpacity>
         </View>
+        <View style={styles.trackingInfo}>
+          <Text style={styles.scoreText}>Hovering...</Text>
+          <Text style={styles.scoreText}>Points: {Math.floor(tracking.score)}</Text>
+          <ActivityIndicator size={'large'} color={Colors.blue} />
+        </View>
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -99,20 +95,22 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   mapContainer: {
-    height: '45%',
     alignItems: 'center',
     justifyContent: 'center',
     marginHorizontal: Spacing.smaller,
     marginTop: Spacing.smaller,
   },
-  trackingInfoContainer: {
-    height: '30%',
+  trackingContainer: {
+    position: 'absolute',
+    bottom: '1%',
+    left: '1%',
+    width: '98%',
+  },
+  trackingInfo: {
     padding: Spacing.smallest,
-    margin: Spacing.smaller,
-    marginBottom: Spacing.smallest,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: Colors.gray900,
+    backgroundColor: Colors.almostBlackTransparent,
     borderRadius: Spacing.smaller,
   },
   trackingControlsContainer: {
@@ -125,10 +123,10 @@ const styles = StyleSheet.create({
     height: '100%',
     borderRadius: Spacing.smaller,
   },
-  infoContainer: {
+  mapInfo: {
     position: 'absolute',
-    bottom: '1%',
-    right: '1%',
+    top: Spacing.extraLarge,
+    left: '1%',
   },
   mapStyleButton: {
     ...Buttons.iconButton,
@@ -139,24 +137,24 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.almostBlack,
     marginTop: Spacing.smallest,
   },
-  startButtonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-  },
   stopButtonContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginLeft: Spacing.extraLarge,
-    marginRight: Spacing.extraLarge,
+    justifyContent: 'center',
+    marginBottom: Spacing.small,
   },
-  trackingButton: {
+  stopButton: {
     padding: Spacing.smallest,
     borderRadius: 110 / 2,
     width: 110,
     height: 110,
     justifyContent: 'center',
+    backgroundColor: Colors.redTransparent,
+    shadowOpacity: 0.2,
+    shadowRadius: 10,
+    shadowColor: Colors.almostBlack,
+    shadowOffset: { height: 0, width: 0 },
   },
-  trackingButtonText: {
+  stopButtonText: {
     ...Buttons.buttonText,
     fontSize: 24,
     textAlign: 'center',

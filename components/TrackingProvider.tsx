@@ -138,6 +138,7 @@ export const TrackingProvider = ({ children }: Props) => {
   const startTracking = () => {
     if (insideGeoFence) {
       setScore(0);
+      setDuration(0);
       setIsTrackingPaused(false);
       setIsTracking(true);
       setTrackingStart(getCurrentTimestamp());

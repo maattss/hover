@@ -79,9 +79,9 @@ const ExploreScreen: React.FC<ExploreProps> = ({ navigation }: ExploreProps) => 
       } as ViewStyle;
     }
   };
-  // TODO: Handle if user is not inside geofence
+  // TODO: Handle if user is not inside geofence, i.e. not start tracking
   return (
-    <View style={styles.container}>
+    <View>
       <MapView
         ref={mapView}
         mapType={chosenMapType}
@@ -112,7 +112,6 @@ const ExploreScreen: React.FC<ExploreProps> = ({ navigation }: ExploreProps) => 
 };
 
 const styles = StyleSheet.create({
-  container: {},
   mapStyle: {
     width,
     height,
