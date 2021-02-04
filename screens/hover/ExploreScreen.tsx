@@ -8,7 +8,6 @@ import { defaultMapLocation } from '../../helpers/objectMappers';
 import GeoFences from '../../components/GeoFences';
 import { HoverStackParamList } from '../../types/navigationTypes';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 const { width, height } = Dimensions.get('window');
 
