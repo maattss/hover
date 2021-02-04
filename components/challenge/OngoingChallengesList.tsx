@@ -1,12 +1,13 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { FlatList, RefreshControl, View, StyleSheet } from 'react-native';
-import { Colors } from '../../theme';
+import { FlatList, RefreshControl, SafeAreaView, StyleSheet } from 'react-native';
+import { Colors, Spacing } from '../../theme';
 import { OngoingChallenge } from '../../types/challengeTypes';
 import OngoingChallengeCard from './OngoingChallengeCard';
 
 interface OngoingChallengesListProps {
   challenges: OngoingChallenge[];
   refetch?: () => void;
+  listHeader?: React.ReactElement;
 }
 
 const OngoingChallengesList: React.FC<OngoingChallengesListProps> = (props: OngoingChallengesListProps) => {
@@ -25,9 +26,10 @@ const OngoingChallengesList: React.FC<OngoingChallengesListProps> = (props: Ongo
       setRefreshing(false);
     }
   }, [refreshing]);
+
   const renderItem = (item: OngoingChallenge) => <OngoingChallengeCard challenge={item} />;
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <FlatList
         data={challengeData}
         keyExtractor={(item, index) => index.toString()}
@@ -43,16 +45,21 @@ const OngoingChallengesList: React.FC<OngoingChallengesListProps> = (props: Ongo
             />
           )
         }
+        ListHeaderComponent={props.listHeader}
+        ListHeaderComponentStyle={styles.headerFooterStyle}
       />
-    </View>
+    </SafeAreaView>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
+  },
+  headerFooterStyle: {
     justifyContent: 'center',
     alignItems: 'center',
     flex: 1,
+    paddingBottom: Spacing.base,
   },
 });
 

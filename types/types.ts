@@ -1311,6 +1311,9 @@ export type Challenge = {
   challenge_state: Challenge_State;
   challenge_type: Challenge_Type_Enum;
   created_at: Scalars['timestamptz'];
+  created_by: Scalars['String'];
+  /** An object relationship */
+  created_by_user: Users;
   end_date: Scalars['date'];
   id: Scalars['Int'];
   rules: Scalars['json'];
@@ -1412,6 +1415,8 @@ export type Challenge_Bool_Exp = {
   challenge_state?: Maybe<Challenge_State_Bool_Exp>;
   challenge_type?: Maybe<Challenge_Type_Enum_Comparison_Exp>;
   created_at?: Maybe<Timestamptz_Comparison_Exp>;
+  created_by?: Maybe<String_Comparison_Exp>;
+  created_by_user?: Maybe<Users_Bool_Exp>;
   end_date?: Maybe<Date_Comparison_Exp>;
   id?: Maybe<Int_Comparison_Exp>;
   rules?: Maybe<Json_Comparison_Exp>;
@@ -1437,6 +1442,8 @@ export type Challenge_Insert_Input = {
   challenge_state?: Maybe<Challenge_State_Obj_Rel_Insert_Input>;
   challenge_type?: Maybe<Challenge_Type_Enum>;
   created_at?: Maybe<Scalars['timestamptz']>;
+  created_by?: Maybe<Scalars['String']>;
+  created_by_user?: Maybe<Users_Obj_Rel_Insert_Input>;
   end_date?: Maybe<Scalars['date']>;
   id?: Maybe<Scalars['Int']>;
   rules?: Maybe<Scalars['json']>;
@@ -1448,6 +1455,7 @@ export type Challenge_Insert_Input = {
 export type Challenge_Max_Fields = {
   __typename?: 'challenge_max_fields';
   created_at?: Maybe<Scalars['timestamptz']>;
+  created_by?: Maybe<Scalars['String']>;
   end_date?: Maybe<Scalars['date']>;
   id?: Maybe<Scalars['Int']>;
   start_date?: Maybe<Scalars['date']>;
@@ -1456,6 +1464,7 @@ export type Challenge_Max_Fields = {
 /** order by max() on columns of table "challenge" */
 export type Challenge_Max_Order_By = {
   created_at?: Maybe<Order_By>;
+  created_by?: Maybe<Order_By>;
   end_date?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
   start_date?: Maybe<Order_By>;
@@ -1465,6 +1474,7 @@ export type Challenge_Max_Order_By = {
 export type Challenge_Min_Fields = {
   __typename?: 'challenge_min_fields';
   created_at?: Maybe<Scalars['timestamptz']>;
+  created_by?: Maybe<Scalars['String']>;
   end_date?: Maybe<Scalars['date']>;
   id?: Maybe<Scalars['Int']>;
   start_date?: Maybe<Scalars['date']>;
@@ -1473,6 +1483,7 @@ export type Challenge_Min_Fields = {
 /** order by min() on columns of table "challenge" */
 export type Challenge_Min_Order_By = {
   created_at?: Maybe<Order_By>;
+  created_by?: Maybe<Order_By>;
   end_date?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
   start_date?: Maybe<Order_By>;
@@ -1507,6 +1518,8 @@ export type Challenge_Order_By = {
   challenge_state?: Maybe<Challenge_State_Order_By>;
   challenge_type?: Maybe<Order_By>;
   created_at?: Maybe<Order_By>;
+  created_by?: Maybe<Order_By>;
+  created_by_user?: Maybe<Users_Order_By>;
   end_date?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
   rules?: Maybe<Order_By>;
@@ -1973,6 +1986,8 @@ export enum Challenge_Select_Column {
   /** column name */
   CreatedAt = 'created_at',
   /** column name */
+  CreatedBy = 'created_by',
+  /** column name */
   EndDate = 'end_date',
   /** column name */
   Id = 'id',
@@ -1988,6 +2003,7 @@ export enum Challenge_Select_Column {
 export type Challenge_Set_Input = {
   challenge_type?: Maybe<Challenge_Type_Enum>;
   created_at?: Maybe<Scalars['timestamptz']>;
+  created_by?: Maybe<Scalars['String']>;
   end_date?: Maybe<Scalars['date']>;
   id?: Maybe<Scalars['Int']>;
   rules?: Maybe<Scalars['json']>;
@@ -2292,6 +2308,7 @@ export enum Challenge_Type_Constraint {
 
 export enum Challenge_Type_Enum {
   Score = 'SCORE',
+  ScoreCategory = 'SCORE_CATEGORY',
 }
 
 /** expression to compare columns of type challenge_type_enum. All fields are combined with logical 'AND'. */
@@ -2398,6 +2415,8 @@ export enum Challenge_Update_Column {
   ChallengeType = 'challenge_type',
   /** column name */
   CreatedAt = 'created_at',
+  /** column name */
+  CreatedBy = 'created_by',
   /** column name */
   EndDate = 'end_date',
   /** column name */

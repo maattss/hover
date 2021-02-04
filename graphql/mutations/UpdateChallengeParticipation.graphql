@@ -1,0 +1,10 @@
+mutation UpdateChallengeParticipation($challenge_id: Int!, $user_id: String!, $state: challenge_participant_state_enum!) {
+  update_challenge_participant_by_pk(
+    pk_columns: { challenge_id: $challenge_id, user_id: $user_id }
+    _set: { state: $state }
+  ) {
+    state
+    challenge_id
+    user_id
+  }
+}

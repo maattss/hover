@@ -3,14 +3,18 @@ import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from 'rea
 import { Buttons, Colors, Spacing, Typography } from '../../theme';
 import useAuthentication from '../../hooks/useAuthentication';
 import { useInsertChallengeMutation } from '../../graphql/mutations/InsertChallenge.generated';
-import { Challenge_Participant_Insert_Input, Challenge_Type_Enum } from '../../types/types';
+import {
+  Challenge_Participant_Insert_Input,
+  Challenge_Participant_State_Enum,
+  Challenge_Type_Enum,
+} from '../../types/types';
 
 const ChallengeScreen: React.FC = () => {
   const user_id = useAuthentication().user?.uid;
   const [challengeType, setChallengeType] = useState<Challenge_Type_Enum>(Challenge_Type_Enum.Score);
   const [endDate, setEndDate] = useState<Date>(new Date('2021-02-11'));
   const [participants, setParticipants] = useState<Challenge_Participant_Insert_Input[]>([
-    { user_id: user_id, accepted: true },
+    { user_id: user_id, state: Challenge_Participant_State_Enum.Accepted },
     { user_id: 'LqzKOPWaY9aiquOGu9SBItAfJUz2' },
   ]);
 

@@ -10,10 +10,10 @@ import { ProfileUserQuery } from '../graphql/queries/ProfileUser.generated';
 import { UserProfile, Achievement as AchievementType, AchievementVariant } from '../types/profileTypes';
 import { ActivityFeedData } from '../types/feedTypes';
 import { Asset } from 'expo-asset';
-import { Challenge_Participant, Challenge_Type_Enum, Geofences } from '../types/types';
+import { Challenge_Participant, Challenge_State_Enum, Challenge_Type_Enum, Geofences } from '../types/types';
 import { ChallengeUser, OngoingChallenge, Opponent, PendingChallenge } from '../types/challengeTypes';
-import { BasicUserFragmentFragment } from '../graphql/Fragments.generated';
 import { GetChallengesQuery } from '../graphql/queries/GetChallenges.generated';
+import { BasicUserFragmentFragment } from '../graphql/Fragments.generated';
 
 // Default location NTNU Trondheim
 export const defaultMapLocation: LatLng = {
@@ -140,7 +140,7 @@ export const convertToUserProfile = (data: ProfileUserQuery | undefined) => {
         level: obj.achievement.level ?? 3,
         createdAt: obj.achievement.created_at ?? '',
         type: AchievementVariant[obj.achievement.achievement_type as keyof typeof AchievementVariant],
-        rule: obj.achievement.rule ?? '{}',
+        rule: obj.achievement.rule ?? {},
       });
     });
     const activitites: ActivityFeedData[] = [];
@@ -178,18 +178,22 @@ type UserChallenges = {
 export const convertChallenge = (challengeData: GetChallengesQuery) => {
   const pendingChallenges: PendingChallenge[] = [];
   const ongoingChallenges: OngoingChallenge[] = [];
-  if (challengeData && challengeData.user && challengeData.user?.pending_challenges) {
+  if (challengeData && challengeData.user && challengeData.user?.id && challengeData.user?.pending_challenges) {
+    const user_id = challengeData.user.id;
     challengeData.user.pending_challenges.forEach((obj) => {
       const opponents = convertOpponent(obj.challenge.opponents);
       if (opponents.length >= 1) {
         pendingChallenges.push({
+          user_id: user_id,
+          created_by: obj.challenge.created_by_user,
           id: obj.challenge.id,
           challenge_type: obj.challenge.challenge_type as Challenge_Type_Enum,
           created_at: obj.challenge.created_at,
-          end_date: new Date(obj.challenge.end_date),
-          is_active: obj.challenge.is_active,
-          start_date: new Date(obj.challenge.start_date),
+          end_date: obj.challenge.end_date,
+          state: obj.challenge.state as Challenge_State_Enum,
+          start_date: obj.challenge.start_date,
           opponents: opponents,
+          rules: obj.challenge.rules ?? {},
         });
       }
     });
@@ -200,13 +204,15 @@ export const convertChallenge = (challengeData: GetChallengesQuery) => {
       const opponents = convertOpponent(obj.challenge.opponents);
       ongoingChallenges.push({
         user: user,
+        created_by: obj.challenge.created_by_user,
         id: obj.challenge.id,
         challenge_type: obj.challenge.challenge_type as Challenge_Type_Enum,
         created_at: obj.challenge.created_at,
-        end_date: new Date(obj.challenge.end_date),
-        is_active: obj.challenge.is_active,
-        start_date: new Date(obj.challenge.start_date),
+        end_date: obj.challenge.end_date,
+        state: obj.challenge.state as Challenge_State_Enum,
+        start_date: obj.challenge.start_date,
         opponents: opponents,
+        rules: obj.challenge.rules ?? {},
       });
     });
   }
@@ -220,7 +226,7 @@ export const convertOpponent = (opponentData: OpponentQueryData) => {
       opponents.push({
         id: obj.user.id,
         name: obj.user.name,
-        accepted: obj.accepted,
+        state: obj.state,
         picture: obj.user.picture,
         bio: obj.user.bio,
       } as Opponent),
@@ -230,7 +236,7 @@ export const convertOpponent = (opponentData: OpponentQueryData) => {
 };
 
 type OpponentQueryData = ReadonlyArray<
-  { readonly __typename: 'challenge_participant' } & Pick<Challenge_Participant, 'accepted'> & {
+  { readonly __typename: 'challenge_participant' } & Pick<Challenge_Participant, 'state'> & {
       readonly user: { readonly __typename: 'users' } & BasicUserFragmentFragment;
     }
 >;
