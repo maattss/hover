@@ -1,16 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Leaderboard, { Item } from '../../components/Leaderboard';
-import {
-  ActivityIndicator,
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  TextStyle,
-  ViewStyle,
-  Platform,
-  Button,
-} from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, TextStyle, ViewStyle, Platform, Button } from 'react-native';
 import { HighscoreQueryVariables, useHighscoreQuery } from '../../graphql/queries/Highscore.generated';
 import { Buttons, Colors, Spacing, Typography } from '../../theme';
 import { convertToHighscoreList } from '../../helpers/objectMappers';
@@ -18,6 +8,7 @@ import { Picker } from '@react-native-picker/picker';
 import { PickerItemProps } from '@react-native-picker/picker/typings/Picker';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import moment from 'moment';
+import Loading from '../../components/Loading';
 
 const STATIC_CATEGORIES: PickerItemProps[] = [
   { label: 'All Categories', value: '' },
@@ -52,9 +43,10 @@ const LeaderboardScreen: React.FC = () => {
     if (highscoreData) setHighscores(convertToHighscoreList(highscoreData));
   }, [highscoreData]);
 
+  if (highscoreLoading) return <Loading />;
+  if (highscoreError) return <Text style={styles.infoText}>{highscoreError.message}</Text>;
+
   if (Platform.OS == 'android') {
-    if (highscoreLoading && !refreshing) return <ActivityIndicator size={'large'} color={Colors.blue} />;
-    if (highscoreError) return <Text style={styles.infoText}>{highscoreError.message}</Text>;
     return (
       <View style={styles.container}>
         <View style={styles.filterContainer}>
@@ -117,9 +109,6 @@ const LeaderboardScreen: React.FC = () => {
             </TouchableOpacity>
           )}
         </View>
-
-        {highscoreError && <Text style={styles.infoText}>{highscoreError.message}</Text>}
-        {highscoreLoading && <ActivityIndicator size={'large'} color={Colors.blue} style={styles.refreshIcon} />}
 
         <View style={styles.leaderboardContainer}>
           {!highscoreLoading && !highscoreError && highscores && <Leaderboard data={highscores} refetch={refetch} />}
@@ -260,7 +249,6 @@ const styles: StylesProps = StyleSheet.create({
     ...Typography.bodyText,
     paddingTop: Spacing.base,
   },
-
   filterButton: {
     ...Buttons.button,
     backgroundColor: Colors.transparent,
