@@ -3,6 +3,7 @@ import { Challenge_Participant_State_Enum, Challenge_State_Enum, Challenge_Type_
 
 export type PendingChallenge = {
   user_id: string;
+  created_by: ChallengeUser;
   id: number;
   challenge_type: Challenge_Type_Enum;
   created_at: string;
@@ -25,6 +26,7 @@ export type ChallengeUser = {
 
 export type OngoingChallenge = {
   user: ChallengeUser;
+  created_by: ChallengeUser;
   id: number;
   challenge_type: Challenge_Type_Enum;
   rules: ChallengeRules;

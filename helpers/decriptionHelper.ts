@@ -21,7 +21,7 @@ export const generateDescription = (challenge: PendingChallenge) => {
 };
 
 const scoreDescription = (challenge: PendingChallenge) => {
-  let description = challenge.opponents[0].name;
+  let description = challenge.created_by.name;
   description += ' challenge you to a Score challenge!';
   description += challenge.rules ? ' Be the first person to reach ' + challenge.rules.score + ' points' : '';
   description += challenge.end_date ? ' by ' + toPrettyDate(challenge.end_date) + '.' : '';
@@ -29,7 +29,7 @@ const scoreDescription = (challenge: PendingChallenge) => {
 };
 
 const scoreCategoryDescription = (challenge: PendingChallenge) => {
-  let description = challenge.opponents[0].name;
+  let description = challenge.created_by.name;
   description += ' challenge you to a Category challenge!';
   description += challenge.rules.score ? ' Be the first person to reach ' + challenge.rules.score + ' points' : '';
   description += challenge.rules.category ? ' in the ' + challenge.rules.category.toLowerCase() + ' category' : '';
@@ -38,7 +38,7 @@ const scoreCategoryDescription = (challenge: PendingChallenge) => {
 };
 
 const defaultDescription = (challenge: PendingChallenge) => {
-  let description = challenge.opponents[0].name + ' challenge you to a ';
+  let description = challenge.created_by.name + ' challenge you to a ';
   description += challenge.challenge_type + ' challenge!';
   description += challenge.end_date ? ' by ' + toPrettyDate(challenge.end_date) + '.' : '';
   return description;

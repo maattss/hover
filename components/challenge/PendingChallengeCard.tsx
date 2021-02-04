@@ -41,7 +41,6 @@ const PendingChallengeCard: React.FC<PendingChallengeCardProps> = ({ challenge }
               state: state,
             },
           }).then(() => setPartcipationState(state));
-          console.log(state, 'challenge', challenge.id, challenge);
         }}>
         <Text style={buttonTextStyle}>{buttonText}</Text>
       </TouchableOpacity>
@@ -71,40 +70,37 @@ const PendingChallengeCard: React.FC<PendingChallengeCardProps> = ({ challenge }
     }
   };
 
-  if (challenge.opponents.length == 1) {
-    const opponent = challenge.opponents[0];
-    return (
-      <View style={styles.card}>
-        <View style={styles.topBar}>
-          <View style={styles.topBarAvatar}>
-            <Image source={{ uri: opponent.picture }} style={styles.avatar} />
-          </View>
-          <View style={styles.topBarText}>
-            <Text style={styles.nameText}>{opponent.name}</Text>
-            <Text style={styles.descriptionText}>{generateDescription(challenge)}</Text>
-          </View>
+  return (
+    <View style={styles.card}>
+      <View style={styles.topBar}>
+        <View style={styles.topBarAvatar}>
+          <Image source={{ uri: challenge.created_by.picture }} style={styles.avatar} />
         </View>
-        <ParticipantButtonSwitch />
+        <View style={styles.topBarText}>
+          <Text style={styles.nameText}>{challenge.created_by.name}</Text>
+          <Text style={styles.descriptionText}>{generateDescription(challenge)}</Text>
+        </View>
       </View>
-    );
-  } else if (challenge.opponents.length > 1) {
-    return (
-      <View style={styles.card}>
-        <View style={styles.topBar}>
-          {challenge.opponents.map((opponent) => (
-            <>
-              <Image key={opponent.id} source={{ uri: opponent.picture }} style={styles.avatar} />
-              <View style={styles.topBarText}>
-                <Text style={styles.nameText}>{opponent.name}</Text>
-                <Text style={styles.descriptionText}>{challenge.challenge_type}</Text>
+      {challenge.opponents.length > 1 && (
+        <View style={styles.opponentContainer}>
+          <Text style={styles.opponentHeaderText}>Other partcicipants</Text>
+          {challenge.opponents
+            .filter((opponent) => opponent.id != challenge.created_by.id)
+            .map((opponent) => (
+              <View key={opponent.id} style={styles.opponentRow}>
+                <Image source={{ uri: opponent.picture }} style={styles.opponentAvatar} />
+                <View style={styles.oppnentNameStateRow}>
+                  <Text style={styles.opponentNameText}>{opponent.name}</Text>
+                  <Text style={styles.opponentStateText}>{opponent.state}</Text>
+                </View>
               </View>
-            </>
-          ))}
+            ))}
         </View>
-        <ParticipantButtonSwitch />
-      </View>
-    );
-  } else return <Text>{challenge.end_date.toString()}</Text>;
+      )}
+
+      <ParticipantButtonSwitch />
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({
@@ -144,6 +140,44 @@ const styles = StyleSheet.create({
     color: Colors.almostWhite,
     fontSize: 12,
     fontStyle: 'italic',
+  },
+  opponentContainer: {
+    paddingTop: Spacing.base,
+    justifyContent: 'flex-end',
+    width: '100%',
+    left: '20%',
+  },
+  opponentHeaderText: {
+    color: Colors.almostWhite,
+    fontSize: 12,
+    fontWeight: 'bold',
+    paddingVertical: Spacing.base,
+  },
+  opponentRow: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+  },
+  opponentAvatar: {
+    height: 25,
+    width: 25,
+    borderRadius: 25 / 2,
+    marginRight: Spacing.small,
+  },
+  oppnentNameStateRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '70%',
+  },
+  opponentNameText: {
+    ...Typography.bodyText,
+    fontWeight: 'bold',
+    width: '60%',
+  },
+  opponentStateText: {
+    ...Typography.bodyText,
+    fontSize: 10,
+    fontStyle: 'italic',
+    width: '40%',
   },
   stateUpdateMessage: {
     marginVertical: Spacing.base,

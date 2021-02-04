@@ -52,7 +52,7 @@ export type GeofenceFragmentFragment = { readonly __typename: 'geofences' } & Pi
 export type ChallengeFragmentFragment = { readonly __typename: 'challenge' } & Pick<
   Types.Challenge,
   'id' | 'challenge_type' | 'created_at' | 'start_date' | 'end_date' | 'state' | 'rules'
->;
+> & { readonly created_by_user: { readonly __typename: 'users' } & BasicUserFragmentFragment };
 
 export type AchievementFragmentFragment = { readonly __typename: 'achievement' } & Pick<
   Types.Achievement,
@@ -148,11 +148,15 @@ export const ChallengeFragmentFragmentDoc = gql`
     id
     challenge_type
     created_at
+    created_by_user {
+      ...basicUserFragment
+    }
     start_date
     end_date
     state
     rules
   }
+  ${BasicUserFragmentFragmentDoc}
 `;
 export const AchievementFragmentFragmentDoc = gql`
   fragment achievementFragment on achievement {

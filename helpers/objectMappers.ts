@@ -185,6 +185,7 @@ export const convertChallenge = (challengeData: GetChallengesQuery) => {
       if (opponents.length >= 1) {
         pendingChallenges.push({
           user_id: user_id,
+          created_by: obj.challenge.created_by_user,
           id: obj.challenge.id,
           challenge_type: obj.challenge.challenge_type as Challenge_Type_Enum,
           created_at: obj.challenge.created_at,
@@ -203,6 +204,7 @@ export const convertChallenge = (challengeData: GetChallengesQuery) => {
       const opponents = convertOpponent(obj.challenge.opponents);
       ongoingChallenges.push({
         user: user,
+        created_by: obj.challenge.created_by_user,
         id: obj.challenge.id,
         challenge_type: obj.challenge.challenge_type as Challenge_Type_Enum,
         created_at: obj.challenge.created_at,
