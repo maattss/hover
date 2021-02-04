@@ -5,10 +5,11 @@ import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import useTracking from '../../hooks/useTracking';
 import { Buttons, Colors, Spacing, Typography } from '../../theme';
 import { HoverStackParamList } from '../../types/navigationTypes';
-import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
+import { FontAwesome as FAIcon } from '@expo/vector-icons';
+import { FontAwesome5 as FA5Icon } from '@expo/vector-icons';
 import { getCategoryColor, getCategoryIconName } from '../../components/feed/ActivityFeedCard';
 import { GeoFenceCategory } from '../../types/geoFenceTypes';
-import { timeStampToHours } from '../../helpers/dateTimeHelpers';
+import { fromSecondsToHours, timeStampToHours } from '../../helpers/dateTimeHelpers';
 
 type NavigationProp = StackNavigationProp<HoverStackParamList>;
 
@@ -27,30 +28,29 @@ const PublishScreen: React.FC<ExploreProps> = ({ navigation }: ExploreProps) => 
 
   const discardActivity = () => {
     Alert.alert('Discard activity', 'Are you sure you want to discard this activity? It will be lost forever.', [
-      { text: 'No' },
+      { text: 'No', style: 'cancel' },
       {
-        text: "Yes, I don't care",
+        text: 'Yes',
         onPress: () => {
           tracking.discardActivity();
           navigation.navigate('Explore');
         },
+        style: 'destructive',
       },
     ]);
   };
   const publishActivity = () => {
-    tracking.stopTracking('Test caption');
+    tracking.stopTracking(caption);
     navigation.navigate('Explore');
   };
   const categoryColor = {
     color: getCategoryColor(GeoFenceCategory.EDUCATION),
   };
-  // TODO: Update resume/discard buttons
-  // TODO: Add appropriate geofence category
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.topBar}>
         <View style={styles.topBarIcon}>
-          <FAIcon name={'info-circle'} style={styles.questionIcon} />
+          <FAIcon name={'question-circle'} style={styles.questionIcon} />
         </View>
 
         <View style={styles.resumeDiscardContainer}>
@@ -67,10 +67,10 @@ const PublishScreen: React.FC<ExploreProps> = ({ navigation }: ExploreProps) => 
       </View>
 
       <View style={styles.trackingInfoContainer}>
-        <Text style={styles.infoScore}>{Math.floor(tracking.score)} points</Text>
+        <Text style={styles.infoScore}>{Math.floor(tracking.score)} points!</Text>
         <View style={styles.infoContainer}>
           <Text style={styles.infoText}>Duration</Text>
-          <Text style={styles.infoTextSmall}>{tracking.duration}</Text>
+          <Text style={styles.infoTextSmall}>{fromSecondsToHours(tracking.duration)}</Text>
         </View>
         <View style={styles.infoContainer}>
           <Text style={styles.infoText}>Started at</Text>
@@ -82,7 +82,7 @@ const PublishScreen: React.FC<ExploreProps> = ({ navigation }: ExploreProps) => 
         </View>
         <View style={[styles.infoContainer, { marginBottom: 0 }]}>
           <Text style={styles.infoText}>Category</Text>
-          <FAIcon
+          <FA5Icon
             style={[styles.categoryIcon, categoryColor]}
             name={getCategoryIconName(tracking.insideGeoFence?.category)}
           />

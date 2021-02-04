@@ -14,9 +14,11 @@ export const timeStampToPresentable = (timestamp: string) => {
 };
 export const timeStampToHours = (timestamp: string) => {
   if (timestamp === '') {
-    const current = getCurrentTimestamp();
-    return moment(current).hours() + ':' + moment(current).minutes();
+    return moment(getCurrentTimestamp()).format('HH:mm');
   } else {
-    return moment(timestamp).hours() + ':' + moment(timestamp).minutes();
+    return moment(timestamp).format('HH:mm');
   }
+};
+export const fromSecondsToHours = (duration: number) => {
+  return moment({}).seconds(duration).format('HH:mm:ss');
 };
