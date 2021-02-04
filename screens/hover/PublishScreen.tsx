@@ -1,6 +1,16 @@
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, SafeAreaView, Alert } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Alert,
+  TouchableWithoutFeedback,
+  KeyboardAvoidingView,
+  Platform,
+  Keyboard,
+  Dimensions,
+} from 'react-native';
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import useTracking from '../../hooks/useTracking';
 import { Buttons, Colors, Spacing, Typography } from '../../theme';
@@ -10,6 +20,9 @@ import { FontAwesome5 as FA5Icon } from '@expo/vector-icons';
 import { getCategoryColor, getCategoryIconName } from '../../components/feed/ActivityFeedCard';
 import { GeoFenceCategory } from '../../types/geoFenceTypes';
 import { durationToTimestamp, timeStampToHours } from '../../helpers/dateTimeHelpers';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
+const { width, height } = Dimensions.get('window');
 
 type NavigationProp = StackNavigationProp<HoverStackParamList>;
 
@@ -32,8 +45,8 @@ const PublishScreen: React.FC<ExploreProps> = ({ navigation }: ExploreProps) => 
       {
         text: 'Yes',
         onPress: () => {
-          tracking.discardActivity();
           navigation.navigate('Explore');
+          tracking.discardActivity();
         },
         style: 'destructive',
       },
@@ -47,71 +60,88 @@ const PublishScreen: React.FC<ExploreProps> = ({ navigation }: ExploreProps) => 
     color: getCategoryColor(GeoFenceCategory.EDUCATION),
   };
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.topBar}>
-        <View style={styles.topBarIcon}>
-          <FAIcon name={'question-circle'} style={styles.questionIcon} />
-        </View>
+    <View style={styles.container}>
+      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={{ flex: 1 }}>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <View style={styles.inner}>
+            <SafeAreaView style={styles.safeInner}>
+              <View style={styles.topBar}>
+                <View style={styles.topBarIcon}>
+                  <FAIcon name={'question-circle'} style={styles.questionIcon} />
+                </View>
 
-        <View style={styles.resumeDiscardContainer}>
-          <Text style={styles.infoTextSmall}>Not ready to publish{'\n'}this activity yet?</Text>
-          <View style={styles.resumeDiscardButtons}>
-            <TouchableOpacity style={[styles.resumeButton, { backgroundColor: Colors.green }]} onPress={resumeTracking}>
-              <Text style={{ ...Buttons.buttonText }}>Resume</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.discardButton} onPress={discardActivity}>
-              <Text style={{ ...Buttons.buttonText }}>Discard</Text>
-            </TouchableOpacity>
+                <View style={styles.resumeDiscardContainer}>
+                  <Text style={styles.infoTextSmall}>Not ready to publish{'\n'}this activity yet?</Text>
+                  <View style={styles.resumeDiscardButtons}>
+                    <TouchableOpacity
+                      style={[styles.resumeButton, { backgroundColor: Colors.green }]}
+                      onPress={resumeTracking}>
+                      <Text style={{ ...Buttons.buttonText }}>Resume</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.discardButton} onPress={discardActivity}>
+                      <Text style={{ ...Buttons.buttonText }}>Discard</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </View>
+
+              <View style={styles.trackingInfoContainer}>
+                <Text style={styles.infoScore}>{Math.floor(tracking.score)} points</Text>
+                <View style={styles.infoContainer}>
+                  <Text style={styles.infoText}>Duration</Text>
+                  <Text style={styles.infoTextSmall}>{durationToTimestamp(tracking.duration)}</Text>
+                </View>
+                <View style={styles.infoContainer}>
+                  <Text style={styles.infoText}>Started at</Text>
+                  <Text style={styles.infoTextSmall}>{timeStampToHours(tracking.trackingStart)}</Text>
+                </View>
+                <View style={styles.infoContainer}>
+                  <Text style={styles.infoText}>Location</Text>
+                  <Text style={styles.infoTextSmall}>{tracking.insideGeoFence?.name}</Text>
+                </View>
+                <View style={[styles.infoContainer, { marginBottom: 0 }]}>
+                  <Text style={styles.infoText}>Category</Text>
+                  <FA5Icon
+                    style={[styles.categoryIcon, categoryColor]}
+                    name={getCategoryIconName(tracking.insideGeoFence?.category)}
+                  />
+                </View>
+                <View>
+                  <TextInput
+                    placeholder="Insert a funny text that describes the activity!"
+                    placeholderTextColor={Colors.gray600}
+                    onChangeText={(val) => setCaption(val)}
+                    style={styles.formField}
+                    multiline>
+                    {caption}
+                  </TextInput>
+                </View>
+              </View>
+
+              <View style={styles.publishButtonContainer}>
+                <TouchableOpacity style={styles.publishButton} onPress={publishActivity}>
+                  <Text style={styles.publishButtonText}>Publish</Text>
+                </TouchableOpacity>
+              </View>
+            </SafeAreaView>
           </View>
-        </View>
-      </View>
-
-      <View style={styles.trackingInfoContainer}>
-        <Text style={styles.infoScore}>{Math.floor(tracking.score)} points</Text>
-        <View style={styles.infoContainer}>
-          <Text style={styles.infoText}>Duration</Text>
-          <Text style={styles.infoTextSmall}>{durationToTimestamp(tracking.duration)}</Text>
-        </View>
-        <View style={styles.infoContainer}>
-          <Text style={styles.infoText}>Started at</Text>
-          <Text style={styles.infoTextSmall}>{timeStampToHours(tracking.trackingStart)}</Text>
-        </View>
-        <View style={styles.infoContainer}>
-          <Text style={styles.infoText}>Location</Text>
-          <Text style={styles.infoTextSmall}>{tracking.insideGeoFence?.name}</Text>
-        </View>
-        <View style={[styles.infoContainer, { marginBottom: 0 }]}>
-          <Text style={styles.infoText}>Category</Text>
-          <FA5Icon
-            style={[styles.categoryIcon, categoryColor]}
-            name={getCategoryIconName(tracking.insideGeoFence?.category)}
-          />
-        </View>
-        <TextInput
-          placeholder="Insert a funny text that describes the activity!"
-          placeholderTextColor={Colors.gray600}
-          onChangeText={(val) => setCaption(val)}
-          style={styles.formField}
-          numberOfLines={3}
-          multiline>
-          {caption}
-        </TextInput>
-      </View>
-
-      <View style={styles.publishButtonContainer}>
-        <TouchableOpacity style={styles.publishButton} onPress={publishActivity}>
-          <Text style={styles.publishButtonText}>Publish</Text>
-        </TouchableOpacity>
-      </View>
-    </SafeAreaView>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
+    height: height,
+  },
+  inner: {
+    justifyContent: 'flex-end',
     flex: 1,
-    margin: Spacing.smaller,
+  },
+  safeInner: {
     justifyContent: 'space-between',
+    height: '100%',
   },
   categoryIcon: {
     color: Colors.almostWhite,
@@ -126,7 +156,7 @@ const styles = StyleSheet.create({
   infoContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: Spacing.small,
+    marginBottom: Spacing.base,
     alignItems: 'center',
   },
   infoText: {
@@ -152,6 +182,7 @@ const styles = StyleSheet.create({
   },
   publishButtonContainer: {
     padding: Spacing.base,
+    marginBottom: Spacing.extraLarge,
   },
   publishButton: {
     ...Buttons.button,

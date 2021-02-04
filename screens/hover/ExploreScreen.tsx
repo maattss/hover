@@ -101,7 +101,10 @@ const ExploreScreen: React.FC<ExploreProps> = ({ navigation }: ExploreProps) => 
       </View>
 
       <View style={styles.startButtonContainer}>
-        <TouchableOpacity style={[styles.startButton, getDynamicButtonStyles()]} onPress={startTracking}>
+        <TouchableOpacity
+          style={[styles.startButton, getDynamicButtonStyles()]}
+          onPress={startTracking}
+          disabled={disableTracking}>
           {disableTracking ? <ActivityIndicator /> : <Text style={styles.startButtonText}>Start</Text>}
         </TouchableOpacity>
       </View>
