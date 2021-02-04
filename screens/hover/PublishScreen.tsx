@@ -1,10 +1,11 @@
 import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
-import { ActivityIndicator, StyleSheet, Text, View, SafeAreaView } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, Alert } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import useTracking from '../../hooks/useTracking';
 import { Buttons, Colors, Spacing, Typography } from '../../theme';
 import { HoverStackParamList } from '../../types/navigationTypes';
+import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 
 type NavigationProp = StackNavigationProp<HoverStackParamList>;
 
@@ -20,6 +21,18 @@ const PublishScreen: React.FC<ExploreProps> = ({ navigation }: ExploreProps) => 
     navigation.goBack();
   };
 
+  const discardActivity = () => {
+    Alert.alert('Discard activity', 'Are you sure you want to discard this activity? It will be lost forever.', [
+      { text: 'No' },
+      {
+        text: "Yes, I don{'}t care",
+        onPress: () => {
+          tracking.discardActivity();
+          navigation.navigate('Explore');
+        },
+      },
+    ]);
+  };
   const publishActivity = () => {
     tracking.stopTracking();
     navigation.navigate('Explore');
@@ -27,17 +40,23 @@ const PublishScreen: React.FC<ExploreProps> = ({ navigation }: ExploreProps) => 
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={{ ...Typography.headerText, marginTop: Spacing.base }}>Publish Activity</Text>
+      <Text style={{ ...Typography.headerText, marginTop: Spacing.base }}>Publish</Text>
       <View style={styles.trackingInfoContainer}>
         <Text style={styles.scoreText}>Duration: {tracking.duration}</Text>
         <Text style={styles.scoreText}>Score: {Math.floor(tracking.score)}</Text>
       </View>
-      <View style={styles.stopButtonContainer}>
+      <View style={styles.resumeButtonContainer}>
         <TouchableOpacity style={[styles.trackingButton, { backgroundColor: Colors.green }]} onPress={resumeTracking}>
           <Text style={styles.trackingButtonText}>Resume</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={[styles.trackingButton, { backgroundColor: Colors.blue }]} onPress={publishActivity}>
-          <Text style={styles.trackingButtonText}>Publish</Text>
+      </View>
+      <View style={styles.publishButtonContainer}>
+        <TouchableOpacity style={styles.discardButton} onPress={discardActivity}>
+          <Text style={styles.publishButtonText}>Discard</Text>
+          {/* <FAIcon name={'trash'} size={'large'} /> */}
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.publishButton} onPress={publishActivity}>
+          <Text style={styles.publishButtonText}>Publish</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -46,8 +65,7 @@ const PublishScreen: React.FC<ExploreProps> = ({ navigation }: ExploreProps) => 
 
 const styles = StyleSheet.create({
   container: {
-    width: '100%',
-    height: '100%',
+    flex: 1,
     margin: Spacing.smaller,
   },
   trackingInfoContainer: {
@@ -64,11 +82,10 @@ const styles = StyleSheet.create({
     marginTop: Spacing.base,
     marginBottom: Spacing.base,
   },
-  stopButtonContainer: {
+  resumeButtonContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginLeft: Spacing.extraLarge,
-    marginRight: Spacing.extraLarge,
+    justifyContent: 'center',
+    margin: Spacing.base,
   },
   trackingButton: {
     padding: Spacing.smallest,
@@ -78,6 +95,23 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   trackingButtonText: {
+    ...Buttons.buttonText,
+    fontSize: 24,
+    textAlign: 'center',
+  },
+  publishButtonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    margin: Spacing.base,
+  },
+  publishButton: {
+    ...Buttons.button,
+  },
+  discardButton: {
+    ...Buttons.button,
+    backgroundColor: Colors.red,
+  },
+  publishButtonText: {
     ...Buttons.buttonText,
     fontSize: 24,
     textAlign: 'center',
