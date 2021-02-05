@@ -2,10 +2,10 @@
 import * as Types from '../types/types';
 
 import { gql } from '@apollo/client';
-export type BasicUserFragmentFragment = { readonly __typename: 'users' } & Pick<
-  Types.Users,
-  'id' | 'email' | 'name' | 'picture' | 'bio'
->;
+export type ListUserFragmentFragment = { readonly __typename: 'users' } & Pick<Types.Users, 'id' | 'name' | 'picture'>;
+
+export type BasicUserFragmentFragment = { readonly __typename: 'users' } & Pick<Types.Users, 'email' | 'bio'> &
+  ListUserFragmentFragment;
 
 export type UserFragmentFragment = { readonly __typename: 'users' } & {
   readonly followers: ReadonlyArray<
@@ -56,54 +56,20 @@ export type AchievementFragmentFragment = { readonly __typename: 'achievement' }
   'id' | 'description' | 'name' | 'achievement_type' | 'level' | 'created_at' | 'rule'
 >;
 
-export type OpponentFragmentFragment = { readonly __typename: 'challenge_participant' } & Pick<
-  Types.Challenge_Participant,
-  'state'
-> & { readonly user: { readonly __typename: 'users' } & Pick<Types.Users, 'id' | 'name' | 'picture'> };
-
-export type ChallengeTypeFragmentFragment = { readonly __typename: 'challenge_type' } & Pick<
-  Types.Challenge_Type,
-  'name' | 'description'
->;
-
-export type ActivityFeedFragmentFragment = { readonly __typename: 'feed' } & Pick<Types.Feed, 'id' | 'created_at'> & {
-    readonly user?: Types.Maybe<{ readonly __typename: 'users' } & BasicUserFragmentFragment>;
-    readonly activity?: Types.Maybe<{ readonly __typename: 'activities' } & BasicActivityFragmentFragment>;
-  };
-
-export type AchievementFeedFragmentFragment = { readonly __typename: 'feed' } & Pick<
-  Types.Feed,
-  'id' | 'created_at'
-> & {
-    readonly user?: Types.Maybe<{ readonly __typename: 'users' } & BasicUserFragmentFragment>;
-    readonly user_achievement?: Types.Maybe<
-      { readonly __typename: 'user_achievement' } & {
-        readonly achievement: { readonly __typename: 'achievement' } & AchievementFragmentFragment;
-      }
-    >;
-  };
-
-export type FullFeedFragmentFragment = { readonly __typename: 'feed' } & Pick<
-  Types.Feed,
-  'id' | 'activity_id' | 'achievement_id' | 'created_at'
-> & {
-    readonly user?: Types.Maybe<{ readonly __typename: 'users' } & BasicUserFragmentFragment>;
-    readonly activity?: Types.Maybe<{ readonly __typename: 'activities' } & BasicActivityFragmentFragment>;
-    readonly user_achievement?: Types.Maybe<
-      { readonly __typename: 'user_achievement' } & {
-        readonly achievement: { readonly __typename: 'achievement' } & AchievementFragmentFragment;
-      }
-    >;
-  };
-
-export const BasicUserFragmentFragmentDoc = gql`
-  fragment basicUserFragment on users {
+export const ListUserFragmentFragmentDoc = gql`
+  fragment listUserFragment on users {
     id
-    email
     name
     picture
+  }
+`;
+export const BasicUserFragmentFragmentDoc = gql`
+  fragment basicUserFragment on users {
+    ...listUserFragment
+    email
     bio
   }
+  ${ListUserFragmentFragmentDoc}
 `;
 export const GeofenceFragmentFragmentDoc = gql`
   fragment geofenceFragment on geofences {

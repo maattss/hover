@@ -1,0 +1,5 @@
+query GetFriends($user_id: String) {
+  users(order_by: { name: asc }, where: { id: { _neq: $user_id } }) {
+    ...listUserFragment
+  }
+}
