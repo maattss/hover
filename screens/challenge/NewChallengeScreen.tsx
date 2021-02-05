@@ -3,7 +3,7 @@ import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import Button from '../../components/Button';
+import Button from '../../components/general/Button';
 import { Buttons, Colors, Spacing } from '../../theme';
 import { ChallengeStackParamList } from '../../types/navigationTypes';
 
@@ -44,6 +44,7 @@ const NewChallengeScreen: React.FC<Props> = ({ route, navigation }: Props) => {
   return (
     <View style={styles.container}>
       <View style={styles.box}>
+<<<<<<< HEAD
         <Button
           onPress={() =>
             // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
@@ -51,6 +52,9 @@ const NewChallengeScreen: React.FC<Props> = ({ route, navigation }: Props) => {
           }>
           Pick users to challenge
         </Button>
+=======
+        <PickUsersScreen />
+>>>>>>> create challenges init
       </View>
     </View>
   );

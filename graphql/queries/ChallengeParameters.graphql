@@ -1,0 +1,10 @@
+query GetChallengeParams($user_id: String) {
+  users(order_by: { name: asc }, where: { id: { _neq: $user_id } }) {
+    id
+    name
+  }
+  challenge_type(order_by: { name: asc }) {
+    name
+    description
+  }
+}
