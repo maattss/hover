@@ -3,20 +3,21 @@ import { StyleSheet, Text, View } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import { Challenge_Participant_Insert_Input, Challenge_Participant_State_Enum } from '../../types/types';
 import CheckBox from '@react-native-community/checkbox';
-import { useGetChallengeParamsQuery } from '../../graphql/queries/ChallengeParameters.generated';
 import Loading from '../../components/Loading';
 import { ChallengeStackParamList } from '../../types/navigationTypes';
 import { RouteProp } from '@react-navigation/native';
+import { useGetFriendsQuery } from '../../graphql/queries/Friends.generated';
+import { ListUserFragmentFragment } from '../../graphql/Fragments.generated';
 
-type ChallengeScreenRouteProp = RouteProp<ChallengeStackParamList, 'PickUsers'>;
+type PickUsersRouteProp = RouteProp<ChallengeStackParamList, 'PickUsers'>;
 
 type Props = {
-  route: ChallengeScreenRouteProp;
+  route: PickUsersRouteProp;
 };
 const PickUsersScreen: React.FC<Props> = ({ route }: Props) => {
   //const [challengeOpponentsOption, setChallengeOpponentsOption] = useState<[]>();
 
-  const { data: challengeParams, loading } = useGetChallengeParamsQuery({
+  const { data: friends, loading } = useGetFriendsQuery({
     variables: { user_id: route.params.user_id },
   });
 
@@ -40,7 +41,7 @@ const PickUsersScreen: React.FC<Props> = ({ route }: Props) => {
     console.log(participants);
   };
 
-  const renderItem = (item: { id: string; name: string }) => (
+  const renderItem = (item: ListUserFragmentFragment) => (
     <View>
       <View style={styles.checkboxContainer}>
         <CheckBox value={false} onValueChange={onChecked} style={styles.checkbox} />
@@ -51,8 +52,8 @@ const PickUsersScreen: React.FC<Props> = ({ route }: Props) => {
 
   return (
     <FlatList
-      data={challengeParams?.users}
-      keyExtractor={(index) => index.toString()}
+      data={friends?.users as ListUserFragmentFragment[]}
+      keyExtractor={(item) => item.id.toString()}
       renderItem={({ item }) => renderItem(item)}
     />
   );
