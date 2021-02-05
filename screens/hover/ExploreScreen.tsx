@@ -1,6 +1,15 @@
 import React, { useState, createRef, useEffect } from 'react';
-import MapView, { MapTypes } from 'react-native-maps';
-import { StyleSheet, Dimensions, Text, View, TouchableOpacity, ViewStyle, ActivityIndicator } from 'react-native';
+import MapView, { MapTypes, Region } from 'react-native-maps';
+import {
+  StyleSheet,
+  Dimensions,
+  Text,
+  View,
+  TouchableOpacity,
+  ViewStyle,
+  ActivityIndicator,
+  Alert,
+} from 'react-native';
 import { Colors, Spacing, Typography, Buttons } from '../../theme';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import useTracking from '../../hooks/useTracking';
@@ -8,6 +17,8 @@ import { defaultMapLocation } from '../../helpers/objectMappers';
 import GeoFences from '../../components/GeoFences';
 import { HoverStackParamList } from '../../types/navigationTypes';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import * as Location from 'expo-location';
 
 const { width, height } = Dimensions.get('window');
 
@@ -21,7 +32,9 @@ const ExploreScreen: React.FC<ExploreProps> = ({ navigation }: ExploreProps) => 
   const [chosenMapType, setChosenMapType] = useState<MapTypes>('standard');
   const [centreOnUser, setCentreOnUser] = useState(false);
   const [disableTracking, setDisableTracking] = useState(true);
+  const [loadingUserPos, setLoadingUserPos] = useState(true);
   const tracking = useTracking();
+  const insets = useSafeAreaInsets();
   // Refetch geofences on init render
   useEffect(() => {
     tracking.refetchGeofences();
@@ -48,12 +61,13 @@ const ExploreScreen: React.FC<ExploreProps> = ({ navigation }: ExploreProps) => 
     chosenMapType === 'satellite' ? setChosenMapType('standard') : setChosenMapType('satellite');
 
   useEffect(() => {
+    if (tracking.userLocation !== null) setLoadingUserPos(false);
     if (tracking.insideGeoFence) {
       setDisableTracking(false);
     } else {
       setDisableTracking(true);
     }
-  }, [tracking.insideGeoFence]);
+  }, [tracking.insideGeoFence, tracking.userLocation]);
 
   const mapView = createRef<MapView>();
   const animateMapToUserPos = () => {
@@ -66,8 +80,15 @@ const ExploreScreen: React.FC<ExploreProps> = ({ navigation }: ExploreProps) => 
       navigation.navigate('Tracking');
     }
   };
+  const notInsideGeoFenceAlert = () => {
+    Alert.alert(
+      'Not inside a Hover zone',
+      "Sorry, you can't start tracking here! Move to a Hover zone to start earning points.",
+      [{ text: 'Ok', style: 'cancel' }],
+    );
+  };
   const getDynamicButtonStyles = () => {
-    if (disableTracking) {
+    if (disableTracking || loadingUserPos) {
       return {
         backgroundColor: Colors.grayTransparent,
       } as ViewStyle;
@@ -77,7 +98,11 @@ const ExploreScreen: React.FC<ExploreProps> = ({ navigation }: ExploreProps) => 
       } as ViewStyle;
     }
   };
-  // TODO: Handle if user is not inside geofence, i.e. not start tracking
+  const getSafeAreaTop = () => {
+    return {
+      marginTop: insets.top,
+    } as ViewStyle;
+  };
   return (
     <View>
       <MapView
@@ -91,7 +116,7 @@ const ExploreScreen: React.FC<ExploreProps> = ({ navigation }: ExploreProps) => 
         <GeoFences geofences={tracking.geoFences} />
       </MapView>
 
-      <View style={styles.infoContainer}>
+      <View style={[styles.infoContainer, getSafeAreaTop()]}>
         <TouchableOpacity style={styles.mapStyleButton} onPress={toggleMapType}>
           <FAIcon style={mapTypeIconStyle} name="globe-europe" />
         </TouchableOpacity>
@@ -103,9 +128,10 @@ const ExploreScreen: React.FC<ExploreProps> = ({ navigation }: ExploreProps) => 
       <View style={styles.startButtonContainer}>
         <TouchableOpacity
           style={[styles.startButton, getDynamicButtonStyles()]}
-          onPress={startTracking}
-          disabled={disableTracking}>
-          {disableTracking ? <ActivityIndicator /> : <Text style={styles.startButtonText}>Start</Text>}
+          onPress={disableTracking ? notInsideGeoFenceAlert : startTracking}
+          disabled={loadingUserPos}>
+          {loadingUserPos && <ActivityIndicator />}
+          {!loadingUserPos && <Text style={styles.startButtonText}>Start</Text>}
         </TouchableOpacity>
       </View>
     </View>

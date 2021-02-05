@@ -67,11 +67,6 @@ const PublishScreen: React.FC<ExploreProps> = ({ navigation }: ExploreProps) => 
       marginTop: insets.top,
     } as ViewStyle;
   };
-  const getSafeAreaBottom = () => {
-    return {
-      marginBottom: insets.bottom,
-    } as ViewStyle;
-  };
   const getSafeAreaHeight = () => {
     return {
       height: insets.top,
