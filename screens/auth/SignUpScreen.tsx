@@ -68,6 +68,7 @@ const SignUpScreen = ({ navigation }: StackScreenProps<RootStackParamList, 'Sign
             onChangeText={(val) => setPassword(val)}
             autoCapitalize="none"
             secureTextEntry
+            autoCorrect={false}
             style={styles.formField}
           />
           <TextInput

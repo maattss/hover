@@ -34,6 +34,7 @@ const LoginScreen = ({ navigation }: StackScreenProps<RootStackParamList, 'Login
             placeholderTextColor={Colors.gray600}
             onChangeText={(val) => setEmail(val)}
             autoCapitalize="none"
+            autoCorrect={false}
             keyboardType="email-address"
             style={styles.formField}
           />

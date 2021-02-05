@@ -64,13 +64,14 @@ const SettingsScreen: React.FC<SettingsProps> = ({ navigation }: SettingsProps) 
 
   const areYouSure = () =>
     Alert.alert(
-      'Are you Sure?',
+      'Are you sure?',
       'You will be signed out of your account.',
       [
         {
           text: 'Cancel',
+          style: 'cancel',
         },
-        { text: 'Sign out', onPress: () => handleLogout() },
+        { text: 'Sign out', style: 'destructive', onPress: handleLogout },
       ],
       { cancelable: false },
     );

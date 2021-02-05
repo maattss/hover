@@ -15,8 +15,8 @@ import Loading from '../../components/Loading';
 
 const ProfileScreen: React.FC = () => {
   const id = useAuthentication().user?.uid;
-  const [userProfile, setUserProfile] = useState<UserProfile>(defaultUserProfile);
   if (id) {
+    const [userProfile, setUserProfile] = useState<UserProfile>(defaultUserProfile);
     const [refreshing, setRefreshing] = useState(false);
     const [limit, setLimit] = useState(3);
     const onRefresh = useCallback(async () => {
@@ -147,8 +147,9 @@ const ProfileScreen: React.FC = () => {
         </View>
       </ScrollView>
     );
+  } else {
+    return <></>;
   }
-  return <></>;
 };
 
 const styles = StyleSheet.create({
