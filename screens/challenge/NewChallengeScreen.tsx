@@ -1,49 +1,38 @@
-import React, { useState } from 'react';
-import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { Buttons, Colors, Spacing, Typography } from '../../theme';
-import useAuthentication from '../../hooks/useAuthentication';
-import { useInsertChallengeMutation } from '../../graphql/mutations/InsertChallenge.generated';
-import {
-  Challenge_Participant_Insert_Input,
-  Challenge_Participant_State_Enum,
-  Challenge_Type_Enum,
-} from '../../types/types';
+import React from 'react';
+import { StyleSheet, View } from 'react-native';
+import { Buttons, Colors, Spacing } from '../../theme';
+import PickUsersScreen from './PickUsersScreen';
 
-const ChallengeScreen: React.FC = () => {
-  const user_id = useAuthentication().user?.uid;
-  const [challengeType, setChallengeType] = useState<Challenge_Type_Enum>(Challenge_Type_Enum.Score);
-  const [endDate, setEndDate] = useState<Date>(new Date('2021-02-11'));
-  const [participants, setParticipants] = useState<Challenge_Participant_Insert_Input[]>([
+const NewChallengeScreen: React.FC = () => {
+  // const user_id = useAuthentication().user?.uid;
+  //const [challengeType] = useState<Challenge_Type_Enum>(Challenge_Type_Enum.Score);
+  //const [endDate] = useState<Date>(new Date('2021-02-11'));
+  //const [challengeTypeOptions, setChallengeTypeOptions] = useState<PickerItemProps[]>();
+
+  // const { data: challengeParams } = useGetChallengeParamsQuery({ variables: { user_id: user_id } });
+
+  /*useEffect(() => {
+    setChallengeTypeOptions(
+      challengeParams?.challenge_type.map<PickerItemProps>((item) => ({
+        label: item.name,
+        value: item.name,
+      })),
+    );
+  }, [challengeParams]); */
+
+  /*const [participants] = useState<Challenge_Participant_Insert_Input[]>([
     { user_id: user_id, state: Challenge_Participant_State_Enum.Accepted },
     { user_id: 'LqzKOPWaY9aiquOGu9SBItAfJUz2' },
-  ]);
+  ]);*/
 
-  const [createChallenge, { data, loading, error }] = useInsertChallengeMutation({
+  /*const [createChallenge] = useInsertChallengeMutation({
     variables: { challenge_type: challengeType, end_date: endDate, participants: participants },
-  });
-
-  if (loading) {
-    return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size={'large'} color={Colors.blue} />
-      </View>
-    );
-  }
-  if (error) {
-    return (
-      <View style={styles.loadingContainer}>
-        <Text style={{ ...Typography.bodyText, marginTop: Spacing.base }}>{error.message}</Text>
-      </View>
-    );
-  }
+  });*/
 
   return (
     <View style={styles.container}>
       <View style={styles.box}>
-        <Text style={{ ...Typography.headerText, marginTop: Spacing.base }}>Create new Challenge</Text>
-        <TouchableOpacity style={styles.challengeButton}>
-          <Text style={{ ...Buttons.buttonText }}>Create challenge</Text>
-        </TouchableOpacity>
+        <PickUsersScreen />
       </View>
     </View>
   );
@@ -55,14 +44,6 @@ const styles = StyleSheet.create({
     padding: Spacing.base,
     alignItems: 'center',
     justifyContent: 'space-between',
-  },
-  loadingContainer: {
-    display: 'flex',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    height: '100%',
-    width: '100%',
-    marginTop: '20%',
   },
   box: {
     backgroundColor: Colors.gray900,
@@ -81,4 +62,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ChallengeScreen;
+export default NewChallengeScreen;
