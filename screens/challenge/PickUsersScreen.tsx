@@ -1,21 +1,27 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-//import { useGetChallengeParamsQuery } from '../../graphql/queries/ChallengeParameters.generated';
 import { FlatList } from 'react-native-gesture-handler';
-import useAuthentication from '../../hooks/useAuthentication';
 import { Challenge_Participant_Insert_Input, Challenge_Participant_State_Enum } from '../../types/types';
 import CheckBox from '@react-native-community/checkbox';
 import { useGetChallengeParamsQuery } from '../../graphql/queries/ChallengeParameters.generated';
 import Loading from '../../components/Loading';
+import { ChallengeStackParamList } from '../../types/navigationTypes';
+import { RouteProp } from '@react-navigation/native';
 
-const PickUsersScreen: React.FC = () => {
-  const user_id = useAuthentication().user?.uid;
+type ChallengeScreenRouteProp = RouteProp<ChallengeStackParamList, 'PickUsers'>;
+
+type Props = {
+  route: ChallengeScreenRouteProp;
+};
+const PickUsersScreen: React.FC<Props> = ({ route }: Props) => {
   //const [challengeOpponentsOption, setChallengeOpponentsOption] = useState<[]>();
 
-  const { data: challengeParams, loading } = useGetChallengeParamsQuery({ variables: { user_id: user_id } });
+  const { data: challengeParams, loading } = useGetChallengeParamsQuery({
+    variables: { user_id: route.params.user_id },
+  });
 
   const participants: Challenge_Participant_Insert_Input[] = [
-    { user_id: user_id, state: Challenge_Participant_State_Enum.Accepted },
+    { user_id: route.params.user_id, state: Challenge_Participant_State_Enum.Accepted },
     //    { user_id: 'LqzKOPWaY9aiquOGu9SBItAfJUz2' },
   ];
 
