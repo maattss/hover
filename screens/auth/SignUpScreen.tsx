@@ -4,6 +4,7 @@ import { Text, View, TextInput, TouchableOpacity, Alert, StyleSheet } from 'reac
 import { RootStackParamList } from '../../types/navigationTypes';
 import Firebase, { fns } from '../../lib/firebase';
 import { Buttons, Colors, Spacing, Typography } from '../../theme';
+import Button from '../../components/Button';
 import Loading from '../../components/Loading';
 
 const SignUpScreen = ({ navigation }: StackScreenProps<RootStackParamList, 'Signup'>) => {
@@ -43,9 +44,9 @@ const SignUpScreen = ({ navigation }: StackScreenProps<RootStackParamList, 'Sign
   if (loading) {
     return (
       <Loading text={'Signing up... Please wait'}>
-        <TouchableOpacity style={styles.cancelButton} onPress={handleCancel}>
-          <Text style={{ ...Buttons.buttonText }}>Cancel</Text>
-        </TouchableOpacity>
+        <Button style={styles.cancelButton} onPress={handleCancel}>
+          Cancel
+        </Button>
       </Loading>
     );
   } else {
@@ -77,9 +78,7 @@ const SignUpScreen = ({ navigation }: StackScreenProps<RootStackParamList, 'Sign
             secureTextEntry
             style={styles.formField}
           />
-          <TouchableOpacity style={styles.signUpButton} onPress={handleSignup}>
-            <Text style={{ ...Buttons.buttonText, color: Colors.white }}>Sign up</Text>
-          </TouchableOpacity>
+          <Button onPress={handleSignup}>Sign up</Button>
         </View>
         <View style={styles.loginContainer}>
           <Text style={{ ...Typography.bodyText }}>Already have an account?</Text>
@@ -120,13 +119,6 @@ const styles = StyleSheet.create({
   infoText: {
     ...Typography.bodyText,
     paddingTop: Spacing.base,
-  },
-  signUpButton: {
-    ...Buttons.button,
-    backgroundColor: Colors.blue,
-    width: '100%',
-    marginTop: Spacing.base,
-    marginBottom: Spacing.base,
   },
   cancelButton: {
     ...Buttons.button,

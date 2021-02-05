@@ -4,6 +4,7 @@ import { Text, View, TextInput, TouchableOpacity, Alert, StyleSheet } from 'reac
 import { RootStackParamList } from '../../types/navigationTypes';
 import Firebase from '../../lib/firebase';
 import { Buttons, Colors, Spacing, Typography } from '../../theme';
+import Button from '../../components/Button';
 import Loading from '../../components/Loading';
 
 const LoginScreen = ({ navigation }: StackScreenProps<RootStackParamList, 'Login'>) => {
@@ -44,9 +45,7 @@ const LoginScreen = ({ navigation }: StackScreenProps<RootStackParamList, 'Login
             style={styles.formField}
           />
 
-          <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
-            <Text style={{ ...Buttons.buttonText }}>Login</Text>
-          </TouchableOpacity>
+          <Button onPress={handleLogin}>Login</Button>
         </View>
 
         <View style={styles.signupContainer}>
@@ -88,13 +87,6 @@ const styles = StyleSheet.create({
   infoText: {
     ...Typography.bodyText,
     paddingTop: Spacing.base,
-  },
-  loginButton: {
-    ...Buttons.button,
-    backgroundColor: Colors.blue,
-    width: '100%',
-    marginTop: Spacing.base,
-    marginBottom: Spacing.base,
   },
   cancelButton: {
     ...Buttons.button,
