@@ -1,9 +1,20 @@
+import { RouteProp } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
+import Button from '../../components/Button';
 import { Buttons, Colors, Spacing } from '../../theme';
-import PickUsersScreen from './PickUsersScreen';
+import { ChallengeStackParamList } from '../../types/navigationTypes';
 
-const NewChallengeScreen: React.FC = () => {
+type NewChallengeRouteProp = RouteProp<ChallengeStackParamList, 'NewChallenge'>;
+type NavigationProp = StackNavigationProp<ChallengeStackParamList, 'NewChallenge'>;
+
+type Props = {
+  navigation: NavigationProp;
+  route: NewChallengeRouteProp;
+};
+
+const NewChallengeScreen: React.FC<Props> = ({ route, navigation }: Props) => {
   // const user_id = useAuthentication().user?.uid;
   //const [challengeType] = useState<Challenge_Type_Enum>(Challenge_Type_Enum.Score);
   //const [endDate] = useState<Date>(new Date('2021-02-11'));
@@ -32,7 +43,9 @@ const NewChallengeScreen: React.FC = () => {
   return (
     <View style={styles.container}>
       <View style={styles.box}>
-        <PickUsersScreen />
+        <Button onPress={() => navigation.push('PickUsers', { user_id: route.params.user_id })}>
+          Pick users to challenge
+        </Button>
       </View>
     </View>
   );
