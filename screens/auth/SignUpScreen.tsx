@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { StackScreenProps } from '@react-navigation/stack';
 import {
   Text,
@@ -12,6 +12,7 @@ import {
   KeyboardAvoidingView,
   ViewStyle,
   Image,
+  Dimensions,
 } from 'react-native';
 import { RootStackParamList } from '../../types/navigationTypes';
 import Firebase, { fns } from '../../lib/firebase';
@@ -33,9 +34,7 @@ const SignUpScreen = ({ navigation }: StackScreenProps<RootStackParamList, 'Sign
   const [validationSuccess, setvalidationSuccess] = useState(true);
 
   const randomPictureURI = () => {
-    console.log('random1');
     const random = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-    console.log('random2');
     return 'https://api.multiavatar.com/' + random + '.png';
   };
   const [picture, setPicture] = useState(randomPictureURI());
@@ -93,55 +92,53 @@ const SignUpScreen = ({ navigation }: StackScreenProps<RootStackParamList, 'Sign
       <View style={styles.container}>
         <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={{ flex: 1 }}>
           <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-            <View style={[styles.blackTop, getSafeAreaHeight()]} />
-            <View style={[styles.inner, getSafeAreaTop()]}>
-              <View style={styles.signUpContainer}>
-                <View style={styles.formContainer}>
-                  <View style={styles.avatarContainer}>
-                    <Image
-                      source={{ uri: picture }}
-                      style={styles.avatar}
-                      // eslint-disable-next-line @typescript-eslint/no-var-requires
-                      loadingIndicatorSource={{ uri: Asset.fromModule(require('../../assets/images/user.png')).uri }}
-                    />
-                  </View>
-                  <Text style={styles.label}>Name</Text>
-                  <TextInput
-                    placeholder="Enter your name"
-                    placeholderTextColor={Colors.gray600}
-                    onChangeText={(val) => setName(val)}
-                    style={styles.formField}
+            <View style={styles.inner}>
+              <View style={[styles.blackTop, getSafeAreaHeight()]} />
+              <View style={[styles.formContainer, getSafeAreaTop()]}>
+                <View style={styles.avatarContainer}>
+                  <Image
+                    // eslint-disable-next-line @typescript-eslint/no-var-requires
+                    loadingIndicatorSource={{ uri: Asset.fromModule(require('../../assets/images/user.png')).uri }}
+                    source={{ uri: picture }}
+                    style={styles.avatar}
                   />
-                  <Text style={styles.label}>E-mail</Text>
-                  <TextInput
-                    placeholder="Enter your e-mail"
-                    placeholderTextColor={Colors.gray600}
-                    onChangeText={(val) => setEmail(val)}
-                    autoCapitalize="none"
-                    keyboardType="email-address"
-                    style={styles.formField}
-                  />
-                  <Text style={styles.label}>Password</Text>
-                  <TextInput
-                    placeholder="Enter your password"
-                    placeholderTextColor={Colors.gray600}
-                    onChangeText={(val) => setPassword(val)}
-                    autoCapitalize="none"
-                    secureTextEntry
-                    autoCorrect={false}
-                    style={styles.formField}
-                  />
-                  <Text style={styles.label}>Confirm password</Text>
-                  <TextInput
-                    placeholder="Confirm your password"
-                    placeholderTextColor={Colors.gray600}
-                    onChangeText={(val) => setConfirmPassword(val)}
-                    autoCapitalize="none"
-                    secureTextEntry
-                    style={styles.formField}
-                  />
-                  <Button onPress={handleSignup}>Sign up</Button>
                 </View>
+                <Text style={styles.label}>Name</Text>
+                <TextInput
+                  placeholder="Enter your name"
+                  placeholderTextColor={Colors.gray600}
+                  onChangeText={(val) => setName(val)}
+                  style={styles.formField}
+                />
+                <Text style={styles.label}>E-mail</Text>
+                <TextInput
+                  placeholder="Enter your e-mail"
+                  placeholderTextColor={Colors.gray600}
+                  onChangeText={(val) => setEmail(val)}
+                  autoCapitalize="none"
+                  keyboardType="email-address"
+                  style={styles.formField}
+                />
+                <Text style={styles.label}>Password</Text>
+                <TextInput
+                  placeholder="Enter your password"
+                  placeholderTextColor={Colors.gray600}
+                  onChangeText={(val) => setPassword(val)}
+                  autoCapitalize="none"
+                  secureTextEntry
+                  autoCorrect={false}
+                  style={styles.formField}
+                />
+                <Text style={styles.label}>Confirm password</Text>
+                <TextInput
+                  placeholder="Confirm your password"
+                  placeholderTextColor={Colors.gray600}
+                  onChangeText={(val) => setConfirmPassword(val)}
+                  autoCapitalize="none"
+                  secureTextEntry
+                  style={styles.formField}
+                />
+                <Button onPress={handleSignup}>Sign up</Button>
                 <View style={styles.loginContainer}>
                   <Text style={{ ...Typography.bodyText }}>Already have an account?</Text>
                   <TouchableOpacity onPress={() => navigation.navigate('Login')}>
@@ -159,10 +156,12 @@ const SignUpScreen = ({ navigation }: StackScreenProps<RootStackParamList, 'Sign
 
 const styles = StyleSheet.create({
   container: {
-    height: '100%',
+    height: Dimensions.get('screen').height,
   },
   inner: {
     justifyContent: 'flex-end',
+    alignItems: 'center',
+    marginBottom: Spacing.base,
   },
   blackTop: {
     position: 'absolute',
@@ -181,10 +180,10 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: Spacing.smallest,
     textAlign: 'left',
-    width: '80%',
+    width: '85%',
   },
   formContainer: {
-    width: '80%',
+    width: '85%',
   },
   avatarContainer: {
     width: '100%',
@@ -221,10 +220,12 @@ const styles = StyleSheet.create({
     color: Colors.blue,
     marginLeft: Spacing.smallest,
     fontWeight: 'bold',
+    backgroundColor: 'green',
   },
   loginContainer: {
-    display: 'flex',
     flexDirection: 'row',
+    justifyContent: 'center',
+    backgroundColor: 'red',
   },
 });
 

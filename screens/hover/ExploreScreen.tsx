@@ -18,7 +18,6 @@ import GeoFences from '../../components/GeoFences';
 import { HoverStackParamList } from '../../types/navigationTypes';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import * as Location from 'expo-location';
 
 const { width, height } = Dimensions.get('window');
 
@@ -116,7 +115,7 @@ const ExploreScreen: React.FC<ExploreProps> = ({ navigation }: ExploreProps) => 
         <GeoFences geofences={tracking.geoFences} />
       </MapView>
 
-      <View style={[styles.infoContainer, getSafeAreaTop()]}>
+      <View style={[styles.mapInfo, getSafeAreaTop()]}>
         <TouchableOpacity style={styles.mapStyleButton} onPress={toggleMapType}>
           <FAIcon style={mapTypeIconStyle} name="globe-europe" />
         </TouchableOpacity>
@@ -143,9 +142,8 @@ const styles = StyleSheet.create({
     width,
     height,
   },
-  infoContainer: {
+  mapInfo: {
     position: 'absolute',
-    top: Spacing.extraLarge,
     left: Spacing.smaller,
   },
   infoText: {
