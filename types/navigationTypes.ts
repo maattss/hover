@@ -29,7 +29,7 @@ export type ChallengeStackParamList = {
   Challenge: undefined;
   PendingChallenges: PendingChallengesScreenProps;
   OngoingChallenges: OngoingChallengesScreenProps;
-  NewChallenge: { user_id?: string };
+  NewChallenge: undefined;
 };
 
 export type NewChallengeStackParamList = {
