@@ -77,15 +77,17 @@ const ChallengeScreen: React.FC<ChallengesProps> = (props: ChallengesProps) => {
         }>
         {pendingChallenges && renderPendingChallenges(props, pendingChallenges, refetch)}
         {ongoingChallenges && renderOngoingChallenges(props, ongoingChallenges, refetch)}
-        <View style={styles.box}>
-          <View style={styles.boxTitle}>
-            <Text style={{ ...Typography.headerText }}>Want a new challenge?</Text>
-            <Text style={{ ...Typography.bodyText }}>Create a challenge for you and your friends!</Text>
+        {user_id && (
+          <View style={styles.box}>
+            <View style={styles.boxTitle}>
+              <Text style={{ ...Typography.headerText }}>Want a new challenge?</Text>
+              <Text style={{ ...Typography.bodyText }}>Create a challenge for you and your friends!</Text>
+            </View>
+            <Button style={styles.challengeButton} onPress={() => props.navigation.push('NewChallenge', { user_id })}>
+              Create new challenge
+            </Button>
           </View>
-          <Button style={styles.challengeButton} onPress={() => props.navigation.push('NewChallenge')}>
-            Create new challenge
-          </Button>
-        </View>
+        )}
       </ScrollView>
     </SafeAreaView>
   );
