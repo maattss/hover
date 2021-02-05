@@ -4,13 +4,13 @@ import { FlatList } from 'react-native-gesture-handler';
 import { Challenge_Participant_Insert_Input, Challenge_Participant_State_Enum } from '../../types/types';
 import { Avatar, CheckBox } from 'react-native-elements';
 import Loading from '../../components/general/Loading';
-import { ChallengeStackParamList } from '../../types/navigationTypes';
+import { NewChallengeStackParamList } from '../../types/navigationTypes';
 import { RouteProp } from '@react-navigation/native';
 import { useGetFriendsQuery } from '../../graphql/queries/Friends.generated';
 import { ListUserFragmentFragment } from '../../graphql/Fragments.generated';
 import { Buttons, Colors, Spacing, Typography } from '../../theme';
 
-type PickUsersRouteProp = RouteProp<ChallengeStackParamList, 'PickUsers'>;
+type PickUsersRouteProp = RouteProp<NewChallengeStackParamList, 'PickUsers'>;
 
 type Props = {
   route: PickUsersRouteProp;
