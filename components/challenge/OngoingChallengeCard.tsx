@@ -10,56 +10,75 @@ interface OngoingChallengeCardProps {
 }
 
 const OngoingChallengeCard: React.FC<OngoingChallengeCardProps> = ({ challenge }: OngoingChallengeCardProps) => {
-  if (challenge.opponents.length == 1) {
-    const opponent = challenge.opponents[0];
-    return (
-      <View style={styles.card}>
-        <View style={styles.avatarContainer}>
-          <Image source={{ uri: challenge.user.picture }} style={styles.avatar} />
-          <Image source={{ uri: opponent.picture }} style={styles.avatar} />
-        </View>
+  const Opponents = () => {
+    switch (challenge.opponents.length) {
+      case 2: {
+        return (
+          <View style={styles.row}>
+            <View style={styles.colum}>
+              <Image source={{ uri: challenge.user.picture }} style={styles.avatar} />
+              <Text style={styles.nameText}>{challenge.user.name}</Text>
+            </View>
+            {challenge.opponents.map((opponent) => (
+              <View key={opponent.id} style={styles.colum}>
+                <Image source={{ uri: opponent.picture }} style={styles.avatar} />
+                <Text style={styles.nameText}>{opponent.name}</Text>
+              </View>
+            ))}
+          </View>
+        );
+      }
+      default: {
+        return (
+          <View>
+            <View style={styles.row}>
+              <View style={styles.colum}>
+                <Image source={{ uri: challenge.user.picture }} style={styles.avatar} />
+                <Text style={styles.nameText}>{challenge.user.name}</Text>
+              </View>
+              <View style={styles.versus}>
+                <Text style={styles.versusText}>vs</Text>
+              </View>
+              <View style={styles.colum}>
+                <Image source={{ uri: challenge.created_by.picture }} style={styles.avatar} />
+                <Text style={styles.nameText}>{challenge.created_by.name}</Text>
+              </View>
+            </View>
+            {challenge.opponents.length > 1 && (
+              <View style={styles.row}>
+                <View>
+                  <Text style={styles.opponentHeaderText}>Other partcicipants</Text>
+                  {challenge.opponents
+                    .filter((opponent) => opponent.id != challenge.created_by.id)
+                    .map((opponent) => (
+                      <View key={opponent.id} style={styles.opponentRow}>
+                        <Image source={{ uri: opponent.picture }} style={styles.opponentAvatar} />
+                        <View style={styles.opponentNameStateRow}>
+                          <Text style={styles.opponentNameText}>{opponent.name}</Text>
+                          <Text style={styles.opponentStateText}>{opponent.state}</Text>
+                        </View>
+                      </View>
+                    ))}
+                </View>
+              </View>
+            )}
+          </View>
+        );
+      }
+    }
+  };
 
-        <View style={styles.nameContainer}>
-          <Text style={styles.nameText}>{challenge.user.name}</Text>
-          <Text style={styles.nameText}>vs</Text>
-          <Text style={styles.nameText}>{opponent.name}</Text>
-        </View>
-        <Divider />
-        <Text style={styles.challengeText}>{challenge.challenge_type}</Text>
+  return (
+    <View style={styles.card}>
+      <Opponents />
+      <Divider />
+      <Text style={styles.challengeText}>{challenge.challenge_type}</Text>
 
-        <View style={styles.footer}>
-          <Text style={styles.footerText}>{timeStampToPresentable(challenge.created_at)}</Text>
-        </View>
+      <View style={styles.footer}>
+        <Text style={styles.footerText}>{timeStampToPresentable(challenge.created_at)}</Text>
       </View>
-    );
-  } else {
-    return (
-      <View style={styles.card}>
-        <View style={styles.avatarContainer}>
-          <Image source={{ uri: challenge.user.picture }} style={styles.avatar} />
-          {challenge.opponents.map((opponent) => (
-            <Image key={opponent.id} source={{ uri: opponent.picture }} style={styles.avatar} />
-          ))}
-        </View>
-
-        <View style={styles.nameContainer}>
-          <Text style={styles.nameText}>{challenge.user.name}</Text>
-          {challenge.opponents.map((opponent) => (
-            <>
-              <Text style={styles.nameText}>vs</Text>
-              <Text style={styles.nameText}>{opponent.name}</Text>
-            </>
-          ))}
-        </View>
-        <Divider />
-        <Text style={styles.challengeText}>{challenge.challenge_type}</Text>
-
-        <View style={styles.footer}>
-          <Text style={styles.footerText}>{timeStampToPresentable(challenge.created_at)}</Text>
-        </View>
-      </View>
-    );
-  }
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({
@@ -74,46 +93,71 @@ const styles = StyleSheet.create({
     shadowColor: Colors.black,
     shadowOffset: { height: 0, width: 0 },
   },
-  topBar: {
+  row: {
     flexDirection: 'row',
-    justifyContent: 'center',
+    justifyContent: 'space-evenly',
   },
-  titleText: {
-    ...Typography.headerText,
-    fontSize: 28,
-    lineHeight: 35,
-  },
-  description: {
-    width: '80%',
-    justifyContent: 'center',
+  colum: {
+    marginTop: Spacing.smaller,
     alignItems: 'center',
+    width: '50%',
   },
   nameText: {
     ...Typography.headerText,
-    fontSize: 20,
+    fontSize: 15,
     paddingRight: Spacing.smallest,
-  },
-  nameContainer: {
-    width: '100%',
-    justifyContent: 'space-evenly',
-    flexDirection: 'row',
-    marginVertical: Spacing.smallest,
   },
   avatar: {
     height: 45,
     width: 45,
     borderRadius: 45 / 2,
-    marginHorizontal: 75,
+    backgroundColor: 'green',
   },
-  avatarContainer: {
-    width: '100%',
-    justifyContent: 'space-evenly',
+  versus: {
+    justifyContent: 'center',
+  },
+  versusText: {
+    color: Colors.almostWhite,
+    fontSize: 16,
+    textAlign: 'center',
+  },
+  opponentHeaderText: {
+    color: Colors.almostWhite,
+    fontSize: 12,
+    fontWeight: 'bold',
+    paddingVertical: Spacing.base,
+  },
+  opponentRow: {
     flexDirection: 'row',
-    marginTop: Spacing.smaller,
+    justifyContent: 'flex-start',
+    marginBottom: Spacing.base,
+  },
+  opponentAvatar: {
+    height: 25,
+    width: 25,
+    borderRadius: 25 / 2,
+    marginRight: Spacing.small,
+  },
+  opponentNameStateRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '70%',
+  },
+  opponentNameText: {
+    ...Typography.bodyText,
+    fontWeight: 'bold',
+    width: '70%',
+  },
+  opponentStateText: {
+    ...Typography.bodyText,
+    fontSize: 10,
+    fontStyle: 'italic',
+    width: '30%',
   },
   challengeText: {
     color: Colors.almostWhite,
-    fontSize: 16,
+    fontSize: 12,
+    fontStyle: 'italic',
     textAlign: 'center',
   },
   footer: {

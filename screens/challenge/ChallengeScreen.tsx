@@ -10,7 +10,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { ChallengeStackParamList } from '../../types/navigationTypes';
 import PendingChallengeCard from '../../components/challenge/PendingChallengeCard';
 import OngoingChallengeCard from '../../components/challenge/OngoingChallengeCard';
-import { Button } from '../../components/Button';
+import Button from '../../components/Button';
 import Loading from '../../components/Loading';
 
 type NavigationProp = StackNavigationProp<ChallengeStackParamList>;
