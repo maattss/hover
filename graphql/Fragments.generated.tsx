@@ -2,10 +2,10 @@
 import * as Types from '../types/types';
 
 import { gql } from '@apollo/client';
-export type BasicUserFragmentFragment = { readonly __typename: 'users' } & Pick<
-  Types.Users,
-  'id' | 'email' | 'name' | 'picture' | 'bio'
->;
+export type ListUserFragmentFragment = { readonly __typename: 'users' } & Pick<Types.Users, 'id' | 'name' | 'picture'>;
+
+export type BasicUserFragmentFragment = { readonly __typename: 'users' } & Pick<Types.Users, 'email' | 'bio'> &
+  ListUserFragmentFragment;
 
 export type UserFragmentFragment = { readonly __typename: 'users' } & {
   readonly followers: ReadonlyArray<
@@ -59,14 +59,20 @@ export type AchievementFragmentFragment = { readonly __typename: 'achievement' }
   'description' | 'name' | 'achievement_type' | 'level' | 'created_at' | 'rule'
 >;
 
-export const BasicUserFragmentFragmentDoc = gql`
-  fragment basicUserFragment on users {
+export const ListUserFragmentFragmentDoc = gql`
+  fragment listUserFragment on users {
     id
-    email
     name
     picture
+  }
+`;
+export const BasicUserFragmentFragmentDoc = gql`
+  fragment basicUserFragment on users {
+    ...listUserFragment
+    email
     bio
   }
+  ${ListUserFragmentFragmentDoc}
 `;
 export const CommentFragmentFragmentDoc = gql`
   fragment commentFragment on comments {
