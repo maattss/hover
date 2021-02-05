@@ -72,6 +72,7 @@ export const ListUserFragmentFragmentDoc = gql`
     name
     picture
   }
+  ${ListUserFragmentFragmentDoc}
 `;
 export const BasicUserFragmentFragmentDoc = gql`
   fragment basicUserFragment on users {
