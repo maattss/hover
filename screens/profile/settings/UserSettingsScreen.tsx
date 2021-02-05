@@ -3,7 +3,6 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  ActivityIndicator,
   View,
   TextInput,
   TextStyle,
@@ -16,6 +15,7 @@ import { SettingsProps } from './SettingsMenuScreen';
 import { useUserQuery } from '../../../graphql/queries/User.generated';
 import { useUpdateUserMutation } from '../../../graphql/mutations/UpdateUser.generated';
 import useAuthentication from '../../../hooks/useAuthentication';
+import Loading from '../../../components/Loading';
 
 const UserSettingsScreen: React.FC<SettingsProps> = ({ navigation }: SettingsProps) => {
   const id = useAuthentication().user?.uid;
@@ -48,12 +48,7 @@ const UserSettingsScreen: React.FC<SettingsProps> = ({ navigation }: SettingsPro
       console.error(fetchError || mutationError);
       Alert.alert('Error', fetchError?.message || mutationError?.message);
     }
-    if (fetchLoading || mutationLoading)
-      return (
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator size={'large'} color={Colors.blue} />
-        </View>
-      );
+    if (fetchLoading || mutationLoading) return <Loading />;
     return (
       <ScrollView keyboardShouldPersistTaps="handled">
         <View style={styles.container}>
@@ -111,7 +106,6 @@ export default UserSettingsScreen;
 
 interface Style {
   container: ViewStyle;
-  loadingContainer: ViewStyle;
   formContainer: ViewStyle;
   formRow: ViewStyle;
   formField: ViewStyle;
@@ -126,14 +120,6 @@ const styles = StyleSheet.create<Style>({
     display: 'flex',
     alignItems: 'center',
     paddingHorizontal: Spacing.base,
-  },
-  loadingContainer: {
-    display: 'flex',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    height: '100%',
-    width: '100%',
-    marginTop: '20%',
   },
   formContainer: {
     width: '90%',

@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { StackScreenProps } from '@react-navigation/stack';
-import { Text, View, TextInput, TouchableOpacity, Alert, ActivityIndicator, StyleSheet } from 'react-native';
+import { Text, View, TextInput, TouchableOpacity, Alert, StyleSheet } from 'react-native';
 import { RootStackParamList } from '../../types/navigationTypes';
 import Firebase, { fns } from '../../lib/firebase';
 import { Buttons, Colors, Spacing, Typography } from '../../theme';
+import Loading from '../../components/Loading';
 
 const SignUpScreen = ({ navigation }: StackScreenProps<RootStackParamList, 'Signup'>) => {
   const [email, setEmail] = useState('');
@@ -41,13 +42,11 @@ const SignUpScreen = ({ navigation }: StackScreenProps<RootStackParamList, 'Sign
 
   if (loading) {
     return (
-      <View style={styles.container}>
-        <ActivityIndicator size={'large'} color={Colors.blue} />
-        <Text style={styles.infoText}>Signing up... Please wait</Text>
+      <Loading text={'Signing up... Please wait'}>
         <TouchableOpacity style={styles.cancelButton} onPress={handleCancel}>
           <Text style={{ ...Buttons.buttonText }}>Cancel</Text>
         </TouchableOpacity>
-      </View>
+      </Loading>
     );
   } else {
     return (
