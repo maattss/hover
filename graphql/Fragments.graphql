@@ -1,8 +1,13 @@
-fragment basicUserFragment on users {
+
+fragment listUserFragment on users {
   id
-  email
   name
   picture
+}
+
+fragment basicUserFragment on users {
+  ...listUserFragment
+  email
   bio
 }
 
