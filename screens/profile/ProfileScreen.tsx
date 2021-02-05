@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { ActivityIndicator, Alert, StyleSheet, Text, View, Image, RefreshControl, Button } from 'react-native';
+import { Alert, StyleSheet, Text, View, Image, RefreshControl, Button } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useProfileUserQuery } from '../../graphql/queries/ProfileUser.generated';
 import useAuthentication from '../../hooks/useAuthentication';
@@ -11,6 +11,7 @@ import { getCategoryIconName, getCategoryColor } from '../../components/feed/Act
 import ProfileActivityCard from '../../components/ProfileActivityCard';
 import Achievement from '../../components/Achievement';
 import { convertToUserProfile, defaultUserProfile } from '../../helpers/objectMappers';
+import Loading from '../../components/Loading';
 
 const ProfileScreen: React.FC = () => {
   const id = useAuthentication().user?.uid;
@@ -104,12 +105,7 @@ const ProfileScreen: React.FC = () => {
       console.error(error);
       Alert.alert('Error', error?.message);
     }
-    if (loading)
-      return (
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator size={'large'} color={Colors.blue} />
-        </View>
-      );
+    if (loading) return <Loading />;
 
     return (
       <ScrollView
@@ -166,14 +162,6 @@ const styles = StyleSheet.create({
     ...Typography.largeBodyText,
     fontStyle: 'italic',
     marginTop: Spacing.smallest,
-  },
-  loadingContainer: {
-    display: 'flex',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    height: '100%',
-    width: '100%',
-    marginTop: '20%',
   },
   avatar: {
     height: 80,

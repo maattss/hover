@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, ActivityIndicator, View, TextInput, Alert, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Alert, ScrollView } from 'react-native';
 import { Buttons, Colors, Spacing, Typography } from '../../../theme';
 import { SettingsProps } from './SettingsMenuScreen';
 import { useUserQuery } from '../../../graphql/queries/User.generated';
 import { useUpdateUserMutation } from '../../../graphql/mutations/UpdateUser.generated';
 import useAuthentication from '../../../hooks/useAuthentication';
 import Button from '../../../components/Button';
+import Loading from '../../../components/Loading';
 
 const UserSettingsScreen: React.FC<SettingsProps> = ({ navigation }: SettingsProps) => {
   const id = useAuthentication().user?.uid;
@@ -38,12 +39,7 @@ const UserSettingsScreen: React.FC<SettingsProps> = ({ navigation }: SettingsPro
       console.error(fetchError || mutationError);
       Alert.alert('Error', fetchError?.message || mutationError?.message);
     }
-    if (fetchLoading || mutationLoading)
-      return (
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator size={'large'} color={Colors.blue} />
-        </View>
-      );
+    if (fetchLoading || mutationLoading) return <Loading />;
 
     const onSubmit = () => {
       updateUser({
@@ -103,14 +99,6 @@ const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
     paddingHorizontal: Spacing.base,
-  },
-  loadingContainer: {
-    display: 'flex',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    height: '100%',
-    width: '100%',
-    marginTop: '20%',
   },
   formContainer: {
     width: '90%',
