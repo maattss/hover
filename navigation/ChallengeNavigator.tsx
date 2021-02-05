@@ -6,6 +6,7 @@ import PendingChallengesScreen from '../screens/challenge/PendingChallengesScree
 import { HeaderIcon } from './FeedNavigator';
 import NewChallengeScreen from '../screens/challenge/NewChallengeScreen';
 import OngoingChallengesScreen from '../screens/challenge/OngoingChallengesScreen';
+import PickUsersScreen from '../screens/challenge/PickUsersScreen';
 
 const ChallengeStack = createStackNavigator<ChallengeStackParamList>();
 
@@ -40,6 +41,13 @@ const ChallengeNavigator: React.FC = () => {
         component={NewChallengeScreen}
         options={() => ({
           headerTitle: 'Create challenge',
+        })}
+      />
+      <ChallengeStack.Screen
+        name="PickUsers"
+        component={PickUsersScreen}
+        options={() => ({
+          headerTitle: 'Pick Users',
         })}
       />
     </ChallengeStack.Navigator>
