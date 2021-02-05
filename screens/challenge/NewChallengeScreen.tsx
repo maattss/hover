@@ -51,7 +51,7 @@ const NewChallengeScreen: React.FC<Props> = ({ route, navigation }: Props) => {
           }>
           Pick users to challenge
         </Button>
-    </View>
+      </View>
     </View>
   );
 };
