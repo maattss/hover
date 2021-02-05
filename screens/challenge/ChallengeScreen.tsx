@@ -1,13 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import {
-  ActivityIndicator,
-  RefreshControl,
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { RefreshControl, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import { useGetChallengesQuery } from '../../graphql/queries/GetChallenges.generated';
 import { Buttons, Colors, Spacing, Typography } from '../../theme';
 import useAuthentication from '../../hooks/useAuthentication';
@@ -18,6 +10,8 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { ChallengeStackParamList } from '../../types/navigationTypes';
 import PendingChallengeCard from '../../components/challenge/PendingChallengeCard';
 import OngoingChallengeCard from '../../components/challenge/OngoingChallengeCard';
+import { Button } from '../../components/Button';
+import Loading from '../../components/Loading';
 
 type NavigationProp = StackNavigationProp<ChallengeStackParamList>;
 
@@ -25,7 +19,7 @@ export type ChallengesProps = {
   navigation: NavigationProp;
 };
 
-const PREVIEW_SIZE = 3;
+const PREVIEW_SIZE = 2;
 
 const ChallengeScreen: React.FC<ChallengesProps> = (props: ChallengesProps) => {
   const user_id = useAuthentication().user?.uid;
@@ -54,17 +48,15 @@ const ChallengeScreen: React.FC<ChallengesProps> = (props: ChallengesProps) => {
     }
   }, [refreshing]);
 
-  if (loading) {
-    return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size={'large'} color={Colors.blue} />
-      </View>
-    );
-  }
+  if (loading) return <Loading />;
+
   if (error) {
     return (
-      <View style={styles.loadingContainer}>
+      <View style={styles.errorContainer}>
         <Text style={{ ...Typography.bodyText, marginTop: Spacing.base }}>{error.message}</Text>
+        <Button style={styles.challengeButton} onPress={onRefresh}>
+          Refresh
+        </Button>
       </View>
     );
   }
@@ -74,7 +66,15 @@ const ChallengeScreen: React.FC<ChallengesProps> = (props: ChallengesProps) => {
       <ScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.scrollContentContainer}
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={() => onRefresh()}
+            tintColor={Colors.blue}
+            colors={[Colors.blue]}
+            progressBackgroundColor={Colors.transparent}
+          />
+        }>
         {pendingChallenges && renderPendingChallenges(props, pendingChallenges, refetch)}
         {ongoingChallenges && renderOngoingChallenges(props, ongoingChallenges, refetch)}
         <View style={styles.box}>
@@ -82,9 +82,9 @@ const ChallengeScreen: React.FC<ChallengesProps> = (props: ChallengesProps) => {
             <Text style={{ ...Typography.headerText }}>Want a new challenge?</Text>
             <Text style={{ ...Typography.bodyText }}>Create a challenge for you and your friends!</Text>
           </View>
-          <TouchableOpacity style={styles.challengeButton} onPress={() => props.navigation.push('NewChallenge')}>
-            <Text style={{ ...Buttons.buttonText }}>Create new challenge</Text>
-          </TouchableOpacity>
+          <Button style={styles.challengeButton} onPress={() => props.navigation.push('NewChallenge')}>
+            Create new challenge
+          </Button>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -103,18 +103,21 @@ const renderPendingChallenges = (
         <Text style={{ ...Typography.bodyText }}>Accept the challenges to compete with other players.</Text>
       </View>
       {pendingChallenges.slice(0, PREVIEW_SIZE).map((item, index) => (
-        <PendingChallengeCard key={index} challenge={item} />
+        <View key={index} style={styles.previewContainer}>
+          <PendingChallengeCard challenge={item} />
+        </View>
       ))}
       {pendingChallenges.length > PREVIEW_SIZE && (
-        <TouchableOpacity
+        <Button
           style={styles.challengeButton}
           onPress={() => navigation.push('PendingChallenges', { pendingChallenges, refetch })}>
-          <Text style={{ ...Buttons.buttonText }}>View all</Text>
-        </TouchableOpacity>
+          View all
+        </Button>
       )}
     </View>
   );
 };
+
 const renderOngoingChallenges = (
   { navigation }: ChallengesProps,
   ongoingChallenges: OngoingChallenge[],
@@ -129,11 +132,11 @@ const renderOngoingChallenges = (
         <OngoingChallengeCard key={index} challenge={item} />
       ))}
       {ongoingChallenges.length > PREVIEW_SIZE && (
-        <TouchableOpacity
+        <Button
           style={styles.challengeButton}
           onPress={() => navigation.push('OngoingChallenges', { ongoingChallenges, refetch })}>
-          <Text style={{ ...Buttons.buttonText }}>View all</Text>
-        </TouchableOpacity>
+          View all
+        </Button>
       )}
     </View>
   );
@@ -142,6 +145,9 @@ const renderOngoingChallenges = (
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  previewContainer: {
+    width: '100%',
   },
   scrollView: {
     paddingHorizontal: Spacing.base,
@@ -152,7 +158,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingBottom: Spacing.base,
   },
-  loadingContainer: {
+  errorContainer: {
     display: 'flex',
     justifyContent: 'flex-start',
     alignItems: 'center',
@@ -163,6 +169,7 @@ const styles = StyleSheet.create({
   box: {
     backgroundColor: Colors.gray900,
     width: '100%',
+    flex: 1,
     alignItems: 'center',
     borderRadius: Spacing.smaller,
     padding: Spacing.base,

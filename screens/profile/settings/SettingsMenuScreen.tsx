@@ -1,10 +1,10 @@
 import React from 'react';
-import { Alert, View, Text, TouchableOpacity, StyleSheet, FlatList } from 'react-native';
+import { Alert, View, StyleSheet, FlatList } from 'react-native';
 import Firebase from '../../../lib/firebase';
 import { Buttons, Spacing, Colors } from '../../../theme';
-import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { SettingsNavigationStackParamList } from '../../../types/navigationTypes';
+import Button, { MenuButton } from '../../../components/Button';
 
 type NavigationProp = StackNavigationProp<SettingsNavigationStackParamList>;
 
@@ -19,13 +19,13 @@ type Item = {
 };
 
 const Item = (item: Item) => (
-  <TouchableOpacity
+  <MenuButton
     style={item.disabled ? styles.settingsItemDisabled : styles.settingsItem}
     onPress={() => (item.onClick ? item.onClick() : null)}
-    disabled={item.disabled}>
-    <Text style={{ ...Buttons.buttonText }}>{item.title}</Text>
-    <FAIcon name="chevron-right" style={{ ...Buttons.buttonText }} />
-  </TouchableOpacity>
+    disabled={item.disabled}
+    label={item.title}
+    icon="chevron-right"
+  />
 );
 
 const SettingsScreen: React.FC<SettingsProps> = ({ navigation }: SettingsProps) => {
@@ -88,9 +88,9 @@ const SettingsScreen: React.FC<SettingsProps> = ({ navigation }: SettingsProps) 
           style={styles.settingsList}
         />
       </View>
-      <TouchableOpacity style={styles.logOutButton} onPress={areYouSure}>
-        <Text style={{ ...Buttons.buttonText }}>Sign out</Text>
-      </TouchableOpacity>
+      <Button style={{ backgroundColor: Colors.red }} onPress={areYouSure}>
+        Sign out
+      </Button>
     </View>
   );
 };
@@ -122,13 +122,6 @@ const styles = StyleSheet.create({
   },
   settingsItemDisabled: {
     display: 'none',
-  },
-  logOutButton: {
-    ...Buttons.button,
-    backgroundColor: Colors.red,
-    width: '100%',
-    marginTop: Spacing.base,
-    marginBottom: Spacing.base,
   },
 });
 

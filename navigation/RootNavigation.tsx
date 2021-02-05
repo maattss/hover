@@ -5,9 +5,9 @@ import { RootStackParamList } from '../types/navigationTypes';
 import TabNavigator from './TabNavigator';
 import SignUpScreen from '../screens/auth/SignUpScreen';
 import LoginScreen from '../screens/auth/LoginScreen';
-import LoadingScreen from '../screens/auth/LoadingScreen';
 import useAuthentication from '../hooks/useAuthentication';
 import { DarkTheme } from '../theme/colors';
+import Loading from '../components/Loading';
 
 export const RootStack = createStackNavigator<RootStackParamList>();
 
@@ -20,7 +20,7 @@ const AppNavigation: React.FC = () => {
     <NavigationContainer theme={DarkTheme}>
       <RootStack.Navigator screenOptions={{ headerShown: false }}>
         {isLoadingUser ? (
-          <RootStack.Screen name="Loading" component={LoadingScreen} />
+          <RootStack.Screen name="Loading" component={Loading} />
         ) : user ? (
           <RootStack.Screen name="Main" component={MainContainer} />
         ) : (

@@ -1,77 +1,111 @@
-import React from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, Text, View, Image, TouchableOpacity, TextStyle, ViewStyle } from 'react-native';
+import { useUpdateChallengeParticipationMutation } from '../../graphql/mutations/UpdateChallengeParticipation.generated';
+import { generateDescription } from '../../helpers/decriptionHelper';
 import { Colors, Typography, Spacing, Buttons } from '../../theme';
 import { PendingChallenge } from '../../types/challengeTypes';
+import { Challenge_Participant_State_Enum } from '../../types/types';
 
 interface PendingChallengeCardProps {
   challenge: PendingChallenge;
 }
 
 const PendingChallengeCard: React.FC<PendingChallengeCardProps> = ({ challenge }: PendingChallengeCardProps) => {
-  if (challenge.opponents.length == 1) {
-    const opponent = challenge.opponents[0];
+  const [partcipationState, setPartcipationState] = useState<Challenge_Participant_State_Enum>(
+    Challenge_Participant_State_Enum.Pending,
+  );
+  const [updateMutation] = useUpdateChallengeParticipationMutation();
+
+  const UpdateButton = ({
+    state,
+  }: {
+    state: Challenge_Participant_State_Enum.Accepted | Challenge_Participant_State_Enum.Declined;
+  }) => {
+    let buttonStyle: ViewStyle = styles.acceptButton;
+    const buttonTextStyle: TextStyle[] = [{ ...Buttons.buttonText }];
+    let buttonText = 'Accept';
+    if (state === Challenge_Participant_State_Enum.Declined) {
+      buttonStyle = styles.declineButton;
+      buttonTextStyle.push({ color: Colors.gray600 });
+      buttonText = 'Decline';
+    }
+
     return (
-      <View style={styles.card}>
-        <View style={styles.topBar}>
-          <Image source={{ uri: opponent.picture }} style={styles.avatar} />
-          <View>
-            <Text style={styles.nameText}>{opponent.name}</Text>
-            <Text style={styles.captionText}>{challenge.challenge_type}</Text>
+      <TouchableOpacity
+        style={buttonStyle}
+        onPress={() => {
+          updateMutation({
+            variables: {
+              challenge_id: challenge.id,
+              user_id: challenge.user_id,
+              state: state,
+            },
+          }).then(() => setPartcipationState(state));
+        }}>
+        <Text style={buttonTextStyle}>{buttonText}</Text>
+      </TouchableOpacity>
+    );
+  };
+  const ParticipantButtonSwitch = () => {
+    switch (partcipationState) {
+      case Challenge_Participant_State_Enum.Pending:
+        return (
+          <View style={styles.buttonsContainer}>
+            <UpdateButton state={Challenge_Participant_State_Enum.Accepted} />
+            <UpdateButton state={Challenge_Participant_State_Enum.Declined} />
           </View>
-        </View>
+        );
+      case Challenge_Participant_State_Enum.Accepted:
+        return (
+          <View style={styles.buttonsContainer}>
+            <Text style={styles.stateUpdateMessage}>You accepted the challenge</Text>
+          </View>
+        );
+      case Challenge_Participant_State_Enum.Declined:
+        return (
+          <View style={styles.buttonsContainer}>
+            <Text style={styles.stateUpdateMessage}>You declined the challenge</Text>
+          </View>
+        );
+    }
+  };
 
-        <View style={styles.buttonsContainer}>
-          <AcceptButton />
-          <DeclineButton />
+  return (
+    <View style={styles.card}>
+      <View style={styles.topBar}>
+        <View style={styles.topBarAvatar}>
+          <Image source={{ uri: challenge.created_by.picture }} style={styles.avatar} />
+        </View>
+        <View style={styles.topBarText}>
+          <Text style={styles.nameText}>{challenge.created_by.name}</Text>
+          <Text style={styles.descriptionText}>{generateDescription(challenge)}</Text>
         </View>
       </View>
-    );
-  } else if (challenge.opponents.length > 1) {
-    return (
-      <View style={styles.card}>
-        <View style={styles.topBar}>
-          {challenge.opponents.map((opponent) => (
-            <>
-              <Image key={opponent.id} source={{ uri: opponent.picture }} style={styles.avatar} />
-              <View>
-                <Text style={styles.nameText}>{opponent.name}</Text>
-                <Text style={styles.captionText}>{challenge.challenge_type}</Text>
+      {challenge.opponents.length > 1 && (
+        <View style={styles.opponentContainer}>
+          <Text style={styles.opponentHeaderText}>Other partcicipants</Text>
+          {challenge.opponents
+            .filter((opponent) => opponent.id != challenge.created_by.id)
+            .map((opponent) => (
+              <View key={opponent.id} style={styles.opponentRow}>
+                <Image source={{ uri: opponent.picture }} style={styles.opponentAvatar} />
+                <View style={styles.oppnentNameStateRow}>
+                  <Text style={styles.opponentNameText}>{opponent.name}</Text>
+                  <Text style={styles.opponentStateText}>{opponent.state}</Text>
+                </View>
               </View>
-            </>
-          ))}
+            ))}
         </View>
+      )}
 
-        <View>
-          {challenge.opponents.map((opponent) => (
-            <Text key={opponent.id} style={styles.nameText}>
-              {opponent.name}
-            </Text>
-          ))}
-        </View>
-        <View style={styles.buttonsContainer}>
-          <AcceptButton />
-          <AcceptButton />
-        </View>
-      </View>
-    );
-  } else return <Text>{challenge.end_date.toString()}</Text>;
+      <ParticipantButtonSwitch />
+    </View>
+  );
 };
 
-//const AcceptButton = (onPress?: () => void) => (
-const AcceptButton = () => (
-  <TouchableOpacity style={styles.acceptButton}>
-    <Text style={{ ...Buttons.buttonText }}>Accept</Text>
-  </TouchableOpacity>
-);
-const DeclineButton = () => (
-  <TouchableOpacity style={styles.declineButton}>
-    <Text style={[{ ...Buttons.buttonText }, { color: Colors.gray500 }]}>Decline</Text>
-  </TouchableOpacity>
-);
 const styles = StyleSheet.create({
   card: {
     backgroundColor: Colors.gray900,
-    width: '100%',
     borderRadius: Spacing.smaller,
     padding: Spacing.base,
     marginHorizontal: Spacing.smaller,
@@ -85,50 +119,71 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-start',
   },
-  nameText: {
-    ...Typography.headerText,
-    fontSize: 20,
-    lineHeight: 30,
-  },
-  captionText: {
-    color: Colors.almostWhite,
-    fontSize: 12,
-    fontStyle: 'italic',
-  },
-  scoreText: {
-    color: Colors.almostWhite,
-    fontSize: 24,
-    textAlign: 'center',
-  },
-  main: {
-    marginVertical: Spacing.small,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  category: {
-    width: '30%',
-    display: 'flex',
-    textAlign: 'center',
-    justifyContent: 'center',
-    flexDirection: 'column',
-    paddingRight: Spacing.base,
-  },
-  categoryIcon: {
-    color: Colors.almostWhite,
-    fontSize: 40,
-    textAlign: 'center',
-    marginVertical: Spacing.smallest,
-  },
-  map: {
-    width: '70%',
-    height: 110,
-    borderRadius: Spacing.smallest,
+  topBarAvatar: {
+    width: '20%',
   },
   avatar: {
     height: 45,
     width: 45,
     borderRadius: 45 / 2,
     marginRight: Spacing.small,
+  },
+  topBarText: {
+    width: '80%',
+  },
+  nameText: {
+    ...Typography.headerText,
+    fontSize: 20,
+    lineHeight: 30,
+  },
+  descriptionText: {
+    color: Colors.almostWhite,
+    fontSize: 12,
+    fontStyle: 'italic',
+  },
+  opponentContainer: {
+    paddingTop: Spacing.base,
+    justifyContent: 'flex-end',
+    width: '100%',
+    left: '20%',
+  },
+  opponentHeaderText: {
+    color: Colors.almostWhite,
+    fontSize: 12,
+    fontWeight: 'bold',
+    paddingVertical: Spacing.base,
+  },
+  opponentRow: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+  },
+  opponentAvatar: {
+    height: 25,
+    width: 25,
+    borderRadius: 25 / 2,
+    marginRight: Spacing.small,
+  },
+  oppnentNameStateRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '70%',
+  },
+  opponentNameText: {
+    ...Typography.bodyText,
+    fontWeight: 'bold',
+    width: '60%',
+  },
+  opponentStateText: {
+    ...Typography.bodyText,
+    fontSize: 10,
+    fontStyle: 'italic',
+    width: '40%',
+  },
+  stateUpdateMessage: {
+    marginVertical: Spacing.base,
+    ...Typography.bodyText,
+    fontStyle: 'italic',
+    width: '100%',
   },
   buttonsContainer: {
     flexDirection: 'row',

@@ -13,7 +13,7 @@ export type InsertChallengeMutation = { readonly __typename: 'mutation_root' } &
   readonly insert_challenge_one?: Types.Maybe<
     { readonly __typename: 'challenge' } & Pick<
       Types.Challenge,
-      'id' | 'challenge_type' | 'start_date' | 'end_date' | 'is_active' | 'rules'
+      'id' | 'challenge_type' | 'start_date' | 'end_date' | 'state' | 'rules'
     > & {
         readonly challenge_participants: ReadonlyArray<
           { readonly __typename: 'challenge_participant' } & {
@@ -37,7 +37,7 @@ export const InsertChallengeDocument = gql`
       challenge_type
       start_date
       end_date
-      is_active
+      state
       rules
       challenge_participants {
         user {

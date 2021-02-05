@@ -3,12 +3,14 @@ import * as Types from '../../types/types';
 
 import {
   BasicUserFragmentFragment,
+  ChallengeFragmentFragment,
   AchievementFragmentFragment,
   GeofenceFragmentFragment,
 } from '../Fragments.generated';
 import { gql } from '@apollo/client';
 import {
   BasicUserFragmentFragmentDoc,
+  ChallengeFragmentFragmentDoc,
   AchievementFragmentFragmentDoc,
   GeofenceFragmentFragmentDoc,
 } from '../Fragments.generated';

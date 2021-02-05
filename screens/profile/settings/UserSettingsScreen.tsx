@@ -1,21 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import {
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  ActivityIndicator,
-  View,
-  TextInput,
-  TextStyle,
-  ViewStyle,
-  Alert,
-  ScrollView,
-} from 'react-native';
+import { StyleSheet, Text, View, TextInput, Alert, ScrollView } from 'react-native';
 import { Buttons, Colors, Spacing, Typography } from '../../../theme';
 import { SettingsProps } from './SettingsMenuScreen';
 import { useUserQuery } from '../../../graphql/queries/User.generated';
 import { useUpdateUserMutation } from '../../../graphql/mutations/UpdateUser.generated';
 import useAuthentication from '../../../hooks/useAuthentication';
+import Button from '../../../components/Button';
+import Loading from '../../../components/Loading';
 
 const UserSettingsScreen: React.FC<SettingsProps> = ({ navigation }: SettingsProps) => {
   const id = useAuthentication().user?.uid;
@@ -48,12 +39,22 @@ const UserSettingsScreen: React.FC<SettingsProps> = ({ navigation }: SettingsPro
       console.error(fetchError || mutationError);
       Alert.alert('Error', fetchError?.message || mutationError?.message);
     }
-    if (fetchLoading || mutationLoading)
-      return (
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator size={'large'} color={Colors.blue} />
-        </View>
-      );
+    if (fetchLoading || mutationLoading) return <Loading />;
+
+    const onSubmit = () => {
+      updateUser({
+        variables: {
+          id,
+          name,
+          bio,
+        },
+      })
+        .finally(() => navigation.goBack())
+        .catch((error) => {
+          console.error(error.message);
+        });
+    };
+
     return (
       <ScrollView keyboardShouldPersistTaps="handled">
         <View style={styles.container}>
@@ -84,23 +85,7 @@ const UserSettingsScreen: React.FC<SettingsProps> = ({ navigation }: SettingsPro
                 numberOfLines={3}
               />
             </View>
-            <TouchableOpacity
-              style={[styles.editButton]}
-              onPress={() => {
-                updateUser({
-                  variables: {
-                    id,
-                    name,
-                    bio,
-                  },
-                })
-                  .finally(() => navigation.goBack())
-                  .catch((error) => {
-                    console.error(error.message);
-                  });
-              }}>
-              <Text style={{ ...Buttons.buttonText }}>Save</Text>
-            </TouchableOpacity>
+            <Button onPress={onSubmit}>Save</Button>
           </View>
         </View>
       </ScrollView>
@@ -109,31 +94,11 @@ const UserSettingsScreen: React.FC<SettingsProps> = ({ navigation }: SettingsPro
 };
 export default UserSettingsScreen;
 
-interface Style {
-  container: ViewStyle;
-  loadingContainer: ViewStyle;
-  formContainer: ViewStyle;
-  formRow: ViewStyle;
-  formField: ViewStyle;
-  formFieldMultiLine: ViewStyle;
-  labelText: TextStyle;
-  labelContainer: ViewStyle;
-  editButton: ViewStyle;
-}
-
-const styles = StyleSheet.create<Style>({
+const styles = StyleSheet.create({
   container: {
     display: 'flex',
     alignItems: 'center',
     paddingHorizontal: Spacing.base,
-  },
-  loadingContainer: {
-    display: 'flex',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    height: '100%',
-    width: '100%',
-    marginTop: '20%',
   },
   formContainer: {
     width: '90%',
@@ -169,11 +134,5 @@ const styles = StyleSheet.create<Style>({
     alignItems: 'flex-start',
     paddingLeft: Spacing.smallest,
     width: '20%',
-  },
-  editButton: {
-    ...Buttons.button,
-    backgroundColor: Colors.blue,
-    width: '100%',
-    marginTop: Spacing.base,
   },
 });

@@ -23,6 +23,12 @@ module.exports = {
     },
     'types/types.ts': {
       plugins: [{ add: { content: '/* eslint-disable */' } }, 'typescript'],
+      config: {
+        scalar: {
+          json: {},
+          date: Date,
+        },
+      },
     },
     './': {
       preset: 'near-operation-file',

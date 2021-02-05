@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { View, Text } from 'react-native';
 import { OngoingChallenge } from '../../types/challengeTypes';
 import { RouteProp } from '@react-navigation/native';
 import { ChallengeStackParamList } from '../../types/navigationTypes';
@@ -16,24 +16,20 @@ type ChallengeScreenRouteProp = RouteProp<ChallengeStackParamList, 'OngoingChall
 type Props = {
   route: ChallengeScreenRouteProp;
 };
-
+const ListHeader = () => (
+  <View>
+    <Text style={{ ...Typography.headerText, marginTop: Spacing.base }}>Ongoing challenges</Text>
+    <Text style={{ ...Typography.bodyText, marginTop: Spacing.base }}>Here are your active challenges.</Text>
+  </View>
+);
 const OngoingChallengesScreen: React.FC<Props> = ({ route }: Props) => {
   return (
-    <View style={styles.container}>
-      <Text style={{ ...Typography.headerText, marginTop: Spacing.base }}>Ongoing challenges</Text>
-      <Text style={{ ...Typography.bodyText, marginTop: Spacing.base }}>Here are your active challenges.</Text>
-      <OngoingChallengesList challenges={route.params.ongoingChallenges} refetch={route.params.refetch} />
-    </View>
+    <OngoingChallengesList
+      challenges={route.params.ongoingChallenges}
+      refetch={route.params.refetch}
+      listHeader={<ListHeader />}
+    />
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 5,
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-});
 
 export default OngoingChallengesScreen;

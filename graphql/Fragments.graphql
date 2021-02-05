@@ -75,10 +75,15 @@ fragment challengeFragment on challenge {
   id
   challenge_type
   created_at
+  created_by_user {
+    ...basicUserFragment
+  }
   start_date
   end_date
   state
+  rules
 }
+
 
 fragment achievementFragment on achievement {
   description

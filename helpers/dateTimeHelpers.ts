@@ -9,13 +9,30 @@ export const durationToTimestamp = (duration: number) => {
 export const getCurrentTimestamp = () => {
   return new Date().toISOString();
 };
+
 export const timeStampToPresentable = (timestamp: string) => {
   return moment(timestamp).fromNow().toString();
 };
+
 export const timeStampToHours = (timestamp: string) => {
   if (timestamp === '') {
     return moment(getCurrentTimestamp()).format('HH:mm');
   } else {
     return moment(timestamp).format('HH:mm:ss');
+  }
+};
+
+export const toPrettyDate = (date: Date) => {
+  const a = moment(date);
+  const duration = moment(date).startOf('day').diff(moment().endOf('day'), 'days');
+
+  if (duration < 7) {
+    return a.format('dddd');
+  } else if (duration < 30) {
+    return a.format('dddd, Do of MMMM');
+  } else if (duration < 365) {
+    return a.format('Do of MMMM');
+  } else {
+    return a.format('Do of MMM YYYY');
   }
 };
