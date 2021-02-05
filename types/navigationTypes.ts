@@ -30,6 +30,7 @@ export type ChallengeStackParamList = {
   PendingChallenges: PendingChallengesScreenProps;
   OngoingChallenges: OngoingChallengesScreenProps;
   NewChallenge: undefined;
+  PickUsers: { user_id: string };
 };
 
 export type NewChallengeStackParamList = {
