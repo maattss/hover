@@ -44,7 +44,6 @@ const styles = StyleSheet.create({
     ...Buttons.button,
     backgroundColor: Colors.blue,
     width: '100%',
-    marginTop: Spacing.base,
-    marginBottom: Spacing.base,
+    marginVertical: Spacing.small,
   },
 });

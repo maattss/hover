@@ -10,6 +10,7 @@ import {
   Platform,
   Keyboard,
   Dimensions,
+  ViewStyle,
 } from 'react-native';
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import useTracking from '../../hooks/useTracking';
@@ -20,9 +21,10 @@ import { FontAwesome5 as FA5Icon } from '@expo/vector-icons';
 import { getCategoryColor, getCategoryIconName } from '../../components/feed/ActivityFeedCard';
 import { GeoFenceCategory } from '../../types/geoFenceTypes';
 import { durationToTimestamp, timeStampToHours } from '../../helpers/dateTimeHelpers';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import Button from '../../components/Button';
 
-const { width, height } = Dimensions.get('window');
+const { width, height } = Dimensions.get('screen');
 
 type NavigationProp = StackNavigationProp<HoverStackParamList>;
 
@@ -33,6 +35,7 @@ type ExploreProps = {
 const PublishScreen: React.FC<ExploreProps> = ({ navigation }: ExploreProps) => {
   const tracking = useTracking();
   const [caption, setCaption] = useState('');
+  const insets = useSafeAreaInsets();
 
   const resumeTracking = () => {
     tracking.startTracking();
@@ -59,13 +62,29 @@ const PublishScreen: React.FC<ExploreProps> = ({ navigation }: ExploreProps) => 
   const categoryColor = {
     color: getCategoryColor(GeoFenceCategory.EDUCATION),
   };
+  const getSafeAreaTop = () => {
+    return {
+      marginTop: insets.top,
+    } as ViewStyle;
+  };
+  const getSafeAreaBottom = () => {
+    return {
+      marginBottom: insets.bottom,
+    } as ViewStyle;
+  };
+  const getSafeAreaHeight = () => {
+    return {
+      height: insets.top,
+    } as ViewStyle;
+  };
   return (
     <View style={styles.container}>
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={{ flex: 1 }}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View style={styles.inner}>
-            <SafeAreaView style={styles.safeInner}>
-              <View style={styles.topBar}>
+            <View style={[styles.blackTop, getSafeAreaHeight()]} />
+            <View>
+              <View style={[styles.topBar, getSafeAreaTop()]}>
                 <View style={styles.topBarIcon}>
                   <FAIcon name={'question-circle'} style={styles.questionIcon} />
                 </View>
@@ -84,8 +103,7 @@ const PublishScreen: React.FC<ExploreProps> = ({ navigation }: ExploreProps) => 
                   </View>
                 </View>
               </View>
-
-              <View style={styles.trackingInfoContainer}>
+              <View style={styles.summaryContainer}>
                 <Text style={styles.infoScore}>{Math.floor(tracking.score)} points</Text>
                 <View style={styles.infoContainer}>
                   <Text style={styles.infoText}>Duration</Text>
@@ -116,14 +134,11 @@ const PublishScreen: React.FC<ExploreProps> = ({ navigation }: ExploreProps) => 
                     {caption}
                   </TextInput>
                 </View>
-              </View>
-
-              <View style={styles.publishButtonContainer}>
-                <TouchableOpacity style={styles.publishButton} onPress={publishActivity}>
+                <Button onPress={publishActivity}>
                   <Text style={styles.publishButtonText}>Publish</Text>
-                </TouchableOpacity>
+                </Button>
               </View>
-            </SafeAreaView>
+            </View>
           </View>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
@@ -137,11 +152,15 @@ const styles = StyleSheet.create({
   },
   inner: {
     justifyContent: 'flex-end',
-    flex: 1,
+    padding: Spacing.small,
   },
-  safeInner: {
-    justifyContent: 'space-between',
-    height: '100%',
+  blackTop: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: width,
+    zIndex: 98,
+    backgroundColor: Colors.black,
   },
   categoryIcon: {
     color: Colors.almostWhite,
@@ -149,9 +168,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     paddingRight: Spacing.smallest,
   },
-  trackingInfoContainer: {
-    padding: Spacing.base,
-    marginBottom: Spacing.smallest,
+  summaryContainer: {
+    marginTop: Spacing.base,
   },
   infoContainer: {
     flexDirection: 'row',
@@ -170,7 +188,7 @@ const styles = StyleSheet.create({
   },
   infoScore: {
     ...Typography.headerText,
-    marginBottom: Spacing.base,
+    marginBottom: Spacing.small,
     textAlign: 'center',
   },
   formField: {
@@ -181,8 +199,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.gray900,
   },
   publishButtonContainer: {
-    padding: Spacing.base,
-    marginBottom: Spacing.extraLarge,
+    marginBottom: 0,
   },
   publishButton: {
     ...Buttons.button,
@@ -196,7 +213,6 @@ const styles = StyleSheet.create({
   topBar: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: Spacing.small,
     backgroundColor: Colors.gray900,
     borderRadius: Spacing.smaller,
     paddingVertical: Spacing.small,
