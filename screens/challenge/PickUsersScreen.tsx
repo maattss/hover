@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import { Challenge_Participant_Insert_Input, Challenge_Participant_State_Enum } from '../../types/types';
 import { Avatar, CheckBox } from 'react-native-elements';
-import Loading from '../../components/Loading';
+import Loading from '../../components/general/Loading';
 import { ChallengeStackParamList } from '../../types/navigationTypes';
 import { RouteProp } from '@react-navigation/native';
 import { useGetFriendsQuery } from '../../graphql/queries/Friends.generated';
