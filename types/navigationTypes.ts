@@ -3,8 +3,7 @@ import { PendingChallengesScreenProps } from '../screens/challenge/PendingChalle
 
 export type RootStackParamList = {
   Main: undefined;
-  Signup: undefined;
-  Login: undefined;
+  Auth: undefined;
   Loading: undefined;
 };
 
@@ -45,4 +44,8 @@ export type SettingsNavigationStackParamList = {
   Settings: undefined;
   'User Settings': undefined;
   About: undefined;
+};
+export type AuthStackParamList = {
+  Login: undefined;
+  Signup: undefined;
 };

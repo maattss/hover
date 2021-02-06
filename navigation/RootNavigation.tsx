@@ -3,15 +3,12 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { RootStackParamList } from '../types/navigationTypes';
 import TabNavigator from './TabNavigator';
-import SignUpScreen from '../screens/auth/SignUpScreen';
-import LoginScreen from '../screens/auth/LoginScreen';
+import AuthNavigator from './AuthNavigator';
 import useAuthentication from '../hooks/useAuthentication';
 import { DarkTheme } from '../theme/colors';
 import Loading from '../components/Loading';
 
 export const RootStack = createStackNavigator<RootStackParamList>();
-
-const MainContainer: React.FC = () => <TabNavigator />;
 
 const AppNavigation: React.FC = () => {
   const { user, isLoadingUser } = useAuthentication();
@@ -22,12 +19,9 @@ const AppNavigation: React.FC = () => {
         {isLoadingUser ? (
           <RootStack.Screen name="Loading" component={Loading} />
         ) : user ? (
-          <RootStack.Screen name="Main" component={MainContainer} />
+          <RootStack.Screen name="Main" component={TabNavigator} />
         ) : (
-          <>
-            <RootStack.Screen name="Login" component={LoginScreen} />
-            <RootStack.Screen name="Signup" component={SignUpScreen} />
-          </>
+          <RootStack.Screen name="Auth" component={AuthNavigator} />
         )}
       </RootStack.Navigator>
     </NavigationContainer>
