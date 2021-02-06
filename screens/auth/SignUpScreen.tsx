@@ -13,6 +13,7 @@ import {
   ViewStyle,
   Image,
   Dimensions,
+  ActivityIndicator,
 } from 'react-native';
 import { RootStackParamList } from '../../types/navigationTypes';
 import Firebase, { fns } from '../../lib/firebase';
@@ -31,6 +32,7 @@ const SignUpScreen = ({ navigation }: StackScreenProps<RootStackParamList, 'Sign
   const [confirmPassword, setConfirmPassword] = useState('');
 
   const [loading, setLoading] = useState(false);
+  const [loadingImage, setLoadingImage] = useState(true);
   const [validationSuccess, setvalidationSuccess] = useState(true);
 
   const randomPictureURI = () => {
@@ -97,11 +99,12 @@ const SignUpScreen = ({ navigation }: StackScreenProps<RootStackParamList, 'Sign
               <View style={[styles.formContainer, getSafeAreaTop()]}>
                 <View style={styles.avatarContainer}>
                   <Image
-                    // eslint-disable-next-line @typescript-eslint/no-var-requires
-                    loadingIndicatorSource={{ uri: Asset.fromModule(require('../../assets/images/user.png')).uri }}
                     source={{ uri: picture }}
                     style={styles.avatar}
+                    onLoadStart={() => setLoadingImage(true)}
+                    onLoadEnd={() => setLoadingImage(false)}
                   />
+                  {loadingImage && <ActivityIndicator style={styles.avatarLoading} color={Colors.blue} />}
                 </View>
                 <Text style={styles.label}>Name</Text>
                 <TextInput
@@ -195,7 +198,11 @@ const styles = StyleSheet.create({
     width: 100,
     borderRadius: 100 / 2,
     margin: Spacing.small,
-    backgroundColor: Colors.white, // Default color
+    backgroundColor: Colors.white,
+  },
+  avatarLoading: {
+    position: 'absolute',
+    top: 50,
   },
   formField: {
     ...Buttons.button,
