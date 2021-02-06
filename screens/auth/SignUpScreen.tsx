@@ -46,19 +46,19 @@ const SignUpScreen = ({ navigation }: StackScreenProps<RootStackParamList, 'Sign
       // Validation rules
       if (name.length < 1) {
         setvalidationSuccess(false);
-        Alert.alert('Name missing', 'Name need to be filled in.');
+        Alert.alert('Name missing', 'Name needs to be filled in.');
       } else if (email.length < 1) {
         setvalidationSuccess(false);
-        Alert.alert('E-mail missing', 'E-mail need to be filled in.');
+        Alert.alert('E-mail missing', 'E-mail needs to be filled in.');
       } else if (!email.includes('@')) {
         setvalidationSuccess(false);
-        Alert.alert('Invalid e-mail', 'E-mail need to be valid.');
+        Alert.alert('Invalid e-mail', 'E-mail needs to be valid.');
       } else if (password.length < 8) {
         setvalidationSuccess(false);
-        Alert.alert('Password too short', 'Password need to be longer than 8 characters.');
+        Alert.alert('Password too short', 'Password needs to be longer than 8 characters.');
       } else if (password !== confirmPassword) {
-        Alert.alert('Something wrong...', 'Please check your email, and that both passwords match!');
         setvalidationSuccess(false);
+        Alert.alert("Passwords don't match", 'Both passwords need to be equal. Please try again.');
       }
 
       if (validationSuccess) {
@@ -121,14 +121,14 @@ const SignUpScreen = ({ navigation }: StackScreenProps<RootStackParamList, 'Sign
                 </View>
                 <Text style={styles.label}>Name</Text>
                 <TextInput
-                  placeholder="Enter your name"
+                  placeholder="Enter your name."
                   placeholderTextColor={Colors.gray600}
                   onChangeText={(val) => setName(val)}
                   style={styles.formField}
                 />
                 <Text style={styles.label}>E-mail</Text>
                 <TextInput
-                  placeholder="Enter your e-mail"
+                  placeholder="Enter your e-mail."
                   placeholderTextColor={Colors.gray600}
                   onChangeText={(val) => setEmail(val)}
                   autoCapitalize="none"
@@ -147,7 +147,7 @@ const SignUpScreen = ({ navigation }: StackScreenProps<RootStackParamList, 'Sign
                 />
                 <Text style={styles.label}>Confirm password</Text>
                 <TextInput
-                  placeholder="Confirm your password"
+                  placeholder="Confirm your password."
                   placeholderTextColor={Colors.gray600}
                   onChangeText={(val) => setConfirmPassword(val)}
                   autoCapitalize="none"
