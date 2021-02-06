@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { StackScreenProps } from '@react-navigation/stack';
-import { Text, View, TextInput, TouchableOpacity, Alert, StyleSheet } from 'react-native';
+import { Text, View, TextInput, TouchableOpacity, Alert, StyleSheet, Image } from 'react-native';
 import { RootStackParamList } from '../../types/navigationTypes';
 import Firebase from '../../lib/firebase';
 import { Buttons, Colors, Spacing, Typography } from '../../theme';
 import Button from '../../components/Button';
 import Loading from '../../components/Loading';
+import { Asset } from 'expo-asset';
 
 const LoginScreen = ({ navigation }: StackScreenProps<RootStackParamList, 'Login'>) => {
   const [email, setEmail] = useState('');
@@ -27,10 +28,16 @@ const LoginScreen = ({ navigation }: StackScreenProps<RootStackParamList, 'Login
   else {
     return (
       <View style={styles.container}>
-        <Text style={styles.header}>Login</Text>
+        {/* eslint-disable @typescript-eslint/no-var-requires */}
+        <Image
+          source={{ uri: Asset.fromModule(require('../../assets/images/adaptive-icon.png')).uri }}
+          style={styles.image}
+        />
+        <Text style={styles.header}>Hover</Text>
         <View style={styles.formContainer}>
+          <Text style={styles.label}>E-mail</Text>
           <TextInput
-            placeholder="Email"
+            placeholder="Enter your e-mail"
             placeholderTextColor={Colors.gray600}
             onChangeText={(val) => setEmail(val)}
             autoCapitalize="none"
@@ -38,17 +45,19 @@ const LoginScreen = ({ navigation }: StackScreenProps<RootStackParamList, 'Login
             keyboardType="email-address"
             style={styles.formField}
           />
+          <Text style={styles.label}>Password</Text>
           <TextInput
-            placeholder="Password"
+            placeholder="Enter your password"
             placeholderTextColor={Colors.gray600}
             onChangeText={(val) => setPassword(val)}
             secureTextEntry
             style={styles.formField}
           />
 
-          <Button onPress={handleLogin}>Login</Button>
+          <Button onPress={handleLogin}>
+            <Text style={{ ...Typography.largeBodyText }}>Log in</Text>
+          </Button>
         </View>
-
         <View style={styles.signupContainer}>
           <Text style={{ ...Typography.bodyText }}>Not a member yet?</Text>
           <TouchableOpacity onPress={() => navigation.navigate('Signup')}>
@@ -72,11 +81,23 @@ const styles = StyleSheet.create({
   header: {
     ...Typography.headerText,
     marginBottom: Spacing.base,
-    textAlign: 'left',
-    width: '80%',
+    textAlign: 'center',
+    width: '85%',
+  },
+  image: {
+    height: 150,
+    width: 150,
+    marginBottom: -20,
   },
   formContainer: {
-    width: '80%',
+    width: '85%',
+  },
+  label: {
+    ...Typography.bodyText,
+    fontWeight: 'bold',
+    marginBottom: Spacing.smallest,
+    textAlign: 'left',
+    width: '85%',
   },
   formField: {
     ...Buttons.button,

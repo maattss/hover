@@ -141,7 +141,9 @@ const SignUpScreen = ({ navigation }: StackScreenProps<RootStackParamList, 'Sign
                   secureTextEntry
                   style={styles.formField}
                 />
-                <Button onPress={handleSignup}>Sign up</Button>
+                <Button onPress={handleSignup}>
+                  <Text style={{ ...Typography.largeBodyText }}>Sign up</Text>
+                </Button>
                 <View style={styles.loginContainer}>
                   <Text style={{ ...Typography.bodyText }}>Already have an account?</Text>
                   <TouchableOpacity onPress={() => navigation.navigate('Login')}>
