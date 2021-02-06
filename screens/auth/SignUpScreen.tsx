@@ -22,7 +22,6 @@ import Button from '../../components/Button';
 import Loading from '../../components/Loading';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Asset } from 'expo-asset';
 
 const SignUpScreen = ({ navigation }: StackScreenProps<RootStackParamList, 'Signup'>) => {
   const insets = useSafeAreaInsets();
@@ -39,12 +38,29 @@ const SignUpScreen = ({ navigation }: StackScreenProps<RootStackParamList, 'Sign
     const random = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
     return 'https://api.multiavatar.com/' + random + '.png';
   };
-  const [picture, setPicture] = useState(randomPictureURI());
+  const picture = randomPictureURI();
 
   const handleSignup = async () => {
     setLoading(true);
     try {
-      if (password !== confirmPassword) setvalidationSuccess(false);
+      // Validation rules
+      if (name.length < 1) {
+        setvalidationSuccess(false);
+        Alert.alert('Name missing', 'Name need to be filled in.');
+      } else if (email.length < 1) {
+        setvalidationSuccess(false);
+        Alert.alert('E-mail missing', 'E-mail need to be filled in.');
+      } else if (!email.includes('@')) {
+        setvalidationSuccess(false);
+        Alert.alert('Invalid e-mail', 'E-mail need to be valid.');
+      } else if (password.length < 8) {
+        setvalidationSuccess(false);
+        Alert.alert('Password too short', 'Password need to be longer than 8 characters.');
+      } else if (password !== confirmPassword) {
+        Alert.alert('Something wrong...', 'Please check your email, and that both passwords match!');
+        setvalidationSuccess(false);
+      }
+
       if (validationSuccess) {
         // Extract the function into a variable
         const registerUser = fns.httpsCallable('registerUser');
@@ -52,16 +68,13 @@ const SignUpScreen = ({ navigation }: StackScreenProps<RootStackParamList, 'Sign
         await registerUser({ email, password });
         // Log the user in
         await Firebase.auth().signInWithEmailAndPassword(email, password);
-        // TODO:
-        // Add user to hasura db
-        Alert.alert('Signup success');
-      } else {
-        Alert.alert('Something wrong...', 'Please check your email, and that both passwords match!');
-        setLoading(false);
+        // TODO: Add user to hasura db
+        Alert.alert('Signup success! Welcome to Hover.');
       }
     } catch (error) {
       console.error(error);
       Alert.alert('Error', error.message);
+    } finally {
       setLoading(false);
     }
   };
@@ -124,7 +137,7 @@ const SignUpScreen = ({ navigation }: StackScreenProps<RootStackParamList, 'Sign
                 />
                 <Text style={styles.label}>Password</Text>
                 <TextInput
-                  placeholder="Enter your password"
+                  placeholder="Enter your password. At least 8 characters."
                   placeholderTextColor={Colors.gray600}
                   onChangeText={(val) => setPassword(val)}
                   autoCapitalize="none"
@@ -200,7 +213,7 @@ const styles = StyleSheet.create({
     width: 100,
     borderRadius: 100 / 2,
     margin: Spacing.small,
-    backgroundColor: Colors.white,
+    backgroundColor: Colors.gray900,
   },
   avatarLoading: {
     position: 'absolute',
