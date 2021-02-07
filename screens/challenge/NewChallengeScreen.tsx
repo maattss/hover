@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-extra-non-null-assertion */
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
@@ -15,7 +16,7 @@ type Props = {
 };
 
 const NewChallengeScreen: React.FC<Props> = ({ route, navigation }: Props) => {
-  // const user_id = useAuthentication().user?.uid;
+  // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
   //const [challengeType] = useState<Challenge_Type_Enum>(Challenge_Type_Enum.Score);
   //const [endDate] = useState<Date>(new Date('2021-02-11'));
   //const [challengeTypeOptions, setChallengeTypeOptions] = useState<PickerItemProps[]>();
@@ -43,7 +44,11 @@ const NewChallengeScreen: React.FC<Props> = ({ route, navigation }: Props) => {
   return (
     <View style={styles.container}>
       <View style={styles.box}>
-        <Button onPress={() => navigation.push('PickUsers', { user_id: route.params.user_id })}>
+        <Button
+          onPress={() =>
+            // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
+            navigation.push('PickUsers', { user_id: route.params.user_id })
+          }>
           Pick users to challenge
         </Button>
       </View>
