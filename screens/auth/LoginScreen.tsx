@@ -23,8 +23,6 @@ import Loading from '../../components/Loading';
 import { Asset } from 'expo-asset';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-const { width, height } = Dimensions.get('screen');
-
 const LoginScreen = ({ navigation }: StackScreenProps<AuthStackParamList, 'Login'>) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -124,7 +122,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 0,
     left: 0,
-    width: width,
+    width: Dimensions.get('screen').width,
     zIndex: 99,
     backgroundColor: Colors.black,
   },
