@@ -15,7 +15,7 @@ import {
   Dimensions,
   ActivityIndicator,
 } from 'react-native';
-import { RootStackParamList } from '../../types/navigationTypes';
+import { AuthStackParamList } from '../../types/navigationTypes';
 import Firebase, { fns } from '../../lib/firebase';
 import { Buttons, Colors, Spacing, Typography } from '../../theme';
 import Button from '../../components/Button';
@@ -23,7 +23,7 @@ import Loading from '../../components/Loading';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-const SignUpScreen = ({ navigation }: StackScreenProps<RootStackParamList, 'Signup'>) => {
+const SignUpScreen = ({ navigation }: StackScreenProps<AuthStackParamList, 'Signup'>) => {
   const insets = useSafeAreaInsets();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -153,6 +153,7 @@ const SignUpScreen = ({ navigation }: StackScreenProps<RootStackParamList, 'Sign
                   autoCapitalize="none"
                   secureTextEntry
                   style={styles.formField}
+                  onSubmitEditing={handleSignup}
                 />
                 <Button onPress={handleSignup}>
                   <Text style={{ ...Typography.largeBodyText }}>Sign up</Text>
