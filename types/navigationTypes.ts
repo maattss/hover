@@ -26,8 +26,8 @@ export type ChallengeStackParamList = {
   Challenge: undefined;
   PendingChallenges: PendingChallengesScreenProps;
   OngoingChallenges: OngoingChallengesScreenProps;
-  NewChallenge: { user_id: string };
-  PickUsers: { user_id: string };
+  NewChallenge: { user_id?: string };
+  PickUsers: { user_id?: string };
 };
 export type HoverStackParamList = {
   Explore: undefined;
