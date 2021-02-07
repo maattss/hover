@@ -125,7 +125,7 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     width: width,
-    zIndex: 98,
+    zIndex: 99,
     backgroundColor: Colors.black,
   },
   image: {

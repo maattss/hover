@@ -24,47 +24,48 @@ import Loading from '../../components/Loading';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useUpdateUserSignUpMutation } from '../../graphql/mutations/UpdateUserSignUp.generated';
 
+export const randomPictureURI = () => {
+  const random = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+  return 'https://api.multiavatar.com/' + random + '.png';
+};
+
 const SignUpScreen = ({ navigation }: StackScreenProps<AuthStackParamList, 'Signup'>) => {
   const insets = useSafeAreaInsets();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-
   const [loading, setLoading] = useState(false);
   const [loadingImage, setLoadingImage] = useState(true);
-  const [validationSuccess, setvalidationSuccess] = useState(true);
-
-  const randomPictureURI = () => {
-    const random = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-    return 'https://api.multiavatar.com/' + random + '.png';
-  };
   const [picture] = useState(randomPictureURI());
-
   const [updateUserSignUp] = useUpdateUserSignUpMutation();
 
+  const validateForm = () => {
+    if (name.length < 1) {
+      Alert.alert('Name missing', 'Name needs to be filled in.');
+      return false;
+    } else if (email.length < 1) {
+      Alert.alert('E-mail missing', 'E-mail needs to be filled in.');
+      return false;
+    } else if (!email.includes('@')) {
+      Alert.alert('Invalid e-mail', 'E-mail needs to be valid.');
+      return false;
+    } else if (password.length < 8) {
+      Alert.alert('Password too short', 'Password needs to be longer than 8 characters.');
+      return false;
+    } else if (password !== confirmPassword) {
+      Alert.alert("Passwords don't match", 'Both passwords need to be equal.');
+      return false;
+    }
+    return true;
+  };
+
   const handleSignup = async () => {
-    setLoading(true);
     try {
-      // Validation rules
-      if (name.length < 1) {
-        setvalidationSuccess(false);
-        Alert.alert('Name missing', 'Name needs to be filled in.');
-      } else if (email.length < 1) {
-        setvalidationSuccess(false);
-        Alert.alert('E-mail missing', 'E-mail needs to be filled in.');
-      } else if (!email.includes('@')) {
-        setvalidationSuccess(false);
-        Alert.alert('Invalid e-mail', 'E-mail needs to be valid.');
-      } else if (password.length < 8) {
-        setvalidationSuccess(false);
-        Alert.alert('Password too short', 'Password needs to be longer than 8 characters.');
-      } else if (password !== confirmPassword) {
-        setvalidationSuccess(false);
-        Alert.alert("Passwords don't match", 'Both passwords need to be equal. Please try again.');
-      }
+      const validationSuccess = validateForm();
 
       if (validationSuccess) {
+        setLoading(true);
         // Extract the function into a variable
         const registerUser = fns.httpsCallable('registerUser');
         // Call the function
@@ -168,6 +169,7 @@ const SignUpScreen = ({ navigation }: StackScreenProps<AuthStackParamList, 'Sign
                   onChangeText={(val) => setConfirmPassword(val)}
                   autoCapitalize="none"
                   secureTextEntry
+                  autoCorrect={false}
                   style={styles.formField}
                   onSubmitEditing={handleSignup}
                 />
@@ -200,7 +202,7 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     width: Dimensions.get('screen').width,
-    zIndex: 98,
+    zIndex: 99,
     backgroundColor: Colors.black,
   },
   signUpContainer: {
