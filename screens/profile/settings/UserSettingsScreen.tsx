@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, TextInput, Alert, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Alert, ScrollView, Image, ActivityIndicator } from 'react-native';
 import { Buttons, Colors, Spacing, Typography } from '../../../theme';
 import { SettingsProps } from './SettingsMenuScreen';
 import { useUserQuery } from '../../../graphql/queries/User.generated';
-import { useUpdateUserSettingsMutation } from '../../../graphql/mutations/UpdateUserSettings.generated';
+import { useUpdateUserMutation } from '../../../graphql/mutations/UpdateUser.generated';
 import useAuthentication from '../../../hooks/useAuthentication';
 import Button from '../../../components/Button';
 import Loading from '../../../components/Loading';
+import { randomPictureURI } from '../../auth/SignUpScreen';
 
 const UserSettingsScreen: React.FC<SettingsProps> = ({ navigation }: SettingsProps) => {
   const id = useAuthentication().user?.uid;
@@ -17,6 +18,8 @@ const UserSettingsScreen: React.FC<SettingsProps> = ({ navigation }: SettingsPro
   } else {
     const [name, setName] = useState('');
     const [bio, setBio] = useState('');
+    const [loadingImage, setLoadingImage] = useState(true);
+    const [picture, setPicture] = useState('');
     const { loading: fetchLoading, error: fetchError, data: data } = useUserQuery({
       variables: {
         id: id,
@@ -25,16 +28,18 @@ const UserSettingsScreen: React.FC<SettingsProps> = ({ navigation }: SettingsPro
     const [
       updateUserSettings,
       { loading: mutationLoading, error: mutationError, data: response },
-    ] = useUpdateUserSettingsMutation();
+    ] = useUpdateUserMutation();
 
     useEffect(() => {
       if (data) {
         setName(data.user?.name ? data.user?.name : '');
         setBio(data.user?.bio ? data.user?.bio : '');
+        setPicture(data.user?.picture ? data.user?.picture : '');
       }
       if (response) {
         setName(response.update_user?.name ? response.update_user?.name : '');
         setBio(response.update_user?.bio ? response.update_user?.bio : '');
+        setPicture(response.update_user?.picture ? response.update_user?.picture : '');
       }
     }, [data, response]);
 
@@ -49,6 +54,7 @@ const UserSettingsScreen: React.FC<SettingsProps> = ({ navigation }: SettingsPro
         variables: {
           id,
           name,
+          picture,
           bio,
         },
       })
@@ -62,33 +68,36 @@ const UserSettingsScreen: React.FC<SettingsProps> = ({ navigation }: SettingsPro
       <ScrollView keyboardShouldPersistTaps="handled">
         <View style={styles.container}>
           <View style={styles.formContainer}>
-            <View style={styles.formRow}>
-              <View style={styles.labelContainer}>
-                <Text style={styles.labelText}>Name</Text>
-              </View>
-              <TextInput
-                placeholder={'What is your name?'}
-                placeholderTextColor={Colors.gray600}
-                value={name}
-                onChangeText={(val) => setName(val)}
-                style={styles.formField}
+            <View style={styles.avatarContainer}>
+              <Image
+                source={{ uri: picture }}
+                style={styles.avatar}
+                onLoadStart={() => setLoadingImage(true)}
+                onLoadEnd={() => setLoadingImage(false)}
               />
+              {loadingImage && <ActivityIndicator style={styles.avatarLoading} color={Colors.blue} />}
             </View>
-            <View style={styles.formRow}>
-              <View style={styles.labelContainer}>
-                <Text style={styles.labelText}>Bio</Text>
-              </View>
-              <TextInput
-                placeholder={'Tell me something about yourself!'}
-                placeholderTextColor={Colors.gray600}
-                value={bio}
-                onChangeText={(val) => setBio(val)}
-                style={styles.formFieldMultiLine}
-                multiline={true}
-                numberOfLines={3}
-              />
-            </View>
-            <Button onPress={onSubmit}>Save</Button>
+            {!loadingImage && <Button onPress={() => setPicture(randomPictureURI())}>Regen picture</Button>}
+            <Text style={styles.label}>Name</Text>
+            <TextInput
+              placeholder={'Enter your name'}
+              placeholderTextColor={Colors.gray600}
+              value={name}
+              onChangeText={(val) => setName(val)}
+              style={styles.formField}
+            />
+            <Text style={styles.label}>Bio</Text>
+            <TextInput
+              placeholder={'Enter something funny about yourself!'}
+              placeholderTextColor={Colors.gray600}
+              value={bio}
+              onChangeText={(val) => setBio(val)}
+              style={styles.formField}
+              multiline={true}
+              numberOfLines={3}
+              onSubmitEditing={onSubmit}
+            />
+            <Button onPress={onSubmit}>Save changes</Button>
           </View>
         </View>
       </ScrollView>
@@ -107,35 +116,32 @@ const styles = StyleSheet.create({
     width: '90%',
     marginTop: '5%',
   },
-  formRow: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: Spacing.base,
+  label: {
+    ...Typography.bodyText,
+    fontWeight: 'bold',
+    marginBottom: Spacing.smallest,
+    textAlign: 'left',
   },
   formField: {
     ...Buttons.button,
     ...Typography.bodyText,
+    padding: Spacing.base,
+    marginBottom: Spacing.base,
     backgroundColor: Colors.gray900,
-    width: '80%',
   },
-  formFieldMultiLine: {
-    ...Buttons.button,
-    ...Typography.bodyText,
-    backgroundColor: Colors.gray900,
-    width: '80%',
-    paddingTop: Spacing.base,
-    paddingLeft: Spacing.base,
-  },
-  labelText: {
-    ...Typography.largeBodyText,
-    fontWeight: 'bold',
-  },
-  labelContainer: {
-    display: 'flex',
+  avatarContainer: {
+    flexDirection: 'row',
     justifyContent: 'center',
-    alignItems: 'flex-start',
-    paddingLeft: Spacing.smallest,
-    width: '20%',
+  },
+  avatar: {
+    height: 100,
+    width: 100,
+    borderRadius: 100 / 2,
+    margin: Spacing.small,
+    backgroundColor: Colors.gray900,
+  },
+  avatarLoading: {
+    position: 'absolute',
+    top: 45,
   },
 });

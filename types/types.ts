@@ -6061,7 +6061,7 @@ export type Users = {
   following_aggregate: Followings_Aggregate;
   id: Scalars['String'];
   name: Scalars['String'];
-  picture: Scalars['String'];
+  picture?: Maybe<Scalars['String']>;
   /** A computed field, executes function "totalscore" */
   totalScore?: Maybe<Scalars['bigint']>;
   updated_at?: Maybe<Scalars['timestamptz']>;

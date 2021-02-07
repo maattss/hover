@@ -1,0 +1,5 @@
+mutation UpdateUser($id: String!, $name: String!, $picture: String!, $bio: String!) {
+  update_user(pk_columns: { id: $id }, _set: { name: $name, picture: $picture, bio: $bio }) {
+    ...basicUserFragment
+  }
+}

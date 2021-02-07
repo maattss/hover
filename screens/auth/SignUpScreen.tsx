@@ -22,7 +22,7 @@ import { Buttons, Colors, Spacing, Typography } from '../../theme';
 import Button from '../../components/Button';
 import Loading from '../../components/Loading';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useUpdateUserSignUpMutation } from '../../graphql/mutations/UpdateUserSignUp.generated';
+import { useUpdateUserMutation } from '../../graphql/mutations/UpdateUser.generated';
 
 export const randomPictureURI = () => {
   const random = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
@@ -32,13 +32,14 @@ export const randomPictureURI = () => {
 const SignUpScreen = ({ navigation }: StackScreenProps<AuthStackParamList, 'Signup'>) => {
   const insets = useSafeAreaInsets();
   const [name, setName] = useState('');
+  const [bio] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [loadingImage, setLoadingImage] = useState(true);
   const [picture] = useState(randomPictureURI());
-  const [updateUserSignUp] = useUpdateUserSignUpMutation();
+  const [updateUserSignUp] = useUpdateUserMutation();
 
   const validateForm = () => {
     if (name.length < 1) {
@@ -80,6 +81,7 @@ const SignUpScreen = ({ navigation }: StackScreenProps<AuthStackParamList, 'Sign
               id,
               name,
               picture,
+              bio,
             },
           });
           Alert.alert('Signup success', 'Welcome to Hover!');
@@ -228,7 +230,7 @@ const styles = StyleSheet.create({
   },
   avatarLoading: {
     position: 'absolute',
-    top: 50,
+    top: 45,
   },
   formField: {
     ...Buttons.button,

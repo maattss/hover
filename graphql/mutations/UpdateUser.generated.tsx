@@ -18,6 +18,7 @@ import * as Apollo from '@apollo/client';
 export type UpdateUserMutationVariables = Types.Exact<{
   id: Types.Scalars['String'];
   name: Types.Scalars['String'];
+  picture: Types.Scalars['String'];
   bio: Types.Scalars['String'];
 }>;
 
@@ -26,8 +27,8 @@ export type UpdateUserMutation = { readonly __typename: 'mutation_root' } & {
 };
 
 export const UpdateUserDocument = gql`
-  mutation UpdateUser($id: String!, $name: String!, $bio: String!) {
-    update_user(pk_columns: { id: $id }, _set: { name: $name, bio: $bio }) {
+  mutation UpdateUser($id: String!, $name: String!, $picture: String!, $bio: String!) {
+    update_user(pk_columns: { id: $id }, _set: { name: $name, picture: $picture, bio: $bio }) {
       ...basicUserFragment
     }
   }
@@ -49,6 +50,7 @@ export const UpdateUserDocument = gql`
  *   variables: {
  *      id: // value for 'id'
  *      name: // value for 'name'
+ *      picture: // value for 'picture'
  *      bio: // value for 'bio'
  *   },
  * });
