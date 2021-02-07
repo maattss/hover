@@ -64,17 +64,6 @@ const UserSettingsScreen: React.FC<SettingsProps> = ({ navigation }: SettingsPro
       }
     }, [data, response]);
 
-    const getSafeAreaHeight = () => {
-      return {
-        height: insets.top,
-      } as ViewStyle;
-    };
-    const getSafeAreaTop = () => {
-      return {
-        marginTop: insets.top,
-      } as ViewStyle;
-    };
-
     const onSubmit = () => {
       updateUserSettings({
         variables: {
