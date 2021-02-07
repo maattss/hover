@@ -27,7 +27,9 @@ const TabNavigator: React.FC = () => {
   const tabIconProfile = ({ color = '' as string }) => <TabIcon name="user-alt" color={color} />;
 
   return (
-    <Tab.Navigator tabBarOptions={{ activeTintColor: Colors.blue, keyboardHidesTabBar: true }}>
+    <Tab.Navigator
+      tabBarOptions={{ activeTintColor: Colors.blue, keyboardHidesTabBar: true }}
+      initialRouteName={'Feed'}>
       <Tab.Screen
         name="Feed"
         component={FeedNavigator}

@@ -12,12 +12,12 @@ import { Typography } from '../theme';
 const HeaderIcon = (props: { name: string; onPress: () => void }) => {
   return <FAIcon style={styles.headericon} {...props} />;
 };
-const ExploreStack = createStackNavigator<ProfileStackParamList>();
+const ProfileStack = createStackNavigator<ProfileStackParamList>();
 
 const ProfileNavigator: React.FC = () => {
   return (
-    <ExploreStack.Navigator>
-      <ExploreStack.Screen
+    <ProfileStack.Navigator>
+      <ProfileStack.Screen
         name="Profile"
         component={ProfileScreen}
         options={({ navigation }) => ({
@@ -26,16 +26,16 @@ const ProfileNavigator: React.FC = () => {
           headerRight: () => <HeaderIcon name="cog" onPress={() => navigation.navigate('Settings')} />,
         })}
       />
-      <ExploreStack.Screen
+      <ProfileStack.Screen
         name="Settings"
         component={SettingsScreen}
         options={{
           headerTitle: 'Settings',
         }}
       />
-      <ExploreStack.Screen name="User Information" component={UserSettingsScreen} />
-      <ExploreStack.Screen name="About" component={AboutScreen} />
-    </ExploreStack.Navigator>
+      <ProfileStack.Screen name="User Information" component={UserSettingsScreen} />
+      <ProfileStack.Screen name="About" component={AboutScreen} />
+    </ProfileStack.Navigator>
   );
 };
 const styles = StyleSheet.create({
