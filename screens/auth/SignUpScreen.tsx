@@ -76,7 +76,7 @@ const SignUpScreen = ({ navigation }: StackScreenProps<AuthStackParamList, 'Sign
         // Add user name and picture to Hasura DB
         const id = newUser.user?.uid;
         if (id) {
-          updateUserSignUp({
+          await updateUserSignUp({
             variables: {
               id,
               name,
