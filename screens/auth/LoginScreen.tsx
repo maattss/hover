@@ -88,9 +88,7 @@ const LoginScreen = ({ navigation }: StackScreenProps<AuthStackParamList, 'Login
                 onSubmitEditing={handleLogin}
               />
 
-              <Button onPress={handleLogin}>
-                <Text style={{ ...Typography.largeBodyText }}>Log in</Text>
-              </Button>
+              <Button onPress={handleLogin}>Log in</Button>
 
               <View style={styles.signupContainer}>
                 <Text style={{ ...Typography.bodyText }}>Not a member yet?</Text>

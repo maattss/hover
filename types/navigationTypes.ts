@@ -42,7 +42,7 @@ export type ProfileStackParamList = {
 
 export type SettingsNavigationStackParamList = {
   Settings: undefined;
-  'User Settings': undefined;
+  'User Information': undefined;
   About: undefined;
 };
 export type AuthStackParamList = {

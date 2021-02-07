@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, TextInput, Alert, ScrollView } from 'react-nati
 import { Buttons, Colors, Spacing, Typography } from '../../../theme';
 import { SettingsProps } from './SettingsMenuScreen';
 import { useUserQuery } from '../../../graphql/queries/User.generated';
-import { useUpdateUserMutation } from '../../../graphql/mutations/UpdateUser.generated';
+import { useUpdateUserSettingsMutation } from '../../../graphql/mutations/UpdateUserSettings.generated';
 import useAuthentication from '../../../hooks/useAuthentication';
 import Button from '../../../components/Button';
 import Loading from '../../../components/Loading';
@@ -22,7 +22,10 @@ const UserSettingsScreen: React.FC<SettingsProps> = ({ navigation }: SettingsPro
         id: id,
       },
     });
-    const [updateUser, { loading: mutationLoading, error: mutationError, data: response }] = useUpdateUserMutation();
+    const [
+      updateUserSettings,
+      { loading: mutationLoading, error: mutationError, data: response },
+    ] = useUpdateUserSettingsMutation();
 
     useEffect(() => {
       if (data) {
@@ -42,7 +45,7 @@ const UserSettingsScreen: React.FC<SettingsProps> = ({ navigation }: SettingsPro
     if (fetchLoading || mutationLoading) return <Loading />;
 
     const onSubmit = () => {
-      updateUser({
+      updateUserSettings({
         variables: {
           id,
           name,

@@ -11,7 +11,7 @@ export const button = {
 
 export const buttonText = {
   color: Colors.almostWhite,
-  fontSize: Typography.bodyText.fontSize,
+  fontSize: Typography.largeBodyText.fontSize,
   fontWeight: 'bold' as const,
   letterSpacing: 1,
 };

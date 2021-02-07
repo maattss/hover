@@ -33,7 +33,7 @@ const ProfileNavigator: React.FC = () => {
           headerTitle: 'Settings',
         }}
       />
-      <ExploreStack.Screen name="User Settings" component={UserSettingsScreen} />
+      <ExploreStack.Screen name="User Information" component={UserSettingsScreen} />
       <ExploreStack.Screen name="About" component={AboutScreen} />
     </ExploreStack.Navigator>
   );

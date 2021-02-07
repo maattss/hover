@@ -69,7 +69,7 @@ const SignUpScreen = ({ navigation }: StackScreenProps<AuthStackParamList, 'Sign
         // Log the user in
         await Firebase.auth().signInWithEmailAndPassword(email, password);
         // TODO: Add user to hasura db
-        Alert.alert('Signup success! Welcome to Hover.');
+        Alert.alert('Signup success', 'Welcome to Hover!');
       }
     } catch (error) {
       console.error(error);
@@ -156,9 +156,7 @@ const SignUpScreen = ({ navigation }: StackScreenProps<AuthStackParamList, 'Sign
                   style={styles.formField}
                   onSubmitEditing={handleSignup}
                 />
-                <Button onPress={handleSignup}>
-                  <Text style={{ ...Typography.largeBodyText }}>Sign up</Text>
-                </Button>
+                <Button onPress={handleSignup}>Sign up</Button>
               </View>
               <View style={styles.loginContainer}>
                 <Text style={{ ...Typography.bodyText }}>Already have an account?</Text>
@@ -200,7 +198,6 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.smallest,
     textAlign: 'left',
   },
-  formContainer: {},
   avatarContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
@@ -242,6 +239,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.red,
     marginTop: Spacing.largest,
     marginBottom: Spacing.base,
+    width: '60%',
   },
 });
 
