@@ -14,13 +14,13 @@ import {
   Image,
   Dimensions,
   ActivityIndicator,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import { AuthStackParamList } from '../../types/navigationTypes';
 import Firebase, { fns } from '../../lib/firebase';
 import { Buttons, Colors, Spacing, Typography } from '../../theme';
 import Button from '../../components/Button';
 import Loading from '../../components/Loading';
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const SignUpScreen = ({ navigation }: StackScreenProps<AuthStackParamList, 'Signup'>) => {
@@ -38,7 +38,7 @@ const SignUpScreen = ({ navigation }: StackScreenProps<AuthStackParamList, 'Sign
     const random = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
     return 'https://api.multiavatar.com/' + random + '.png';
   };
-  const picture = randomPictureURI();
+  const [picture] = useState(randomPictureURI());
 
   const handleSignup = async () => {
     setLoading(true);
@@ -109,8 +109,8 @@ const SignUpScreen = ({ navigation }: StackScreenProps<AuthStackParamList, 'Sign
           <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <View style={styles.inner}>
               <View style={[styles.blackTop, getSafeAreaHeight()]} />
-              <View style={[styles.formContainer, getSafeAreaTop()]}>
-                <View style={styles.avatarContainer}>
+              <View>
+                <View style={[styles.avatarContainer, getSafeAreaTop()]}>
                   <Image
                     source={{ uri: picture }}
                     style={styles.avatar}
@@ -119,16 +119,17 @@ const SignUpScreen = ({ navigation }: StackScreenProps<AuthStackParamList, 'Sign
                   />
                   {loadingImage && <ActivityIndicator style={styles.avatarLoading} color={Colors.blue} />}
                 </View>
+
                 <Text style={styles.label}>Name</Text>
                 <TextInput
-                  placeholder="Enter your name."
+                  placeholder="Enter your name"
                   placeholderTextColor={Colors.gray600}
                   onChangeText={(val) => setName(val)}
                   style={styles.formField}
                 />
                 <Text style={styles.label}>E-mail</Text>
                 <TextInput
-                  placeholder="Enter your e-mail."
+                  placeholder="Enter your e-mail"
                   placeholderTextColor={Colors.gray600}
                   onChangeText={(val) => setEmail(val)}
                   autoCapitalize="none"
@@ -137,7 +138,7 @@ const SignUpScreen = ({ navigation }: StackScreenProps<AuthStackParamList, 'Sign
                 />
                 <Text style={styles.label}>Password</Text>
                 <TextInput
-                  placeholder="Enter your password. At least 8 characters."
+                  placeholder="Enter your password (at least 8 characters)"
                   placeholderTextColor={Colors.gray600}
                   onChangeText={(val) => setPassword(val)}
                   autoCapitalize="none"
@@ -147,7 +148,7 @@ const SignUpScreen = ({ navigation }: StackScreenProps<AuthStackParamList, 'Sign
                 />
                 <Text style={styles.label}>Confirm password</Text>
                 <TextInput
-                  placeholder="Confirm your password."
+                  placeholder="Confirm your password"
                   placeholderTextColor={Colors.gray600}
                   onChangeText={(val) => setConfirmPassword(val)}
                   autoCapitalize="none"
@@ -158,12 +159,12 @@ const SignUpScreen = ({ navigation }: StackScreenProps<AuthStackParamList, 'Sign
                 <Button onPress={handleSignup}>
                   <Text style={{ ...Typography.largeBodyText }}>Sign up</Text>
                 </Button>
-                <View style={styles.loginContainer}>
-                  <Text style={{ ...Typography.bodyText }}>Already have an account?</Text>
-                  <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-                    <Text style={styles.loginLink}>Login</Text>
-                  </TouchableOpacity>
-                </View>
+              </View>
+              <View style={styles.loginContainer}>
+                <Text style={{ ...Typography.bodyText }}>Already have an account?</Text>
+                <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+                  <Text style={styles.loginLink}>Login</Text>
+                </TouchableOpacity>
               </View>
             </View>
           </TouchableWithoutFeedback>
@@ -179,14 +180,13 @@ const styles = StyleSheet.create({
   },
   inner: {
     justifyContent: 'flex-end',
-    alignItems: 'center',
-    marginBottom: Spacing.base,
+    padding: Spacing.small,
   },
   blackTop: {
     position: 'absolute',
     top: 0,
     left: 0,
-    width: '100%',
+    width: Dimensions.get('screen').width,
     zIndex: 98,
     backgroundColor: Colors.black,
   },
@@ -199,13 +199,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: Spacing.smallest,
     textAlign: 'left',
-    width: '85%',
   },
-  formContainer: {
-    width: '85%',
-  },
+  formContainer: {},
   avatarContainer: {
-    width: '100%',
     flexDirection: 'row',
     justifyContent: 'center',
   },
@@ -223,7 +219,7 @@ const styles = StyleSheet.create({
   formField: {
     ...Buttons.button,
     ...Typography.bodyText,
-    padding: Spacing.small,
+    padding: Spacing.base,
     marginBottom: Spacing.base,
     backgroundColor: Colors.gray900,
   },
@@ -231,24 +227,21 @@ const styles = StyleSheet.create({
     ...Typography.bodyText,
     paddingTop: Spacing.base,
   },
-  cancelButton: {
-    ...Buttons.button,
-    backgroundColor: Colors.red,
-    width: '60%',
-    marginTop: Spacing.largest,
-    marginBottom: Spacing.base,
-  },
   loginLink: {
     ...Typography.bodyText,
     color: Colors.blue,
     marginLeft: Spacing.smallest,
     fontWeight: 'bold',
-    backgroundColor: 'green',
   },
   loginContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
-    backgroundColor: 'red',
+  },
+  cancelButton: {
+    ...Buttons.button,
+    backgroundColor: Colors.red,
+    marginTop: Spacing.largest,
+    marginBottom: Spacing.base,
   },
 });
 

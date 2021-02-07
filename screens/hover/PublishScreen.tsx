@@ -98,6 +98,7 @@ const PublishScreen: React.FC<ExploreProps> = ({ navigation }: ExploreProps) => 
                   </View>
                 </View>
               </View>
+
               <View style={styles.summaryContainer}>
                 <Text style={styles.infoScore}>{Math.floor(tracking.score)} points</Text>
                 <View style={styles.infoContainer}>
@@ -119,6 +120,7 @@ const PublishScreen: React.FC<ExploreProps> = ({ navigation }: ExploreProps) => 
                     name={getCategoryIconName(tracking.insideGeoFence?.category)}
                   />
                 </View>
+
                 <View>
                   <TextInput
                     placeholder="Insert a funny text that describes the activity!"
