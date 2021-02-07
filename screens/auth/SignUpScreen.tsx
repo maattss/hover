@@ -22,6 +22,7 @@ import { Buttons, Colors, Spacing, Typography } from '../../theme';
 import Button from '../../components/Button';
 import Loading from '../../components/Loading';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useUpdateUserSignUpMutation } from '../../graphql/mutations/UpdateUserSignUp.generated';
 
 const SignUpScreen = ({ navigation }: StackScreenProps<AuthStackParamList, 'Signup'>) => {
   const insets = useSafeAreaInsets();
@@ -39,6 +40,8 @@ const SignUpScreen = ({ navigation }: StackScreenProps<AuthStackParamList, 'Sign
     return 'https://api.multiavatar.com/' + random + '.png';
   };
   const [picture] = useState(randomPictureURI());
+
+  const [updateUserSignUp] = useUpdateUserSignUpMutation();
 
   const handleSignup = async () => {
     setLoading(true);
@@ -67,9 +70,21 @@ const SignUpScreen = ({ navigation }: StackScreenProps<AuthStackParamList, 'Sign
         // Call the function
         await registerUser({ email, password });
         // Log the user in
-        await Firebase.auth().signInWithEmailAndPassword(email, password);
-        // TODO: Add user to hasura db
-        Alert.alert('Signup success', 'Welcome to Hover!');
+        const newUser = await Firebase.auth().signInWithEmailAndPassword(email, password);
+        // Add user name and picture to Hasura DB
+        const id = newUser.user?.uid;
+        if (id) {
+          updateUserSignUp({
+            variables: {
+              id,
+              name,
+              picture,
+            },
+          });
+          Alert.alert('Signup success', 'Welcome to Hover!');
+        } else {
+          throw new Error('Error updating user data to Hasura');
+        }
       }
     } catch (error) {
       console.error(error);
