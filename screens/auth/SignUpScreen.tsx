@@ -230,7 +230,7 @@ const styles = StyleSheet.create({
   },
   avatarLoading: {
     position: 'absolute',
-    top: 45,
+    top: 50,
   },
   formField: {
     ...Buttons.button,

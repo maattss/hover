@@ -1,13 +1,30 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, TextInput, Alert, ScrollView, Image, ActivityIndicator } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  Alert,
+  Image,
+  ActivityIndicator,
+  Button,
+  Keyboard,
+  KeyboardAvoidingView,
+  TouchableWithoutFeedback,
+  Platform,
+  Dimensions,
+  ViewStyle,
+} from 'react-native';
 import { Buttons, Colors, Spacing, Typography } from '../../../theme';
 import { SettingsProps } from './SettingsMenuScreen';
 import { useUserQuery } from '../../../graphql/queries/User.generated';
 import { useUpdateUserMutation } from '../../../graphql/mutations/UpdateUser.generated';
 import useAuthentication from '../../../hooks/useAuthentication';
-import Button from '../../../components/Button';
+import CustomButton from '../../../components/Button';
 import Loading from '../../../components/Loading';
 import { randomPictureURI } from '../../auth/SignUpScreen';
+import { Asset } from 'expo-asset';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const UserSettingsScreen: React.FC<SettingsProps> = ({ navigation }: SettingsProps) => {
   const id = useAuthentication().user?.uid;
@@ -19,7 +36,11 @@ const UserSettingsScreen: React.FC<SettingsProps> = ({ navigation }: SettingsPro
     const [name, setName] = useState('');
     const [bio, setBio] = useState('');
     const [loadingImage, setLoadingImage] = useState(true);
-    const [picture, setPicture] = useState('');
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const defaultPicture = Asset.fromModule(require('../../../assets/images/user.png')).uri;
+    const [picture, setPicture] = useState(defaultPicture);
+    const insets = useSafeAreaInsets();
+
     const { loading: fetchLoading, error: fetchError, data: data } = useUserQuery({
       variables: {
         id: id,
@@ -34,7 +55,7 @@ const UserSettingsScreen: React.FC<SettingsProps> = ({ navigation }: SettingsPro
       if (data) {
         setName(data.user?.name ? data.user?.name : '');
         setBio(data.user?.bio ? data.user?.bio : '');
-        setPicture(data.user?.picture ? data.user?.picture : '');
+        setPicture(data.user?.picture ? data.user?.picture : defaultPicture);
       }
       if (response) {
         setName(response.update_user?.name ? response.update_user?.name : '');
@@ -43,11 +64,16 @@ const UserSettingsScreen: React.FC<SettingsProps> = ({ navigation }: SettingsPro
       }
     }, [data, response]);
 
-    if (fetchError || mutationError) {
-      console.error(fetchError || mutationError);
-      Alert.alert('Error', fetchError?.message || mutationError?.message);
-    }
-    if (fetchLoading || mutationLoading) return <Loading />;
+    const getSafeAreaHeight = () => {
+      return {
+        height: insets.top,
+      } as ViewStyle;
+    };
+    const getSafeAreaTop = () => {
+      return {
+        marginTop: insets.top,
+      } as ViewStyle;
+    };
 
     const onSubmit = () => {
       updateUserSettings({
@@ -64,43 +90,55 @@ const UserSettingsScreen: React.FC<SettingsProps> = ({ navigation }: SettingsPro
         });
     };
 
+    if (fetchError || mutationError) {
+      console.error(fetchError || mutationError);
+      Alert.alert('Error', fetchError?.message || mutationError?.message);
+    }
+    if (fetchLoading || mutationLoading) return <Loading />;
     return (
-      <ScrollView keyboardShouldPersistTaps="handled">
-        <View style={styles.container}>
-          <View style={styles.formContainer}>
-            <View style={styles.avatarContainer}>
-              <Image
-                source={{ uri: picture }}
-                style={styles.avatar}
-                onLoadStart={() => setLoadingImage(true)}
-                onLoadEnd={() => setLoadingImage(false)}
-              />
-              {loadingImage && <ActivityIndicator style={styles.avatarLoading} color={Colors.blue} />}
+      <View style={styles.container}>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          style={{ flex: 1 }}
+          keyboardVerticalOffset={64}>
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <View style={styles.inner}>
+              <View>
+                <View style={styles.avatarContainer}>
+                  <Image
+                    source={{ uri: picture }}
+                    style={styles.avatar}
+                    onLoadStart={() => setLoadingImage(true)}
+                    onLoadEnd={() => setLoadingImage(false)}
+                  />
+                  {loadingImage && <ActivityIndicator style={styles.avatarLoading} color={Colors.blue} />}
+                  <Button onPress={() => setPicture(randomPictureURI())} title="Regenerate picture" />
+                </View>
+
+                <Text style={styles.label}>Name</Text>
+                <TextInput
+                  placeholder={'Enter your name'}
+                  placeholderTextColor={Colors.gray600}
+                  value={name}
+                  onChangeText={(val) => setName(val)}
+                  style={styles.formField}
+                />
+                <Text style={styles.label}>Bio</Text>
+                <TextInput
+                  placeholder={'Enter something funny about yourself!'}
+                  placeholderTextColor={Colors.gray600}
+                  value={bio}
+                  onChangeText={(val) => setBio(val)}
+                  style={styles.formFieldMultiLine}
+                  multiline={true}
+                  numberOfLines={3}
+                />
+                <CustomButton onPress={onSubmit}>Save changes</CustomButton>
+              </View>
             </View>
-            {!loadingImage && <Button onPress={() => setPicture(randomPictureURI())}>Regen picture</Button>}
-            <Text style={styles.label}>Name</Text>
-            <TextInput
-              placeholder={'Enter your name'}
-              placeholderTextColor={Colors.gray600}
-              value={name}
-              onChangeText={(val) => setName(val)}
-              style={styles.formField}
-            />
-            <Text style={styles.label}>Bio</Text>
-            <TextInput
-              placeholder={'Enter something funny about yourself!'}
-              placeholderTextColor={Colors.gray600}
-              value={bio}
-              onChangeText={(val) => setBio(val)}
-              style={styles.formField}
-              multiline={true}
-              numberOfLines={3}
-              onSubmitEditing={onSubmit}
-            />
-            <Button onPress={onSubmit}>Save changes</Button>
-          </View>
-        </View>
-      </ScrollView>
+          </TouchableWithoutFeedback>
+        </KeyboardAvoidingView>
+      </View>
     );
   }
 };
@@ -108,13 +146,20 @@ export default UserSettingsScreen;
 
 const styles = StyleSheet.create({
   container: {
-    display: 'flex',
-    alignItems: 'center',
-    paddingHorizontal: Spacing.base,
+    height: Dimensions.get('screen').height,
   },
-  formContainer: {
-    width: '90%',
-    marginTop: '5%',
+  inner: {
+    justifyContent: 'flex-end',
+    padding: Spacing.small,
+    marginBottom: Spacing.large,
+  },
+  blackTop: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: Dimensions.get('screen').width,
+    zIndex: 99,
+    backgroundColor: Colors.black,
   },
   label: {
     ...Typography.bodyText,
@@ -129,19 +174,29 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.base,
     backgroundColor: Colors.gray900,
   },
+  formFieldMultiLine: {
+    ...Buttons.button,
+    ...Typography.bodyText,
+    backgroundColor: Colors.gray900,
+    paddingTop: Spacing.base,
+    paddingLeft: Spacing.base,
+    marginBottom: Spacing.base,
+  },
   avatarContainer: {
-    flexDirection: 'row',
+    alignItems: 'center',
     justifyContent: 'center',
+    marginBottom: Spacing.base,
   },
   avatar: {
     height: 100,
     width: 100,
     borderRadius: 100 / 2,
-    margin: Spacing.small,
     backgroundColor: Colors.gray900,
   },
   avatarLoading: {
+    height: 100,
+    width: 100,
     position: 'absolute',
-    top: 45,
+    top: 0,
   },
 });
