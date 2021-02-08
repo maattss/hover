@@ -19,7 +19,6 @@ import { HoverStackParamList } from '../../types/navigationTypes';
 import { FontAwesome as FAIcon } from '@expo/vector-icons';
 import { FontAwesome5 as FA5Icon } from '@expo/vector-icons';
 import { getCategoryColor, getCategoryIconName } from '../../components/feed/ActivityFeedCard';
-import { GeoFenceCategory } from '../../types/geoFenceTypes';
 import { durationToTimestamp, timeStampToHours } from '../../helpers/dateTimeHelpers';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Button from '../../components/Button';
@@ -60,7 +59,7 @@ const PublishScreen: React.FC<ExploreProps> = ({ navigation }: ExploreProps) => 
     navigation.navigate('Explore');
   };
   const categoryColor = {
-    color: getCategoryColor(GeoFenceCategory.EDUCATION),
+    color: getCategoryColor(tracking.insideGeoFence?.category),
   };
   const getSafeAreaTop = () => {
     return {

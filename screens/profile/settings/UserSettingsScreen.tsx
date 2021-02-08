@@ -13,7 +13,6 @@ import {
   TouchableWithoutFeedback,
   Platform,
   Dimensions,
-  ViewStyle,
 } from 'react-native';
 import { Buttons, Colors, Spacing, Typography } from '../../../theme';
 import { SettingsProps } from './SettingsMenuScreen';
@@ -24,7 +23,6 @@ import CustomButton from '../../../components/Button';
 import Loading from '../../../components/Loading';
 import { randomPictureURI } from '../../auth/SignUpScreen';
 import { Asset } from 'expo-asset';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const UserSettingsScreen: React.FC<SettingsProps> = ({ navigation }: SettingsProps) => {
   const id = useAuthentication().user?.uid;
@@ -39,7 +37,6 @@ const UserSettingsScreen: React.FC<SettingsProps> = ({ navigation }: SettingsPro
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const defaultPicture = Asset.fromModule(require('../../../assets/images/user.png')).uri;
     const [picture, setPicture] = useState(defaultPicture);
-    const insets = useSafeAreaInsets();
 
     const { loading: fetchLoading, error: fetchError, data: data } = useUserQuery({
       variables: {

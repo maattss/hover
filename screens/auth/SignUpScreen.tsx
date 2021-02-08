@@ -15,11 +15,12 @@ import {
   Dimensions,
   ActivityIndicator,
   TouchableWithoutFeedback,
+  Button,
 } from 'react-native';
 import { AuthStackParamList } from '../../types/navigationTypes';
 import Firebase, { fns } from '../../lib/firebase';
 import { Buttons, Colors, Spacing, Typography } from '../../theme';
-import Button from '../../components/Button';
+import CustomButton from '../../components/Button';
 import Loading from '../../components/Loading';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useUpdateUserMutation } from '../../graphql/mutations/UpdateUser.generated';
@@ -38,7 +39,7 @@ const SignUpScreen = ({ navigation }: StackScreenProps<AuthStackParamList, 'Sign
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [loadingImage, setLoadingImage] = useState(true);
-  const [picture] = useState(randomPictureURI());
+  const [picture, setPicture] = useState(randomPictureURI());
   const [updateUserSignUp] = useUpdateUserMutation();
 
   const validateForm = () => {
@@ -115,9 +116,9 @@ const SignUpScreen = ({ navigation }: StackScreenProps<AuthStackParamList, 'Sign
   if (loading) {
     return (
       <Loading text={'Signing up... Please wait'}>
-        <Button style={styles.cancelButton} onPress={handleCancel}>
+        <CustomButton style={styles.cancelButton} onPress={handleCancel}>
           Cancel
-        </Button>
+        </CustomButton>
       </Loading>
     );
   } else {
@@ -136,6 +137,7 @@ const SignUpScreen = ({ navigation }: StackScreenProps<AuthStackParamList, 'Sign
                     onLoadEnd={() => setLoadingImage(false)}
                   />
                   {loadingImage && <ActivityIndicator style={styles.avatarLoading} color={Colors.blue} />}
+                  <Button onPress={() => setPicture(randomPictureURI())} title="Regenerate picture" />
                 </View>
 
                 <Text style={styles.label}>Name</Text>
@@ -175,7 +177,7 @@ const SignUpScreen = ({ navigation }: StackScreenProps<AuthStackParamList, 'Sign
                   style={styles.formField}
                   onSubmitEditing={handleSignup}
                 />
-                <Button onPress={handleSignup}>Sign up</Button>
+                <CustomButton onPress={handleSignup}>Sign up</CustomButton>
               </View>
               <View style={styles.loginContainer}>
                 <Text style={{ ...Typography.bodyText }}>Already have an account?</Text>
@@ -218,8 +220,9 @@ const styles = StyleSheet.create({
     textAlign: 'left',
   },
   avatarContainer: {
-    flexDirection: 'row',
+    alignItems: 'center',
     justifyContent: 'center',
+    marginBottom: Spacing.base,
   },
   avatar: {
     height: 100,
