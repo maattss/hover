@@ -1,23 +1,50 @@
 import React, { useState, createRef, useEffect } from 'react';
-import MapView, { LatLng, MapTypes, Region } from 'react-native-maps';
-import { StyleSheet, Dimensions, Text, View, TouchableOpacity } from 'react-native';
+import MapView, { MapTypes, Region } from 'react-native-maps';
+import {
+  StyleSheet,
+  Dimensions,
+  Text,
+  View,
+  TouchableOpacity,
+  ViewStyle,
+  ActivityIndicator,
+  Alert,
+} from 'react-native';
 import { Colors, Spacing, Typography, Buttons } from '../../theme';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
-import SnackBar, { SnackBarVariant } from '../../components/SnackBar';
 import useTracking from '../../hooks/useTracking';
 import { defaultMapLocation } from '../../helpers/objectMappers';
 import GeoFences from '../../components/GeoFences';
+import { HoverStackParamList } from '../../types/navigationTypes';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const { width, height } = Dimensions.get('window');
 
-const MapScreen: React.FC = () => {
-  const [mapRegion, setMapRegion] = useState<LatLng>();
+type NavigationProp = StackNavigationProp<HoverStackParamList>;
+
+type ExploreProps = {
+  navigation: NavigationProp;
+};
+
+const ExploreScreen: React.FC<ExploreProps> = ({ navigation }: ExploreProps) => {
   const [chosenMapType, setChosenMapType] = useState<MapTypes>('standard');
   const [centreOnUser, setCentreOnUser] = useState(false);
-  const [showSnackbar, setShowSnackbar] = useState(false);
+  const [disableTracking, setDisableTracking] = useState(true);
+  const [loadingUserPos, setLoadingUserPos] = useState(true);
   const tracking = useTracking();
-  tracking.refetchGeofences();
+  const insets = useSafeAreaInsets();
+  // Refetch geofences on init render
+  useEffect(() => {
+    tracking.refetchGeofences();
+  }, []);
 
+  const defaultRegion: Region = {
+    longitude: tracking.userLocation ? tracking.userLocation.coords.longitude : defaultMapLocation.longitude,
+    latitude: tracking.userLocation ? tracking.userLocation.coords.latitude : defaultMapLocation.latitude,
+    latitudeDelta: 0.01,
+    longitudeDelta: 0.01 * (width / height),
+  };
   // Dynamic styles
   const mapTypeIconStyle = {
     fontSize: Typography.icon.fontSize,
@@ -32,57 +59,63 @@ const MapScreen: React.FC = () => {
   const toggleMapType = () =>
     chosenMapType === 'satellite' ? setChosenMapType('standard') : setChosenMapType('satellite');
 
-  const regionChange = (region: Region) => {
-    setMapRegion(region);
-  };
   useEffect(() => {
+    if (tracking.userLocation !== null) setLoadingUserPos(false);
     if (tracking.insideGeoFence) {
-      setShowSnackbar(true);
+      setDisableTracking(false);
     } else {
-      setShowSnackbar(false);
+      setDisableTracking(true);
     }
-  }, [tracking.insideGeoFence]);
+  }, [tracking.insideGeoFence, tracking.userLocation]);
 
   const mapView = createRef<MapView>();
   const animateMapToUserPos = () => {
     if (tracking.userLocation) setCentreOnUser(true);
-    mapView.current?.animateToRegion(
-      {
-        longitude: tracking.userLocation ? tracking.userLocation.coords.longitude : defaultMapLocation.longitude,
-        latitude: tracking.userLocation ? tracking.userLocation.coords.latitude : defaultMapLocation.latitude,
-        latitudeDelta: 0.01,
-        longitudeDelta: 0.01 * (width / height),
-      },
-      1000,
+    mapView.current?.animateToRegion(defaultRegion, 1000);
+  };
+  const startTracking = () => {
+    if (!disableTracking) {
+      tracking.startTracking();
+      navigation.navigate('Tracking');
+    }
+  };
+  const notInsideGeoFenceAlert = () => {
+    Alert.alert(
+      'Not inside a Hover zone',
+      "Sorry, you can't start tracking here! Move to a Hover zone to start earning points.",
+      [{ text: 'Ok', style: 'cancel' }],
     );
   };
-
+  const getDynamicButtonStyles = () => {
+    if (disableTracking || loadingUserPos) {
+      return {
+        backgroundColor: Colors.grayTransparent,
+      } as ViewStyle;
+    } else {
+      return {
+        backgroundColor: Colors.greenTransparent,
+      } as ViewStyle;
+    }
+  };
+  const getSafeAreaTop = () => {
+    return {
+      marginTop: insets.top,
+    } as ViewStyle;
+  };
   return (
-    <View style={styles.container}>
+    <View>
       <MapView
         ref={mapView}
         mapType={chosenMapType}
+        initialRegion={defaultRegion}
         showsUserLocation
         style={styles.mapStyle}
-        onRegionChange={(region) => regionChange(region)}
-        onRegionChangeComplete={(region) => regionChange(region)}
-        onMapReady={animateMapToUserPos}
         onDoublePress={() => setCentreOnUser(false)}
         onPanDrag={() => setCentreOnUser(false)}>
         <GeoFences geofences={tracking.geoFences} />
       </MapView>
 
-      <View style={styles.positionContainer}>
-        <Text style={styles.infoText}>
-          User location: ({tracking.userLocation ? tracking.userLocation.coords.latitude.toPrecision(5) : 'Unknown'},{' '}
-          {tracking.userLocation ? tracking.userLocation.coords.longitude.toPrecision(5) : 'Unknown'})
-        </Text>
-        <Text style={styles.infoText}>
-          Map region: ({mapRegion ? mapRegion.latitude.toPrecision(5) : ''},{' '}
-          {mapRegion ? mapRegion.longitude.toPrecision(5) : ''})
-        </Text>
-      </View>
-      <View style={styles.infoContainer}>
+      <View style={[styles.mapInfo, getSafeAreaTop()]}>
         <TouchableOpacity style={styles.mapStyleButton} onPress={toggleMapType}>
           <FAIcon style={mapTypeIconStyle} name="globe-europe" />
         </TouchableOpacity>
@@ -90,41 +123,28 @@ const MapScreen: React.FC = () => {
           <FAIcon style={centreOnUserIconStyle} name="crosshairs" />
         </TouchableOpacity>
       </View>
-      <SnackBar
-        variant={SnackBarVariant.INFO}
-        title={'Inside a Hover zone!'}
-        show={showSnackbar}
-        setShow={setShowSnackbar}
-        message={'Head over to the Hover screen to start tracking.'}
-      />
+
+      <View style={styles.startButtonContainer}>
+        <TouchableOpacity
+          style={[styles.startButton, getDynamicButtonStyles()]}
+          onPress={disableTracking ? notInsideGeoFenceAlert : startTracking}
+          disabled={loadingUserPos}>
+          {loadingUserPos && <ActivityIndicator />}
+          {!loadingUserPos && <Text style={styles.startButtonText}>Start</Text>}
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
   mapStyle: {
     width,
     height,
   },
-  infoContainer: {
+  mapInfo: {
     position: 'absolute',
-    top: '6%',
-    right: '0.5%',
-  },
-  positionContainer: {
-    backgroundColor: Colors.almostBlack,
-    alignItems: 'flex-start',
-    position: 'absolute',
-    top: '6%',
-    left: '0.5%',
-    padding: Spacing.smaller,
-    margin: 0,
-    borderRadius: 10,
+    left: Spacing.smaller,
   },
   infoText: {
     ...Typography.bodyText,
@@ -134,17 +154,40 @@ const styles = StyleSheet.create({
   },
   mapStyleButton: {
     ...Buttons.iconButton,
-    backgroundColor: Colors.almostBlack,
+    backgroundColor: Colors.almostBlackTransparent,
   },
   centreOnUserButton: {
     ...Buttons.iconButton,
-    backgroundColor: Colors.almostBlack,
+    backgroundColor: Colors.almostBlackTransparent,
     marginTop: Spacing.smallest,
   },
   icon: {
     fontSize: Typography.icon.fontSize,
     color: Colors.blue,
   },
+  startButtonContainer: {
+    position: 'absolute',
+    bottom: '10%',
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  startButton: {
+    padding: Spacing.smallest,
+    borderRadius: 110 / 2,
+    width: 110,
+    height: 110,
+    justifyContent: 'center',
+    shadowOpacity: 0.2,
+    shadowRadius: 10,
+    shadowColor: Colors.almostBlack,
+    shadowOffset: { height: 0, width: 0 },
+  },
+  startButtonText: {
+    ...Buttons.buttonText,
+    fontSize: 24,
+    textAlign: 'center',
+  },
 });
 
-export default MapScreen;
+export default ExploreScreen;

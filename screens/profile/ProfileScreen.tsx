@@ -15,8 +15,8 @@ import Loading from '../../components/Loading';
 
 const ProfileScreen: React.FC = () => {
   const id = useAuthentication().user?.uid;
-  const [userProfile, setUserProfile] = useState<UserProfile>(defaultUserProfile);
   if (id) {
+    const [userProfile, setUserProfile] = useState<UserProfile>(defaultUserProfile);
     const [refreshing, setRefreshing] = useState(false);
     const [limit, setLimit] = useState(3);
     const onRefresh = useCallback(async () => {
@@ -128,9 +128,15 @@ const ProfileScreen: React.FC = () => {
         </View>
 
         <Text style={styles.header}>Achievements</Text>
-        <ScrollView style={styles.achievementsContainer} horizontal={true}>
-          {renderAchievements()}
-        </ScrollView>
+        {userProfile.achievements.length < 1 ? (
+          <View style={styles.noData}>
+            <Text style={{ ...Typography.largeBodyText }}>No achivements...</Text>
+          </View>
+        ) : (
+          <ScrollView style={styles.achievementsContainer} horizontal={true}>
+            {renderAchievements()}
+          </ScrollView>
+        )}
 
         <Text style={styles.header}>Score</Text>
         <View style={styles.scoreContainer}>
@@ -141,14 +147,21 @@ const ProfileScreen: React.FC = () => {
         </View>
 
         <Text style={styles.header}>Activities</Text>
-        <View style={styles.activitiesContainer}>
-          {renderActivities()}
-          <Button title={'Load more...'} onPress={loadMoreActivities}></Button>
-        </View>
+        {userProfile.activities.length < 1 ? (
+          <View style={styles.noData}>
+            <Text style={{ ...Typography.largeBodyText }}>No activites...</Text>
+          </View>
+        ) : (
+          <View style={styles.activitiesContainer}>
+            {renderActivities()}
+            <Button title={'Load more...'} onPress={loadMoreActivities}></Button>
+          </View>
+        )}
       </ScrollView>
     );
+  } else {
+    return <></>;
   }
-  return <></>;
 };
 
 const styles = StyleSheet.create({
@@ -231,6 +244,10 @@ const styles = StyleSheet.create({
   loadMoreButton: {
     ...Buttons.button,
     backgroundColor: Colors.blue,
+  },
+  noData: {
+    marginLeft: Spacing.smaller,
+    marginBottom: Spacing.small,
   },
 });
 

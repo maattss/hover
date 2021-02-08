@@ -40,9 +40,9 @@ const SettingsScreen: React.FC<SettingsProps> = ({ navigation }: SettingsProps) 
   const SettingMenu: Item[] = [
     {
       id: 'bd7acbea-c1b1-873h-aed5-3ad53ahsj8ba',
-      title: 'User Settings',
+      title: 'User Information',
       disabled: false,
-      onClick: () => navigation.navigate('User Settings'),
+      onClick: () => navigation.navigate('User Information'),
     },
     {
       id: 'bd78heea-c1b1-873h-aed5-3hjsnahsj8ba',
@@ -64,13 +64,14 @@ const SettingsScreen: React.FC<SettingsProps> = ({ navigation }: SettingsProps) 
 
   const areYouSure = () =>
     Alert.alert(
-      'Are you Sure?',
+      'Are you sure?',
       'You will be signed out of your account.',
       [
         {
           text: 'Cancel',
+          style: 'cancel',
         },
-        { text: 'Sign out', onPress: () => handleLogout() },
+        { text: 'Sign out', style: 'destructive', onPress: handleLogout },
       ],
       { cancelable: false },
     );

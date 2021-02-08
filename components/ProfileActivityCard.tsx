@@ -3,44 +3,15 @@ import { StyleSheet, Text, View, ViewStyle } from 'react-native';
 import { Colors, Spacing } from '../theme';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import { ActivityFeedData } from '../types/feedTypes';
-import { GeoFenceCategory } from '../types/geoFenceTypes';
 import { timeStampToPresentable } from '../helpers/dateTimeHelpers';
 import MapView, { LatLng, Marker, Region } from 'react-native-maps';
 import { defaultMapLocation } from '../helpers/objectMappers';
 import GeoFences from './GeoFences';
+import { getCategoryColor, getCategoryIconName } from './feed/ActivityFeedCard';
 
 interface ActivityFeedCardProps {
   activity: ActivityFeedData;
 }
-
-export const getCategoryIconName = (category: GeoFenceCategory | undefined) => {
-  switch (category) {
-    case GeoFenceCategory.CULTURE:
-      return 'theater-masks';
-    case GeoFenceCategory.SOCIAL:
-      return 'users';
-    case GeoFenceCategory.EXERCISE:
-      return 'dumbbell';
-    case GeoFenceCategory.EDUCATION:
-      return 'graduation-cap';
-    default:
-      return 'question-circle';
-  }
-};
-export const getCategoryColor = (category: GeoFenceCategory | undefined) => {
-  switch (category) {
-    case GeoFenceCategory.CULTURE:
-      return Colors.almostWhite;
-    case GeoFenceCategory.SOCIAL:
-      return Colors.blue;
-    case GeoFenceCategory.EXERCISE:
-      return Colors.green;
-    case GeoFenceCategory.EDUCATION:
-      return Colors.red;
-    default:
-      return Colors.gray800;
-  }
-};
 
 const ProfileActivityCard: React.FC<ActivityFeedCardProps> = ({ activity }: ActivityFeedCardProps) => {
   const categoryColor = {

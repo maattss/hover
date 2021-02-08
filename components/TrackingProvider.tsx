@@ -31,7 +31,8 @@ interface TrackingContextValues {
   duration: number;
   startTracking: () => void;
   pauseTracking: () => void;
-  stopTracking: () => void;
+  stopTracking: (caption: string) => void;
+  discardActivity: () => void;
 }
 
 export const TrackingContext = React.createContext<TrackingContextValues>({
@@ -55,6 +56,9 @@ export const TrackingContext = React.createContext<TrackingContextValues>({
     console.error('Function not initialized');
   },
   stopTracking: () => {
+    console.error('Function not initialized');
+  },
+  discardActivity: () => {
     console.error('Function not initialized');
   },
 });
@@ -134,6 +138,7 @@ export const TrackingProvider = ({ children }: Props) => {
   const startTracking = () => {
     if (insideGeoFence) {
       setScore(0);
+      setDuration(0);
       setIsTrackingPaused(false);
       setIsTracking(true);
       setTrackingStart(getCurrentTimestamp());
@@ -142,10 +147,16 @@ export const TrackingProvider = ({ children }: Props) => {
   const pauseTracking = () => {
     setIsTrackingPaused(true);
   };
-  const stopTracking = async () => {
+  const discardActivity = () => {
+    setIsTrackingPaused(true);
+    setIsTracking(false);
+  };
+
+  const stopTracking = async (caption: string) => {
     setIsTrackingPaused(true);
     setIsTracking(false);
     const activity = {
+      caption: caption,
       geofence_id: insideGeoFence?.id,
       user_id: userId ?? '0',
       score: Math.floor(score),
@@ -164,7 +175,7 @@ export const TrackingProvider = ({ children }: Props) => {
     } catch (error) {
       console.error('Mutation error', error.message);
       addUnUploadedActivity({
-        caption: '',
+        caption: activity.caption,
         geofenceId: activity.geofence_id ?? 0,
         score: activity.score,
         startedAt: activity.started_at,
@@ -200,6 +211,7 @@ export const TrackingProvider = ({ children }: Props) => {
     startTracking: startTracking,
     pauseTracking: pauseTracking,
     stopTracking: stopTracking,
+    discardActivity: discardActivity,
   };
   return <TrackingContext.Provider value={value}>{children}</TrackingContext.Provider>;
 };

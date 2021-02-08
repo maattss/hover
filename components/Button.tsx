@@ -14,7 +14,7 @@ interface ButtonProps {
 const Button: React.FC<ButtonProps> = (props: ButtonProps) => {
   return (
     <TouchableOpacity onPress={props.onPress} style={[styles.basicButton, props.style]}>
-      <Text style={[{ ...Buttons.buttonText }, props.textStyle]}>{props.children}</Text>
+      <Text style={[{ ...Buttons.largeButtonText }, props.textStyle]}>{props.children}</Text>
     </TouchableOpacity>
   );
 };
@@ -44,7 +44,6 @@ const styles = StyleSheet.create({
     ...Buttons.button,
     backgroundColor: Colors.blue,
     width: '100%',
-    marginTop: Spacing.base,
-    marginBottom: Spacing.base,
+    marginVertical: Spacing.small,
   },
 });

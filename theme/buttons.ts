@@ -15,6 +15,12 @@ export const buttonText = {
   fontWeight: 'bold' as const,
   letterSpacing: 1,
 };
+export const largeButtonText = {
+  color: Colors.almostWhite,
+  fontSize: Typography.largeBodyText.fontSize,
+  fontWeight: 'bold' as const,
+  letterSpacing: 1,
+};
 
 export const iconButton = {
   borderRadius: Spacing.smaller,

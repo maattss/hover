@@ -9,8 +9,17 @@ export const durationToTimestamp = (duration: number) => {
 export const getCurrentTimestamp = () => {
   return new Date().toISOString();
 };
+
 export const timeStampToPresentable = (timestamp: string) => {
   return moment(timestamp).fromNow().toString();
+};
+
+export const timeStampToHours = (timestamp: string) => {
+  if (timestamp === '') {
+    return moment(getCurrentTimestamp()).format('HH:mm');
+  } else {
+    return moment(timestamp).format('HH:mm:ss');
+  }
 };
 
 export const toPrettyDate = (date: Date) => {

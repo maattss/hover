@@ -43,10 +43,9 @@ const LeaderboardScreen: React.FC = () => {
     if (highscoreData) setHighscores(convertToHighscoreList(highscoreData));
   }, [highscoreData]);
 
-  if (highscoreLoading) return <Loading />;
-  if (highscoreError) return <Text style={styles.infoText}>{highscoreError.message}</Text>;
-
   if (Platform.OS == 'android') {
+    if (highscoreLoading) return <Loading />;
+    if (highscoreError) return <Text style={styles.infoText}>{highscoreError.message}</Text>;
     return (
       <View style={styles.container}>
         <View style={styles.filterContainer}>
