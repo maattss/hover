@@ -59,6 +59,11 @@ export type AchievementFragmentFragment = { readonly __typename: 'achievement' }
   'description' | 'name' | 'achievement_type' | 'level' | 'created_at' | 'rule'
 >;
 
+export type OpponentFragmentFragment = { readonly __typename: 'challenge_participant' } & Pick<
+  Types.Challenge_Participant,
+  'state'
+> & { readonly user: { readonly __typename: 'users' } & BasicUserFragmentFragment };
+
 export const ListUserFragmentFragmentDoc = gql`
   fragment listUserFragment on users {
     id
@@ -173,4 +178,13 @@ export const AchievementFragmentFragmentDoc = gql`
     created_at
     rule
   }
+`;
+export const OpponentFragmentFragmentDoc = gql`
+  fragment opponentFragment on challenge_participant {
+    user {
+      ...basicUserFragment
+    }
+    state
+  }
+  ${BasicUserFragmentFragmentDoc}
 `;

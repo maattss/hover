@@ -83,7 +83,7 @@ const ChallengeScreen: React.FC<ChallengesProps> = (props: ChallengesProps) => {
               <Text style={{ ...Typography.headerText }}>Want a new challenge?</Text>
               <Text style={{ ...Typography.bodyText }}>Create a challenge for you and your friends!</Text>
             </View>
-            <Button style={styles.challengeButton} onPress={() => props.navigation.push('NewChallenge', { user_id })}>
+            <Button style={styles.challengeButton} onPress={() => props.navigation.navigate('NewChallenge')}>
               Create new challenge
             </Button>
           </View>
