@@ -8,7 +8,7 @@ import OpponentsList from '../../components/challenge/OpponentsList';
 import Separator from '../../components/Separator';
 import { useInsertChallengeMutation } from '../../graphql/mutations/InsertChallenge.generated';
 import { Buttons, Colors, Spacing, Typography } from '../../theme';
-import { NewChallengeStackParamList } from '../../types/navigationTypes';
+import { ChallengeStackParamList, NewChallengeStackParamList } from '../../types/navigationTypes';
 import {
   Challenge_Participant_Insert_Input,
   Challenge_Participant_State_Enum,
@@ -16,14 +16,14 @@ import {
 } from '../../types/types';
 
 type NewChallengeRouteProp = RouteProp<NewChallengeStackParamList, 'NewChallengeOverview'>;
-type NavigationProp = StackNavigationProp<NewChallengeStackParamList, 'NewChallengeOverview'>;
+type NavigationProp = StackNavigationProp<ChallengeStackParamList, 'NewChallenge'>;
 
 type Props = {
   navigation: NavigationProp;
   route: NewChallengeRouteProp;
 };
 
-const NewChallengeOverviewScreen: React.FC<Props> = ({ route }: Props) => {
+const NewChallengeOverviewScreen: React.FC<Props> = ({ route, navigation }: Props) => {
   const [challengeType] = useState<Challenge_Type_Enum>(Challenge_Type_Enum.Score);
   const [endDate] = useState<Date>(new Date('2021-02-11'));
 
@@ -45,9 +45,7 @@ const NewChallengeOverviewScreen: React.FC<Props> = ({ route }: Props) => {
     return list;
   };
 
-  const [createChallenge] = useInsertChallengeMutation({
-    variables: { challenge_type: challengeType, end_date: endDate, participants: toParticipantList() },
-  });
+  const [createChallenge] = useInsertChallengeMutation();
 
   return (
     <View style={styles.container}>
@@ -60,7 +58,19 @@ const NewChallengeOverviewScreen: React.FC<Props> = ({ route }: Props) => {
 
         <Separator />
       </View>
-      <Button onPress={createChallenge}>Challenge!</Button>
+      <Button
+        onPress={() =>
+          createChallenge({
+            variables: {
+              challenge_type: challengeType,
+              end_date: endDate,
+              participants: toParticipantList(),
+              created_by: route.params.user_id,
+            },
+          }).then(() => navigation.pop())
+        }>
+        Challenge!
+      </Button>
     </View>
   );
 };
