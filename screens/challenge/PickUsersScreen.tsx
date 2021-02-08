@@ -10,7 +10,6 @@ import { ListUserFragmentFragment } from '../../graphql/Fragments.generated';
 import { Buttons, Colors, Spacing, Typography } from '../../theme';
 import Button from '../../components/general/Button';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { Challenge_Participant_Insert_Input } from '../../types/types';
 import Separator from '../../components/Separator';
 
 type PickUsersRouteProp = RouteProp<NewChallengeStackParamList, 'PickUsers'>;
@@ -22,44 +21,47 @@ type Props = {
 };
 const PickUsersScreen: React.FC<Props> = ({
   route: {
-    params: { user_id, participants, setParticipants },
+    params: { user_id },
   },
-  navigation: { goBack },
+  navigation,
 }: Props) => {
   const { data: friends, loading } = useGetFriendsQuery({
     variables: { user_id: user_id },
   });
 
-  const [localParticipants, setLocalParticipants] = useState<Challenge_Participant_Insert_Input[]>(participants);
+  const [participants, setParticipants] = useState<ListUserFragmentFragment[]>([]);
+  const [isDisabled, setDisabled] = useState(participants.length == 0);
 
-  if (loading) return <Loading />;
-
-  const onChecked = (id: string) => {
-    const index = localParticipants.findIndex((x) => x.user_id == id);
-    const newParticipants = localParticipants;
+  const onChecked = (user: ListUserFragmentFragment) => {
+    const index = participants.findIndex((x) => x.id == user.id);
+    const newParticipants = participants;
     if (index > -1) {
       newParticipants.splice(index, 1);
     } else {
-      newParticipants.push({ user_id: id });
+      newParticipants.push(user);
     }
 
-    setLocalParticipants(newParticipants);
-    console.log(newParticipants);
+    setParticipants(newParticipants);
+    setDisabled(participants.length == 0);
   };
 
   const isFriendChecked = (id: string) => {
-    if (localParticipants.findIndex((x) => x.user_id == id) > -1) return true;
+    if (participants.findIndex((x) => x.id == id) > -1) return true;
     return false;
   };
 
   const renderItem = (item: ListUserFragmentFragment) => {
     console.log(item.name);
-    return <FriendItem item={item} checked={isFriendChecked(item.id)} onValueChanged={() => onChecked(item.id)} />;
+    return <FriendItem item={item} checked={isFriendChecked(item.id)} onValueChanged={() => onChecked(item)} />;
   };
+
+  if (loading) return <Loading />;
 
   return (
     <View style={styles.container}>
       <FlatList
+        ListHeaderComponent={<Text style={styles.title}>Who?</Text>}
+        ListHeaderComponentStyle={styles.title}
         style={styles.box}
         data={friends?.users as ListUserFragmentFragment[]}
         keyExtractor={(item) => item.id.toString()}
@@ -68,9 +70,13 @@ const PickUsersScreen: React.FC<Props> = ({
       />
       <Button
         onPress={() => {
-          setParticipants(localParticipants);
-          goBack();
-        }}>
+          navigation.push('NewChallengeOverview', {
+            user_id: user_id,
+            participants: participants,
+          });
+          console.log(participants.length);
+        }}
+        disabled={isDisabled}>
         Save Participants
       </Button>
     </View>
@@ -80,13 +86,13 @@ const PickUsersScreen: React.FC<Props> = ({
 interface FriendItemProps {
   item: ListUserFragmentFragment;
   checked: boolean;
-  onValueChanged: (id: string) => void;
+  onValueChanged: (id: ListUserFragmentFragment) => void;
 }
 
 const FriendItem: React.FC<FriendItemProps> = (props: FriendItemProps) => {
   const [checked, setChecked] = useState<boolean>(props.checked);
   const onPressed = () => {
-    props.onValueChanged(props.item.id);
+    props.onValueChanged(props.item);
     setChecked(!checked);
   };
   return (
@@ -123,6 +129,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.base,
     marginHorizontal: Spacing.smaller,
     marginVertical: Spacing.smaller,
+  },
+  title: {
+    paddingVertical: Spacing.base,
+    ...Typography.headerText,
   },
   checkboxContainer: {
     flexDirection: 'row',

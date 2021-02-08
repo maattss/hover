@@ -66,6 +66,11 @@ export type ChallengeTypeFragmentFragment = { readonly __typename: 'challenge_ty
   'name' | 'description'
 >;
 
+export type OpponentFragmentFragment = { readonly __typename: 'challenge_participant' } & Pick<
+  Types.Challenge_Participant,
+  'state'
+> & { readonly user: { readonly __typename: 'users' } & BasicUserFragmentFragment };
+
 export const ListUserFragmentFragmentDoc = gql`
   fragment listUserFragment on users {
     id
