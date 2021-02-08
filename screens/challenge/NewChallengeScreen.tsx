@@ -1,11 +1,16 @@
 /* eslint-disable @typescript-eslint/no-extra-non-null-assertion */
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import Button from '../../components/Button';
 import { Buttons, Colors, Spacing } from '../../theme';
 import { ChallengeStackParamList } from '../../types/navigationTypes';
+import {
+  Challenge_Participant_Insert_Input,
+  Challenge_Participant_State_Enum,
+  Challenge_Type_Enum,
+} from '../../types/types';
 
 type NewChallengeRouteProp = RouteProp<ChallengeStackParamList, 'NewChallenge'>;
 type NavigationProp = StackNavigationProp<ChallengeStackParamList, 'NewChallenge'>;
@@ -31,11 +36,15 @@ const NewChallengeScreen: React.FC<Props> = ({ route, navigation }: Props) => {
       })),
     );
   }, [challengeParams]); */
+  const challengeTypes = Object.keys(Challenge_Type_Enum);
+  console.log('challengeTypes', challengeTypes);
 
-  /*const [participants] = useState<Challenge_Participant_Insert_Input[]>([
-    { user_id: user_id, state: Challenge_Participant_State_Enum.Accepted },
-    { user_id: 'LqzKOPWaY9aiquOGu9SBItAfJUz2' },
-  ]);*/
+  const [participants, setParticipants] = useState<Challenge_Participant_Insert_Input[]>([]);
+  useEffect(() => {
+    const newParticipants = participants;
+    newParticipants.push({ user_id: route.params.user_id, state: Challenge_Participant_State_Enum.Accepted });
+    setParticipants(newParticipants);
+  }, [participants]);
 
   /*const [createChallenge] = useInsertChallengeMutation({
     variables: { challenge_type: challengeType, end_date: endDate, participants: participants },
@@ -46,8 +55,11 @@ const NewChallengeScreen: React.FC<Props> = ({ route, navigation }: Props) => {
       <View style={styles.box}>
         <Button
           onPress={() =>
-            // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
-            navigation.push('PickUsers', { user_id: route.params.user_id })
+            navigation.push('PickUsers', {
+              user_id: route.params.user_id,
+              participants: participants,
+              setParticipants: setParticipants,
+            })
           }>
           Pick users to challenge
         </Button>

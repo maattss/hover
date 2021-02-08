@@ -1,5 +1,7 @@
+import { Dispatch, SetStateAction } from 'react';
 import { OngoingChallengesScreenProps } from '../screens/challenge/OngoingChallengesScreen';
 import { PendingChallengesScreenProps } from '../screens/challenge/PendingChallengesScreen';
+import { Challenge_Participant_Insert_Input } from './types';
 
 export type RootStackParamList = {
   Main: undefined;
@@ -27,7 +29,11 @@ export type ChallengeStackParamList = {
   PendingChallenges: PendingChallengesScreenProps;
   OngoingChallenges: OngoingChallengesScreenProps;
   NewChallenge: { user_id?: string };
-  PickUsers: { user_id?: string };
+  PickUsers: {
+    user_id?: string;
+    participants: Challenge_Participant_Insert_Input[];
+    setParticipants: Dispatch<SetStateAction<Challenge_Participant_Insert_Input[]>>;
+  };
 };
 export type HoverStackParamList = {
   Explore: undefined;
