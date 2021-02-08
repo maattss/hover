@@ -11,6 +11,7 @@ import { Buttons, Colors, Spacing, Typography } from '../../theme';
 import Button from '../../components/general/Button';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Challenge_Participant_Insert_Input } from '../../types/types';
+import Separator from '../../components/Separator';
 
 type PickUsersRouteProp = RouteProp<NewChallengeStackParamList, 'PickUsers'>;
 type NavigationProp = StackNavigationProp<NewChallengeStackParamList>;
@@ -55,7 +56,7 @@ const PickUsersScreen: React.FC<Props> = ({
     console.log(item.name);
     return <FriendItem item={item} checked={isFriendChecked(item.id)} onValueChanged={() => onChecked(item.id)} />;
   };
-  const renderSeparator = () => <View style={styles.seperator} />;
+
   return (
     <View style={styles.container}>
       <FlatList
@@ -63,7 +64,7 @@ const PickUsersScreen: React.FC<Props> = ({
         data={friends?.users as ListUserFragmentFragment[]}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => renderItem(item)}
-        ItemSeparatorComponent={renderSeparator}
+        ItemSeparatorComponent={() => <Separator />}
       />
       <Button
         onPress={() => {
@@ -128,10 +129,6 @@ const styles = StyleSheet.create({
     width: '100%',
     backgroundColor: Colors.gray900,
     alignItems: 'center',
-  },
-  seperator: {
-    backgroundColor: Colors.gray800,
-    height: 0.5,
   },
   checkbox: {
     alignSelf: 'center',
