@@ -8,6 +8,7 @@ export type InsertChallengeMutationVariables = Types.Exact<{
   end_date: Types.Scalars['date'];
   participants: ReadonlyArray<Types.Challenge_Participant_Insert_Input> | Types.Challenge_Participant_Insert_Input;
   created_by: Types.Scalars['String'];
+  rules: Types.Scalars['json'];
 }>;
 
 export type InsertChallengeMutation = { readonly __typename: 'mutation_root' } & {
@@ -31,6 +32,7 @@ export const InsertChallengeDocument = gql`
     $end_date: date!
     $participants: [challenge_participant_insert_input!]!
     $created_by: String!
+    $rules: json!
   ) {
     insert_challenge_one(
       object: {
@@ -38,6 +40,7 @@ export const InsertChallengeDocument = gql`
         challenge_participants: { data: $participants }
         challenge_type: $challenge_type
         created_by: $created_by
+        rules: $rules
       }
     ) {
       id
@@ -73,6 +76,7 @@ export const InsertChallengeDocument = gql`
  *      end_date: // value for 'end_date'
  *      participants: // value for 'participants'
  *      created_by: // value for 'created_by'
+ *      rules: // value for 'rules'
  *   },
  * });
  */
