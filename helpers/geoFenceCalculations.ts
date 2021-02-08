@@ -1,8 +1,10 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 import { Colors } from '../theme';
 import { hexToRGB } from '../theme/colors';
 import { PolygonGeoFence, CircleGeoFence, GeoFence, GeoFenceVariant, GeoFenceCategory } from '../types/geoFenceTypes';
 import { LocationObject } from 'expo-location';
 import { LatLng } from 'react-native-maps';
+import { Asset } from 'expo-asset';
 
 export const insideGeoFences = (userLocation: LocationObject, geoFences: GeoFence[] | undefined) => {
   if (geoFences) {
@@ -96,5 +98,20 @@ export const getGeoFenceScoreRatio = (category: GeoFenceCategory) => {
       return 1 / 60;
     default:
       return 1 / 60;
+  }
+};
+
+export const getGeoFenceImage = (category: GeoFenceCategory) => {
+  switch (category) {
+    case GeoFenceCategory.EDUCATION:
+      return Asset.fromModule(require('../assets/images/education-icon.png')).uri;
+    case GeoFenceCategory.CULTURE:
+      return Asset.fromModule(require('../assets/images/culture-icon.png')).uri;
+    case GeoFenceCategory.EXERCISE:
+      return Asset.fromModule(require('../assets/images/exercise-icon.png')).uri;
+    case GeoFenceCategory.SOCIAL:
+      return Asset.fromModule(require('../assets/images/social-icon.png')).uri;
+    default:
+      return Asset.fromModule(require('../assets/images/adaptive-icon.png')).uri;
   }
 };
