@@ -20,6 +20,23 @@ const Button: React.FC<ButtonProps> = (props: ButtonProps) => {
 };
 export default Button;
 
+interface IconButtonProps {
+  onPress?: () => void;
+  textStyle?: TextStyle;
+  style?: ViewStyle | ViewStyle[];
+  label: string;
+  icon: string;
+  iconStyle?: TextStyle;
+}
+export const IconButton: React.FC<IconButtonProps> = (props: IconButtonProps) => {
+  return (
+    <TouchableOpacity style={[styles.basicButton, props.style]} onPress={props.onPress}>
+      <Text style={[{ ...Buttons.buttonText }, props.textStyle]}>{props.label}</Text>
+      <FAIcon name={props.icon} style={[styles.buttonIcon, props.iconStyle]} />
+    </TouchableOpacity>
+  );
+};
+
 interface MenuButtonProps {
   onPress?: () => void;
   label: string;
