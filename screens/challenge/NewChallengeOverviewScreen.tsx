@@ -8,7 +8,7 @@ import OpponentsList from '../../components/challenge/OpponentsList';
 import Separator from '../../components/Separator';
 import { useInsertChallengeMutation } from '../../graphql/mutations/InsertChallenge.generated';
 import { Buttons, Colors, Spacing, Typography } from '../../theme';
-import { ChallengeStackParamList, NewChallengeStackParamList } from '../../types/navigationTypes';
+import { NewChallengeStackParamList, RootTabParamList } from '../../types/navigationTypes';
 import {
   Challenge_Participant_Insert_Input,
   Challenge_Participant_State_Enum,
@@ -16,7 +16,7 @@ import {
 } from '../../types/types';
 
 type NewChallengeRouteProp = RouteProp<NewChallengeStackParamList, 'NewChallengeOverview'>;
-type NavigationProp = StackNavigationProp<ChallengeStackParamList, 'NewChallenge'>;
+type NavigationProp = StackNavigationProp<RootTabParamList, 'Challenge'>;
 
 type Props = {
   navigation: NavigationProp;
@@ -26,6 +26,7 @@ type Props = {
 const NewChallengeOverviewScreen: React.FC<Props> = ({ route, navigation }: Props) => {
   const [challengeType] = useState<Challenge_Type_Enum>(Challenge_Type_Enum.Score);
   const [endDate] = useState<Date>(new Date('2021-02-11'));
+  const [rules] = useState<string>(JSON.stringify({ score: 220 }));
 
   const challengeTypes = Object.keys(Challenge_Type_Enum);
   console.log('challengeTypes', challengeTypes);
@@ -66,8 +67,9 @@ const NewChallengeOverviewScreen: React.FC<Props> = ({ route, navigation }: Prop
               end_date: endDate,
               participants: toParticipantList(),
               created_by: route.params.user_id,
+              rules: rules,
             },
-          }).then(() => navigation.pop())
+          }).then(() => navigation.navigate('Challenge'))
         }>
         Challenge!
       </Button>

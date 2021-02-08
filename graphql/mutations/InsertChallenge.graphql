@@ -3,6 +3,7 @@ mutation InsertChallenge(
   $end_date: date!
   $participants: [challenge_participant_insert_input!]!
   $created_by: String!
+  $rules: json!
 ) {
   insert_challenge_one(
     object: {
@@ -10,6 +11,7 @@ mutation InsertChallenge(
       challenge_participants: { data: $participants }
       challenge_type: $challenge_type
       created_by: $created_by
+      rules: $rules
     }
   ) {
     id
