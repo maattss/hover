@@ -98,3 +98,10 @@ fragment achievementFragment on achievement {
   created_at
   rule
 }
+
+fragment opponentFragment on challenge_participant {
+  user {
+    ...basicUserFragment
+  }
+  state
+}

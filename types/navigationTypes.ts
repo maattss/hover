@@ -1,7 +1,6 @@
-import { Dispatch, SetStateAction } from 'react';
+import { ListUserFragmentFragment } from '../graphql/Fragments.generated';
 import { OngoingChallengesScreenProps } from '../screens/challenge/OngoingChallengesScreen';
 import { PendingChallengesScreenProps } from '../screens/challenge/PendingChallengesScreen';
-import { Challenge_Participant_Insert_Input } from './types';
 
 export type RootStackParamList = {
   Main: undefined;
@@ -28,11 +27,16 @@ export type ChallengeStackParamList = {
   Challenge: undefined;
   PendingChallenges: PendingChallengesScreenProps;
   OngoingChallenges: OngoingChallengesScreenProps;
-  NewChallenge: { user_id?: string };
+  NewChallenge: undefined;
+};
+
+export type NewChallengeStackParamList = {
   PickUsers: {
-    user_id?: string;
-    participants: Challenge_Participant_Insert_Input[];
-    setParticipants: Dispatch<SetStateAction<Challenge_Participant_Insert_Input[]>>;
+    user_id: string;
+  };
+  NewChallengeOverview: {
+    user_id: string;
+    participants: ListUserFragmentFragment[];
   };
 };
 export type HoverStackParamList = {
