@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Circle, Polygon, Overlay, Coordinate } from 'react-native-maps';
 import { GeoFence, GeoFenceVariant, CircleGeoFence, PolygonGeoFence } from '../types/geoFenceTypes';
-import { getGeoFenceColor, getGeoFenceImage } from '../helpers/geoFenceCalculations';
+import { addMetersToLatLng, getGeoFenceColor, getGeoFenceImage } from '../helpers/geoFenceCalculations';
 
 interface GeoFencesProps {
   geofences?: GeoFence[];
@@ -13,19 +13,21 @@ const drawGeoFences = (geoFences: GeoFence[] | undefined) => {
       if (geoFence.variant === GeoFenceVariant.CIRCLE) {
         const currentGeoFence = geoFence as CircleGeoFence;
         const overLayBounds: [Coordinate, Coordinate] = [
-          [
-            currentGeoFence.latitude + currentGeoFence.radius / 2,
-            currentGeoFence.longitude - currentGeoFence.radius / 2,
-          ],
-          [
-            currentGeoFence.latitude - currentGeoFence.radius / 2,
-            currentGeoFence.longitude + currentGeoFence.radius / 2,
-          ],
+          addMetersToLatLng(
+            currentGeoFence.latitude,
+            currentGeoFence.longitude,
+            currentGeoFence.radius / 2,
+            -currentGeoFence.radius / 2,
+          ),
+          addMetersToLatLng(
+            currentGeoFence.latitude,
+            currentGeoFence.longitude,
+            -currentGeoFence.radius / 2,
+            currentGeoFence.radius / 2,
+          ),
         ];
-        // TODO: Overlay radius to lat,long
-        // TODO: Add key
         return (
-          <>
+          <Fragment key={index}>
             <Circle
               key={index}
               center={{ latitude: currentGeoFence.latitude, longitude: currentGeoFence.longitude }}
@@ -39,7 +41,7 @@ const drawGeoFences = (geoFences: GeoFence[] | undefined) => {
               bounds={overLayBounds}
               style={{ backgroundColor: 'red' }}
             />
-          </>
+          </Fragment>
         );
       } else if (geoFence.variant === GeoFenceVariant.POLYGON) {
         const currentGeoFence = geoFence as PolygonGeoFence;
