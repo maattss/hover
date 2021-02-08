@@ -13,7 +13,10 @@ interface ButtonProps {
 
 const Button: React.FC<ButtonProps> = (props: ButtonProps) => {
   return (
-    <TouchableOpacity onPress={props.onPress} style={[styles.basicButton, props.style]}>
+    <TouchableOpacity
+      onPress={props.onPress}
+      disabled={props.disabled}
+      style={[styles.basicButton, props.style, props.disabled ? styles.disabledButton : null]}>
       <Text style={[{ ...Buttons.largeButtonText }, props.textStyle]}>{props.children}</Text>
     </TouchableOpacity>
   );
@@ -49,7 +52,7 @@ interface MenuButtonProps {
 
 export const MenuButton: React.FC<MenuButtonProps> = (props: MenuButtonProps) => {
   return (
-    <TouchableOpacity style={[styles.basicButton, props.style]} disabled={props.disabled} onPress={props.onPress}>
+    <TouchableOpacity style={[styles.menuButton, props.style]} disabled={props.disabled} onPress={props.onPress}>
       <Text style={{ ...Buttons.buttonText }}>{props.label}</Text>
       <FAIcon name={props.icon} style={{ ...Buttons.buttonText }} />
     </TouchableOpacity>
@@ -62,5 +65,23 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.blue,
     width: '100%',
     marginVertical: Spacing.small,
+  },
+  disabledButton: {
+    ...Buttons.button,
+    backgroundColor: Colors.gray500,
+    width: '100%',
+    marginVertical: Spacing.small,
+  },
+  buttonIcon: {
+    ...Buttons.buttonText,
+    paddingLeft: Spacing.small,
+  },
+  menuButton: {
+    ...Buttons.button,
+    marginBottom: Spacing.smaller,
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    backgroundColor: Colors.gray900,
   },
 });

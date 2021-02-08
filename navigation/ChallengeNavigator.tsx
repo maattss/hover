@@ -4,9 +4,8 @@ import { createStackNavigator } from '@react-navigation/stack';
 import ChallengeScreen from '../screens/challenge/ChallengeScreen';
 import PendingChallengesScreen from '../screens/challenge/PendingChallengesScreen';
 import { HeaderIcon } from './FeedNavigator';
-import NewChallengeScreen from '../screens/challenge/NewChallengeScreen';
 import OngoingChallengesScreen from '../screens/challenge/OngoingChallengesScreen';
-import PickUsersScreen from '../screens/challenge/PickUsersScreen';
+import NewChallengeNavigator from './NewChallengeNavigator';
 
 const ChallengeStack = createStackNavigator<ChallengeStackParamList>();
 
@@ -38,16 +37,9 @@ const ChallengeNavigator: React.FC = () => {
       />
       <ChallengeStack.Screen
         name="NewChallenge"
-        component={NewChallengeScreen}
+        component={NewChallengeNavigator}
         options={() => ({
-          headerTitle: 'Create challenge',
-        })}
-      />
-      <ChallengeStack.Screen
-        name="PickUsers"
-        component={PickUsersScreen}
-        options={() => ({
-          headerTitle: 'Pick Users',
+          headerShown: false,
         })}
       />
     </ChallengeStack.Navigator>
