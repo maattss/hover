@@ -30,6 +30,7 @@ interface TrackingContextValues {
   score: number;
   duration: number;
   startTracking: () => void;
+  resumeTracking: () => void;
   pauseTracking: () => void;
   stopTracking: (caption: string) => void;
   discardActivity: () => void;
@@ -50,6 +51,9 @@ export const TrackingContext = React.createContext<TrackingContextValues>({
   score: 0,
   duration: 0,
   startTracking: () => {
+    console.error('Function not initialized');
+  },
+  resumeTracking: () => {
     console.error('Function not initialized');
   },
   pauseTracking: () => {
@@ -144,6 +148,9 @@ export const TrackingProvider = ({ children }: Props) => {
       setTrackingStart(getCurrentTimestamp());
     }
   };
+  const resumeTracking = () => {
+    setIsTrackingPaused(false);
+  };
   const pauseTracking = () => {
     setIsTrackingPaused(true);
   };
@@ -209,6 +216,7 @@ export const TrackingProvider = ({ children }: Props) => {
     score: score,
     duration: duration,
     startTracking: startTracking,
+    resumeTracking: resumeTracking,
     pauseTracking: pauseTracking,
     stopTracking: stopTracking,
     discardActivity: discardActivity,

@@ -37,7 +37,7 @@ const PublishScreen: React.FC<ExploreProps> = ({ navigation }: ExploreProps) => 
   const insets = useSafeAreaInsets();
 
   const resumeTracking = () => {
-    tracking.startTracking();
+    tracking.resumeTracking();
     navigation.navigate('Tracking');
   };
 
