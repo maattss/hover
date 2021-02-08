@@ -1,10 +1,16 @@
 mutation InsertChallenge(
-  $challenge_type: challenge_type_enum
-  $end_date: date
+  $challenge_type: challenge_type_enum!
+  $end_date: date!
   $participants: [challenge_participant_insert_input!]!
+  $created_by: String!
 ) {
   insert_challenge_one(
-    object: { end_date: $end_date, challenge_participants: { data: $participants }, challenge_type: $challenge_type }
+    object: {
+      end_date: $end_date
+      challenge_participants: { data: $participants }
+      challenge_type: $challenge_type
+      created_by: $created_by
+    }
   ) {
     id
     challenge_type
@@ -17,5 +23,6 @@ mutation InsertChallenge(
         id
       }
     }
+    created_by
   }
 }
