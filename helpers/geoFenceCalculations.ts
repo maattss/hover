@@ -53,6 +53,13 @@ const measureCircleDistance = (lat1: number, lon1: number, lat2: number, lon2: n
   const d = R * c;
   return d * 1000; // Convert to meters
 };
+const addMetersToLatLng = (coordinates: LatLng, dy: number, dx: number) => {
+  const R = 6378.137; // Radius of earth in KM
+  const newLatitude = coordinates.latitude + (dy / R) * (180 / Math.PI);
+  const newLongitude =
+    coordinates.longitude + ((dx / R) * (180 / Math.PI)) / Math.cos((coordinates.latitude * Math.PI) / 180);
+  return [newLatitude, newLongitude];
+};
 
 export const estimatedRadius = (coordinates: LatLng[]) => {
   let biggestLength = 0;
