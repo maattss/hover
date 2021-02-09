@@ -34,8 +34,14 @@ export type NewChallengeStackParamList = {
   PickUsers: {
     user_id: string;
   };
+  ChallengeRules: {
+    user_id: string;
+    participants: ListUserFragmentFragment[];
+  };
   NewChallengeOverview: {
     user_id: string;
+    challenge_type: string;
+    rules: string;
     participants: ListUserFragmentFragment[];
   };
 };

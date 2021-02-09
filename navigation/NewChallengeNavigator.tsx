@@ -1,9 +1,9 @@
 import React from 'react';
 import { NewChallengeStackParamList } from '../types/navigationTypes';
 import { createStackNavigator } from '@react-navigation/stack';
-import PickUsersScreen from '../screens/challenge/PickUsersScreen';
-import NewChallengeOverviewScreen from '../screens/challenge/NewChallengeOverviewScreen';
 import useAuthentication from '../hooks/useAuthentication';
+import NewChallengeOverviewScreen from '../screens/challenge/newchallenge/NewChallengeOverviewScreen';
+import PickUsersScreen from '../screens/challenge/newchallenge/PickUsersScreen';
 
 const NewChallengeStack = createStackNavigator<NewChallengeStackParamList>();
 
@@ -18,6 +18,13 @@ const NewChallengeNavigator: React.FC = () => {
           headerTitle: 'Pick Users',
         })}
         initialParams={{ user_id: user_id }}
+      />
+      <NewChallengeStack.Screen
+        name="ChallengeRules"
+        component={NewChallengeOverviewScreen}
+        options={() => ({
+          headerTitle: 'Define Rules',
+        })}
       />
       <NewChallengeStack.Screen
         name="NewChallengeOverview"
