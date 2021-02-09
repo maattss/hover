@@ -69,7 +69,7 @@ export type ChallengeTypeFragmentFragment = { readonly __typename: 'challenge_ty
 export type OpponentFragmentFragment = { readonly __typename: 'challenge_participant' } & Pick<
   Types.Challenge_Participant,
   'state'
-> & { readonly user: { readonly __typename: 'users' } & BasicUserFragmentFragment };
+> & { readonly user: { readonly __typename: 'users' } & Pick<Types.Users, 'id' | 'name' | 'picture'> };
 
 export const ListUserFragmentFragmentDoc = gql`
   fragment listUserFragment on users {
@@ -232,7 +232,9 @@ export const FullFeedFragmentFragmentDoc = gql`
   fragment fullFeedFragment on feed {
     id
     user {
-      ...basicUserFragment
+      id
+      name
+      picture
     }
     activity_id
     activity {
