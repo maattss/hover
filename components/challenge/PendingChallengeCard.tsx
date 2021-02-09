@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity, TextStyle, ViewStyle } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, TextStyle, ViewStyle } from 'react-native';
+import { Avatar } from 'react-native-elements';
 import { useUpdateChallengeParticipationMutation } from '../../graphql/mutations/UpdateChallengeParticipation.generated';
 import { generateDescription } from '../../helpers/decriptionHelper';
 import { Colors, Typography, Spacing, Buttons } from '../../theme';
@@ -74,7 +75,7 @@ const PendingChallengeCard: React.FC<PendingChallengeCardProps> = ({ challenge }
     <View style={styles.card}>
       <View style={styles.topBar}>
         <View style={styles.topBarAvatar}>
-          <Image source={{ uri: challenge.created_by.picture }} style={styles.avatar} />
+          <Avatar rounded source={{ uri: challenge.created_by.picture ?? '' }} size="medium" />
         </View>
         <View style={styles.topBarText}>
           <Text style={styles.nameText}>{challenge.created_by.name}</Text>
@@ -85,12 +86,12 @@ const PendingChallengeCard: React.FC<PendingChallengeCardProps> = ({ challenge }
         <View style={styles.opponentContainer}>
           <Text style={styles.opponentHeaderText}>Other partcicipants</Text>
           {challenge.opponents
-            .filter((opponent) => opponent.id != challenge.created_by.id)
+            .filter((opponent) => opponent.user.id != challenge.created_by.id)
             .map((opponent) => (
-              <View key={opponent.id} style={styles.opponentRow}>
-                <Image source={{ uri: opponent.picture }} style={styles.opponentAvatar} />
+              <View key={opponent.user.id} style={styles.opponentRow}>
+                <Avatar rounded source={{ uri: opponent.user.picture ?? '' }} size="medium" />
                 <View style={styles.oppnentNameStateRow}>
-                  <Text style={styles.opponentNameText}>{opponent.name}</Text>
+                  <Text style={styles.opponentNameText}>{opponent.user.name}</Text>
                   <Text style={styles.opponentStateText}>{opponent.state}</Text>
                 </View>
               </View>
