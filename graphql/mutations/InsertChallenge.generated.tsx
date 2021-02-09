@@ -4,7 +4,7 @@ import * as Types from '../../types/types';
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 export type InsertChallengeMutationVariables = Types.Exact<{
-  challenge_type: Types.Challenge_Type_Enum;
+  challenge_type?: Types.Maybe<Types.Challenge_Type_Enum>;
   end_date: Types.Scalars['date'];
   participants: ReadonlyArray<Types.Challenge_Participant_Insert_Input> | Types.Challenge_Participant_Insert_Input;
   created_by: Types.Scalars['String'];
@@ -28,7 +28,7 @@ export type InsertChallengeMutation = { readonly __typename: 'mutation_root' } &
 
 export const InsertChallengeDocument = gql`
   mutation InsertChallenge(
-    $challenge_type: challenge_type_enum!
+    $challenge_type: challenge_type_enum
     $end_date: date!
     $participants: [challenge_participant_insert_input!]!
     $created_by: String!
