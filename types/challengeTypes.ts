@@ -40,4 +40,5 @@ export type OngoingChallenge = {
 export type ChallengeRules = {
   category?: string;
   score?: number;
+  time?: number;
 };
