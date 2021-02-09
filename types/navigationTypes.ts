@@ -1,6 +1,7 @@
-import { ListUserFragmentFragment } from '../graphql/Fragments.generated';
+import { ChallengeTypeFragmentFragment, ListUserFragmentFragment } from '../graphql/Fragments.generated';
 import { OngoingChallengesScreenProps } from '../screens/challenge/OngoingChallengesScreen';
 import { PendingChallengesScreenProps } from '../screens/challenge/PendingChallengesScreen';
+import { ChallengeRules } from './challengeTypes';
 
 export type RootStackParamList = {
   Main: undefined;
@@ -34,14 +35,20 @@ export type NewChallengeStackParamList = {
   PickUsers: {
     user_id: string;
   };
-  ChallengeRules: {
+  ChallengeType: {
     user_id: string;
     participants: ListUserFragmentFragment[];
   };
+  ChallengeRules: {
+    user_id: string;
+    participants: ListUserFragmentFragment[];
+    challenge_type: ChallengeTypeFragmentFragment;
+  };
   NewChallengeOverview: {
     user_id: string;
-    challenge_type: string;
-    rules: string;
+    challenge_type: ChallengeTypeFragmentFragment;
+    rules: ChallengeRules;
+    end_date: Date;
     participants: ListUserFragmentFragment[];
   };
 };
