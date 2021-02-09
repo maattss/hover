@@ -16,13 +16,13 @@ const drawGeoFences = (geoFences: GeoFence[] | undefined) => {
           addMetersToLatLng(
             currentGeoFence.latitude,
             currentGeoFence.longitude,
-            currentGeoFence.radius / 2,
+            -currentGeoFence.radius / 2,
             -currentGeoFence.radius / 2,
           ),
           addMetersToLatLng(
             currentGeoFence.latitude,
             currentGeoFence.longitude,
-            -currentGeoFence.radius / 2,
+            currentGeoFence.radius / 2,
             currentGeoFence.radius / 2,
           ),
         ];
@@ -36,11 +36,7 @@ const drawGeoFences = (geoFences: GeoFence[] | undefined) => {
               strokeColor={getGeoFenceColor(currentGeoFence.category, 1)}
               strokeWidth={1}
             />
-            <Overlay
-              image={{ uri: getGeoFenceImage(currentGeoFence.category) }}
-              bounds={overLayBounds}
-              style={{ backgroundColor: 'red' }}
-            />
+            <Overlay image={{ uri: getGeoFenceImage(currentGeoFence.category) }} bounds={overLayBounds} />
           </Fragment>
         );
       } else if (geoFence.variant === GeoFenceVariant.POLYGON) {

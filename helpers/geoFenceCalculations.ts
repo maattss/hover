@@ -54,7 +54,7 @@ const measureCircleDistance = (lat1: number, lon1: number, lat2: number, lon2: n
   return d * 1000; // Convert to meters
 };
 export const addMetersToLatLng = (latitude: number, longitude: number, dy: number, dx: number): [number, number] => {
-  const R = 6378.137; // Radius of earth in KM
+  const R = 6378.137 * 1000; // Radius of earth in meters
   const newLatitude = latitude + (dy / R) * (180 / Math.PI);
   const newLongitude = longitude + ((dx / R) * (180 / Math.PI)) / Math.cos((latitude * Math.PI) / 180);
   return [newLatitude, newLongitude];
