@@ -29,7 +29,6 @@ const NewChallengeOverviewScreen: React.FC<Props> = ({ route, navigation }: Prop
   const [rules] = useState<string>(JSON.stringify({ score: 220 }));
 
   const challengeTypes = Object.keys(Challenge_Type_Enum);
-  console.log('challengeTypes', challengeTypes);
 
   const toParticipantList = () => {
     const list: Challenge_Participant_Insert_Input[] = [
