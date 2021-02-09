@@ -34,7 +34,7 @@ const OngoingChallengeCard: React.FC<OngoingChallengeCardProps> = ({ challenge }
           <View>
             <View style={styles.row}>
               <View style={styles.colum}>
-                <Avatar rounded source={{ uri: challenge.created_by.picture ?? '' }} size="medium" />
+                <Avatar rounded source={{ uri: challenge.user.picture ?? '' }} size="medium" />
                 <Text style={styles.nameText}>{challenge.user.name}</Text>
               </View>
               <View style={styles.versus}>

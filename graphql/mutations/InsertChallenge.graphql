@@ -1,5 +1,5 @@
 mutation InsertChallenge(
-  $challenge_type: challenge_type_enum!
+  $challenge_type: challenge_type_enum
   $end_date: date!
   $participants: [challenge_participant_insert_input!]!
   $created_by: String!
