@@ -1,19 +1,16 @@
 /* eslint-disable @typescript-eslint/no-extra-non-null-assertion */
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import React, { useState } from 'react';
+import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import Button from '../../../components/Button';
 import OpponentsList from '../../../components/challenge/OpponentsList';
 import Separator from '../../../components/Separator';
 import { useInsertChallengeMutation } from '../../../graphql/mutations/InsertChallenge.generated';
+import { convertToJsonRule, getChallengeTypeEnum } from '../../../helpers/challengeMappers';
 import { Buttons, Colors, Spacing, Typography } from '../../../theme';
 import { NewChallengeStackParamList, RootTabParamList } from '../../../types/navigationTypes';
-import {
-  Challenge_Participant_Insert_Input,
-  Challenge_Participant_State_Enum,
-  Challenge_Type_Enum,
-} from '../../../types/types';
+import { Challenge_Participant_Insert_Input, Challenge_Participant_State_Enum } from '../../../types/types';
 
 type NewChallengeRouteProp = RouteProp<NewChallengeStackParamList, 'NewChallengeOverview'>;
 type NavigationProp = StackNavigationProp<RootTabParamList, 'Challenge'>;
@@ -24,12 +21,6 @@ type Props = {
 };
 
 const NewChallengeOverviewScreen: React.FC<Props> = ({ route, navigation }: Props) => {
-  const [challengeType] = useState<Challenge_Type_Enum>(Challenge_Type_Enum.Score);
-  const [endDate] = useState<Date>(new Date('2021-02-11'));
-  const [rules] = useState<string>(JSON.stringify({ score: 220 }));
-
-  const challengeTypes = Object.keys(Challenge_Type_Enum);
-
   const toParticipantList = () => {
     const list: Challenge_Participant_Insert_Input[] = [
       { user_id: route.params.user_id, state: Challenge_Participant_State_Enum.Accepted },
@@ -62,11 +53,11 @@ const NewChallengeOverviewScreen: React.FC<Props> = ({ route, navigation }: Prop
         onPress={() =>
           createChallenge({
             variables: {
-              challenge_type: challengeType,
-              end_date: endDate,
+              challenge_type: getChallengeTypeEnum(route.params.challenge_type.name),
+              end_date: route.params.end_date,
               participants: toParticipantList(),
               created_by: route.params.user_id,
-              rules: rules,
+              rules: convertToJsonRule(route.params.rules),
             },
           }).then(() => navigation.navigate('Challenge'))
         }>

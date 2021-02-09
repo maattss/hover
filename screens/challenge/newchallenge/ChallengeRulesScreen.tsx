@@ -1,12 +1,12 @@
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import Button from '../../../components/Button';
 import Separator from '../../../components/Separator';
 import { Buttons, Colors, Spacing, Typography } from '../../../theme';
+import { ChallengeRules } from '../../../types/challengeTypes';
 import { NewChallengeStackParamList } from '../../../types/navigationTypes';
-import { Challenge_Type_Enum } from '../../../types/types';
 
 type ChallengeRulesRouteProp = RouteProp<NewChallengeStackParamList, 'ChallengeRules'>;
 type NavigationProp = StackNavigationProp<NewChallengeStackParamList>;
@@ -17,20 +17,23 @@ type Props = {
 };
 
 const ChallengeRulesScreen: React.FC<Props> = ({ route, navigation }: Props) => {
-  const [challengeType] = useState<Challenge_Type_Enum>(Challenge_Type_Enum.Score);
+  const [rules] = useState<ChallengeRules>({
+    category: 'CULTURE',
+    score: 200,
+  });
   const [endDate] = useState<Date>(new Date('2021-02-11'));
-  const [rules] = useState<string>(JSON.stringify({ score: 220 }));
 
-  const challengeTypes = Object.keys(Challenge_Type_Enum);
-  const [isDisabled, setDisabled] = useState(true);
+  useEffect(() => {
+    console.log(rules);
+  }, [rules]);
 
-  const onRuleChange = () => {
-    setDisabled(false);
-  };
+  const [isDisabled, setDisabled] = useState(false);
+
   return (
     <View style={styles.container}>
       <View style={styles.box}>
         <Text style={{ ...Typography.headerText }}>What is the challenge?</Text>
+        <Separator />
 
         <View style={styles.box}></View>
         <Separator />
@@ -40,12 +43,11 @@ const ChallengeRulesScreen: React.FC<Props> = ({ route, navigation }: Props) => 
           navigation.push('NewChallengeOverview', {
             ...route.params,
             rules: rules,
-            challenge_type: challengeType,
+            end_date: endDate,
           });
-          onRuleChange();
         }}
         disabled={isDisabled}>
-        Save Participants
+        Save Rules
       </Button>
     </View>
   );

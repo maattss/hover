@@ -43,7 +43,7 @@ export const IconButton: React.FC<IconButtonProps> = (props: IconButtonProps) =>
 interface MenuButtonProps {
   onPress?: () => void;
   label: string;
-  icon: string;
+  icon?: string;
   disabled?: boolean;
   textStyle?: TextStyle;
   style?: ViewStyle;
@@ -54,7 +54,7 @@ export const MenuButton: React.FC<MenuButtonProps> = (props: MenuButtonProps) =>
   return (
     <TouchableOpacity style={[styles.menuButton, props.style]} disabled={props.disabled} onPress={props.onPress}>
       <Text style={{ ...Buttons.buttonText }}>{props.label}</Text>
-      <FAIcon name={props.icon} style={{ ...Buttons.buttonText }} />
+      <FAIcon name={props.icon ?? 'chevron-right'} style={{ ...Buttons.buttonText }} />
     </TouchableOpacity>
   );
 };
