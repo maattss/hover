@@ -1,9 +1,13 @@
 /* eslint-disable */
 import * as Types from '../../types/types';
 
-import { ListUserFragmentFragment } from '../Fragments.generated';
+import { ListUserFragmentFragment, ChallengeFragmentFragment, OpponentFragmentFragment } from '../Fragments.generated';
 import { gql } from '@apollo/client';
-import { ListUserFragmentFragmentDoc } from '../Fragments.generated';
+import {
+  ListUserFragmentFragmentDoc,
+  ChallengeFragmentFragmentDoc,
+  OpponentFragmentFragmentDoc,
+} from '../Fragments.generated';
 import * as Apollo from '@apollo/client';
 export type GetFriendsQueryVariables = Types.Exact<{
   user_id?: Types.Maybe<Types.Scalars['String']>;

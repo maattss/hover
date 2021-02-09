@@ -42,7 +42,7 @@ export type ActivityFragmentFragment = { readonly __typename: 'activities' } & P
 export type CommentFragmentFragment = { readonly __typename: 'comments' } & Pick<
   Types.Comments,
   'comment_id' | 'activity_id' | 'content'
-> & { readonly user: { readonly __typename: 'users' } & BasicUserFragmentFragment };
+> & { readonly user: { readonly __typename: 'users' } & ListUserFragmentFragment };
 
 export type GeofenceFragmentFragment = { readonly __typename: 'geofences' } & Pick<
   Types.Geofences,
@@ -52,7 +52,7 @@ export type GeofenceFragmentFragment = { readonly __typename: 'geofences' } & Pi
 export type ChallengeFragmentFragment = { readonly __typename: 'challenge' } & Pick<
   Types.Challenge,
   'id' | 'challenge_type' | 'created_at' | 'start_date' | 'end_date' | 'state' | 'rules'
-> & { readonly created_by_user: { readonly __typename: 'users' } & BasicUserFragmentFragment };
+>;
 
 export type AchievementFragmentFragment = { readonly __typename: 'achievement' } & Pick<
   Types.Achievement,
@@ -62,7 +62,7 @@ export type AchievementFragmentFragment = { readonly __typename: 'achievement' }
 export type OpponentFragmentFragment = { readonly __typename: 'challenge_participant' } & Pick<
   Types.Challenge_Participant,
   'state'
-> & { readonly user: { readonly __typename: 'users' } & BasicUserFragmentFragment };
+> & { readonly user: { readonly __typename: 'users' } & Pick<Types.Users, 'id' | 'name' | 'picture'> };
 
 export const ListUserFragmentFragmentDoc = gql`
   fragment listUserFragment on users {
@@ -85,10 +85,10 @@ export const CommentFragmentFragmentDoc = gql`
     activity_id
     content
     user {
-      ...basicUserFragment
+      ...listUserFragment
     }
   }
-  ${BasicUserFragmentFragmentDoc}
+  ${ListUserFragmentFragmentDoc}
 `;
 export const GeofenceFragmentFragmentDoc = gql`
   fragment geofenceFragment on geofences {
@@ -159,15 +159,11 @@ export const ChallengeFragmentFragmentDoc = gql`
     id
     challenge_type
     created_at
-    created_by_user {
-      ...basicUserFragment
-    }
     start_date
     end_date
     state
     rules
   }
-  ${BasicUserFragmentFragmentDoc}
 `;
 export const AchievementFragmentFragmentDoc = gql`
   fragment achievementFragment on achievement {
@@ -182,9 +178,10 @@ export const AchievementFragmentFragmentDoc = gql`
 export const OpponentFragmentFragmentDoc = gql`
   fragment opponentFragment on challenge_participant {
     user {
-      ...basicUserFragment
+      id
+      name
+      picture
     }
     state
   }
-  ${BasicUserFragmentFragmentDoc}
 `;
