@@ -70,7 +70,7 @@ const PickUsersScreen: React.FC<Props> = ({
       />
       <Button
         onPress={() => {
-          navigation.push('NewChallengeOverview', {
+          navigation.push('ChallengeRules', {
             user_id: user_id,
             participants: participants,
           });

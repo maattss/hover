@@ -4,6 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import useAuthentication from '../hooks/useAuthentication';
 import NewChallengeOverviewScreen from '../screens/challenge/newchallenge/NewChallengeOverviewScreen';
 import PickUsersScreen from '../screens/challenge/newchallenge/PickUsersScreen';
+import ChallengeRulesScreen from '../screens/challenge/newchallenge/ChallengeRulesScreen';
 
 const NewChallengeStack = createStackNavigator<NewChallengeStackParamList>();
 
@@ -21,7 +22,7 @@ const NewChallengeNavigator: React.FC = () => {
       />
       <NewChallengeStack.Screen
         name="ChallengeRules"
-        component={NewChallengeOverviewScreen}
+        component={ChallengeRulesScreen}
         options={() => ({
           headerTitle: 'Define Rules',
         })}
