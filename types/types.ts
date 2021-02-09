@@ -2307,8 +2307,11 @@ export enum Challenge_Type_Constraint {
 }
 
 export enum Challenge_Type_Enum {
+  /** Score challenge */
   Score = 'SCORE',
+  /** Score in specific category challenge */
   ScoreCategory = 'SCORE_CATEGORY',
+  /** Time challenge */
   Time = 'TIME',
 }
 

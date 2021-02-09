@@ -102,3 +102,8 @@ fragment opponentFragment on challenge_participant {
   }
   state
 }
+
+fragment challengeTypeFragment on challenge_type {
+  name
+  description
+}
