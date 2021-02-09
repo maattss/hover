@@ -3,17 +3,17 @@ import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { useState } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
-import Button from '../../components/Button';
-import OpponentsList from '../../components/challenge/OpponentsList';
-import Separator from '../../components/Separator';
-import { useInsertChallengeMutation } from '../../graphql/mutations/InsertChallenge.generated';
-import { Buttons, Colors, Spacing, Typography } from '../../theme';
-import { NewChallengeStackParamList, RootTabParamList } from '../../types/navigationTypes';
+import Button from '../../../components/Button';
+import OpponentsList from '../../../components/challenge/OpponentsList';
+import Separator from '../../../components/Separator';
+import { useInsertChallengeMutation } from '../../../graphql/mutations/InsertChallenge.generated';
+import { Buttons, Colors, Spacing, Typography } from '../../../theme';
+import { NewChallengeStackParamList, RootTabParamList } from '../../../types/navigationTypes';
 import {
   Challenge_Participant_Insert_Input,
   Challenge_Participant_State_Enum,
   Challenge_Type_Enum,
-} from '../../types/types';
+} from '../../../types/types';
 
 type NewChallengeRouteProp = RouteProp<NewChallengeStackParamList, 'NewChallengeOverview'>;
 type NavigationProp = StackNavigationProp<RootTabParamList, 'Challenge'>;
