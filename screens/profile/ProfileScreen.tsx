@@ -160,11 +160,15 @@ const styles = StyleSheet.create({
   },
   name: {
     ...Typography.headerText,
+    flexWrap: 'wrap',
+    width: '70%',
   },
   bio: {
     ...Typography.largeBodyText,
     fontStyle: 'italic',
     marginTop: Spacing.smallest,
+    flexWrap: 'wrap',
+    width: '70%',
   },
   avatar: {
     height: 80,

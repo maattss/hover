@@ -1,17 +1,9 @@
 import React, { Fragment } from 'react';
-import { Image, Text, View } from 'react-native';
-import { Circle, Polygon, Overlay, Coordinate, Callout, Marker } from 'react-native-maps';
-import {
-  GeoFence,
-  GeoFenceVariant,
-  CircleGeoFence,
-  PolygonGeoFence,
-  GeoFenceCategory,
-} from '../../types/geoFenceTypes';
-import { addMetersToLatLng, getGeoFenceColor, getGeoFenceImage } from '../../helpers/geoFenceCalculations';
-import { Typography, Colors } from '../../theme';
-import { FontAwesome as FAIcon } from '@expo/vector-icons';
-import { hexToRGB } from '../../theme/colors';
+import { Image } from 'react-native';
+import { Circle, Polygon, Marker } from 'react-native-maps';
+import { GeoFence, GeoFenceVariant, CircleGeoFence, PolygonGeoFence } from '../../types/geoFenceTypes';
+import { getGeoFenceColor, getGeoFenceImage } from '../../helpers/geoFenceCalculations';
+import { Spacing } from '../../theme';
 
 interface GeoFencesProps {
   geofences?: GeoFence[];
@@ -19,7 +11,6 @@ interface GeoFencesProps {
 }
 
 const drawGeoFences = (geoFences: GeoFence[] | undefined, zoom: number, customMarker: boolean) => {
-  console.log('zoom geofences', zoom);
   if (geoFences) {
     return geoFences.map((geoFence, index) => {
       const zoomScaling = Math.ceil((zoom ?? 0) * 2000);
@@ -37,7 +28,8 @@ const drawGeoFences = (geoFences: GeoFence[] | undefined, zoom: number, customMa
               strokeColor={getGeoFenceColor(currentGeoFence.category, 1)}
               strokeWidth={1}
             />
-            {/* Default marker for maps without zoom */}
+
+            {/* Default marker for maps without zoom, e.g. activity cards */}
             {!customMarker && (
               <Marker
                 coordinate={{ latitude: currentGeoFence.latitude, longitude: currentGeoFence.longitude }}
@@ -47,7 +39,7 @@ const drawGeoFences = (geoFences: GeoFence[] | undefined, zoom: number, customMa
             )}
 
             {/* Custom info marker for bigger maps (maps with zoom, e.g. explore screen) */}
-            {textSize > 0 && customMarker && (
+            {textSize > 10 && customMarker && (
               <Marker
                 coordinate={{ latitude: currentGeoFence.latitude, longitude: currentGeoFence.longitude }}
                 title={currentGeoFence.name}
@@ -70,13 +62,6 @@ const drawGeoFences = (geoFences: GeoFence[] | undefined, zoom: number, customMa
               strokeColor={getGeoFenceColor(currentGeoFence.category, 1)}
               strokeWidth={1}
             />
-            <Circle
-              center={{ latitude: currentGeoFence.latitude, longitude: currentGeoFence.longitude }}
-              radius={currentGeoFence.radius}
-              fillColor={getGeoFenceColor(GeoFenceCategory.EDUCATION, 0.4)}
-              strokeColor={getGeoFenceColor(currentGeoFence.category, 1)}
-              strokeWidth={1}
-            />
 
             {/* Default marker for maps without zoom */}
             {!customMarker && (
@@ -88,11 +73,12 @@ const drawGeoFences = (geoFences: GeoFence[] | undefined, zoom: number, customMa
             )}
 
             {/* Custom info marker for bigger maps (maps with zoom, e.g. explore screen) */}
-            {textSize > 0 && customMarker && (
+            {textSize > 10 && customMarker && (
               <Marker
-                coordinate={{ latitude: geoFence.latitude, longitude: geoFence.longitude }}
                 title={currentGeoFence.name}
-                description={currentGeoFence.description}>
+                description={currentGeoFence.description}
+                coordinate={{ latitude: geoFence.latitude, longitude: geoFence.longitude }}
+                style={{ marginHorizontal: Spacing.extraLarge }}>
                 <Image
                   source={{ uri: getGeoFenceImage(currentGeoFence.category) }}
                   style={{ height: textSize, width: textSize }}
