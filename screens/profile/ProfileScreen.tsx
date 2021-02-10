@@ -7,11 +7,11 @@ import { Buttons, Colors, Spacing, Typography } from '../../theme';
 import { UserProfile } from '../../types/profileTypes';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import { GeoFenceCategory } from '../../types/geoFenceTypes';
-import { getCategoryIconName, getCategoryColor } from '../../components/feed/ActivityFeedCard';
 import ProfileActivityCard from '../../components/ProfileActivityCard';
 import Achievement from '../../components/Achievement';
 import { convertToUserProfile, defaultUserProfile } from '../../helpers/objectMappers';
 import Loading from '../../components/Loading';
+import { getCategoryColor, getCategoryIconName } from '../../helpers/categoryHelpers';
 
 const ProfileScreen: React.FC = () => {
   const id = useAuthentication().user?.uid;
@@ -61,20 +61,18 @@ const ProfileScreen: React.FC = () => {
         };
       };
 
-      return Object.keys(GeoFenceCategory)
-        .filter((key) => !isNaN(Number(GeoFenceCategory[key as keyof typeof GeoFenceCategory])))
-        .map((category, index) => {
-          const categoryEnum: GeoFenceCategory = GeoFenceCategory[category as keyof typeof GeoFenceCategory];
-          return (
-            <View key={index} style={styles.score}>
-              <FAIcon
-                style={[styles.categoryIcon, categoryColor(categoryEnum)]}
-                name={getCategoryIconName(categoryEnum)}
-              />
-              <Text style={{ ...Typography.headerText, textAlign: 'center' }}>{getScore(categoryEnum)}</Text>
-            </View>
-          );
-        });
+      return Object.keys(GeoFenceCategory).map((category, index) => {
+        const categoryEnum: GeoFenceCategory = GeoFenceCategory[category as keyof typeof GeoFenceCategory];
+        return (
+          <View key={index} style={styles.score}>
+            <FAIcon
+              style={[styles.categoryIcon, categoryColor(categoryEnum)]}
+              name={getCategoryIconName(categoryEnum)}
+            />
+            <Text style={{ ...Typography.headerText, textAlign: 'center' }}>{getScore(categoryEnum)}</Text>
+          </View>
+        );
+      });
     };
     const renderAchievements = () => {
       return userProfile.achievements

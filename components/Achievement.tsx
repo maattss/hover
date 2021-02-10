@@ -5,7 +5,7 @@ import { Achievement as AchievementType, AchievementVariant } from '../types/pro
 import { Typography } from '../theme';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import { GeoFenceCategory } from '../types/geoFenceTypes';
-import { getCategoryIconName } from './feed/ActivityFeedCard';
+import { getCategoryIconName } from '../helpers/categoryHelpers';
 
 interface AchievementProps {
   achievement: AchievementType;

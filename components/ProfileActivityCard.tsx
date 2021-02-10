@@ -7,7 +7,7 @@ import { timeStampToPresentable } from '../helpers/dateTimeHelpers';
 import MapView, { LatLng, Marker, Region } from 'react-native-maps';
 import { defaultMapLocation } from '../helpers/objectMappers';
 import GeoFences from './GeoFences';
-import { getCategoryColor, getCategoryIconName } from './feed/ActivityFeedCard';
+import { getCategoryColor, getCategoryIconName } from '../helpers/categoryHelpers';
 
 interface ActivityFeedCardProps {
   activity: ActivityFeedData;

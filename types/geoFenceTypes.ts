@@ -34,10 +34,10 @@ export enum GeoFenceVariant {
   POLYGON,
 }
 export enum GeoFenceCategory {
-  EDUCATION,
-  EXERCISE,
-  SOCIAL,
-  CULTURE,
+  EDUCATION = 'EDUCATION',
+  EXERCISE = 'EXERCISE',
+  SOCIAL = 'SOCIAL',
+  CULTURE = 'CULTURE',
 }
 
 export type GeoFence = CircleGeoFence | PolygonGeoFence;
