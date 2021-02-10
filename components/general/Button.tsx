@@ -1,7 +1,9 @@
 import React from 'react';
 import { TouchableOpacity, Text, TextStyle, ViewStyle, StyleSheet } from 'react-native';
-import { Buttons, Colors, Spacing } from '../../theme';
+import { Buttons, Colors, Spacing, Typography } from '../../theme';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
+import { GeoFenceCategory } from '../../types/geoFenceTypes';
+import { CategoryIcon } from '../CategoryIcon';
 
 interface ButtonProps {
   onPress?: () => void;
@@ -59,6 +61,24 @@ export const MenuButton: React.FC<MenuButtonProps> = (props: MenuButtonProps) =>
   );
 };
 
+interface CategoryButtonProps {
+  onPress?: () => void;
+  category: GeoFenceCategory;
+  isSelected?: boolean;
+  textStyle?: TextStyle;
+  style?: ViewStyle;
+}
+export const CategoryButton: React.FC<CategoryButtonProps> = (props: CategoryButtonProps) => {
+  return (
+    <TouchableOpacity
+      style={[styles.categoryButton, props.style, props.isSelected ? styles.isSelected : null]}
+      onPress={props.onPress}>
+      <CategoryIcon category={props.category} />
+      <Text style={{ ...Typography.bodyText, textAlign: 'center', fontSize: 10 }}>{props.category.toString()}</Text>
+    </TouchableOpacity>
+  );
+};
+
 const styles = StyleSheet.create({
   basicButton: {
     ...Buttons.button,
@@ -83,5 +103,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     backgroundColor: Colors.gray900,
+  },
+  categoryButton: {
+    ...Typography.headerText,
+    backgroundColor: Colors.gray800,
+    borderRadius: Spacing.smaller,
+    paddingVertical: Spacing.base,
+    margin: Spacing.smallest,
+    width: '22%%',
+  },
+  isSelected: {
+    backgroundColor: Colors.gray600,
   },
 });
