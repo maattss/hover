@@ -78,7 +78,7 @@ const NewChallengeOverviewScreen: React.FC<Props> = ({ route, navigation }: Prop
         )}
         <View style={styles.infoContainer}>
           <Text style={styles.infoText}>Before</Text>
-          <Text style={styles.infoTextSmall}>{route.params.end_date.toDateString()}</Text>
+          <Text style={styles.infoTextSmall}>{new Date(route.params.end_date).toDateString()}</Text>
         </View>
       </View>
       <Button
@@ -86,7 +86,7 @@ const NewChallengeOverviewScreen: React.FC<Props> = ({ route, navigation }: Prop
           createChallenge({
             variables: {
               challenge_type: route.params.challenge_type,
-              end_date: route.params.end_date.toDateString(),
+              end_date: route.params.end_date,
               participants: toParticipantList(),
               created_by: route.params.user_id,
               rules: convertToJsonRule(route.params.rules),

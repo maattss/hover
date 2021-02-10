@@ -49,7 +49,7 @@ export type NewChallengeStackParamList = {
     user_id: string;
     challenge_type: Challenge_Type_Enum;
     rules: ChallengeRules;
-    end_date: Date;
+    end_date: string;
     participants: ListUserFragmentFragment[];
   };
 };
