@@ -10,6 +10,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import Separator from '../../../components/Separator';
 import { useChallengeTypesQuery } from '../../../graphql/queries/ChallengeTypes.generated';
 import { MenuButton } from '../../../components/Button';
+import { getChallengeTypeEnum } from '../../../helpers/challengeMappers';
 
 type ChallengeTypeRouteProp = RouteProp<NewChallengeStackParamList, 'ChallengeType'>;
 type NavigationProp = StackNavigationProp<NewChallengeStackParamList>;
@@ -28,7 +29,7 @@ const ChallengeTypeScreen: React.FC<Props> = ({ route, navigation }: Props) => {
         onPress={() => {
           navigation.push('ChallengeRules', {
             ...route.params,
-            challenge_type: item,
+            challenge_type: getChallengeTypeEnum(item.name),
           });
         }}
         label={item.description ?? item.name}
