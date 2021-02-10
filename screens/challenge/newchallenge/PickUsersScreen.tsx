@@ -74,7 +74,6 @@ const PickUsersScreen: React.FC<Props> = ({
             user_id: user_id,
             participants: participants,
           });
-          console.log(participants.length);
         }}
         disabled={isDisabled}>
         Save Participants
