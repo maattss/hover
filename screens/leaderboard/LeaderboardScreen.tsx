@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Leaderboard, { Item } from '../../components/Leaderboard';
+import Leaderboard, { Item } from '../../components/leaderboard/Leaderboard';
 import { StyleSheet, Text, View, TouchableOpacity, TextStyle, ViewStyle, Platform, Button } from 'react-native';
 import { HighscoreQueryVariables, useHighscoreQuery } from '../../graphql/queries/Highscore.generated';
 import { Buttons, Colors, Spacing, Typography } from '../../theme';

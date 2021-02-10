@@ -42,7 +42,8 @@ const ActivityFeedCard: React.FC<ActivityFeedCardProps> = ({ activity }: Activit
           initialRegion={mapRegion}
           rotateEnabled={false}
           scrollEnabled={false}
-          pitchEnabled={false}>
+          pitchEnabled={false}
+          zoomEnabled={false}>
           <Marker
             coordinate={markerCoordinate}
             title={activity.geoFence ? activity.geoFence.name : 'No name'}
