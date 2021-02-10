@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
 import { Colors, Typography, Spacing } from '../../theme';
 import { timeStampToPresentable } from '../../helpers/dateTimeHelpers';
-import Divider from '../Divider';
+import Divider from '../general/Divider';
 import { OngoingChallenge } from '../../types/challengeTypes';
 
 interface OngoingChallengeCardProps {

@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { Buttons, Colors, Typography, Spacing } from '../theme';
+import { Buttons, Colors, Typography, Spacing } from '../../theme';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 
 interface SnackBarProps {

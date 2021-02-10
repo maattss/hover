@@ -9,8 +9,8 @@ import { setContext } from '@apollo/link-context';
 import Firebase from './lib/firebase';
 import { persistCache } from 'apollo3-cache-persist';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import AuthProvider from './components/AuthProvider';
-import TrackingProvider from './components/TrackingProvider';
+import AuthProvider from './components/providers/AuthProvider';
+import TrackingProvider from './components/providers/TrackingProvider';
 import { GRAPHQL_API_URL } from './lib/config';
 import fragmentMatcher from './types/fragmentMatcher';
 

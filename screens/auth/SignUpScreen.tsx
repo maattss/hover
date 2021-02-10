@@ -20,8 +20,8 @@ import {
 import { AuthStackParamList } from '../../types/navigationTypes';
 import Firebase, { fns } from '../../lib/firebase';
 import { Buttons, Colors, Spacing, Typography } from '../../theme';
-import CustomButton from '../../components/Button';
-import Loading from '../../components/Loading';
+import CustomButton from '../../components/general/Button';
+import Loading from '../../components/general/Loading';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useUpdateUserMutation } from '../../graphql/mutations/UpdateUser.generated';
 

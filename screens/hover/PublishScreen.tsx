@@ -18,10 +18,9 @@ import useTracking from '../../hooks/useTracking';
 import { Buttons, Colors, Spacing, Typography } from '../../theme';
 import { HoverStackParamList } from '../../types/navigationTypes';
 import { FontAwesome as FAIcon } from '@expo/vector-icons';
-import { getCategoryColor } from '../../components/feed/ActivityFeedCard';
 import { durationToTimestamp, timeStampToHours } from '../../helpers/dateTimeHelpers';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import Button from '../../components/Button';
+import Button from '../../components/general/Button';
 import { getGeoFenceImage } from '../../helpers/geoFenceCalculations';
 
 const { width, height } = Dimensions.get('screen');
@@ -58,9 +57,6 @@ const PublishScreen: React.FC<ExploreProps> = ({ navigation }: ExploreProps) => 
   const publishActivity = () => {
     tracking.stopTracking(caption);
     navigation.navigate('Explore');
-  };
-  const categoryColor = {
-    color: getCategoryColor(tracking.insideGeoFence?.category),
   };
   const getSafeAreaTop = () => {
     return {

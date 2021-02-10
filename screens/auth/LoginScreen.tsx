@@ -18,8 +18,8 @@ import {
 import { AuthStackParamList } from '../../types/navigationTypes';
 import Firebase from '../../lib/firebase';
 import { Buttons, Colors, Spacing, Typography } from '../../theme';
-import Button from '../../components/Button';
-import Loading from '../../components/Loading';
+import Button from '../../components/general/Button';
+import Loading from '../../components/general/Loading';
 import { Asset } from 'expo-asset';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 

@@ -1,10 +1,10 @@
 import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
-import { Colors, Spacing } from '../theme';
-import { Achievement as AchievementType, AchievementVariant } from '../types/profileTypes';
-import { Typography } from '../theme';
+import { Colors, Spacing } from '../../theme';
+import { Achievement as AchievementType, AchievementVariant } from '../../types/profileTypes';
+import { Typography } from '../../theme';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
-import { GeoFenceCategory } from '../types/geoFenceTypes';
+import { GeoFenceCategory } from '../../types/geoFenceTypes';
 
 interface AchievementProps {
   achievement: AchievementType;

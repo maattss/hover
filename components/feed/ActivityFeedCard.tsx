@@ -2,31 +2,15 @@ import React from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
 import { Colors, Typography, Spacing } from '../../theme';
 import { ActivityFeedData } from '../../types/feedTypes';
-import { GeoFenceCategory } from '../../types/geoFenceTypes';
 import { timeStampToPresentable } from '../../helpers/dateTimeHelpers';
 import MapView, { LatLng, Marker, Region } from 'react-native-maps';
 import { defaultMapLocation } from '../../helpers/objectMappers';
-import GeoFences from '../GeoFences';
+import GeoFences from '../map/GeoFences';
 import { getGeoFenceImage } from '../../helpers/geoFenceCalculations';
 
 interface ActivityFeedCardProps {
   activity: ActivityFeedData;
 }
-
-export const getCategoryColor = (category: GeoFenceCategory | undefined) => {
-  switch (category) {
-    case GeoFenceCategory.CULTURE:
-      return Colors.almostWhite;
-    case GeoFenceCategory.SOCIAL:
-      return Colors.blue;
-    case GeoFenceCategory.EXERCISE:
-      return Colors.green;
-    case GeoFenceCategory.EDUCATION:
-      return Colors.red;
-    default:
-      return Colors.gray800;
-  }
-};
 
 const ActivityFeedCard: React.FC<ActivityFeedCardProps> = ({ activity }: ActivityFeedCardProps) => {
   const mapRegion: Region = {

@@ -19,8 +19,8 @@ import { SettingsProps } from './SettingsMenuScreen';
 import { useUserQuery } from '../../../graphql/queries/User.generated';
 import { useUpdateUserMutation } from '../../../graphql/mutations/UpdateUser.generated';
 import useAuthentication from '../../../hooks/useAuthentication';
-import CustomButton from '../../../components/Button';
-import Loading from '../../../components/Loading';
+import CustomButton from '../../../components/general/Button';
+import Loading from '../../../components/general/Loading';
 import { randomPictureURI } from '../../auth/SignUpScreen';
 import { Asset } from 'expo-asset';
 

@@ -8,7 +8,7 @@ import { Picker } from '@react-native-picker/picker';
 import { PickerItemProps } from '@react-native-picker/picker/typings/Picker';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import moment from 'moment';
-import Loading from '../../components/Loading';
+import Loading from '../../components/general/Loading';
 
 const STATIC_CATEGORIES: PickerItemProps[] = [
   { label: 'All Categories', value: '' },

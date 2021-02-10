@@ -92,6 +92,21 @@ export const getGeoFenceColor = (category: GeoFenceCategory, opacity: number) =>
   }
 };
 
+export const getCategoryColor = (category: GeoFenceCategory) => {
+  switch (category) {
+    case GeoFenceCategory.CULTURE:
+      return Colors.almostWhite;
+    case GeoFenceCategory.SOCIAL:
+      return Colors.blue;
+    case GeoFenceCategory.EXERCISE:
+      return Colors.green;
+    case GeoFenceCategory.EDUCATION:
+      return Colors.red;
+    default:
+      return Colors.gray800;
+  }
+};
+
 export const getGeoFenceScoreRatio = (category: GeoFenceCategory) => {
   switch (category) {
     case GeoFenceCategory.EDUCATION:

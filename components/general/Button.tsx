@@ -1,6 +1,6 @@
 import React from 'react';
 import { TouchableOpacity, Text, TextStyle, ViewStyle, StyleSheet } from 'react-native';
-import { Buttons, Colors, Spacing } from '../theme';
+import { Buttons, Colors, Spacing } from '../../theme';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 
 interface ButtonProps {

@@ -6,10 +6,10 @@ import useAuthentication from '../../hooks/useAuthentication';
 import { Buttons, Colors, Spacing, Typography } from '../../theme';
 import { UserProfile } from '../../types/profileTypes';
 import { GeoFenceCategory } from '../../types/geoFenceTypes';
-import ProfileActivityCard from '../../components/ProfileActivityCard';
-import Achievement from '../../components/Achievement';
+import ProfileActivityCard from '../../components/profile/ProfileActivityCard';
+import Achievement from '../../components/profile/Achievement';
 import { convertToUserProfile, defaultUserProfile } from '../../helpers/objectMappers';
-import Loading from '../../components/Loading';
+import Loading from '../../components/general/Loading';
 import { getGeoFenceImage } from '../../helpers/geoFenceCalculations';
 
 const ProfileScreen: React.FC = () => {

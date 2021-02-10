@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, Image } from 'react-native';
 import { Colors, Typography, Spacing } from '../../theme';
 import { AchievementFeedData } from '../../types/feedTypes';
 import { timeStampToPresentable } from '../../helpers/dateTimeHelpers';
-import Achievement from '../Achievement';
+import Achievement from '../profile/Achievement';
 
 interface AchievementFeedCardProps {
   data: AchievementFeedData;

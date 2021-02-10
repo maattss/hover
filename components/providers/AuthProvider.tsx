@@ -1,6 +1,6 @@
 import React, { useEffect, useState, ReactNode } from 'react';
 import { User } from 'firebase';
-import Firebase from '../lib/firebase';
+import Firebase from '../../lib/firebase';
 
 interface Props {
   children: ReactNode;

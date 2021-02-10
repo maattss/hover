@@ -1,17 +1,17 @@
 import React, { useState, ReactNode, useEffect } from 'react';
-import { GeoFence, TrackedActivity } from '../types/geoFenceTypes';
-import { convertToGeoFences } from '../helpers/objectMappers';
+import { GeoFence, TrackedActivity } from '../../types/geoFenceTypes';
+import { convertToGeoFences } from '../../helpers/objectMappers';
 import { usePermissions, LOCATION, PermissionResponse } from 'expo-permissions';
-import { startBackgroundUpdate, stopBackgroundUpdate } from '../tasks/locationBackgroundTasks';
-import { useGeofencesQuery } from '../graphql/queries/Geofences.generated';
-import { useInsertActivityMutation } from '../graphql/mutations/InsertActivity.generated';
+import { startBackgroundUpdate, stopBackgroundUpdate } from '../../tasks/locationBackgroundTasks';
+import { useGeofencesQuery } from '../../graphql/queries/Geofences.generated';
+import { useInsertActivityMutation } from '../../graphql/mutations/InsertActivity.generated';
 import { Alert } from 'react-native';
-import { durationToTimestamp, getCurrentTimestamp } from '../helpers/dateTimeHelpers';
-import { getGeoFenceScoreRatio, insideGeoFences } from '../helpers/geoFenceCalculations';
-import { useInterval } from '../hooks/useInterval';
+import { durationToTimestamp, getCurrentTimestamp } from '../../helpers/dateTimeHelpers';
+import { getGeoFenceScoreRatio, insideGeoFences } from '../../helpers/geoFenceCalculations';
+import { useInterval } from '../../hooks/useInterval';
 import * as Location from 'expo-location';
 import { LocationObject } from 'expo-location';
-import useAuthentication from '../hooks/useAuthentication';
+import useAuthentication from '../../hooks/useAuthentication';
 
 interface Props {
   children: ReactNode;

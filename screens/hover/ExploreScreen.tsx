@@ -14,7 +14,7 @@ import { Colors, Spacing, Typography, Buttons } from '../../theme';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import useTracking from '../../hooks/useTracking';
 import { defaultMapLocation } from '../../helpers/objectMappers';
-import GeoFences from '../../components/GeoFences';
+import GeoFences from '../../components/map/GeoFences';
 import { HoverStackParamList } from '../../types/navigationTypes';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';

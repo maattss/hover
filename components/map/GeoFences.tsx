@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import { Circle, Polygon, Overlay, Coordinate } from 'react-native-maps';
-import { GeoFence, GeoFenceVariant, CircleGeoFence, PolygonGeoFence } from '../types/geoFenceTypes';
-import { addMetersToLatLng, getGeoFenceColor, getGeoFenceImage } from '../helpers/geoFenceCalculations';
+import { GeoFence, GeoFenceVariant, CircleGeoFence, PolygonGeoFence } from '../../types/geoFenceTypes';
+import { addMetersToLatLng, getGeoFenceColor, getGeoFenceImage } from '../../helpers/geoFenceCalculations';
 
 interface GeoFencesProps {
   geofences?: GeoFence[];

@@ -1,22 +1,18 @@
 import React from 'react';
 import { StyleSheet, Text, View, ViewStyle, Image } from 'react-native';
-import { Colors, Spacing } from '../theme';
-import { ActivityFeedData } from '../types/feedTypes';
-import { timeStampToPresentable } from '../helpers/dateTimeHelpers';
+import { Colors, Spacing } from '../../theme';
+import { ActivityFeedData } from '../../types/feedTypes';
+import { timeStampToPresentable } from '../../helpers/dateTimeHelpers';
 import MapView, { LatLng, Marker, Region } from 'react-native-maps';
-import { defaultMapLocation } from '../helpers/objectMappers';
-import GeoFences from './GeoFences';
-import { getCategoryColor } from './feed/ActivityFeedCard';
-import { getGeoFenceImage } from '../helpers/geoFenceCalculations';
+import { defaultMapLocation } from '../../helpers/objectMappers';
+import GeoFences from '../map/GeoFences';
+import { getGeoFenceImage } from '../../helpers/geoFenceCalculations';
 
 interface ActivityFeedCardProps {
   activity: ActivityFeedData;
 }
 
 const ProfileActivityCard: React.FC<ActivityFeedCardProps> = ({ activity }: ActivityFeedCardProps) => {
-  const categoryColor = {
-    color: getCategoryColor(activity.geoFence ? activity.geoFence.category : undefined),
-  };
   const mapRegion: Region = {
     latitude: activity.geoFence ? activity.geoFence.latitude : defaultMapLocation.latitude,
     longitude: activity.geoFence ? activity.geoFence.longitude : defaultMapLocation.latitude,
@@ -39,10 +35,6 @@ const ProfileActivityCard: React.FC<ActivityFeedCardProps> = ({ activity }: Acti
       <View style={styles.main}>
         <View style={styles.category}>
           <Image source={{ uri: getGeoFenceImage(activity.geoFence?.category) }} style={styles.categoryIcon} />
-          {/* <FAIcon
-            style={[styles.categoryIcon, categoryColor]}
-            name={getCategoryIconName(activity.geoFence ? activity.geoFence.category : undefined)}
-          /> */}
           <Text style={styles.scoreText}>{activity.score} points</Text>
         </View>
         <MapView
@@ -102,10 +94,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   categoryIcon: {
-    color: Colors.almostWhite,
     width: 65,
     height: 65,
-    textAlign: 'center',
     marginVertical: Spacing.smallest,
   },
   map: {
