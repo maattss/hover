@@ -105,12 +105,12 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.gray900,
   },
   categoryButton: {
-    ...Typography.headerText,
+    ...Typography.bodyText,
     backgroundColor: Colors.gray800,
     borderRadius: Spacing.smaller,
     paddingVertical: Spacing.base,
     margin: Spacing.smallest,
-    width: '22%%',
+    width: '22%',
   },
   isSelected: {
     backgroundColor: Colors.gray600,
