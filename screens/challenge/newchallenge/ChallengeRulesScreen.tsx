@@ -32,19 +32,21 @@ type Props = {
 };
 
 const ChallengeRulesScreen: React.FC<Props> = ({ route, navigation }: Props) => {
-  const today = new Date();
   const [rules, setRules] = useState<ChallengeRules>({});
   const [score, setScore] = useState<number>();
   const [category, setCategory] = useState<GeoFenceCategory>();
   const [hours, setHours] = useState<number>();
-  const [endDate, setEndDate] = useState<Date>(today);
+  const [endDate, setEndDate] = useState<Date>();
 
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const fields = getChallengeTypeFields(route.params.challenge_type);
-  const [isDisabled, setDisabled] = useState(false);
+  const [isDisabled, setDisabled] = useState(true);
   const validateRule = () => {
-    console.log(fields.forEach((key) => key in rules));
-    setDisabled(false);
+    if (fields.every((key) => rules[key as keyof ChallengeRules]) && endDate) {
+      setDisabled(false);
+    } else {
+      setDisabled(true);
+    }
   };
   const showDatePicker = () => {
     setDatePickerVisibility(true);
@@ -57,6 +59,12 @@ const ChallengeRulesScreen: React.FC<Props> = ({ route, navigation }: Props) => 
     hideDatePicker();
   };
 
+  const parseNumber = (val: string): number => {
+    if (isNaN(parseInt(val))) {
+      return 0;
+    }
+    return parseInt(val);
+  };
   useEffect(() => {
     setRules({
       category: category,
@@ -64,7 +72,7 @@ const ChallengeRulesScreen: React.FC<Props> = ({ route, navigation }: Props) => 
       time: hours,
     });
     validateRule();
-  }, [score, category, hours]);
+  }, [score, category, hours, endDate]);
 
   const renderCategories = () => {
     return Object.keys(GeoFenceCategory).map((cat, index) => {
@@ -90,7 +98,7 @@ const ChallengeRulesScreen: React.FC<Props> = ({ route, navigation }: Props) => 
             <TextInput
               placeholder="Enter your goal score"
               placeholderTextColor={Colors.gray600}
-              onChangeText={(val) => setScore(parseInt(val))}
+              onChangeText={(val) => setScore(parseNumber(val))}
               value={score?.toString()}
               keyboardType="numeric"
               style={styles.formField}
@@ -111,7 +119,7 @@ const ChallengeRulesScreen: React.FC<Props> = ({ route, navigation }: Props) => 
             <TextInput
               placeholder="Enter number of hours"
               placeholderTextColor={Colors.gray600}
-              onChangeText={(val) => setHours(parseInt(val))}
+              onChangeText={(val) => setHours(parseNumber(val))}
               value={hours?.toString()}
               keyboardType="numeric"
               style={styles.formField}
@@ -161,7 +169,7 @@ const ChallengeRulesScreen: React.FC<Props> = ({ route, navigation }: Props) => 
                   navigation.push('NewChallengeOverview', {
                     ...route.params,
                     rules: rules,
-                    end_date: endDate,
+                    end_date: endDate?.toISOString() ?? new Date().toISOString(),
                   });
                 }}
                 disabled={isDisabled}>
