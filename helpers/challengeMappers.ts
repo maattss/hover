@@ -3,7 +3,6 @@ import { Challenge_Type_Enum } from '../types/types';
 
 export const convertToJsonRule = (rules: ChallengeRules): string => {
   const jsonRule = JSON.parse(JSON.stringify(rules));
-  console.log('convertToJsonRule: ', jsonRule);
   return jsonRule;
 };
 
