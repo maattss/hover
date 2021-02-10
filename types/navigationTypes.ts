@@ -1,7 +1,8 @@
-import { ChallengeTypeFragmentFragment, ListUserFragmentFragment } from '../graphql/Fragments.generated';
+import { ListUserFragmentFragment } from '../graphql/Fragments.generated';
 import { OngoingChallengesScreenProps } from '../screens/challenge/OngoingChallengesScreen';
 import { PendingChallengesScreenProps } from '../screens/challenge/PendingChallengesScreen';
 import { ChallengeRules } from './challengeTypes';
+import { Challenge_Type_Enum } from './types';
 
 export type RootStackParamList = {
   Main: undefined;
@@ -42,11 +43,11 @@ export type NewChallengeStackParamList = {
   ChallengeRules: {
     user_id: string;
     participants: ListUserFragmentFragment[];
-    challenge_type: ChallengeTypeFragmentFragment;
+    challenge_type: Challenge_Type_Enum;
   };
   NewChallengeOverview: {
     user_id: string;
-    challenge_type: ChallengeTypeFragmentFragment;
+    challenge_type: Challenge_Type_Enum;
     rules: ChallengeRules;
     end_date: Date;
     participants: ListUserFragmentFragment[];
