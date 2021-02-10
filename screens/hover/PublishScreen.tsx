@@ -1,5 +1,5 @@
 import { StackNavigationProp } from '@react-navigation/stack';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   Text,
@@ -35,6 +35,15 @@ const PublishScreen: React.FC<ExploreProps> = ({ navigation }: ExploreProps) => 
   const tracking = useTracking();
   const [caption, setCaption] = useState('');
   const insets = useSafeAreaInsets();
+
+  useEffect(
+    () =>
+      navigation.addListener('beforeRemove', (e) => {
+        // Preventing going back to explore screen before activity is published/discarded
+        e.preventDefault();
+      }),
+    [navigation],
+  );
 
   const resumeTracking = () => {
     tracking.resumeTracking();

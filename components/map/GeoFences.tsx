@@ -16,9 +16,9 @@ const drawGeoFences = (geoFences: GeoFence[] | undefined, zoom: number, customMa
       const zoomScaling = Math.ceil((zoom ?? 0) * 2000);
       const geoFenceSizeScaling = Math.ceil(geoFence.radius / 4);
       const textSize = 50 - zoomScaling + geoFenceSizeScaling;
+
       if (geoFence.variant === GeoFenceVariant.CIRCLE) {
         const currentGeoFence = geoFence as CircleGeoFence;
-        console.log('Text size', textSize);
         return (
           <Fragment key={index}>
             <Circle

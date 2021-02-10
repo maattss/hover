@@ -1,4 +1,4 @@
-import React, { useState, createRef } from 'react';
+import React, { useState, createRef, useEffect } from 'react';
 import MapView, { MapTypes, Region } from 'react-native-maps';
 import { StyleSheet, Dimensions, Text, View, TouchableOpacity, ActivityIndicator, ViewStyle } from 'react-native';
 import { Colors, Spacing, Typography, Buttons } from '../../theme';
@@ -23,6 +23,15 @@ const TrackingScreen: React.FC<ExploreProps> = ({ navigation }: ExploreProps) =>
   const [centreOnUser, setCentreOnUser] = useState(false);
   const tracking = useTracking();
   const insets = useSafeAreaInsets();
+
+  useEffect(
+    () =>
+      navigation.addListener('beforeRemove', (e) => {
+        // Preventing going back to explore screen when tracking
+        e.preventDefault();
+      }),
+    [navigation],
+  );
 
   // Dynamic styles
   const mapTypeIconStyle = {
