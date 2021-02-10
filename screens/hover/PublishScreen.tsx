@@ -11,17 +11,18 @@ import {
   Keyboard,
   Dimensions,
   ViewStyle,
+  Image,
 } from 'react-native';
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import useTracking from '../../hooks/useTracking';
 import { Buttons, Colors, Spacing, Typography } from '../../theme';
 import { HoverStackParamList } from '../../types/navigationTypes';
 import { FontAwesome as FAIcon } from '@expo/vector-icons';
-import { FontAwesome5 as FA5Icon } from '@expo/vector-icons';
-import { getCategoryColor, getCategoryIconName } from '../../components/feed/ActivityFeedCard';
+import { getCategoryColor } from '../../components/feed/ActivityFeedCard';
 import { durationToTimestamp, timeStampToHours } from '../../helpers/dateTimeHelpers';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Button from '../../components/Button';
+import { getGeoFenceImage } from '../../helpers/geoFenceCalculations';
 
 const { width, height } = Dimensions.get('screen');
 
@@ -114,9 +115,9 @@ const PublishScreen: React.FC<ExploreProps> = ({ navigation }: ExploreProps) => 
                 </View>
                 <View style={[styles.infoContainer, { marginBottom: 0 }]}>
                   <Text style={styles.infoText}>Category</Text>
-                  <FA5Icon
-                    style={[styles.categoryIcon, categoryColor]}
-                    name={getCategoryIconName(tracking.insideGeoFence?.category)}
+                  <Image
+                    source={{ uri: getGeoFenceImage(tracking.insideGeoFence?.category) }}
+                    style={styles.categoryIcon}
                   />
                 </View>
 
@@ -159,9 +160,9 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.black,
   },
   categoryIcon: {
-    color: Colors.almostWhite,
-    fontSize: 42,
-    textAlign: 'center',
+    height: 50,
+    width: 50,
+    marginVertical: Spacing.smallest,
     paddingRight: Spacing.smallest,
   },
   summaryContainer: {

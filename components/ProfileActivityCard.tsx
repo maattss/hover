@@ -1,13 +1,13 @@
 import React from 'react';
-import { StyleSheet, Text, View, ViewStyle } from 'react-native';
+import { StyleSheet, Text, View, ViewStyle, Image } from 'react-native';
 import { Colors, Spacing } from '../theme';
-import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import { ActivityFeedData } from '../types/feedTypes';
 import { timeStampToPresentable } from '../helpers/dateTimeHelpers';
 import MapView, { LatLng, Marker, Region } from 'react-native-maps';
 import { defaultMapLocation } from '../helpers/objectMappers';
 import GeoFences from './GeoFences';
-import { getCategoryColor, getCategoryIconName } from './feed/ActivityFeedCard';
+import { getCategoryColor } from './feed/ActivityFeedCard';
+import { getGeoFenceImage } from '../helpers/geoFenceCalculations';
 
 interface ActivityFeedCardProps {
   activity: ActivityFeedData;
@@ -38,10 +38,11 @@ const ProfileActivityCard: React.FC<ActivityFeedCardProps> = ({ activity }: Acti
       </View>
       <View style={styles.main}>
         <View style={styles.category}>
-          <FAIcon
+          <Image source={{ uri: getGeoFenceImage(activity.geoFence?.category) }} style={styles.categoryIcon} />
+          {/* <FAIcon
             style={[styles.categoryIcon, categoryColor]}
             name={getCategoryIconName(activity.geoFence ? activity.geoFence.category : undefined)}
-          />
+          /> */}
           <Text style={styles.scoreText}>{activity.score} points</Text>
         </View>
         <MapView
@@ -98,12 +99,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flexDirection: 'column',
     paddingRight: Spacing.base,
+    alignItems: 'center',
   },
   categoryIcon: {
     color: Colors.almostWhite,
-    fontSize: 40,
+    width: 65,
+    height: 65,
     textAlign: 'center',
-    width: '100%',
     marginVertical: Spacing.smallest,
   },
   map: {

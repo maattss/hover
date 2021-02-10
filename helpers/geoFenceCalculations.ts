@@ -107,16 +107,16 @@ export const getGeoFenceScoreRatio = (category: GeoFenceCategory) => {
   }
 };
 
-export const getGeoFenceImage = (category: GeoFenceCategory) => {
+export const getGeoFenceImage = (category: GeoFenceCategory | undefined) => {
   switch (category) {
     case GeoFenceCategory.EDUCATION:
-      return Asset.fromModule(require('../assets/images/education-icon.png')).uri;
+      return Asset.fromModule(require('../assets/images/categoryIcons/education.png')).uri;
     case GeoFenceCategory.CULTURE:
-      return Asset.fromModule(require('../assets/images/culture-icon.png')).uri;
+      return Asset.fromModule(require('../assets/images/categoryIcons/culture.png')).uri;
     case GeoFenceCategory.EXERCISE:
-      return Asset.fromModule(require('../assets/images/exercise-icon.png')).uri;
+      return Asset.fromModule(require('../assets/images/categoryIcons/exercise.png')).uri;
     case GeoFenceCategory.SOCIAL:
-      return Asset.fromModule(require('../assets/images/social-icon.png')).uri;
+      return Asset.fromModule(require('../assets/images/categoryIcons/social.png')).uri;
     default:
       return Asset.fromModule(require('../assets/images/adaptive-icon.png')).uri;
   }

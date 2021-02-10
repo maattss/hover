@@ -5,13 +5,12 @@ import { useProfileUserQuery } from '../../graphql/queries/ProfileUser.generated
 import useAuthentication from '../../hooks/useAuthentication';
 import { Buttons, Colors, Spacing, Typography } from '../../theme';
 import { UserProfile } from '../../types/profileTypes';
-import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import { GeoFenceCategory } from '../../types/geoFenceTypes';
-import { getCategoryIconName, getCategoryColor } from '../../components/feed/ActivityFeedCard';
 import ProfileActivityCard from '../../components/ProfileActivityCard';
 import Achievement from '../../components/Achievement';
 import { convertToUserProfile, defaultUserProfile } from '../../helpers/objectMappers';
 import Loading from '../../components/Loading';
+import { getGeoFenceImage } from '../../helpers/geoFenceCalculations';
 
 const ProfileScreen: React.FC = () => {
   const id = useAuthentication().user?.uid;
@@ -55,22 +54,13 @@ const ProfileScreen: React.FC = () => {
     };
 
     const renderScore = () => {
-      const categoryColor = (category: GeoFenceCategory) => {
-        return {
-          color: getCategoryColor(category),
-        };
-      };
-
       return Object.keys(GeoFenceCategory)
         .filter((key) => !isNaN(Number(GeoFenceCategory[key as keyof typeof GeoFenceCategory])))
         .map((category, index) => {
           const categoryEnum: GeoFenceCategory = GeoFenceCategory[category as keyof typeof GeoFenceCategory];
           return (
             <View key={index} style={styles.score}>
-              <FAIcon
-                style={[styles.categoryIcon, categoryColor(categoryEnum)]}
-                name={getCategoryIconName(categoryEnum)}
-              />
+              <Image source={{ uri: getGeoFenceImage(categoryEnum) }} style={styles.categoryIcon} />
               <Text style={{ ...Typography.headerText, textAlign: 'center' }}>{getScore(categoryEnum)}</Text>
             </View>
           );
@@ -209,6 +199,7 @@ const styles = StyleSheet.create({
     padding: Spacing.base,
     margin: Spacing.smallest,
     width: '47.5%',
+    alignItems: 'center',
   },
   totalScoreContainer: {
     backgroundColor: Colors.gray900,
@@ -236,10 +227,9 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.base,
   },
   categoryIcon: {
-    color: Colors.almostWhite,
-    fontSize: 40,
-    textAlign: 'center',
-    marginVertical: Spacing.smallest,
+    height: 70,
+    width: 70,
+    margin: Spacing.small,
   },
   loadMoreButton: {
     ...Buttons.button,

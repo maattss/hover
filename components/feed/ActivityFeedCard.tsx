@@ -1,32 +1,18 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
 import { Colors, Typography, Spacing } from '../../theme';
-import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import { ActivityFeedData } from '../../types/feedTypes';
 import { GeoFenceCategory } from '../../types/geoFenceTypes';
 import { timeStampToPresentable } from '../../helpers/dateTimeHelpers';
 import MapView, { LatLng, Marker, Region } from 'react-native-maps';
 import { defaultMapLocation } from '../../helpers/objectMappers';
 import GeoFences from '../GeoFences';
+import { getGeoFenceImage } from '../../helpers/geoFenceCalculations';
 
 interface ActivityFeedCardProps {
   activity: ActivityFeedData;
 }
 
-export const getCategoryIconName = (category: GeoFenceCategory | undefined) => {
-  switch (category) {
-    case GeoFenceCategory.CULTURE:
-      return 'theater-masks';
-    case GeoFenceCategory.SOCIAL:
-      return 'users';
-    case GeoFenceCategory.EXERCISE:
-      return 'dumbbell';
-    case GeoFenceCategory.EDUCATION:
-      return 'graduation-cap';
-    default:
-      return 'question-circle';
-  }
-};
 export const getCategoryColor = (category: GeoFenceCategory | undefined) => {
   switch (category) {
     case GeoFenceCategory.CULTURE:
@@ -43,9 +29,6 @@ export const getCategoryColor = (category: GeoFenceCategory | undefined) => {
 };
 
 const ActivityFeedCard: React.FC<ActivityFeedCardProps> = ({ activity }: ActivityFeedCardProps) => {
-  const categoryColor = {
-    color: getCategoryColor(activity.geoFence ? activity.geoFence.category : undefined),
-  };
   const mapRegion: Region = {
     latitude: activity.geoFence ? activity.geoFence.latitude : defaultMapLocation.latitude,
     longitude: activity.geoFence ? activity.geoFence.longitude : defaultMapLocation.latitude,
@@ -67,10 +50,7 @@ const ActivityFeedCard: React.FC<ActivityFeedCardProps> = ({ activity }: Activit
       </View>
       <View style={styles.main}>
         <View style={styles.category}>
-          <FAIcon
-            style={[styles.categoryIcon, categoryColor]}
-            name={getCategoryIconName(activity.geoFence ? activity.geoFence.category : undefined)}
-          />
+          <Image source={{ uri: getGeoFenceImage(activity.geoFence?.category) }} style={styles.categoryIcon} />
           <Text style={styles.scoreText}>{activity.score} points</Text>
         </View>
         <MapView
@@ -128,15 +108,14 @@ const styles = StyleSheet.create({
   category: {
     width: '30%',
     display: 'flex',
-    textAlign: 'center',
     justifyContent: 'center',
+    alignItems: 'center',
     flexDirection: 'column',
     paddingRight: Spacing.base,
   },
   categoryIcon: {
-    color: Colors.almostWhite,
-    fontSize: 40,
-    textAlign: 'center',
+    height: 50,
+    width: 50,
     marginVertical: Spacing.smallest,
   },
   map: {
