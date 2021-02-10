@@ -1034,7 +1034,7 @@ export type Activities_Variance_Order_By = {
 /** columns and relationships of "categories" */
 export type Categories = {
   __typename?: 'categories';
-  description?: Maybe<Scalars['String']>;
+  description: Scalars['String'];
   name: Scalars['String'];
   points_per_minute: Scalars['Int'];
 };
@@ -2313,6 +2313,8 @@ export enum Challenge_Type_Enum {
   ScoreCategory = 'SCORE_CATEGORY',
   /** Time challenge */
   Time = 'TIME',
+  /** Time in specific category challenge */
+  TimeCategory = 'TIME_CATEGORY',
 }
 
 /** expression to compare columns of type challenge_type_enum. All fields are combined with logical 'AND'. */
