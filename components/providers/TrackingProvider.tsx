@@ -31,14 +31,6 @@ interface TrackingContextValues {
   unUploadedActivities: TrackedActivity[];
   insideGeoFence: GeoFence | null;
   trackingState: TrackingState;
-  /**
-   * @deprecated Will soon be deleted. Use trackingState instead. TODO: Remove
-   */
-  isTracking: boolean;
-  /**
-   * @deprecated Will soon be deleted. Use trackingState instead. TODO: Remove
-   */
-  isTrackingPaused: boolean;
   trackingStart: string;
   score: number;
   duration: number;
@@ -59,8 +51,6 @@ export const TrackingContext = React.createContext<TrackingContextValues>({
   unUploadedActivities: [],
   insideGeoFence: null,
   trackingState: TrackingState.EXPLORE,
-  isTracking: false,
-  isTrackingPaused: true,
   trackingStart: '',
   score: 0,
   duration: 0,
@@ -90,8 +80,6 @@ export const TrackingProvider = ({ children }: Props) => {
   const [unUploadedActivities, setUnUploadedActivities] = useState<TrackedActivity[]>([]);
   const [insideGeoFence, setInsideGeoFence] = useState<GeoFence | null>(null);
   const [trackingState, setTrackingState] = useState<TrackingState>(TrackingState.EXPLORE);
-  const [isTracking, setIsTracking] = useState(false); // TODO: remove
-  const [isTrackingPaused, setIsTrackingPaused] = useState(true);
   const [trackingStart, setTrackingStart] = useState('');
   const [score, setScore] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -158,28 +146,21 @@ export const TrackingProvider = ({ children }: Props) => {
     if (insideGeoFence) {
       setScore(0);
       setDuration(0);
-      setIsTrackingPaused(false);
       setTrackingState(TrackingState.TRACKING);
       setTrackingStart(getCurrentTimestamp());
     }
   };
   const resumeTracking = () => {
-    setIsTrackingPaused(false); // TODO: Remove
     setTrackingState(TrackingState.TRACKING);
   };
   const pauseTracking = () => {
-    setIsTrackingPaused(true); // TODO: Remove
     setTrackingState(TrackingState.PUBLISH);
   };
   const discardActivity = () => {
-    setIsTrackingPaused(true);
-    setIsTracking(false); // TODO: Remove
     setTrackingState(TrackingState.EXPLORE);
   };
 
   const stopTracking = async (caption: string) => {
-    setIsTrackingPaused(true);
-    setIsTracking(false); // TODO: Remove
     setTrackingState(TrackingState.EXPLORE);
     const activity = {
       caption: caption,
@@ -219,7 +200,7 @@ export const TrackingProvider = ({ children }: Props) => {
         setScore(score + 1 * getGeoFenceScoreRatio(insideGeoFence.category));
       }
     },
-    isTrackingPaused ? null : 1000,
+    trackingState === TrackingState.PUBLISH ? null : 1000,
   );
 
   const value: TrackingContextValues = {
