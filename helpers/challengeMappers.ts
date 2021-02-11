@@ -14,16 +14,16 @@ export const getChallengeTypeFields = (challengeType: Challenge_Type_Enum): stri
   let fields: string[] = [];
   switch (challengeType) {
     case Challenge_Type_Enum.Score:
-      fields = ['score'];
+      fields = ['SCORE'];
       break;
     case Challenge_Type_Enum.ScoreCategory:
-      fields = ['score', 'category'];
+      fields = ['SCORE', 'CATEGORY'];
       break;
     case Challenge_Type_Enum.Time:
-      fields = ['time'];
+      fields = ['TIME'];
       break;
     case Challenge_Type_Enum.TimeCategory:
-      fields = ['time', 'category'];
+      fields = ['TIME', 'CATEGORY'];
       break;
   }
   return fields;
