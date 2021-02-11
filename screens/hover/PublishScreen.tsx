@@ -1,23 +1,15 @@
-import { StackNavigationProp } from '@react-navigation/stack';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Text, View, Alert, Image } from 'react-native';
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import useTracking from '../../hooks/useTracking';
 import { Buttons, Colors, Spacing, Typography } from '../../theme';
-import { HoverStackParamList } from '../../types/navigationTypes';
 import { FontAwesome as FAIcon } from '@expo/vector-icons';
 import { durationToTimestamp, timeStampToHours } from '../../helpers/dateTimeHelpers';
 import Button from '../../components/general/Button';
 import { getGeoFenceImage } from '../../helpers/geoFenceCalculations';
 import KeyboardAvoiderNoHeader from '../../components/general/KeyboarAvoiderNoHeader';
 
-type NavigationProp = StackNavigationProp<HoverStackParamList>;
-
-type ExploreProps = {
-  navigation: NavigationProp;
-};
-
-const PublishScreen: React.FC<ExploreProps> = ({ navigation }: ExploreProps) => {
+const PublishScreen: React.FC = () => {
   const tracking = useTracking();
   const [caption, setCaption] = useState('');
 

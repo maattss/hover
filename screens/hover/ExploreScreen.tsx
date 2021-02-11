@@ -15,19 +15,11 @@ import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import useTracking from '../../hooks/useTracking';
 import { defaultMapLocation } from '../../helpers/objectMappers';
 import GeoFences from '../../components/map/GeoFences';
-import { HoverStackParamList } from '../../types/navigationTypes';
-import { StackNavigationProp } from '@react-navigation/stack';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const { width, height } = Dimensions.get('window');
 
-type NavigationProp = StackNavigationProp<HoverStackParamList>;
-
-type ExploreProps = {
-  navigation: NavigationProp;
-};
-
-const ExploreScreen: React.FC<ExploreProps> = ({ navigation }: ExploreProps) => {
+const ExploreScreen: React.FC = () => {
   const [chosenMapType, setChosenMapType] = useState<MapTypes>('standard');
   const [centreOnUser, setCentreOnUser] = useState(false);
   const [disableTracking, setDisableTracking] = useState(true);
