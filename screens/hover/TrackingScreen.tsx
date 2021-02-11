@@ -51,7 +51,7 @@ const TrackingScreen: React.FC<ExploreProps> = ({ navigation }: ExploreProps) =>
     longitude: tracking.userLocation ? tracking.userLocation.coords.longitude : defaultMapLocation.longitude,
     latitude: (tracking.userLocation ? tracking.userLocation.coords.latitude : defaultMapLocation.latitude) - 0.003,
     latitudeDelta: 0.01,
-    longitudeDelta: 0.01 * (width / height),
+    longitudeDelta: 0.01,
   };
   const animateMapToUserPos = () => {
     if (tracking.userLocation) setCentreOnUser(true);
