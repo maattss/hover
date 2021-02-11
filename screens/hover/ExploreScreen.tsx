@@ -77,7 +77,7 @@ const ExploreScreen: React.FC<ExploreProps> = ({ navigation }: ExploreProps) => 
   const startTracking = () => {
     if (!disableTracking) {
       tracking.startTracking();
-      navigation.navigate('Tracking');
+      //navigation.navigate('Tracking');
     }
   };
   const notInsideGeoFenceAlert = () => {

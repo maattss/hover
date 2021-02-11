@@ -58,7 +58,7 @@ const TrackingScreen: React.FC<ExploreProps> = ({ navigation }: ExploreProps) =>
   };
   const stopTracking = () => {
     tracking.pauseTracking();
-    navigation.navigate('Publish');
+    //navigation.navigate('Publish'); TODO: Remove
   };
   const getSafeAreaTop = () => {
     return {

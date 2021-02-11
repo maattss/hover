@@ -21,18 +21,18 @@ const PublishScreen: React.FC<ExploreProps> = ({ navigation }: ExploreProps) => 
   const tracking = useTracking();
   const [caption, setCaption] = useState('');
 
-  useEffect(
-    () =>
-      navigation.addListener('beforeRemove', (e) => {
-        // Preventing going back to explore screen before activity is published/discarded
-        e.preventDefault();
-      }),
-    [navigation],
-  );
+  // useEffect(
+  //   () =>
+  //     navigation.addListener('beforeRemove', (e) => {
+  //       // Preventing going back to explore screen before activity is published/discarded
+  //       e.preventDefault();
+  //     }),
+  //   [navigation],
+  // );
 
   const resumeTracking = () => {
     tracking.resumeTracking();
-    navigation.navigate('Tracking');
+    // navigation.navigate('Tracking'); TODO: Remove
   };
 
   const discardActivity = () => {
@@ -41,7 +41,7 @@ const PublishScreen: React.FC<ExploreProps> = ({ navigation }: ExploreProps) => 
       {
         text: 'Yes',
         onPress: () => {
-          navigation.navigate('Explore');
+          //navigation.navigate('Explore'); TODO: Remove
           tracking.discardActivity();
         },
         style: 'destructive',
@@ -50,7 +50,7 @@ const PublishScreen: React.FC<ExploreProps> = ({ navigation }: ExploreProps) => 
   };
   const publishActivity = () => {
     tracking.stopTracking(caption);
-    navigation.navigate('Explore');
+    // navigation.navigate('Explore'); TODO: Remove
   };
 
   return (
