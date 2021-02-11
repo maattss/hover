@@ -7,7 +7,6 @@ import { Buttons, Colors, Spacing, Typography } from '../../theme';
 import { HoverStackParamList } from '../../types/navigationTypes';
 import { FontAwesome as FAIcon } from '@expo/vector-icons';
 import { durationToTimestamp, timeStampToHours } from '../../helpers/dateTimeHelpers';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Button from '../../components/general/Button';
 import { getGeoFenceImage } from '../../helpers/geoFenceCalculations';
 import KeyboardAvoiderNoHeader from '../../components/general/KeyboarAvoiderNoHeader';

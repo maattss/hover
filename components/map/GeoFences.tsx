@@ -3,7 +3,6 @@ import { Image, View } from 'react-native';
 import { Circle, Polygon, Marker } from 'react-native-maps';
 import { GeoFence, GeoFenceVariant, CircleGeoFence, PolygonGeoFence } from '../../types/geoFenceTypes';
 import { getGeoFenceColor, getGeoFenceImage } from '../../helpers/geoFenceCalculations';
-import { Spacing } from '../../theme';
 
 interface GeoFencesProps {
   geofences?: GeoFence[];

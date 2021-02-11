@@ -7,14 +7,8 @@ import {
   TouchableOpacity,
   Alert,
   StyleSheet,
-  Keyboard,
-  Platform,
-  KeyboardAvoidingView,
-  ViewStyle,
   Image,
-  Dimensions,
   ActivityIndicator,
-  TouchableWithoutFeedback,
   Button,
 } from 'react-native';
 import { AuthStackParamList } from '../../types/navigationTypes';
@@ -22,7 +16,6 @@ import Firebase, { fns } from '../../lib/firebase';
 import { Buttons, Colors, Spacing, Typography } from '../../theme';
 import CustomButton from '../../components/general/Button';
 import Loading from '../../components/general/Loading';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useUpdateUserMutation } from '../../graphql/mutations/UpdateUser.generated';
 import KeyboardAvoiderNoHeader from '../../components/general/KeyboarAvoiderNoHeader';
 
@@ -32,7 +25,6 @@ export const randomPictureURI = () => {
 };
 
 const SignUpScreen = ({ navigation }: StackScreenProps<AuthStackParamList, 'Signup'>) => {
-  const insets = useSafeAreaInsets();
   const [name, setName] = useState('');
   const [bio] = useState('');
   const [email, setEmail] = useState('');
@@ -101,17 +93,6 @@ const SignUpScreen = ({ navigation }: StackScreenProps<AuthStackParamList, 'Sign
 
   const handleCancel = () => {
     setLoading(false);
-  };
-
-  const getSafeAreaTop = () => {
-    return {
-      marginTop: insets.top,
-    } as ViewStyle;
-  };
-  const getSafeAreaHeight = () => {
-    return {
-      height: insets.top,
-    } as ViewStyle;
   };
 
   if (loading) {

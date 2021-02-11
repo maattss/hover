@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { StackScreenProps } from '@react-navigation/stack';
-import { Text, View, TextInput, TouchableOpacity, Alert, StyleSheet, Image, Dimensions } from 'react-native';
+import { Text, View, TextInput, TouchableOpacity, Alert, StyleSheet, Image } from 'react-native';
 import { AuthStackParamList } from '../../types/navigationTypes';
 import Firebase from '../../lib/firebase';
 import { Buttons, Colors, Spacing, Typography } from '../../theme';
