@@ -19,6 +19,7 @@ type ExploreProps = {
 const TrackingScreen: React.FC<ExploreProps> = ({ navigation }: ExploreProps) => {
   const [chosenMapType, setChosenMapType] = useState<MapTypes>('standard');
   const [centreOnUser, setCentreOnUser] = useState(false);
+  const [zoom, setZoom] = useState<number>(0.01);
   const tracking = useTracking();
   const insets = useSafeAreaInsets();
 
@@ -48,8 +49,8 @@ const TrackingScreen: React.FC<ExploreProps> = ({ navigation }: ExploreProps) =>
   const defaultRegion: Region = {
     longitude: tracking.userLocation ? tracking.userLocation.coords.longitude : defaultMapLocation.longitude,
     latitude: (tracking.userLocation ? tracking.userLocation.coords.latitude : defaultMapLocation.latitude) - 0.003,
-    latitudeDelta: 0.01,
-    longitudeDelta: 0.01,
+    latitudeDelta: zoom,
+    longitudeDelta: zoom,
   };
   const animateMapToUserPos = () => {
     if (tracking.userLocation) setCentreOnUser(true);
@@ -74,8 +75,9 @@ const TrackingScreen: React.FC<ExploreProps> = ({ navigation }: ExploreProps) =>
         style={styles.mapStyle}
         initialRegion={defaultRegion}
         onDoublePress={() => setCentreOnUser(false)}
-        onPanDrag={() => setCentreOnUser(false)}>
-        <GeoFences geofences={tracking.geoFences} />
+        onPanDrag={() => setCentreOnUser(false)}
+        onRegionChangeComplete={(region) => setZoom(region.latitudeDelta)}>
+        <GeoFences geofences={tracking.geoFences} zoom={zoom} />
       </MapView>
 
       <View style={[styles.mapInfo, getSafeAreaTop()]}>
