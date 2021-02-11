@@ -91,7 +91,7 @@ const ChallengeRulesScreen: React.FC<Props> = ({ route, navigation }: Props) => 
   };
   const RuleField = ({ field }: { field: string }) => {
     switch (field) {
-      case 'score':
+      case 'SCORE':
         return (
           <View>
             <Text style={styles.label}>Goal score</Text>
@@ -105,14 +105,14 @@ const ChallengeRulesScreen: React.FC<Props> = ({ route, navigation }: Props) => 
             />
           </View>
         );
-      case 'category':
+      case 'CATEGORY':
         return (
           <View>
             <Text style={styles.label}>Pick a category</Text>
             <View style={styles.categoryButtonsContainer}>{renderCategories()}</View>
           </View>
         );
-      case 'time':
+      case 'TIME':
         return (
           <View>
             <Text style={styles.label}>Hours</Text>
@@ -127,9 +127,8 @@ const ChallengeRulesScreen: React.FC<Props> = ({ route, navigation }: Props) => 
           </View>
         );
       default:
-        break;
+        return <Text style={styles.label}>Invalid field: {field}</Text>;
     }
-    return <Text style={styles.label}>Invalid field: {field}</Text>;
   };
 
   return (
