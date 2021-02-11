@@ -1,19 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  TextInput,
-  Alert,
-  Image,
-  ActivityIndicator,
-  Button,
-  Keyboard,
-  KeyboardAvoidingView,
-  TouchableWithoutFeedback,
-  Platform,
-  Dimensions,
-} from 'react-native';
+import { StyleSheet, Text, View, TextInput, Alert, Image, ActivityIndicator, Button } from 'react-native';
 import { Buttons, Colors, Spacing, Typography } from '../../../theme';
 import { SettingsProps } from './SettingsMenuScreen';
 import { useUserQuery } from '../../../graphql/queries/User.generated';
@@ -23,6 +9,7 @@ import CustomButton from '../../../components/general/Button';
 import Loading from '../../../components/general/Loading';
 import { randomPictureURI } from '../../auth/SignUpScreen';
 import { Asset } from 'expo-asset';
+import KeyboardAvoider from '../../../components/general/KeyboardAvoider';
 
 const UserSettingsScreen: React.FC<SettingsProps> = ({ navigation }: SettingsProps) => {
   const id = useAuthentication().user?.uid;
@@ -82,71 +69,44 @@ const UserSettingsScreen: React.FC<SettingsProps> = ({ navigation }: SettingsPro
     }
     if (fetchLoading || mutationLoading) return <Loading />;
     return (
-      <View style={styles.container}>
-        <KeyboardAvoidingView
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-          style={{ flex: 1 }}
-          keyboardVerticalOffset={64}>
-          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-            <View style={styles.inner}>
-              <View>
-                <View style={styles.avatarContainer}>
-                  <Image
-                    source={{ uri: picture }}
-                    style={styles.avatar}
-                    onLoadStart={() => setLoadingImage(true)}
-                    onLoadEnd={() => setLoadingImage(false)}
-                  />
-                  {loadingImage && <ActivityIndicator style={styles.avatarLoading} color={Colors.blue} />}
-                  <Button onPress={() => setPicture(randomPictureURI())} title="Regenerate picture" />
-                </View>
+      <KeyboardAvoider>
+        <View style={styles.avatarContainer}>
+          <Image
+            source={{ uri: picture }}
+            style={styles.avatar}
+            onLoadStart={() => setLoadingImage(true)}
+            onLoadEnd={() => setLoadingImage(false)}
+          />
+          {loadingImage && <ActivityIndicator style={styles.avatarLoading} color={Colors.blue} />}
+          <Button onPress={() => setPicture(randomPictureURI())} title="Regenerate picture" />
+        </View>
 
-                <Text style={styles.label}>Name</Text>
-                <TextInput
-                  placeholder={'Enter your name'}
-                  placeholderTextColor={Colors.gray600}
-                  value={name}
-                  onChangeText={(val) => setName(val)}
-                  style={styles.formField}
-                />
-                <Text style={styles.label}>Bio</Text>
-                <TextInput
-                  placeholder={'Enter something funny about yourself!'}
-                  placeholderTextColor={Colors.gray600}
-                  value={bio}
-                  onChangeText={(val) => setBio(val)}
-                  style={styles.formFieldMultiLine}
-                  multiline={true}
-                  numberOfLines={3}
-                />
-                <CustomButton onPress={onSubmit}>Save changes</CustomButton>
-              </View>
-            </View>
-          </TouchableWithoutFeedback>
-        </KeyboardAvoidingView>
-      </View>
+        <Text style={styles.label}>Name</Text>
+        <TextInput
+          placeholder={'Enter your name'}
+          placeholderTextColor={Colors.gray600}
+          value={name}
+          onChangeText={(val) => setName(val)}
+          style={styles.formField}
+        />
+        <Text style={styles.label}>Bio</Text>
+        <TextInput
+          placeholder={'Enter something funny about yourself!'}
+          placeholderTextColor={Colors.gray600}
+          value={bio}
+          onChangeText={(val) => setBio(val)}
+          style={styles.formFieldMultiLine}
+          multiline={true}
+          numberOfLines={3}
+        />
+        <CustomButton onPress={onSubmit}>Save changes</CustomButton>
+      </KeyboardAvoider>
     );
   }
 };
 export default UserSettingsScreen;
 
 const styles = StyleSheet.create({
-  container: {
-    height: Dimensions.get('screen').height,
-  },
-  inner: {
-    justifyContent: 'flex-end',
-    padding: Spacing.small,
-    marginBottom: Spacing.large,
-  },
-  blackTop: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    width: Dimensions.get('screen').width,
-    zIndex: 99,
-    backgroundColor: Colors.black,
-  },
   label: {
     ...Typography.bodyText,
     fontWeight: 'bold',

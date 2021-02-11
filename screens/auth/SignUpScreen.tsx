@@ -24,6 +24,7 @@ import CustomButton from '../../components/general/Button';
 import Loading from '../../components/general/Loading';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useUpdateUserMutation } from '../../graphql/mutations/UpdateUser.generated';
+import KeyboardAvoiderNoHeader from '../../components/general/KeyboarAvoiderNoHeader';
 
 export const randomPictureURI = () => {
   const random = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
@@ -123,92 +124,69 @@ const SignUpScreen = ({ navigation }: StackScreenProps<AuthStackParamList, 'Sign
     );
   } else {
     return (
-      <View style={styles.container}>
-        <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={{ flex: 1 }}>
-          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-            <View style={styles.inner}>
-              <View style={[styles.blackTop, getSafeAreaHeight()]} />
-              <View>
-                <View style={[styles.avatarContainer, getSafeAreaTop()]}>
-                  <Image
-                    source={{ uri: picture }}
-                    style={styles.avatar}
-                    onLoadStart={() => setLoadingImage(true)}
-                    onLoadEnd={() => setLoadingImage(false)}
-                  />
-                  {loadingImage && <ActivityIndicator style={styles.avatarLoading} color={Colors.blue} />}
-                  <Button onPress={() => setPicture(randomPictureURI())} title="Regenerate picture" />
-                </View>
+      <KeyboardAvoiderNoHeader>
+        <View style={styles.avatarContainer}>
+          <Image
+            source={{ uri: picture }}
+            style={styles.avatar}
+            onLoadStart={() => setLoadingImage(true)}
+            onLoadEnd={() => setLoadingImage(false)}
+          />
+          {loadingImage && <ActivityIndicator style={styles.avatarLoading} color={Colors.blue} />}
+          <Button onPress={() => setPicture(randomPictureURI())} title="Regenerate picture" />
+        </View>
 
-                <Text style={styles.label}>Name</Text>
-                <TextInput
-                  placeholder="Enter your name"
-                  placeholderTextColor={Colors.gray600}
-                  onChangeText={(val) => setName(val)}
-                  style={styles.formField}
-                />
-                <Text style={styles.label}>E-mail</Text>
-                <TextInput
-                  placeholder="Enter your e-mail"
-                  placeholderTextColor={Colors.gray600}
-                  onChangeText={(val) => setEmail(val)}
-                  autoCapitalize="none"
-                  keyboardType="email-address"
-                  style={styles.formField}
-                />
-                <Text style={styles.label}>Password</Text>
-                <TextInput
-                  placeholder="Enter your password (at least 8 characters)"
-                  placeholderTextColor={Colors.gray600}
-                  onChangeText={(val) => setPassword(val)}
-                  autoCapitalize="none"
-                  secureTextEntry
-                  autoCorrect={false}
-                  style={styles.formField}
-                />
-                <Text style={styles.label}>Confirm password</Text>
-                <TextInput
-                  placeholder="Confirm your password"
-                  placeholderTextColor={Colors.gray600}
-                  onChangeText={(val) => setConfirmPassword(val)}
-                  autoCapitalize="none"
-                  secureTextEntry
-                  autoCorrect={false}
-                  style={styles.formField}
-                  onSubmitEditing={handleSignup}
-                />
-                <CustomButton onPress={handleSignup}>Sign up</CustomButton>
-              </View>
-              <View style={styles.loginContainer}>
-                <Text style={{ ...Typography.bodyText }}>Already have an account?</Text>
-                <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-                  <Text style={styles.loginLink}>Login</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </TouchableWithoutFeedback>
-        </KeyboardAvoidingView>
-      </View>
+        <Text style={styles.label}>Name</Text>
+        <TextInput
+          placeholder="Enter your name"
+          placeholderTextColor={Colors.gray600}
+          onChangeText={(val) => setName(val)}
+          style={styles.formField}
+        />
+        <Text style={styles.label}>E-mail</Text>
+        <TextInput
+          placeholder="Enter your e-mail"
+          placeholderTextColor={Colors.gray600}
+          onChangeText={(val) => setEmail(val)}
+          autoCapitalize="none"
+          keyboardType="email-address"
+          style={styles.formField}
+        />
+        <Text style={styles.label}>Password</Text>
+        <TextInput
+          placeholder="Enter your password (at least 8 characters)"
+          placeholderTextColor={Colors.gray600}
+          onChangeText={(val) => setPassword(val)}
+          autoCapitalize="none"
+          secureTextEntry
+          autoCorrect={false}
+          style={styles.formField}
+        />
+        <Text style={styles.label}>Confirm password</Text>
+        <TextInput
+          placeholder="Confirm your password"
+          placeholderTextColor={Colors.gray600}
+          onChangeText={(val) => setConfirmPassword(val)}
+          autoCapitalize="none"
+          secureTextEntry
+          autoCorrect={false}
+          style={styles.formField}
+          onSubmitEditing={handleSignup}
+        />
+        <CustomButton onPress={handleSignup}>Sign up</CustomButton>
+
+        <View style={styles.loginContainer}>
+          <Text style={{ ...Typography.bodyText }}>Already have an account?</Text>
+          <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+            <Text style={styles.loginLink}>Login</Text>
+          </TouchableOpacity>
+        </View>
+      </KeyboardAvoiderNoHeader>
     );
   }
 };
 
 const styles = StyleSheet.create({
-  container: {
-    height: Dimensions.get('screen').height,
-  },
-  inner: {
-    justifyContent: 'flex-end',
-    padding: Spacing.small,
-  },
-  blackTop: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    width: Dimensions.get('screen').width,
-    zIndex: 99,
-    backgroundColor: Colors.black,
-  },
   signUpContainer: {
     alignItems: 'center',
     marginBottom: Spacing.base,
