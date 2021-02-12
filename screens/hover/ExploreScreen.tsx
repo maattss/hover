@@ -1,5 +1,5 @@
 import React, { useState, createRef, useEffect } from 'react';
-import MapView, { LatLng, MapTypes, Region } from 'react-native-maps';
+import MapView, { EventUserLocation, LatLng, MapTypes, Region } from 'react-native-maps';
 import {
   StyleSheet,
   Dimensions,
@@ -25,21 +25,22 @@ const ExploreScreen: React.FC = () => {
   const [centreOnUser, setCentreOnUser] = useState(false);
   const [disableTracking, setDisableTracking] = useState(true);
   const [loadingUserPos, setLoadingUserPos] = useState(true);
-  const [zoom, setZoom] = useState<number>(0.01);
+  const [zoom, setZoom] = useState<number>(0.02);
   const tracking = useTracking();
   const insets = useSafeAreaInsets();
+  const userRegion: Region = {
+    latitude: userLocationMap ? userLocationMap.latitude : defaultMapLocation.latitude,
+    longitude: userLocationMap ? userLocationMap.longitude : defaultMapLocation.longitude,
+    latitudeDelta: 0.02,
+    longitudeDelta: 0.02,
+  };
 
+  // Refetch geofences and animate map to user position on init render
   useEffect(() => {
-    // Refetch geofences on init render
     tracking.refetchGeofences();
+    animateMapToUserPos();
   }, []);
 
-  const defaultRegion: Region = {
-    latitude: userLocationMap ? userLocationMap.latitude : defaultMapLocation.longitude,
-    longitude: userLocationMap ? userLocationMap.longitude : defaultMapLocation.longitude,
-    latitudeDelta: zoom,
-    longitudeDelta: zoom,
-  };
   // Dynamic styles
   const mapTypeIconStyle = {
     fontSize: Typography.icon.fontSize,
@@ -50,10 +51,7 @@ const ExploreScreen: React.FC = () => {
     color: centreOnUser ? Colors.blue : Colors.white,
   };
 
-  // Map event listener functions
-  const toggleMapType = () =>
-    chosenMapType === 'satellite' ? setChosenMapType('standard') : setChosenMapType('satellite');
-
+  // Tracking event listener functions
   useEffect(() => {
     if (tracking.userLocation !== null) {
       setLoadingUserPos(false);
@@ -68,16 +66,28 @@ const ExploreScreen: React.FC = () => {
   useEffect(() => {
     if (tracking.userLocation === null && userLocationMap !== null) {
       tracking.updateUserLocation(userLocationMap);
+      animateMapToUserPos();
     }
   }, [userLocationMap]);
 
+  // Map event functions
   const mapView = createRef<MapView>();
+  const toggleMapType = () =>
+    chosenMapType === 'satellite' ? setChosenMapType('standard') : setChosenMapType('satellite');
   const animateMapToUserPos = () => {
-    if (tracking.userLocation) setCentreOnUser(true);
-    mapView.current?.animateToRegion(defaultRegion, 1000);
+    if (tracking.userLocation) {
+      setCentreOnUser(true);
+      mapView.current?.animateToRegion(userRegion, 1000);
+    }
   };
   const startTracking = () => {
     if (!disableTracking) tracking.startTracking();
+  };
+  const userLocationChange = (e: EventUserLocation) => {
+    setUserLocationMap({
+      latitude: e.nativeEvent.coordinate.latitude,
+      longitude: e.nativeEvent.coordinate.longitude,
+    });
   };
   const notInsideGeoFenceAlert = () => {
     Alert.alert(
@@ -102,23 +112,19 @@ const ExploreScreen: React.FC = () => {
       marginTop: insets.top,
     } as ViewStyle;
   };
+
   return (
     <View>
       <MapView
         ref={mapView}
         mapType={chosenMapType}
-        initialRegion={defaultRegion}
+        initialRegion={userRegion}
         showsUserLocation
         style={styles.mapStyle}
-        onUserLocationChange={(e) =>
-          setUserLocationMap({
-            latitude: e.nativeEvent.coordinate.latitude,
-            longitude: e.nativeEvent.coordinate.longitude,
-          })
-        }
+        onUserLocationChange={userLocationChange}
         onDoublePress={() => setCentreOnUser(false)}
         onPanDrag={() => setCentreOnUser(false)}
-        onRegionChangeComplete={(region) => setZoom(region.latitudeDelta + region.longitudeDelta)}>
+        onRegionChangeComplete={(region) => setZoom(region.latitudeDelta)}>
         <GeoFences geofences={tracking.geoFences} zoom={zoom} />
       </MapView>
 
