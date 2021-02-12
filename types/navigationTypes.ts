@@ -52,6 +52,7 @@ export type NewChallengeStackParamList = {
     end_date: string;
     participants: ListUserFragmentFragment[];
   };
+  ChallengeInfo: undefined;
 };
 export type HoverStackParamList = {
   Explore: undefined;
