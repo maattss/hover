@@ -12,6 +12,7 @@ import { useInterval } from '../../hooks/useInterval';
 import * as Location from 'expo-location';
 import { LocationObject } from 'expo-location';
 import useAuthentication from '../../hooks/useAuthentication';
+import { LatLng } from 'react-native-maps';
 
 interface Props {
   children: ReactNode;
@@ -26,6 +27,7 @@ export enum TrackingState {
 interface TrackingContextValues {
   locationPermission: PermissionResponse | undefined;
   userLocation: LocationObject | null;
+  updateUserLocation: (location: LatLng) => void;
   geoFences: GeoFence[];
   refetchGeofences: () => void;
   unUploadedActivities: TrackedActivity[];
@@ -44,6 +46,7 @@ interface TrackingContextValues {
 export const TrackingContext = React.createContext<TrackingContextValues>({
   locationPermission: undefined,
   userLocation: null,
+  updateUserLocation: () => console.error('Function not initialized'),
   geoFences: [],
   refetchGeofences: () => {
     console.error('Function not initialized');
@@ -54,21 +57,11 @@ export const TrackingContext = React.createContext<TrackingContextValues>({
   trackingStart: '',
   score: 0,
   duration: 0,
-  startTracking: () => {
-    console.error('Function not initialized');
-  },
-  resumeTracking: () => {
-    console.error('Function not initialized');
-  },
-  pauseTracking: () => {
-    console.error('Function not initialized');
-  },
-  stopTracking: () => {
-    console.error('Function not initialized');
-  },
-  discardActivity: () => {
-    console.error('Function not initialized');
-  },
+  startTracking: () => console.error('Function not initialized'),
+  resumeTracking: () => console.error('Function not initialized'),
+  pauseTracking: () => console.error('Function not initialized'),
+  stopTracking: () => console.error('Function not initialized'),
+  discardActivity: () => console.error('Function not initialized'),
 });
 TrackingContext.displayName = 'TrackingContext';
 
@@ -109,34 +102,46 @@ export const TrackingProvider = ({ children }: Props) => {
     return await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Highest });
   };
 
-  // Update user location every second
-  const [ticking] = useState(true);
-  const [counter, setCounter] = useState(0);
-  useInterval(
-    async () => {
-      const newUserLocation = await getLocation();
-      console.log('Checking user location...');
-      setCounter(counter + 1);
-      const differentLatitude = newUserLocation.coords.latitude !== userLocation?.coords.latitude;
-      const differentLongitude = newUserLocation.coords.longitude !== userLocation?.coords.longitude;
+  const externalUpdateUserLocation = (newUserLocation: LatLng) => {
+    if (userLocation === null) {
+      updateUserLocation({
+        coords: {
+          latitude: newUserLocation.latitude,
+          longitude: newUserLocation.longitude,
+          altitude: null,
+          accuracy: null,
+          altitudeAccuracy: null,
+          heading: null,
+          speed: null,
+        },
+        timestamp: Date.now(),
+      });
+    }
+  };
 
-      if (differentLatitude || differentLongitude) {
-        console.log(
-          'Updated user location... [' + newUserLocation.coords.latitude + ',' + newUserLocation.coords.longitude + ']',
-        );
-        setUserLocation(newUserLocation);
+  const updateUserLocation = (newUserLocation: LocationObject) => {
+    setUserLocation(newUserLocation);
+    console.log(
+      'Updated user location... [' + newUserLocation.coords.latitude + ',' + newUserLocation.coords.longitude + ']',
+    );
 
-        const insideGeoFenceCheck = insideGeoFences(newUserLocation, geoFences);
-        if (insideGeoFenceCheck) {
-          setInsideGeoFence(insideGeoFenceCheck);
-          console.log('Inside geo fence!');
-        } else {
-          console.log('Outside geofence!');
-        }
-      }
-    },
-    ticking ? 5000 : null,
-  );
+    const insideGeoFenceCheck = insideGeoFences(newUserLocation, geoFences);
+    if (insideGeoFenceCheck) {
+      setInsideGeoFence(insideGeoFenceCheck);
+      console.log('Inside geo fence!');
+    } else {
+      console.log('Outside geofence!');
+    }
+  };
+
+  // Update user location every 5 seconds
+  useInterval(async () => {
+    console.log('Checking user location...');
+    const newUserLocation = await getLocation();
+    const differentLatitude = newUserLocation.coords.latitude !== userLocation?.coords.latitude;
+    const differentLongitude = newUserLocation.coords.longitude !== userLocation?.coords.longitude;
+    if (differentLatitude || differentLongitude) updateUserLocation(newUserLocation);
+  }, 5000);
 
   const addUnUploadedActivity = (activity: TrackedActivity) =>
     setUnUploadedActivities([...unUploadedActivities, activity]);
@@ -206,6 +211,7 @@ export const TrackingProvider = ({ children }: Props) => {
   const value: TrackingContextValues = {
     locationPermission: locationPermission,
     userLocation: userLocation,
+    updateUserLocation: externalUpdateUserLocation,
     geoFences: geoFences,
     refetchGeofences: refetch,
     unUploadedActivities: unUploadedActivities,

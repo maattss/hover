@@ -1,5 +1,5 @@
 import React, { useState, createRef, useEffect } from 'react';
-import MapView, { MapTypes, Region } from 'react-native-maps';
+import MapView, { LatLng, MapTypes, Region } from 'react-native-maps';
 import {
   StyleSheet,
   Dimensions,
@@ -21,20 +21,22 @@ const { width, height } = Dimensions.get('window');
 
 const ExploreScreen: React.FC = () => {
   const [chosenMapType, setChosenMapType] = useState<MapTypes>('standard');
+  const [userLocationMap, setUserLocationMap] = useState<LatLng | null>(null);
   const [centreOnUser, setCentreOnUser] = useState(false);
   const [disableTracking, setDisableTracking] = useState(true);
   const [loadingUserPos, setLoadingUserPos] = useState(true);
   const [zoom, setZoom] = useState<number>(0.01);
   const tracking = useTracking();
   const insets = useSafeAreaInsets();
-  // Refetch geofences on init render
+
   useEffect(() => {
+    // Refetch geofences on init render
     tracking.refetchGeofences();
   }, []);
 
   const defaultRegion: Region = {
-    longitude: tracking.userLocation ? tracking.userLocation.coords.longitude : defaultMapLocation.longitude,
-    latitude: tracking.userLocation ? tracking.userLocation.coords.latitude : defaultMapLocation.latitude,
+    latitude: userLocationMap ? userLocationMap.latitude : defaultMapLocation.longitude,
+    longitude: userLocationMap ? userLocationMap.longitude : defaultMapLocation.longitude,
     latitudeDelta: zoom,
     longitudeDelta: zoom,
   };
@@ -53,7 +55,9 @@ const ExploreScreen: React.FC = () => {
     chosenMapType === 'satellite' ? setChosenMapType('standard') : setChosenMapType('satellite');
 
   useEffect(() => {
-    if (tracking.userLocation !== null) setLoadingUserPos(false);
+    if (tracking.userLocation !== null) {
+      setLoadingUserPos(false);
+    }
     if (tracking.insideGeoFence) {
       setDisableTracking(false);
     } else {
@@ -61,16 +65,19 @@ const ExploreScreen: React.FC = () => {
     }
   }, [tracking.insideGeoFence, tracking.userLocation]);
 
+  useEffect(() => {
+    if (tracking.userLocation === null && userLocationMap !== null) {
+      tracking.updateUserLocation(userLocationMap);
+    }
+  }, [userLocationMap]);
+
   const mapView = createRef<MapView>();
   const animateMapToUserPos = () => {
     if (tracking.userLocation) setCentreOnUser(true);
     mapView.current?.animateToRegion(defaultRegion, 1000);
   };
   const startTracking = () => {
-    if (!disableTracking) {
-      tracking.startTracking();
-      //navigation.navigate('Tracking');
-    }
+    if (!disableTracking) tracking.startTracking();
   };
   const notInsideGeoFenceAlert = () => {
     Alert.alert(
@@ -103,9 +110,15 @@ const ExploreScreen: React.FC = () => {
         initialRegion={defaultRegion}
         showsUserLocation
         style={styles.mapStyle}
+        onUserLocationChange={(e) =>
+          setUserLocationMap({
+            latitude: e.nativeEvent.coordinate.latitude,
+            longitude: e.nativeEvent.coordinate.longitude,
+          })
+        }
         onDoublePress={() => setCentreOnUser(false)}
         onPanDrag={() => setCentreOnUser(false)}
-        onRegionChangeComplete={(region) => setZoom(region.latitudeDelta)}>
+        onRegionChangeComplete={(region) => setZoom(region.latitudeDelta + region.longitudeDelta)}>
         <GeoFences geofences={tracking.geoFences} zoom={zoom} />
       </MapView>
 
