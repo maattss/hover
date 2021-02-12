@@ -84,7 +84,6 @@ const styles = StyleSheet.create({
     ...Buttons.button,
     backgroundColor: Colors.blue,
     width: '100%',
-    marginVertical: Spacing.small,
   },
   disabledButton: {
     ...Buttons.button,
@@ -109,7 +108,6 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.gray700,
     borderRadius: Spacing.smaller,
     paddingVertical: Spacing.base,
-    margin: Spacing.smallest,
     width: '22%',
   },
   isSelected: {
