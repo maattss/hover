@@ -8,6 +8,8 @@ import { CircleGeoFence, GeoFenceCategory, GeoFenceVariant } from '../../types/g
 import { AchievementVariant } from '../../types/profileTypes';
 import { useFeedQuery } from '../../graphql/queries/Feed.generated';
 import { ScrollView } from 'react-native-gesture-handler';
+import Loading from '../../components/general/Loading';
+import Error from '../../components/general/Error';
 
 // Test data. TODO: Remove
 const testGeoFence: CircleGeoFence = {
@@ -53,7 +55,7 @@ const testChallenge: ChallengeFeedData = {
 
 const FeedScreen: React.FC = () => {
   const [refreshing, setRefreshing] = useState(false);
-  const [limit, setLimit] = useState(3);
+  const [limit, setLimit] = useState(10);
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
     await refetch();
@@ -66,7 +68,7 @@ const FeedScreen: React.FC = () => {
     nextFetchPolicy: 'network-only',
   });
   const loadMoreFeedElements = () => {
-    const newLimit = limit + 3;
+    const newLimit = limit + 10;
     setLimit(newLimit);
     fetchMore({
       variables: {
@@ -79,6 +81,9 @@ const FeedScreen: React.FC = () => {
       console.log('Feed data', data.feed);
     }
   }, [data]);
+
+  if (error) <Error message={error.message} apolloError={error} />;
+  if (loading) <Loading />;
 
   return (
     <ScrollView

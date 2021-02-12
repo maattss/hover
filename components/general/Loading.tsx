@@ -6,12 +6,13 @@ interface LoadingProps {
   text?: string;
   children?: React.ReactNode;
 }
-export const Loading: React.FC<LoadingProps> = (props: LoadingProps) => {
+
+export const Loading: React.FC<LoadingProps> = ({ text, children }: LoadingProps) => {
   return (
     <View style={styles.loadingContainer}>
       <ActivityIndicator size={'large'} color={Colors.blue} />
-      {props.text && <Text style={styles.loadingText}>{props.text}</Text>}
-      {props.children}
+      {text && <Text style={styles.loadingText}>{text}</Text>}
+      {children}
     </View>
   );
 };
