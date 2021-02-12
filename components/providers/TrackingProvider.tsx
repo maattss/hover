@@ -26,6 +26,7 @@ export enum TrackingState {
 
 interface TrackingContextValues {
   locationPermission: PermissionResponse | undefined;
+  loadingUserLocation: boolean;
   userLocation: LocationObject | null;
   updateUserLocation: (location: LatLng) => void;
   geoFences: GeoFence[];
@@ -45,6 +46,7 @@ interface TrackingContextValues {
 
 export const TrackingContext = React.createContext<TrackingContextValues>({
   locationPermission: undefined,
+  loadingUserLocation: true,
   userLocation: null,
   updateUserLocation: () => console.error('Function not initialized'),
   geoFences: [],
@@ -68,6 +70,7 @@ TrackingContext.displayName = 'TrackingContext';
 export const TrackingProvider = ({ children }: Props) => {
   const userId = useAuthentication().user?.uid;
   const [locationPermission] = usePermissions(LOCATION, { ask: true });
+  const [loadingUserLocation, setLoadingUserLocation] = useState(false);
   const [userLocation, setUserLocation] = useState<LocationObject | null>(null);
   const [geoFences, setGeoFences] = useState<GeoFence[]>([]);
   const [unUploadedActivities, setUnUploadedActivities] = useState<TrackedActivity[]>([]);
@@ -98,10 +101,7 @@ export const TrackingProvider = ({ children }: Props) => {
     }
   }, [locationPermission]);
 
-  const getLocation = async () => {
-    return await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Highest });
-  };
-
+  const getLocation = async () => await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Highest });
   const externalUpdateUserLocation = (newUserLocation: LatLng) => {
     if (userLocation === null) {
       updateUserLocation({
@@ -121,6 +121,7 @@ export const TrackingProvider = ({ children }: Props) => {
 
   const updateUserLocation = (newUserLocation: LocationObject) => {
     setUserLocation(newUserLocation);
+    if (loadingUserLocation) setLoadingUserLocation(false);
     console.log(
       'Updated user location... [' + newUserLocation.coords.latitude + ',' + newUserLocation.coords.longitude + ']',
     );
@@ -210,6 +211,7 @@ export const TrackingProvider = ({ children }: Props) => {
 
   const value: TrackingContextValues = {
     locationPermission: locationPermission,
+    loadingUserLocation: loadingUserLocation,
     userLocation: userLocation,
     updateUserLocation: externalUpdateUserLocation,
     geoFences: geoFences,

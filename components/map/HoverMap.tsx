@@ -18,8 +18,16 @@ const HoverMap: React.FC = () => {
   const tracking = useTracking();
   const insets = useSafeAreaInsets();
   const userRegion: Region = {
-    latitude: userLocationMap ? userLocationMap.latitude : defaultMapLocation.latitude,
-    longitude: userLocationMap ? userLocationMap.longitude : defaultMapLocation.longitude,
+    latitude: tracking.userLocation
+      ? tracking.userLocation.coords.latitude
+      : userLocationMap
+      ? userLocationMap.latitude
+      : defaultMapLocation.latitude,
+    longitude: tracking.userLocation
+      ? tracking.userLocation.coords.longitude
+      : userLocationMap
+      ? userLocationMap.longitude
+      : defaultMapLocation.longitude,
     latitudeDelta: 0.02,
     longitudeDelta: 0.02,
   };
@@ -52,10 +60,8 @@ const HoverMap: React.FC = () => {
   const toggleMapType = () =>
     chosenMapType === 'satellite' ? setChosenMapType('standard') : setChosenMapType('satellite');
   const animateMapToUserPos = () => {
-    if (tracking.userLocation) {
-      setCentreOnUser(true);
-      mapView.current?.animateToRegion(userRegion, 1000);
-    }
+    setCentreOnUser(true);
+    mapView.current?.animateToRegion(userRegion, 1000);
   };
   const userLocationChange = (e: EventUserLocation) => {
     setUserLocationMap({
