@@ -87,7 +87,7 @@ const ChallengeRulesScreen: React.FC<Props> = ({ route, navigation }: Props) => 
         <Text style={{ ...Typography.headerText }}>What is the challenge?</Text>
         <Divider />
         <View>
-          {fields.map((field, index) => {
+          {fields.map((field) => {
             if (field == 'SCORE') {
               return (
                 <View>
