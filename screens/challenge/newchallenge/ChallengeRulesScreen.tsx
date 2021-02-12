@@ -14,14 +14,14 @@ import { TextInput } from 'react-native-gesture-handler';
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import Button, { CategoryButton } from '../../../components/Button';
-import Separator from '../../../components/Separator';
+import Button, { CategoryButton } from '../../../components/general/Button';
 import { Buttons, Colors, Spacing, Typography } from '../../../theme';
 import { ChallengeRules } from '../../../types/challengeTypes';
 import { NewChallengeStackParamList } from '../../../types/navigationTypes';
 import moment from 'moment';
 import { GeoFenceCategory } from '../../../types/geoFenceTypes';
 import { getChallengeTypeFields } from '../../../helpers/challengeMappers';
+import Divider from '../../../components/general/Divider';
 
 type ChallengeRulesRouteProp = RouteProp<NewChallengeStackParamList, 'ChallengeRules'>;
 type NavigationProp = StackNavigationProp<NewChallengeStackParamList>;
@@ -142,14 +142,14 @@ const ChallengeRulesScreen: React.FC<Props> = ({ route, navigation }: Props) => 
             <View>
               <View style={styles.box}>
                 <Text style={{ ...Typography.headerText }}>What is the challenge?</Text>
-                <Separator />
+                <Divider />
                 <View>
                   {fields.map((field, index) => (
                     <RuleField key={index} field={field} />
                   ))}
                 </View>
                 <View style={styles.box}></View>
-                <Separator />
+                <Divider />
                 <Text style={{ ...Typography.headerText }}>Last day of challenge?</Text>
                 <View>
                   <Button style={styles.formField} onPress={showDatePicker}>

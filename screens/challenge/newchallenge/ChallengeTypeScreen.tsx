@@ -1,16 +1,16 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
-import Loading from '../../../components/Loading';
+import Loading from '../../../components/general/Loading';
 import { NewChallengeStackParamList } from '../../../types/navigationTypes';
 import { RouteProp } from '@react-navigation/native';
 import { ChallengeTypeFragmentFragment } from '../../../graphql/Fragments.generated';
 import { Colors, Spacing, Typography } from '../../../theme';
 import { StackNavigationProp } from '@react-navigation/stack';
-import Separator from '../../../components/Separator';
 import { useChallengeTypesQuery } from '../../../graphql/queries/ChallengeTypes.generated';
-import { MenuButton } from '../../../components/Button';
+import { MenuButton } from '../../../components/general/Button';
 import { getChallengeTypeEnum } from '../../../helpers/challengeMappers';
+import Divider from '../../../components/general/Divider';
 
 type ChallengeTypeRouteProp = RouteProp<NewChallengeStackParamList, 'ChallengeType'>;
 type NavigationProp = StackNavigationProp<NewChallengeStackParamList>;
@@ -48,7 +48,7 @@ const ChallengeTypeScreen: React.FC<Props> = ({ route, navigation }: Props) => {
         data={challengeTypes?.challenge_type as ChallengeTypeFragmentFragment[]}
         keyExtractor={({ name }) => name}
         renderItem={({ item }) => renderItem(item)}
-        ItemSeparatorComponent={() => <Separator />}
+        ItemSeparatorComponent={() => <Divider />}
       />
     </View>
   );
