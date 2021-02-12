@@ -81,7 +81,6 @@ fragment challengeFragment on challenge {
   rules
 }
 
-
 fragment achievementFragment on achievement {
   id
   description
@@ -106,9 +105,35 @@ fragment challengeTypeFragment on challenge_type {
   description
 }
 
-fragment feedFragment on feed {
+fragment activityFeedFragment on feed {
   id
-  user_id
+  user {
+    ...basicUserFragment
+  }
+  activity {
+    ...basicActivityFragment
+  }
+  created_at
+}
+
+fragment achievementFeedFragment on feed {
+  id
+  user {
+    ...basicUserFragment
+  }
+  user_achievement {
+    achievement {
+      ...achievementFragment
+    }
+  }
+  created_at
+}
+
+fragment fullFeedFragment on feed {
+  id
+  user {
+    ...basicUserFragment
+  }
   activity_id
   activity {
     ...basicActivityFragment

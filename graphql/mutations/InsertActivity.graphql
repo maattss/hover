@@ -1,11 +1,5 @@
 mutation InsertActivity($activity: activities_insert_input!) {
   insert_feed_one(object: { feed_type: ACTIVITY, activity: { data: $activity } }) {
-    ...feedFragment
-    created_at
-    activity {
-      ...basicActivityFragment
-      created_at
-      user_id
-    }
+    ...activityFeedFragment
   }
 }
