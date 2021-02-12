@@ -24,26 +24,24 @@ export const randomPictureURI = () => {
   return 'https://api.multiavatar.com/' + random + '.png';
 };
 
+export const getSanitizedEmail = (name: string) => {
+  // Replace everything that is not number or letter with an underscore. And append valid email domain.
+  return name.replace(/[^a-z0-9]/gi, '_').toLowerCase() + '@hover.app';
+};
+
 const SignUpScreen = ({ navigation }: StackScreenProps<AuthStackParamList, 'Signup'>) => {
   const [name, setName] = useState('');
   const [bio] = useState('');
-  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [loadingImage, setLoadingImage] = useState(true);
   const [picture, setPicture] = useState(randomPictureURI());
-  const [updateUserSignUp] = useUpdateUserMutation();
+  const [updateUser] = useUpdateUserMutation();
 
   const validateForm = () => {
     if (name.length < 1) {
-      Alert.alert('Name missing', 'Name needs to be filled in.');
-      return false;
-    } else if (email.length < 1) {
-      Alert.alert('E-mail missing', 'E-mail needs to be filled in.');
-      return false;
-    } else if (!email.includes('@')) {
-      Alert.alert('Invalid e-mail', 'E-mail needs to be valid.');
+      Alert.alert('Username missing', 'Username needs to be filled in.');
       return false;
     } else if (password.length < 8) {
       Alert.alert('Password too short', 'Password needs to be longer than 8 characters.');
@@ -63,6 +61,8 @@ const SignUpScreen = ({ navigation }: StackScreenProps<AuthStackParamList, 'Sign
         setLoading(true);
         // Extract the function into a variable
         const registerUser = fns.httpsCallable('registerUser');
+        // Generate email from username.
+        const email = getSanitizedEmail(name);
         // Call the function
         await registerUser({ email, password });
         // Log the user in
@@ -70,7 +70,7 @@ const SignUpScreen = ({ navigation }: StackScreenProps<AuthStackParamList, 'Sign
         // Add user name and picture to Hasura DB
         const id = newUser.user?.uid;
         if (id) {
-          await updateUserSignUp({
+          await updateUser({
             variables: {
               id,
               name,
@@ -80,7 +80,7 @@ const SignUpScreen = ({ navigation }: StackScreenProps<AuthStackParamList, 'Sign
           });
           Alert.alert('Signup success', 'Welcome to Hover!');
         } else {
-          throw new Error('Error updating user data to Hasura');
+          throw new Error('Error inserting user data to Hasura on signup.');
         }
       }
     } catch (error) {
@@ -117,20 +117,13 @@ const SignUpScreen = ({ navigation }: StackScreenProps<AuthStackParamList, 'Sign
           <Button onPress={() => setPicture(randomPictureURI())} title="Regenerate picture" />
         </View>
 
-        <Text style={styles.label}>Name</Text>
+        <Text style={styles.label}>Username</Text>
         <TextInput
-          placeholder="Enter your name"
+          placeholder="Enter your username"
           placeholderTextColor={Colors.gray600}
           onChangeText={(val) => setName(val)}
-          style={styles.formField}
-        />
-        <Text style={styles.label}>E-mail</Text>
-        <TextInput
-          placeholder="Enter your e-mail"
-          placeholderTextColor={Colors.gray600}
-          onChangeText={(val) => setEmail(val)}
-          autoCapitalize="none"
-          keyboardType="email-address"
+          autoCapitalize="words"
+          autoCorrect={false}
           style={styles.formField}
         />
         <Text style={styles.label}>Password</Text>
