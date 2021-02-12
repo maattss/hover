@@ -10,7 +10,7 @@ import { ListUserFragmentFragment } from '../../../graphql/Fragments.generated';
 import { Buttons, Colors, Spacing, Typography } from '../../../theme';
 import Button from '../../../components/general/Button';
 import { StackNavigationProp } from '@react-navigation/stack';
-import Separator from '../../../components/Separator';
+import Divider from '../../../components/general/Divider';
 
 type PickUsersRouteProp = RouteProp<NewChallengeStackParamList, 'PickUsers'>;
 type NavigationProp = StackNavigationProp<NewChallengeStackParamList>;
@@ -66,7 +66,7 @@ const PickUsersScreen: React.FC<Props> = ({
         data={friends?.users as ListUserFragmentFragment[]}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => renderItem(item)}
-        ItemSeparatorComponent={() => <Separator />}
+        ItemSeparatorComponent={() => <Divider />}
       />
       <Button
         onPress={() => {

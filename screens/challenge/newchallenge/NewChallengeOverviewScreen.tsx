@@ -3,10 +3,9 @@ import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
-import Button from '../../../components/Button';
+import Button from '../../../components/general/Button';
 import OpponentsList from '../../../components/challenge/OpponentsList';
 import { FontAwesome5 as FA5Icon } from '@expo/vector-icons';
-import Separator from '../../../components/Separator';
 import { useInsertChallengeMutation } from '../../../graphql/mutations/InsertChallenge.generated';
 import { convertToJsonRule } from '../../../helpers/challengeMappers';
 import { Buttons, Colors, Spacing, Typography } from '../../../theme';
@@ -14,6 +13,7 @@ import { NewChallengeStackParamList, RootTabParamList } from '../../../types/nav
 import { Challenge_Participant_Insert_Input, Challenge_Participant_State_Enum } from '../../../types/types';
 import { GeoFenceCategory } from '../../../types/geoFenceTypes';
 import { getCategoryColor, getCategoryIconName } from '../../../helpers/categoryHelpers';
+import Divider from '../../../components/general/Divider';
 
 type NewChallengeRouteProp = RouteProp<NewChallengeStackParamList, 'NewChallengeOverview'>;
 type NavigationProp = StackNavigationProp<RootTabParamList, 'Challenge'>;
@@ -52,7 +52,7 @@ const NewChallengeOverviewScreen: React.FC<Props> = ({ route, navigation }: Prop
           <Text style={styles.infoText}>Against</Text>
           <OpponentsList opponents={route.params.participants} />
         </View>
-        <Separator />
+        <Divider />
         {route.params.rules?.score && (
           <View style={styles.infoContainer}>
             <Text style={styles.infoText}>Goal score</Text>
