@@ -87,10 +87,10 @@ const ChallengeRulesScreen: React.FC<Props> = ({ route, navigation }: Props) => 
         <Text style={{ ...Typography.headerText }}>Define the rules</Text>
         <Divider />
         <View>
-          {fields.map((field) => {
+          {fields.map((field, index) => {
             if (field == 'SCORE') {
               return (
-                <View style={styles.section}>
+                <View key={index} style={styles.section}>
                   <Text style={styles.label}>Goal score</Text>
                   <TextInput
                     placeholder="Enter your goal score"
@@ -104,14 +104,14 @@ const ChallengeRulesScreen: React.FC<Props> = ({ route, navigation }: Props) => 
               );
             } else if (field == 'CATEGORY') {
               return (
-                <View style={styles.section}>
+                <View key={index} style={styles.section}>
                   <Text style={styles.label}>Pick a category</Text>
                   <View style={styles.categoryButtonsContainer}>{renderCategories()}</View>
                 </View>
               );
             } else if (field == 'TIME') {
               return (
-                <View style={styles.section}>
+                <View key={index} style={styles.section}>
                   <Text style={styles.label}>Hours</Text>
                   <TextInput
                     placeholder="Enter number of hours"
@@ -124,7 +124,11 @@ const ChallengeRulesScreen: React.FC<Props> = ({ route, navigation }: Props) => 
                 </View>
               );
             } else {
-              return <Text style={styles.label}>Invalid field: {field}</Text>;
+              return (
+                <Text key={index} style={styles.label}>
+                  Invalid field: {field}
+                </Text>
+              );
             }
           })}
         </View>
