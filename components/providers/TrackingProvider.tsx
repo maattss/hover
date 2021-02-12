@@ -1,5 +1,5 @@
 import React, { useState, ReactNode, useEffect } from 'react';
-import { GeoFence, TrackedActivity } from '../../types/geoFenceTypes';
+import { GeoFence } from '../../types/geoFenceTypes';
 import { convertToGeoFences } from '../../helpers/objectMappers';
 import { usePermissions, LOCATION, PermissionResponse } from 'expo-permissions';
 import { startBackgroundUpdate, stopBackgroundUpdate } from '../../tasks/locationBackgroundTasks';
@@ -12,6 +12,7 @@ import { useInterval } from '../../hooks/useInterval';
 import * as Location from 'expo-location';
 import { LocationObject } from 'expo-location';
 import useAuthentication from '../../hooks/useAuthentication';
+import { Activities_Insert_Input } from '../../types/types';
 
 interface Props {
   children: ReactNode;
@@ -28,7 +29,7 @@ interface TrackingContextValues {
   userLocation: LocationObject | null;
   geoFences: GeoFence[];
   refetchGeofences: () => void;
-  unUploadedActivities: TrackedActivity[];
+  unUploadedActivities: Activities_Insert_Input[];
   insideGeoFence: GeoFence | null;
   trackingState: TrackingState;
   trackingStart: string;
@@ -77,7 +78,7 @@ export const TrackingProvider = ({ children }: Props) => {
   const [locationPermission] = usePermissions(LOCATION, { ask: true });
   const [userLocation, setUserLocation] = useState<LocationObject | null>(null);
   const [geoFences, setGeoFences] = useState<GeoFence[]>([]);
-  const [unUploadedActivities, setUnUploadedActivities] = useState<TrackedActivity[]>([]);
+  const [unUploadedActivities, setUnUploadedActivities] = useState<Activities_Insert_Input[]>([]);
   const [insideGeoFence, setInsideGeoFence] = useState<GeoFence | null>(null);
   const [trackingState, setTrackingState] = useState<TrackingState>(TrackingState.EXPLORE);
   const [trackingStart, setTrackingStart] = useState('');
@@ -138,7 +139,7 @@ export const TrackingProvider = ({ children }: Props) => {
     ticking ? 5000 : null,
   );
 
-  const addUnUploadedActivity = (activity: TrackedActivity) =>
+  const addUnUploadedActivity = (activity: Activities_Insert_Input) =>
     setUnUploadedActivities([...unUploadedActivities, activity]);
 
   // Tracking
@@ -181,13 +182,7 @@ export const TrackingProvider = ({ children }: Props) => {
       Alert.alert('Upload complete', 'Activity uploaded successfully!', [{ text: 'OK' }]);
     } catch (error) {
       console.error('Mutation error', error.message);
-      addUnUploadedActivity({
-        caption: activity.caption,
-        geofenceId: activity.geofence_id ?? 0,
-        score: activity.score,
-        startedAt: activity.started_at,
-        duration: activity.duration,
-      });
+      addUnUploadedActivity(activity);
     }
   };
 

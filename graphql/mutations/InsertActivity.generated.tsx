@@ -1,25 +1,25 @@
 /* eslint-disable */
 import * as Types from '../../types/types';
 
-import { BasicActivityFragmentFragment } from '../Fragments.generated';
+import { ActivityFeedFragmentFragment } from '../Fragments.generated';
 import { gql } from '@apollo/client';
-import { BasicActivityFragmentFragmentDoc } from '../Fragments.generated';
+import { ActivityFeedFragmentFragmentDoc } from '../Fragments.generated';
 import * as Apollo from '@apollo/client';
 export type InsertActivityMutationVariables = Types.Exact<{
   activity: Types.Activities_Insert_Input;
 }>;
 
 export type InsertActivityMutation = { readonly __typename: 'mutation_root' } & {
-  readonly insert_activities_one?: Types.Maybe<{ readonly __typename: 'activities' } & BasicActivityFragmentFragment>;
+  readonly insert_feed_one?: Types.Maybe<{ readonly __typename: 'feed' } & ActivityFeedFragmentFragment>;
 };
 
 export const InsertActivityDocument = gql`
   mutation InsertActivity($activity: activities_insert_input!) {
-    insert_activities_one(object: $activity) {
-      ...basicActivityFragment
+    insert_feed_one(object: { feed_type: ACTIVITY, activity: { data: $activity } }) {
+      ...activityFeedFragment
     }
   }
-  ${BasicActivityFragmentFragmentDoc}
+  ${ActivityFeedFragmentFragmentDoc}
 `;
 
 /**

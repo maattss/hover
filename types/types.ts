@@ -59,6 +59,8 @@ export type Achievement = {
   achievement_type: Achievement_Type_Enum;
   created_at?: Maybe<Scalars['timestamptz']>;
   description?: Maybe<Scalars['String']>;
+  /** An object relationship */
+  feed?: Maybe<Feed>;
   id: Scalars['Int'];
   level: Scalars['Int'];
   name: Scalars['String'];
@@ -164,6 +166,7 @@ export type Achievement_Bool_Exp = {
   achievement_type?: Maybe<Achievement_Type_Enum_Comparison_Exp>;
   created_at?: Maybe<Timestamptz_Comparison_Exp>;
   description?: Maybe<String_Comparison_Exp>;
+  feed?: Maybe<Feed_Bool_Exp>;
   id?: Maybe<Int_Comparison_Exp>;
   level?: Maybe<Int_Comparison_Exp>;
   name?: Maybe<String_Comparison_Exp>;
@@ -189,6 +192,7 @@ export type Achievement_Insert_Input = {
   achievement_type?: Maybe<Achievement_Type_Enum>;
   created_at?: Maybe<Scalars['timestamptz']>;
   description?: Maybe<Scalars['String']>;
+  feed?: Maybe<Feed_Obj_Rel_Insert_Input>;
   id?: Maybe<Scalars['Int']>;
   level?: Maybe<Scalars['Int']>;
   name?: Maybe<Scalars['String']>;
@@ -262,6 +266,7 @@ export type Achievement_Order_By = {
   achievement_type?: Maybe<Order_By>;
   created_at?: Maybe<Order_By>;
   description?: Maybe<Order_By>;
+  feed?: Maybe<Feed_Order_By>;
   id?: Maybe<Order_By>;
   level?: Maybe<Order_By>;
   name?: Maybe<Order_By>;
@@ -601,21 +606,19 @@ export type Activities = {
   __typename?: 'activities';
   activity_id: Scalars['Int'];
   caption?: Maybe<Scalars['String']>;
-  /** An array relationship */
-  comments: Array<Comments>;
-  /** An aggregated array relationship */
-  comments_aggregate: Comments_Aggregate;
   created_at?: Maybe<Scalars['timestamptz']>;
   duration: Scalars['interval'];
   /** An object relationship */
+  feed?: Maybe<Feed>;
+  /** An array relationship */
+  feeds: Array<Feed>;
+  /** An aggregated array relationship */
+  feeds_aggregate: Feed_Aggregate;
+  /** An object relationship */
   geofence: Geofences;
   geofence_id: Scalars['Int'];
-  /** An array relationship */
-  likes: Array<Likes>;
-  /** An aggregated array relationship */
-  likes_aggregate: Likes_Aggregate;
   score?: Maybe<Scalars['Int']>;
-  started_at: Scalars['timestamptz'];
+  started_at?: Maybe<Scalars['timestamptz']>;
   /** A computed field, executes function "stopped_at" */
   stopped_at?: Maybe<Scalars['timestamptz']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
@@ -625,39 +628,21 @@ export type Activities = {
 };
 
 /** columns and relationships of "activities" */
-export type ActivitiesCommentsArgs = {
-  distinct_on?: Maybe<Array<Comments_Select_Column>>;
+export type ActivitiesFeedsArgs = {
+  distinct_on?: Maybe<Array<Feed_Select_Column>>;
   limit?: Maybe<Scalars['Int']>;
   offset?: Maybe<Scalars['Int']>;
-  order_by?: Maybe<Array<Comments_Order_By>>;
-  where?: Maybe<Comments_Bool_Exp>;
+  order_by?: Maybe<Array<Feed_Order_By>>;
+  where?: Maybe<Feed_Bool_Exp>;
 };
 
 /** columns and relationships of "activities" */
-export type ActivitiesComments_AggregateArgs = {
-  distinct_on?: Maybe<Array<Comments_Select_Column>>;
+export type ActivitiesFeeds_AggregateArgs = {
+  distinct_on?: Maybe<Array<Feed_Select_Column>>;
   limit?: Maybe<Scalars['Int']>;
   offset?: Maybe<Scalars['Int']>;
-  order_by?: Maybe<Array<Comments_Order_By>>;
-  where?: Maybe<Comments_Bool_Exp>;
-};
-
-/** columns and relationships of "activities" */
-export type ActivitiesLikesArgs = {
-  distinct_on?: Maybe<Array<Likes_Select_Column>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  order_by?: Maybe<Array<Likes_Order_By>>;
-  where?: Maybe<Likes_Bool_Exp>;
-};
-
-/** columns and relationships of "activities" */
-export type ActivitiesLikes_AggregateArgs = {
-  distinct_on?: Maybe<Array<Likes_Select_Column>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  order_by?: Maybe<Array<Likes_Order_By>>;
-  where?: Maybe<Likes_Bool_Exp>;
+  order_by?: Maybe<Array<Feed_Order_By>>;
+  where?: Maybe<Feed_Bool_Exp>;
 };
 
 /** aggregated selection of "activities" */
@@ -732,12 +717,12 @@ export type Activities_Bool_Exp = {
   _or?: Maybe<Array<Maybe<Activities_Bool_Exp>>>;
   activity_id?: Maybe<Int_Comparison_Exp>;
   caption?: Maybe<String_Comparison_Exp>;
-  comments?: Maybe<Comments_Bool_Exp>;
   created_at?: Maybe<Timestamptz_Comparison_Exp>;
   duration?: Maybe<Interval_Comparison_Exp>;
+  feed?: Maybe<Feed_Bool_Exp>;
+  feeds?: Maybe<Feed_Bool_Exp>;
   geofence?: Maybe<Geofences_Bool_Exp>;
   geofence_id?: Maybe<Int_Comparison_Exp>;
-  likes?: Maybe<Likes_Bool_Exp>;
   score?: Maybe<Int_Comparison_Exp>;
   started_at?: Maybe<Timestamptz_Comparison_Exp>;
   updated_at?: Maybe<Timestamptz_Comparison_Exp>;
@@ -749,6 +734,10 @@ export type Activities_Bool_Exp = {
 export enum Activities_Constraint {
   /** unique or primary key constraint */
   ActivityPkey = 'Activity_pkey',
+  /** unique or primary key constraint */
+  ActivitiesActivityIdUserIdKey = 'activities_activity_id_user_id_key',
+  /** unique or primary key constraint */
+  ActivitiesStartedAtUserIdKey = 'activities_started_at_user_id_key',
 }
 
 /** input type for incrementing integer column in table "activities" */
@@ -762,12 +751,12 @@ export type Activities_Inc_Input = {
 export type Activities_Insert_Input = {
   activity_id?: Maybe<Scalars['Int']>;
   caption?: Maybe<Scalars['String']>;
-  comments?: Maybe<Comments_Arr_Rel_Insert_Input>;
   created_at?: Maybe<Scalars['timestamptz']>;
   duration?: Maybe<Scalars['interval']>;
+  feed?: Maybe<Feed_Obj_Rel_Insert_Input>;
+  feeds?: Maybe<Feed_Arr_Rel_Insert_Input>;
   geofence?: Maybe<Geofences_Obj_Rel_Insert_Input>;
   geofence_id?: Maybe<Scalars['Int']>;
-  likes?: Maybe<Likes_Arr_Rel_Insert_Input>;
   score?: Maybe<Scalars['Int']>;
   started_at?: Maybe<Scalars['timestamptz']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
@@ -851,12 +840,12 @@ export type Activities_On_Conflict = {
 export type Activities_Order_By = {
   activity_id?: Maybe<Order_By>;
   caption?: Maybe<Order_By>;
-  comments_aggregate?: Maybe<Comments_Aggregate_Order_By>;
   created_at?: Maybe<Order_By>;
   duration?: Maybe<Order_By>;
+  feed?: Maybe<Feed_Order_By>;
+  feeds_aggregate?: Maybe<Feed_Aggregate_Order_By>;
   geofence?: Maybe<Geofences_Order_By>;
   geofence_id?: Maybe<Order_By>;
-  likes_aggregate?: Maybe<Likes_Aggregate_Order_By>;
   score?: Maybe<Order_By>;
   started_at?: Maybe<Order_By>;
   updated_at?: Maybe<Order_By>;
@@ -1034,7 +1023,7 @@ export type Activities_Variance_Order_By = {
 /** columns and relationships of "categories" */
 export type Categories = {
   __typename?: 'categories';
-  description?: Maybe<Scalars['String']>;
+  description: Scalars['String'];
   name: Scalars['String'];
   points_per_minute: Scalars['Int'];
 };
@@ -2307,8 +2296,14 @@ export enum Challenge_Type_Constraint {
 }
 
 export enum Challenge_Type_Enum {
+  /** Score challenge */
   Score = 'SCORE',
+  /** Score in specific category challenge */
   ScoreCategory = 'SCORE_CATEGORY',
+  /** Time challenge */
+  Time = 'TIME',
+  /** Time in specific category challenge */
+  TimeCategory = 'TIME_CATEGORY',
 }
 
 /** expression to compare columns of type challenge_type_enum. All fields are combined with logical 'AND'. */
@@ -2804,6 +2799,543 @@ export type Date_Comparison_Exp = {
   _lte?: Maybe<Scalars['date']>;
   _neq?: Maybe<Scalars['date']>;
   _nin?: Maybe<Array<Scalars['date']>>;
+};
+
+/** columns and relationships of "feed" */
+export type Feed = {
+  __typename?: 'feed';
+  achievement_id?: Maybe<Scalars['Int']>;
+  /** An object relationship */
+  activity?: Maybe<Activities>;
+  /** An object relationship */
+  activityByActivityIdCreatedAtUserId?: Maybe<Activities>;
+  activity_id: Scalars['Int'];
+  created_at?: Maybe<Scalars['timestamptz']>;
+  /** An object relationship */
+  feedTypeByFeedType: Feed_Type;
+  feed_type: Feed_Type_Enum;
+  id: Scalars['Int'];
+  /** An object relationship */
+  user?: Maybe<Users>;
+  /** An object relationship */
+  userAchievementByAchievementIdCreatedAtUserId?: Maybe<User_Achievement>;
+  /** An object relationship */
+  user_achievement?: Maybe<User_Achievement>;
+  user_id?: Maybe<Scalars['String']>;
+};
+
+/** aggregated selection of "feed" */
+export type Feed_Aggregate = {
+  __typename?: 'feed_aggregate';
+  aggregate?: Maybe<Feed_Aggregate_Fields>;
+  nodes: Array<Feed>;
+};
+
+/** aggregate fields of "feed" */
+export type Feed_Aggregate_Fields = {
+  __typename?: 'feed_aggregate_fields';
+  avg?: Maybe<Feed_Avg_Fields>;
+  count?: Maybe<Scalars['Int']>;
+  max?: Maybe<Feed_Max_Fields>;
+  min?: Maybe<Feed_Min_Fields>;
+  stddev?: Maybe<Feed_Stddev_Fields>;
+  stddev_pop?: Maybe<Feed_Stddev_Pop_Fields>;
+  stddev_samp?: Maybe<Feed_Stddev_Samp_Fields>;
+  sum?: Maybe<Feed_Sum_Fields>;
+  var_pop?: Maybe<Feed_Var_Pop_Fields>;
+  var_samp?: Maybe<Feed_Var_Samp_Fields>;
+  variance?: Maybe<Feed_Variance_Fields>;
+};
+
+/** aggregate fields of "feed" */
+export type Feed_Aggregate_FieldsCountArgs = {
+  columns?: Maybe<Array<Feed_Select_Column>>;
+  distinct?: Maybe<Scalars['Boolean']>;
+};
+
+/** order by aggregate values of table "feed" */
+export type Feed_Aggregate_Order_By = {
+  avg?: Maybe<Feed_Avg_Order_By>;
+  count?: Maybe<Order_By>;
+  max?: Maybe<Feed_Max_Order_By>;
+  min?: Maybe<Feed_Min_Order_By>;
+  stddev?: Maybe<Feed_Stddev_Order_By>;
+  stddev_pop?: Maybe<Feed_Stddev_Pop_Order_By>;
+  stddev_samp?: Maybe<Feed_Stddev_Samp_Order_By>;
+  sum?: Maybe<Feed_Sum_Order_By>;
+  var_pop?: Maybe<Feed_Var_Pop_Order_By>;
+  var_samp?: Maybe<Feed_Var_Samp_Order_By>;
+  variance?: Maybe<Feed_Variance_Order_By>;
+};
+
+/** input type for inserting array relation for remote table "feed" */
+export type Feed_Arr_Rel_Insert_Input = {
+  data: Array<Feed_Insert_Input>;
+  on_conflict?: Maybe<Feed_On_Conflict>;
+};
+
+/** aggregate avg on columns */
+export type Feed_Avg_Fields = {
+  __typename?: 'feed_avg_fields';
+  achievement_id?: Maybe<Scalars['Float']>;
+  activity_id?: Maybe<Scalars['Float']>;
+  id?: Maybe<Scalars['Float']>;
+};
+
+/** order by avg() on columns of table "feed" */
+export type Feed_Avg_Order_By = {
+  achievement_id?: Maybe<Order_By>;
+  activity_id?: Maybe<Order_By>;
+  id?: Maybe<Order_By>;
+};
+
+/** Boolean expression to filter rows from the table "feed". All fields are combined with a logical 'AND'. */
+export type Feed_Bool_Exp = {
+  _and?: Maybe<Array<Maybe<Feed_Bool_Exp>>>;
+  _not?: Maybe<Feed_Bool_Exp>;
+  _or?: Maybe<Array<Maybe<Feed_Bool_Exp>>>;
+  achievement_id?: Maybe<Int_Comparison_Exp>;
+  activity?: Maybe<Activities_Bool_Exp>;
+  activityByActivityIdCreatedAtUserId?: Maybe<Activities_Bool_Exp>;
+  activity_id?: Maybe<Int_Comparison_Exp>;
+  created_at?: Maybe<Timestamptz_Comparison_Exp>;
+  feedTypeByFeedType?: Maybe<Feed_Type_Bool_Exp>;
+  feed_type?: Maybe<Feed_Type_Enum_Comparison_Exp>;
+  id?: Maybe<Int_Comparison_Exp>;
+  user?: Maybe<Users_Bool_Exp>;
+  userAchievementByAchievementIdCreatedAtUserId?: Maybe<User_Achievement_Bool_Exp>;
+  user_achievement?: Maybe<User_Achievement_Bool_Exp>;
+  user_id?: Maybe<String_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "feed" */
+export enum Feed_Constraint {
+  /** unique or primary key constraint */
+  FeedAchievementIdKey = 'feed_achievement_id_key',
+  /** unique or primary key constraint */
+  FeedActivityIdKey = 'feed_activity_id_key',
+  /** unique or primary key constraint */
+  FeedPkey = 'feed_pkey',
+}
+
+/** input type for incrementing integer column in table "feed" */
+export type Feed_Inc_Input = {
+  achievement_id?: Maybe<Scalars['Int']>;
+  activity_id?: Maybe<Scalars['Int']>;
+  id?: Maybe<Scalars['Int']>;
+};
+
+/** input type for inserting data into table "feed" */
+export type Feed_Insert_Input = {
+  achievement_id?: Maybe<Scalars['Int']>;
+  activity?: Maybe<Activities_Obj_Rel_Insert_Input>;
+  activityByActivityIdCreatedAtUserId?: Maybe<Activities_Obj_Rel_Insert_Input>;
+  activity_id?: Maybe<Scalars['Int']>;
+  created_at?: Maybe<Scalars['timestamptz']>;
+  feedTypeByFeedType?: Maybe<Feed_Type_Obj_Rel_Insert_Input>;
+  feed_type?: Maybe<Feed_Type_Enum>;
+  id?: Maybe<Scalars['Int']>;
+  user?: Maybe<Users_Obj_Rel_Insert_Input>;
+  userAchievementByAchievementIdCreatedAtUserId?: Maybe<User_Achievement_Obj_Rel_Insert_Input>;
+  user_achievement?: Maybe<User_Achievement_Obj_Rel_Insert_Input>;
+  user_id?: Maybe<Scalars['String']>;
+};
+
+/** aggregate max on columns */
+export type Feed_Max_Fields = {
+  __typename?: 'feed_max_fields';
+  achievement_id?: Maybe<Scalars['Int']>;
+  activity_id?: Maybe<Scalars['Int']>;
+  created_at?: Maybe<Scalars['timestamptz']>;
+  id?: Maybe<Scalars['Int']>;
+  user_id?: Maybe<Scalars['String']>;
+};
+
+/** order by max() on columns of table "feed" */
+export type Feed_Max_Order_By = {
+  achievement_id?: Maybe<Order_By>;
+  activity_id?: Maybe<Order_By>;
+  created_at?: Maybe<Order_By>;
+  id?: Maybe<Order_By>;
+  user_id?: Maybe<Order_By>;
+};
+
+/** aggregate min on columns */
+export type Feed_Min_Fields = {
+  __typename?: 'feed_min_fields';
+  achievement_id?: Maybe<Scalars['Int']>;
+  activity_id?: Maybe<Scalars['Int']>;
+  created_at?: Maybe<Scalars['timestamptz']>;
+  id?: Maybe<Scalars['Int']>;
+  user_id?: Maybe<Scalars['String']>;
+};
+
+/** order by min() on columns of table "feed" */
+export type Feed_Min_Order_By = {
+  achievement_id?: Maybe<Order_By>;
+  activity_id?: Maybe<Order_By>;
+  created_at?: Maybe<Order_By>;
+  id?: Maybe<Order_By>;
+  user_id?: Maybe<Order_By>;
+};
+
+/** response of any mutation on the table "feed" */
+export type Feed_Mutation_Response = {
+  __typename?: 'feed_mutation_response';
+  /** number of affected rows by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data of the affected rows by the mutation */
+  returning: Array<Feed>;
+};
+
+/** input type for inserting object relation for remote table "feed" */
+export type Feed_Obj_Rel_Insert_Input = {
+  data: Feed_Insert_Input;
+  on_conflict?: Maybe<Feed_On_Conflict>;
+};
+
+/** on conflict condition type for table "feed" */
+export type Feed_On_Conflict = {
+  constraint: Feed_Constraint;
+  update_columns: Array<Feed_Update_Column>;
+  where?: Maybe<Feed_Bool_Exp>;
+};
+
+/** ordering options when selecting data from "feed" */
+export type Feed_Order_By = {
+  achievement_id?: Maybe<Order_By>;
+  activity?: Maybe<Activities_Order_By>;
+  activityByActivityIdCreatedAtUserId?: Maybe<Activities_Order_By>;
+  activity_id?: Maybe<Order_By>;
+  created_at?: Maybe<Order_By>;
+  feedTypeByFeedType?: Maybe<Feed_Type_Order_By>;
+  feed_type?: Maybe<Order_By>;
+  id?: Maybe<Order_By>;
+  user?: Maybe<Users_Order_By>;
+  userAchievementByAchievementIdCreatedAtUserId?: Maybe<User_Achievement_Order_By>;
+  user_achievement?: Maybe<User_Achievement_Order_By>;
+  user_id?: Maybe<Order_By>;
+};
+
+/** primary key columns input for table: "feed" */
+export type Feed_Pk_Columns_Input = {
+  id: Scalars['Int'];
+};
+
+/** select columns of table "feed" */
+export enum Feed_Select_Column {
+  /** column name */
+  AchievementId = 'achievement_id',
+  /** column name */
+  ActivityId = 'activity_id',
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  FeedType = 'feed_type',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  UserId = 'user_id',
+}
+
+/** input type for updating data in table "feed" */
+export type Feed_Set_Input = {
+  achievement_id?: Maybe<Scalars['Int']>;
+  activity_id?: Maybe<Scalars['Int']>;
+  created_at?: Maybe<Scalars['timestamptz']>;
+  feed_type?: Maybe<Feed_Type_Enum>;
+  id?: Maybe<Scalars['Int']>;
+  user_id?: Maybe<Scalars['String']>;
+};
+
+/** aggregate stddev on columns */
+export type Feed_Stddev_Fields = {
+  __typename?: 'feed_stddev_fields';
+  achievement_id?: Maybe<Scalars['Float']>;
+  activity_id?: Maybe<Scalars['Float']>;
+  id?: Maybe<Scalars['Float']>;
+};
+
+/** order by stddev() on columns of table "feed" */
+export type Feed_Stddev_Order_By = {
+  achievement_id?: Maybe<Order_By>;
+  activity_id?: Maybe<Order_By>;
+  id?: Maybe<Order_By>;
+};
+
+/** aggregate stddev_pop on columns */
+export type Feed_Stddev_Pop_Fields = {
+  __typename?: 'feed_stddev_pop_fields';
+  achievement_id?: Maybe<Scalars['Float']>;
+  activity_id?: Maybe<Scalars['Float']>;
+  id?: Maybe<Scalars['Float']>;
+};
+
+/** order by stddev_pop() on columns of table "feed" */
+export type Feed_Stddev_Pop_Order_By = {
+  achievement_id?: Maybe<Order_By>;
+  activity_id?: Maybe<Order_By>;
+  id?: Maybe<Order_By>;
+};
+
+/** aggregate stddev_samp on columns */
+export type Feed_Stddev_Samp_Fields = {
+  __typename?: 'feed_stddev_samp_fields';
+  achievement_id?: Maybe<Scalars['Float']>;
+  activity_id?: Maybe<Scalars['Float']>;
+  id?: Maybe<Scalars['Float']>;
+};
+
+/** order by stddev_samp() on columns of table "feed" */
+export type Feed_Stddev_Samp_Order_By = {
+  achievement_id?: Maybe<Order_By>;
+  activity_id?: Maybe<Order_By>;
+  id?: Maybe<Order_By>;
+};
+
+/** aggregate sum on columns */
+export type Feed_Sum_Fields = {
+  __typename?: 'feed_sum_fields';
+  achievement_id?: Maybe<Scalars['Int']>;
+  activity_id?: Maybe<Scalars['Int']>;
+  id?: Maybe<Scalars['Int']>;
+};
+
+/** order by sum() on columns of table "feed" */
+export type Feed_Sum_Order_By = {
+  achievement_id?: Maybe<Order_By>;
+  activity_id?: Maybe<Order_By>;
+  id?: Maybe<Order_By>;
+};
+
+/** columns and relationships of "feed_type" */
+export type Feed_Type = {
+  __typename?: 'feed_type';
+  /** An array relationship */
+  feeds: Array<Feed>;
+  /** An aggregated array relationship */
+  feeds_aggregate: Feed_Aggregate;
+  name: Scalars['String'];
+};
+
+/** columns and relationships of "feed_type" */
+export type Feed_TypeFeedsArgs = {
+  distinct_on?: Maybe<Array<Feed_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Feed_Order_By>>;
+  where?: Maybe<Feed_Bool_Exp>;
+};
+
+/** columns and relationships of "feed_type" */
+export type Feed_TypeFeeds_AggregateArgs = {
+  distinct_on?: Maybe<Array<Feed_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Feed_Order_By>>;
+  where?: Maybe<Feed_Bool_Exp>;
+};
+
+/** aggregated selection of "feed_type" */
+export type Feed_Type_Aggregate = {
+  __typename?: 'feed_type_aggregate';
+  aggregate?: Maybe<Feed_Type_Aggregate_Fields>;
+  nodes: Array<Feed_Type>;
+};
+
+/** aggregate fields of "feed_type" */
+export type Feed_Type_Aggregate_Fields = {
+  __typename?: 'feed_type_aggregate_fields';
+  count?: Maybe<Scalars['Int']>;
+  max?: Maybe<Feed_Type_Max_Fields>;
+  min?: Maybe<Feed_Type_Min_Fields>;
+};
+
+/** aggregate fields of "feed_type" */
+export type Feed_Type_Aggregate_FieldsCountArgs = {
+  columns?: Maybe<Array<Feed_Type_Select_Column>>;
+  distinct?: Maybe<Scalars['Boolean']>;
+};
+
+/** order by aggregate values of table "feed_type" */
+export type Feed_Type_Aggregate_Order_By = {
+  count?: Maybe<Order_By>;
+  max?: Maybe<Feed_Type_Max_Order_By>;
+  min?: Maybe<Feed_Type_Min_Order_By>;
+};
+
+/** input type for inserting array relation for remote table "feed_type" */
+export type Feed_Type_Arr_Rel_Insert_Input = {
+  data: Array<Feed_Type_Insert_Input>;
+  on_conflict?: Maybe<Feed_Type_On_Conflict>;
+};
+
+/** Boolean expression to filter rows from the table "feed_type". All fields are combined with a logical 'AND'. */
+export type Feed_Type_Bool_Exp = {
+  _and?: Maybe<Array<Maybe<Feed_Type_Bool_Exp>>>;
+  _not?: Maybe<Feed_Type_Bool_Exp>;
+  _or?: Maybe<Array<Maybe<Feed_Type_Bool_Exp>>>;
+  feeds?: Maybe<Feed_Bool_Exp>;
+  name?: Maybe<String_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "feed_type" */
+export enum Feed_Type_Constraint {
+  /** unique or primary key constraint */
+  FeedTypePkey = 'feed_type_pkey',
+}
+
+export enum Feed_Type_Enum {
+  Achievement = 'ACHIEVEMENT',
+  Activity = 'ACTIVITY',
+}
+
+/** expression to compare columns of type feed_type_enum. All fields are combined with logical 'AND'. */
+export type Feed_Type_Enum_Comparison_Exp = {
+  _eq?: Maybe<Feed_Type_Enum>;
+  _in?: Maybe<Array<Feed_Type_Enum>>;
+  _is_null?: Maybe<Scalars['Boolean']>;
+  _neq?: Maybe<Feed_Type_Enum>;
+  _nin?: Maybe<Array<Feed_Type_Enum>>;
+};
+
+/** input type for inserting data into table "feed_type" */
+export type Feed_Type_Insert_Input = {
+  feeds?: Maybe<Feed_Arr_Rel_Insert_Input>;
+  name?: Maybe<Scalars['String']>;
+};
+
+/** aggregate max on columns */
+export type Feed_Type_Max_Fields = {
+  __typename?: 'feed_type_max_fields';
+  name?: Maybe<Scalars['String']>;
+};
+
+/** order by max() on columns of table "feed_type" */
+export type Feed_Type_Max_Order_By = {
+  name?: Maybe<Order_By>;
+};
+
+/** aggregate min on columns */
+export type Feed_Type_Min_Fields = {
+  __typename?: 'feed_type_min_fields';
+  name?: Maybe<Scalars['String']>;
+};
+
+/** order by min() on columns of table "feed_type" */
+export type Feed_Type_Min_Order_By = {
+  name?: Maybe<Order_By>;
+};
+
+/** response of any mutation on the table "feed_type" */
+export type Feed_Type_Mutation_Response = {
+  __typename?: 'feed_type_mutation_response';
+  /** number of affected rows by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data of the affected rows by the mutation */
+  returning: Array<Feed_Type>;
+};
+
+/** input type for inserting object relation for remote table "feed_type" */
+export type Feed_Type_Obj_Rel_Insert_Input = {
+  data: Feed_Type_Insert_Input;
+  on_conflict?: Maybe<Feed_Type_On_Conflict>;
+};
+
+/** on conflict condition type for table "feed_type" */
+export type Feed_Type_On_Conflict = {
+  constraint: Feed_Type_Constraint;
+  update_columns: Array<Feed_Type_Update_Column>;
+  where?: Maybe<Feed_Type_Bool_Exp>;
+};
+
+/** ordering options when selecting data from "feed_type" */
+export type Feed_Type_Order_By = {
+  feeds_aggregate?: Maybe<Feed_Aggregate_Order_By>;
+  name?: Maybe<Order_By>;
+};
+
+/** primary key columns input for table: "feed_type" */
+export type Feed_Type_Pk_Columns_Input = {
+  name: Scalars['String'];
+};
+
+/** select columns of table "feed_type" */
+export enum Feed_Type_Select_Column {
+  /** column name */
+  Name = 'name',
+}
+
+/** input type for updating data in table "feed_type" */
+export type Feed_Type_Set_Input = {
+  name?: Maybe<Scalars['String']>;
+};
+
+/** update columns of table "feed_type" */
+export enum Feed_Type_Update_Column {
+  /** column name */
+  Name = 'name',
+}
+
+/** update columns of table "feed" */
+export enum Feed_Update_Column {
+  /** column name */
+  AchievementId = 'achievement_id',
+  /** column name */
+  ActivityId = 'activity_id',
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  FeedType = 'feed_type',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  UserId = 'user_id',
+}
+
+/** aggregate var_pop on columns */
+export type Feed_Var_Pop_Fields = {
+  __typename?: 'feed_var_pop_fields';
+  achievement_id?: Maybe<Scalars['Float']>;
+  activity_id?: Maybe<Scalars['Float']>;
+  id?: Maybe<Scalars['Float']>;
+};
+
+/** order by var_pop() on columns of table "feed" */
+export type Feed_Var_Pop_Order_By = {
+  achievement_id?: Maybe<Order_By>;
+  activity_id?: Maybe<Order_By>;
+  id?: Maybe<Order_By>;
+};
+
+/** aggregate var_samp on columns */
+export type Feed_Var_Samp_Fields = {
+  __typename?: 'feed_var_samp_fields';
+  achievement_id?: Maybe<Scalars['Float']>;
+  activity_id?: Maybe<Scalars['Float']>;
+  id?: Maybe<Scalars['Float']>;
+};
+
+/** order by var_samp() on columns of table "feed" */
+export type Feed_Var_Samp_Order_By = {
+  achievement_id?: Maybe<Order_By>;
+  activity_id?: Maybe<Order_By>;
+  id?: Maybe<Order_By>;
+};
+
+/** aggregate variance on columns */
+export type Feed_Variance_Fields = {
+  __typename?: 'feed_variance_fields';
+  achievement_id?: Maybe<Scalars['Float']>;
+  activity_id?: Maybe<Scalars['Float']>;
+  id?: Maybe<Scalars['Float']>;
+};
+
+/** order by variance() on columns of table "feed" */
+export type Feed_Variance_Order_By = {
+  achievement_id?: Maybe<Order_By>;
+  activity_id?: Maybe<Order_By>;
+  id?: Maybe<Order_By>;
 };
 
 /** expression to compare columns of type float8. All fields are combined with logical 'AND'. */
@@ -4001,6 +4533,14 @@ export type Mutation_Root = {
   delete_comment?: Maybe<Comments>;
   /** delete data from the table: "comments" */
   delete_comments?: Maybe<Comments_Mutation_Response>;
+  /** delete data from the table: "feed" */
+  delete_feed?: Maybe<Feed_Mutation_Response>;
+  /** delete single row from the table: "feed" */
+  delete_feed_by_pk?: Maybe<Feed>;
+  /** delete data from the table: "feed_type" */
+  delete_feed_type?: Maybe<Feed_Type_Mutation_Response>;
+  /** delete single row from the table: "feed_type" */
+  delete_feed_type_by_pk?: Maybe<Feed_Type>;
   /** delete data from the table: "followings" */
   delete_followings?: Maybe<Followings_Mutation_Response>;
   /** delete single row from the table: "followings" */
@@ -4065,6 +4605,14 @@ export type Mutation_Root = {
   insert_comment?: Maybe<Comments>;
   /** insert data into the table: "comments" */
   insert_comments?: Maybe<Comments_Mutation_Response>;
+  /** insert data into the table: "feed" */
+  insert_feed?: Maybe<Feed_Mutation_Response>;
+  /** insert a single row into the table: "feed" */
+  insert_feed_one?: Maybe<Feed>;
+  /** insert data into the table: "feed_type" */
+  insert_feed_type?: Maybe<Feed_Type_Mutation_Response>;
+  /** insert a single row into the table: "feed_type" */
+  insert_feed_type_one?: Maybe<Feed_Type>;
   /** insert data into the table: "followings" */
   insert_followings?: Maybe<Followings_Mutation_Response>;
   /** insert a single row into the table: "followings" */
@@ -4129,6 +4677,14 @@ export type Mutation_Root = {
   update_comment?: Maybe<Comments>;
   /** update data of the table: "comments" */
   update_comments?: Maybe<Comments_Mutation_Response>;
+  /** update data of the table: "feed" */
+  update_feed?: Maybe<Feed_Mutation_Response>;
+  /** update single row of the table: "feed" */
+  update_feed_by_pk?: Maybe<Feed>;
+  /** update data of the table: "feed_type" */
+  update_feed_type?: Maybe<Feed_Type_Mutation_Response>;
+  /** update single row of the table: "feed_type" */
+  update_feed_type_by_pk?: Maybe<Feed_Type>;
   /** update data of the table: "followings" */
   update_followings?: Maybe<Followings_Mutation_Response>;
   /** update single row of the table: "followings" */
@@ -4257,6 +4813,26 @@ export type Mutation_RootDelete_CommentsArgs = {
 };
 
 /** mutation root */
+export type Mutation_RootDelete_FeedArgs = {
+  where: Feed_Bool_Exp;
+};
+
+/** mutation root */
+export type Mutation_RootDelete_Feed_By_PkArgs = {
+  id: Scalars['Int'];
+};
+
+/** mutation root */
+export type Mutation_RootDelete_Feed_TypeArgs = {
+  where: Feed_Type_Bool_Exp;
+};
+
+/** mutation root */
+export type Mutation_RootDelete_Feed_Type_By_PkArgs = {
+  name: Scalars['String'];
+};
+
+/** mutation root */
 export type Mutation_RootDelete_FollowingsArgs = {
   where: Followings_Bool_Exp;
 };
@@ -4311,6 +4887,7 @@ export type Mutation_RootDelete_User_AchievementArgs = {
 /** mutation root */
 export type Mutation_RootDelete_User_Achievement_By_PkArgs = {
   achievement_id: Scalars['Int'];
+  created_at: Scalars['timestamptz'];
   user_id: Scalars['String'];
 };
 
@@ -4437,6 +5014,30 @@ export type Mutation_RootInsert_CommentArgs = {
 export type Mutation_RootInsert_CommentsArgs = {
   objects: Array<Comments_Insert_Input>;
   on_conflict?: Maybe<Comments_On_Conflict>;
+};
+
+/** mutation root */
+export type Mutation_RootInsert_FeedArgs = {
+  objects: Array<Feed_Insert_Input>;
+  on_conflict?: Maybe<Feed_On_Conflict>;
+};
+
+/** mutation root */
+export type Mutation_RootInsert_Feed_OneArgs = {
+  object: Feed_Insert_Input;
+  on_conflict?: Maybe<Feed_On_Conflict>;
+};
+
+/** mutation root */
+export type Mutation_RootInsert_Feed_TypeArgs = {
+  objects: Array<Feed_Type_Insert_Input>;
+  on_conflict?: Maybe<Feed_Type_On_Conflict>;
+};
+
+/** mutation root */
+export type Mutation_RootInsert_Feed_Type_OneArgs = {
+  object: Feed_Type_Insert_Input;
+  on_conflict?: Maybe<Feed_Type_On_Conflict>;
 };
 
 /** mutation root */
@@ -4644,6 +5245,32 @@ export type Mutation_RootUpdate_CommentsArgs = {
 };
 
 /** mutation root */
+export type Mutation_RootUpdate_FeedArgs = {
+  _inc?: Maybe<Feed_Inc_Input>;
+  _set?: Maybe<Feed_Set_Input>;
+  where: Feed_Bool_Exp;
+};
+
+/** mutation root */
+export type Mutation_RootUpdate_Feed_By_PkArgs = {
+  _inc?: Maybe<Feed_Inc_Input>;
+  _set?: Maybe<Feed_Set_Input>;
+  pk_columns: Feed_Pk_Columns_Input;
+};
+
+/** mutation root */
+export type Mutation_RootUpdate_Feed_TypeArgs = {
+  _set?: Maybe<Feed_Type_Set_Input>;
+  where: Feed_Type_Bool_Exp;
+};
+
+/** mutation root */
+export type Mutation_RootUpdate_Feed_Type_By_PkArgs = {
+  _set?: Maybe<Feed_Type_Set_Input>;
+  pk_columns: Feed_Type_Pk_Columns_Input;
+};
+
+/** mutation root */
 export type Mutation_RootUpdate_FollowingsArgs = {
   _set?: Maybe<Followings_Set_Input>;
   where: Followings_Bool_Exp;
@@ -4800,6 +5427,18 @@ export type Query_Root = {
   comments: Array<Comments>;
   /** fetch aggregated fields from the table: "comments" */
   comments_aggregate: Comments_Aggregate;
+  /** fetch data from the table: "feed" */
+  feed: Array<Feed>;
+  /** fetch aggregated fields from the table: "feed" */
+  feed_aggregate: Feed_Aggregate;
+  /** fetch data from the table: "feed" using primary key columns */
+  feed_by_pk?: Maybe<Feed>;
+  /** fetch data from the table: "feed_type" */
+  feed_type: Array<Feed_Type>;
+  /** fetch aggregated fields from the table: "feed_type" */
+  feed_type_aggregate: Feed_Type_Aggregate;
+  /** fetch data from the table: "feed_type" using primary key columns */
+  feed_type_by_pk?: Maybe<Feed_Type>;
   /** fetch data from the table: "followings" */
   followings: Array<Followings>;
   /** fetch aggregated fields from the table: "followings" */
@@ -5074,6 +5713,52 @@ export type Query_RootComments_AggregateArgs = {
 };
 
 /** query root */
+export type Query_RootFeedArgs = {
+  distinct_on?: Maybe<Array<Feed_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Feed_Order_By>>;
+  where?: Maybe<Feed_Bool_Exp>;
+};
+
+/** query root */
+export type Query_RootFeed_AggregateArgs = {
+  distinct_on?: Maybe<Array<Feed_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Feed_Order_By>>;
+  where?: Maybe<Feed_Bool_Exp>;
+};
+
+/** query root */
+export type Query_RootFeed_By_PkArgs = {
+  id: Scalars['Int'];
+};
+
+/** query root */
+export type Query_RootFeed_TypeArgs = {
+  distinct_on?: Maybe<Array<Feed_Type_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Feed_Type_Order_By>>;
+  where?: Maybe<Feed_Type_Bool_Exp>;
+};
+
+/** query root */
+export type Query_RootFeed_Type_AggregateArgs = {
+  distinct_on?: Maybe<Array<Feed_Type_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Feed_Type_Order_By>>;
+  where?: Maybe<Feed_Type_Bool_Exp>;
+};
+
+/** query root */
+export type Query_RootFeed_Type_By_PkArgs = {
+  name: Scalars['String'];
+};
+
+/** query root */
 export type Query_RootFollowingsArgs = {
   distinct_on?: Maybe<Array<Followings_Select_Column>>;
   limit?: Maybe<Scalars['Int']>;
@@ -5213,6 +5898,7 @@ export type Query_RootUser_Achievement_AggregateArgs = {
 /** query root */
 export type Query_RootUser_Achievement_By_PkArgs = {
   achievement_id: Scalars['Int'];
+  created_at: Scalars['timestamptz'];
   user_id: Scalars['String'];
 };
 
@@ -5297,6 +5983,18 @@ export type Subscription_Root = {
   comments: Array<Comments>;
   /** fetch aggregated fields from the table: "comments" */
   comments_aggregate: Comments_Aggregate;
+  /** fetch data from the table: "feed" */
+  feed: Array<Feed>;
+  /** fetch aggregated fields from the table: "feed" */
+  feed_aggregate: Feed_Aggregate;
+  /** fetch data from the table: "feed" using primary key columns */
+  feed_by_pk?: Maybe<Feed>;
+  /** fetch data from the table: "feed_type" */
+  feed_type: Array<Feed_Type>;
+  /** fetch aggregated fields from the table: "feed_type" */
+  feed_type_aggregate: Feed_Type_Aggregate;
+  /** fetch data from the table: "feed_type" using primary key columns */
+  feed_type_by_pk?: Maybe<Feed_Type>;
   /** fetch data from the table: "followings" */
   followings: Array<Followings>;
   /** fetch aggregated fields from the table: "followings" */
@@ -5571,6 +6269,52 @@ export type Subscription_RootComments_AggregateArgs = {
 };
 
 /** subscription root */
+export type Subscription_RootFeedArgs = {
+  distinct_on?: Maybe<Array<Feed_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Feed_Order_By>>;
+  where?: Maybe<Feed_Bool_Exp>;
+};
+
+/** subscription root */
+export type Subscription_RootFeed_AggregateArgs = {
+  distinct_on?: Maybe<Array<Feed_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Feed_Order_By>>;
+  where?: Maybe<Feed_Bool_Exp>;
+};
+
+/** subscription root */
+export type Subscription_RootFeed_By_PkArgs = {
+  id: Scalars['Int'];
+};
+
+/** subscription root */
+export type Subscription_RootFeed_TypeArgs = {
+  distinct_on?: Maybe<Array<Feed_Type_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Feed_Type_Order_By>>;
+  where?: Maybe<Feed_Type_Bool_Exp>;
+};
+
+/** subscription root */
+export type Subscription_RootFeed_Type_AggregateArgs = {
+  distinct_on?: Maybe<Array<Feed_Type_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Feed_Type_Order_By>>;
+  where?: Maybe<Feed_Type_Bool_Exp>;
+};
+
+/** subscription root */
+export type Subscription_RootFeed_Type_By_PkArgs = {
+  name: Scalars['String'];
+};
+
+/** subscription root */
 export type Subscription_RootFollowingsArgs = {
   distinct_on?: Maybe<Array<Followings_Select_Column>>;
   limit?: Maybe<Scalars['Int']>;
@@ -5710,6 +6454,7 @@ export type Subscription_RootUser_Achievement_AggregateArgs = {
 /** subscription root */
 export type Subscription_RootUser_Achievement_By_PkArgs = {
   achievement_id: Scalars['Int'];
+  created_at: Scalars['timestamptz'];
   user_id: Scalars['String'];
 };
 
@@ -5849,7 +6594,7 @@ export type User_Achievement_Bool_Exp = {
 /** unique or primary key constraints on table "user_achievement" */
 export enum User_Achievement_Constraint {
   /** unique or primary key constraint */
-  UserAchievmentPkey = 'user_achievment_pkey',
+  UserAchievementPkey = 'user_achievement_pkey',
 }
 
 /** input type for incrementing integer column in table "user_achievement" */
@@ -5930,6 +6675,7 @@ export type User_Achievement_Order_By = {
 /** primary key columns input for table: "user_achievement" */
 export type User_Achievement_Pk_Columns_Input = {
   achievement_id: Scalars['Int'];
+  created_at: Scalars['timestamptz'];
   user_id: Scalars['String'];
 };
 

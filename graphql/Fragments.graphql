@@ -42,9 +42,6 @@ fragment activityFragment on activities {
   activity_id
   caption
   created_at
-  comments {
-    ...commentFragment
-  }
   geofence {
     ...geofenceFragment
   }
@@ -84,12 +81,68 @@ fragment challengeFragment on challenge {
   rules
 }
 
-
 fragment achievementFragment on achievement {
+  id
   description
   name
   achievement_type
   level
   created_at
   rule
+}
+
+fragment opponentFragment on challenge_participant {
+  user {
+    id
+    name
+    picture
+  }
+  state
+}
+
+fragment challengeTypeFragment on challenge_type {
+  name
+  description
+}
+
+fragment activityFeedFragment on feed {
+  id
+  user {
+    ...basicUserFragment
+  }
+  activity {
+    ...basicActivityFragment
+  }
+  created_at
+}
+
+fragment achievementFeedFragment on feed {
+  id
+  user {
+    ...basicUserFragment
+  }
+  user_achievement {
+    achievement {
+      ...achievementFragment
+    }
+  }
+  created_at
+}
+
+fragment fullFeedFragment on feed {
+  id
+  user {
+    ...basicUserFragment
+  }
+  activity_id
+  activity {
+    ...basicActivityFragment
+  }
+  achievement_id
+  user_achievement {
+    achievement {
+      ...achievementFragment
+    }
+  }
+  created_at
 }
