@@ -8,16 +8,17 @@ import Button from '../../components/general/Button';
 import Loading from '../../components/general/Loading';
 import { Asset } from 'expo-asset';
 import KeyboardAvoiderNoHeader from '../../components/general/KeyboarAvoiderNoHeader';
+import { sanitizeUsername } from './SignUpScreen';
 
 const LoginScreen = ({ navigation }: StackScreenProps<AuthStackParamList, 'Login'>) => {
-  const [email, setEmail] = useState('');
+  const [name, setName] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
   const handleLogin = async () => {
     setLoading(true);
     try {
-      await Firebase.auth().signInWithEmailAndPassword(email, password);
+      await Firebase.auth().signInWithEmailAndPassword(sanitizeUsername(name), password);
     } catch (error) {
       console.error(error);
       Alert.alert('Error', error.message);
@@ -37,11 +38,11 @@ const LoginScreen = ({ navigation }: StackScreenProps<AuthStackParamList, 'Login
         <Text style={styles.header}>Hover</Text>
       </View>
 
-      <Text style={styles.label}>E-mail</Text>
+      <Text style={styles.label}>Username</Text>
       <TextInput
-        placeholder="Enter your e-mail"
+        placeholder="Enter your username"
         placeholderTextColor={Colors.gray600}
-        onChangeText={(val) => setEmail(val)}
+        onChangeText={(val) => setName(val)}
         autoCapitalize="none"
         autoCorrect={false}
         keyboardType="email-address"
