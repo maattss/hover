@@ -13,36 +13,17 @@ const PublishScreen: React.FC = () => {
   const tracking = useTracking();
   const [caption, setCaption] = useState('');
 
-  // useEffect(
-  //   () =>
-  //     navigation.addListener('beforeRemove', (e) => {
-  //       // Preventing going back to explore screen before activity is published/discarded
-  //       e.preventDefault();
-  //     }),
-  //   [navigation],
-  // );
-
-  const resumeTracking = () => {
-    tracking.resumeTracking();
-    // navigation.navigate('Tracking'); TODO: Remove
-  };
-
+  const publishActivity = () => tracking.stopTracking(caption);
+  const resumeTracking = () => tracking.resumeTracking();
   const discardActivity = () => {
     Alert.alert('Discard activity', 'Are you sure you want to discard this activity? It will be lost forever.', [
       { text: 'No', style: 'cancel' },
       {
         text: 'Yes',
-        onPress: () => {
-          //navigation.navigate('Explore'); TODO: Remove
-          tracking.discardActivity();
-        },
+        onPress: () => tracking.discardActivity(),
         style: 'destructive',
       },
     ]);
-  };
-  const publishActivity = () => {
-    tracking.stopTracking(caption);
-    // navigation.navigate('Explore'); TODO: Remove
   };
 
   return (

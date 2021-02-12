@@ -11,8 +11,6 @@ const ExploreStack = createStackNavigator<HoverStackParamList>();
 
 const HoverNavigator: React.FC = () => {
   const tracking = useTracking();
-  console.log('TrackingState: ' + tracking.trackingState.toString());
-  console.log('TrackingState: ' + (tracking.trackingState === TrackingState.EXPLORE));
   return (
     <ExploreStack.Navigator screenOptions={{ headerShown: false }}>
       {tracking.trackingState === TrackingState.EXPLORE && (

@@ -1,4 +1,4 @@
-import React, { useState, createRef, useEffect } from 'react';
+import React, { useState, createRef } from 'react';
 import MapView, { MapTypes, Region } from 'react-native-maps';
 import { StyleSheet, Text, View, TouchableOpacity, ActivityIndicator, ViewStyle } from 'react-native';
 import { Colors, Spacing, Typography, Buttons } from '../../theme';
@@ -6,31 +6,14 @@ import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import useTracking from '../../hooks/useTracking';
 import { defaultMapLocation } from '../../helpers/objectMappers';
 import GeoFences from '../../components/map/GeoFences';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { HoverStackParamList } from '../../types/navigationTypes';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-type NavigationProp = StackNavigationProp<HoverStackParamList>;
-
-type ExploreProps = {
-  navigation: NavigationProp;
-};
-
-const TrackingScreen: React.FC<ExploreProps> = ({ navigation }: ExploreProps) => {
+const TrackingScreen: React.FC = () => {
   const [chosenMapType, setChosenMapType] = useState<MapTypes>('standard');
   const [centreOnUser, setCentreOnUser] = useState(false);
   const [zoom, setZoom] = useState<number>(0.01);
   const tracking = useTracking();
   const insets = useSafeAreaInsets();
-
-  useEffect(
-    () =>
-      navigation.addListener('beforeRemove', (e) => {
-        // Preventing going back to explore screen when tracking
-        e.preventDefault();
-      }),
-    [navigation],
-  );
 
   // Dynamic styles
   const mapTypeIconStyle = {
@@ -56,10 +39,8 @@ const TrackingScreen: React.FC<ExploreProps> = ({ navigation }: ExploreProps) =>
     if (tracking.userLocation) setCentreOnUser(true);
     mapView.current?.animateToRegion(defaultRegion, 1000);
   };
-  const stopTracking = () => {
-    tracking.pauseTracking();
-    //navigation.navigate('Publish'); TODO: Remove
-  };
+  const stopTracking = () => tracking.pauseTracking();
+
   const getSafeAreaTop = () => {
     return {
       marginTop: insets.top,

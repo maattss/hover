@@ -178,7 +178,7 @@ export const TrackingProvider = ({ children }: Props) => {
         },
       });
       console.log('Activity inserted to db', response);
-      Alert.alert('Upload complete', 'Activity uploaded successfully!', [{ text: 'Cancel' }, { text: 'OK' }]);
+      Alert.alert('Upload complete', 'Activity uploaded successfully!', [{ text: 'OK' }]);
     } catch (error) {
       console.error('Mutation error', error.message);
       addUnUploadedActivity({
