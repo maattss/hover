@@ -106,13 +106,13 @@ const styles = StyleSheet.create({
   },
   categoryButton: {
     ...Typography.bodyText,
-    backgroundColor: Colors.gray800,
+    backgroundColor: Colors.gray700,
     borderRadius: Spacing.smaller,
     paddingVertical: Spacing.base,
     margin: Spacing.smallest,
     width: '22%',
   },
   isSelected: {
-    backgroundColor: Colors.gray600,
+    backgroundColor: Colors.gray900,
   },
 });
