@@ -5,6 +5,7 @@ import { timeStampToPresentable } from '../../helpers/dateTimeHelpers';
 import Divider from '../general/Divider';
 import { OngoingChallenge } from '../../types/challengeTypes';
 import { Avatar } from 'react-native-elements';
+import { generateOngoingChallengeDescription } from '../../helpers/decriptionHelper';
 
 interface OngoingChallengeCardProps {
   challenge: OngoingChallenge;
@@ -73,7 +74,7 @@ const OngoingChallengeCard: React.FC<OngoingChallengeCardProps> = ({ challenge }
     <View style={styles.card}>
       <Opponents />
       <Divider />
-      <Text style={styles.challengeText}>{challenge.challenge_type}</Text>
+      <Text style={styles.challengeText}>{generateOngoingChallengeDescription(challenge)}</Text>
 
       <View style={styles.footer}>
         <Text style={styles.footerText}>{timeStampToPresentable(challenge.created_at)}</Text>

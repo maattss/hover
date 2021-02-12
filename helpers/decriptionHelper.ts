@@ -1,5 +1,5 @@
 import { ListUserFragmentFragment } from '../graphql/Fragments.generated';
-import { ChallengeRules, PendingChallenge } from '../types/challengeTypes';
+import { ChallengeRules, OngoingChallenge, PendingChallenge } from '../types/challengeTypes';
 import { Challenge_Type_Enum } from '../types/types';
 import { toPrettyDate } from './dateTimeHelpers';
 
@@ -43,7 +43,7 @@ const scoreCategoryDescription = (challenge: PendingChallenge) => {
   description += challenge.rules.score ? ' Be the first person to reach ' + challenge.rules.score + ' points' : '';
   description += challenge.rules.category
     ? ' in the ' + challenge.rules.category.toString().toLowerCase() + ' category'
-    : '';
+    : ' at any valid Hover location';
   description += challenge.end_date ? ' by ' + toPrettyDate(challenge.end_date) + '.' : '';
   return description;
 };
@@ -60,7 +60,7 @@ const timeCategoryDescription = (challenge: PendingChallenge) => {
   description += challenge.rules.time ? ' Be the first person to reach ' + challenge.rules.time + ' hours' : '';
   description += challenge.rules.category
     ? ' in the ' + challenge.rules.category.toString().toLowerCase() + ' category'
-    : '';
+    : ' at any valid Hover location';
   description += challenge.end_date ? ' by ' + toPrettyDate(challenge.end_date) + '.' : '';
   return description;
 };
@@ -69,6 +69,20 @@ const defaultDescription = (challenge: PendingChallenge) => {
   let description = challenge.created_by.name + ' challenge you to a ';
   description += challenge.challenge_type + ' challenge!';
   description += challenge.end_date ? ' by ' + toPrettyDate(challenge.end_date) + '.' : '';
+  return description;
+};
+/**
+ * CREATE CHALLENGE DESCRIPTION HELPERS.
+ */
+
+export const generateOngoingChallengeDescription = (challenge: OngoingChallenge) => {
+  let description = 'First person to';
+  description += challenge.rules.score ? ' get ' + challenge.rules.score + ' points' : '';
+  description += challenge.rules.time ? ' spend ' + challenge.rules.time + ' hours' : '';
+  description += challenge.rules.category
+    ? ' at a location within the ' + challenge.rules.category.toLowerCase() + ' category'
+    : ' at any valid Hover location';
+  description += challenge.end_date ? ' by ' + toPrettyDate(new Date(challenge.end_date)) + '.' : '';
   return description;
 };
 
@@ -84,17 +98,20 @@ export const generateNewChallengeDescription = (
 ) => {
   let description;
   description = 'You are challenging ' + participantsToString(participants);
-  description += ' to a ' + challenge_type.toLowerCase().toString() + ' challenge. ';
+  description += ' to a ' + challenge_type.toLowerCase().toString().replace('_', ' in ') + ' challenge. ';
   description += 'The challenge is simple; first person to';
   description += rules.score ? ' get ' + rules.score + ' points' : '';
   description += rules.time ? ' spend ' + rules.time + ' hours' : '';
-  description += rules.category ? ' at a location within the ' + rules.category.toLowerCase() + ' category' : '';
+  description += rules.category
+    ? ' at a location within the ' + rules.category.toLowerCase() + ' category'
+    : ' at any valid Hover location';
   description += end_date ? ' by ' + toPrettyDate(new Date(end_date)) + '.' : '';
   return description;
 };
 
 const participantsToString = (participants: ListUserFragmentFragment[]) => {
-  const names = participants.map((participant) => participant.name).join(',');
-  names.replace(/,(?=[^,]+$)/, ', and');
-  return names;
+  return participants
+    .map((participant) => participant.name.split(' ')[0])
+    .join(', ')
+    .replace(/,(?=[^,]*$)/, ' and');
 };
