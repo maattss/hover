@@ -66,15 +66,35 @@ export type ChallengeTypeFragmentFragment = { readonly __typename: 'challenge_ty
   'name' | 'description'
 >;
 
-export type OpponentFragmentFragment = { readonly __typename: 'challenge_participant' } & Pick<
-  Types.Challenge_Participant,
-  'state'
-> & { readonly user: { readonly __typename: 'users' } & Pick<Types.Users, 'id' | 'name' | 'picture'> };
+export type ActivityFeedFragmentFragment = { readonly __typename: 'feed' } & Pick<Types.Feed, 'id' | 'created_at'> & {
+    readonly user?: Types.Maybe<{ readonly __typename: 'users' } & BasicUserFragmentFragment>;
+    readonly activity?: Types.Maybe<{ readonly __typename: 'activities' } & BasicActivityFragmentFragment>;
+  };
 
-export type ChallengeTypeFragmentFragment = { readonly __typename: 'challenge_type' } & Pick<
-  Types.Challenge_Type,
-  'name' | 'description'
->;
+export type AchievementFeedFragmentFragment = { readonly __typename: 'feed' } & Pick<
+  Types.Feed,
+  'id' | 'created_at'
+> & {
+    readonly user?: Types.Maybe<{ readonly __typename: 'users' } & BasicUserFragmentFragment>;
+    readonly user_achievement?: Types.Maybe<
+      { readonly __typename: 'user_achievement' } & {
+        readonly achievement: { readonly __typename: 'achievement' } & AchievementFragmentFragment;
+      }
+    >;
+  };
+
+export type FullFeedFragmentFragment = { readonly __typename: 'feed' } & Pick<
+  Types.Feed,
+  'id' | 'activity_id' | 'achievement_id' | 'created_at'
+> & {
+    readonly user?: Types.Maybe<{ readonly __typename: 'users' } & BasicUserFragmentFragment>;
+    readonly activity?: Types.Maybe<{ readonly __typename: 'activities' } & BasicActivityFragmentFragment>;
+    readonly user_achievement?: Types.Maybe<
+      { readonly __typename: 'user_achievement' } & {
+        readonly achievement: { readonly __typename: 'achievement' } & AchievementFragmentFragment;
+      }
+    >;
+  };
 
 export const ListUserFragmentFragmentDoc = gql`
   fragment listUserFragment on users {
@@ -82,7 +102,6 @@ export const ListUserFragmentFragmentDoc = gql`
     name
     picture
   }
-  ${ListUserFragmentFragmentDoc}
 `;
 export const BasicUserFragmentFragmentDoc = gql`
   fragment basicUserFragment on users {
@@ -147,10 +166,10 @@ export const CommentFragmentFragmentDoc = gql`
     activity_id
     content
     user {
-      ...basicUserFragment
+      ...listUserFragment
     }
   }
-  ${BasicUserFragmentFragmentDoc}
+  ${ListUserFragmentFragmentDoc}
 `;
 export const ChallengeFragmentFragmentDoc = gql`
   fragment challengeFragment on challenge {
@@ -219,9 +238,7 @@ export const AchievementFeedFragmentFragmentDoc = gql`
   fragment achievementFeedFragment on feed {
     id
     user {
-      id
-      name
-      picture
+      ...basicUserFragment
     }
     user_achievement {
       achievement {
@@ -237,9 +254,7 @@ export const FullFeedFragmentFragmentDoc = gql`
   fragment fullFeedFragment on feed {
     id
     user {
-      id
-      name
-      picture
+      ...basicUserFragment
     }
     activity_id
     activity {
@@ -256,16 +271,4 @@ export const FullFeedFragmentFragmentDoc = gql`
   ${BasicUserFragmentFragmentDoc}
   ${BasicActivityFragmentFragmentDoc}
   ${AchievementFragmentFragmentDoc}
-`;
-export const ChallengeTypeFragmentFragmentDoc = gql`
-  fragment challengeTypeFragment on challenge_type {
-    name
-    description
-  }
-`;
-export const ChallengeTypeFragmentFragmentDoc = gql`
-  fragment challengeTypeFragment on challenge_type {
-    name
-    description
-  }
 `;
