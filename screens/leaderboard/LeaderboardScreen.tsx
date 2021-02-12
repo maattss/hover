@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Leaderboard, { Item } from '../../components/Leaderboard';
+import Leaderboard, { Item } from '../../components/leaderboard/Leaderboard';
 import { StyleSheet, Text, View, TouchableOpacity, TextStyle, ViewStyle, Platform, Button } from 'react-native';
 import { HighscoreQueryVariables, useHighscoreQuery } from '../../graphql/queries/Highscore.generated';
 import { Buttons, Colors, Spacing, Typography } from '../../theme';
@@ -8,7 +8,7 @@ import { Picker } from '@react-native-picker/picker';
 import { PickerItemProps } from '@react-native-picker/picker/typings/Picker';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import moment from 'moment';
-import Loading from '../../components/Loading';
+import Loading from '../../components/general/Loading';
 
 const STATIC_CATEGORIES: PickerItemProps[] = [
   { label: 'All Categories', value: '' },

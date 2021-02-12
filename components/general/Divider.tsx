@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Colors, Spacing } from '../theme';
+import { Colors, Spacing } from '../../theme';
 
 const Divider: React.FC = () => {
   return <View style={styles.divider} />;

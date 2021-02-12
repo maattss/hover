@@ -4,7 +4,7 @@ import Firebase from '../../../lib/firebase';
 import { Buttons, Spacing, Colors } from '../../../theme';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { SettingsNavigationStackParamList } from '../../../types/navigationTypes';
-import Button, { MenuButton } from '../../../components/Button';
+import Button, { MenuButton } from '../../../components/general/Button';
 
 type NavigationProp = StackNavigationProp<SettingsNavigationStackParamList>;
 
@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
   container: {
     display: 'flex',
     alignItems: 'center',
-    paddingLeft: Spacing.large,
+    padding: Spacing.large,
     paddingRight: Spacing.large,
     paddingTop: Spacing.small,
     paddingBottom: Spacing.small,

@@ -15,13 +15,13 @@ const FeedScreen: React.FC = () => {
     longitude: 10.406626,
     radius: 50,
     name: 'Test name',
-    category: GeoFenceCategory.SOCIAL,
+    category: GeoFenceCategory.EDUCATION,
     variant: GeoFenceVariant.CIRCLE,
     description: 'Test description',
   };
   const testActivity: ActivityFeedData = {
     userName: 'Siri Mykland',
-    caption: 'Very nice workout!',
+    caption: 'Very nice activity!',
     geoFence: testGeoFence,
     startedAt: '2021-01-29T10:00:00+01:00',
     picture: 'https://api.multiavatar.com/Kuninori%20Bun%20Lord.png',

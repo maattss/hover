@@ -1,8 +1,8 @@
 import { ApolloQueryResult } from '@apollo/client';
 import React, { useState, useEffect } from 'react';
 import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { HighscoreQuery } from '../graphql/queries/Highscore.generated';
-import { Colors, Spacing, Typography } from '../theme';
+import { HighscoreQuery } from '../../graphql/queries/Highscore.generated';
+import { Colors, Spacing, Typography } from '../../theme';
 
 interface SortParam {
   data: Item[];

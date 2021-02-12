@@ -10,6 +10,7 @@ import HoverNavigator from './HoverNavigator';
 import ProfileNavigator from './ProfileNavigator';
 import useTracking from '../hooks/useTracking';
 import ChallengeNavigator from './ChallengeNavigator';
+import { TrackingState } from '../components/providers/TrackingProvider';
 
 const TabIcon = (props: { name: string; color: string }) => {
   return <FAIcon style={styles.tabicon} {...props} />;
@@ -49,7 +50,7 @@ const TabNavigator: React.FC = () => {
         component={HoverNavigator}
         options={{
           tabBarIcon: tabIconTracking,
-          tabBarBadge: tracking.isTracking && !tracking.isTrackingPaused ? '' : undefined,
+          tabBarBadge: tracking.trackingState === TrackingState.TRACKING ? '' : undefined,
         }}
       />
       <Tab.Screen

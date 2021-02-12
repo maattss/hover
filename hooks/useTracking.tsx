@@ -1,5 +1,5 @@
 import React from 'react';
-import { TrackingContext } from '../components/TrackingProvider';
+import { TrackingContext } from '../components/providers/TrackingProvider';
 
 const useTracking = () => {
   const tracking = React.useContext(TrackingContext);

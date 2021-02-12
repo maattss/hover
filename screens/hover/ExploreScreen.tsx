@@ -14,24 +14,17 @@ import { Colors, Spacing, Typography, Buttons } from '../../theme';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import useTracking from '../../hooks/useTracking';
 import { defaultMapLocation } from '../../helpers/objectMappers';
-import GeoFences from '../../components/GeoFences';
-import { HoverStackParamList } from '../../types/navigationTypes';
-import { StackNavigationProp } from '@react-navigation/stack';
+import GeoFences from '../../components/map/GeoFences';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const { width, height } = Dimensions.get('window');
 
-type NavigationProp = StackNavigationProp<HoverStackParamList>;
-
-type ExploreProps = {
-  navigation: NavigationProp;
-};
-
-const ExploreScreen: React.FC<ExploreProps> = ({ navigation }: ExploreProps) => {
+const ExploreScreen: React.FC = () => {
   const [chosenMapType, setChosenMapType] = useState<MapTypes>('standard');
   const [centreOnUser, setCentreOnUser] = useState(false);
   const [disableTracking, setDisableTracking] = useState(true);
   const [loadingUserPos, setLoadingUserPos] = useState(true);
+  const [zoom, setZoom] = useState<number>(0.01);
   const tracking = useTracking();
   const insets = useSafeAreaInsets();
   // Refetch geofences on init render
@@ -42,8 +35,8 @@ const ExploreScreen: React.FC<ExploreProps> = ({ navigation }: ExploreProps) => 
   const defaultRegion: Region = {
     longitude: tracking.userLocation ? tracking.userLocation.coords.longitude : defaultMapLocation.longitude,
     latitude: tracking.userLocation ? tracking.userLocation.coords.latitude : defaultMapLocation.latitude,
-    latitudeDelta: 0.01,
-    longitudeDelta: 0.01 * (width / height),
+    latitudeDelta: zoom,
+    longitudeDelta: zoom,
   };
   // Dynamic styles
   const mapTypeIconStyle = {
@@ -76,7 +69,7 @@ const ExploreScreen: React.FC<ExploreProps> = ({ navigation }: ExploreProps) => 
   const startTracking = () => {
     if (!disableTracking) {
       tracking.startTracking();
-      navigation.navigate('Tracking');
+      //navigation.navigate('Tracking');
     }
   };
   const notInsideGeoFenceAlert = () => {
@@ -111,8 +104,9 @@ const ExploreScreen: React.FC<ExploreProps> = ({ navigation }: ExploreProps) => 
         showsUserLocation
         style={styles.mapStyle}
         onDoublePress={() => setCentreOnUser(false)}
-        onPanDrag={() => setCentreOnUser(false)}>
-        <GeoFences geofences={tracking.geoFences} />
+        onPanDrag={() => setCentreOnUser(false)}
+        onRegionChangeComplete={(region) => setZoom(region.latitudeDelta)}>
+        <GeoFences geofences={tracking.geoFences} zoom={zoom} />
       </MapView>
 
       <View style={[styles.mapInfo, getSafeAreaTop()]}>

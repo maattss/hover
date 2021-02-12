@@ -4,7 +4,7 @@ import { GeofencesQuery } from '../graphql/queries/Geofences.generated';
 import { LatLng } from 'react-native-maps';
 import { estimatedRadius } from './geoFenceCalculations';
 import { CircleGeoFence, GeoFence, GeoFenceCategory, GeoFenceVariant, PolygonGeoFence } from '../types/geoFenceTypes';
-import { Item } from '../components/Leaderboard';
+import { Item } from '../components/leaderboard/Leaderboard';
 import { HighscoreQuery } from '../graphql/queries/Highscore.generated';
 import { ProfileUserQuery } from '../graphql/queries/ProfileUser.generated';
 import { UserProfile, Achievement as AchievementType, AchievementVariant } from '../types/profileTypes';

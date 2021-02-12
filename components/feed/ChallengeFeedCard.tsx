@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, Image } from 'react-native';
 import { Colors, Typography, Spacing } from '../../theme';
 import { ChallengeFeedData } from '../../types/feedTypes';
 import { timeStampToPresentable } from '../../helpers/dateTimeHelpers';
-import Divider from '../Divider';
+import Divider from '../general/Divider';
 
 interface ChallengeFeedCardProps {
   challenge: ChallengeFeedData;

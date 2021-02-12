@@ -1,20 +1,26 @@
 import React, { useState, ReactNode, useEffect } from 'react';
-import { GeoFence, TrackedActivity } from '../types/geoFenceTypes';
-import { convertToGeoFences } from '../helpers/objectMappers';
+import { GeoFence, TrackedActivity } from '../../types/geoFenceTypes';
+import { convertToGeoFences } from '../../helpers/objectMappers';
 import { usePermissions, LOCATION, PermissionResponse } from 'expo-permissions';
-import { startBackgroundUpdate, stopBackgroundUpdate } from '../tasks/locationBackgroundTasks';
-import { useGeofencesQuery } from '../graphql/queries/Geofences.generated';
-import { useInsertActivityMutation } from '../graphql/mutations/InsertActivity.generated';
+import { startBackgroundUpdate, stopBackgroundUpdate } from '../../tasks/locationBackgroundTasks';
+import { useGeofencesQuery } from '../../graphql/queries/Geofences.generated';
+import { useInsertActivityMutation } from '../../graphql/mutations/InsertActivity.generated';
 import { Alert } from 'react-native';
-import { durationToTimestamp, getCurrentTimestamp } from '../helpers/dateTimeHelpers';
-import { getGeoFenceScoreRatio, insideGeoFences } from '../helpers/geoFenceCalculations';
-import { useInterval } from '../hooks/useInterval';
+import { durationToTimestamp, getCurrentTimestamp } from '../../helpers/dateTimeHelpers';
+import { getGeoFenceScoreRatio, insideGeoFences } from '../../helpers/geoFenceCalculations';
+import { useInterval } from '../../hooks/useInterval';
 import * as Location from 'expo-location';
 import { LocationObject } from 'expo-location';
-import useAuthentication from '../hooks/useAuthentication';
+import useAuthentication from '../../hooks/useAuthentication';
 
 interface Props {
   children: ReactNode;
+}
+
+export enum TrackingState {
+  EXPLORE,
+  TRACKING,
+  PUBLISH,
 }
 
 interface TrackingContextValues {
@@ -24,12 +30,12 @@ interface TrackingContextValues {
   refetchGeofences: () => void;
   unUploadedActivities: TrackedActivity[];
   insideGeoFence: GeoFence | null;
-  isTracking: boolean;
-  isTrackingPaused: boolean;
+  trackingState: TrackingState;
   trackingStart: string;
   score: number;
   duration: number;
   startTracking: () => void;
+  resumeTracking: () => void;
   pauseTracking: () => void;
   stopTracking: (caption: string) => void;
   discardActivity: () => void;
@@ -44,12 +50,14 @@ export const TrackingContext = React.createContext<TrackingContextValues>({
   },
   unUploadedActivities: [],
   insideGeoFence: null,
-  isTracking: false,
-  isTrackingPaused: true,
+  trackingState: TrackingState.EXPLORE,
   trackingStart: '',
   score: 0,
   duration: 0,
   startTracking: () => {
+    console.error('Function not initialized');
+  },
+  resumeTracking: () => {
     console.error('Function not initialized');
   },
   pauseTracking: () => {
@@ -71,8 +79,7 @@ export const TrackingProvider = ({ children }: Props) => {
   const [geoFences, setGeoFences] = useState<GeoFence[]>([]);
   const [unUploadedActivities, setUnUploadedActivities] = useState<TrackedActivity[]>([]);
   const [insideGeoFence, setInsideGeoFence] = useState<GeoFence | null>(null);
-  const [isTracking, setIsTracking] = useState(false);
-  const [isTrackingPaused, setIsTrackingPaused] = useState(true);
+  const [trackingState, setTrackingState] = useState<TrackingState>(TrackingState.EXPLORE);
   const [trackingStart, setTrackingStart] = useState('');
   const [score, setScore] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -139,22 +146,22 @@ export const TrackingProvider = ({ children }: Props) => {
     if (insideGeoFence) {
       setScore(0);
       setDuration(0);
-      setIsTrackingPaused(false);
-      setIsTracking(true);
+      setTrackingState(TrackingState.TRACKING);
       setTrackingStart(getCurrentTimestamp());
     }
   };
+  const resumeTracking = () => {
+    setTrackingState(TrackingState.TRACKING);
+  };
   const pauseTracking = () => {
-    setIsTrackingPaused(true);
+    setTrackingState(TrackingState.PUBLISH);
   };
   const discardActivity = () => {
-    setIsTrackingPaused(true);
-    setIsTracking(false);
+    setTrackingState(TrackingState.EXPLORE);
   };
 
   const stopTracking = async (caption: string) => {
-    setIsTrackingPaused(true);
-    setIsTracking(false);
+    setTrackingState(TrackingState.EXPLORE);
     const activity = {
       caption: caption,
       geofence_id: insideGeoFence?.id,
@@ -171,7 +178,7 @@ export const TrackingProvider = ({ children }: Props) => {
         },
       });
       console.log('Activity inserted to db', response);
-      Alert.alert('Upload complete', 'Activity uploaded successfully!', [{ text: 'Cancel' }, { text: 'OK' }]);
+      Alert.alert('Upload complete', 'Activity uploaded successfully!', [{ text: 'OK' }]);
     } catch (error) {
       console.error('Mutation error', error.message);
       addUnUploadedActivity({
@@ -193,7 +200,7 @@ export const TrackingProvider = ({ children }: Props) => {
         setScore(score + 1 * getGeoFenceScoreRatio(insideGeoFence.category));
       }
     },
-    isTrackingPaused ? null : 1000,
+    trackingState === TrackingState.TRACKING ? 1000 : null,
   );
 
   const value: TrackingContextValues = {
@@ -203,12 +210,12 @@ export const TrackingProvider = ({ children }: Props) => {
     refetchGeofences: refetch,
     unUploadedActivities: unUploadedActivities,
     insideGeoFence: insideGeoFence,
-    isTracking: isTracking,
-    isTrackingPaused: isTrackingPaused,
+    trackingState: trackingState,
     trackingStart: trackingStart,
     score: score,
     duration: duration,
     startTracking: startTracking,
+    resumeTracking: resumeTracking,
     pauseTracking: pauseTracking,
     stopTracking: stopTracking,
     discardActivity: discardActivity,
