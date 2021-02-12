@@ -169,7 +169,6 @@ export const TrackingProvider = ({ children }: Props) => {
       user_id: userId ?? '0',
       score: Math.floor(score),
       started_at: trackingStart,
-      created_at: new Date().toISOString(),
       duration: durationToTimestamp(duration),
     };
 
