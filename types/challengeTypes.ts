@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import { ListUserFragmentFragment, OpponentFragmentFragment } from '../graphql/Fragments.generated';
+import { GeoFenceCategory } from './geoFenceTypes';
 import { Challenge_Participant_State_Enum, Challenge_State_Enum, Challenge_Type_Enum } from './types';
 
 export type PendingChallenge = {
@@ -39,7 +40,7 @@ export type OngoingChallenge = {
 };
 
 export type ChallengeRules = {
-  category?: string;
+  category?: GeoFenceCategory;
   score?: number;
   time?: number;
 };
