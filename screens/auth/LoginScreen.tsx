@@ -8,7 +8,7 @@ import Button from '../../components/general/Button';
 import Loading from '../../components/general/Loading';
 import { Asset } from 'expo-asset';
 import KeyboardAvoiderNoHeader from '../../components/general/KeyboarAvoiderNoHeader';
-import { sanitizeUsername } from './SignUpScreen';
+import { getSanitizedEmail } from './SignUpScreen';
 
 const LoginScreen = ({ navigation }: StackScreenProps<AuthStackParamList, 'Login'>) => {
   const [name, setName] = useState('');
@@ -18,7 +18,7 @@ const LoginScreen = ({ navigation }: StackScreenProps<AuthStackParamList, 'Login
   const handleLogin = async () => {
     setLoading(true);
     try {
-      await Firebase.auth().signInWithEmailAndPassword(sanitizeUsername(name), password);
+      await Firebase.auth().signInWithEmailAndPassword(getSanitizedEmail(name), password);
     } catch (error) {
       console.error(error);
       Alert.alert('Error', error.message);
@@ -43,9 +43,8 @@ const LoginScreen = ({ navigation }: StackScreenProps<AuthStackParamList, 'Login
         placeholder="Enter your username"
         placeholderTextColor={Colors.gray600}
         onChangeText={(val) => setName(val)}
-        autoCapitalize="none"
+        autoCapitalize="words"
         autoCorrect={false}
-        keyboardType="email-address"
         style={styles.formField}
       />
       <Text style={styles.label}>Password</Text>
