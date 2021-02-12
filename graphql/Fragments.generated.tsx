@@ -34,10 +34,7 @@ export type BasicActivityFragmentFragment = { readonly __typename: 'activities' 
 export type ActivityFragmentFragment = { readonly __typename: 'activities' } & Pick<
   Types.Activities,
   'activity_id' | 'caption' | 'created_at'
-> & {
-    readonly comments: ReadonlyArray<{ readonly __typename: 'comments' } & CommentFragmentFragment>;
-    readonly geofence: { readonly __typename: 'geofences' } & GeofenceFragmentFragment;
-  };
+> & { readonly geofence: { readonly __typename: 'geofences' } & GeofenceFragmentFragment };
 
 export type CommentFragmentFragment = { readonly __typename: 'comments' } & Pick<
   Types.Comments,
@@ -56,8 +53,30 @@ export type ChallengeFragmentFragment = { readonly __typename: 'challenge' } & P
 
 export type AchievementFragmentFragment = { readonly __typename: 'achievement' } & Pick<
   Types.Achievement,
-  'description' | 'name' | 'achievement_type' | 'level' | 'created_at' | 'rule'
+  'id' | 'description' | 'name' | 'achievement_type' | 'level' | 'created_at' | 'rule'
 >;
+
+export type OpponentFragmentFragment = { readonly __typename: 'challenge_participant' } & Pick<
+  Types.Challenge_Participant,
+  'state'
+> & { readonly user: { readonly __typename: 'users' } & Pick<Types.Users, 'id' | 'name' | 'picture'> };
+
+export type ChallengeTypeFragmentFragment = { readonly __typename: 'challenge_type' } & Pick<
+  Types.Challenge_Type,
+  'name' | 'description'
+>;
+
+export type FeedFragmentFragment = { readonly __typename: 'feed' } & Pick<
+  Types.Feed,
+  'id' | 'user_id' | 'activity_id' | 'achievement_id' | 'created_at'
+> & {
+    readonly activity?: Types.Maybe<{ readonly __typename: 'activities' } & BasicActivityFragmentFragment>;
+    readonly user_achievement?: Types.Maybe<
+      { readonly __typename: 'user_achievement' } & {
+        readonly achievement: { readonly __typename: 'achievement' } & AchievementFragmentFragment;
+      }
+    >;
+  };
 
 export const BasicUserFragmentFragmentDoc = gql`
   fragment basicUserFragment on users {
@@ -67,17 +86,6 @@ export const BasicUserFragmentFragmentDoc = gql`
     picture
     bio
   }
-`;
-export const CommentFragmentFragmentDoc = gql`
-  fragment commentFragment on comments {
-    comment_id
-    activity_id
-    content
-    user {
-      ...basicUserFragment
-    }
-  }
-  ${BasicUserFragmentFragmentDoc}
 `;
 export const GeofenceFragmentFragmentDoc = gql`
   fragment geofenceFragment on geofences {
@@ -97,14 +105,10 @@ export const ActivityFragmentFragmentDoc = gql`
     activity_id
     caption
     created_at
-    comments {
-      ...commentFragment
-    }
     geofence {
       ...geofenceFragment
     }
   }
-  ${CommentFragmentFragmentDoc}
   ${GeofenceFragmentFragmentDoc}
 `;
 export const UserFragmentFragmentDoc = gql`
@@ -132,16 +136,16 @@ export const UserFragmentFragmentDoc = gql`
   ${BasicUserFragmentFragmentDoc}
   ${ActivityFragmentFragmentDoc}
 `;
-export const BasicActivityFragmentFragmentDoc = gql`
-  fragment basicActivityFragment on activities {
+export const CommentFragmentFragmentDoc = gql`
+  fragment commentFragment on comments {
+    comment_id
     activity_id
-    caption
-    duration
-    geofence_id
-    score
-    started_at
-    stopped_at
+    content
+    user {
+      ...basicUserFragment
+    }
   }
+  ${BasicUserFragmentFragmentDoc}
 `;
 export const ChallengeFragmentFragmentDoc = gql`
   fragment challengeFragment on challenge {
@@ -158,8 +162,36 @@ export const ChallengeFragmentFragmentDoc = gql`
   }
   ${BasicUserFragmentFragmentDoc}
 `;
+export const OpponentFragmentFragmentDoc = gql`
+  fragment opponentFragment on challenge_participant {
+    user {
+      id
+      name
+      picture
+    }
+    state
+  }
+`;
+export const ChallengeTypeFragmentFragmentDoc = gql`
+  fragment challengeTypeFragment on challenge_type {
+    name
+    description
+  }
+`;
+export const BasicActivityFragmentFragmentDoc = gql`
+  fragment basicActivityFragment on activities {
+    activity_id
+    caption
+    duration
+    geofence_id
+    score
+    started_at
+    stopped_at
+  }
+`;
 export const AchievementFragmentFragmentDoc = gql`
   fragment achievementFragment on achievement {
+    id
     description
     name
     achievement_type
@@ -167,4 +199,23 @@ export const AchievementFragmentFragmentDoc = gql`
     created_at
     rule
   }
+`;
+export const FeedFragmentFragmentDoc = gql`
+  fragment feedFragment on feed {
+    id
+    user_id
+    activity_id
+    activity {
+      ...basicActivityFragment
+    }
+    achievement_id
+    user_achievement {
+      achievement {
+        ...achievementFragment
+      }
+    }
+    created_at
+  }
+  ${BasicActivityFragmentFragmentDoc}
+  ${AchievementFragmentFragmentDoc}
 `;
