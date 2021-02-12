@@ -3,7 +3,7 @@ import { TouchableOpacity, Text, TextStyle, ViewStyle, StyleSheet } from 'react-
 import { Buttons, Colors, Spacing, Typography } from '../../theme';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import { GeoFenceCategory } from '../../types/geoFenceTypes';
-import { CategoryIcon } from '../CategoryIcon';
+import { CategoryIcon } from './CategoryIcon';
 
 interface ButtonProps {
   onPress?: () => void;
