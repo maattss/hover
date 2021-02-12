@@ -14,6 +14,7 @@ import { Challenge_Participant_Insert_Input, Challenge_Participant_State_Enum } 
 import { GeoFenceCategory } from '../../../types/geoFenceTypes';
 import { getCategoryColor, getCategoryIconName } from '../../../helpers/categoryHelpers';
 import Divider from '../../../components/general/Divider';
+import { generateNewChallengeDescription } from '../../../helpers/decriptionHelper';
 
 type NewChallengeRouteProp = RouteProp<NewChallengeStackParamList, 'NewChallengeOverview'>;
 type NavigationProp = StackNavigationProp<RootTabParamList, 'Challenge'>;
@@ -47,12 +48,22 @@ const NewChallengeOverviewScreen: React.FC<Props> = ({ route, navigation }: Prop
     <View style={styles.container}>
       <View style={styles.box}>
         <Text style={{ ...Typography.headerText }}>Overview</Text>
-
+        <Divider />
+        <View style={styles.infoContainer}>
+          <Text style={{ ...Typography.bodyText }}>
+            {generateNewChallengeDescription(
+              route.params.challenge_type,
+              route.params.rules,
+              route.params.end_date,
+              route.params.participants,
+            )}
+          </Text>
+        </View>
+        <Divider />
         <View style={styles.infoContainer}>
           <Text style={styles.infoText}>Against</Text>
           <OpponentsList opponents={route.params.participants} />
         </View>
-        <Divider />
         {route.params.rules?.score && (
           <View style={styles.infoContainer}>
             <Text style={styles.infoText}>Goal score</Text>

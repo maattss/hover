@@ -33,7 +33,7 @@ const ChallengeRulesScreen: React.FC<Props> = ({ route, navigation }: Props) => 
   const fields = getChallengeTypeFields(route.params.challenge_type);
   const [isDisabled, setDisabled] = useState(true);
   const validateRule = () => {
-    if (fields.every((key) => rules[key as keyof ChallengeRules]) && endDate) {
+    if (fields.every((key) => rules[key.toLowerCase() as keyof ChallengeRules]) && endDate) {
       setDisabled(false);
     } else {
       setDisabled(true);
