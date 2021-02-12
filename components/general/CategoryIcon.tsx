@@ -1,9 +1,9 @@
 import React from 'react';
-import { GeoFenceCategory } from '../types/geoFenceTypes';
+import { GeoFenceCategory } from '../../types/geoFenceTypes';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import { StyleSheet, ViewStyle } from 'react-native';
-import { Colors, Spacing } from '../theme';
-import { getCategoryColor, getCategoryIconName } from '../helpers/categoryHelpers';
+import { Colors, Spacing } from '../../theme';
+import { getCategoryColor, getCategoryIconName } from '../../helpers/categoryHelpers';
 
 interface CategoryIconProps {
   category: GeoFenceCategory;
