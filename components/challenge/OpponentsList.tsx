@@ -1,20 +1,21 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { ListUserFragmentFragment } from '../../graphql/Fragments.generated';
-import { Colors, Typography, Spacing, Buttons } from '../../theme';
+import { Typography, Spacing } from '../../theme';
+import { Avatar } from 'react-native-elements';
 interface OpponentsListProps {
   opponents: ListUserFragmentFragment[];
 }
 
-const OpponentsList: React.FC<OpponentsListProps> = ({ opponents }: OpponentsListProps) => {
+const OpponentsRowList: React.FC<OpponentsListProps> = ({ opponents }: OpponentsListProps) => {
   return (
-    <View>
+    <View style={styles.opponentRow}>
       {opponents.map((opponent: ListUserFragmentFragment) => (
-        <View key={opponent.id} style={styles.opponentRow}>
-          <Image source={{ uri: opponent.picture ?? '' }} style={styles.opponentAvatar} />
-          <View style={styles.oppnentNameStateRow}>
-            <Text style={styles.opponentNameText}>{opponent.name}</Text>
+        <View key={opponent.id} style={styles.opponentBox}>
+          <View>
+            <Avatar source={{ uri: opponent.picture ?? '' }} size="small" />
           </View>
+          <Text style={styles.opponentNameText}>{opponent.name.split(' ')[0]}</Text>
         </View>
       ))}
     </View>
@@ -22,105 +23,20 @@ const OpponentsList: React.FC<OpponentsListProps> = ({ opponents }: OpponentsLis
 };
 
 const styles = StyleSheet.create({
-  card: {
-    backgroundColor: Colors.gray900,
-    borderRadius: Spacing.smaller,
-    padding: Spacing.base,
-    marginHorizontal: Spacing.smaller,
-    marginVertical: Spacing.smallest,
-    shadowOpacity: 0.75,
-    shadowRadius: 3,
-    shadowColor: Colors.black,
-    shadowOffset: { height: 0, width: 0 },
-  },
-  topBar: {
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-  },
-  topBarAvatar: {
-    width: '20%',
-  },
-  avatar: {
-    height: 45,
-    width: 45,
-    borderRadius: 45 / 2,
-    marginRight: Spacing.small,
-  },
-  topBarText: {
-    width: '80%',
-  },
-  nameText: {
-    ...Typography.headerText,
-    fontSize: 20,
-    lineHeight: 30,
-  },
-  descriptionText: {
-    color: Colors.almostWhite,
-    fontSize: 12,
-    fontStyle: 'italic',
-  },
-  opponentContainer: {
-    paddingTop: Spacing.base,
-    justifyContent: 'flex-end',
-    width: '100%',
-    left: '20%',
-  },
-  opponentHeaderText: {
-    color: Colors.almostWhite,
-    fontSize: 12,
-    fontWeight: 'bold',
-    paddingVertical: Spacing.base,
-  },
   opponentRow: {
     flexDirection: 'row',
-    justifyContent: 'flex-start',
+    justifyContent: 'flex-end',
+    width: '60%',
+    flexWrap: 'wrap',
   },
-  opponentAvatar: {
-    height: 25,
-    width: 25,
-    borderRadius: 25 / 2,
-    marginRight: Spacing.small,
-  },
-  oppnentNameStateRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '70%',
+  opponentBox: {
+    alignItems: 'center',
+    marginLeft: Spacing.base,
   },
   opponentNameText: {
     ...Typography.bodyText,
-    fontWeight: 'bold',
-    width: '60%',
-  },
-  opponentStateText: {
-    ...Typography.bodyText,
-    fontSize: 10,
-    fontStyle: 'italic',
-    width: '40%',
-  },
-  stateUpdateMessage: {
-    marginVertical: Spacing.base,
-    ...Typography.bodyText,
-    fontStyle: 'italic',
-    width: '100%',
-  },
-  buttonsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '100%',
-  },
-  acceptButton: {
-    width: '45%',
-    ...Buttons.button,
-    backgroundColor: Colors.blue,
-    marginVertical: Spacing.base,
-  },
-  declineButton: {
-    width: '45%',
-    ...Buttons.button,
-    backgroundColor: Colors.gray100,
-    marginTop: Spacing.base,
-    marginBottom: Spacing.base,
+    fontSize: 11,
   },
 });
 
-export default OpponentsList;
+export default OpponentsRowList;

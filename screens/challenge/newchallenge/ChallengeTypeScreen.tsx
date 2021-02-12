@@ -25,7 +25,7 @@ const ChallengeTypeScreen: React.FC<Props> = ({ route, navigation }: Props) => {
   const renderItem = (item: ChallengeTypeFragmentFragment) => {
     return (
       <MenuButton
-        style={styles.checkboxContainer}
+        style={styles.challengeTypeRow}
         onPress={() => {
           navigation.push('ChallengeRules', {
             ...route.params,
@@ -42,13 +42,18 @@ const ChallengeTypeScreen: React.FC<Props> = ({ route, navigation }: Props) => {
   return (
     <View style={styles.container}>
       <FlatList
-        ListHeaderComponent={<Text style={styles.title}>What type of challenge?</Text>}
-        ListHeaderComponentStyle={styles.title}
+        ListHeaderComponent={
+          <>
+            <Text style={styles.title}>What type of challenge?</Text>
+            <Divider />
+          </>
+        }
         style={styles.box}
         data={challengeTypes?.challenge_type as ChallengeTypeFragmentFragment[]}
         keyExtractor={({ name }) => name}
         renderItem={({ item }) => renderItem(item)}
         ItemSeparatorComponent={() => <Divider />}
+        ListFooterComponent={<Divider />}
       />
     </View>
   );
@@ -73,7 +78,7 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing.base,
     ...Typography.headerText,
   },
-  checkboxContainer: {
+  challengeTypeRow: {
     flexDirection: 'row',
     width: '100%',
     backgroundColor: Colors.gray900,

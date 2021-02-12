@@ -2,9 +2,9 @@
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, Alert } from 'react-native';
 import Button from '../../../components/general/Button';
-import OpponentsList from '../../../components/challenge/OpponentsList';
+import OpponentsRowList from '../../../components/challenge/OpponentsList';
 import { FontAwesome5 as FA5Icon } from '@expo/vector-icons';
 import { useInsertChallengeMutation } from '../../../graphql/mutations/InsertChallenge.generated';
 import { convertToJsonRule } from '../../../helpers/challengeMappers';
@@ -60,9 +60,9 @@ const NewChallengeOverviewScreen: React.FC<Props> = ({ route, navigation }: Prop
           </Text>
         </View>
         <Divider />
-        <View style={styles.infoContainer}>
+        <View style={[styles.infoContainer, { alignItems: 'flex-start' }]}>
           <Text style={styles.infoText}>Against</Text>
-          <OpponentsList opponents={route.params.participants} />
+          <OpponentsRowList opponents={route.params.participants} />
         </View>
         {route.params.rules?.score && (
           <View style={styles.infoContainer}>
@@ -102,7 +102,13 @@ const NewChallengeOverviewScreen: React.FC<Props> = ({ route, navigation }: Prop
               created_by: route.params.user_id,
               rules: convertToJsonRule(route.params.rules),
             },
-          }).then(() => navigation.navigate('Challenge'))
+          })
+            .then((response) => {
+              navigation.navigate('Challenge');
+              console.log('Chalenge inserted to db', response);
+              Alert.alert('Upload complete', 'Challenge uploaded successfully!', [{ text: 'OK' }]);
+            })
+            .catch((error) => console.error('Mutation error', error.message))
         }>
         Challenge!
       </Button>

@@ -84,13 +84,13 @@ const ChallengeRulesScreen: React.FC<Props> = ({ route, navigation }: Props) => 
   return (
     <KeyboardAvoiderNoHeader>
       <View style={styles.box}>
-        <Text style={{ ...Typography.headerText }}>What is the challenge?</Text>
+        <Text style={{ ...Typography.headerText }}>Define the rules</Text>
         <Divider />
         <View>
           {fields.map((field) => {
             if (field == 'SCORE') {
               return (
-                <View>
+                <View style={styles.section}>
                   <Text style={styles.label}>Goal score</Text>
                   <TextInput
                     placeholder="Enter your goal score"
@@ -104,14 +104,14 @@ const ChallengeRulesScreen: React.FC<Props> = ({ route, navigation }: Props) => 
               );
             } else if (field == 'CATEGORY') {
               return (
-                <View>
+                <View style={styles.section}>
                   <Text style={styles.label}>Pick a category</Text>
                   <View style={styles.categoryButtonsContainer}>{renderCategories()}</View>
                 </View>
               );
             } else if (field == 'TIME') {
               return (
-                <View>
+                <View style={styles.section}>
                   <Text style={styles.label}>Hours</Text>
                   <TextInput
                     placeholder="Enter number of hours"
@@ -128,10 +128,8 @@ const ChallengeRulesScreen: React.FC<Props> = ({ route, navigation }: Props) => 
             }
           })}
         </View>
-        <View style={styles.box}></View>
-        <Divider />
-        <Text style={styles.label}>Last day of challenge?</Text>
-        <View>
+        <View style={styles.section}>
+          <Text style={styles.label}>Last day of challenge?</Text>
           <Button style={styles.formField} onPress={showDatePicker}>
             {moment(endDate).format('DD. MMM YYYY')}
           </Button>
@@ -165,6 +163,9 @@ const styles = StyleSheet.create({
     borderRadius: Spacing.smaller,
     padding: Spacing.base,
   },
+  section: {
+    paddingVertical: Spacing.small,
+  },
   label: {
     ...Typography.bodyText,
     fontWeight: 'bold',
@@ -181,7 +182,7 @@ const styles = StyleSheet.create({
   categoryButtonsContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
   },
 });
 

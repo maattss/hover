@@ -51,7 +51,6 @@ const PickUsersScreen: React.FC<Props> = ({
   };
 
   const renderItem = (item: ListUserFragmentFragment) => {
-    console.log(item.name);
     return <FriendItem item={item} checked={isFriendChecked(item.id)} onValueChanged={() => onChecked(item)} />;
   };
 
@@ -60,13 +59,18 @@ const PickUsersScreen: React.FC<Props> = ({
   return (
     <View style={styles.container}>
       <FlatList
-        ListHeaderComponent={<Text style={styles.title}>Who?</Text>}
-        ListHeaderComponentStyle={styles.title}
+        ListHeaderComponent={
+          <>
+            <Text style={styles.title}>Who?</Text>
+            <Divider />
+          </>
+        }
         style={styles.box}
         data={friends?.users as ListUserFragmentFragment[]}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => renderItem(item)}
         ItemSeparatorComponent={() => <Divider />}
+        ListFooterComponent={<Divider />}
       />
       <Button
         onPress={() => {
@@ -95,7 +99,7 @@ const FriendItem: React.FC<FriendItemProps> = (props: FriendItemProps) => {
     setChecked(!checked);
   };
   return (
-    <TouchableOpacity style={styles.checkboxContainer} onPress={onPressed}>
+    <TouchableOpacity style={styles.friendRow} onPress={onPressed}>
       <CheckBox
         center
         onPress={onPressed}
@@ -133,7 +137,7 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing.base,
     ...Typography.headerText,
   },
-  checkboxContainer: {
+  friendRow: {
     flexDirection: 'row',
     width: '100%',
     backgroundColor: Colors.gray900,
