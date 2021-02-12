@@ -200,7 +200,7 @@ export const TrackingProvider = ({ children }: Props) => {
         setScore(score + 1 * getGeoFenceScoreRatio(insideGeoFence.category));
       }
     },
-    trackingState === TrackingState.PUBLISH ? null : 1000,
+    trackingState === TrackingState.TRACKING ? 1000 : null,
   );
 
   const value: TrackingContextValues = {
