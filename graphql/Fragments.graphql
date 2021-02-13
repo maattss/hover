@@ -28,6 +28,19 @@ fragment userFragment on users {
   }
 }
 
+fragment feedActivityFragment on activities {
+  activity_id
+  caption
+  duration
+  geofence_id
+  geofence {
+    ...geofenceFragment
+  }
+  score
+  started_at
+  stopped_at
+}
+
 fragment basicActivityFragment on activities {
   activity_id
   caption
@@ -129,6 +142,19 @@ fragment achievementFeedFragment on feed {
   created_at
 }
 
+fragment feedActivityFragment on activities {
+  activity_id
+  caption
+  duration
+  geofence_id
+  geofence {
+    ...geofenceFragment
+  }
+  score
+  started_at
+  stopped_at
+}
+
 fragment fullFeedFragment on feed {
   id
   user {
@@ -136,7 +162,7 @@ fragment fullFeedFragment on feed {
   }
   activity_id
   activity {
-    ...activityFragment
+    ...feedActivityFragment
   }
   achievement_id
   user_achievement {
