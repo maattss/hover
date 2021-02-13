@@ -1,5 +1,8 @@
+import { ListUserFragmentFragment } from '../graphql/Fragments.generated';
 import { OngoingChallengesScreenProps } from '../screens/challenge/OngoingChallengesScreen';
 import { PendingChallengesScreenProps } from '../screens/challenge/PendingChallengesScreen';
+import { ChallengeRules } from './challengeTypes';
+import { Challenge_Type_Enum } from './types';
 
 export type RootStackParamList = {
   Main: undefined;
@@ -27,6 +30,29 @@ export type ChallengeStackParamList = {
   PendingChallenges: PendingChallengesScreenProps;
   OngoingChallenges: OngoingChallengesScreenProps;
   NewChallenge: undefined;
+};
+
+export type NewChallengeStackParamList = {
+  PickUsers: {
+    user_id: string;
+  };
+  ChallengeType: {
+    user_id: string;
+    participants: ListUserFragmentFragment[];
+  };
+  ChallengeRules: {
+    user_id: string;
+    participants: ListUserFragmentFragment[];
+    challenge_type: Challenge_Type_Enum;
+  };
+  NewChallengeOverview: {
+    user_id: string;
+    challenge_type: Challenge_Type_Enum;
+    rules: ChallengeRules;
+    end_date: string;
+    participants: ListUserFragmentFragment[];
+  };
+  ChallengeInfo: undefined;
 };
 export type HoverStackParamList = {
   Explore: undefined;

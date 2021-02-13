@@ -2,10 +2,10 @@
 import * as Types from '../types/types';
 
 import { gql } from '@apollo/client';
-export type BasicUserFragmentFragment = { readonly __typename: 'users' } & Pick<
-  Types.Users,
-  'id' | 'email' | 'name' | 'picture' | 'bio'
->;
+export type ListUserFragmentFragment = { readonly __typename: 'users' } & Pick<Types.Users, 'id' | 'name' | 'picture'>;
+
+export type BasicUserFragmentFragment = { readonly __typename: 'users' } & Pick<Types.Users, 'email' | 'bio'> &
+  ListUserFragmentFragment;
 
 export type UserFragmentFragment = { readonly __typename: 'users' } & {
   readonly followers: ReadonlyArray<
@@ -39,7 +39,7 @@ export type ActivityFragmentFragment = { readonly __typename: 'activities' } & P
 export type CommentFragmentFragment = { readonly __typename: 'comments' } & Pick<
   Types.Comments,
   'comment_id' | 'activity_id' | 'content'
-> & { readonly user: { readonly __typename: 'users' } & BasicUserFragmentFragment };
+> & { readonly user: { readonly __typename: 'users' } & ListUserFragmentFragment };
 
 export type GeofenceFragmentFragment = { readonly __typename: 'geofences' } & Pick<
   Types.Geofences,
@@ -49,7 +49,7 @@ export type GeofenceFragmentFragment = { readonly __typename: 'geofences' } & Pi
 export type ChallengeFragmentFragment = { readonly __typename: 'challenge' } & Pick<
   Types.Challenge,
   'id' | 'challenge_type' | 'created_at' | 'start_date' | 'end_date' | 'state' | 'rules'
-> & { readonly created_by_user: { readonly __typename: 'users' } & BasicUserFragmentFragment };
+>;
 
 export type AchievementFragmentFragment = { readonly __typename: 'achievement' } & Pick<
   Types.Achievement,
@@ -101,14 +101,20 @@ export type FullFeedFragmentFragment = { readonly __typename: 'feed' } & Pick<
     >;
   };
 
-export const BasicUserFragmentFragmentDoc = gql`
-  fragment basicUserFragment on users {
+export const ListUserFragmentFragmentDoc = gql`
+  fragment listUserFragment on users {
     id
-    email
     name
     picture
+  }
+`;
+export const BasicUserFragmentFragmentDoc = gql`
+  fragment basicUserFragment on users {
+    ...listUserFragment
+    email
     bio
   }
+  ${ListUserFragmentFragmentDoc}
 `;
 export const GeofenceFragmentFragmentDoc = gql`
   fragment geofenceFragment on geofences {
@@ -165,25 +171,21 @@ export const CommentFragmentFragmentDoc = gql`
     activity_id
     content
     user {
-      ...basicUserFragment
+      ...listUserFragment
     }
   }
-  ${BasicUserFragmentFragmentDoc}
+  ${ListUserFragmentFragmentDoc}
 `;
 export const ChallengeFragmentFragmentDoc = gql`
   fragment challengeFragment on challenge {
     id
     challenge_type
     created_at
-    created_by_user {
-      ...basicUserFragment
-    }
     start_date
     end_date
     state
     rules
   }
-  ${BasicUserFragmentFragmentDoc}
 `;
 export const OpponentFragmentFragmentDoc = gql`
   fragment opponentFragment on challenge_participant {
