@@ -7,7 +7,7 @@ export const convertToJsonRule = (rules: ChallengeRules): string => {
 };
 
 export const getChallengeTypeEnum = (challengeType: string): Challenge_Type_Enum => {
-  return Object.values(Challenge_Type_Enum).find((key) => key == challengeType) ?? Challenge_Type_Enum.Score;
+  return Challenge_Type_Enum[challengeType as keyof typeof Challenge_Type_Enum];
 };
 
 export const getChallengeTypeFields = (challengeType: Challenge_Type_Enum): string[] => {
