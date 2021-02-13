@@ -110,6 +110,8 @@ const LeaderboardScreen: React.FC = () => {
         </View>
 
         <View style={styles.leaderboardContainer}>
+          {highscoreLoading && <Loading />}
+          {highscoreError && <Text style={styles.infoText}>{highscoreError.message}</Text>}
           {!highscoreLoading && !highscoreError && highscores && <Leaderboard data={highscores} refetch={refetch} />}
         </View>
 

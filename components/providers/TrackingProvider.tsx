@@ -12,6 +12,7 @@ import { useInterval } from '../../hooks/useInterval';
 import * as Location from 'expo-location';
 import { LocationObject } from 'expo-location';
 import useAuthentication from '../../hooks/useAuthentication';
+import { LatLng } from 'react-native-maps';
 import { Activities_Insert_Input } from '../../types/types';
 
 interface Props {
@@ -26,7 +27,9 @@ export enum TrackingState {
 
 interface TrackingContextValues {
   locationPermission: PermissionResponse | undefined;
+  loadingUserLocation: boolean;
   userLocation: LocationObject | null;
+  updateUserLocation: (location: LatLng) => void;
   geoFences: GeoFence[];
   refetchGeofences: () => void;
   unUploadedActivities: Activities_Insert_Input[];
@@ -44,7 +47,9 @@ interface TrackingContextValues {
 
 export const TrackingContext = React.createContext<TrackingContextValues>({
   locationPermission: undefined,
+  loadingUserLocation: true,
   userLocation: null,
+  updateUserLocation: () => console.error('Function not initialized'),
   geoFences: [],
   refetchGeofences: () => {
     console.error('Function not initialized');
@@ -55,27 +60,18 @@ export const TrackingContext = React.createContext<TrackingContextValues>({
   trackingStart: '',
   score: 0,
   duration: 0,
-  startTracking: () => {
-    console.error('Function not initialized');
-  },
-  resumeTracking: () => {
-    console.error('Function not initialized');
-  },
-  pauseTracking: () => {
-    console.error('Function not initialized');
-  },
-  stopTracking: () => {
-    console.error('Function not initialized');
-  },
-  discardActivity: () => {
-    console.error('Function not initialized');
-  },
+  startTracking: () => console.error('Function not initialized'),
+  resumeTracking: () => console.error('Function not initialized'),
+  pauseTracking: () => console.error('Function not initialized'),
+  stopTracking: () => console.error('Function not initialized'),
+  discardActivity: () => console.error('Function not initialized'),
 });
 TrackingContext.displayName = 'TrackingContext';
 
 export const TrackingProvider = ({ children }: Props) => {
   const userId = useAuthentication().user?.uid;
   const [locationPermission] = usePermissions(LOCATION, { ask: true });
+  const [loadingUserLocation, setLoadingUserLocation] = useState(false);
   const [userLocation, setUserLocation] = useState<LocationObject | null>(null);
   const [geoFences, setGeoFences] = useState<GeoFence[]>([]);
   const [unUploadedActivities, setUnUploadedActivities] = useState<Activities_Insert_Input[]>([]);
@@ -106,38 +102,48 @@ export const TrackingProvider = ({ children }: Props) => {
     }
   }, [locationPermission]);
 
-  const getLocation = async () => {
-    return await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Highest });
+  const getLocation = async () => await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Highest });
+  const externalUpdateUserLocation = (newUserLocation: LatLng) => {
+    if (userLocation === null) {
+      updateUserLocation({
+        coords: {
+          latitude: newUserLocation.latitude,
+          longitude: newUserLocation.longitude,
+          altitude: null,
+          accuracy: null,
+          altitudeAccuracy: null,
+          heading: null,
+          speed: null,
+        },
+        timestamp: Date.now(),
+      });
+    }
   };
 
-  // Update user location every second
-  const [ticking] = useState(true);
-  const [counter, setCounter] = useState(0);
-  useInterval(
-    async () => {
-      const newUserLocation = await getLocation();
-      console.log('Checking user location...');
-      setCounter(counter + 1);
-      const differentLatitude = newUserLocation.coords.latitude !== userLocation?.coords.latitude;
-      const differentLongitude = newUserLocation.coords.longitude !== userLocation?.coords.longitude;
+  const updateUserLocation = (newUserLocation: LocationObject) => {
+    setUserLocation(newUserLocation);
+    if (loadingUserLocation) setLoadingUserLocation(false);
+    console.log(
+      'Updated user location... [' + newUserLocation.coords.latitude + ',' + newUserLocation.coords.longitude + ']',
+    );
 
-      if (differentLatitude || differentLongitude) {
-        console.log(
-          'Updated user location... [' + newUserLocation.coords.latitude + ',' + newUserLocation.coords.longitude + ']',
-        );
-        setUserLocation(newUserLocation);
+    const insideGeoFenceCheck = insideGeoFences(newUserLocation, geoFences);
+    if (insideGeoFenceCheck) {
+      setInsideGeoFence(insideGeoFenceCheck);
+      console.log('Inside geo fence!');
+    } else {
+      console.log('Outside geofence!');
+    }
+  };
 
-        const insideGeoFenceCheck = insideGeoFences(newUserLocation, geoFences);
-        if (insideGeoFenceCheck) {
-          setInsideGeoFence(insideGeoFenceCheck);
-          console.log('Inside geo fence!');
-        } else {
-          console.log('Outside geofence!');
-        }
-      }
-    },
-    ticking ? 5000 : null,
-  );
+  // Update user location every 5 seconds
+  useInterval(async () => {
+    console.log('Checking user location...');
+    const newUserLocation = await getLocation();
+    const differentLatitude = newUserLocation.coords.latitude !== userLocation?.coords.latitude;
+    const differentLongitude = newUserLocation.coords.longitude !== userLocation?.coords.longitude;
+    if (differentLatitude || differentLongitude) updateUserLocation(newUserLocation);
+  }, 5000);
 
   const addUnUploadedActivity = (activity: Activities_Insert_Input) =>
     setUnUploadedActivities([...unUploadedActivities, activity]);
@@ -200,7 +206,9 @@ export const TrackingProvider = ({ children }: Props) => {
 
   const value: TrackingContextValues = {
     locationPermission: locationPermission,
+    loadingUserLocation: loadingUserLocation,
     userLocation: userLocation,
+    updateUserLocation: externalUpdateUserLocation,
     geoFences: geoFences,
     refetchGeofences: refetch,
     unUploadedActivities: unUploadedActivities,
