@@ -26,11 +26,6 @@ export type UserFragmentFragment = { readonly __typename: 'users' } & {
   readonly activities: ReadonlyArray<{ readonly __typename: 'activities' } & ActivityFragmentFragment>;
 } & BasicUserFragmentFragment;
 
-export type FeedActivityFragmentFragment = { readonly __typename: 'activities' } & Pick<
-  Types.Activities,
-  'activity_id' | 'caption' | 'duration' | 'geofence_id' | 'score' | 'started_at' | 'stopped_at'
-> & { readonly geofence: { readonly __typename: 'geofences' } & GeofenceFragmentFragment };
-
 export type BasicActivityFragmentFragment = { readonly __typename: 'activities' } & Pick<
   Types.Activities,
   'activity_id' | 'caption' | 'duration' | 'geofence_id' | 'score' | 'started_at' | 'stopped_at'
