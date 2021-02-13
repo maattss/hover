@@ -11,6 +11,7 @@ import {
 import * as Apollo from '@apollo/client';
 export type GetChallengesQueryVariables = Types.Exact<{
   user_id: Types.Scalars['String'];
+  limit?: Types.Maybe<Types.Scalars['Int']>;
 }>;
 
 export type GetChallengesQuery = { readonly __typename: 'query_root' } & {
@@ -51,18 +52,23 @@ export type GetChallengesQuery = { readonly __typename: 'query_root' } & {
 };
 
 export const GetChallengesDocument = gql`
-  query GetChallenges($user_id: String!) {
+  query GetChallenges($user_id: String!, $limit: Int = 2) {
     user(id: $user_id) {
       ...listUserFragment
       pending_challenges: challenge_participants(
         where: { state: { _eq: PENDING }, challenge: { state: { _eq: ACTIVE } } }
+        order_by: {}
       ) {
         challenge {
           ...challengeFragment
           created_by_user {
             ...listUserFragment
           }
-          opponents: challenge_participants(where: { user_id: { _neq: $user_id } }) {
+          opponents: challenge_participants(
+            where: { user_id: { _neq: $user_id } }
+            limit: $limit
+            order_by: { challenge: { created_at: desc } }
+          ) {
             ...opponentFragment
           }
         }
@@ -75,7 +81,11 @@ export const GetChallengesDocument = gql`
           created_by_user {
             ...listUserFragment
           }
-          opponents: challenge_participants(where: { user_id: { _neq: $user_id } }) {
+          opponents: challenge_participants(
+            where: { user_id: { _neq: $user_id } }
+            limit: $limit
+            order_by: { challenge: { created_at: desc } }
+          ) {
             ...opponentFragment
           }
         }
@@ -88,7 +98,11 @@ export const GetChallengesDocument = gql`
           created_by_user {
             ...listUserFragment
           }
-          opponents: challenge_participants(where: { user_id: { _neq: $user_id } }) {
+          opponents: challenge_participants(
+            where: { user_id: { _neq: $user_id } }
+            limit: $limit
+            order_by: { challenge: { created_at: desc } }
+          ) {
             ...opponentFragment
           }
         }
@@ -113,6 +127,7 @@ export const GetChallengesDocument = gql`
  * const { data, loading, error } = useGetChallengesQuery({
  *   variables: {
  *      user_id: // value for 'user_id'
+ *      limit: // value for 'limit'
  *   },
  * });
  */
