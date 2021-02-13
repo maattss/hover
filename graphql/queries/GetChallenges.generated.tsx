@@ -11,7 +11,7 @@ import {
 import * as Apollo from '@apollo/client';
 export type GetChallengesQueryVariables = Types.Exact<{
   user_id: Types.Scalars['String'];
-  limit?: Types.Maybe<Types.Scalars['Int']>;
+  limit: Types.Scalars['Int'];
 }>;
 
 export type GetChallengesQuery = { readonly __typename: 'query_root' } & {
@@ -52,7 +52,7 @@ export type GetChallengesQuery = { readonly __typename: 'query_root' } & {
 };
 
 export const GetChallengesDocument = gql`
-  query GetChallenges($user_id: String!, $limit: Int = 2) {
+  query GetChallenges($user_id: String!, $limit: Int!) {
     user(id: $user_id) {
       ...listUserFragment
       pending_challenges: challenge_participants(

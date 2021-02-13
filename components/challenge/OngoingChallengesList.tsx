@@ -1,11 +1,15 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { FlatList, RefreshControl, SafeAreaView, StyleSheet } from 'react-native';
+import { Alert, Button, FlatList, RefreshControl, SafeAreaView, StyleSheet } from 'react-native';
+import { useGetOngoingChallengesQuery } from '../../graphql/queries/GetOngoingChallenges.generated';
+import { convertChallenge } from '../../helpers/objectMappers';
 import { Colors, Spacing } from '../../theme';
 import { OngoingChallenge } from '../../types/challengeTypes';
+import Loading from '../general/Loading';
 import OngoingChallengeCard from './OngoingChallengeCard';
 
 interface OngoingChallengesListProps {
-  challenges: OngoingChallenge[];
+  user_id: string;
+  initial_challenges: OngoingChallenge[];
   refetch?: () => void;
   listHeader?: React.ReactElement;
 }
@@ -13,21 +17,46 @@ interface OngoingChallengesListProps {
 const OngoingChallengesList: React.FC<OngoingChallengesListProps> = (props: OngoingChallengesListProps) => {
   const [challengeData, setChallengeData] = useState<OngoingChallenge[]>([]);
   const [refreshing, setRefreshing] = useState(false);
+  const [limit, setLimit] = useState(3);
+
+  const { data, loading, error, refetch, fetchMore } = useGetOngoingChallengesQuery({
+    variables: { user_id: props.user_id, limit: 3 },
+    nextFetchPolicy: 'network-only',
+  });
 
   useEffect(() => {
-    const { challenges } = props;
-    setChallengeData(challenges);
-  }, [props.challenges]);
+    const { initial_challenges } = props;
+    if (!data) {
+      setChallengeData(initial_challenges);
+    } else {
+      const { ongoingChallenges } = convertChallenge(data);
+      setChallengeData(ongoingChallenges);
+    }
+  }, [props.initial_challenges, data]);
 
   const onRefresh = useCallback(async () => {
-    if (props.refetch) {
+    if (refetch) {
       setRefreshing(true);
-      await props.refetch();
+      await refetch();
       setRefreshing(false);
     }
   }, [refreshing]);
-
+  const loadMoreChallenges = () => {
+    const newLimit = limit + 3;
+    setLimit(newLimit);
+    fetchMore({
+      variables: {
+        limit: newLimit,
+      },
+    });
+  };
+  if (error) {
+    console.error(error);
+    Alert.alert('Error', error?.message);
+  }
+  if (loading) return <Loading />;
   const renderItem = (item: OngoingChallenge) => <OngoingChallengeCard challenge={item} />;
+
   return (
     <SafeAreaView style={styles.container}>
       <FlatList
@@ -47,6 +76,8 @@ const OngoingChallengesList: React.FC<OngoingChallengesListProps> = (props: Ongo
         }
         ListHeaderComponent={props.listHeader}
         ListHeaderComponentStyle={styles.headerFooterStyle}
+        ListFooterComponent={<Button title={'Load more...'} onPress={loadMoreChallenges}></Button>}
+        ListFooterComponentStyle={styles.headerFooterStyle}
       />
     </SafeAreaView>
   );

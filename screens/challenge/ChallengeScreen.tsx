@@ -29,7 +29,7 @@ const ChallengeScreen: React.FC<ChallengesProps> = (props: ChallengesProps) => {
   const [ongoingChallenges, setOngoingChallenges] = useState<OngoingChallenge[]>();
 
   const { data: challengeData, loading, error, refetch } = useGetChallengesQuery({
-    variables: { user_id: user_id ? user_id : '' },
+    variables: { user_id: user_id ? user_id : '', limit: 2 },
   });
 
   useEffect(() => {
@@ -76,7 +76,7 @@ const ChallengeScreen: React.FC<ChallengesProps> = (props: ChallengesProps) => {
           />
         }>
         {pendingChallenges && renderPendingChallenges(props, pendingChallenges, refetch)}
-        {ongoingChallenges && renderOngoingChallenges(props, ongoingChallenges, refetch)}
+        {ongoingChallenges && renderOngoingChallenges(props, ongoingChallenges, refetch, user_id ? user_id : '')}
         {user_id && (
           <View style={styles.box}>
             <View style={styles.boxTitle}>
@@ -124,6 +124,7 @@ const renderOngoingChallenges = (
   { navigation }: ChallengesProps,
   ongoingChallenges: OngoingChallenge[],
   refetch: () => void,
+  user_id: string,
 ) => {
   return (
     <View style={styles.box}>
@@ -136,7 +137,7 @@ const renderOngoingChallenges = (
       {ongoingChallenges.length > PREVIEW_SIZE && (
         <Button
           style={styles.challengeButton}
-          onPress={() => navigation.push('OngoingChallenges', { ongoingChallenges, refetch })}>
+          onPress={() => navigation.push('OngoingChallenges', { user_id, ongoingChallenges, refetch })}>
           View all
         </Button>
       )}

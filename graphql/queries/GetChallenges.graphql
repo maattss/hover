@@ -1,4 +1,4 @@
-query GetChallenges($user_id: String!, $limit: Int = 2) {
+query GetChallenges($user_id: String!, $limit: Int!) {
   user(id: $user_id) {
     ...listUserFragment
     pending_challenges: challenge_participants(

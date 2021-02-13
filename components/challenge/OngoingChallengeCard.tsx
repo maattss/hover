@@ -31,19 +31,21 @@ const OngoingChallengeCard: React.FC<OngoingChallengeCardProps> = ({ challenge }
         );
       }
       default: {
+        const created_by = challenge.created_by;
+        const user = challenge.user.id == created_by.id ? challenge.opponents[0].user : challenge.user;
         return (
           <View>
             <View style={styles.row}>
               <View style={styles.colum}>
-                <Avatar rounded source={{ uri: challenge.user.picture ?? '' }} size="medium" />
-                <Text style={styles.nameText}>{challenge.user.name}</Text>
+                <Avatar rounded source={{ uri: created_by.picture ?? '' }} size="medium" />
+                <Text style={styles.nameText}>{created_by.name}</Text>
               </View>
               <View style={styles.versus}>
                 <Text style={styles.versusText}>vs</Text>
               </View>
               <View style={styles.colum}>
-                <Avatar rounded source={{ uri: challenge.created_by.picture ?? '' }} size="medium" />
-                <Text style={styles.nameText}>{challenge.created_by.name}</Text>
+                <Avatar rounded source={{ uri: user.picture ?? '' }} size="medium" />
+                <Text style={styles.nameText}>{user.name}</Text>
               </View>
             </View>
             {challenge.opponents.length > 1 && (
@@ -51,7 +53,7 @@ const OngoingChallengeCard: React.FC<OngoingChallengeCardProps> = ({ challenge }
                 <View>
                   <Text style={styles.opponentHeaderText}>Other partcicipants</Text>
                   {challenge.opponents
-                    .filter((opponent) => opponent.user.id != challenge.created_by.id)
+                    .filter((opponent) => opponent.user.id != created_by.id || opponent.user.id != user.id)
                     .map((opponent) => (
                       <View key={opponent.user.id} style={styles.opponentRow}>
                         <Avatar rounded source={{ uri: opponent.user.picture ?? '' }} size="medium" />

@@ -7,6 +7,7 @@ import { Spacing, Typography } from '../../theme';
 import OngoingChallengesList from '../../components/challenge/OngoingChallengesList';
 
 export interface OngoingChallengesScreenProps {
+  user_id: string;
   ongoingChallenges: OngoingChallenge[];
   refetch: () => void;
 }
@@ -25,8 +26,8 @@ const ListHeader = () => (
 const OngoingChallengesScreen: React.FC<Props> = ({ route }: Props) => {
   return (
     <OngoingChallengesList
-      challenges={route.params.ongoingChallenges}
-      refetch={route.params.refetch}
+      user_id={route.params.user_id}
+      initial_challenges={route.params.ongoingChallenges}
       listHeader={<ListHeader />}
     />
   );
