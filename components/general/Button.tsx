@@ -1,9 +1,9 @@
 import React from 'react';
-import { TouchableOpacity, Text, TextStyle, ViewStyle, StyleSheet } from 'react-native';
+import { TouchableOpacity, Text, TextStyle, ViewStyle, StyleSheet, Image } from 'react-native';
 import { Buttons, Colors, Spacing, Typography } from '../../theme';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import { GeoFenceCategory } from '../../types/geoFenceTypes';
-import { CategoryIcon } from './CategoryIcon';
+import { getGeoFenceImage } from '../../helpers/geoFenceCalculations';
 
 interface ButtonProps {
   onPress?: () => void;
@@ -73,8 +73,8 @@ export const CategoryButton: React.FC<CategoryButtonProps> = (props: CategoryBut
     <TouchableOpacity
       style={[styles.categoryButton, props.style, props.isSelected ? styles.isSelected : null]}
       onPress={props.onPress}>
-      <CategoryIcon category={props.category} />
-      <Text style={{ ...Typography.bodyText, textAlign: 'center', fontSize: 10 }}>{props.category.toString()}</Text>
+      <Image source={{ uri: getGeoFenceImage(props.category) }} style={styles.categoryIcon} />
+      <Text style={{ ...Typography.bodyText, fontSize: 10 }}>{props.category.toString()}</Text>
     </TouchableOpacity>
   );
 };
@@ -105,10 +105,16 @@ const styles = StyleSheet.create({
   },
   categoryButton: {
     ...Typography.bodyText,
-    backgroundColor: Colors.gray700,
+    backgroundColor: Colors.gray800,
     borderRadius: Spacing.smaller,
     paddingVertical: Spacing.base,
     width: '22%',
+    alignItems: 'center',
+  },
+  categoryIcon: {
+    width: 50,
+    height: 50,
+    marginVertical: Spacing.smallest,
   },
   isSelected: {
     backgroundColor: Colors.gray900,

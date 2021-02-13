@@ -2,19 +2,17 @@
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
-import { StyleSheet, View, Text, Alert } from 'react-native';
+import { StyleSheet, View, Text, Image, Alert } from 'react-native';
 import Button from '../../../components/general/Button';
 import OpponentsRowList from '../../../components/challenge/OpponentsList';
-import { FontAwesome5 as FA5Icon } from '@expo/vector-icons';
 import { useInsertChallengeMutation } from '../../../graphql/mutations/InsertChallenge.generated';
 import { convertToJsonRule } from '../../../helpers/challengeMappers';
 import { Buttons, Colors, Spacing, Typography } from '../../../theme';
 import { NewChallengeStackParamList, RootTabParamList } from '../../../types/navigationTypes';
 import { Challenge_Participant_Insert_Input, Challenge_Participant_State_Enum } from '../../../types/types';
-import { GeoFenceCategory } from '../../../types/geoFenceTypes';
-import { getCategoryColor, getCategoryIconName } from '../../../helpers/categoryHelpers';
 import Divider from '../../../components/general/Divider';
 import { generateNewChallengeDescription } from '../../../helpers/decriptionHelper';
+import { getGeoFenceImage } from '../../../helpers/geoFenceCalculations';
 
 type NewChallengeRouteProp = RouteProp<NewChallengeStackParamList, 'NewChallengeOverview'>;
 type NavigationProp = StackNavigationProp<RootTabParamList, 'Challenge'>;
@@ -41,9 +39,7 @@ const NewChallengeOverviewScreen: React.FC<Props> = ({ route, navigation }: Prop
   };
 
   const [createChallenge] = useInsertChallengeMutation();
-  const categoryColor = {
-    color: getCategoryColor(GeoFenceCategory[route.params.rules?.category as keyof typeof GeoFenceCategory]),
-  };
+
   return (
     <View style={styles.container}>
       <View style={styles.box}>
@@ -79,12 +75,7 @@ const NewChallengeOverviewScreen: React.FC<Props> = ({ route, navigation }: Prop
         {route.params.rules?.category && (
           <View style={[styles.infoContainer, { marginBottom: 0 }]}>
             <Text style={styles.infoText}>Category</Text>
-            <FA5Icon
-              style={[styles.categoryIcon, categoryColor]}
-              name={getCategoryIconName(
-                GeoFenceCategory[route.params.rules?.category as keyof typeof GeoFenceCategory],
-              )}
-            />
+            <Image source={{ uri: getGeoFenceImage(route.params.rules.category) }} style={styles.categoryIcon} />
           </View>
         )}
         <View style={styles.infoContainer}>
@@ -131,18 +122,6 @@ const styles = StyleSheet.create({
     marginHorizontal: Spacing.smaller,
     marginVertical: Spacing.smaller,
   },
-  opponentContainer: {
-    paddingTop: Spacing.base,
-    justifyContent: 'flex-end',
-    width: '100%',
-    left: '20%',
-  },
-  middleHeaderText: {
-    color: Colors.almostWhite,
-    fontSize: 12,
-    fontWeight: 'bold',
-    paddingVertical: Spacing.base,
-  },
   infoContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -158,23 +137,10 @@ const styles = StyleSheet.create({
     ...Typography.largeBodyText,
     fontSize: 18,
   },
-  infoScore: {
-    ...Typography.headerText,
-    marginBottom: Spacing.small,
-    textAlign: 'center',
-  },
   categoryIcon: {
-    color: Colors.almostWhite,
-    fontSize: 42,
-    textAlign: 'center',
-    paddingRight: Spacing.smallest,
-  },
-  challengeButton: {
-    ...Buttons.button,
-    backgroundColor: Colors.green,
-    width: '100%',
-    marginTop: Spacing.base,
-    marginBottom: Spacing.base,
+    width: 50,
+    height: 50,
+    marginVertical: Spacing.smallest,
   },
 });
 
