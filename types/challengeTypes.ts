@@ -10,9 +10,9 @@ export type PendingChallenge = {
   challenge_type: Challenge_Type_Enum;
   created_at: string;
   rules: ChallengeRules;
-  end_date: Date;
+  end_date: string;
   state: Challenge_State_Enum;
-  start_date: Date;
+  start_date: string;
   opponents: readonly OpponentFragmentFragment[];
 };
 
@@ -34,7 +34,7 @@ export type OngoingChallenge = {
   rules: ChallengeRules;
   end_date: Date;
   state: Challenge_State_Enum;
-  start_date: Date;
+  start_date: string;
   created_at: string;
   opponents: readonly OpponentFragmentFragment[];
 };

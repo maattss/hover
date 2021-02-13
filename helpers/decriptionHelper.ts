@@ -33,7 +33,7 @@ const scoreDescription = (challenge: PendingChallenge) => {
   let description = challenge.created_by.name;
   description += ' challenge you to a Score challenge!';
   description += challenge.rules ? ' Be the first person to reach ' + challenge.rules.score + ' points' : '';
-  description += challenge.end_date ? ' by ' + toPrettyDate(challenge.end_date) + '.' : '';
+  description += challenge.end_date ? ' by ' + toPrettyDate(new Date(challenge.end_date)) + '.' : '';
   return description;
 };
 
@@ -44,14 +44,14 @@ const scoreCategoryDescription = (challenge: PendingChallenge) => {
   description += challenge.rules.category
     ? ' in the ' + challenge.rules.category.toString().toLowerCase() + ' category'
     : ' at any valid Hover location';
-  description += challenge.end_date ? ' by ' + toPrettyDate(challenge.end_date) + '.' : '';
+  description += challenge.end_date ? ' by ' + toPrettyDate(new Date(challenge.end_date)) + '.' : '';
   return description;
 };
 const timeDescription = (challenge: PendingChallenge) => {
   let description = challenge.created_by.name;
   description += ' challenge you to a Time challenge!';
   description += challenge.rules.time ? ' Be the first person to reach ' + challenge.rules.time + ' hours' : '';
-  description += challenge.end_date ? ' by ' + toPrettyDate(challenge.end_date) + '.' : '';
+  description += challenge.end_date ? ' by ' + toPrettyDate(new Date(challenge.end_date)) + '.' : '';
   return description;
 };
 const timeCategoryDescription = (challenge: PendingChallenge) => {
@@ -61,14 +61,14 @@ const timeCategoryDescription = (challenge: PendingChallenge) => {
   description += challenge.rules.category
     ? ' in the ' + challenge.rules.category.toString().toLowerCase() + ' category'
     : ' at any valid Hover location';
-  description += challenge.end_date ? ' by ' + toPrettyDate(challenge.end_date) + '.' : '';
+  description += challenge.end_date ? ' by ' + toPrettyDate(new Date(challenge.end_date)) + '.' : '';
   return description;
 };
 
 const defaultDescription = (challenge: PendingChallenge) => {
   let description = challenge.created_by.name + ' challenge you to a ';
   description += challenge.challenge_type + ' challenge!';
-  description += challenge.end_date ? ' by ' + toPrettyDate(challenge.end_date) + '.' : '';
+  description += challenge.end_date ? ' by ' + toPrettyDate(new Date(challenge.end_date)) + '.' : '';
   return description;
 };
 /**
