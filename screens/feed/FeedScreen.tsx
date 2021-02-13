@@ -3,13 +3,14 @@ import { View, StyleSheet, RefreshControl, Button } from 'react-native';
 import ActivityFeedCard from '../../components/feed/ActivityFeedCard';
 import AchievementFeedCard from '../../components/feed/AchievementFeedCard';
 import { Typography, Spacing, Colors } from '../../theme';
-import { ActivityFeedData, AchievementFeedData, ChallengeFeedData } from '../../types/feedTypes';
+import { ActivityFeedData, AchievementFeedData, ChallengeFeedData, FeedData } from '../../types/feedTypes';
 import { CircleGeoFence, GeoFenceCategory, GeoFenceVariant } from '../../types/geoFenceTypes';
 import { AchievementVariant } from '../../types/profileTypes';
 import { useFeedQuery } from '../../graphql/queries/Feed.generated';
 import { ScrollView } from 'react-native-gesture-handler';
 import Loading from '../../components/general/Loading';
 import Error from '../../components/general/Error';
+import { convertToFeedData } from '../../helpers/objectMappers';
 
 // Test data. TODO: Remove
 const testGeoFence: CircleGeoFence = {
@@ -56,6 +57,7 @@ const testChallenge: ChallengeFeedData = {
 const FeedScreen: React.FC = () => {
   const [refreshing, setRefreshing] = useState(false);
   const [limit, setLimit] = useState(10);
+  const [feedElements, setFeedElements] = useState<FeedData[]>([]);
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
     await refetch();
@@ -78,7 +80,8 @@ const FeedScreen: React.FC = () => {
   };
   useEffect(() => {
     if (data && data.feed) {
-      console.log('Feed data', data.feed);
+      const feedData = convertToFeedData(data);
+      // setFeedElements(feedData);
     }
   }, [data]);
 

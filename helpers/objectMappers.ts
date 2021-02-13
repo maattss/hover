@@ -8,12 +8,14 @@ import { Item } from '../components/leaderboard/Leaderboard';
 import { HighscoreQuery } from '../graphql/queries/Highscore.generated';
 import { ProfileUserQuery } from '../graphql/queries/ProfileUser.generated';
 import { UserProfile, Achievement as AchievementType, AchievementVariant } from '../types/profileTypes';
-import { ActivityFeedData } from '../types/feedTypes';
+import { AchievementFeedData, ActivityFeedData, FeedData } from '../types/feedTypes';
 import { Asset } from 'expo-asset';
 import { Challenge_Participant, Challenge_State_Enum, Challenge_Type_Enum, Geofences } from '../types/types';
 import { ChallengeUser, OngoingChallenge, Opponent, PendingChallenge } from '../types/challengeTypes';
 import { GetChallengesQuery } from '../graphql/queries/GetChallenges.generated';
 import { BasicUserFragmentFragment } from '../graphql/Fragments.generated';
+import { FeedQuery } from '../graphql/queries/Feed.generated';
+import { act } from 'react-test-renderer';
 
 // Default location NTNU Trondheim
 export const defaultMapLocation: LatLng = {
@@ -235,6 +237,53 @@ export const convertOpponent = (opponentData: OpponentQueryData) => {
   return opponents;
 };
 
+export const convertToFeedData = (data: FeedQuery) => {
+  const feedData: FeedData[] = [];
+  for (const obj of data.feed) {
+    console.log(obj);
+    if (obj.activitiy) {
+      console.log('activity', obj.activity);
+      //const activity = convertToActivityFeedData(obj.activity);
+      //feedData.push(activity);
+    } else if (obj.user_achievement) {
+      console.log('achievement', obj.user_achievement);
+      //const achievement = convertToAchievementFeedData(obj.achievement);
+      //feedData.push(achievement);
+    }
+  }
+  return feedData;
+};
+export const convertToActivityFeedData: ActivityFeedData = (activity: any) => {
+  return {
+    caption: activity.caption,
+    duration: activity.duration,
+    geoFence: activity.geofence,
+    picture: activity.picture,
+    score: activity.score,
+    startedAt: activity.startedat,
+    userName: activity.userName,
+  } as ActivityFeedData;
+};
+export const convertToAchievementFeedData: AchievementFeedData = (achievement: any) => {
+  const feedData: AchievementFeedData = {
+    achievement: {
+      name: 'test',
+      type: AchievementVariant.SCORE,
+      createdAt: '',
+      description: '',
+      level: 2,
+      rule: {
+        category: '',
+        score: 200,
+      },
+    },
+    picture: achievement.picture,
+    userName: achievement.userName,
+  };
+  return feedData;
+};
+
+// Types
 type OpponentQueryData = ReadonlyArray<
   { readonly __typename: 'challenge_participant' } & Pick<Challenge_Participant, 'state'> & {
       readonly user: { readonly __typename: 'users' } & BasicUserFragmentFragment;

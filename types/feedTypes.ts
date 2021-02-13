@@ -30,3 +30,5 @@ export type ChallengeFeedData = {
   description: string;
   createdAt: string;
 };
+
+export type FeedData = ActivityFeedData | AchievementFeedData;
