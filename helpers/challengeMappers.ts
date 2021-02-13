@@ -11,20 +11,14 @@ export const getChallengeTypeEnum = (challengeType: string): Challenge_Type_Enum
 };
 
 export const getChallengeTypeFields = (challengeType: Challenge_Type_Enum): string[] => {
-  let fields: string[] = [];
   switch (challengeType) {
     case Challenge_Type_Enum.Score:
-      fields = ['SCORE'];
-      break;
+      return ['SCORE'];
     case Challenge_Type_Enum.ScoreCategory:
-      fields = ['SCORE', 'CATEGORY'];
-      break;
+      return ['SCORE', 'CATEGORY'];
     case Challenge_Type_Enum.Time:
-      fields = ['TIME'];
-      break;
+      return ['TIME'];
     case Challenge_Type_Enum.TimeCategory:
-      fields = ['TIME', 'CATEGORY'];
-      break;
+      return ['TIME', 'CATEGORY'];
   }
-  return fields;
 };
