@@ -10,6 +10,7 @@ const ChallengeInfoScreen: React.FC = () => {
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis sapiente error maiores, corporis molestias
         mollitia numquam voluptatem, sunt corrupti fugiat inventore hic doloribus, quidem odit quas consectetur eius
         labore ad!
+        {/* TODO: Insert challenge description */}
       </Text>
     </View>
   );
