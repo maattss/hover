@@ -5,15 +5,17 @@ import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 export type InsertChallengeMutationVariables = Types.Exact<{
   challenge_type?: Types.Maybe<Types.Challenge_Type_Enum>;
-  end_date?: Types.Maybe<Types.Scalars['date']>;
+  end_date: Types.Scalars['date'];
   participants: ReadonlyArray<Types.Challenge_Participant_Insert_Input> | Types.Challenge_Participant_Insert_Input;
+  created_by: Types.Scalars['String'];
+  rules: Types.Scalars['json'];
 }>;
 
 export type InsertChallengeMutation = { readonly __typename: 'mutation_root' } & {
   readonly insert_challenge_one?: Types.Maybe<
     { readonly __typename: 'challenge' } & Pick<
       Types.Challenge,
-      'id' | 'challenge_type' | 'start_date' | 'end_date' | 'state' | 'rules'
+      'id' | 'challenge_type' | 'start_date' | 'end_date' | 'state' | 'rules' | 'created_by'
     > & {
         readonly challenge_participants: ReadonlyArray<
           { readonly __typename: 'challenge_participant' } & {
@@ -27,11 +29,19 @@ export type InsertChallengeMutation = { readonly __typename: 'mutation_root' } &
 export const InsertChallengeDocument = gql`
   mutation InsertChallenge(
     $challenge_type: challenge_type_enum
-    $end_date: date
+    $end_date: date!
     $participants: [challenge_participant_insert_input!]!
+    $created_by: String!
+    $rules: json!
   ) {
     insert_challenge_one(
-      object: { end_date: $end_date, challenge_participants: { data: $participants }, challenge_type: $challenge_type }
+      object: {
+        end_date: $end_date
+        challenge_participants: { data: $participants }
+        challenge_type: $challenge_type
+        created_by: $created_by
+        rules: $rules
+      }
     ) {
       id
       challenge_type
@@ -44,6 +54,7 @@ export const InsertChallengeDocument = gql`
           id
         }
       }
+      created_by
     }
   }
 `;
@@ -64,6 +75,8 @@ export const InsertChallengeDocument = gql`
  *      challenge_type: // value for 'challenge_type'
  *      end_date: // value for 'end_date'
  *      participants: // value for 'participants'
+ *      created_by: // value for 'created_by'
+ *      rules: // value for 'rules'
  *   },
  * });
  */

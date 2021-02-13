@@ -1,9 +1,11 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { Colors, Typography, Spacing } from '../../theme';
 import { timeStampToPresentable } from '../../helpers/dateTimeHelpers';
 import Divider from '../general/Divider';
 import { OngoingChallenge } from '../../types/challengeTypes';
+import { Avatar } from 'react-native-elements';
+import { generateOngoingChallengeDescription } from '../../helpers/decriptionHelper';
 
 interface OngoingChallengeCardProps {
   challenge: OngoingChallenge;
@@ -16,13 +18,13 @@ const OngoingChallengeCard: React.FC<OngoingChallengeCardProps> = ({ challenge }
         return (
           <View style={styles.row}>
             <View style={styles.colum}>
-              <Image source={{ uri: challenge.user.picture }} style={styles.avatar} />
+              <Avatar rounded source={{ uri: challenge.user.picture ?? '' }} size="medium" />
               <Text style={styles.nameText}>{challenge.user.name}</Text>
             </View>
             {challenge.opponents.map((opponent) => (
-              <View key={opponent.id} style={styles.colum}>
-                <Image source={{ uri: opponent.picture }} style={styles.avatar} />
-                <Text style={styles.nameText}>{opponent.name}</Text>
+              <View key={opponent.user.id} style={styles.colum}>
+                <Avatar rounded source={{ uri: opponent.user.picture ?? '' }} size="medium" />
+                <Text style={styles.nameText}>{opponent.user.name}</Text>
               </View>
             ))}
           </View>
@@ -33,14 +35,14 @@ const OngoingChallengeCard: React.FC<OngoingChallengeCardProps> = ({ challenge }
           <View>
             <View style={styles.row}>
               <View style={styles.colum}>
-                <Image source={{ uri: challenge.user.picture }} style={styles.avatar} />
+                <Avatar rounded source={{ uri: challenge.user.picture ?? '' }} size="medium" />
                 <Text style={styles.nameText}>{challenge.user.name}</Text>
               </View>
               <View style={styles.versus}>
                 <Text style={styles.versusText}>vs</Text>
               </View>
               <View style={styles.colum}>
-                <Image source={{ uri: challenge.created_by.picture }} style={styles.avatar} />
+                <Avatar rounded source={{ uri: challenge.created_by.picture ?? '' }} size="medium" />
                 <Text style={styles.nameText}>{challenge.created_by.name}</Text>
               </View>
             </View>
@@ -49,12 +51,12 @@ const OngoingChallengeCard: React.FC<OngoingChallengeCardProps> = ({ challenge }
                 <View>
                   <Text style={styles.opponentHeaderText}>Other partcicipants</Text>
                   {challenge.opponents
-                    .filter((opponent) => opponent.id != challenge.created_by.id)
+                    .filter((opponent) => opponent.user.id != challenge.created_by.id)
                     .map((opponent) => (
-                      <View key={opponent.id} style={styles.opponentRow}>
-                        <Image source={{ uri: opponent.picture }} style={styles.opponentAvatar} />
+                      <View key={opponent.user.id} style={styles.opponentRow}>
+                        <Avatar rounded source={{ uri: opponent.user.picture ?? '' }} size="medium" />
                         <View style={styles.opponentNameStateRow}>
-                          <Text style={styles.opponentNameText}>{opponent.name}</Text>
+                          <Text style={styles.opponentNameText}>{opponent.user.name}</Text>
                           <Text style={styles.opponentStateText}>{opponent.state}</Text>
                         </View>
                       </View>
@@ -72,7 +74,7 @@ const OngoingChallengeCard: React.FC<OngoingChallengeCardProps> = ({ challenge }
     <View style={styles.card}>
       <Opponents />
       <Divider />
-      <Text style={styles.challengeText}>{challenge.challenge_type}</Text>
+      <Text style={styles.challengeText}>{generateOngoingChallengeDescription(challenge)}</Text>
 
       <View style={styles.footer}>
         <Text style={styles.footerText}>{timeStampToPresentable(challenge.created_at)}</Text>

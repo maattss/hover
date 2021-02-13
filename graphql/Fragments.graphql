@@ -1,8 +1,12 @@
-fragment basicUserFragment on users {
+fragment listUserFragment on users {
   id
-  email
   name
   picture
+}
+
+fragment basicUserFragment on users {
+  ...listUserFragment
+  email
   bio
 }
 
@@ -52,7 +56,7 @@ fragment commentFragment on comments {
   activity_id
   content
   user {
-    ...basicUserFragment
+    ...listUserFragment
   }
 }
 
@@ -72,9 +76,6 @@ fragment challengeFragment on challenge {
   id
   challenge_type
   created_at
-  created_by_user {
-    ...basicUserFragment
-  }
   start_date
   end_date
   state
