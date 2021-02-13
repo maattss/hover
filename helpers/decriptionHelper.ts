@@ -4,7 +4,7 @@ import { Challenge_Type_Enum } from '../types/types';
 import { toPrettyDate } from './dateTimeHelpers';
 
 /**
- * PENDING CHALLENGEs DESCRIPTION HELPERS.
+ * PENDING CHALLENGES DESCRIPTION HELPERS.
  */
 export const generateDescription = (challenge: PendingChallenge) => {
   let description;
@@ -72,7 +72,7 @@ const defaultDescription = (challenge: PendingChallenge) => {
   return description;
 };
 /**
- * CREATE CHALLENGE DESCRIPTION HELPERS.
+ * ONGOING CHALLENGES DESCRIPTION HELPERS.
  */
 
 export const generateOngoingChallengeDescription = (challenge: OngoingChallenge) => {
@@ -87,7 +87,7 @@ export const generateOngoingChallengeDescription = (challenge: OngoingChallenge)
 };
 
 /**
- * CREATE CHALLENGE DESCRIPTION HELPERS.
+ * NEW CHALLENGE DESCRIPTION HELPERS.
  */
 
 export const generateNewChallengeDescription = (
