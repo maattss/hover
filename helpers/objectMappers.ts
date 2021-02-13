@@ -241,31 +241,34 @@ export const convertOpponent = (opponentData: OpponentQueryData) => {
 export const convertToFeedData = (data: FeedQuery) => {
   const feedData: FeedData[] = [];
   for (const obj of data.feed) {
+    console.log('Obj', obj);
     if (obj.activity) {
       console.log('Activity', obj.activity);
-      //const activity = convertToActivityFeedData(obj.activity);
+      const activity = convertToActivityFeedData(obj.activity, obj.user, obj.created_at);
+      console.log('Activity converted', activity);
       //feedData.push(activity);
-    } else if (obj.user_achievement) {
+    } else if (obj.user_achievement && obj.user_achievement.achievement) {
       console.log('Achievement', obj.user_achievement);
-      //const achievement = convertToAchievementFeedData(obj.achievement);
+      const achievement = convertToAchievementFeedData(obj.user_achievement.achievement, obj.user, obj.created_at);
+      console.log('Achievement converted', achievement);
       //feedData.push(achievement);
     }
   }
   return feedData;
 };
-export const convertToActivityFeedData: ActivityFeedData = (activity: any) => {
+export const convertToActivityFeedData = (activity: any, user: any, created_at: string) => {
   return {
     caption: activity.caption,
     duration: activity.duration,
-    geoFence: activity.geofence,
+    geoFence: convertToGeoFence(activity.geofence),
     picture: activity.picture,
     score: activity.score,
     startedAt: activity.startedat,
     userName: activity.userName,
   } as ActivityFeedData;
 };
-export const convertToAchievementFeedData: AchievementFeedData = (achievement: any) => {
-  const feedData: AchievementFeedData = {
+export const convertToAchievementFeedData = (achievement: any, user: any, created_at: string) => {
+  return {
     achievement: {
       name: 'test',
       type: AchievementVariant.SCORE,
@@ -279,8 +282,7 @@ export const convertToAchievementFeedData: AchievementFeedData = (achievement: a
     },
     picture: achievement.picture,
     userName: achievement.userName,
-  };
-  return feedData;
+  } as AchievementFeedData;
 };
 
 // Types
