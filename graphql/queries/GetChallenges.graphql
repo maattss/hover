@@ -1,16 +1,21 @@
-query GetChallenges($user_id: String!) {
+query GetChallenges($user_id: String!, $limit: Int = 2) {
   user(id: $user_id) {
-    ...basicUserFragment
+    ...listUserFragment
     pending_challenges: challenge_participants(
       where: { state: { _eq: PENDING }, challenge: { state: { _eq: ACTIVE } } }
+      order_by: {}
     ) {
       challenge {
         ...challengeFragment
-        opponents: challenge_participants(where: { user_id: { _neq: $user_id } }) {
-          user {
-            ...basicUserFragment
-          }
-          state
+        created_by_user {
+          ...listUserFragment
+        }
+        opponents: challenge_participants(
+          where: { user_id: { _neq: $user_id } }
+          limit: $limit
+          order_by: { challenge: { created_at: desc } }
+        ) {
+          ...opponentFragment
         }
       }
     }
@@ -19,11 +24,15 @@ query GetChallenges($user_id: String!) {
     ) {
       challenge {
         ...challengeFragment
-        opponents: challenge_participants(where: { user_id: { _neq: $user_id } }) {
-          user {
-            ...basicUserFragment
-          }
-          state
+        created_by_user {
+          ...listUserFragment
+        }
+        opponents: challenge_participants(
+          where: { user_id: { _neq: $user_id } }
+          limit: $limit
+          order_by: { challenge: { created_at: desc } }
+        ) {
+          ...opponentFragment
         }
       }
     }
@@ -32,11 +41,15 @@ query GetChallenges($user_id: String!) {
     ) {
       challenge {
         ...challengeFragment
-        opponents: challenge_participants(where: { user_id: { _neq: $user_id } }) {
-          user {
-            ...basicUserFragment
-          }
-          state
+        created_by_user {
+          ...listUserFragment
+        }
+        opponents: challenge_participants(
+          where: { user_id: { _neq: $user_id } }
+          limit: $limit
+          order_by: { challenge: { created_at: desc } }
+        ) {
+          ...opponentFragment
         }
       }
     }

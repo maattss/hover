@@ -1,22 +1,17 @@
 /* eslint-disable */
 import * as Types from '../../types/types';
 
-import {
-  BasicUserFragmentFragment,
-  ChallengeFragmentFragment,
-  AchievementFragmentFragment,
-  GeofenceFragmentFragment,
-} from '../Fragments.generated';
+import { ListUserFragmentFragment, ChallengeFragmentFragment, OpponentFragmentFragment } from '../Fragments.generated';
 import { gql } from '@apollo/client';
 import {
-  BasicUserFragmentFragmentDoc,
+  ListUserFragmentFragmentDoc,
   ChallengeFragmentFragmentDoc,
-  AchievementFragmentFragmentDoc,
-  GeofenceFragmentFragmentDoc,
+  OpponentFragmentFragmentDoc,
 } from '../Fragments.generated';
 import * as Apollo from '@apollo/client';
 export type GetChallengesQueryVariables = Types.Exact<{
   user_id: Types.Scalars['String'];
+  limit?: Types.Maybe<Types.Scalars['Int']>;
 }>;
 
 export type GetChallengesQuery = { readonly __typename: 'query_root' } & {
@@ -25,10 +20,9 @@ export type GetChallengesQuery = { readonly __typename: 'query_root' } & {
       readonly pending_challenges: ReadonlyArray<
         { readonly __typename: 'challenge_participant' } & {
           readonly challenge: { readonly __typename: 'challenge' } & {
+            readonly created_by_user: { readonly __typename: 'users' } & ListUserFragmentFragment;
             readonly opponents: ReadonlyArray<
-              { readonly __typename: 'challenge_participant' } & Pick<Types.Challenge_Participant, 'state'> & {
-                  readonly user: { readonly __typename: 'users' } & BasicUserFragmentFragment;
-                }
+              { readonly __typename: 'challenge_participant' } & OpponentFragmentFragment
             >;
           } & ChallengeFragmentFragment;
         }
@@ -36,10 +30,9 @@ export type GetChallengesQuery = { readonly __typename: 'query_root' } & {
       readonly ongoing_challenges: ReadonlyArray<
         { readonly __typename: 'challenge_participant' } & {
           readonly challenge: { readonly __typename: 'challenge' } & {
+            readonly created_by_user: { readonly __typename: 'users' } & ListUserFragmentFragment;
             readonly opponents: ReadonlyArray<
-              { readonly __typename: 'challenge_participant' } & Pick<Types.Challenge_Participant, 'state'> & {
-                  readonly user: { readonly __typename: 'users' } & BasicUserFragmentFragment;
-                }
+              { readonly __typename: 'challenge_participant' } & OpponentFragmentFragment
             >;
           } & ChallengeFragmentFragment;
         }
@@ -47,32 +40,36 @@ export type GetChallengesQuery = { readonly __typename: 'query_root' } & {
       readonly finished_challenges: ReadonlyArray<
         { readonly __typename: 'challenge_participant' } & {
           readonly challenge: { readonly __typename: 'challenge' } & {
+            readonly created_by_user: { readonly __typename: 'users' } & ListUserFragmentFragment;
             readonly opponents: ReadonlyArray<
-              { readonly __typename: 'challenge_participant' } & Pick<Types.Challenge_Participant, 'state'> & {
-                  readonly user: { readonly __typename: 'users' } & BasicUserFragmentFragment;
-                }
+              { readonly __typename: 'challenge_participant' } & OpponentFragmentFragment
             >;
           } & ChallengeFragmentFragment;
         }
       >;
-    } & BasicUserFragmentFragment
+    } & ListUserFragmentFragment
   >;
 };
 
 export const GetChallengesDocument = gql`
-  query GetChallenges($user_id: String!) {
+  query GetChallenges($user_id: String!, $limit: Int = 2) {
     user(id: $user_id) {
-      ...basicUserFragment
+      ...listUserFragment
       pending_challenges: challenge_participants(
         where: { state: { _eq: PENDING }, challenge: { state: { _eq: ACTIVE } } }
+        order_by: {}
       ) {
         challenge {
           ...challengeFragment
-          opponents: challenge_participants(where: { user_id: { _neq: $user_id } }) {
-            user {
-              ...basicUserFragment
-            }
-            state
+          created_by_user {
+            ...listUserFragment
+          }
+          opponents: challenge_participants(
+            where: { user_id: { _neq: $user_id } }
+            limit: $limit
+            order_by: { challenge: { created_at: desc } }
+          ) {
+            ...opponentFragment
           }
         }
       }
@@ -81,11 +78,15 @@ export const GetChallengesDocument = gql`
       ) {
         challenge {
           ...challengeFragment
-          opponents: challenge_participants(where: { user_id: { _neq: $user_id } }) {
-            user {
-              ...basicUserFragment
-            }
-            state
+          created_by_user {
+            ...listUserFragment
+          }
+          opponents: challenge_participants(
+            where: { user_id: { _neq: $user_id } }
+            limit: $limit
+            order_by: { challenge: { created_at: desc } }
+          ) {
+            ...opponentFragment
           }
         }
       }
@@ -94,18 +95,23 @@ export const GetChallengesDocument = gql`
       ) {
         challenge {
           ...challengeFragment
-          opponents: challenge_participants(where: { user_id: { _neq: $user_id } }) {
-            user {
-              ...basicUserFragment
-            }
-            state
+          created_by_user {
+            ...listUserFragment
+          }
+          opponents: challenge_participants(
+            where: { user_id: { _neq: $user_id } }
+            limit: $limit
+            order_by: { challenge: { created_at: desc } }
+          ) {
+            ...opponentFragment
           }
         }
       }
     }
   }
-  ${BasicUserFragmentFragmentDoc}
+  ${ListUserFragmentFragmentDoc}
   ${ChallengeFragmentFragmentDoc}
+  ${OpponentFragmentFragmentDoc}
 `;
 
 /**
@@ -121,6 +127,7 @@ export const GetChallengesDocument = gql`
  * const { data, loading, error } = useGetChallengesQuery({
  *   variables: {
  *      user_id: // value for 'user_id'
+ *      limit: // value for 'limit'
  *   },
  * });
  */

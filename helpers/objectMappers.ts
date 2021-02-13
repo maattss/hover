@@ -10,10 +10,9 @@ import { ProfileUserQuery } from '../graphql/queries/ProfileUser.generated';
 import { UserProfile, Achievement as AchievementType, AchievementVariant } from '../types/profileTypes';
 import { ActivityFeedData } from '../types/feedTypes';
 import { Asset } from 'expo-asset';
-import { Challenge_Participant, Challenge_State_Enum, Challenge_Type_Enum, Geofences } from '../types/types';
-import { ChallengeUser, OngoingChallenge, Opponent, PendingChallenge } from '../types/challengeTypes';
+import { Challenge_State_Enum, Challenge_Type_Enum, Geofences } from '../types/types';
+import { OngoingChallenge, PendingChallenge } from '../types/challengeTypes';
 import { GetChallengesQuery } from '../graphql/queries/GetChallenges.generated';
-import { BasicUserFragmentFragment } from '../graphql/Fragments.generated';
 
 // Default location NTNU Trondheim
 export const defaultMapLocation: LatLng = {
@@ -149,7 +148,7 @@ export const convertToUserProfile = (data: ProfileUserQuery | undefined) => {
         userName: data.user ? data.user.name : defaultUserProfile.name,
         startedAt: obj.started_at,
         score: obj.score ?? 0,
-        picture: data.user ? data.user.picture : defaultUserProfile.picture,
+        picture: data.user?.picture ? data.user.picture : defaultUserProfile.picture.toString(),
         geoFence: convertToGeoFence(obj.geofence),
         caption: obj.caption ?? '',
         duration: obj.duration,
@@ -171,6 +170,7 @@ export const convertToUserProfile = (data: ProfileUserQuery | undefined) => {
     } as UserProfile;
   }
 };
+
 type UserChallenges = {
   pendingChallenges: PendingChallenge[];
   ongoingChallenges: OngoingChallenge[];
@@ -180,8 +180,9 @@ export const convertChallenge = (challengeData: GetChallengesQuery) => {
   const ongoingChallenges: OngoingChallenge[] = [];
   if (challengeData && challengeData.user && challengeData.user?.id && challengeData.user?.pending_challenges) {
     const user_id = challengeData.user.id;
+
     challengeData.user.pending_challenges.forEach((obj) => {
-      const opponents = convertOpponent(obj.challenge.opponents);
+      const opponents = obj.challenge.opponents;
       if (opponents.length >= 1) {
         pendingChallenges.push({
           user_id: user_id,
@@ -199,9 +200,9 @@ export const convertChallenge = (challengeData: GetChallengesQuery) => {
     });
   }
   if (challengeData && challengeData.user && challengeData.user?.ongoing_challenges) {
-    const user: ChallengeUser = challengeData.user;
+    const user = challengeData.user;
     challengeData.user.ongoing_challenges.forEach((obj) => {
-      const opponents = convertOpponent(obj.challenge.opponents);
+      const opponents = obj.challenge.opponents;
       ongoingChallenges.push({
         user: user,
         created_by: obj.challenge.created_by_user,
@@ -218,28 +219,6 @@ export const convertChallenge = (challengeData: GetChallengesQuery) => {
   }
   return { pendingChallenges, ongoingChallenges } as UserChallenges;
 };
-
-export const convertOpponent = (opponentData: OpponentQueryData) => {
-  const opponents: Opponent[] = [];
-  if (opponentData) {
-    opponentData.forEach((obj) =>
-      opponents.push({
-        id: obj.user.id,
-        name: obj.user.name,
-        state: obj.state,
-        picture: obj.user.picture,
-        bio: obj.user.bio,
-      } as Opponent),
-    );
-  }
-  return opponents;
-};
-
-type OpponentQueryData = ReadonlyArray<
-  { readonly __typename: 'challenge_participant' } & Pick<Challenge_Participant, 'state'> & {
-      readonly user: { readonly __typename: 'users' } & BasicUserFragmentFragment;
-    }
->;
 
 type GeoFencesQuery = {
   readonly __typename: 'geofences';

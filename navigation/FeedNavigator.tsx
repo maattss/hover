@@ -40,6 +40,6 @@ export default FeedNavigator;
 const styles = StyleSheet.create({
   headericon: {
     ...Typography.icon,
-    marginRight: 10,
+    marginRight: 20,
   },
 });
