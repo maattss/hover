@@ -240,13 +240,12 @@ export const convertOpponent = (opponentData: OpponentQueryData) => {
 export const convertToFeedData = (data: FeedQuery) => {
   const feedData: FeedData[] = [];
   for (const obj of data.feed) {
-    console.log(obj);
-    if (obj.activitiy) {
-      console.log('activity', obj.activity);
+    if (obj.activity) {
+      console.log('Activity', obj.activity);
       //const activity = convertToActivityFeedData(obj.activity);
       //feedData.push(activity);
     } else if (obj.user_achievement) {
-      console.log('achievement', obj.user_achievement);
+      console.log('Achievement', obj.user_achievement);
       //const achievement = convertToAchievementFeedData(obj.achievement);
       //feedData.push(achievement);
     }

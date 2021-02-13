@@ -88,7 +88,7 @@ export type FullFeedFragmentFragment = { readonly __typename: 'feed' } & Pick<
   'id' | 'activity_id' | 'achievement_id' | 'created_at'
 > & {
     readonly user?: Types.Maybe<{ readonly __typename: 'users' } & BasicUserFragmentFragment>;
-    readonly activity?: Types.Maybe<{ readonly __typename: 'activities' } & BasicActivityFragmentFragment>;
+    readonly activity?: Types.Maybe<{ readonly __typename: 'activities' } & ActivityFragmentFragment>;
     readonly user_achievement?: Types.Maybe<
       { readonly __typename: 'user_achievement' } & {
         readonly achievement: { readonly __typename: 'achievement' } & AchievementFragmentFragment;
@@ -256,7 +256,7 @@ export const FullFeedFragmentFragmentDoc = gql`
     }
     activity_id
     activity {
-      ...basicActivityFragment
+      ...activityFragment
     }
     achievement_id
     user_achievement {
@@ -267,6 +267,6 @@ export const FullFeedFragmentFragmentDoc = gql`
     created_at
   }
   ${BasicUserFragmentFragmentDoc}
-  ${BasicActivityFragmentFragmentDoc}
+  ${ActivityFragmentFragmentDoc}
   ${AchievementFragmentFragmentDoc}
 `;

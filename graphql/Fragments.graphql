@@ -136,7 +136,7 @@ fragment fullFeedFragment on feed {
   }
   activity_id
   activity {
-    ...basicActivityFragment
+    ...activityFragment
   }
   achievement_id
   user_achievement {
