@@ -56,7 +56,7 @@ const testChallenge: ChallengeFeedData = {
 
 const FeedScreen: React.FC = () => {
   const [refreshing, setRefreshing] = useState(false);
-  const [limit, setLimit] = useState(10);
+  const [limit, setLimit] = useState(1);
   const [feedElements, setFeedElements] = useState<FeedData[]>([]);
   const onRefresh = useCallback(async () => {
     setRefreshing(true);

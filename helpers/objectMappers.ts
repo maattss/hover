@@ -7,11 +7,11 @@ import { CircleGeoFence, GeoFence, GeoFenceCategory, GeoFenceVariant, PolygonGeo
 import { Item } from '../components/leaderboard/Leaderboard';
 import { HighscoreQuery } from '../graphql/queries/Highscore.generated';
 import { ProfileUserQuery } from '../graphql/queries/ProfileUser.generated';
-import { UserProfile, Achievement as AchievementType, AchievementVariant } from '../types/profileTypes';
-import { AchievementFeedData, ActivityFeedData, FeedData } from '../types/feedTypes';
+import { UserProfile, Achievement, AchievementVariant, Activity } from '../types/profileTypes';
+import { AchievementFeedData, ActivityFeedData, FeedData, User } from '../types/feedTypes';
 import { Asset } from 'expo-asset';
-import { Challenge_State_Enum, Challenge_Type_Enum, Geofences } from '../types/types';
-import { OngoingChallenge, PendingChallenge } from '../types/challengeTypes';
+import { Challenge_Participant, Challenge_State_Enum, Challenge_Type_Enum, Geofences } from '../types/types';
+import { OngoingChallenge, Opponent, PendingChallenge } from '../types/challengeTypes';
 import { GetChallengesQuery } from '../graphql/queries/GetChallenges.generated';
 import { BasicUserFragmentFragment } from '../graphql/Fragments.generated';
 import { FeedQuery } from '../graphql/queries/Feed.generated';
@@ -256,32 +256,45 @@ export const convertToFeedData = (data: FeedQuery) => {
   }
   return feedData;
 };
-export const convertToActivityFeedData = (activity: any, user: any, created_at: string) => {
+export const convertToActivityFeedData = (activity: Activity, user: User, createdAt: string) => {
   return {
-    caption: activity.caption,
-    duration: activity.duration,
-    geoFence: convertToGeoFence(activity.geofence),
-    picture: activity.picture,
-    score: activity.score,
-    startedAt: activity.startedat,
-    userName: activity.userName,
+    activity: {
+      caption: activity.caption,
+      duration: activity.duration,
+      geoFence: convertToGeoFence(activity.geoFence), //TODO: Fix
+      score: activity.score,
+    },
+    user: {
+      bio: user.bio,
+      email: user.email,
+      id: user.id,
+      name: user.name,
+      picture: user.picture,
+    },
+    createdAt: createdAt,
   } as ActivityFeedData;
 };
-export const convertToAchievementFeedData = (achievement: any, user: any, created_at: string) => {
+export const convertToAchievementFeedData = (achievement: Achievement, user: User, createdAt: string) => {
   return {
     achievement: {
-      name: 'test',
-      type: AchievementVariant.SCORE,
-      createdAt: '',
-      description: '',
-      level: 2,
+      name: achievement.name,
+      type: achievement.type,
+      createdAt: achievement.createdAt,
+      description: achievement.description,
+      level: achievement.level,
       rule: {
-        category: '',
-        score: 200,
+        category: achievement.rule.category,
+        score: achievement.rule.score,
       },
     },
-    picture: achievement.picture,
-    userName: achievement.userName,
+    user: {
+      bio: user.bio,
+      email: user.email,
+      id: user.id,
+      name: user.name,
+      picture: user.picture,
+    },
+    createdAt: createdAt,
   } as AchievementFeedData;
 };
 

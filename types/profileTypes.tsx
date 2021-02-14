@@ -1,4 +1,5 @@
 import { ActivityFeedData } from './feedTypes';
+import { GeoFence } from './geoFenceTypes';
 
 export enum AchievementVariant {
   DEFAULT,
@@ -33,4 +34,14 @@ export type Achievement = {
   createdAt: string;
   level: number;
   rule: AchievementRule;
+};
+
+export type Activity = {
+  activityId: string;
+  caption: string;
+  geoFence: GeoFence;
+  startedAt: string;
+  stoppedAt: string;
+  score: number;
+  duration: number;
 };

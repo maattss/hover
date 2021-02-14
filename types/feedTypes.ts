@@ -1,5 +1,4 @@
-import { GeoFence } from './geoFenceTypes';
-import { Achievement as AchievementType } from '../types/profileTypes';
+import { Achievement, Activity } from '../types/profileTypes';
 
 export enum FeedCategory {
   ACTIVITY,
@@ -8,19 +7,16 @@ export enum FeedCategory {
 }
 
 export type ActivityFeedData = {
-  userName: string;
-  picture: string;
-  caption: string;
-  geoFence: GeoFence | undefined;
-  startedAt: string;
-  score: number;
-  duration: number;
+  user: User;
+  activity: Activity;
+  createdAt: string;
 };
 export type AchievementFeedData = {
-  userName: string;
-  picture: string;
-  achievement: AchievementType;
+  user: User;
+  achievement: Achievement;
+  createdAt: string;
 };
+
 export type ChallengeFeedData = {
   name: string;
   userPicture1: string;
@@ -29,6 +25,13 @@ export type ChallengeFeedData = {
   userName2: string;
   description: string;
   createdAt: string;
+};
+export type User = {
+  bio: string;
+  email: string;
+  id: string;
+  name: string;
+  picture: string;
 };
 
 export type FeedData = ActivityFeedData | AchievementFeedData;
