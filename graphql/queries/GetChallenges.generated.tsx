@@ -57,52 +57,45 @@ export const GetChallengesDocument = gql`
       ...listUserFragment
       pending_challenges: challenge_participants(
         where: { state: { _eq: PENDING }, challenge: { state: { _eq: ACTIVE } } }
-        order_by: {}
+        limit: $limit
+        order_by: { challenge: { created_at: desc } }
       ) {
         challenge {
           ...challengeFragment
           created_by_user {
             ...listUserFragment
           }
-          opponents: challenge_participants(
-            where: { user_id: { _neq: $user_id } }
-            limit: $limit
-            order_by: { challenge: { created_at: desc } }
-          ) {
+          opponents: challenge_participants(where: { user_id: { _neq: $user_id } }) {
             ...opponentFragment
           }
         }
       }
       ongoing_challenges: challenge_participants(
         where: { state: { _eq: ACCEPTED }, challenge: { state: { _eq: ACTIVE } } }
+        limit: $limit
+        order_by: { challenge: { created_at: desc } }
       ) {
         challenge {
           ...challengeFragment
           created_by_user {
             ...listUserFragment
           }
-          opponents: challenge_participants(
-            where: { user_id: { _neq: $user_id } }
-            limit: $limit
-            order_by: { challenge: { created_at: desc } }
-          ) {
+          opponents: challenge_participants(order_by: { challenge_participant_state: { state: asc } }) {
             ...opponentFragment
           }
         }
       }
       finished_challenges: challenge_participants(
         where: { state: { _eq: ACCEPTED }, challenge: { state: { _eq: FINISHED } } }
+        limit: $limit
+        order_by: { challenge: { created_at: desc } }
       ) {
         challenge {
           ...challengeFragment
           created_by_user {
             ...listUserFragment
           }
-          opponents: challenge_participants(
-            where: { user_id: { _neq: $user_id } }
-            limit: $limit
-            order_by: { challenge: { created_at: desc } }
-          ) {
+          opponents: challenge_participants(where: { user_id: { _neq: $user_id } }) {
             ...opponentFragment
           }
         }

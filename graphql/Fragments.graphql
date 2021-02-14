@@ -99,6 +99,7 @@ fragment opponentFragment on challenge_participant {
     picture
   }
   state
+  progress
 }
 
 fragment challengeTypeFragment on challenge_type {

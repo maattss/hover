@@ -1524,6 +1524,7 @@ export type Challenge_Participant = {
   challenge_id: Scalars['Int'];
   /** An object relationship */
   challenge_participant_state: Challenge_Participant_State;
+  progress?: Maybe<Scalars['Int']>;
   state: Challenge_Participant_State_Enum;
   /** An object relationship */
   user: Users;
@@ -1584,11 +1585,13 @@ export type Challenge_Participant_Arr_Rel_Insert_Input = {
 export type Challenge_Participant_Avg_Fields = {
   __typename?: 'challenge_participant_avg_fields';
   challenge_id?: Maybe<Scalars['Float']>;
+  progress?: Maybe<Scalars['Float']>;
 };
 
 /** order by avg() on columns of table "challenge_participant" */
 export type Challenge_Participant_Avg_Order_By = {
   challenge_id?: Maybe<Order_By>;
+  progress?: Maybe<Order_By>;
 };
 
 /** Boolean expression to filter rows from the table "challenge_participant". All fields are combined with a logical 'AND'. */
@@ -1599,6 +1602,7 @@ export type Challenge_Participant_Bool_Exp = {
   challenge?: Maybe<Challenge_Bool_Exp>;
   challenge_id?: Maybe<Int_Comparison_Exp>;
   challenge_participant_state?: Maybe<Challenge_Participant_State_Bool_Exp>;
+  progress?: Maybe<Int_Comparison_Exp>;
   state?: Maybe<Challenge_Participant_State_Enum_Comparison_Exp>;
   user?: Maybe<Users_Bool_Exp>;
   user_id?: Maybe<String_Comparison_Exp>;
@@ -1613,6 +1617,7 @@ export enum Challenge_Participant_Constraint {
 /** input type for incrementing integer column in table "challenge_participant" */
 export type Challenge_Participant_Inc_Input = {
   challenge_id?: Maybe<Scalars['Int']>;
+  progress?: Maybe<Scalars['Int']>;
 };
 
 /** input type for inserting data into table "challenge_participant" */
@@ -1620,6 +1625,7 @@ export type Challenge_Participant_Insert_Input = {
   challenge?: Maybe<Challenge_Obj_Rel_Insert_Input>;
   challenge_id?: Maybe<Scalars['Int']>;
   challenge_participant_state?: Maybe<Challenge_Participant_State_Obj_Rel_Insert_Input>;
+  progress?: Maybe<Scalars['Int']>;
   state?: Maybe<Challenge_Participant_State_Enum>;
   user?: Maybe<Users_Obj_Rel_Insert_Input>;
   user_id?: Maybe<Scalars['String']>;
@@ -1629,12 +1635,14 @@ export type Challenge_Participant_Insert_Input = {
 export type Challenge_Participant_Max_Fields = {
   __typename?: 'challenge_participant_max_fields';
   challenge_id?: Maybe<Scalars['Int']>;
+  progress?: Maybe<Scalars['Int']>;
   user_id?: Maybe<Scalars['String']>;
 };
 
 /** order by max() on columns of table "challenge_participant" */
 export type Challenge_Participant_Max_Order_By = {
   challenge_id?: Maybe<Order_By>;
+  progress?: Maybe<Order_By>;
   user_id?: Maybe<Order_By>;
 };
 
@@ -1642,12 +1650,14 @@ export type Challenge_Participant_Max_Order_By = {
 export type Challenge_Participant_Min_Fields = {
   __typename?: 'challenge_participant_min_fields';
   challenge_id?: Maybe<Scalars['Int']>;
+  progress?: Maybe<Scalars['Int']>;
   user_id?: Maybe<Scalars['String']>;
 };
 
 /** order by min() on columns of table "challenge_participant" */
 export type Challenge_Participant_Min_Order_By = {
   challenge_id?: Maybe<Order_By>;
+  progress?: Maybe<Order_By>;
   user_id?: Maybe<Order_By>;
 };
 
@@ -1678,6 +1688,7 @@ export type Challenge_Participant_Order_By = {
   challenge?: Maybe<Challenge_Order_By>;
   challenge_id?: Maybe<Order_By>;
   challenge_participant_state?: Maybe<Challenge_Participant_State_Order_By>;
+  progress?: Maybe<Order_By>;
   state?: Maybe<Order_By>;
   user?: Maybe<Users_Order_By>;
   user_id?: Maybe<Order_By>;
@@ -1694,6 +1705,8 @@ export enum Challenge_Participant_Select_Column {
   /** column name */
   ChallengeId = 'challenge_id',
   /** column name */
+  Progress = 'progress',
+  /** column name */
   State = 'state',
   /** column name */
   UserId = 'user_id',
@@ -1702,6 +1715,7 @@ export enum Challenge_Participant_Select_Column {
 /** input type for updating data in table "challenge_participant" */
 export type Challenge_Participant_Set_Input = {
   challenge_id?: Maybe<Scalars['Int']>;
+  progress?: Maybe<Scalars['Int']>;
   state?: Maybe<Challenge_Participant_State_Enum>;
   user_id?: Maybe<Scalars['String']>;
 };
@@ -1880,50 +1894,60 @@ export enum Challenge_Participant_State_Update_Column {
 export type Challenge_Participant_Stddev_Fields = {
   __typename?: 'challenge_participant_stddev_fields';
   challenge_id?: Maybe<Scalars['Float']>;
+  progress?: Maybe<Scalars['Float']>;
 };
 
 /** order by stddev() on columns of table "challenge_participant" */
 export type Challenge_Participant_Stddev_Order_By = {
   challenge_id?: Maybe<Order_By>;
+  progress?: Maybe<Order_By>;
 };
 
 /** aggregate stddev_pop on columns */
 export type Challenge_Participant_Stddev_Pop_Fields = {
   __typename?: 'challenge_participant_stddev_pop_fields';
   challenge_id?: Maybe<Scalars['Float']>;
+  progress?: Maybe<Scalars['Float']>;
 };
 
 /** order by stddev_pop() on columns of table "challenge_participant" */
 export type Challenge_Participant_Stddev_Pop_Order_By = {
   challenge_id?: Maybe<Order_By>;
+  progress?: Maybe<Order_By>;
 };
 
 /** aggregate stddev_samp on columns */
 export type Challenge_Participant_Stddev_Samp_Fields = {
   __typename?: 'challenge_participant_stddev_samp_fields';
   challenge_id?: Maybe<Scalars['Float']>;
+  progress?: Maybe<Scalars['Float']>;
 };
 
 /** order by stddev_samp() on columns of table "challenge_participant" */
 export type Challenge_Participant_Stddev_Samp_Order_By = {
   challenge_id?: Maybe<Order_By>;
+  progress?: Maybe<Order_By>;
 };
 
 /** aggregate sum on columns */
 export type Challenge_Participant_Sum_Fields = {
   __typename?: 'challenge_participant_sum_fields';
   challenge_id?: Maybe<Scalars['Int']>;
+  progress?: Maybe<Scalars['Int']>;
 };
 
 /** order by sum() on columns of table "challenge_participant" */
 export type Challenge_Participant_Sum_Order_By = {
   challenge_id?: Maybe<Order_By>;
+  progress?: Maybe<Order_By>;
 };
 
 /** update columns of table "challenge_participant" */
 export enum Challenge_Participant_Update_Column {
   /** column name */
   ChallengeId = 'challenge_id',
+  /** column name */
+  Progress = 'progress',
   /** column name */
   State = 'state',
   /** column name */
@@ -1934,33 +1958,39 @@ export enum Challenge_Participant_Update_Column {
 export type Challenge_Participant_Var_Pop_Fields = {
   __typename?: 'challenge_participant_var_pop_fields';
   challenge_id?: Maybe<Scalars['Float']>;
+  progress?: Maybe<Scalars['Float']>;
 };
 
 /** order by var_pop() on columns of table "challenge_participant" */
 export type Challenge_Participant_Var_Pop_Order_By = {
   challenge_id?: Maybe<Order_By>;
+  progress?: Maybe<Order_By>;
 };
 
 /** aggregate var_samp on columns */
 export type Challenge_Participant_Var_Samp_Fields = {
   __typename?: 'challenge_participant_var_samp_fields';
   challenge_id?: Maybe<Scalars['Float']>;
+  progress?: Maybe<Scalars['Float']>;
 };
 
 /** order by var_samp() on columns of table "challenge_participant" */
 export type Challenge_Participant_Var_Samp_Order_By = {
   challenge_id?: Maybe<Order_By>;
+  progress?: Maybe<Order_By>;
 };
 
 /** aggregate variance on columns */
 export type Challenge_Participant_Variance_Fields = {
   __typename?: 'challenge_participant_variance_fields';
   challenge_id?: Maybe<Scalars['Float']>;
+  progress?: Maybe<Scalars['Float']>;
 };
 
 /** order by variance() on columns of table "challenge_participant" */
 export type Challenge_Participant_Variance_Order_By = {
   challenge_id?: Maybe<Order_By>;
+  progress?: Maybe<Order_By>;
 };
 
 /** primary key columns input for table: "challenge" */

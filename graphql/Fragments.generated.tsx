@@ -58,7 +58,7 @@ export type AchievementFragmentFragment = { readonly __typename: 'achievement' }
 
 export type OpponentFragmentFragment = { readonly __typename: 'challenge_participant' } & Pick<
   Types.Challenge_Participant,
-  'state'
+  'state' | 'progress'
 > & { readonly user: { readonly __typename: 'users' } & Pick<Types.Users, 'id' | 'name' | 'picture'> };
 
 export type ChallengeTypeFragmentFragment = { readonly __typename: 'challenge_type' } & Pick<
@@ -190,6 +190,7 @@ export const OpponentFragmentFragmentDoc = gql`
       picture
     }
     state
+    progress
   }
 `;
 export const ChallengeTypeFragmentFragmentDoc = gql`
