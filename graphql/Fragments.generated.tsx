@@ -49,7 +49,10 @@ export type GeofenceFragmentFragment = { readonly __typename: 'geofences' } & Pi
 export type ChallengeFragmentFragment = { readonly __typename: 'challenge' } & Pick<
   Types.Challenge,
   'id' | 'challenge_type' | 'created_at' | 'start_date' | 'end_date' | 'state' | 'rules'
->;
+> & {
+    readonly created_by_user: { readonly __typename: 'users' } & ListUserFragmentFragment;
+    readonly opponents: ReadonlyArray<{ readonly __typename: 'challenge_participant' } & OpponentFragmentFragment>;
+  };
 
 export type AchievementFragmentFragment = { readonly __typename: 'achievement' } & Pick<
   Types.Achievement,
@@ -171,17 +174,6 @@ export const CommentFragmentFragmentDoc = gql`
   }
   ${ListUserFragmentFragmentDoc}
 `;
-export const ChallengeFragmentFragmentDoc = gql`
-  fragment challengeFragment on challenge {
-    id
-    challenge_type
-    created_at
-    start_date
-    end_date
-    state
-    rules
-  }
-`;
 export const OpponentFragmentFragmentDoc = gql`
   fragment opponentFragment on challenge_participant {
     user {
@@ -192,6 +184,25 @@ export const OpponentFragmentFragmentDoc = gql`
     state
     progress
   }
+`;
+export const ChallengeFragmentFragmentDoc = gql`
+  fragment challengeFragment on challenge {
+    id
+    challenge_type
+    created_at
+    start_date
+    end_date
+    state
+    rules
+    created_by_user {
+      ...listUserFragment
+    }
+    opponents: challenge_participants(order_by: { challenge_participant_state: { state: asc } }) {
+      ...opponentFragment
+    }
+  }
+  ${ListUserFragmentFragmentDoc}
+  ${OpponentFragmentFragmentDoc}
 `;
 export const ChallengeTypeFragmentFragmentDoc = gql`
   fragment challengeTypeFragment on challenge_type {
