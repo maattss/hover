@@ -3,75 +3,27 @@ import { View, StyleSheet, RefreshControl, Button, Text } from 'react-native';
 import ActivityFeedCard from '../../components/feed/ActivityFeedCard';
 import AchievementFeedCard from '../../components/feed/AchievementFeedCard';
 import { Typography, Spacing, Colors } from '../../theme';
-import {
-  ActivityFeedData,
-  AchievementFeedData,
-  ChallengeFeedData,
-  FeedData,
-  FeedCategory,
-} from '../../types/feedTypes';
-import { CircleGeoFence, GeoFenceCategory, GeoFenceVariant } from '../../types/geoFenceTypes';
-import { AchievementVariant } from '../../types/profileTypes';
+import { FeedData, FeedCategory, ActivityFeedData } from '../../types/feedTypes';
+
 import { useFeedQuery } from '../../graphql/queries/Feed.generated';
 import { ScrollView } from 'react-native-gesture-handler';
 import Loading from '../../components/general/Loading';
 import Error from '../../components/general/Error';
 import { convertToFeedData } from '../../helpers/objectMappers';
 
-// Test data. TODO: Remove
-const testGeoFence: CircleGeoFence = {
-  id: 9,
-  latitude: 63.431731,
-  longitude: 10.406626,
-  radius: 50,
-  name: 'Test name',
-  category: GeoFenceCategory.EDUCATION,
-  variant: GeoFenceVariant.CIRCLE,
-  description: 'Test description',
-};
-const testActivity: ActivityFeedData = {
-  userName: 'Siri Mykland',
-  caption: 'Very nice activity!',
-  geoFence: testGeoFence,
-  startedAt: '2021-01-29T10:00:00+01:00',
-  picture: 'https://api.multiavatar.com/Kuninori%20Bun%20Lord.png',
-  score: 200,
-  duration: 100,
-};
-const testAchievement: AchievementFeedData = {
-  userName: 'Mats Tyldum',
-  picture: 'https://api.multiavatar.com/c68e82f2fb46979b85.png',
-  achievement: {
-    name: '1000 points',
-    description: 'Achieved 1000 points!',
-    type: AchievementVariant.SCORE,
-    createdAt: '2021-01-28T09:00:00+01:00',
-    level: 1,
-    rule: { score: 100, category: 'CULTURE' },
-  },
-};
-const testChallenge: ChallengeFeedData = {
-  name: 'MaxPoints7Days',
-  userName1: 'Mats Tyldum',
-  userName2: 'Siri Mykland',
-  userPicture1: 'https://api.multiavatar.com/c68e82f2fb46979b85.png',
-  userPicture2: 'https://api.multiavatar.com/Kuninori%20Bun%20Lord.png',
-  createdAt: '2021-01-29T13:00:00+01:00',
-  description: 'Highest amount of points in the next 7 days.',
-};
-
 const renderFeed = (feedElements: FeedData[]) => {
-  return feedElements.map((element, index) => {
-    if (element.feedCategory === FeedCategory.ACTIVITY) {
+  return feedElements.map((data, index) => {
+    if (data.feedCategory === FeedCategory.ACTIVITY) {
       return (
-        <View key={index}>
-          <Text style={{ color: 'white' }}>Activity</Text>
+        <View key={index} style={styles.element}>
+          <ActivityFeedCard data={data as ActivityFeedData} />
         </View>
       );
-    } else if (element.feedCategory === FeedCategory.ACHIEVEMENT) {
+    } else if (data.feedCategory === FeedCategory.ACHIEVEMENT) {
       return (
-        <View key={index}>
-          <Text style={{ color: 'white' }}>Achievement</Text>
+        <View key={index} style={styles.element}>
+          <Text>Achievement</Text>
+          {/* <AchievementFeedCard achievement={element as AchievementFeedData} /> */}
         </View>
       );
     }
@@ -126,16 +78,6 @@ const FeedScreen: React.FC = () => {
           progressBackgroundColor={Colors.transparent}
         />
       }>
-      <View>
-        {/* TODO: Replace examples with refreshable list with data from API */}
-        <View style={styles.element}>
-          <ActivityFeedCard activity={testActivity} />
-        </View>
-        <View style={styles.element}>
-          <AchievementFeedCard data={testAchievement} />
-        </View>
-        <Button title={'Load more...'} onPress={loadMoreFeedElements}></Button>
-      </View>
       {renderFeed(feedElements)}
     </ScrollView>
   );

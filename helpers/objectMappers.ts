@@ -13,7 +13,12 @@ import { Asset } from 'expo-asset';
 import { Challenge_Participant, Challenge_State_Enum, Challenge_Type_Enum, Geofences } from '../types/types';
 import { OngoingChallenge, Opponent, PendingChallenge } from '../types/challengeTypes';
 import { GetChallengesQuery } from '../graphql/queries/GetChallenges.generated';
-import { BasicUserFragmentFragment } from '../graphql/Fragments.generated';
+import {
+  AchievementFragmentFragment,
+  ActivityFragmentFragment,
+  BasicUserFragmentFragment,
+  ListUserFragmentFragment,
+} from '../graphql/Fragments.generated';
 import { FeedQuery } from '../graphql/queries/Feed.generated';
 
 // Default location NTNU Trondheim
@@ -242,22 +247,20 @@ export const convertToFeedData = (data: FeedQuery) => {
   const feedData: FeedData[] = [];
   for (const obj of data.feed) {
     if (obj.activity) {
-      feedData.push(convertToActivityFeedData(obj.activity as Activity, obj.user as User, obj.created_at as string));
+      feedData.push(convertToActivityFeedData(obj.activity, obj.user, obj.created_at));
     } else if (obj.user_achievement && obj.user_achievement.achievement) {
-      feedData.push(
-        convertToAchievementFeedData(
-          obj.user_achievement.achievement as Achievement,
-          obj.user as User,
-          obj.created_at as string,
-        ),
-      );
+      feedData.push(convertToAchievementFeedData(obj.user_achievement.achievement, obj.user, obj.created_at));
     } else {
       console.error('Error converting feed data. Data is not an activity or achievement!');
     }
   }
   return feedData;
 };
-export const convertToActivityFeedData = (activity: Activity, user: User, createdAt: string) => {
+export const convertToActivityFeedData = (
+  activity: ActivityFragmentFragment,
+  user: ListUserFragmentFragment | null | undefined,
+  createdAt: string,
+) => {
   return {
     activity: activity,
     user: user,
@@ -265,7 +268,11 @@ export const convertToActivityFeedData = (activity: Activity, user: User, create
     feedCategory: FeedCategory.ACTIVITY,
   } as ActivityFeedData;
 };
-export const convertToAchievementFeedData = (achievement: Achievement, user: User, createdAt: string) => {
+export const convertToAchievementFeedData = (
+  achievement: AchievementFragmentFragment,
+  user: ListUserFragmentFragment | null | undefined,
+  createdAt: string,
+) => {
   return {
     achievement: achievement,
     user: user,

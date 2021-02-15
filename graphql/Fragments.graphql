@@ -146,7 +146,7 @@ fragment feedActivityFragment on activities {
 fragment fullFeedFragment on feed {
   id
   user {
-    ...basicUserFragment
+    ...listUserFragment
   }
   activity_id
   activity {

@@ -1,4 +1,8 @@
-import { Achievement, Activity } from '../types/profileTypes';
+import {
+  AchievementFragmentFragment,
+  FeedActivityFragmentFragment,
+  ListUserFragmentFragment,
+} from '../graphql/Fragments.generated';
 
 export enum FeedCategory {
   ACTIVITY,
@@ -7,33 +11,16 @@ export enum FeedCategory {
 }
 
 export type ActivityFeedData = {
-  user: User;
-  activity: Activity;
+  user: ListUserFragmentFragment;
+  activity: FeedActivityFragmentFragment;
   createdAt: string;
   feedCategory: FeedCategory;
 };
 export type AchievementFeedData = {
-  user: User;
-  achievement: Achievement;
+  user: ListUserFragmentFragment;
+  achievement: AchievementFragmentFragment;
   createdAt: string;
   feedCategory: FeedCategory;
-};
-
-export type ChallengeFeedData = {
-  name: string;
-  userPicture1: string;
-  userPicture2: string;
-  userName1: string;
-  userName2: string;
-  description: string;
-  createdAt: string;
-};
-export type User = {
-  bio: string;
-  email: string;
-  id: string;
-  name: string;
-  picture: string;
 };
 
 export type FeedData = ActivityFeedData | AchievementFeedData;

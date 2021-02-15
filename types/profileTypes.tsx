@@ -1,4 +1,3 @@
-import { ActivityFeedData } from './feedTypes';
 import { GeoFence } from './geoFenceTypes';
 
 export enum AchievementVariant {
