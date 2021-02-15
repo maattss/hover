@@ -49,14 +49,6 @@ const ChallengeScreen: React.FC<ChallengesProps> = (props: ChallengesProps) => {
     }
   }, [refreshing]);
 
-  /*useEffect(() => {
-    const unsubscribe = props.navigation.addListener('focus', () => {
-      console.log('Refreshed!');
-      handleRefresh();
-    });
-    return unsubscribe;
-  }, [props.navigation]);*/
-
   if (loading) return <Loading />;
 
   if (error) {
