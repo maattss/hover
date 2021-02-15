@@ -97,11 +97,9 @@ const OngoingChallengeCard: React.FC<OngoingChallengeCardProps> = ({ challenge }
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: Colors.gray800,
+    backgroundColor: Colors.gray900,
     borderRadius: Spacing.smaller,
     padding: Spacing.base,
-    marginHorizontal: Spacing.smaller,
-    marginVertical: Spacing.smallest,
     shadowOpacity: 0.75,
     shadowRadius: 3,
     shadowColor: Colors.black,
@@ -112,7 +110,6 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
   infoContainer: {
-    padding: Spacing.base,
     justifyContent: 'center',
     flexShrink: 1,
   },

@@ -29,7 +29,8 @@ const ChallengeScreen: React.FC<ChallengesProps> = (props: ChallengesProps) => {
   const [ongoingChallenges, setOngoingChallenges] = useState<OngoingChallenge[]>();
 
   const { data: challengeData, loading, error, refetch } = useGetChallengesQuery({
-    variables: { user_id: user_id ? user_id : '', limit: 2 },
+    variables: { user_id: user_id ? user_id : '', limit: PREVIEW_SIZE + 1 },
+    nextFetchPolicy: 'network-only',
   });
 
   useEffect(() => {
@@ -40,7 +41,7 @@ const ChallengeScreen: React.FC<ChallengesProps> = (props: ChallengesProps) => {
     }
   }, [challengeData]);
 
-  const onRefresh = useCallback(async () => {
+  const handleRefresh = useCallback(async () => {
     if (refetch) {
       setRefreshing(true);
       await refetch();
@@ -48,13 +49,22 @@ const ChallengeScreen: React.FC<ChallengesProps> = (props: ChallengesProps) => {
     }
   }, [refreshing]);
 
+  useEffect(() => {
+    const unsubscribe = props.navigation.addListener('focus', () => {
+      handleRefresh();
+    });
+    return () => {
+      unsubscribe;
+    };
+  }, [props.navigation]);
+
   if (loading) return <Loading />;
 
   if (error) {
     return (
       <View style={styles.errorContainer}>
         <Text style={{ ...Typography.bodyText, marginTop: Spacing.base }}>{error.message}</Text>
-        <Button style={styles.challengeButton} onPress={onRefresh}>
+        <Button style={styles.challengeButton} onPress={handleRefresh}>
           Refresh
         </Button>
       </View>
@@ -69,14 +79,18 @@ const ChallengeScreen: React.FC<ChallengesProps> = (props: ChallengesProps) => {
         refreshControl={
           <RefreshControl
             refreshing={refreshing}
-            onRefresh={() => onRefresh()}
+            onRefresh={handleRefresh}
             tintColor={Colors.blue}
             colors={[Colors.blue]}
             progressBackgroundColor={Colors.transparent}
           />
         }>
-        {pendingChallenges && renderPendingChallenges(props, pendingChallenges, refetch)}
-        {ongoingChallenges && renderOngoingChallenges(props, ongoingChallenges, refetch, user_id ? user_id : '')}
+        {pendingChallenges &&
+          pendingChallenges.length > 0 &&
+          renderPendingChallenges(props, pendingChallenges, user_id ? user_id : '')}
+        {ongoingChallenges &&
+          ongoingChallenges.length > 0 &&
+          renderOngoingChallenges(props, ongoingChallenges, user_id ? user_id : '')}
         {user_id && (
           <View style={styles.box}>
             <View style={styles.boxTitle}>
@@ -96,7 +110,7 @@ const ChallengeScreen: React.FC<ChallengesProps> = (props: ChallengesProps) => {
 const renderPendingChallenges = (
   { navigation }: ChallengesProps,
   pendingChallenges: PendingChallenge[],
-  refetch: () => void,
+  user_id: string,
 ) => {
   return (
     <View style={styles.box}>
@@ -112,7 +126,7 @@ const renderPendingChallenges = (
       {pendingChallenges.length > PREVIEW_SIZE && (
         <Button
           style={styles.challengeButton}
-          onPress={() => navigation.push('PendingChallenges', { pendingChallenges, refetch })}>
+          onPress={() => navigation.push('PendingChallenges', { user_id, pendingChallenges })}>
           View all
         </Button>
       )}
@@ -123,7 +137,6 @@ const renderPendingChallenges = (
 const renderOngoingChallenges = (
   { navigation }: ChallengesProps,
   ongoingChallenges: OngoingChallenge[],
-  refetch: () => void,
   user_id: string,
 ) => {
   return (
@@ -132,12 +145,14 @@ const renderOngoingChallenges = (
         <Text style={{ ...Typography.headerText }}>Ongoing Challenges</Text>
       </View>
       {ongoingChallenges.slice(0, PREVIEW_SIZE).map((item, index) => (
-        <OngoingChallengeCard key={index} challenge={item} />
+        <View key={index} style={styles.previewContainer}>
+          <OngoingChallengeCard challenge={item} />
+        </View>
       ))}
       {ongoingChallenges.length > PREVIEW_SIZE && (
         <Button
           style={styles.challengeButton}
-          onPress={() => navigation.push('OngoingChallenges', { user_id, ongoingChallenges, refetch })}>
+          onPress={() => navigation.push('OngoingChallenges', { user_id, ongoingChallenges })}>
           View all
         </Button>
       )}
@@ -176,18 +191,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: Spacing.smaller,
     padding: Spacing.base,
-    marginHorizontal: Spacing.smaller,
     marginVertical: Spacing.smaller,
   },
   boxTitle: {
     marginBottom: Spacing.base,
   },
   challengeButton: {
-    ...Buttons.button,
     backgroundColor: Colors.green,
-    width: '100%',
-    marginTop: Spacing.base,
-    marginBottom: Spacing.base,
+    marginVertical: Spacing.base,
   },
 });
 

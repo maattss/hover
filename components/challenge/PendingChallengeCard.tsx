@@ -110,8 +110,6 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.gray900,
     borderRadius: Spacing.smaller,
     padding: Spacing.base,
-    marginHorizontal: Spacing.smaller,
-    marginVertical: Spacing.smallest,
     shadowOpacity: 0.75,
     shadowRadius: 3,
     shadowColor: Colors.black,
