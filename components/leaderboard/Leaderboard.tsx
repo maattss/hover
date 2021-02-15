@@ -75,7 +75,7 @@ const Leaderboard: React.FC<LeaderboardProps> = (props: LeaderboardProps) => {
     <View style={styles.container}>
       <FlatList
         data={sortedData}
-        keyExtractor={(item, index) => index.toString()}
+        keyExtractor={(_, index) => index.toString()}
         renderItem={({ item, index }) => renderItemS(item, index)}
       />
     </View>
