@@ -4,13 +4,13 @@ import * as Types from '../../types/types';
 import {
   BasicUserFragmentFragment,
   AchievementFragmentFragment,
-  GeofenceFragmentFragment,
+  FeedActivityFragmentFragment,
 } from '../Fragments.generated';
 import { gql } from '@apollo/client';
 import {
   BasicUserFragmentFragmentDoc,
   AchievementFragmentFragmentDoc,
-  GeofenceFragmentFragmentDoc,
+  FeedActivityFragmentFragmentDoc,
 } from '../Fragments.generated';
 import * as Apollo from '@apollo/client';
 export type ProfileUserQueryVariables = Types.Exact<{
@@ -26,12 +26,7 @@ export type ProfileUserQuery = { readonly __typename: 'query_root' } & {
             readonly achievement: { readonly __typename: 'achievement' } & AchievementFragmentFragment;
           }
         >;
-        readonly activities: ReadonlyArray<
-          { readonly __typename: 'activities' } & Pick<
-            Types.Activities,
-            'activity_id' | 'caption' | 'created_at' | 'duration' | 'score' | 'started_at' | 'stopped_at'
-          > & { readonly geofence: { readonly __typename: 'geofences' } & GeofenceFragmentFragment }
-        >;
+        readonly activities: ReadonlyArray<{ readonly __typename: 'activities' } & FeedActivityFragmentFragment>;
         readonly education_score: { readonly __typename: 'activities_aggregate' } & {
           readonly aggregate?: Types.Maybe<
             { readonly __typename: 'activities_aggregate_fields' } & {
@@ -83,16 +78,7 @@ export const ProfileUserDocument = gql`
         }
       }
       activities(order_by: { created_at: desc }, limit: $limit) {
-        activity_id
-        caption
-        created_at
-        duration
-        score
-        started_at
-        stopped_at
-        geofence {
-          ...geofenceFragment
-        }
+        ...feedActivityFragment
       }
       education_score: activities_aggregate(where: { geofence: { category: { _eq: "EDUCATION" } } }) {
         aggregate {
@@ -126,7 +112,7 @@ export const ProfileUserDocument = gql`
   }
   ${BasicUserFragmentFragmentDoc}
   ${AchievementFragmentFragmentDoc}
-  ${GeofenceFragmentFragmentDoc}
+  ${FeedActivityFragmentFragmentDoc}
 `;
 
 /**

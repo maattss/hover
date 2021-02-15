@@ -10,13 +10,20 @@ import { ProfileUserQuery } from '../graphql/queries/ProfileUser.generated';
 import { UserProfile, Achievement, AchievementVariant, Activity } from '../types/profileTypes';
 import { AchievementFeedData, ActivityFeedData, FeedCategory, FeedData, User } from '../types/feedTypes';
 import { Asset } from 'expo-asset';
-import { Challenge_Participant, Challenge_State_Enum, Challenge_Type_Enum, Geofences } from '../types/types';
+import {
+  Achievement_Type_Enum,
+  Challenge_Participant,
+  Challenge_State_Enum,
+  Challenge_Type_Enum,
+  Geofences,
+} from '../types/types';
 import { OngoingChallenge, Opponent, PendingChallenge } from '../types/challengeTypes';
 import { GetChallengesQuery } from '../graphql/queries/GetChallenges.generated';
 import {
   AchievementFragmentFragment,
   ActivityFragmentFragment,
   BasicUserFragmentFragment,
+  FeedActivityFragmentFragment,
   ListUserFragmentFragment,
 } from '../graphql/Fragments.generated';
 import { FeedQuery } from '../graphql/queries/Feed.generated';
@@ -138,42 +145,22 @@ export const defaultUserProfile: UserProfile = {
 
 export const convertToUserProfile = (data: ProfileUserQuery | undefined) => {
   if (data && data.user) {
-    const achievements: Achievement[] = [];
-    data.user.user_achievement.forEach((obj) => {
-      achievements.push({
-        description: obj.achievement.description ?? '',
-        name: obj.achievement.name ?? '',
-        level: obj.achievement.level ?? 3,
-        createdAt: obj.achievement.created_at ?? '',
-        type: AchievementVariant[obj.achievement.achievement_type as keyof typeof AchievementVariant],
-        rule: obj.achievement.rule ?? {},
-      });
-    });
-    const activitites: Activity[] = [];
-    data.user.activities.forEach((obj) => {
-      activitites.push({
-        activityId: obj.activity_id,
-        startedAt: obj.started_at,
-        stoppedAt: obj.stopped_at,
-        score: obj.score ?? 0,
-        geoFence: convertToGeoFence(obj.geofence),
-        caption: obj.caption ?? '',
-        duration: obj.duration,
-      });
-    });
+    const achievements: readonly AchievementFragmentFragment[] = data.user.user_achievement.map(
+      (data) => data.achievement,
+    );
     return {
       id: data.user.id ?? '',
       name: data.user.name ?? defaultUserProfile.name,
       bio: data.user.bio ?? defaultUserProfile.bio,
       email: data.user.email ?? defaultUserProfile.email,
-      picture: data.user.picture ?? Asset.fromModule(require('../assets/images/user.png')).uri, // Default picture
+      picture: data.user.picture ?? defaultUserProfile.picture,
       totalScore: data.user.totalScore ?? defaultUserProfile.totalScore,
       educationScore: data.user.education_score.aggregate?.sum?.score ?? defaultUserProfile.educationScore,
       cultureScore: data.user.culture_score.aggregate?.sum?.score ?? defaultUserProfile.cultureScore,
       socialScore: data.user.social_score.aggregate?.sum?.score ?? defaultUserProfile.socialScore,
       exerciseScore: data.user.exercise_score.aggregate?.sum?.score ?? defaultUserProfile.exerciseScore,
       achievements: achievements,
-      activities: activitites,
+      activities: data.user.activities,
     } as UserProfile;
   }
 };

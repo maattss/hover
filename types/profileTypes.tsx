@@ -1,4 +1,4 @@
-import { GeoFence } from './geoFenceTypes';
+import { AchievementFragmentFragment, FeedActivityFragmentFragment } from '../graphql/Fragments.generated';
 
 export enum AchievementVariant {
   DEFAULT,
@@ -22,25 +22,6 @@ export type UserProfile = {
   cultureScore: number;
   socialScore: number;
   exerciseScore: number;
-  achievements: Achievement[];
-  activities: Activity[];
-};
-
-export type Achievement = {
-  description: string;
-  name: string;
-  type: AchievementVariant;
-  createdAt: string;
-  level: number;
-  rule: AchievementRule;
-};
-
-export type Activity = {
-  activityId: string;
-  caption: string;
-  geoFence: GeoFence;
-  startedAt: string;
-  stoppedAt: string;
-  score: number;
-  duration: number;
+  achievements: readonly AchievementFragmentFragment[];
+  activities: readonly FeedActivityFragmentFragment[];
 };

@@ -7,21 +7,27 @@ import MapView, { LatLng, Marker, Region } from 'react-native-maps';
 import { defaultMapLocation } from '../../helpers/objectMappers';
 import GeoFences from '../map/GeoFences';
 import { getGeoFenceImage } from '../../helpers/geoFenceCalculations';
+import { GeoFenceCategory } from '../../types/geoFenceTypes';
+import { ActivityFragmentFragment } from '../../graphql/Fragments.generated';
 
 interface ActivityFeedCardProps {
-  activity: ActivityFeedData;
+  activity: ActivityFragmentFragment;
 }
 
 const ProfileActivityCard: React.FC<ActivityFeedCardProps> = ({ activity }: ActivityFeedCardProps) => {
+  // TODO: Remove!
+  if (!activity.geofence) console.log('No geofence!');
+  console.log('Data', activity);
+
   const mapRegion: Region = {
-    latitude: activity.geoFence ? activity.geoFence.latitude : defaultMapLocation.latitude,
-    longitude: activity.geoFence ? activity.geoFence.longitude : defaultMapLocation.latitude,
+    latitude: activity.geofence.latitude,
+    longitude: activity.geofence.longitude,
     latitudeDelta: 0.01,
     longitudeDelta: 0.01,
   };
   const markerCoordinate: LatLng = {
-    latitude: activity.geoFence ? activity.geoFence.latitude : defaultMapLocation.latitude,
-    longitude: activity.geoFence ? activity.geoFence.longitude : defaultMapLocation.latitude,
+    latitude: activity.geofence.latitude,
+    longitude: activity.geofence.longitude,
   };
   const getTopBarDisplay = () => {
     if (!activity.caption || activity.caption === '') return { display: 'none' } as ViewStyle;
@@ -34,7 +40,12 @@ const ProfileActivityCard: React.FC<ActivityFeedCardProps> = ({ activity }: Acti
       </View>
       <View style={styles.main}>
         <View style={styles.category}>
-          <Image source={{ uri: getGeoFenceImage(activity.geoFence?.category) }} style={styles.categoryIcon} />
+          <Image
+            source={{
+              uri: getGeoFenceImage(GeoFenceCategory[activity.geofence.category as keyof typeof GeoFenceCategory]),
+            }}
+            style={styles.categoryIcon}
+          />
           <Text style={styles.scoreText}>{activity.score} points</Text>
         </View>
         <MapView
@@ -45,14 +56,14 @@ const ProfileActivityCard: React.FC<ActivityFeedCardProps> = ({ activity }: Acti
           pitchEnabled={false}>
           <Marker
             coordinate={markerCoordinate}
-            title={activity.geoFence ? activity.geoFence.name : 'No name'}
-            description={activity.geoFence ? activity.geoFence.description : 'No description'}
+            title={activity.geofence.name ?? 'No name'}
+            description={activity.geofence.description ? activity.geofence.description : 'No description'}
           />
-          <GeoFences geofences={activity.geoFence ? [activity.geoFence] : undefined} />
+          {/* <GeoFences geofences={[data.activity.geofence]} /> */}
         </MapView>
       </View>
       <View style={styles.footer}>
-        <Text style={styles.footerText}>{timeStampToPresentable(activity.startedAt)}</Text>
+        <Text style={styles.footerText}>{timeStampToPresentable(activity.started_at)}</Text>
       </View>
     </View>
   );
