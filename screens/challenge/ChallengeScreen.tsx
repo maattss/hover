@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { ScrollView, RefreshControl, StyleSheet, Text, View } from 'react-native';
-import { useGetChallengesQuery } from '../../graphql/queries/GetChallenges.generated';
+import { GetChallengesQuery, useGetChallengesQuery } from '../../graphql/queries/GetChallenges.generated';
 import { Colors, Spacing, Typography } from '../../theme';
 import useAuthentication from '../../hooks/useAuthentication';
 import { Challenge } from '../../types/challengeTypes';
@@ -32,14 +32,23 @@ const ChallengeScreen: React.FC<ChallengesProps> = (props: ChallengesProps) => {
     variables: { user_id: user_id ? user_id : '', limit: PREVIEW_SIZE + 1 },
     fetchPolicy: 'network-only',
   });
+  useEffect(() => {
+    if (challengeData && challengeData.user) {
+      console.log('Sorting new data...');
+      const { pendingChallenges, ongoingChallenges } = convertChallenge(challengeData);
+      setPendingChallenges(pendingChallenges);
+      setOngoingChallenges(ongoingChallenges);
+    }
+  }, [challengeData]);
 
   const handleRefresh = useCallback(async () => {
-    if (refetch && !loading) {
+    if (refetch) {
+      console.log('Refreshing...');
       setRefreshing(true);
-      refetch();
+      await refetch();
       setRefreshing(false);
     }
-  }, [refreshing, refetch]);
+  }, [refreshing]);
 
   const isFocused = useIsFocused();
   useEffect(() => {
@@ -47,14 +56,6 @@ const ChallengeScreen: React.FC<ChallengesProps> = (props: ChallengesProps) => {
       handleRefresh();
     }
   }, [isFocused]);
-
-  useEffect(() => {
-    if (challengeData && challengeData.user) {
-      const { pendingChallenges, ongoingChallenges } = convertChallenge(challengeData);
-      setPendingChallenges(pendingChallenges);
-      setOngoingChallenges(ongoingChallenges);
-    }
-  }, [challengeData]);
 
   if (loading) return <Loading />;
 
