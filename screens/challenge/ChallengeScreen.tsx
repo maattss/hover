@@ -1,17 +1,17 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { RefreshControl, SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { ScrollView, RefreshControl, StyleSheet, Text, View } from 'react-native';
 import { useGetChallengesQuery } from '../../graphql/queries/GetChallenges.generated';
 import { Colors, Spacing, Typography } from '../../theme';
 import useAuthentication from '../../hooks/useAuthentication';
 import { Challenge } from '../../types/challengeTypes';
 import { convertChallenge } from '../../helpers/objectMappers';
-import { ScrollView } from 'react-native-gesture-handler';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { ChallengeStackParamList } from '../../types/navigationTypes';
 import PendingChallengeCard from '../../components/challenge/PendingChallengeCard';
 import OngoingChallengeCard from '../../components/challenge/OngoingChallengeCard';
 import Button from '../../components/general/Button';
 import Loading from '../../components/general/Loading';
+import { useIsFocused } from '@react-navigation/native';
 
 type NavigationProp = StackNavigationProp<ChallengeStackParamList>;
 
@@ -33,6 +33,21 @@ const ChallengeScreen: React.FC<ChallengesProps> = (props: ChallengesProps) => {
     fetchPolicy: 'network-only',
   });
 
+  const handleRefresh = useCallback(async () => {
+    if (refetch && !loading) {
+      setRefreshing(true);
+      refetch();
+      setRefreshing(false);
+    }
+  }, [refreshing, refetch]);
+
+  const isFocused = useIsFocused();
+  useEffect(() => {
+    if (isFocused) {
+      handleRefresh();
+    }
+  }, [isFocused]);
+
   useEffect(() => {
     if (challengeData && challengeData.user) {
       const { pendingChallenges, ongoingChallenges } = convertChallenge(challengeData);
@@ -40,14 +55,6 @@ const ChallengeScreen: React.FC<ChallengesProps> = (props: ChallengesProps) => {
       setOngoingChallenges(ongoingChallenges);
     }
   }, [challengeData]);
-
-  const handleRefresh = useCallback(async () => {
-    if (refetch) {
-      setRefreshing(true);
-      await refetch();
-      setRefreshing(false);
-    }
-  }, [refreshing]);
 
   if (loading) return <Loading />;
 
@@ -63,38 +70,36 @@ const ChallengeScreen: React.FC<ChallengesProps> = (props: ChallengesProps) => {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView
-        style={styles.scrollView}
-        contentContainerStyle={styles.scrollContentContainer}
-        refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={handleRefresh}
-            tintColor={Colors.blue}
-            colors={[Colors.blue]}
-            progressBackgroundColor={Colors.transparent}
-          />
-        }>
-        {pendingChallenges &&
-          pendingChallenges.length > 0 &&
-          renderPendingChallenges(props, pendingChallenges, user_id ? user_id : '')}
-        {ongoingChallenges &&
-          ongoingChallenges.length > 0 &&
-          renderOngoingChallenges(props, ongoingChallenges, user_id ? user_id : '')}
-        {user_id && (
-          <View style={styles.box}>
-            <View style={styles.boxTitle}>
-              <Text style={{ ...Typography.headerText }}>Want a new challenge?</Text>
-              <Text style={{ ...Typography.bodyText }}>Create a challenge for you and your friends!</Text>
-            </View>
-            <Button style={styles.challengeButton} onPress={() => props.navigation.navigate('NewChallenge')}>
-              Create new challenge
-            </Button>
+    <ScrollView
+      style={styles.scrollView}
+      contentContainerStyle={styles.scrollContentContainer}
+      refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={handleRefresh}
+          tintColor={Colors.blue}
+          colors={[Colors.blue]}
+          progressBackgroundColor={Colors.transparent}
+        />
+      }>
+      {pendingChallenges &&
+        pendingChallenges.length > 0 &&
+        renderPendingChallenges(props, pendingChallenges, user_id ? user_id : '')}
+      {ongoingChallenges &&
+        ongoingChallenges.length > 0 &&
+        renderOngoingChallenges(props, ongoingChallenges, user_id ? user_id : '')}
+      {user_id && (
+        <View style={styles.box}>
+          <View style={styles.boxTitle}>
+            <Text style={{ ...Typography.headerText }}>Want a new challenge?</Text>
+            <Text style={{ ...Typography.bodyText }}>Create a challenge for you and your friends!</Text>
           </View>
-        )}
-      </ScrollView>
-    </SafeAreaView>
+          <Button style={styles.challengeButton} onPress={() => props.navigation.navigate('NewChallenge')}>
+            Create new challenge
+          </Button>
+        </View>
+      )}
+    </ScrollView>
   );
 };
 
@@ -144,14 +149,8 @@ const renderOngoingChallenges = ({ navigation }: ChallengesProps, ongoingChallen
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  previewContainer: {
-    width: '100%',
-    marginVertical: Spacing.smaller,
-  },
   scrollView: {
+    flex: 1,
     paddingHorizontal: Spacing.base,
   },
   scrollContentContainer: {
@@ -159,6 +158,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     paddingBottom: Spacing.base,
+  },
+  previewContainer: {
+    width: '100%',
+    marginVertical: Spacing.smaller,
   },
   errorContainer: {
     display: 'flex',
