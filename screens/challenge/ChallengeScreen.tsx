@@ -30,7 +30,7 @@ const ChallengeScreen: React.FC<ChallengesProps> = (props: ChallengesProps) => {
 
   const { data: challengeData, loading, error, refetch } = useGetChallengesQuery({
     variables: { user_id: user_id ? user_id : '', limit: PREVIEW_SIZE + 1 },
-    nextFetchPolicy: 'network-only',
+    fetchPolicy: 'network-only',
   });
 
   useEffect(() => {
@@ -49,14 +49,13 @@ const ChallengeScreen: React.FC<ChallengesProps> = (props: ChallengesProps) => {
     }
   }, [refreshing]);
 
-  useEffect(() => {
+  /*useEffect(() => {
     const unsubscribe = props.navigation.addListener('focus', () => {
+      console.log('Refreshed!');
       handleRefresh();
     });
-    return () => {
-      unsubscribe;
-    };
-  }, [props.navigation]);
+    return unsubscribe;
+  }, [props.navigation]);*/
 
   if (loading) return <Loading />;
 
@@ -158,6 +157,7 @@ const styles = StyleSheet.create({
   },
   previewContainer: {
     width: '100%',
+    marginVertical: Spacing.smaller,
   },
   scrollView: {
     paddingHorizontal: Spacing.base,
