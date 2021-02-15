@@ -7,7 +7,7 @@ import MapView, { LatLng, Marker, Region } from 'react-native-maps';
 import GeoFences from '../map/GeoFences';
 import { getGeoFenceImage } from '../../helpers/geoFenceCalculations';
 import { convertToGeoFence, defaultUserProfile } from '../../helpers/objectMappers';
-import { GeoFence, GeoFenceCategory } from '../../types/geoFenceTypes';
+import { GeoFenceCategory } from '../../types/geoFenceTypes';
 
 interface ActivityFeedCardProps {
   data: ActivityFeedData;

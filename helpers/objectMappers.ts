@@ -7,23 +7,16 @@ import { CircleGeoFence, GeoFence, GeoFenceCategory, GeoFenceVariant, PolygonGeo
 import { Item } from '../components/leaderboard/Leaderboard';
 import { HighscoreQuery } from '../graphql/queries/Highscore.generated';
 import { ProfileUserQuery } from '../graphql/queries/ProfileUser.generated';
-import { UserProfile, Achievement, AchievementVariant, Activity } from '../types/profileTypes';
-import { AchievementFeedData, ActivityFeedData, FeedCategory, FeedData, User } from '../types/feedTypes';
+import { UserProfile } from '../types/profileTypes';
+import { AchievementFeedData, ActivityFeedData, FeedCategory, FeedData } from '../types/feedTypes';
 import { Asset } from 'expo-asset';
-import {
-  Achievement_Type_Enum,
-  Challenge_Participant,
-  Challenge_State_Enum,
-  Challenge_Type_Enum,
-  Geofences,
-} from '../types/types';
+import { Challenge_Participant, Challenge_State_Enum, Challenge_Type_Enum, Geofences } from '../types/types';
 import { OngoingChallenge, Opponent, PendingChallenge } from '../types/challengeTypes';
 import { GetChallengesQuery } from '../graphql/queries/GetChallenges.generated';
 import {
   AchievementFragmentFragment,
   ActivityFragmentFragment,
   BasicUserFragmentFragment,
-  FeedActivityFragmentFragment,
   GeofenceFragmentFragment,
   ListUserFragmentFragment,
 } from '../graphql/Fragments.generated';
@@ -274,11 +267,4 @@ type OpponentQueryData = ReadonlyArray<
   { readonly __typename: 'challenge_participant' } & Pick<Challenge_Participant, 'state'> & {
       readonly user: { readonly __typename: 'users' } & BasicUserFragmentFragment;
     }
->;
-
-type GeoFencesQuery = {
-  readonly __typename: 'geofences';
-} & Pick<
-  Geofences,
-  'id' | 'name' | 'description' | 'category' | 'variant' | 'latitude' | 'longitude' | 'radius' | 'coordinates'
 >;
