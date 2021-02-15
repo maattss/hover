@@ -10,11 +10,13 @@ export type ActivityFeedData = {
   user: User;
   activity: Activity;
   createdAt: string;
+  feedCategory: FeedCategory;
 };
 export type AchievementFeedData = {
   user: User;
   achievement: Achievement;
   createdAt: string;
+  feedCategory: FeedCategory;
 };
 
 export type ChallengeFeedData = {

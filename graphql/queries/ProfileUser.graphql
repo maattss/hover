@@ -8,11 +8,13 @@ query ProfileUser($id: String!, $limit: Int!) {
       }
     }
     activities(order_by: { created_at: desc }, limit: $limit) {
+      activity_id
       caption
       created_at
       duration
       score
       started_at
+      stopped_at
       geofence {
         ...geofenceFragment
       }

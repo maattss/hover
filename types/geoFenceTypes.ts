@@ -22,8 +22,8 @@ export interface PolygonGeoFence {
   coordinates: LatLng[];
 }
 export enum GeoFenceVariant {
-  CIRCLE,
-  POLYGON,
+  CIRCLE = 'CIRCLE',
+  POLYGON = 'POLYGON',
 }
 export enum GeoFenceCategory {
   EDUCATION = 'EDUCATION',

@@ -1,9 +1,15 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, StyleSheet, RefreshControl, Button } from 'react-native';
+import { View, StyleSheet, RefreshControl, Button, Text } from 'react-native';
 import ActivityFeedCard from '../../components/feed/ActivityFeedCard';
 import AchievementFeedCard from '../../components/feed/AchievementFeedCard';
 import { Typography, Spacing, Colors } from '../../theme';
-import { ActivityFeedData, AchievementFeedData, ChallengeFeedData, FeedData } from '../../types/feedTypes';
+import {
+  ActivityFeedData,
+  AchievementFeedData,
+  ChallengeFeedData,
+  FeedData,
+  FeedCategory,
+} from '../../types/feedTypes';
 import { CircleGeoFence, GeoFenceCategory, GeoFenceVariant } from '../../types/geoFenceTypes';
 import { AchievementVariant } from '../../types/profileTypes';
 import { useFeedQuery } from '../../graphql/queries/Feed.generated';
@@ -54,9 +60,28 @@ const testChallenge: ChallengeFeedData = {
   description: 'Highest amount of points in the next 7 days.',
 };
 
+const renderFeed = (feedElements: FeedData[]) => {
+  return feedElements.map((element, index) => {
+    if (element.feedCategory === FeedCategory.ACTIVITY) {
+      return (
+        <View key={index}>
+          <Text style={{ color: 'white' }}>Activity</Text>
+        </View>
+      );
+    } else if (element.feedCategory === FeedCategory.ACHIEVEMENT) {
+      return (
+        <View key={index}>
+          <Text style={{ color: 'white' }}>Achievement</Text>
+        </View>
+      );
+    }
+    return <></>;
+  });
+};
+
 const FeedScreen: React.FC = () => {
   const [refreshing, setRefreshing] = useState(false);
-  const [limit, setLimit] = useState(1);
+  const [limit, setLimit] = useState(10);
   const [feedElements, setFeedElements] = useState<FeedData[]>([]);
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
@@ -81,7 +106,8 @@ const FeedScreen: React.FC = () => {
   useEffect(() => {
     if (data && data.feed) {
       const feedData = convertToFeedData(data);
-      // setFeedElements(feedData);
+      console.log(feedData);
+      setFeedElements(feedData);
     }
   }, [data]);
 
@@ -110,6 +136,7 @@ const FeedScreen: React.FC = () => {
         </View>
         <Button title={'Load more...'} onPress={loadMoreFeedElements}></Button>
       </View>
+      {renderFeed(feedElements)}
     </ScrollView>
   );
 };

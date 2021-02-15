@@ -24,7 +24,7 @@ export type UserProfile = {
   socialScore: number;
   exerciseScore: number;
   achievements: Achievement[];
-  activities: ActivityFeedData[];
+  activities: Activity[];
 };
 
 export type Achievement = {

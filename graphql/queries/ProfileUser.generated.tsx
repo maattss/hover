@@ -29,7 +29,7 @@ export type ProfileUserQuery = { readonly __typename: 'query_root' } & {
         readonly activities: ReadonlyArray<
           { readonly __typename: 'activities' } & Pick<
             Types.Activities,
-            'caption' | 'created_at' | 'duration' | 'score' | 'started_at'
+            'activity_id' | 'caption' | 'created_at' | 'duration' | 'score' | 'started_at' | 'stopped_at'
           > & { readonly geofence: { readonly __typename: 'geofences' } & GeofenceFragmentFragment }
         >;
         readonly education_score: { readonly __typename: 'activities_aggregate' } & {
@@ -83,11 +83,13 @@ export const ProfileUserDocument = gql`
         }
       }
       activities(order_by: { created_at: desc }, limit: $limit) {
+        activity_id
         caption
         created_at
         duration
         score
         started_at
+        stopped_at
         geofence {
           ...geofenceFragment
         }

@@ -8,7 +8,7 @@ import { Item } from '../components/leaderboard/Leaderboard';
 import { HighscoreQuery } from '../graphql/queries/Highscore.generated';
 import { ProfileUserQuery } from '../graphql/queries/ProfileUser.generated';
 import { UserProfile, Achievement, AchievementVariant, Activity } from '../types/profileTypes';
-import { AchievementFeedData, ActivityFeedData, FeedData, User } from '../types/feedTypes';
+import { AchievementFeedData, ActivityFeedData, FeedCategory, FeedData, User } from '../types/feedTypes';
 import { Asset } from 'expo-asset';
 import { Challenge_Participant, Challenge_State_Enum, Challenge_Type_Enum, Geofences } from '../types/types';
 import { OngoingChallenge, Opponent, PendingChallenge } from '../types/challengeTypes';
@@ -133,7 +133,7 @@ export const defaultUserProfile: UserProfile = {
 
 export const convertToUserProfile = (data: ProfileUserQuery | undefined) => {
   if (data && data.user) {
-    const achievements: AchievementType[] = [];
+    const achievements: Achievement[] = [];
     data.user.user_achievement.forEach((obj) => {
       achievements.push({
         description: obj.achievement.description ?? '',
@@ -144,13 +144,13 @@ export const convertToUserProfile = (data: ProfileUserQuery | undefined) => {
         rule: obj.achievement.rule ?? {},
       });
     });
-    const activitites: ActivityFeedData[] = [];
+    const activitites: Activity[] = [];
     data.user.activities.forEach((obj) => {
       activitites.push({
-        userName: data.user ? data.user.name : defaultUserProfile.name,
+        activityId: obj.activity_id,
         startedAt: obj.started_at,
+        stoppedAt: obj.stopped_at,
         score: obj.score ?? 0,
-        picture: data.user?.picture ? data.user.picture : defaultUserProfile.picture.toString(),
         geoFence: convertToGeoFence(obj.geofence),
         caption: obj.caption ?? '',
         duration: obj.duration,
@@ -241,60 +241,36 @@ export const convertOpponent = (opponentData: OpponentQueryData) => {
 export const convertToFeedData = (data: FeedQuery) => {
   const feedData: FeedData[] = [];
   for (const obj of data.feed) {
-    console.log('Obj', obj);
     if (obj.activity) {
-      console.log('Activity', obj.activity);
-      const activity = convertToActivityFeedData(obj.activity, obj.user, obj.created_at);
-      console.log('Activity converted', activity);
-      //feedData.push(activity);
+      feedData.push(convertToActivityFeedData(obj.activity as Activity, obj.user as User, obj.created_at as string));
     } else if (obj.user_achievement && obj.user_achievement.achievement) {
-      console.log('Achievement', obj.user_achievement);
-      const achievement = convertToAchievementFeedData(obj.user_achievement.achievement, obj.user, obj.created_at);
-      console.log('Achievement converted', achievement);
-      //feedData.push(achievement);
+      feedData.push(
+        convertToAchievementFeedData(
+          obj.user_achievement.achievement as Achievement,
+          obj.user as User,
+          obj.created_at as string,
+        ),
+      );
+    } else {
+      console.error('Error converting feed data. Data is not an activity or achievement!');
     }
   }
   return feedData;
 };
 export const convertToActivityFeedData = (activity: Activity, user: User, createdAt: string) => {
   return {
-    activity: {
-      caption: activity.caption,
-      duration: activity.duration,
-      geoFence: convertToGeoFence(activity.geoFence), //TODO: Fix
-      score: activity.score,
-    },
-    user: {
-      bio: user.bio,
-      email: user.email,
-      id: user.id,
-      name: user.name,
-      picture: user.picture,
-    },
+    activity: activity,
+    user: user,
     createdAt: createdAt,
+    feedCategory: FeedCategory.ACTIVITY,
   } as ActivityFeedData;
 };
 export const convertToAchievementFeedData = (achievement: Achievement, user: User, createdAt: string) => {
   return {
-    achievement: {
-      name: achievement.name,
-      type: achievement.type,
-      createdAt: achievement.createdAt,
-      description: achievement.description,
-      level: achievement.level,
-      rule: {
-        category: achievement.rule.category,
-        score: achievement.rule.score,
-      },
-    },
-    user: {
-      bio: user.bio,
-      email: user.email,
-      id: user.id,
-      name: user.name,
-      picture: user.picture,
-    },
+    achievement: achievement,
+    user: user,
     createdAt: createdAt,
+    feedCategory: FeedCategory.ACHIEVEMENT,
   } as AchievementFeedData;
 };
 
