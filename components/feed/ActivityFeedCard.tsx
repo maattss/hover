@@ -6,8 +6,8 @@ import { timeStampToPresentable } from '../../helpers/dateTimeHelpers';
 import MapView, { LatLng, Marker, Region } from 'react-native-maps';
 import GeoFences from '../map/GeoFences';
 import { getGeoFenceImage } from '../../helpers/geoFenceCalculations';
-import { defaultUserProfile } from '../../helpers/objectMappers';
-import { GeoFenceCategory } from '../../types/geoFenceTypes';
+import { convertToGeoFence, defaultUserProfile } from '../../helpers/objectMappers';
+import { GeoFence, GeoFenceCategory } from '../../types/geoFenceTypes';
 
 interface ActivityFeedCardProps {
   data: ActivityFeedData;
@@ -24,6 +24,7 @@ const ActivityFeedCard: React.FC<ActivityFeedCardProps> = ({ data }: ActivityFee
     latitude: data.activity.geofence.latitude,
     longitude: data.activity.geofence.longitude,
   };
+  const activityGeoFence = convertToGeoFence(data.activity.geofence);
   return (
     <View style={styles.card}>
       <View style={styles.topBar}>
@@ -56,7 +57,7 @@ const ActivityFeedCard: React.FC<ActivityFeedCardProps> = ({ data }: ActivityFee
             title={data.activity.geofence.name ?? 'No name'}
             description={data.activity.geofence.description ?? 'No description'}
           />
-          {/* <GeoFences geofences={[{ name: data.activity.geofence.name }]} /> */}
+          {activityGeoFence && <GeoFences geofences={[activityGeoFence]} />}
         </MapView>
       </View>
       <View style={styles.footer}>

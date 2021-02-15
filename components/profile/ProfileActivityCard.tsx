@@ -1,14 +1,13 @@
 import React from 'react';
 import { StyleSheet, Text, View, ViewStyle, Image } from 'react-native';
 import { Colors, Spacing } from '../../theme';
-import { ActivityFeedData } from '../../types/feedTypes';
 import { timeStampToPresentable } from '../../helpers/dateTimeHelpers';
 import MapView, { LatLng, Marker, Region } from 'react-native-maps';
-import { defaultMapLocation } from '../../helpers/objectMappers';
-import GeoFences from '../map/GeoFences';
 import { getGeoFenceImage } from '../../helpers/geoFenceCalculations';
 import { GeoFenceCategory } from '../../types/geoFenceTypes';
 import { FeedActivityFragmentFragment } from '../../graphql/Fragments.generated';
+import { convertToGeoFence } from '../../helpers/objectMappers';
+import GeoFences from '../map/GeoFences';
 
 interface ActivityFeedCardProps {
   activity: FeedActivityFragmentFragment;
@@ -25,6 +24,7 @@ const ProfileActivityCard: React.FC<ActivityFeedCardProps> = ({ activity }: Acti
     latitude: activity.geofence.latitude,
     longitude: activity.geofence.longitude,
   };
+  const activityGeoFence = convertToGeoFence(activity.geofence);
   const getTopBarDisplay = () => {
     if (!activity.caption || activity.caption === '') return { display: 'none' } as ViewStyle;
     return { display: 'flex' } as ViewStyle;
@@ -55,7 +55,7 @@ const ProfileActivityCard: React.FC<ActivityFeedCardProps> = ({ activity }: Acti
             title={activity.geofence.name ?? 'No name'}
             description={activity.geofence.description ? activity.geofence.description : 'No description'}
           />
-          {/* <GeoFences geofences={[data.activity.geofence]} /> */}
+          {activityGeoFence && <GeoFences geofences={[activityGeoFence]} />}
         </MapView>
       </View>
       <View style={styles.footer}>

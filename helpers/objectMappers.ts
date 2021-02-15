@@ -24,6 +24,7 @@ import {
   ActivityFragmentFragment,
   BasicUserFragmentFragment,
   FeedActivityFragmentFragment,
+  GeofenceFragmentFragment,
   ListUserFragmentFragment,
 } from '../graphql/Fragments.generated';
 import { FeedQuery } from '../graphql/queries/Feed.generated';
@@ -74,7 +75,7 @@ export const convertToGeoFences = (data: GeofencesQuery) => {
   }
   return geoFences;
 };
-export const convertToGeoFence = (geofence: GeoFencesQuery) => {
+export const convertToGeoFence = (geofence: GeofenceFragmentFragment) => {
   if (geofence.variant === 'CIRCLE') {
     return {
       id: geofence.id,
