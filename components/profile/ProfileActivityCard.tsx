@@ -8,17 +8,13 @@ import { defaultMapLocation } from '../../helpers/objectMappers';
 import GeoFences from '../map/GeoFences';
 import { getGeoFenceImage } from '../../helpers/geoFenceCalculations';
 import { GeoFenceCategory } from '../../types/geoFenceTypes';
-import { ActivityFragmentFragment } from '../../graphql/Fragments.generated';
+import { FeedActivityFragmentFragment } from '../../graphql/Fragments.generated';
 
 interface ActivityFeedCardProps {
-  activity: ActivityFragmentFragment;
+  activity: FeedActivityFragmentFragment;
 }
 
 const ProfileActivityCard: React.FC<ActivityFeedCardProps> = ({ activity }: ActivityFeedCardProps) => {
-  // TODO: Remove!
-  if (!activity.geofence) console.log('No geofence!');
-  console.log('Data', activity);
-
   const mapRegion: Region = {
     latitude: activity.geofence.latitude,
     longitude: activity.geofence.longitude,

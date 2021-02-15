@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, RefreshControl, Text, ListRenderItem } from 'react-native';
+import { View, StyleSheet, RefreshControl, ListRenderItem } from 'react-native';
 import ActivityFeedCard from '../../components/feed/ActivityFeedCard';
 import AchievementFeedCard from '../../components/feed/AchievementFeedCard';
 import { Typography, Spacing, Colors } from '../../theme';
-import { FeedData, FeedCategory, ActivityFeedData } from '../../types/feedTypes';
-
+import { FeedData, FeedCategory, ActivityFeedData, AchievementFeedData } from '../../types/feedTypes';
 import { useFeedQuery } from '../../graphql/queries/Feed.generated';
 import { FlatList } from 'react-native-gesture-handler';
 import Loading from '../../components/general/Loading';
@@ -21,8 +20,7 @@ const getItem = (data: FeedData) => {
   } else if (data.feedCategory === FeedCategory.ACHIEVEMENT) {
     return (
       <View style={styles.element}>
-        <Text>Achievement</Text>
-        {/* <AchievementFeedCard achievement={element as AchievementFeedData} /> */}
+        <AchievementFeedCard data={data as AchievementFeedData} />
       </View>
     );
   }
@@ -89,6 +87,7 @@ const FeedScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     padding: Spacing.smaller,
+    marginBottom: Spacing.smaller,
   },
   header: {
     ...Typography.headerText,
