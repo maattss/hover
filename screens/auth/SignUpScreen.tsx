@@ -16,7 +16,6 @@ import Firebase, { fns } from '../../lib/firebase';
 import { Buttons, Colors, Spacing, Typography } from '../../theme';
 import CustomButton from '../../components/general/Button';
 import Loading from '../../components/general/Loading';
-import { useUpdateUserMutation } from '../../graphql/mutations/UpdateUser.generated';
 import KeyboardAvoiderNoHeader from '../../components/general/KeyboarAvoiderNoHeader';
 
 export const randomPictureURI = () => {
@@ -37,7 +36,6 @@ const SignUpScreen = ({ navigation }: StackScreenProps<AuthStackParamList, 'Sign
   const [loading, setLoading] = useState(false);
   const [loadingImage, setLoadingImage] = useState(true);
   const [picture, setPicture] = useState(randomPictureURI());
-  const [updateUser] = useUpdateUserMutation();
 
   const validateForm = () => {
     if (name.length < 1) {
@@ -64,20 +62,10 @@ const SignUpScreen = ({ navigation }: StackScreenProps<AuthStackParamList, 'Sign
         // Generate email from username.
         const email = getSanitizedEmail(name);
         // Call the function
-        await registerUser({ email, password });
+        await registerUser({ email, password, name, picture });
         // Log the user in
         const newUser = await Firebase.auth().signInWithEmailAndPassword(email, password);
-        // Add user name and picture to Hasura DB
-        const id = newUser.user?.uid;
-        if (id) {
-          await updateUser({
-            variables: {
-              id,
-              name,
-              picture,
-              bio,
-            },
-          });
+        if (newUser) {
           Alert.alert('Signup success', 'Welcome to Hover!');
         } else {
           throw new Error('Error inserting user data to Hasura on signup.');
