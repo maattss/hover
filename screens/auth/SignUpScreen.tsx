@@ -30,7 +30,6 @@ export const getSanitizedEmail = (name: string) => {
 
 const SignUpScreen = ({ navigation }: StackScreenProps<AuthStackParamList, 'Signup'>) => {
   const [name, setName] = useState('');
-  const [bio] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
