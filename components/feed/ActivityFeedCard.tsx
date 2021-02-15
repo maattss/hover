@@ -14,7 +14,6 @@ interface ActivityFeedCardProps {
 }
 
 const ActivityFeedCard: React.FC<ActivityFeedCardProps> = ({ data }: ActivityFeedCardProps) => {
-  console.log(data);
   const mapRegion: Region = {
     latitude: data.activity.geofence.latitude,
     longitude: data.activity.geofence.longitude,
