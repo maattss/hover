@@ -2839,7 +2839,7 @@ export type Feed = {
   activity?: Maybe<Activities>;
   /** An object relationship */
   activityByActivityIdCreatedAtUserId?: Maybe<Activities>;
-  activity_id: Scalars['Int'];
+  activity_id?: Maybe<Scalars['Int']>;
   created_at?: Maybe<Scalars['timestamptz']>;
   /** An object relationship */
   feedTypeByFeedType: Feed_Type;

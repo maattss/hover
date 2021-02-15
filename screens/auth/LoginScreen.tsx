@@ -109,6 +109,7 @@ const styles = StyleSheet.create({
   signupContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
+    marginTop: Spacing.smaller,
   },
 });
 

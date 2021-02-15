@@ -207,6 +207,7 @@ const styles = StyleSheet.create({
   loginContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
+    marginTop: Spacing.smaller,
   },
   cancelButton: {
     ...Buttons.button,
