@@ -76,11 +76,11 @@ const PendingChallengeCard: React.FC<PendingChallengeCardProps> = ({ challenge }
 
   return (
     <View style={styles.card}>
-      <View style={styles.topBar}>
-        <View style={styles.topBarAvatar}>
+      <View style={styles.row}>
+        <View style={styles.avatar}>
           <Avatar rounded source={{ uri: challenge.created_by.picture ?? '' }} size="medium" />
         </View>
-        <View style={styles.topBarText}>
+        <View style={styles.infoContainer}>
           <Text style={styles.nameText}>{challenge.created_by.name}</Text>
           <Text style={styles.descriptionText}>{generateDescription(challenge)}</Text>
         </View>
@@ -90,7 +90,9 @@ const PendingChallengeCard: React.FC<PendingChallengeCardProps> = ({ challenge }
           <Text style={styles.opponentHeaderText}>Other partcicipants</Text>
           {opponents.map((opponent) => (
             <View key={opponent.user.id} style={styles.opponentRow}>
-              <Avatar rounded source={{ uri: opponent.user.picture ?? '' }} size="medium" />
+              <View style={styles.opponentAvatar}>
+                <Avatar rounded source={{ uri: opponent.user.picture ?? '' }} size="medium" />
+              </View>
               <View style={styles.oppnentNameStateRow}>
                 <Text style={styles.opponentNameText}>{opponent.user.name}</Text>
                 <Text style={styles.opponentStateText}>{opponent.state}</Text>
@@ -115,21 +117,16 @@ const styles = StyleSheet.create({
     shadowColor: Colors.black,
     shadowOffset: { height: 0, width: 0 },
   },
-  topBar: {
+  avatar: {
+    marginRight: Spacing.base,
+  },
+  row: {
     flexDirection: 'row',
     justifyContent: 'flex-start',
   },
-  topBarAvatar: {
-    width: '20%',
-  },
-  avatar: {
-    height: 45,
-    width: 45,
-    borderRadius: 45 / 2,
-    marginRight: Spacing.small,
-  },
-  topBarText: {
-    width: '80%',
+  infoContainer: {
+    justifyContent: 'center',
+    flexShrink: 1,
   },
   nameText: {
     ...Typography.headerText,
@@ -158,9 +155,6 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
   opponentAvatar: {
-    height: 25,
-    width: 25,
-    borderRadius: 25 / 2,
     marginRight: Spacing.small,
   },
   oppnentNameStateRow: {

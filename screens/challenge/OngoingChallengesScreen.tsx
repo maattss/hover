@@ -44,12 +44,10 @@ const OngoingChallengesScreen: React.FC<Props> = ({ route }: Props) => {
         setChallengeData(ongoingChallenges);
       }
     }
-    console.log('useEffect');
   }, [data, fetchMore]);
 
   const loadMoreChallenges = () => {
     if (!endReached && !loading) {
-      console.log('loadMoreChallenges');
       const newOffset = offset + limit;
       setOffset(newOffset);
       fetchMore({

@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
     width: '50%',
   },
   avatar: {
-    marginRight: Spacing.small,
+    marginRight: Spacing.base,
   },
   opponentAvatar: {
     marginRight: Spacing.small,
