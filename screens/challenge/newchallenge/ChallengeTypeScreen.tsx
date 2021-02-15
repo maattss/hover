@@ -9,8 +9,8 @@ import { Colors, Spacing, Typography } from '../../../theme';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useChallengeTypesQuery } from '../../../graphql/queries/ChallengeTypes.generated';
 import { MenuButton } from '../../../components/general/Button';
-import { getChallengeTypeEnum } from '../../../helpers/challengeMappers';
 import Divider from '../../../components/general/Divider';
+import { Challenge_Type_Enum } from '../../../types/types';
 
 type ChallengeTypeRouteProp = RouteProp<NewChallengeStackParamList, 'ChallengeType'>;
 type NavigationProp = StackNavigationProp<NewChallengeStackParamList>;
@@ -29,7 +29,7 @@ const ChallengeTypeScreen: React.FC<Props> = ({ route, navigation }: Props) => {
         onPress={() => {
           navigation.push('ChallengeRules', {
             ...route.params,
-            challenge_type: getChallengeTypeEnum(item.name),
+            challenge_type: item.name as Challenge_Type_Enum,
           });
         }}
         label={item.description ?? item.name}
