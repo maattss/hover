@@ -8,12 +8,6 @@ query GetChallenges($user_id: String!, $limit: Int!) {
     ) {
       challenge {
         ...challengeFragment
-        created_by_user {
-          ...listUserFragment
-        }
-        opponents: challenge_participants(where: { user_id: { _neq: $user_id } }) {
-          ...opponentFragment
-        }
       }
     }
     ongoing_challenges: challenge_participants(
@@ -23,12 +17,6 @@ query GetChallenges($user_id: String!, $limit: Int!) {
     ) {
       challenge {
         ...challengeFragment
-        created_by_user {
-          ...listUserFragment
-        }
-        opponents: challenge_participants(order_by: { challenge_participant_state: { state: asc } }) {
-          ...opponentFragment
-        }
       }
     }
     finished_challenges: challenge_participants(
@@ -38,12 +26,6 @@ query GetChallenges($user_id: String!, $limit: Int!) {
     ) {
       challenge {
         ...challengeFragment
-        created_by_user {
-          ...listUserFragment
-        }
-        opponents: challenge_participants(where: { user_id: { _neq: $user_id } }) {
-          ...opponentFragment
-        }
       }
     }
   }

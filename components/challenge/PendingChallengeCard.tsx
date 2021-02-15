@@ -38,7 +38,7 @@ const PendingChallengeCard: React.FC<PendingChallengeCardProps> = ({ challenge }
           updateMutation({
             variables: {
               challenge_id: challenge.id,
-              user_id: challenge.user_id,
+              user_id: challenge.user.id,
               state: state,
             },
           }).then(() => setPartcipationState(state));
@@ -70,6 +70,9 @@ const PendingChallengeCard: React.FC<PendingChallengeCardProps> = ({ challenge }
         );
     }
   };
+  const opponents = challenge.opponents.filter(
+    (opponent) => opponent.user.id != challenge.created_by.id && opponent.user.id == challenge.user.id,
+  );
 
   return (
     <View style={styles.card}>
@@ -82,20 +85,18 @@ const PendingChallengeCard: React.FC<PendingChallengeCardProps> = ({ challenge }
           <Text style={styles.descriptionText}>{generateDescription(challenge)}</Text>
         </View>
       </View>
-      {challenge.opponents.length > 1 && (
+      {opponents.length > 1 && (
         <View style={styles.opponentContainer}>
           <Text style={styles.opponentHeaderText}>Other partcicipants</Text>
-          {challenge.opponents
-            .filter((opponent) => opponent.user.id != challenge.created_by.id)
-            .map((opponent) => (
-              <View key={opponent.user.id} style={styles.opponentRow}>
-                <Avatar rounded source={{ uri: opponent.user.picture ?? '' }} size="medium" />
-                <View style={styles.oppnentNameStateRow}>
-                  <Text style={styles.opponentNameText}>{opponent.user.name}</Text>
-                  <Text style={styles.opponentStateText}>{opponent.state}</Text>
-                </View>
+          {opponents.map((opponent) => (
+            <View key={opponent.user.id} style={styles.opponentRow}>
+              <Avatar rounded source={{ uri: opponent.user.picture ?? '' }} size="medium" />
+              <View style={styles.oppnentNameStateRow}>
+                <Text style={styles.opponentNameText}>{opponent.user.name}</Text>
+                <Text style={styles.opponentStateText}>{opponent.state}</Text>
               </View>
-            ))}
+            </View>
+          ))}
         </View>
       )}
 
