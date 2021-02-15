@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { RefreshControl, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import { useGetChallengesQuery } from '../../graphql/queries/GetChallenges.generated';
-import { Buttons, Colors, Spacing, Typography } from '../../theme';
+import { Colors, Spacing, Typography } from '../../theme';
 import useAuthentication from '../../hooks/useAuthentication';
-import { OngoingChallenge, PendingChallenge } from '../../types/challengeTypes';
+import { Challenge } from '../../types/challengeTypes';
 import { convertChallenge } from '../../helpers/objectMappers';
 import { ScrollView } from 'react-native-gesture-handler';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -25,8 +25,8 @@ const ChallengeScreen: React.FC<ChallengesProps> = (props: ChallengesProps) => {
   const user_id = useAuthentication().user?.uid;
   const [refreshing, setRefreshing] = useState(false);
 
-  const [pendingChallenges, setPendingChallenges] = useState<PendingChallenge[]>();
-  const [ongoingChallenges, setOngoingChallenges] = useState<OngoingChallenge[]>();
+  const [pendingChallenges, setPendingChallenges] = useState<Challenge[]>();
+  const [ongoingChallenges, setOngoingChallenges] = useState<Challenge[]>();
 
   const { data: challengeData, loading, error, refetch } = useGetChallengesQuery({
     variables: { user_id: user_id ? user_id : '', limit: PREVIEW_SIZE + 1 },
@@ -107,11 +107,7 @@ const ChallengeScreen: React.FC<ChallengesProps> = (props: ChallengesProps) => {
   );
 };
 
-const renderPendingChallenges = (
-  { navigation }: ChallengesProps,
-  pendingChallenges: PendingChallenge[],
-  user_id: string,
-) => {
+const renderPendingChallenges = ({ navigation }: ChallengesProps, pendingChallenges: Challenge[], user_id: string) => {
   return (
     <View style={styles.box}>
       <View style={styles.boxTitle}>
@@ -134,11 +130,7 @@ const renderPendingChallenges = (
   );
 };
 
-const renderOngoingChallenges = (
-  { navigation }: ChallengesProps,
-  ongoingChallenges: OngoingChallenge[],
-  user_id: string,
-) => {
+const renderOngoingChallenges = ({ navigation }: ChallengesProps, ongoingChallenges: Challenge[], user_id: string) => {
   return (
     <View style={styles.box}>
       <View style={styles.boxTitle}>

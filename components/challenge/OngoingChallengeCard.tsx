@@ -3,14 +3,14 @@ import { Animated, StyleSheet, Text, View } from 'react-native';
 import { Colors, Typography, Spacing } from '../../theme';
 import { timeStampToPresentable } from '../../helpers/dateTimeHelpers';
 import Divider from '../general/Divider';
-import { OngoingChallenge } from '../../types/challengeTypes';
+import { Challenge } from '../../types/challengeTypes';
 import { Avatar } from 'react-native-elements';
 import { generateOngoingChallengeDescription } from '../../helpers/decriptionHelper';
 import { Challenge_Participant_State_Enum, Challenge_Type_Enum } from '../../types/types';
 import { OpponentFragmentFragment } from '../../graphql/Fragments.generated';
 
 interface OngoingChallengeCardProps {
-  challenge: OngoingChallenge;
+  challenge: Challenge;
 }
 
 const OngoingChallengeCard: React.FC<OngoingChallengeCardProps> = ({ challenge }: OngoingChallengeCardProps) => {

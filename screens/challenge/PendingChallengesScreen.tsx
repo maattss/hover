@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { View, Text, StyleSheet, RefreshControl, SafeAreaView, FlatList, Alert } from 'react-native';
-import { PendingChallenge } from '../../types/challengeTypes';
+import { Challenge } from '../../types/challengeTypes';
 import { RouteProp } from '@react-navigation/native';
 import { ChallengeStackParamList } from '../../types/navigationTypes';
 import { Colors, Spacing, Typography } from '../../theme';
@@ -10,7 +10,7 @@ import { convertToChallenge } from '../../helpers/objectMappers';
 import { useGetPendingChallengesQuery } from '../../graphql/queries/GetPendingChallenges.generated';
 
 export interface PendingChallengesScreenProps {
-  pendingChallenges: PendingChallenge[];
+  pendingChallenges: Challenge[];
   user_id: string;
 }
 
@@ -20,7 +20,7 @@ type Props = {
 };
 
 const PendingChallengesScreen: React.FC<Props> = ({ route }: Props) => {
-  const [challengeData, setChallengeData] = useState<PendingChallenge[]>([]);
+  const [challengeData, setChallengeData] = useState<Challenge[]>([]);
   const [refreshing, setRefreshing] = useState(false);
 
   const [limit] = useState(5);
@@ -38,9 +38,9 @@ const PendingChallengesScreen: React.FC<Props> = ({ route }: Props) => {
       if (data.user.pending_challenges.length == 0) {
         setEndReached(true);
       } else {
-        const pendingChallenges: PendingChallenge[] = challengeData;
+        const pendingChallenges: Challenge[] = challengeData;
         data.user.pending_challenges.forEach((obj) => {
-          pendingChallenges.push(convertToChallenge(obj.challenge, user) as PendingChallenge);
+          pendingChallenges.push(convertToChallenge(obj.challenge, user));
         });
         setChallengeData(pendingChallenges);
       }
@@ -80,7 +80,7 @@ const PendingChallengesScreen: React.FC<Props> = ({ route }: Props) => {
       </Text>
     </View>
   );
-  const renderItem = (item: PendingChallenge) => (
+  const renderItem = (item: Challenge) => (
     <View style={{ marginHorizontal: Spacing.smaller }}>
       <PendingChallengeCard challenge={item} />
     </View>

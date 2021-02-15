@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, SafeAreaView, StyleSheet, FlatList, Alert } from 'react-native';
-import { OngoingChallenge } from '../../types/challengeTypes';
+import { Challenge } from '../../types/challengeTypes';
 import { RouteProp } from '@react-navigation/native';
 import { ChallengeStackParamList } from '../../types/navigationTypes';
 import { Spacing, Typography } from '../../theme';
@@ -11,7 +11,7 @@ import OngoingChallengeCard from '../../components/challenge/OngoingChallengeCar
 
 export interface OngoingChallengesScreenProps {
   user_id: string;
-  ongoingChallenges: OngoingChallenge[];
+  ongoingChallenges: Challenge[];
 }
 
 type ChallengeScreenRouteProp = RouteProp<ChallengeStackParamList, 'OngoingChallenges'>;
@@ -21,7 +21,7 @@ type Props = {
 };
 
 const OngoingChallengesScreen: React.FC<Props> = ({ route }: Props) => {
-  const [challengeData, setChallengeData] = useState<OngoingChallenge[]>([]);
+  const [challengeData, setChallengeData] = useState<Challenge[]>([]);
   const [limit] = useState(5);
   const [offset, setOffset] = useState(0);
   const [endReached, setEndReached] = useState(false);
@@ -37,9 +37,9 @@ const OngoingChallengesScreen: React.FC<Props> = ({ route }: Props) => {
       if (data.user.ongoing_challenges.length == 0) {
         setEndReached(true);
       } else {
-        const ongoingChallenges: OngoingChallenge[] = challengeData;
+        const ongoingChallenges: Challenge[] = challengeData;
         data.user.ongoing_challenges.forEach((obj) => {
-          ongoingChallenges.push(convertToChallenge(obj.challenge, user) as OngoingChallenge);
+          ongoingChallenges.push(convertToChallenge(obj.challenge, user));
         });
         setChallengeData(ongoingChallenges);
       }
@@ -67,7 +67,7 @@ const OngoingChallengesScreen: React.FC<Props> = ({ route }: Props) => {
       <Text style={{ ...Typography.bodyText, marginTop: Spacing.base }}>Here are your active challenges.</Text>
     </View>
   );
-  const renderItem = (item: OngoingChallenge) => (
+  const renderItem = (item: Challenge) => (
     <View style={styles.cardbox}>
       <OngoingChallengeCard challenge={item} />
     </View>

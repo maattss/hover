@@ -11,7 +11,7 @@ import { UserProfile, Achievement as AchievementType, AchievementVariant } from 
 import { ActivityFeedData } from '../types/feedTypes';
 import { Asset } from 'expo-asset';
 import { Challenge_State_Enum, Challenge_Type_Enum, Geofences } from '../types/types';
-import { OngoingChallenge, PendingChallenge } from '../types/challengeTypes';
+import { Challenge } from '../types/challengeTypes';
 import { GetChallengesQuery } from '../graphql/queries/GetChallenges.generated';
 import { ChallengeFragmentFragment, ListUserFragmentFragment } from '../graphql/Fragments.generated';
 
@@ -173,33 +173,30 @@ export const convertToUserProfile = (data: ProfileUserQuery | undefined) => {
 };
 
 type UserChallenges = {
-  pendingChallenges: PendingChallenge[];
-  ongoingChallenges: OngoingChallenge[];
+  pendingChallenges: Challenge[];
+  ongoingChallenges: Challenge[];
 };
 export const convertChallenge = (challengeData: GetChallengesQuery) => {
-  const pendingChallenges: PendingChallenge[] = [];
-  const ongoingChallenges: OngoingChallenge[] = [];
+  const pendingChallenges: Challenge[] = [];
+  const ongoingChallenges: Challenge[] = [];
 
   if (challengeData && challengeData.user) {
     const user = challengeData.user;
     if (challengeData.user?.pending_challenges) {
       challengeData.user.pending_challenges.forEach((obj) =>
-        pendingChallenges.push(convertToChallenge(obj.challenge, user) as PendingChallenge),
+        pendingChallenges.push(convertToChallenge(obj.challenge, user)),
       );
     }
     if (challengeData.user?.ongoing_challenges) {
       challengeData.user.ongoing_challenges.forEach((obj) =>
-        ongoingChallenges.push(convertToChallenge(obj.challenge, user) as OngoingChallenge),
+        ongoingChallenges.push(convertToChallenge(obj.challenge, user)),
       );
     }
   }
   return { pendingChallenges, ongoingChallenges } as UserChallenges;
 };
 
-export const convertToChallenge = (
-  challenge: ChallengeFragmentFragment,
-  user: ListUserFragmentFragment,
-): OngoingChallenge | PendingChallenge => {
+export const convertToChallenge = (challenge: ChallengeFragmentFragment, user: ListUserFragmentFragment): Challenge => {
   {
     const opponents = challenge.opponents;
     return {

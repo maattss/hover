@@ -3,20 +3,7 @@ import { ListUserFragmentFragment, OpponentFragmentFragment } from '../graphql/F
 import { GeoFenceCategory } from './geoFenceTypes';
 import { Challenge_State_Enum, Challenge_Type_Enum } from './types';
 
-export type PendingChallenge = {
-  user: ListUserFragmentFragment;
-  created_by: ListUserFragmentFragment;
-  id: number;
-  challenge_type: Challenge_Type_Enum;
-  created_at: string;
-  rules: ChallengeRules;
-  end_date: string;
-  state: Challenge_State_Enum;
-  start_date: string;
-  opponents: readonly OpponentFragmentFragment[];
-};
-
-export type OngoingChallenge = {
+export type Challenge = {
   user: ListUserFragmentFragment;
   created_by: ListUserFragmentFragment;
   id: number;

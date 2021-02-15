@@ -4,11 +4,11 @@ import { Avatar } from 'react-native-elements';
 import { useUpdateChallengeParticipationMutation } from '../../graphql/mutations/UpdateChallengeParticipation.generated';
 import { generateDescription } from '../../helpers/decriptionHelper';
 import { Colors, Typography, Spacing, Buttons } from '../../theme';
-import { PendingChallenge } from '../../types/challengeTypes';
+import { Challenge } from '../../types/challengeTypes';
 import { Challenge_Participant_State_Enum } from '../../types/types';
 
 interface PendingChallengeCardProps {
-  challenge: PendingChallenge;
+  challenge: Challenge;
 }
 
 const PendingChallengeCard: React.FC<PendingChallengeCardProps> = ({ challenge }: PendingChallengeCardProps) => {
