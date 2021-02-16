@@ -59,9 +59,10 @@ const FeedScreen: React.FC = () => {
     setRefreshing(false);
   };
   const loadMoreFeedElements = async () => {
-    const newLimit = limit + 10;
-    setLimit(newLimit);
-    fetchMore({
+    const newOffset = offset + pageSize;
+    setOffset(newOffset);
+    setFetchingMore(true);
+    await fetchMore({
       variables: {
         limit: pageSize,
         offset: newOffset,
