@@ -4,38 +4,46 @@ import { Colors, Typography, Spacing } from '../../theme';
 import { ActivityFeedData } from '../../types/feedTypes';
 import { timeStampToPresentable } from '../../helpers/dateTimeHelpers';
 import MapView, { LatLng, Marker, Region } from 'react-native-maps';
-import { defaultMapLocation } from '../../helpers/objectMappers';
 import GeoFences from '../map/GeoFences';
 import { getGeoFenceImage } from '../../helpers/geoFenceCalculations';
+import { convertToGeoFence, defaultUserProfile } from '../../helpers/objectMappers';
+import { GeoFenceCategory } from '../../types/geoFenceTypes';
 
 interface ActivityFeedCardProps {
-  activity: ActivityFeedData;
+  data: ActivityFeedData;
 }
 
-const ActivityFeedCard: React.FC<ActivityFeedCardProps> = ({ activity }: ActivityFeedCardProps) => {
+const ActivityFeedCard: React.FC<ActivityFeedCardProps> = ({ data }: ActivityFeedCardProps) => {
   const mapRegion: Region = {
-    latitude: activity.geoFence ? activity.geoFence.latitude : defaultMapLocation.latitude,
-    longitude: activity.geoFence ? activity.geoFence.longitude : defaultMapLocation.latitude,
+    latitude: data.activity.geofence.latitude,
+    longitude: data.activity.geofence.longitude,
     latitudeDelta: 0.01,
     longitudeDelta: 0.01,
   };
   const markerCoordinate: LatLng = {
-    latitude: activity.geoFence ? activity.geoFence.latitude : defaultMapLocation.latitude,
-    longitude: activity.geoFence ? activity.geoFence.longitude : defaultMapLocation.latitude,
+    latitude: data.activity.geofence.latitude,
+    longitude: data.activity.geofence.longitude,
   };
+  const activityGeoFence = convertToGeoFence(data.activity.geofence);
   return (
     <View style={styles.card}>
       <View style={styles.topBar}>
-        <Image source={{ uri: activity.picture }} style={styles.avatar} />
+        <Image
+          source={{ uri: data.user.picture ? data.user.picture : defaultUserProfile.picture }}
+          style={styles.avatar}
+        />
         <View>
-          <Text style={styles.nameText}>{activity.userName}</Text>
-          <Text style={styles.captionText}>{activity.caption}</Text>
+          <Text style={styles.nameText}>{data.user.name}</Text>
+          <Text style={styles.captionText}>{data.activity.caption}</Text>
         </View>
       </View>
       <View style={styles.main}>
         <View style={styles.category}>
-          <Image source={{ uri: getGeoFenceImage(activity.geoFence?.category) }} style={styles.categoryIcon} />
-          <Text style={styles.scoreText}>{activity.score} points</Text>
+          <Image
+            source={{ uri: getGeoFenceImage(data.activity.geofence.category as GeoFenceCategory) }}
+            style={styles.categoryIcon}
+          />
+          <Text style={styles.scoreText}>{data.activity.score} points</Text>
         </View>
         <MapView
           style={styles.map}
@@ -46,14 +54,14 @@ const ActivityFeedCard: React.FC<ActivityFeedCardProps> = ({ activity }: Activit
           zoomEnabled={false}>
           <Marker
             coordinate={markerCoordinate}
-            title={activity.geoFence ? activity.geoFence.name : 'No name'}
-            description={activity.geoFence ? activity.geoFence.description : 'No description'}
+            title={data.activity.geofence.name ?? 'No name'}
+            description={data.activity.geofence.description ?? 'No description'}
           />
-          <GeoFences geofences={activity.geoFence ? [activity.geoFence] : undefined} />
+          {activityGeoFence && <GeoFences geofences={[activityGeoFence]} />}
         </MapView>
       </View>
       <View style={styles.footer}>
-        <Text style={styles.footerText}>{timeStampToPresentable(activity.startedAt)}</Text>
+        <Text style={styles.footerText}>{timeStampToPresentable(data.createdAt)}</Text>
       </View>
     </View>
   );

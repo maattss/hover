@@ -1,14 +1,5 @@
 query Geofences {
   geofences {
-    id
-    name
-    description
-    latitude
-    longitude
-    radius
-    variant
-    coordinates
-    category
+    ...geofenceFragment
   }
 }
-

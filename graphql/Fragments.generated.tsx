@@ -83,12 +83,17 @@ export type AchievementFeedFragmentFragment = { readonly __typename: 'feed' } & 
     >;
   };
 
+export type FeedActivityFragmentFragment = { readonly __typename: 'activities' } & Pick<
+  Types.Activities,
+  'activity_id' | 'caption' | 'duration' | 'geofence_id' | 'score' | 'started_at' | 'stopped_at'
+> & { readonly geofence: { readonly __typename: 'geofences' } & GeofenceFragmentFragment };
+
 export type FullFeedFragmentFragment = { readonly __typename: 'feed' } & Pick<
   Types.Feed,
   'id' | 'activity_id' | 'achievement_id' | 'created_at'
 > & {
-    readonly user?: Types.Maybe<{ readonly __typename: 'users' } & BasicUserFragmentFragment>;
-    readonly activity?: Types.Maybe<{ readonly __typename: 'activities' } & BasicActivityFragmentFragment>;
+    readonly user?: Types.Maybe<{ readonly __typename: 'users' } & ListUserFragmentFragment>;
+    readonly activity?: Types.Maybe<{ readonly __typename: 'activities' } & FeedActivityFragmentFragment>;
     readonly user_achievement?: Types.Maybe<
       { readonly __typename: 'user_achievement' } & {
         readonly achievement: { readonly __typename: 'achievement' } & AchievementFragmentFragment;
@@ -250,15 +255,30 @@ export const AchievementFeedFragmentFragmentDoc = gql`
   ${BasicUserFragmentFragmentDoc}
   ${AchievementFragmentFragmentDoc}
 `;
+export const FeedActivityFragmentFragmentDoc = gql`
+  fragment feedActivityFragment on activities {
+    activity_id
+    caption
+    duration
+    geofence_id
+    geofence {
+      ...geofenceFragment
+    }
+    score
+    started_at
+    stopped_at
+  }
+  ${GeofenceFragmentFragmentDoc}
+`;
 export const FullFeedFragmentFragmentDoc = gql`
   fragment fullFeedFragment on feed {
     id
     user {
-      ...basicUserFragment
+      ...listUserFragment
     }
     activity_id
     activity {
-      ...basicActivityFragment
+      ...feedActivityFragment
     }
     achievement_id
     user_achievement {
@@ -268,7 +288,7 @@ export const FullFeedFragmentFragmentDoc = gql`
     }
     created_at
   }
-  ${BasicUserFragmentFragmentDoc}
-  ${BasicActivityFragmentFragmentDoc}
+  ${ListUserFragmentFragmentDoc}
+  ${FeedActivityFragmentFragmentDoc}
   ${AchievementFragmentFragmentDoc}
 `;
