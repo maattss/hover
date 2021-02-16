@@ -7,7 +7,7 @@ import Button from '../../../components/general/Button';
 import OpponentsRowList from '../../../components/challenge/OpponentsList';
 import { useInsertChallengeMutation } from '../../../graphql/mutations/InsertChallenge.generated';
 import { convertToJsonRule } from '../../../helpers/challengeMappers';
-import { Buttons, Colors, Spacing, Typography } from '../../../theme';
+import { Colors, Spacing, Typography } from '../../../theme';
 import { NewChallengeStackParamList, RootTabParamList } from '../../../types/navigationTypes';
 import { Challenge_Participant_Insert_Input, Challenge_Participant_State_Enum } from '../../../types/types';
 import Divider from '../../../components/general/Divider';
