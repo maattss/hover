@@ -23,7 +23,7 @@ const PendingChallengesScreen: React.FC<Props> = ({ route }: Props) => {
   const [challengeData, setChallengeData] = useState<Challenge[]>([]);
   const [refreshing, setRefreshing] = useState(false);
 
-  const [limit] = useState(5);
+  const limit = 5;
   const [offset, setOffset] = useState(0);
   const [endReached, setEndReached] = useState(false);
 
