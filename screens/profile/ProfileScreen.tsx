@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Alert, StyleSheet, Text, View, Image, RefreshControl, Button } from 'react-native';
+import { StyleSheet, Text, View, Image, RefreshControl, Button } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useProfileUserQuery } from '../../graphql/queries/ProfileUser.generated';
 import useAuthentication from '../../hooks/useAuthentication';
@@ -9,6 +9,7 @@ import { GeoFenceCategory } from '../../types/geoFenceTypes';
 import ProfileActivityCard from '../../components/profile/ProfileActivityCard';
 import Achievement from '../../components/profile/Achievement';
 import { convertToUserProfile, defaultUserProfile } from '../../helpers/objectMappers';
+import Error from '../../components/general/Error';
 import Loading from '../../components/general/Loading';
 import { getGeoFenceImage } from '../../helpers/geoFenceCalculations';
 
@@ -89,10 +90,7 @@ const ProfileScreen: React.FC = () => {
       });
     };
 
-    if (error) {
-      console.error(error);
-      Alert.alert('Error', error?.message);
-    }
+    if (error) return <Error message={error.message} apolloError={error} />;
     if (loading) return <Loading />;
 
     return (

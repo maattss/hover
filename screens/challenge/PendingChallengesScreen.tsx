@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, FlatList, Alert } from 'react-native';
+import { View, Text, StyleSheet, FlatList } from 'react-native';
 import { Challenge } from '../../types/challengeTypes';
 import { RouteProp } from '@react-navigation/native';
 import { ChallengeStackParamList } from '../../types/navigationTypes';
 import { Spacing, Typography } from '../../theme';
 import PendingChallengeCard from '../../components/challenge/PendingChallengeCard';
+import Error from '../../components/general/Error';
 import Loading from '../../components/general/Loading';
 import { convertToChallenge } from '../../helpers/objectMappers';
 import { useGetPendingChallengesQuery } from '../../graphql/queries/GetPendingChallenges.generated';
@@ -81,10 +82,8 @@ const PendingChallengesScreen: React.FC<Props> = ({ route }: Props) => {
     );
   };
 
-  if (error) {
-    console.error(error);
-    Alert.alert('Error', error?.message);
-  }
+  if (error) return <Error message={error.message} apolloError={error} />;
+
   return (
     <FlatList
       data={challengeData}

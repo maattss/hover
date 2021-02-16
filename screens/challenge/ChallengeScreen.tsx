@@ -10,6 +10,7 @@ import { ChallengeStackParamList } from '../../types/navigationTypes';
 import PendingChallengeCard from '../../components/challenge/PendingChallengeCard';
 import OngoingChallengeCard from '../../components/challenge/OngoingChallengeCard';
 import Button from '../../components/general/Button';
+import Error from '../../components/general/Error';
 import Loading from '../../components/general/Loading';
 import { useIsFocused } from '@react-navigation/native';
 
@@ -58,16 +59,7 @@ const ChallengeScreen: React.FC<ChallengesProps> = (props: ChallengesProps) => {
 
   if (loading) return <Loading />;
 
-  if (error) {
-    return (
-      <View style={styles.errorContainer}>
-        <Text style={{ ...Typography.bodyText, marginTop: Spacing.base }}>{error.message}</Text>
-        <Button style={styles.challengeButton} onPress={handleRefresh}>
-          Refresh
-        </Button>
-      </View>
-    );
-  }
+  if (error) return <Error message={error.message} apolloError={error} />;
 
   return (
     <ScrollView
