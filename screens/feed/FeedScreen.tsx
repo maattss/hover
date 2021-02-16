@@ -71,7 +71,7 @@ const FeedScreen: React.FC = () => {
   };
 
   if (error) return <Error message={error.message} apolloError={error} />;
-  if (loading) return <Loading />;
+  if (loading && !fetchingMore) return <Loading />;
 
   const renderItem: ListRenderItem<FeedData> = ({ item }) => getItem(item);
   return (
