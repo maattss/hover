@@ -1,0 +1,15 @@
+query GetPendingChallenges($user_id: String!, $limit: Int!, $offset: Int!) {
+  user(id: $user_id) {
+    ...listUserFragment
+    pending_challenges: challenge_participants(
+      where: { state: { _eq: PENDING }, challenge: { state: { _eq: ACTIVE } } }
+      limit: $limit
+      offset: $offset
+      order_by: { challenge: { created_at: desc } }
+    ) {
+      challenge {
+        ...challengeFragment
+      }
+    }
+  }
+}

@@ -6,10 +6,6 @@ export const convertToJsonRule = (rules: ChallengeRules): string => {
   return jsonRule;
 };
 
-export const getChallengeTypeEnum = (challengeType: string): Challenge_Type_Enum => {
-  return Challenge_Type_Enum[challengeType as keyof typeof Challenge_Type_Enum];
-};
-
 export const getChallengeTypeFields = (challengeType: Challenge_Type_Enum): string[] => {
   switch (challengeType) {
     case Challenge_Type_Enum.Score:

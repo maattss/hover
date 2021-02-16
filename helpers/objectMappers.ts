@@ -10,13 +10,13 @@ import { ProfileUserQuery } from '../graphql/queries/ProfileUser.generated';
 import { UserProfile } from '../types/profileTypes';
 import { AchievementFeedData, ActivityFeedData, FeedCategory, FeedData } from '../types/feedTypes';
 import { Asset } from 'expo-asset';
-import { Challenge_Participant, Challenge_State_Enum, Challenge_Type_Enum } from '../types/types';
-import { OngoingChallenge, Opponent, PendingChallenge } from '../types/challengeTypes';
+import { Challenge_State_Enum, Challenge_Type_Enum } from '../types/types';
+import { Challenge } from '../types/challengeTypes';
 import { GetChallengesQuery } from '../graphql/queries/GetChallenges.generated';
 import {
   AchievementFragmentFragment,
   ActivityFragmentFragment,
-  BasicUserFragmentFragment,
+  ChallengeFragmentFragment,
   GeofenceFragmentFragment,
   ListUserFragmentFragment,
 } from '../graphql/Fragments.generated';
@@ -160,68 +160,45 @@ export const convertToUserProfile = (data: ProfileUserQuery | undefined) => {
 };
 
 type UserChallenges = {
-  pendingChallenges: PendingChallenge[];
-  ongoingChallenges: OngoingChallenge[];
+  pendingChallenges: Challenge[];
+  ongoingChallenges: Challenge[];
 };
 export const convertChallenge = (challengeData: GetChallengesQuery) => {
-  const pendingChallenges: PendingChallenge[] = [];
-  const ongoingChallenges: OngoingChallenge[] = [];
-  if (challengeData && challengeData.user && challengeData.user?.id && challengeData.user?.pending_challenges) {
-    const user_id = challengeData.user.id;
+  const pendingChallenges: Challenge[] = [];
+  const ongoingChallenges: Challenge[] = [];
 
-    challengeData.user.pending_challenges.forEach((obj) => {
-      const opponents = obj.challenge.opponents;
-      if (opponents.length >= 1) {
-        pendingChallenges.push({
-          user_id: user_id,
-          created_by: obj.challenge.created_by_user,
-          id: obj.challenge.id,
-          challenge_type: obj.challenge.challenge_type as Challenge_Type_Enum,
-          created_at: obj.challenge.created_at,
-          end_date: obj.challenge.end_date,
-          state: obj.challenge.state as Challenge_State_Enum,
-          start_date: obj.challenge.start_date,
-          opponents: opponents,
-          rules: obj.challenge.rules ?? {},
-        });
-      }
-    });
-  }
-  if (challengeData && challengeData.user && challengeData.user?.ongoing_challenges) {
+  if (challengeData && challengeData.user) {
     const user = challengeData.user;
-    challengeData.user.ongoing_challenges.forEach((obj) => {
-      const opponents = obj.challenge.opponents;
-      ongoingChallenges.push({
-        user: user,
-        created_by: obj.challenge.created_by_user,
-        id: obj.challenge.id,
-        challenge_type: obj.challenge.challenge_type as Challenge_Type_Enum,
-        created_at: obj.challenge.created_at,
-        end_date: obj.challenge.end_date,
-        state: obj.challenge.state as Challenge_State_Enum,
-        start_date: obj.challenge.start_date,
-        opponents: opponents,
-        rules: obj.challenge.rules ?? {},
-      });
-    });
+    if (challengeData.user?.pending_challenges) {
+      challengeData.user.pending_challenges.forEach((obj) =>
+        pendingChallenges.push(convertToChallenge(obj.challenge, user)),
+      );
+    }
+    if (challengeData.user?.ongoing_challenges) {
+      challengeData.user.ongoing_challenges.forEach((obj) =>
+        ongoingChallenges.push(convertToChallenge(obj.challenge, user)),
+      );
+    }
   }
   return { pendingChallenges, ongoingChallenges } as UserChallenges;
 };
 
-export const convertOpponent = (opponentData: OpponentQueryData) => {
-  const opponents: Opponent[] = [];
-  if (opponentData) {
-    opponentData.forEach((obj) =>
-      opponents.push({
-        id: obj.user.id,
-        name: obj.user.name,
-        state: obj.state,
-        picture: obj.user.picture,
-        bio: obj.user.bio,
-      } as Opponent),
-    );
+export const convertToChallenge = (challenge: ChallengeFragmentFragment, user: ListUserFragmentFragment): Challenge => {
+  {
+    const opponents = challenge.opponents;
+    return {
+      user: user,
+      created_by: challenge.created_by_user,
+      id: challenge.id,
+      challenge_type: challenge.challenge_type as Challenge_Type_Enum,
+      created_at: challenge.created_at,
+      end_date: challenge.end_date,
+      state: challenge.state as Challenge_State_Enum,
+      start_date: challenge.start_date,
+      opponents: opponents,
+      rules: challenge.rules ?? {},
+    };
   }
-  return opponents;
 };
 
 export const convertToFeedData = (data: FeedQuery) => {
@@ -261,10 +238,3 @@ export const convertToAchievementFeedData = (
     feedCategory: FeedCategory.ACHIEVEMENT,
   } as AchievementFeedData;
 };
-
-// Types
-type OpponentQueryData = ReadonlyArray<
-  { readonly __typename: 'challenge_participant' } & Pick<Challenge_Participant, 'state'> & {
-      readonly user: { readonly __typename: 'users' } & BasicUserFragmentFragment;
-    }
->;

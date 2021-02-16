@@ -1,80 +1,92 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Animated, StyleSheet, Text, View } from 'react-native';
 import { Colors, Typography, Spacing } from '../../theme';
 import { timeStampToPresentable } from '../../helpers/dateTimeHelpers';
 import Divider from '../general/Divider';
-import { OngoingChallenge } from '../../types/challengeTypes';
+import { Challenge } from '../../types/challengeTypes';
 import { Avatar } from 'react-native-elements';
 import { generateOngoingChallengeDescription } from '../../helpers/decriptionHelper';
+import { Challenge_Participant_State_Enum, Challenge_Type_Enum } from '../../types/types';
+import { OpponentFragmentFragment } from '../../graphql/Fragments.generated';
 
 interface OngoingChallengeCardProps {
-  challenge: OngoingChallenge;
+  challenge: Challenge;
 }
 
 const OngoingChallengeCard: React.FC<OngoingChallengeCardProps> = ({ challenge }: OngoingChallengeCardProps) => {
   const Opponents = () => {
-    switch (challenge.opponents.length) {
-      case 2: {
-        return (
-          <View style={styles.row}>
-            <View style={styles.colum}>
-              <Avatar rounded source={{ uri: challenge.user.picture ?? '' }} size="medium" />
-              <Text style={styles.nameText}>{challenge.user.name}</Text>
-            </View>
-            {challenge.opponents.map((opponent) => (
-              <View key={opponent.user.id} style={styles.colum}>
-                <Avatar rounded source={{ uri: opponent.user.picture ?? '' }} size="medium" />
-                <Text style={styles.nameText}>{opponent.user.name}</Text>
-              </View>
-            ))}
-          </View>
-        );
-      }
-      default: {
-        return (
-          <View>
-            <View style={styles.row}>
-              <View style={styles.colum}>
-                <Avatar rounded source={{ uri: challenge.user.picture ?? '' }} size="medium" />
-                <Text style={styles.nameText}>{challenge.user.name}</Text>
-              </View>
-              <View style={styles.versus}>
-                <Text style={styles.versusText}>vs</Text>
-              </View>
-              <View style={styles.colum}>
-                <Avatar rounded source={{ uri: challenge.created_by.picture ?? '' }} size="medium" />
-                <Text style={styles.nameText}>{challenge.created_by.name}</Text>
-              </View>
-            </View>
-            {challenge.opponents.length > 1 && (
-              <View style={styles.row}>
-                <View>
-                  <Text style={styles.opponentHeaderText}>Other partcicipants</Text>
-                  {challenge.opponents
-                    .filter((opponent) => opponent.user.id != challenge.created_by.id)
-                    .map((opponent) => (
-                      <View key={opponent.user.id} style={styles.opponentRow}>
-                        <Avatar rounded source={{ uri: opponent.user.picture ?? '' }} size="medium" />
-                        <View style={styles.opponentNameStateRow}>
-                          <Text style={styles.opponentNameText}>{opponent.user.name}</Text>
-                          <Text style={styles.opponentStateText}>{opponent.state}</Text>
-                        </View>
-                      </View>
-                    ))}
+    return (
+      <View style={styles.row}>
+        <View>
+          <Text style={styles.opponentHeaderText}>Challenge partcicipants</Text>
+          {challenge.opponents.map((opponent, index) => {
+            return (
+              <View key={index} style={styles.opponentRow}>
+                <View style={styles.opponentAvatar}>
+                  <Avatar rounded source={{ uri: opponent.user.picture ?? '' }} size="small" />
+                </View>
+                <View style={styles.opponentInfo}>
+                  <View style={styles.opponentNameStateRow}>
+                    <Text style={styles.opponentNameText}>{opponent.user.name}</Text>
+                    <Text style={styles.opponentStateText}>{opponent.state}</Text>
+                  </View>
+
+                  <View style={styles.opponentNameStateRow}>
+                    <View style={styles.progressBar}>
+                      {opponent.state != Challenge_Participant_State_Enum.Declined && (
+                        <Animated.View
+                          style={[
+                            [StyleSheet.absoluteFill],
+                            {
+                              backgroundColor:
+                                opponent.state == Challenge_Participant_State_Enum.Accepted
+                                  ? Colors.blue
+                                  : Colors.gray500,
+                              borderRadius: 5,
+                              width: getProgressPercentage(opponent),
+                            },
+                          ]}
+                        />
+                      )}
+                    </View>
+                  </View>
                 </View>
               </View>
-            )}
-          </View>
-        );
-      }
-    }
+            );
+          })}
+        </View>
+      </View>
+    );
   };
-
+  const getProgressPercentage = (opponent: OpponentFragmentFragment) => {
+    let width = 0;
+    if (
+      challenge.challenge_type == Challenge_Type_Enum.Score ||
+      challenge.challenge_type == Challenge_Type_Enum.ScoreCategory
+    ) {
+      width = opponent.progress && challenge.rules.score ? (opponent.progress / challenge.rules.score) * 100 : 0;
+    } else if (
+      challenge.challenge_type == Challenge_Type_Enum.Time ||
+      challenge.challenge_type == Challenge_Type_Enum.TimeCategory
+    ) {
+      width = opponent.progress && challenge.rules.time ? (opponent.progress / challenge.rules.time) * 100 : 0;
+    }
+    return (width > 100 ? 100 : width) + '%';
+  };
   return (
     <View style={styles.card}>
+      <View style={styles.row}>
+        <View style={styles.avatar}>
+          <Avatar rounded source={{ uri: challenge.created_by.picture ?? '' }} size="medium" />
+        </View>
+        <View style={styles.infoContainer}>
+          <Text style={styles.nameText}>{challenge.created_by.name}</Text>
+          <Text style={styles.captionText}>{generateOngoingChallengeDescription(challenge)}</Text>
+        </View>
+      </View>
+      <Divider />
       <Opponents />
       <Divider />
-      <Text style={styles.challengeText}>{generateOngoingChallengeDescription(challenge)}</Text>
 
       <View style={styles.footer}>
         <Text style={styles.footerText}>{timeStampToPresentable(challenge.created_at)}</Text>
@@ -88,8 +100,6 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.gray900,
     borderRadius: Spacing.smaller,
     padding: Spacing.base,
-    marginHorizontal: Spacing.smaller,
-    marginVertical: Spacing.smallest,
     shadowOpacity: 0.75,
     shadowRadius: 3,
     shadowColor: Colors.black,
@@ -97,31 +107,45 @@ const styles = StyleSheet.create({
   },
   row: {
     flexDirection: 'row',
-    justifyContent: 'space-evenly',
+    justifyContent: 'flex-start',
+  },
+  infoContainer: {
+    justifyContent: 'center',
+    flexShrink: 1,
   },
   colum: {
     marginTop: Spacing.smaller,
     alignItems: 'center',
     width: '50%',
   },
+  avatar: {
+    marginRight: Spacing.base,
+  },
+  opponentAvatar: {
+    marginRight: Spacing.small,
+    width: '10%',
+  },
+  opponentInfo: {
+    width: '90%',
+  },
   nameText: {
     ...Typography.headerText,
-    fontSize: 15,
-    paddingRight: Spacing.smallest,
+    fontSize: 20,
+    lineHeight: 30,
   },
-  avatar: {
-    height: 45,
-    width: 45,
-    borderRadius: 45 / 2,
-    backgroundColor: 'green',
-  },
-  versus: {
-    justifyContent: 'center',
-  },
-  versusText: {
+  captionText: {
     color: Colors.almostWhite,
-    fontSize: 16,
-    textAlign: 'center',
+    fontSize: 12,
+    fontStyle: 'italic',
+    flexWrap: 'wrap',
+  },
+  progressBar: {
+    height: 10,
+    width: '100%',
+    backgroundColor: Colors.almostWhite,
+    borderColor: Colors.almostBlack,
+    borderWidth: 2,
+    borderRadius: 5,
   },
   opponentHeaderText: {
     color: Colors.almostWhite,
@@ -130,20 +154,16 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing.base,
   },
   opponentRow: {
+    flex: 1,
     flexDirection: 'row',
     justifyContent: 'flex-start',
     marginBottom: Spacing.base,
   },
-  opponentAvatar: {
-    height: 25,
-    width: 25,
-    borderRadius: 25 / 2,
-    marginRight: Spacing.small,
-  },
   opponentNameStateRow: {
+    width: '90%',
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '70%',
+    justifyContent: 'center',
+    flexShrink: 1,
   },
   opponentNameText: {
     ...Typography.bodyText,
@@ -155,12 +175,6 @@ const styles = StyleSheet.create({
     fontSize: 10,
     fontStyle: 'italic',
     width: '30%',
-  },
-  challengeText: {
-    color: Colors.almostWhite,
-    fontSize: 12,
-    fontStyle: 'italic',
-    textAlign: 'center',
   },
   footer: {
     flexDirection: 'row',

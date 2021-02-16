@@ -1,17 +1,18 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { RefreshControl, SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { ScrollView, RefreshControl, StyleSheet, Text, View } from 'react-native';
 import { useGetChallengesQuery } from '../../graphql/queries/GetChallenges.generated';
-import { Buttons, Colors, Spacing, Typography } from '../../theme';
+import { Colors, Spacing, Typography } from '../../theme';
 import useAuthentication from '../../hooks/useAuthentication';
-import { OngoingChallenge, PendingChallenge } from '../../types/challengeTypes';
+import { Challenge } from '../../types/challengeTypes';
 import { convertChallenge } from '../../helpers/objectMappers';
-import { ScrollView } from 'react-native-gesture-handler';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { ChallengeStackParamList } from '../../types/navigationTypes';
 import PendingChallengeCard from '../../components/challenge/PendingChallengeCard';
 import OngoingChallengeCard from '../../components/challenge/OngoingChallengeCard';
 import Button from '../../components/general/Button';
+import Error from '../../components/general/Error';
 import Loading from '../../components/general/Loading';
+import { useIsFocused } from '@react-navigation/native';
 
 type NavigationProp = StackNavigationProp<ChallengeStackParamList>;
 
@@ -25,22 +26,23 @@ const ChallengeScreen: React.FC<ChallengesProps> = (props: ChallengesProps) => {
   const user_id = useAuthentication().user?.uid;
   const [refreshing, setRefreshing] = useState(false);
 
-  const [pendingChallenges, setPendingChallenges] = useState<PendingChallenge[]>();
-  const [ongoingChallenges, setOngoingChallenges] = useState<OngoingChallenge[]>();
+  const [pendingChallenges, setPendingChallenges] = useState<Challenge[]>();
+  const [ongoingChallenges, setOngoingChallenges] = useState<Challenge[]>();
 
-  const { data: challengeData, loading, error, refetch } = useGetChallengesQuery({
-    variables: { user_id: user_id ? user_id : '' },
+  const { data, loading, error, refetch } = useGetChallengesQuery({
+    variables: { user_id: user_id ? user_id : '', limit: PREVIEW_SIZE + 1 },
+    nextFetchPolicy: 'network-only',
   });
-
   useEffect(() => {
-    if (challengeData && challengeData.user) {
-      const { pendingChallenges, ongoingChallenges } = convertChallenge(challengeData);
+    if (data && data.user) {
+      console.log('Sorting new data...');
+      const { pendingChallenges, ongoingChallenges } = convertChallenge(data);
       setPendingChallenges(pendingChallenges);
       setOngoingChallenges(ongoingChallenges);
     }
-  }, [challengeData]);
+  }, [data]);
 
-  const onRefresh = useCallback(async () => {
+  const handleRefresh = useCallback(async () => {
     if (refetch) {
       setRefreshing(true);
       await refetch();
@@ -48,56 +50,52 @@ const ChallengeScreen: React.FC<ChallengesProps> = (props: ChallengesProps) => {
     }
   }, [refreshing]);
 
+  const isFocused = useIsFocused();
+  useEffect(() => {
+    if (isFocused) {
+      handleRefresh();
+    }
+  }, [isFocused]);
+
   if (loading) return <Loading />;
 
-  if (error) {
-    return (
-      <View style={styles.errorContainer}>
-        <Text style={{ ...Typography.bodyText, marginTop: Spacing.base }}>{error.message}</Text>
-        <Button style={styles.challengeButton} onPress={onRefresh}>
-          Refresh
-        </Button>
-      </View>
-    );
-  }
+  if (error) return <Error message={error.message} apolloError={error} />;
 
   return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView
-        style={styles.scrollView}
-        contentContainerStyle={styles.scrollContentContainer}
-        refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={() => onRefresh()}
-            tintColor={Colors.blue}
-            colors={[Colors.blue]}
-            progressBackgroundColor={Colors.transparent}
-          />
-        }>
-        {pendingChallenges && renderPendingChallenges(props, pendingChallenges, refetch)}
-        {ongoingChallenges && renderOngoingChallenges(props, ongoingChallenges, refetch)}
-        {user_id && (
-          <View style={styles.box}>
-            <View style={styles.boxTitle}>
-              <Text style={{ ...Typography.headerText }}>Want a new challenge?</Text>
-              <Text style={{ ...Typography.bodyText }}>Create a challenge for you and your friends!</Text>
-            </View>
-            <Button style={styles.challengeButton} onPress={() => props.navigation.navigate('NewChallenge')}>
-              Create new challenge
-            </Button>
+    <ScrollView
+      style={styles.scrollView}
+      contentContainerStyle={styles.scrollContentContainer}
+      refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={handleRefresh}
+          tintColor={Colors.blue}
+          colors={[Colors.blue]}
+          progressBackgroundColor={Colors.transparent}
+        />
+      }>
+      {pendingChallenges &&
+        pendingChallenges.length > 0 &&
+        renderPendingChallenges(props, pendingChallenges, user_id ? user_id : '')}
+      {ongoingChallenges &&
+        ongoingChallenges.length > 0 &&
+        renderOngoingChallenges(props, ongoingChallenges, user_id ? user_id : '')}
+      {user_id && (
+        <View style={styles.box}>
+          <View style={styles.boxTitle}>
+            <Text style={{ ...Typography.headerText }}>Want a new challenge?</Text>
+            <Text style={{ ...Typography.bodyText }}>Create a challenge for you and your friends!</Text>
           </View>
-        )}
-      </ScrollView>
-    </SafeAreaView>
+          <Button style={styles.challengeButton} onPress={() => props.navigation.navigate('NewChallenge')}>
+            Create new challenge
+          </Button>
+        </View>
+      )}
+    </ScrollView>
   );
 };
 
-const renderPendingChallenges = (
-  { navigation }: ChallengesProps,
-  pendingChallenges: PendingChallenge[],
-  refetch: () => void,
-) => {
+const renderPendingChallenges = ({ navigation }: ChallengesProps, pendingChallenges: Challenge[], user_id: string) => {
   return (
     <View style={styles.box}>
       <View style={styles.boxTitle}>
@@ -112,7 +110,7 @@ const renderPendingChallenges = (
       {pendingChallenges.length > PREVIEW_SIZE && (
         <Button
           style={styles.challengeButton}
-          onPress={() => navigation.push('PendingChallenges', { pendingChallenges, refetch })}>
+          onPress={() => navigation.push('PendingChallenges', { user_id, pendingChallenges })}>
           View all
         </Button>
       )}
@@ -120,23 +118,21 @@ const renderPendingChallenges = (
   );
 };
 
-const renderOngoingChallenges = (
-  { navigation }: ChallengesProps,
-  ongoingChallenges: OngoingChallenge[],
-  refetch: () => void,
-) => {
+const renderOngoingChallenges = ({ navigation }: ChallengesProps, ongoingChallenges: Challenge[], user_id: string) => {
   return (
     <View style={styles.box}>
       <View style={styles.boxTitle}>
         <Text style={{ ...Typography.headerText }}>Ongoing Challenges</Text>
       </View>
       {ongoingChallenges.slice(0, PREVIEW_SIZE).map((item, index) => (
-        <OngoingChallengeCard key={index} challenge={item} />
+        <View key={index} style={styles.previewContainer}>
+          <OngoingChallengeCard challenge={item} />
+        </View>
       ))}
       {ongoingChallenges.length > PREVIEW_SIZE && (
         <Button
           style={styles.challengeButton}
-          onPress={() => navigation.push('OngoingChallenges', { ongoingChallenges, refetch })}>
+          onPress={() => navigation.push('OngoingChallenges', { user_id, ongoingChallenges })}>
           View all
         </Button>
       )}
@@ -145,13 +141,8 @@ const renderOngoingChallenges = (
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  previewContainer: {
-    width: '100%',
-  },
   scrollView: {
+    flex: 1,
     paddingHorizontal: Spacing.base,
   },
   scrollContentContainer: {
@@ -159,6 +150,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     paddingBottom: Spacing.base,
+  },
+  previewContainer: {
+    width: '100%',
+    marginVertical: Spacing.smaller,
   },
   errorContainer: {
     display: 'flex',
@@ -175,18 +170,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: Spacing.smaller,
     padding: Spacing.base,
-    marginHorizontal: Spacing.smaller,
     marginVertical: Spacing.smaller,
   },
   boxTitle: {
     marginBottom: Spacing.base,
   },
   challengeButton: {
-    ...Buttons.button,
     backgroundColor: Colors.green,
-    width: '100%',
-    marginTop: Spacing.base,
-    marginBottom: Spacing.base,
+    marginVertical: Spacing.base,
   },
 });
 

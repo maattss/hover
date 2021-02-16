@@ -4,11 +4,11 @@ import { Avatar } from 'react-native-elements';
 import { useUpdateChallengeParticipationMutation } from '../../graphql/mutations/UpdateChallengeParticipation.generated';
 import { generateDescription } from '../../helpers/decriptionHelper';
 import { Colors, Typography, Spacing, Buttons } from '../../theme';
-import { PendingChallenge } from '../../types/challengeTypes';
+import { Challenge } from '../../types/challengeTypes';
 import { Challenge_Participant_State_Enum } from '../../types/types';
 
 interface PendingChallengeCardProps {
-  challenge: PendingChallenge;
+  challenge: Challenge;
 }
 
 const PendingChallengeCard: React.FC<PendingChallengeCardProps> = ({ challenge }: PendingChallengeCardProps) => {
@@ -38,7 +38,7 @@ const PendingChallengeCard: React.FC<PendingChallengeCardProps> = ({ challenge }
           updateMutation({
             variables: {
               challenge_id: challenge.id,
-              user_id: challenge.user_id,
+              user_id: challenge.user.id,
               state: state,
             },
           }).then(() => setPartcipationState(state));
@@ -70,32 +70,35 @@ const PendingChallengeCard: React.FC<PendingChallengeCardProps> = ({ challenge }
         );
     }
   };
+  const opponents = challenge.opponents.filter(
+    (opponent) => opponent.user.id != challenge.created_by.id && opponent.user.id == challenge.user.id,
+  );
 
   return (
     <View style={styles.card}>
-      <View style={styles.topBar}>
-        <View style={styles.topBarAvatar}>
+      <View style={styles.row}>
+        <View style={styles.avatar}>
           <Avatar rounded source={{ uri: challenge.created_by.picture ?? '' }} size="medium" />
         </View>
-        <View style={styles.topBarText}>
+        <View style={styles.infoContainer}>
           <Text style={styles.nameText}>{challenge.created_by.name}</Text>
           <Text style={styles.descriptionText}>{generateDescription(challenge)}</Text>
         </View>
       </View>
-      {challenge.opponents.length > 1 && (
+      {opponents.length > 1 && (
         <View style={styles.opponentContainer}>
           <Text style={styles.opponentHeaderText}>Other partcicipants</Text>
-          {challenge.opponents
-            .filter((opponent) => opponent.user.id != challenge.created_by.id)
-            .map((opponent) => (
-              <View key={opponent.user.id} style={styles.opponentRow}>
+          {opponents.map((opponent) => (
+            <View key={opponent.user.id} style={styles.opponentRow}>
+              <View style={styles.opponentAvatar}>
                 <Avatar rounded source={{ uri: opponent.user.picture ?? '' }} size="medium" />
-                <View style={styles.oppnentNameStateRow}>
-                  <Text style={styles.opponentNameText}>{opponent.user.name}</Text>
-                  <Text style={styles.opponentStateText}>{opponent.state}</Text>
-                </View>
               </View>
-            ))}
+              <View style={styles.oppnentNameStateRow}>
+                <Text style={styles.opponentNameText}>{opponent.user.name}</Text>
+                <Text style={styles.opponentStateText}>{opponent.state}</Text>
+              </View>
+            </View>
+          ))}
         </View>
       )}
 
@@ -109,28 +112,21 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.gray900,
     borderRadius: Spacing.smaller,
     padding: Spacing.base,
-    marginHorizontal: Spacing.smaller,
-    marginVertical: Spacing.smallest,
     shadowOpacity: 0.75,
     shadowRadius: 3,
     shadowColor: Colors.black,
     shadowOffset: { height: 0, width: 0 },
   },
-  topBar: {
+  avatar: {
+    marginRight: Spacing.base,
+  },
+  row: {
     flexDirection: 'row',
     justifyContent: 'flex-start',
   },
-  topBarAvatar: {
-    width: '20%',
-  },
-  avatar: {
-    height: 45,
-    width: 45,
-    borderRadius: 45 / 2,
-    marginRight: Spacing.small,
-  },
-  topBarText: {
-    width: '80%',
+  infoContainer: {
+    justifyContent: 'center',
+    flexShrink: 1,
   },
   nameText: {
     ...Typography.headerText,
@@ -159,9 +155,6 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
   opponentAvatar: {
-    height: 25,
-    width: 25,
-    borderRadius: 25 / 2,
     marginRight: Spacing.small,
   },
   oppnentNameStateRow: {

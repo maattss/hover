@@ -1,32 +1,9 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import { ListUserFragmentFragment, OpponentFragmentFragment } from '../graphql/Fragments.generated';
 import { GeoFenceCategory } from './geoFenceTypes';
-import { Challenge_Participant_State_Enum, Challenge_State_Enum, Challenge_Type_Enum } from './types';
+import { Challenge_State_Enum, Challenge_Type_Enum } from './types';
 
-export type PendingChallenge = {
-  user_id: string;
-  created_by: ListUserFragmentFragment;
-  id: number;
-  challenge_type: Challenge_Type_Enum;
-  created_at: string;
-  rules: ChallengeRules;
-  end_date: string;
-  state: Challenge_State_Enum;
-  start_date: string;
-  opponents: readonly OpponentFragmentFragment[];
-};
-
-export type Opponent = {
-  state: Challenge_Participant_State_Enum;
-} & ChallengeUser;
-
-export type ChallengeUser = {
-  id: string;
-  name: string;
-  picture: string;
-};
-
-export type OngoingChallenge = {
+export type Challenge = {
   user: ListUserFragmentFragment;
   created_by: ListUserFragmentFragment;
   id: number;

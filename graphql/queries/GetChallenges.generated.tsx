@@ -1,17 +1,13 @@
 /* eslint-disable */
 import * as Types from '../../types/types';
 
-import { ListUserFragmentFragment, ChallengeFragmentFragment, OpponentFragmentFragment } from '../Fragments.generated';
+import { ListUserFragmentFragment, ChallengeFragmentFragment } from '../Fragments.generated';
 import { gql } from '@apollo/client';
-import {
-  ListUserFragmentFragmentDoc,
-  ChallengeFragmentFragmentDoc,
-  OpponentFragmentFragmentDoc,
-} from '../Fragments.generated';
+import { ListUserFragmentFragmentDoc, ChallengeFragmentFragmentDoc } from '../Fragments.generated';
 import * as Apollo from '@apollo/client';
 export type GetChallengesQueryVariables = Types.Exact<{
   user_id: Types.Scalars['String'];
-  limit?: Types.Maybe<Types.Scalars['Int']>;
+  limit: Types.Scalars['Int'];
 }>;
 
 export type GetChallengesQuery = { readonly __typename: 'query_root' } & {
@@ -19,32 +15,17 @@ export type GetChallengesQuery = { readonly __typename: 'query_root' } & {
     { readonly __typename: 'users' } & {
       readonly pending_challenges: ReadonlyArray<
         { readonly __typename: 'challenge_participant' } & {
-          readonly challenge: { readonly __typename: 'challenge' } & {
-            readonly created_by_user: { readonly __typename: 'users' } & ListUserFragmentFragment;
-            readonly opponents: ReadonlyArray<
-              { readonly __typename: 'challenge_participant' } & OpponentFragmentFragment
-            >;
-          } & ChallengeFragmentFragment;
+          readonly challenge: { readonly __typename: 'challenge' } & ChallengeFragmentFragment;
         }
       >;
       readonly ongoing_challenges: ReadonlyArray<
         { readonly __typename: 'challenge_participant' } & {
-          readonly challenge: { readonly __typename: 'challenge' } & {
-            readonly created_by_user: { readonly __typename: 'users' } & ListUserFragmentFragment;
-            readonly opponents: ReadonlyArray<
-              { readonly __typename: 'challenge_participant' } & OpponentFragmentFragment
-            >;
-          } & ChallengeFragmentFragment;
+          readonly challenge: { readonly __typename: 'challenge' } & ChallengeFragmentFragment;
         }
       >;
       readonly finished_challenges: ReadonlyArray<
         { readonly __typename: 'challenge_participant' } & {
-          readonly challenge: { readonly __typename: 'challenge' } & {
-            readonly created_by_user: { readonly __typename: 'users' } & ListUserFragmentFragment;
-            readonly opponents: ReadonlyArray<
-              { readonly __typename: 'challenge_participant' } & OpponentFragmentFragment
-            >;
-          } & ChallengeFragmentFragment;
+          readonly challenge: { readonly __typename: 'challenge' } & ChallengeFragmentFragment;
         }
       >;
     } & ListUserFragmentFragment
@@ -52,66 +33,40 @@ export type GetChallengesQuery = { readonly __typename: 'query_root' } & {
 };
 
 export const GetChallengesDocument = gql`
-  query GetChallenges($user_id: String!, $limit: Int = 2) {
+  query GetChallenges($user_id: String!, $limit: Int!) {
     user(id: $user_id) {
       ...listUserFragment
       pending_challenges: challenge_participants(
         where: { state: { _eq: PENDING }, challenge: { state: { _eq: ACTIVE } } }
-        order_by: {}
+        limit: $limit
+        order_by: { challenge: { created_at: desc } }
       ) {
         challenge {
           ...challengeFragment
-          created_by_user {
-            ...listUserFragment
-          }
-          opponents: challenge_participants(
-            where: { user_id: { _neq: $user_id } }
-            limit: $limit
-            order_by: { challenge: { created_at: desc } }
-          ) {
-            ...opponentFragment
-          }
         }
       }
       ongoing_challenges: challenge_participants(
         where: { state: { _eq: ACCEPTED }, challenge: { state: { _eq: ACTIVE } } }
+        limit: $limit
+        order_by: { challenge: { created_at: desc } }
       ) {
         challenge {
           ...challengeFragment
-          created_by_user {
-            ...listUserFragment
-          }
-          opponents: challenge_participants(
-            where: { user_id: { _neq: $user_id } }
-            limit: $limit
-            order_by: { challenge: { created_at: desc } }
-          ) {
-            ...opponentFragment
-          }
         }
       }
       finished_challenges: challenge_participants(
         where: { state: { _eq: ACCEPTED }, challenge: { state: { _eq: FINISHED } } }
+        limit: $limit
+        order_by: { challenge: { created_at: desc } }
       ) {
         challenge {
           ...challengeFragment
-          created_by_user {
-            ...listUserFragment
-          }
-          opponents: challenge_participants(
-            where: { user_id: { _neq: $user_id } }
-            limit: $limit
-            order_by: { challenge: { created_at: desc } }
-          ) {
-            ...opponentFragment
-          }
         }
       }
     }
   }
   ${ListUserFragmentFragmentDoc}
   ${ChallengeFragmentFragmentDoc}
-  ${OpponentFragmentFragmentDoc}
 `;
 
 /**
