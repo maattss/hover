@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { ScrollView, RefreshControl, StyleSheet, Text, View } from 'react-native';
-import { GetChallengesQuery, useGetChallengesQuery } from '../../graphql/queries/GetChallenges.generated';
+import { useGetChallengesQuery } from '../../graphql/queries/GetChallenges.generated';
 import { Colors, Spacing, Typography } from '../../theme';
 import useAuthentication from '../../hooks/useAuthentication';
 import { Challenge } from '../../types/challengeTypes';
@@ -28,22 +28,21 @@ const ChallengeScreen: React.FC<ChallengesProps> = (props: ChallengesProps) => {
   const [pendingChallenges, setPendingChallenges] = useState<Challenge[]>();
   const [ongoingChallenges, setOngoingChallenges] = useState<Challenge[]>();
 
-  const { data: challengeData, loading, error, refetch } = useGetChallengesQuery({
+  const { data, loading, error, refetch } = useGetChallengesQuery({
     variables: { user_id: user_id ? user_id : '', limit: PREVIEW_SIZE + 1 },
-    fetchPolicy: 'network-only',
+    nextFetchPolicy: 'network-only',
   });
   useEffect(() => {
-    if (challengeData && challengeData.user) {
+    if (data && data.user) {
       console.log('Sorting new data...');
-      const { pendingChallenges, ongoingChallenges } = convertChallenge(challengeData);
+      const { pendingChallenges, ongoingChallenges } = convertChallenge(data);
       setPendingChallenges(pendingChallenges);
       setOngoingChallenges(ongoingChallenges);
     }
-  }, [challengeData]);
+  }, [data]);
 
   const handleRefresh = useCallback(async () => {
     if (refetch) {
-      console.log('Refreshing...');
       setRefreshing(true);
       await refetch();
       setRefreshing(false);
