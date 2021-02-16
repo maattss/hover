@@ -1,33 +1,23 @@
 /* eslint-disable */
 import * as Types from '../../types/types';
 
+import { GeofenceFragmentFragment } from '../Fragments.generated';
 import { gql } from '@apollo/client';
+import { GeofenceFragmentFragmentDoc } from '../Fragments.generated';
 import * as Apollo from '@apollo/client';
 export type GeofencesQueryVariables = Types.Exact<{ [key: string]: never }>;
 
 export type GeofencesQuery = { readonly __typename: 'query_root' } & {
-  readonly geofences: ReadonlyArray<
-    { readonly __typename: 'geofences' } & Pick<
-      Types.Geofences,
-      'id' | 'name' | 'description' | 'latitude' | 'longitude' | 'radius' | 'variant' | 'coordinates' | 'category'
-    >
-  >;
+  readonly geofences: ReadonlyArray<{ readonly __typename: 'geofences' } & GeofenceFragmentFragment>;
 };
 
 export const GeofencesDocument = gql`
   query Geofences {
     geofences {
-      id
-      name
-      description
-      latitude
-      longitude
-      radius
-      variant
-      coordinates
-      category
+      ...geofenceFragment
     }
   }
+  ${GeofenceFragmentFragmentDoc}
 `;
 
 /**

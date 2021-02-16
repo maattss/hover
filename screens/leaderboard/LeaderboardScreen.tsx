@@ -1,6 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import Leaderboard, { Item } from '../../components/leaderboard/Leaderboard';
-import { StyleSheet, Text, View, TouchableOpacity, TextStyle, ViewStyle, Platform, Button } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  TextStyle,
+  ViewStyle,
+  Platform,
+  Button,
+  ActivityIndicator,
+} from 'react-native';
 import { HighscoreQueryVariables, useHighscoreQuery } from '../../graphql/queries/Highscore.generated';
 import { Buttons, Colors, Spacing, Typography } from '../../theme';
 import { convertToHighscoreList } from '../../helpers/objectMappers';
@@ -110,7 +120,7 @@ const LeaderboardScreen: React.FC = () => {
         </View>
 
         <View style={styles.leaderboardContainer}>
-          {highscoreLoading && <Loading />}
+          {highscoreLoading && <ActivityIndicator size={'large'} color={Colors.blue} />}
           {highscoreError && <Text style={styles.infoText}>{highscoreError.message}</Text>}
           {!highscoreLoading && !highscoreError && highscores && <Leaderboard data={highscores} refetch={refetch} />}
         </View>

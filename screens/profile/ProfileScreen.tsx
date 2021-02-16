@@ -54,17 +54,15 @@ const ProfileScreen: React.FC = () => {
     };
 
     const renderScore = () => {
-      return Object.keys(GeoFenceCategory)
-        .filter((key) => !isNaN(Number(GeoFenceCategory[key as keyof typeof GeoFenceCategory])))
-        .map((category, index) => {
-          const categoryEnum: GeoFenceCategory = GeoFenceCategory[category as keyof typeof GeoFenceCategory];
-          return (
-            <View key={index} style={styles.score}>
-              <Image source={{ uri: getGeoFenceImage(categoryEnum) }} style={styles.categoryIcon} />
-              <Text style={{ ...Typography.headerText, textAlign: 'center' }}>{getScore(categoryEnum)}</Text>
-            </View>
-          );
-        });
+      return Object.keys(GeoFenceCategory).map((category, index) => {
+        const categoryEnum: GeoFenceCategory = GeoFenceCategory[category as keyof typeof GeoFenceCategory];
+        return (
+          <View key={index} style={styles.score}>
+            <Image source={{ uri: getGeoFenceImage(categoryEnum) }} style={styles.categoryIcon} />
+            <Text style={{ ...Typography.headerText, textAlign: 'center' }}>{getScore(categoryEnum)}</Text>
+          </View>
+        );
+      });
     };
     const renderAchievements = () => {
       return userProfile.achievements

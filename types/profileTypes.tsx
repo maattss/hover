@@ -1,4 +1,4 @@
-import { ActivityFeedData } from './feedTypes';
+import { AchievementFragmentFragment, FeedActivityFragmentFragment } from '../graphql/Fragments.generated';
 
 export enum AchievementVariant {
   DEFAULT,
@@ -22,15 +22,6 @@ export type UserProfile = {
   cultureScore: number;
   socialScore: number;
   exerciseScore: number;
-  achievements: Achievement[];
-  activities: ActivityFeedData[];
-};
-
-export type Achievement = {
-  description: string;
-  name: string;
-  type: AchievementVariant;
-  createdAt: string;
-  level: number;
-  rule: AchievementRule;
+  achievements: readonly AchievementFragmentFragment[];
+  activities: readonly FeedActivityFragmentFragment[];
 };

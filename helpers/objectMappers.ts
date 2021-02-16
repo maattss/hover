@@ -7,13 +7,20 @@ import { CircleGeoFence, GeoFence, GeoFenceCategory, GeoFenceVariant, PolygonGeo
 import { Item } from '../components/leaderboard/Leaderboard';
 import { HighscoreQuery } from '../graphql/queries/Highscore.generated';
 import { ProfileUserQuery } from '../graphql/queries/ProfileUser.generated';
-import { UserProfile, Achievement as AchievementType, AchievementVariant } from '../types/profileTypes';
-import { ActivityFeedData } from '../types/feedTypes';
+import { UserProfile } from '../types/profileTypes';
+import { AchievementFeedData, ActivityFeedData, FeedCategory, FeedData } from '../types/feedTypes';
 import { Asset } from 'expo-asset';
-import { Challenge_State_Enum, Challenge_Type_Enum, Geofences } from '../types/types';
+import { Challenge_State_Enum, Challenge_Type_Enum } from '../types/types';
 import { Challenge } from '../types/challengeTypes';
 import { GetChallengesQuery } from '../graphql/queries/GetChallenges.generated';
-import { ChallengeFragmentFragment, ListUserFragmentFragment } from '../graphql/Fragments.generated';
+import {
+  AchievementFragmentFragment,
+  ActivityFragmentFragment,
+  ChallengeFragmentFragment,
+  GeofenceFragmentFragment,
+  ListUserFragmentFragment,
+} from '../graphql/Fragments.generated';
+import { FeedQuery } from '../graphql/queries/Feed.generated';
 
 // Default location NTNU Trondheim
 export const defaultMapLocation: LatLng = {
@@ -61,7 +68,7 @@ export const convertToGeoFences = (data: GeofencesQuery) => {
   }
   return geoFences;
 };
-export const convertToGeoFence = (geofence: GeoFencesQuery) => {
+export const convertToGeoFence = (geofence: GeofenceFragmentFragment) => {
   if (geofence.variant === 'CIRCLE') {
     return {
       id: geofence.id,
@@ -132,42 +139,22 @@ export const defaultUserProfile: UserProfile = {
 
 export const convertToUserProfile = (data: ProfileUserQuery | undefined) => {
   if (data && data.user) {
-    const achievements: AchievementType[] = [];
-    data.user.user_achievement.forEach((obj) => {
-      achievements.push({
-        description: obj.achievement.description ?? '',
-        name: obj.achievement.name ?? '',
-        level: obj.achievement.level ?? 3,
-        createdAt: obj.achievement.created_at ?? '',
-        type: AchievementVariant[obj.achievement.achievement_type as keyof typeof AchievementVariant],
-        rule: obj.achievement.rule ?? {},
-      });
-    });
-    const activitites: ActivityFeedData[] = [];
-    data.user.activities.forEach((obj) => {
-      activitites.push({
-        userName: data.user ? data.user.name : defaultUserProfile.name,
-        startedAt: obj.started_at,
-        score: obj.score ?? 0,
-        picture: data.user?.picture ? data.user.picture : defaultUserProfile.picture.toString(),
-        geoFence: convertToGeoFence(obj.geofence),
-        caption: obj.caption ?? '',
-        duration: obj.duration,
-      });
-    });
+    const achievements: readonly AchievementFragmentFragment[] = data.user.user_achievement.map(
+      (data) => data.achievement,
+    );
     return {
       id: data.user.id ?? '',
       name: data.user.name ?? defaultUserProfile.name,
       bio: data.user.bio ?? defaultUserProfile.bio,
       email: data.user.email ?? defaultUserProfile.email,
-      picture: data.user.picture ?? Asset.fromModule(require('../assets/images/user.png')).uri, // Default picture
+      picture: data.user.picture ?? defaultUserProfile.picture,
       totalScore: data.user.totalScore ?? defaultUserProfile.totalScore,
       educationScore: data.user.education_score.aggregate?.sum?.score ?? defaultUserProfile.educationScore,
       cultureScore: data.user.culture_score.aggregate?.sum?.score ?? defaultUserProfile.cultureScore,
       socialScore: data.user.social_score.aggregate?.sum?.score ?? defaultUserProfile.socialScore,
       exerciseScore: data.user.exercise_score.aggregate?.sum?.score ?? defaultUserProfile.exerciseScore,
       achievements: achievements,
-      activities: activitites,
+      activities: data.user.activities,
     } as UserProfile;
   }
 };
@@ -214,9 +201,40 @@ export const convertToChallenge = (challenge: ChallengeFragmentFragment, user: L
   }
 };
 
-type GeoFencesQuery = {
-  readonly __typename: 'geofences';
-} & Pick<
-  Geofences,
-  'id' | 'name' | 'description' | 'category' | 'variant' | 'latitude' | 'longitude' | 'radius' | 'coordinates'
->;
+export const convertToFeedData = (data: FeedQuery) => {
+  const feedData: FeedData[] = [];
+  for (const obj of data.feed) {
+    if (obj.activity) {
+      feedData.push(convertToActivityFeedData(obj.activity, obj.user, obj.created_at));
+    } else if (obj.user_achievement && obj.user_achievement.achievement) {
+      feedData.push(convertToAchievementFeedData(obj.user_achievement.achievement, obj.user, obj.created_at));
+    } else {
+      console.error('Error converting feed data. Data is not an activity or achievement!');
+    }
+  }
+  return feedData;
+};
+export const convertToActivityFeedData = (
+  activity: ActivityFragmentFragment,
+  user: ListUserFragmentFragment | null | undefined,
+  createdAt: string,
+) => {
+  return {
+    activity: activity,
+    user: user,
+    createdAt: createdAt,
+    feedCategory: FeedCategory.ACTIVITY,
+  } as ActivityFeedData;
+};
+export const convertToAchievementFeedData = (
+  achievement: AchievementFragmentFragment,
+  user: ListUserFragmentFragment | null | undefined,
+  createdAt: string,
+) => {
+  return {
+    achievement: achievement,
+    user: user,
+    createdAt: createdAt,
+    feedCategory: FeedCategory.ACHIEVEMENT,
+  } as AchievementFeedData;
+};

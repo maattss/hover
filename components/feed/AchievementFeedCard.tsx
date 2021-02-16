@@ -4,6 +4,7 @@ import { Colors, Typography, Spacing } from '../../theme';
 import { AchievementFeedData } from '../../types/feedTypes';
 import { timeStampToPresentable } from '../../helpers/dateTimeHelpers';
 import Achievement from '../profile/Achievement';
+import { defaultUserProfile } from '../../helpers/objectMappers';
 
 interface AchievementFeedCardProps {
   data: AchievementFeedData;
@@ -13,8 +14,11 @@ const AchievementFeedCard: React.FC<AchievementFeedCardProps> = ({ data }: Achie
   return (
     <View style={styles.card}>
       <View style={styles.topBar}>
-        <Image source={{ uri: data.picture }} style={styles.avatar} />
-        <Text style={styles.nameText}>{data.userName}</Text>
+        <Image
+          source={{ uri: data.user.picture ? data.user.picture : defaultUserProfile.picture }}
+          style={styles.avatar}
+        />
+        <Text style={styles.nameText}>{data.user.name}</Text>
       </View>
 
       <View style={styles.main}>
@@ -27,7 +31,7 @@ const AchievementFeedCard: React.FC<AchievementFeedCardProps> = ({ data }: Achie
       </View>
 
       <View style={styles.footer}>
-        <Text style={styles.footerText}>{timeStampToPresentable(data.achievement.createdAt)}</Text>
+        <Text style={styles.footerText}>{timeStampToPresentable(data.achievement.created_at)}</Text>
       </View>
     </View>
   );

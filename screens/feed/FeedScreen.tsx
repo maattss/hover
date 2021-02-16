@@ -1,76 +1,103 @@
-import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, StyleSheet, RefreshControl, ListRenderItem } from 'react-native';
 import ActivityFeedCard from '../../components/feed/ActivityFeedCard';
 import AchievementFeedCard from '../../components/feed/AchievementFeedCard';
-import { Typography, Spacing } from '../../theme';
-import { ActivityFeedData, AchievementFeedData, ChallengeFeedData } from '../../types/feedTypes';
-import { CircleGeoFence, GeoFenceCategory, GeoFenceVariant } from '../../types/geoFenceTypes';
-import ChallengeFeedCard from '../../components/feed/ChallengeFeedCard';
-import { AchievementVariant } from '../../types/profileTypes';
+import { Typography, Spacing, Colors } from '../../theme';
+import { FeedData, FeedCategory, ActivityFeedData, AchievementFeedData } from '../../types/feedTypes';
+import { useFeedQuery } from '../../graphql/queries/Feed.generated';
+import { FlatList } from 'react-native-gesture-handler';
+import Loading from '../../components/general/Loading';
+import Error from '../../components/general/Error';
+import { convertToFeedData } from '../../helpers/objectMappers';
+
+const getItem = (data: FeedData) => {
+  if (data.feedCategory === FeedCategory.ACTIVITY) {
+    return (
+      <View style={styles.element}>
+        <ActivityFeedCard data={data as ActivityFeedData} />
+      </View>
+    );
+  } else if (data.feedCategory === FeedCategory.ACHIEVEMENT) {
+    return (
+      <View style={styles.element}>
+        <AchievementFeedCard data={data as AchievementFeedData} />
+      </View>
+    );
+  }
+  return <></>;
+};
 
 const FeedScreen: React.FC = () => {
-  const testGeoFence: CircleGeoFence = {
-    id: 9,
-    latitude: 63.431731,
-    longitude: 10.406626,
-    radius: 50,
-    name: 'Test name',
-    category: GeoFenceCategory.EDUCATION,
-    variant: GeoFenceVariant.CIRCLE,
-    description: 'Test description',
-  };
-  const testActivity: ActivityFeedData = {
-    userName: 'Siri Mykland',
-    caption: 'Very nice activity!',
-    geoFence: testGeoFence,
-    startedAt: '2021-01-29T10:00:00+01:00',
-    picture: 'https://api.multiavatar.com/Kuninori%20Bun%20Lord.png',
-    score: 200,
-    duration: 100,
-  };
-  const testAchievement: AchievementFeedData = {
-    userName: 'Mats Tyldum',
-    picture: 'https://api.multiavatar.com/c68e82f2fb46979b85.png',
-    achievement: {
-      name: '1000 points',
-      description: 'Achieved 1000 points!',
-      type: AchievementVariant.SCORE,
-      createdAt: '2021-01-28T09:00:00+01:00',
-      level: 1,
-      rule: { score: 100, category: 'CULTURE' },
+  const pageSize = 10;
+  const [refreshing, setRefreshing] = useState(false);
+  const [offset, setOffset] = useState(0);
+  const [fetchingMore, setFetchingMore] = useState(false);
+  const [feedElements, setFeedElements] = useState<FeedData[]>([]);
+
+  const { loading: loading, error: error, data: data, refetch, fetchMore } = useFeedQuery({
+    variables: {
+      limit: pageSize,
+      offset: offset,
     },
+    nextFetchPolicy: 'network-only',
+  });
+  useEffect(() => {
+    if (data && data.feed) {
+      const newFeedData = convertToFeedData(data);
+      if (fetchingMore) {
+        setFeedElements(feedElements.concat(newFeedData));
+        setFetchingMore(false);
+      } else {
+        setFeedElements(newFeedData);
+      }
+    }
+  }, [data]);
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await refetch();
+    setRefreshing(false);
   };
-  const testChallenge: ChallengeFeedData = {
-    name: 'MaxPoints7Days',
-    userName1: 'Mats Tyldum',
-    userName2: 'Siri Mykland',
-    userPicture1: 'https://api.multiavatar.com/c68e82f2fb46979b85.png',
-    userPicture2: 'https://api.multiavatar.com/Kuninori%20Bun%20Lord.png',
-    createdAt: '2021-01-29T13:00:00+01:00',
-    description: 'Highest amount of points in the next 7 days.',
+  const loadMoreFeedElements = async () => {
+    const newOffset = offset + pageSize;
+    setOffset(newOffset);
+    setFetchingMore(true);
+    await fetchMore({
+      variables: {
+        limit: pageSize,
+        offset: newOffset,
+      },
+    });
   };
 
+  if (error) <Error message={error.message} apolloError={error} />;
+  if (loading) <Loading />;
+
+  const renderItem: ListRenderItem<FeedData> = ({ item }) => getItem(item);
   return (
-    <View style={styles.container}>
-      {/* TODO: Replace examples with refreshable list with data from API */}
-      <View style={styles.element}>
-        <ActivityFeedCard activity={testActivity} />
-      </View>
-      <View style={styles.element}>
-        <AchievementFeedCard data={testAchievement} />
-      </View>
-      <View style={styles.element}>
-        <ChallengeFeedCard challenge={testChallenge} />
-      </View>
-    </View>
+    <FlatList<FeedData>
+      style={styles.container}
+      data={feedElements}
+      renderItem={(item) => renderItem(item)}
+      keyExtractor={(_, index) => index.toString()}
+      refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={onRefresh}
+          tintColor={Colors.blue}
+          colors={[Colors.blue]}
+          progressBackgroundColor={Colors.transparent}
+        />
+      }
+      onEndReached={loadMoreFeedElements}
+    />
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     padding: Spacing.smaller,
-    alignItems: 'center',
-    width: '100%',
+    marginBottom: Spacing.smaller,
   },
   header: {
     ...Typography.headerText,

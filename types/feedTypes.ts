@@ -1,5 +1,8 @@
-import { GeoFence } from './geoFenceTypes';
-import { Achievement as AchievementType } from '../types/profileTypes';
+import {
+  AchievementFragmentFragment,
+  FeedActivityFragmentFragment,
+  ListUserFragmentFragment,
+} from '../graphql/Fragments.generated';
 
 export enum FeedCategory {
   ACTIVITY,
@@ -8,25 +11,16 @@ export enum FeedCategory {
 }
 
 export type ActivityFeedData = {
-  userName: string;
-  picture: string;
-  caption: string;
-  geoFence: GeoFence | undefined;
-  startedAt: string;
-  score: number;
-  duration: number;
+  user: ListUserFragmentFragment;
+  activity: FeedActivityFragmentFragment;
+  createdAt: string;
+  feedCategory: FeedCategory;
 };
 export type AchievementFeedData = {
-  userName: string;
-  picture: string;
-  achievement: AchievementType;
-};
-export type ChallengeFeedData = {
-  name: string;
-  userPicture1: string;
-  userPicture2: string;
-  userName1: string;
-  userName2: string;
-  description: string;
+  user: ListUserFragmentFragment;
+  achievement: AchievementFragmentFragment;
   createdAt: string;
+  feedCategory: FeedCategory;
 };
+
+export type FeedData = ActivityFeedData | AchievementFeedData;

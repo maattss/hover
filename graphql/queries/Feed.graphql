@@ -1,5 +1,5 @@
-query Feed($limit: Int) {
-  feed(order_by: { created_at: desc }, limit: $limit) {
+query Feed($limit: Int, $offset: Int) {
+  feed(order_by: { created_at: desc }, limit: $limit, offset: $offset) {
     ...fullFeedFragment
   }
 }
