@@ -1,9 +1,9 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { View, Text, StyleSheet, RefreshControl, FlatList, Alert } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, FlatList, Alert } from 'react-native';
 import { Challenge } from '../../types/challengeTypes';
 import { RouteProp } from '@react-navigation/native';
 import { ChallengeStackParamList } from '../../types/navigationTypes';
-import { Colors, Spacing, Typography } from '../../theme';
+import { Spacing, Typography } from '../../theme';
 import PendingChallengeCard from '../../components/challenge/PendingChallengeCard';
 import Loading from '../../components/general/Loading';
 import { convertToChallenge } from '../../helpers/objectMappers';
@@ -21,13 +21,12 @@ type Props = {
 
 const PendingChallengesScreen: React.FC<Props> = ({ route }: Props) => {
   const [challengeData, setChallengeData] = useState<Challenge[]>([]);
-  const [refreshing, setRefreshing] = useState(false);
 
   const limit = 5;
   const [offset, setOffset] = useState(0);
   const [endReached, setEndReached] = useState(false);
 
-  const { data, loading, error, refetch, fetchMore } = useGetPendingChallengesQuery({
+  const { data, loading, error, fetchMore } = useGetPendingChallengesQuery({
     variables: { user_id: route.params.user_id, limit: limit, offset: offset },
     fetchPolicy: 'network-only',
   });
@@ -48,7 +47,7 @@ const PendingChallengesScreen: React.FC<Props> = ({ route }: Props) => {
   }, [data]);
 
   const loadMoreChallenges = () => {
-    if (!endReached && !loading && !refreshing) {
+    if (!endReached && !loading) {
       const newOffset = offset + limit;
       setOffset(newOffset);
       fetchMore({
@@ -59,16 +58,6 @@ const PendingChallengesScreen: React.FC<Props> = ({ route }: Props) => {
       });
     }
   };
-  const handleRefresh = useCallback(async () => {
-    if (refetch) {
-      setRefreshing(true);
-      setEndReached(false);
-      setChallengeData([]);
-      setOffset(0);
-      await refetch({ offset: offset });
-      setRefreshing(false);
-    }
-  }, [refreshing]);
 
   const renderHeader = () => (
     <View style={styles.header}>
@@ -99,17 +88,9 @@ const PendingChallengesScreen: React.FC<Props> = ({ route }: Props) => {
   return (
     <FlatList
       data={challengeData}
+      bounces={false}
       keyExtractor={(_, index) => index.toString()}
       renderItem={({ item }) => renderItem(item)}
-      refreshControl={
-        <RefreshControl
-          refreshing={refreshing}
-          onRefresh={handleRefresh}
-          tintColor={Colors.blue}
-          colors={[Colors.blue]}
-          progressBackgroundColor={Colors.transparent}
-        />
-      }
       onEndReachedThreshold={0.5}
       onEndReached={loadMoreChallenges}
       ListHeaderComponent={renderHeader}

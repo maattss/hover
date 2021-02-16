@@ -88,6 +88,7 @@ const OngoingChallengesScreen: React.FC<Props> = ({ route }: Props) => {
   return (
     <FlatList
       data={challengeData}
+      bounces={false}
       keyExtractor={(_, index) => index.toString()}
       renderItem={({ item }) => renderItem(item)}
       onEndReachedThreshold={0.5}
