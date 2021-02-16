@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, SafeAreaView, StyleSheet, FlatList, Alert } from 'react-native';
+import { View, Text, StyleSheet, FlatList, Alert } from 'react-native';
 import { Challenge } from '../../types/challengeTypes';
 import { RouteProp } from '@react-navigation/native';
 import { ChallengeStackParamList } from '../../types/navigationTypes';
@@ -22,13 +22,13 @@ type Props = {
 
 const OngoingChallengesScreen: React.FC<Props> = ({ route }: Props) => {
   const [challengeData, setChallengeData] = useState<Challenge[]>([]);
-  const [limit] = useState(5);
+  const limit = 5;
   const [offset, setOffset] = useState(0);
   const [endReached, setEndReached] = useState(false);
 
   const { data, loading, error, fetchMore } = useGetOngoingChallengesQuery({
     variables: { user_id: route.params.user_id, limit: limit, offset: offset },
-    nextFetchPolicy: 'network-only',
+    fetchPolicy: 'network-only',
   });
 
   useEffect(() => {
@@ -44,9 +44,9 @@ const OngoingChallengesScreen: React.FC<Props> = ({ route }: Props) => {
         setChallengeData(ongoingChallenges);
       }
     }
-  }, [data, fetchMore]);
+  }, [data]);
 
-  const loadMoreChallenges = () => {
+  const loadMoreChallenges = async () => {
     if (!endReached && !loading) {
       const newOffset = offset + limit;
       setOffset(newOffset);
@@ -86,24 +86,19 @@ const OngoingChallengesScreen: React.FC<Props> = ({ route }: Props) => {
     Alert.alert('Error', error?.message);
   }
   return (
-    <SafeAreaView style={styles.container}>
-      <FlatList
-        data={challengeData}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item }) => renderItem(item)}
-        onEndReachedThreshold={0.5}
-        onEndReached={loadMoreChallenges}
-        ListHeaderComponent={renderHeader}
-        ListFooterComponent={renderFooter}
-      />
-    </SafeAreaView>
+    <FlatList
+      data={challengeData}
+      keyExtractor={(_, index) => index.toString()}
+      renderItem={({ item }) => renderItem(item)}
+      onEndReachedThreshold={0.5}
+      onEndReached={loadMoreChallenges}
+      ListHeaderComponent={renderHeader}
+      ListFooterComponent={renderFooter}
+    />
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
   header: {
     justifyContent: 'center',
     alignItems: 'center',

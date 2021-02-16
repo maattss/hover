@@ -29,7 +29,7 @@ const PendingChallengesScreen: React.FC<Props> = ({ route }: Props) => {
 
   const { data, loading, error, refetch, fetchMore } = useGetPendingChallengesQuery({
     variables: { user_id: route.params.user_id, limit: limit, offset: offset },
-    nextFetchPolicy: 'network-only',
+    fetchPolicy: 'network-only',
   });
 
   useEffect(() => {
