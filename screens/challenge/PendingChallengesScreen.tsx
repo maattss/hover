@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { View, Text, StyleSheet, RefreshControl, SafeAreaView, FlatList, Alert } from 'react-native';
+import { View, Text, StyleSheet, RefreshControl, FlatList, Alert } from 'react-native';
 import { Challenge } from '../../types/challengeTypes';
 import { RouteProp } from '@react-navigation/native';
 import { ChallengeStackParamList } from '../../types/navigationTypes';
@@ -97,33 +97,28 @@ const PendingChallengesScreen: React.FC<Props> = ({ route }: Props) => {
     Alert.alert('Error', error?.message);
   }
   return (
-    <SafeAreaView style={styles.container}>
-      <FlatList
-        data={challengeData}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item }) => renderItem(item)}
-        refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={handleRefresh}
-            tintColor={Colors.blue}
-            colors={[Colors.blue]}
-            progressBackgroundColor={Colors.transparent}
-          />
-        }
-        onEndReachedThreshold={0.5}
-        onEndReached={loadMoreChallenges}
-        ListHeaderComponent={renderHeader}
-        ListFooterComponent={renderFooter}
-      />
-    </SafeAreaView>
+    <FlatList
+      data={challengeData}
+      keyExtractor={(_, index) => index.toString()}
+      renderItem={({ item }) => renderItem(item)}
+      refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={handleRefresh}
+          tintColor={Colors.blue}
+          colors={[Colors.blue]}
+          progressBackgroundColor={Colors.transparent}
+        />
+      }
+      onEndReachedThreshold={0.5}
+      onEndReached={loadMoreChallenges}
+      ListHeaderComponent={renderHeader}
+      ListFooterComponent={renderFooter}
+    />
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
   header: {
     justifyContent: 'center',
     alignItems: 'center',
