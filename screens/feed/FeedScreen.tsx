@@ -28,20 +28,28 @@ const getItem = (data: FeedData) => {
 };
 
 const FeedScreen: React.FC = () => {
+  const pageSize = 10;
   const [refreshing, setRefreshing] = useState(false);
-  const [limit, setLimit] = useState(10);
+  const [offset, setOffset] = useState(0);
+  const [fetchingMore, setFetchingMore] = useState(false);
   const [feedElements, setFeedElements] = useState<FeedData[]>([]);
 
   const { loading: loading, error: error, data: data, refetch, fetchMore } = useFeedQuery({
     variables: {
-      limit: limit,
+      limit: pageSize,
+      offset: offset,
     },
     nextFetchPolicy: 'network-only',
   });
   useEffect(() => {
     if (data && data.feed) {
-      const feedData = convertToFeedData(data);
-      setFeedElements(feedData);
+      const newFeedData = convertToFeedData(data);
+      if (fetchingMore) {
+        setFeedElements(feedElements.concat(newFeedData));
+        setFetchingMore(false);
+      } else {
+        setFeedElements(newFeedData);
+      }
     }
   }, [data]);
 
@@ -55,7 +63,8 @@ const FeedScreen: React.FC = () => {
     setLimit(newLimit);
     fetchMore({
       variables: {
-        limit: newLimit,
+        limit: pageSize,
+        offset: newOffset,
       },
     });
   };

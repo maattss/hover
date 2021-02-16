@@ -10,7 +10,7 @@ import { ProfileUserQuery } from '../graphql/queries/ProfileUser.generated';
 import { UserProfile } from '../types/profileTypes';
 import { AchievementFeedData, ActivityFeedData, FeedCategory, FeedData } from '../types/feedTypes';
 import { Asset } from 'expo-asset';
-import { Challenge_Participant, Challenge_State_Enum, Challenge_Type_Enum, Geofences } from '../types/types';
+import { Challenge_Participant, Challenge_State_Enum, Challenge_Type_Enum } from '../types/types';
 import { OngoingChallenge, Opponent, PendingChallenge } from '../types/challengeTypes';
 import { GetChallengesQuery } from '../graphql/queries/GetChallenges.generated';
 import {

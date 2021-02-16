@@ -7,6 +7,7 @@ import { FullFeedFragmentFragmentDoc } from '../Fragments.generated';
 import * as Apollo from '@apollo/client';
 export type FeedQueryVariables = Types.Exact<{
   limit?: Types.Maybe<Types.Scalars['Int']>;
+  offset?: Types.Maybe<Types.Scalars['Int']>;
 }>;
 
 export type FeedQuery = { readonly __typename: 'query_root' } & {
@@ -14,8 +15,8 @@ export type FeedQuery = { readonly __typename: 'query_root' } & {
 };
 
 export const FeedDocument = gql`
-  query Feed($limit: Int) {
-    feed(order_by: { created_at: desc }, limit: $limit) {
+  query Feed($limit: Int, $offset: Int) {
+    feed(order_by: { created_at: desc }, limit: $limit, offset: $offset) {
       ...fullFeedFragment
     }
   }
@@ -35,6 +36,7 @@ export const FeedDocument = gql`
  * const { data, loading, error } = useFeedQuery({
  *   variables: {
  *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
  *   },
  * });
  */
