@@ -1,22 +1,23 @@
 import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import { Colors, Spacing } from '../../theme';
-import { Achievement as AchievementType, AchievementVariant } from '../../types/profileTypes';
 import { Typography } from '../../theme';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import { GeoFenceCategory } from '../../types/geoFenceTypes';
+import { AchievementFragmentFragment } from '../../graphql/Fragments.generated';
+import { Achievement_Type_Enum } from '../../types/types';
 
 interface AchievementProps {
-  achievement: AchievementType;
+  achievement: AchievementFragmentFragment;
 }
-export const getAchievementIcon = (achievement: AchievementType) => {
-  switch (achievement.type) {
-    case AchievementVariant.SCORE:
+export const getAchievementIcon = (achievement: AchievementFragmentFragment) => {
+  switch (achievement.achievement_type) {
+    case Achievement_Type_Enum.Score:
       return 'trophy';
-    case AchievementVariant.SCORE_IN_CATEGORY:
+    case Achievement_Type_Enum.ScoreInCategory:
       const category = GeoFenceCategory[achievement.rule.category as keyof typeof GeoFenceCategory];
       return getCategoryIconName(category);
-    case AchievementVariant.FIRST_ACTIVITY:
+    case Achievement_Type_Enum.FirstActivity:
       return 'award';
     default:
       return 'medal';
@@ -57,6 +58,7 @@ const Achievement: React.FC<AchievementProps> = ({ achievement }: AchievementPro
   const iconColor = {
     color: getAchievementColor(achievement.level),
   };
+
   return (
     <View style={styles.achievement}>
       <View style={[styles.trophy, trophyBorderColor]}>

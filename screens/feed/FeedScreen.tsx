@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, RefreshControl, ListRenderItem } from 'react-native';
+import { View, StyleSheet, RefreshControl, ListRenderItem, ActivityIndicator } from 'react-native';
 import ActivityFeedCard from '../../components/feed/ActivityFeedCard';
 import AchievementFeedCard from '../../components/feed/AchievementFeedCard';
 import { Typography, Spacing, Colors } from '../../theme';
@@ -32,6 +32,7 @@ const FeedScreen: React.FC = () => {
   const [refreshing, setRefreshing] = useState(false);
   const [offset, setOffset] = useState(0);
   const [fetchingMore, setFetchingMore] = useState(false);
+  const [endReached, setEndReached] = useState(false);
   const [feedElements, setFeedElements] = useState<FeedData[]>([]);
 
   const { loading: loading, error: error, data: data, refetch, fetchMore } = useFeedQuery({
@@ -43,12 +44,16 @@ const FeedScreen: React.FC = () => {
   });
   useEffect(() => {
     if (data && data.feed) {
-      const newFeedData = convertToFeedData(data);
-      if (fetchingMore) {
-        setFeedElements(feedElements.concat(newFeedData));
-        setFetchingMore(false);
+      if (data.feed.length == 0) {
+        setEndReached(true);
       } else {
-        setFeedElements(newFeedData);
+        const newFeedData = convertToFeedData(data);
+        if (fetchingMore) {
+          setFeedElements(feedElements.concat(newFeedData));
+          setFetchingMore(false);
+        } else {
+          setFeedElements(newFeedData);
+        }
       }
     }
   }, [data]);
@@ -59,19 +64,30 @@ const FeedScreen: React.FC = () => {
     setRefreshing(false);
   };
   const loadMoreFeedElements = async () => {
-    const newOffset = offset + pageSize;
-    setOffset(newOffset);
-    setFetchingMore(true);
-    await fetchMore({
-      variables: {
-        limit: pageSize,
-        offset: newOffset,
-      },
-    });
+    if (!endReached && !loading) {
+      const newOffset = offset + pageSize;
+      setOffset(newOffset);
+      setFetchingMore(true);
+      await fetchMore({
+        variables: {
+          limit: pageSize,
+          offset: newOffset,
+        },
+      });
+    }
+  };
+  const renderFooter = () => {
+    if (loading && !endReached)
+      return (
+        <View>
+          <ActivityIndicator color={Colors.blue} />
+        </View>
+      );
+    return <></>;
   };
 
   if (error) return <Error message={error.message} apolloError={error} />;
-  if (loading) return <Loading />;
+  if (loading && !fetchingMore) return <Loading />;
 
   const renderItem: ListRenderItem<FeedData> = ({ item }) => getItem(item);
   return (
@@ -89,7 +105,9 @@ const FeedScreen: React.FC = () => {
           progressBackgroundColor={Colors.transparent}
         />
       }
+      onEndReachedThreshold={0.5}
       onEndReached={loadMoreFeedElements}
+      ListFooterComponent={renderFooter}
     />
   );
 };
@@ -106,6 +124,12 @@ const styles = StyleSheet.create({
   element: {
     marginBottom: Spacing.smaller,
     width: '100%',
+  },
+  footer: {
+    padding: Spacing.base,
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
   },
 });
 

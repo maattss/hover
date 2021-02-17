@@ -209,7 +209,7 @@ export const convertToFeedData = (data: FeedQuery) => {
     } else if (obj.user_achievement && obj.user_achievement.achievement) {
       feedData.push(convertToAchievementFeedData(obj.user_achievement.achievement, obj.user, obj.created_at));
     } else {
-      console.error('Error converting feed data. Data is not an activity or achievement!');
+      console.log('This feed element does not have a linked activity or achievement.');
     }
   }
   return feedData;
