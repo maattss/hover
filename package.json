@@ -64,7 +64,8 @@
     "react-native-tab-view": "^2.15.2",
     "react-native-web": "~0.13.12",
     "react-scripts": "^4.0.0",
-    "robust-point-in-polygon": "^1.0.3"
+    "robust-point-in-polygon": "^1.0.3",
+    "unique-names-generator": "^4.3.1"
   },
   "devDependencies": {
     "@babel/core": "~7.9.0",
