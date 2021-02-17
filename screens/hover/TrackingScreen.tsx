@@ -1,23 +1,23 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, ActivityIndicator, TextInput } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, ActivityIndicator, TextInput, Switch } from 'react-native';
 import { uniqueNamesGenerator, Config, adjectives, animals } from 'unique-names-generator';
 import { Colors, Spacing, Typography, Buttons } from '../../theme';
 import useTracking from '../../hooks/useTracking';
 import HoverMap from '../../components/map/HoverMap';
+import Button from '../../components/general/Button';
 
 const TrackingScreen: React.FC = () => {
   const tracking = useTracking();
-  const [collabCode, setCollabCode] = useState('');
-  const stopTracking = () => tracking.pauseTracking();
-
   const wordConfig: Config = {
     dictionaries: [adjectives, animals],
     separator: ' ',
     style: 'upperCase',
     length: 2,
   };
-
-  const collabName: string = uniqueNamesGenerator(wordConfig);
+  const [yourCollabCode, setYourCollabCode] = useState(uniqueNamesGenerator(wordConfig));
+  const [friendCollabCode, setFriendCollabCode] = useState('');
+  const [isEnabled, setIsEnabled] = useState(false);
+  const stopTracking = () => tracking.pauseTracking();
 
   return (
     <View style={styles.container}>
@@ -25,30 +25,41 @@ const TrackingScreen: React.FC = () => {
 
       <View style={styles.trackingContainer}>
         <View style={styles.collabInfo}>
-          <Text style={{ ...Typography.headerText }}>Hover with friends</Text>
-          <Text style={{ ...Typography.largeBodyText }}>Your code: {collabName}</Text>
-          <TextInput
-            placeholder="Enter code"
-            placeholderTextColor={Colors.gray600}
-            onChangeText={(val) => setCollabCode(val)}
-            style={styles.formField}
-          />
+          <Text style={{ ...Typography.headerText }}>Hover with a friend</Text>
+          <View style={styles.mbSmall}>
+            <Text style={{ ...Typography.bodyText }}>Earn 2 x points by hovering together with a friend!</Text>
+            <Text style={{ ...Typography.bodyText }}>
+              Ask your friend for his/hers code and insert below or share your code.
+            </Text>
+          </View>
+          <View style={styles.mbSmall}>
+            <Text style={styles.label}>Your code</Text>
+            <Text style={{ ...Typography.headerText, width: '100%', textAlign: 'center' }}>{yourCollabCode}</Text>
+          </View>
+          <View>
+            <Text style={styles.label}>Friend&apos;s code</Text>
+            <TextInput
+              placeholder="Enter Hover code from your friend"
+              placeholderTextColor={Colors.gray600}
+              onChangeText={(val) => setFriendCollabCode(val)}
+              style={styles.formField}
+            />
+          </View>
+
+          <Button>Join friend</Button>
         </View>
 
         <View style={styles.trackingInfo}>
-          <Text style={{ ...Typography.headerText }}>Tracking info</Text>
-          <View style>
-            <View>
-              <ActivityIndicator size={'large'} color={Colors.blue} />
-              <Text style={styles.scoreText}>Points: {Math.floor(tracking.score)}</Text>
-            </View>
+          <View>
+            <ActivityIndicator size={'large'} color={Colors.blue} />
+            <Text style={styles.scoreText}>Points: {Math.floor(tracking.score)}</Text>
+          </View>
 
-            <View style={styles.stopButtonContainer}>
-              <TouchableOpacity style={styles.stopButton} onPress={stopTracking}>
-                <Text style={styles.stopButtonText}>Stop</Text>
-              </TouchableOpacity>
-              <View />
-            </View>
+          <View style={styles.stopButtonContainer}>
+            <TouchableOpacity style={styles.stopButton} onPress={stopTracking}>
+              <Text style={styles.stopButtonText}>Stop</Text>
+            </TouchableOpacity>
+            <View />
           </View>
         </View>
       </View>
@@ -116,6 +127,15 @@ const styles = StyleSheet.create({
     padding: Spacing.base,
     marginBottom: Spacing.base,
     backgroundColor: Colors.gray900,
+  },
+  label: {
+    ...Typography.bodyText,
+    fontWeight: 'bold',
+    marginBottom: Spacing.smallest,
+    textAlign: 'left',
+  },
+  mbSmall: {
+    marginBottom: Spacing.smaller,
   },
 });
 
