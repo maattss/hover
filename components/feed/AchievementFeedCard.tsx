@@ -31,7 +31,7 @@ const AchievementFeedCard: React.FC<AchievementFeedCardProps> = ({ data }: Achie
       </View>
 
       <View style={styles.footer}>
-        <Text style={styles.footerText}>{timeStampToPresentable(data.achievement.created_at)}</Text>
+        <Text style={styles.footerText}>{timeStampToPresentable(data.createdAt)}</Text>
       </View>
     </View>
   );
