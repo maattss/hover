@@ -11,16 +11,24 @@ const TrackingScreen: React.FC = () => {
   return (
     <View style={styles.container}>
       <HoverMap />
+
       <View style={styles.trackingContainer}>
-        <View style={styles.trackingInfo}>
-          <ActivityIndicator size={'large'} color={Colors.blue} />
-          <Text style={styles.scoreText}>Points: {Math.floor(tracking.score)}</Text>
+        <View style={styles.collabInfo}>
+          <Text style={{ ...Typography.headerText, padding: 20 }}>hey</Text>
         </View>
-        <View style={styles.stopButtonContainer}>
-          <TouchableOpacity style={styles.stopButton} onPress={stopTracking}>
-            <Text style={styles.stopButtonText}>Stop</Text>
-          </TouchableOpacity>
-          <View />
+
+        <View style={styles.trackingInfo}>
+          <View>
+            <ActivityIndicator size={'large'} color={Colors.blue} />
+            <Text style={styles.scoreText}>Points: {Math.floor(tracking.score)}</Text>
+          </View>
+
+          <View style={styles.stopButtonContainer}>
+            <TouchableOpacity style={styles.stopButton} onPress={stopTracking}>
+              <Text style={styles.stopButtonText}>Stop</Text>
+            </TouchableOpacity>
+            <View />
+          </View>
         </View>
       </View>
     </View>
@@ -33,18 +41,25 @@ const styles = StyleSheet.create({
   },
   trackingContainer: {
     position: 'absolute',
-    bottom: '1%',
-    left: '1%',
-    width: '98%',
+    bottom: 0,
+    left: 0,
+    margin: Spacing.smallest,
     backgroundColor: Colors.almostBlackTransparent,
     borderRadius: Spacing.smaller,
+    width: '100%',
+  },
+  collabInfo: {
+    width: '100%',
     flexDirection: 'row',
-    justifyContent: 'space-evenly',
-    paddingVertical: Spacing.base,
+    justifyContent: 'center',
+    // backgroundColor: Colors.redTransparent,
   },
   trackingInfo: {
-    justifyContent: 'center',
+    alignItems: 'center',
+    justifyContent: 'space-evenly',
     paddingHorizontal: Spacing.smaller,
+    flexDirection: 'row',
+    // backgroundColor: Colors.bluTransparent,
   },
   stopButtonContainer: {
     justifyContent: 'center',

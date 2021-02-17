@@ -14,7 +14,8 @@ const HoverNavigator: React.FC = () => {
   return (
     <ExploreStack.Navigator screenOptions={{ headerShown: false }}>
       {tracking.trackingState === TrackingState.EXPLORE && (
-        <ExploreStack.Screen name="Explore" component={ExploreScreen} />
+        // TODO: Change to explore screen. Tracking screen only for testing.
+        <ExploreStack.Screen name="Tracking" component={TrackingScreen} />
       )}
       {tracking.trackingState === TrackingState.TRACKING && (
         <ExploreStack.Screen name="Tracking" component={TrackingScreen} />
