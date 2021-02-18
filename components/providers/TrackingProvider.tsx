@@ -43,6 +43,7 @@ interface TrackingContextValues {
   pauseTracking: () => void;
   stopTracking: (caption: string) => void;
   discardActivity: () => void;
+  updateDoubleScore: (value: boolean) => void;
 }
 
 export const TrackingContext = React.createContext<TrackingContextValues>({
@@ -65,6 +66,7 @@ export const TrackingContext = React.createContext<TrackingContextValues>({
   pauseTracking: () => console.error('Function not initialized'),
   stopTracking: () => console.error('Function not initialized'),
   discardActivity: () => console.error('Function not initialized'),
+  updateDoubleScore: () => console.error('Function not initialized'),
 });
 TrackingContext.displayName = 'TrackingContext';
 
@@ -80,6 +82,7 @@ export const TrackingProvider = ({ children }: Props) => {
   const [trackingStart, setTrackingStart] = useState('');
   const [score, setScore] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [doubleScore, setDoubleScore] = useState(false);
 
   const [InsertActivity] = useInsertActivityMutation();
   const { data: geoFenceData, error: geoFenceFetchError, refetch } = useGeofencesQuery({
@@ -191,6 +194,7 @@ export const TrackingProvider = ({ children }: Props) => {
       addUnUploadedActivity(activity);
     }
   };
+  const updateDoubleScore = (value: boolean) => setDoubleScore(value);
 
   // Update score and duration every second
   useInterval(
@@ -198,7 +202,9 @@ export const TrackingProvider = ({ children }: Props) => {
       console.log('Tracking...');
       if (insideGeoFence) {
         setDuration(duration + 1);
-        setScore(score + 1 * getGeoFenceScoreRatio(insideGeoFence.category));
+        const scoreRatio = getGeoFenceScoreRatio(insideGeoFence.category);
+        const scoreIncrease = doubleScore ? 2 * scoreRatio : scoreRatio;
+        setScore(score + scoreIncrease);
       }
     },
     trackingState === TrackingState.TRACKING ? 1000 : null,
@@ -222,6 +228,7 @@ export const TrackingProvider = ({ children }: Props) => {
     pauseTracking: pauseTracking,
     stopTracking: stopTracking,
     discardActivity: discardActivity,
+    updateDoubleScore: updateDoubleScore,
   };
   return <TrackingContext.Provider value={value}>{children}</TrackingContext.Provider>;
 };

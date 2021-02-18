@@ -19,7 +19,8 @@ const TrackingScreen: React.FC = () => {
   const [friendCollabCode, setFriendCollabCode] = useState('');
   const [isEnabled, setIsEnabled] = useState(false);
   const stopTracking = () => tracking.pauseTracking();
-
+  const score = Math.floor(tracking.score);
+  const progress = tracking.score - score;
   return (
     <View style={styles.container}>
       <HoverMap />
@@ -52,8 +53,8 @@ const TrackingScreen: React.FC = () => {
 
         <View style={styles.trackingInfo}>
           <View>
-            <Progress.Bar progress={0.5} width={200} height={15} borderColor={Colors.blue} color={Colors.blue} />
-            <Text style={styles.scoreText}>Points: {Math.floor(tracking.score)}</Text>
+            <Progress.Bar progress={progress} width={200} height={15} borderColor={Colors.blue} color={Colors.blue} />
+            <Text style={styles.scoreText}>Points: {score}</Text>
           </View>
 
           <View style={styles.stopButtonContainer}>
