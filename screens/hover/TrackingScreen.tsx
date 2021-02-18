@@ -18,6 +18,8 @@ const TrackingScreen: React.FC = () => {
   const [yourCollabCode, setYourCollabCode] = useState(uniqueNamesGenerator(wordConfig));
   const [friendCollabCode, setFriendCollabCode] = useState('');
   const [isEnabled, setIsEnabled] = useState(false);
+  const [join, setJoin] = useState(false);
+  const [start, setStart] = useState(false);
   const stopTracking = () => tracking.pauseTracking();
   const score = Math.floor(tracking.score);
   const nextScore = Math.ceil(tracking.score + 0.000001);
@@ -57,19 +59,23 @@ const TrackingScreen: React.FC = () => {
         <View style={styles.collabInfo}>
           <Text style={{ ...Typography.headerText }}>Hover with friend</Text>
 
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'space-evenly',
-              width: '100%',
-              paddingHorizontal: Spacing.base,
-            }}>
-            {/* <CustomButton>Start session</CustomButton>
+          {join && <Text style={{ ...Typography.largeBodyText }}>Join</Text>}
+          {start && <Text style={{ ...Typography.largeBodyText }}>Start</Text>}
+          {!join && !start && (
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-evenly',
+                width: '100%',
+                paddingHorizontal: Spacing.base,
+              }}>
+              {/* <CustomButton>Start session</CustomButton>
             <CustomButton>Join session</CustomButton> */}
-            <Button title={'Start'} onPress={() => console.log('Start')} />
-            <Button title={'Join'} onPress={() => console.log('Join')} />
-          </View>
+              <Button title={'Start'} onPress={() => setStart(true)} />
+              <Button title={'Join'} onPress={() => setJoin(true)} />
+            </View>
+          )}
         </View>
 
         <View style={styles.trackingInfo}>
