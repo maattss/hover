@@ -23,7 +23,7 @@ const TrackingScreen: React.FC = () => {
   const progress = tracking.score - score;
   return (
     <View style={styles.container}>
-      <HoverMap />
+      <HoverMap customWidth={100} customHeight={100} />
 
       <View style={styles.trackingContainer}>
         <View style={styles.collabInfo}>

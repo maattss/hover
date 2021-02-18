@@ -8,14 +8,21 @@ import { defaultMapLocation } from '../../helpers/objectMappers';
 import GeoFences from '../../components/map/GeoFences';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-const { width, height } = Dimensions.get('window');
+interface HoverMapProps {
+  customWidth?: number;
+  customHeight?: number;
+}
 
-const HoverMap: React.FC = () => {
+const HoverMap: React.FC<HoverMapProps> = ({ customWidth, customHeight }: HoverMapProps) => {
+  const width = customWidth ? customWidth : Dimensions.get('window').height;
+  const height = customHeight ? customHeight : Dimensions.get('window').height;
+
   const [chosenMapType, setChosenMapType] = useState<MapTypes>('standard');
   const [userLocationMap, setUserLocationMap] = useState<LatLng | null>(null);
   const [centreOnUser, setCentreOnUser] = useState(false);
   const [zoom, setZoom] = useState<number>(0.02);
   const tracking = useTracking();
+
   const insets = useSafeAreaInsets();
   const userRegion: Region = {
     latitude: tracking.userLocation
@@ -82,7 +89,7 @@ const HoverMap: React.FC = () => {
         mapType={chosenMapType}
         initialRegion={userRegion}
         showsUserLocation
-        style={styles.mapStyle}
+        style={{ width: width, height: height }}
         onUserLocationChange={userLocationChange}
         onDoublePress={() => setCentreOnUser(false)}
         onPanDrag={() => setCentreOnUser(false)}
@@ -103,10 +110,6 @@ const HoverMap: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
-  mapStyle: {
-    width,
-    height,
-  },
   mapInfo: {
     position: 'absolute',
     left: Spacing.smaller,
