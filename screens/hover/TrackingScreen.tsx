@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, ActivityIndicator, TextInput, Switch } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, ActivityIndicator, TextInput, Switch, Button } from 'react-native';
 import { uniqueNamesGenerator, Config, adjectives, animals } from 'unique-names-generator';
 import { Colors, Spacing, Typography, Buttons } from '../../theme';
 import useTracking from '../../hooks/useTracking';
 import HoverMap from '../../components/map/HoverMap';
-import Button from '../../components/general/Button';
+import CustomButton from '../../components/general/Button';
 import * as Progress from 'react-native-progress';
 
 const TrackingScreen: React.FC = () => {
@@ -53,6 +53,24 @@ const TrackingScreen: React.FC = () => {
 
           <Button>Join friend</Button>
         </View> */}
+
+        <View style={styles.collabInfo}>
+          <Text style={{ ...Typography.headerText }}>Hover with friend</Text>
+
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-evenly',
+              width: '100%',
+              paddingHorizontal: Spacing.base,
+            }}>
+            {/* <CustomButton>Start session</CustomButton>
+            <CustomButton>Join session</CustomButton> */}
+            <Button title={'Start'} onPress={() => console.log('Start')} />
+            <Button title={'Join'} onPress={() => console.log('Join')} />
+          </View>
+        </View>
 
         <View style={styles.trackingInfo}>
           <Text style={styles.headerText}>Tracking...</Text>
