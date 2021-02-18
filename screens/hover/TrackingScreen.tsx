@@ -5,6 +5,7 @@ import { Colors, Spacing, Typography, Buttons } from '../../theme';
 import useTracking from '../../hooks/useTracking';
 import HoverMap from '../../components/map/HoverMap';
 import Button from '../../components/general/Button';
+import * as Progress from 'react-native-progress';
 
 const TrackingScreen: React.FC = () => {
   const tracking = useTracking();
@@ -51,7 +52,7 @@ const TrackingScreen: React.FC = () => {
 
         <View style={styles.trackingInfo}>
           <View>
-            <ActivityIndicator size={'large'} color={Colors.blue} />
+            <Progress.Bar progress={0.5} width={200} height={15} borderColor={Colors.blue} color={Colors.blue} />
             <Text style={styles.scoreText}>Points: {Math.floor(tracking.score)}</Text>
           </View>
 
@@ -92,24 +93,17 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
     padding: Spacing.smaller,
     marginTop: Spacing.smaller,
-    flexDirection: 'row',
     backgroundColor: Colors.almostBlackTransparent,
     borderRadius: Spacing.smaller,
   },
   stopButtonContainer: {
     justifyContent: 'center',
-    paddingHorizontal: Spacing.smaller,
+    width: '100%',
   },
   stopButton: {
-    borderRadius: 110 / 2,
-    width: 110,
-    height: 110,
+    ...Buttons.button,
     justifyContent: 'center',
     backgroundColor: Colors.redTransparent,
-    shadowOpacity: 0.2,
-    shadowRadius: 10,
-    shadowColor: Colors.almostBlack,
-    shadowOffset: { height: 0, width: 0 },
   },
   stopButtonText: {
     ...Buttons.buttonText,
