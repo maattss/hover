@@ -20,13 +20,16 @@ const TrackingScreen: React.FC = () => {
   const [isEnabled, setIsEnabled] = useState(false);
   const stopTracking = () => tracking.pauseTracking();
   const score = Math.floor(tracking.score);
+  const nextScore = Math.ceil(tracking.score + 0.000001);
   const progress = tracking.score - score;
   return (
     <View style={styles.container}>
-      <HoverMap customWidth={100} customHeight={100} />
+      <View style={styles.mapContainer}>
+        <HoverMap />
+      </View>
 
       <View style={styles.trackingContainer}>
-        <View style={styles.collabInfo}>
+        {/* <View style={styles.collabInfo}>
           <Text style={{ ...Typography.headerText }}>Hover with a friend</Text>
           <View style={styles.mbSmall}>
             <Text style={{ ...Typography.bodyText }}>Earn 2 x points by hovering together with a friend!</Text>
@@ -49,12 +52,27 @@ const TrackingScreen: React.FC = () => {
           </View>
 
           <Button>Join friend</Button>
-        </View>
+        </View> */}
 
         <View style={styles.trackingInfo}>
-          <View>
-            <Progress.Bar progress={progress} width={200} height={15} borderColor={Colors.blue} color={Colors.blue} />
-            <Text style={styles.scoreText}>Points: {score}</Text>
+          <Text style={styles.headerText}>Tracking...</Text>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-evenly',
+              width: '100%',
+              paddingHorizontal: Spacing.base,
+            }}>
+            <Text style={styles.label}>Points</Text>
+            <View style={{ marginHorizontal: '35%' }} />
+            <Text style={styles.label}>Next</Text>
+          </View>
+
+          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-evenly', width: '100%' }}>
+            <Text style={styles.scoreText}>{score}</Text>
+            <Progress.Bar progress={progress} width={200} height={24} borderColor={Colors.blue} color={Colors.blue} />
+            <Text style={styles.scoreText}>{nextScore}</Text>
           </View>
 
           <View style={styles.stopButtonContainer}>
@@ -72,6 +90,9 @@ const TrackingScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     height: '100%',
+  },
+  mapContainer: {
+    // margin: Spacing.smaller,
   },
   trackingContainer: {
     position: 'absolute',
@@ -113,8 +134,11 @@ const styles = StyleSheet.create({
   },
   scoreText: {
     ...Typography.headerText,
-    marginTop: Spacing.base,
-    marginBottom: Spacing.base,
+    marginVertical: Spacing.small,
+  },
+  headerText: {
+    ...Typography.headerText,
+    marginVertical: Spacing.smaller,
   },
   formField: {
     ...Buttons.button,
