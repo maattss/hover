@@ -51,11 +51,11 @@ const TrackingScreen: React.FC = () => {
         <HoverMap />
       </View>
 
-      <View style={styles.trackingContainer}>
+      <View style={styles.infoContainer}>
         <View style={styles.collabInfo}>
           <View style={styles.collabTopBar}>
             <View>
-              <Text style={{ ...Typography.xlBodyText }}>Hover with friend</Text>
+              <Text style={styles.collabHeader}>Hover with friend</Text>
               <Text style={styles.collabSubHeader}>Get started to earn 2x points!</Text>
             </View>
 
@@ -85,11 +85,11 @@ const TrackingScreen: React.FC = () => {
           {start && <Text style={{ ...Typography.largeBodyText }}>Start</Text>}
 
           {!join && !start && (
-            <View style={styles.collabButtons}>
-              <CustomButton style={{ width: '47%', padding: Spacing.small }} onPress={() => setStart(true)}>
+            <View style={styles.collabButtonsContainer}>
+              <CustomButton style={styles.collabButton} onPress={() => setStart(true)}>
                 Start session
               </CustomButton>
-              <CustomButton style={{ width: '47%', padding: Spacing.small }} onPress={() => setJoin(true)}>
+              <CustomButton style={styles.collabButton} onPress={() => setJoin(true)}>
                 Join friend
               </CustomButton>
             </View>
@@ -100,7 +100,7 @@ const TrackingScreen: React.FC = () => {
           <Text style={styles.headerText}>Tracking...</Text>
           <View style={styles.progressBarLabels}>
             <Text style={styles.label}>Points</Text>
-            <View style={{ marginHorizontal: '35%' }} />
+            <View style={{ marginHorizontal: 100 }} />
             <Text style={styles.label}>Next</Text>
           </View>
 
@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   mapContainer: {},
-  trackingContainer: {
+  infoContainer: {
     position: 'absolute',
     bottom: 0,
     left: '1%',
@@ -155,10 +155,25 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.base,
     paddingVertical: Spacing.small,
   },
+  collabHeader: {
+    ...Typography.xlBodyText,
+  },
   collabSubHeader: {
     ...Typography.largeBodyText,
     marginTop: Spacing.smallest,
     fontStyle: 'italic',
+  },
+  // Insert join/start styling here
+  collabButtonsContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    width: '100%',
+    padding: Spacing.smaller,
+  },
+  collabButton: {
+    width: '47%',
+    padding: Spacing.small,
   },
   icon: {
     ...Typography.icon,
@@ -174,6 +189,17 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.almostBlackTransparent,
     borderRadius: Spacing.smaller,
   },
+  headerText: {
+    ...Typography.headerText,
+    marginVertical: Spacing.smaller,
+  },
+  scoreText: {
+    ...Typography.headerText,
+    marginVertical: Spacing.small,
+  },
+  mh100: {
+    marginHorizontal: 100,
+  },
   progressBar: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -186,13 +212,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
     width: '100%',
     paddingHorizontal: Spacing.base,
-  },
-  collabButtons: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    width: '100%',
-    padding: Spacing.smaller,
   },
   stopButtonContainer: {
     justifyContent: 'center',
@@ -208,30 +227,22 @@ const styles = StyleSheet.create({
     fontSize: 24,
     textAlign: 'center',
   },
-  scoreText: {
-    ...Typography.headerText,
-    marginVertical: Spacing.small,
-  },
-  headerText: {
-    ...Typography.headerText,
-    marginVertical: Spacing.smaller,
-  },
-  formField: {
-    ...Buttons.button,
-    ...Typography.bodyText,
-    padding: Spacing.base,
-    marginBottom: Spacing.base,
-    backgroundColor: Colors.gray900,
-  },
-  label: {
-    ...Typography.bodyText,
-    fontWeight: 'bold',
-    marginBottom: Spacing.smallest,
-    textAlign: 'left',
-  },
-  mbSmall: {
-    marginBottom: Spacing.smaller,
-  },
+  // formField: {
+  //   ...Buttons.button,
+  //   ...Typography.bodyText,
+  //   padding: Spacing.base,
+  //   marginBottom: Spacing.base,
+  //   backgroundColor: Colors.gray900,
+  // },
+  // label: {
+  //   ...Typography.bodyText,
+  //   fontWeight: 'bold',
+  //   marginBottom: Spacing.smallest,
+  //   textAlign: 'left',
+  // },
+  // mbSmall: {
+  //   marginBottom: Spacing.smaller,
+  // },
 });
 
 export default TrackingScreen;
