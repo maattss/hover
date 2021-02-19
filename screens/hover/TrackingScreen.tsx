@@ -1,5 +1,15 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, ActivityIndicator, TextInput, Switch, Button } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  ActivityIndicator,
+  TextInput,
+  Switch,
+  Button,
+  Alert,
+} from 'react-native';
 import { uniqueNamesGenerator, Config, adjectives, animals } from 'unique-names-generator';
 import { Colors, Spacing, Typography, Buttons } from '../../theme';
 import useTracking from '../../hooks/useTracking';
@@ -8,23 +18,34 @@ import CustomButton from '../../components/general/Button';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import * as Progress from 'react-native-progress';
 
+const wordConfig: Config = {
+  dictionaries: [adjectives, animals],
+  separator: ' ',
+  style: 'upperCase',
+  length: 2,
+};
+
 const TrackingScreen: React.FC = () => {
   const tracking = useTracking();
-  const wordConfig: Config = {
-    dictionaries: [adjectives, animals],
-    separator: ' ',
-    style: 'upperCase',
-    length: 2,
-  };
-  const [yourCollabCode, setYourCollabCode] = useState(uniqueNamesGenerator(wordConfig));
-  const [friendCollabCode, setFriendCollabCode] = useState('');
-  const [isEnabled, setIsEnabled] = useState(false);
   const [join, setJoin] = useState(false);
   const [start, setStart] = useState(false);
+
   const stopTracking = () => tracking.pauseTracking();
   const score = Math.floor(tracking.score);
   const nextScore = Math.ceil(tracking.score + 0.000001);
   const progress = tracking.score - score;
+
+  const [yourCollabCode, setYourCollabCode] = useState(uniqueNamesGenerator(wordConfig));
+  const [friendCollabCode, setFriendCollabCode] = useState('');
+  const [isEnabled, setIsEnabled] = useState(false);
+
+  const showInfoPopup = () =>
+    Alert.alert(
+      'Hover together with a friend and earn 2x points!',
+      // 'Earn 2x points by hovering together with your friend! \n' +
+      'Start a session to get a code you can share, or ' + 'join a friends by inserting their code.',
+    );
+
   return (
     <View style={styles.container}>
       <View style={styles.mapContainer}>
@@ -58,18 +79,39 @@ const TrackingScreen: React.FC = () => {
         </View> */}
 
         <View style={styles.collabInfo}>
-          <Text style={{ ...Typography.xlBodyText }}>Hover with friend</Text>
-          <FAIcon name={'info-circle'} style={styles.icon} />
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              paddingHorizontal: Spacing.base,
+              paddingVertical: Spacing.small,
+            }}>
+            <View>
+              <Text style={{ ...Typography.xlBodyText }}>Hover with friend</Text>
+              <Text style={{ ...Typography.largeBodyText, marginTop: Spacing.smallest, fontStyle: 'italic' }}>
+                Get started to earn 2x points!
+              </Text>
+            </View>
+
+            <TouchableOpacity onPress={showInfoPopup} style={{ marginTop: Spacing.smaller }}>
+              <FAIcon name={'info-circle'} style={styles.icon} />
+            </TouchableOpacity>
+          </View>
 
           {join && <Text style={{ ...Typography.largeBodyText }}>Join</Text>}
           {start && <Text style={{ ...Typography.largeBodyText }}>Start</Text>}
           {!join && !start && (
             <View style={styles.collabButtons}>
-              {/* <CustomButton>Start session</CustomButton>
-            <CustomButton>Join session</CustomButton> */}
-              <Button title={'Start session'} onPress={() => setStart(true)} />
-              <Button title={'Join friend'} onPress={() => setJoin(true)} />
+              <CustomButton style={{ width: '47%', padding: Spacing.small }}>Start session</CustomButton>
+              <CustomButton style={{ width: '47%', padding: Spacing.small }}>Join friend</CustomButton>
             </View>
+
+            // <View style={styles.collabButtons}>
+            //   <CustomButton>Start session</CustomButton>
+            //   <CustomButton>Join session</CustomButton>
+            //   {/* <Button title={'Start session'} onPress={() => setStart(true)} />
+            //   <Button title={'Join friend'} onPress={() => setJoin(true)} /> */}
+            // </View>
           )}
         </View>
 
@@ -155,9 +197,9 @@ const styles = StyleSheet.create({
   collabButtons: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-evenly',
+    justifyContent: 'space-between',
     width: '100%',
-    paddingHorizontal: Spacing.base,
+    padding: Spacing.smaller,
   },
   stopButtonContainer: {
     justifyContent: 'center',
