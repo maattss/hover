@@ -105,7 +105,6 @@ export const TrackingProvider = ({ children }: Props) => {
     }
   }, [locationPermission]);
 
-  const getLocation = async () => await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Highest });
   const externalUpdateUserLocation = (newUserLocation: LatLng) => {
     if (userLocation === null) {
       updateUserLocation({
@@ -143,7 +142,8 @@ export const TrackingProvider = ({ children }: Props) => {
   useInterval(
     async () => {
       console.log('Checking user location...');
-      const newUserLocation = await getLocation();
+      const newUserLocation = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Highest });
+
       const differentLatitude = newUserLocation.coords.latitude !== userLocation?.coords.latitude;
       const differentLongitude = newUserLocation.coords.longitude !== userLocation?.coords.longitude;
       if (differentLatitude || differentLongitude) updateUserLocation(newUserLocation);

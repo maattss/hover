@@ -42,7 +42,6 @@ const TrackingScreen: React.FC = () => {
   const showInfoPopup = () =>
     Alert.alert(
       'Hover together with a friend and earn 2x points!',
-      // 'Earn 2x points by hovering together with your friend! \n' +
       'Start a session to get a code you can share, or ' + 'join a friends by inserting their code.',
     );
 
@@ -53,14 +52,19 @@ const TrackingScreen: React.FC = () => {
       </View>
 
       <View style={styles.trackingContainer}>
-        {/* <View style={styles.collabInfo}>
-          <Text style={{ ...Typography.headerText }}>Hover with a friend</Text>
-          <View style={styles.mbSmall}>
-            <Text style={{ ...Typography.bodyText }}>Earn 2 x points by hovering together with a friend!</Text>
-            <Text style={{ ...Typography.bodyText }}>
-              Ask your friend for his/hers code and insert below or share your code.
-            </Text>
+        <View style={styles.collabInfo}>
+          <View style={styles.collabTopBar}>
+            <View>
+              <Text style={{ ...Typography.xlBodyText }}>Hover with friend</Text>
+              <Text style={styles.collabSubHeader}>Get started to earn 2x points!</Text>
+            </View>
+
+            <TouchableOpacity onPress={showInfoPopup} style={styles.iconButton}>
+              <FAIcon name={'info-circle'} style={styles.icon} />
+            </TouchableOpacity>
           </View>
+
+          {/* 
           <View style={styles.mbSmall}>
             <Text style={styles.label}>Your code</Text>
             <Text style={{ ...Typography.headerText, width: '100%', textAlign: 'center' }}>{yourCollabCode}</Text>
@@ -73,45 +77,22 @@ const TrackingScreen: React.FC = () => {
               onChangeText={(val) => setFriendCollabCode(val)}
               style={styles.formField}
             />
-          </View>
+          </View> 
+          */}
 
-          <Button>Join friend</Button>
-        </View> */}
-
-        <View style={styles.collabInfo}>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              paddingHorizontal: Spacing.base,
-              paddingVertical: Spacing.small,
-            }}>
-            <View>
-              <Text style={{ ...Typography.xlBodyText }}>Hover with friend</Text>
-              <Text style={{ ...Typography.largeBodyText, marginTop: Spacing.smallest, fontStyle: 'italic' }}>
-                Get started to earn 2x points!
-              </Text>
-            </View>
-
-            <TouchableOpacity onPress={showInfoPopup} style={{ marginTop: Spacing.smaller }}>
-              <FAIcon name={'info-circle'} style={styles.icon} />
-            </TouchableOpacity>
-          </View>
-
+          {/* TODO: Replace */}
           {join && <Text style={{ ...Typography.largeBodyText }}>Join</Text>}
           {start && <Text style={{ ...Typography.largeBodyText }}>Start</Text>}
+
           {!join && !start && (
             <View style={styles.collabButtons}>
-              <CustomButton style={{ width: '47%', padding: Spacing.small }}>Start session</CustomButton>
-              <CustomButton style={{ width: '47%', padding: Spacing.small }}>Join friend</CustomButton>
+              <CustomButton style={{ width: '47%', padding: Spacing.small }} onPress={() => setStart(true)}>
+                Start session
+              </CustomButton>
+              <CustomButton style={{ width: '47%', padding: Spacing.small }} onPress={() => setJoin(true)}>
+                Join friend
+              </CustomButton>
             </View>
-
-            // <View style={styles.collabButtons}>
-            //   <CustomButton>Start session</CustomButton>
-            //   <CustomButton>Join session</CustomButton>
-            //   {/* <Button title={'Start session'} onPress={() => setStart(true)} />
-            //   <Button title={'Join friend'} onPress={() => setJoin(true)} /> */}
-            // </View>
           )}
         </View>
 
@@ -152,9 +133,7 @@ const styles = StyleSheet.create({
   container: {
     height: '100%',
   },
-  mapContainer: {
-    // margin: Spacing.smaller,
-  },
+  mapContainer: {},
   trackingContainer: {
     position: 'absolute',
     bottom: 0,
@@ -170,8 +149,22 @@ const styles = StyleSheet.create({
     borderRadius: Spacing.smaller,
     padding: Spacing.smaller,
   },
+  collabTopBar: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: Spacing.base,
+    paddingVertical: Spacing.small,
+  },
+  collabSubHeader: {
+    ...Typography.largeBodyText,
+    marginTop: Spacing.smallest,
+    fontStyle: 'italic',
+  },
   icon: {
     ...Typography.icon,
+  },
+  iconButton: {
+    marginTop: Spacing.smaller,
   },
   trackingInfo: {
     alignItems: 'center',
