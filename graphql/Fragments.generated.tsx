@@ -54,6 +54,10 @@ export type ChallengeFragmentFragment = { readonly __typename: 'challenge' } & P
     readonly opponents: ReadonlyArray<{ readonly __typename: 'challenge_participant' } & OpponentFragmentFragment>;
   };
 
+export type ChallengeFeedFragmentFragment = { readonly __typename: 'challenge' } & {
+  readonly winner?: Types.Maybe<{ readonly __typename: 'users' } & ListUserFragmentFragment>;
+} & ChallengeFragmentFragment;
+
 export type AchievementFragmentFragment = { readonly __typename: 'achievement' } & Pick<
   Types.Achievement,
   'id' | 'description' | 'name' | 'achievement_type' | 'level' | 'created_at' | 'rule'
@@ -102,6 +106,7 @@ export type FullFeedFragmentFragment = { readonly __typename: 'feed' } & Pick<
         readonly achievement: { readonly __typename: 'achievement' } & AchievementFragmentFragment;
       }
     >;
+    readonly challenge?: Types.Maybe<{ readonly __typename: 'challenge' } & ChallengeFeedFragmentFragment>;
   };
 
 export const ListUserFragmentFragmentDoc = gql`
@@ -179,36 +184,6 @@ export const CommentFragmentFragmentDoc = gql`
   }
   ${ListUserFragmentFragmentDoc}
 `;
-export const OpponentFragmentFragmentDoc = gql`
-  fragment opponentFragment on challenge_participant {
-    user {
-      id
-      name
-      picture
-    }
-    state
-    progress
-  }
-`;
-export const ChallengeFragmentFragmentDoc = gql`
-  fragment challengeFragment on challenge {
-    id
-    challenge_type
-    created_at
-    start_date
-    end_date
-    state
-    rules
-    created_by_user {
-      ...listUserFragment
-    }
-    opponents: challenge_participants(order_by: { challenge_participant_state: { state: asc } }) {
-      ...opponentFragment
-    }
-  }
-  ${ListUserFragmentFragmentDoc}
-  ${OpponentFragmentFragmentDoc}
-`;
 export const ChallengeTypeFragmentFragmentDoc = gql`
   fragment challengeTypeFragment on challenge_type {
     name
@@ -282,6 +257,46 @@ export const FeedActivityFragmentFragmentDoc = gql`
   }
   ${GeofenceFragmentFragmentDoc}
 `;
+export const OpponentFragmentFragmentDoc = gql`
+  fragment opponentFragment on challenge_participant {
+    user {
+      id
+      name
+      picture
+    }
+    state
+    progress
+  }
+`;
+export const ChallengeFragmentFragmentDoc = gql`
+  fragment challengeFragment on challenge {
+    id
+    challenge_type
+    created_at
+    start_date
+    end_date
+    state
+    rules
+    created_by_user {
+      ...listUserFragment
+    }
+    opponents: challenge_participants(order_by: { challenge_participant_state: { state: asc } }) {
+      ...opponentFragment
+    }
+  }
+  ${ListUserFragmentFragmentDoc}
+  ${OpponentFragmentFragmentDoc}
+`;
+export const ChallengeFeedFragmentFragmentDoc = gql`
+  fragment challengeFeedFragment on challenge {
+    ...challengeFragment
+    winner {
+      ...listUserFragment
+    }
+  }
+  ${ChallengeFragmentFragmentDoc}
+  ${ListUserFragmentFragmentDoc}
+`;
 export const FullFeedFragmentFragmentDoc = gql`
   fragment fullFeedFragment on feed {
     id
@@ -298,9 +313,13 @@ export const FullFeedFragmentFragmentDoc = gql`
         ...achievementFragment
       }
     }
+    challenge {
+      ...challengeFeedFragment
+    }
     created_at
   }
   ${ListUserFragmentFragmentDoc}
   ${FeedActivityFragmentFragmentDoc}
   ${AchievementFragmentFragmentDoc}
+  ${ChallengeFeedFragmentFragmentDoc}
 `;

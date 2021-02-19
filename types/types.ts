@@ -1304,10 +1304,15 @@ export type Challenge = {
   /** An object relationship */
   created_by_user: Users;
   end_date: Scalars['date'];
+  /** An object relationship */
+  feed?: Maybe<Feed>;
   id: Scalars['Int'];
   rules: Scalars['json'];
   start_date: Scalars['date'];
   state: Challenge_State_Enum;
+  /** An object relationship */
+  winner?: Maybe<Users>;
+  winner_id?: Maybe<Scalars['String']>;
 };
 
 /** columns and relationships of "challenge" */
@@ -1407,14 +1412,19 @@ export type Challenge_Bool_Exp = {
   created_by?: Maybe<String_Comparison_Exp>;
   created_by_user?: Maybe<Users_Bool_Exp>;
   end_date?: Maybe<Date_Comparison_Exp>;
+  feed?: Maybe<Feed_Bool_Exp>;
   id?: Maybe<Int_Comparison_Exp>;
   rules?: Maybe<Json_Comparison_Exp>;
   start_date?: Maybe<Date_Comparison_Exp>;
   state?: Maybe<Challenge_State_Enum_Comparison_Exp>;
+  winner?: Maybe<Users_Bool_Exp>;
+  winner_id?: Maybe<String_Comparison_Exp>;
 };
 
 /** unique or primary key constraints on table "challenge" */
 export enum Challenge_Constraint {
+  /** unique or primary key constraint */
+  ChallengeIdWinnerIdKey = 'challenge_id_winner_id_key',
   /** unique or primary key constraint */
   UserChallengePkey = 'user_challenge_pkey',
 }
@@ -1434,10 +1444,13 @@ export type Challenge_Insert_Input = {
   created_by?: Maybe<Scalars['String']>;
   created_by_user?: Maybe<Users_Obj_Rel_Insert_Input>;
   end_date?: Maybe<Scalars['date']>;
+  feed?: Maybe<Feed_Obj_Rel_Insert_Input>;
   id?: Maybe<Scalars['Int']>;
   rules?: Maybe<Scalars['json']>;
   start_date?: Maybe<Scalars['date']>;
   state?: Maybe<Challenge_State_Enum>;
+  winner?: Maybe<Users_Obj_Rel_Insert_Input>;
+  winner_id?: Maybe<Scalars['String']>;
 };
 
 /** aggregate max on columns */
@@ -1448,6 +1461,7 @@ export type Challenge_Max_Fields = {
   end_date?: Maybe<Scalars['date']>;
   id?: Maybe<Scalars['Int']>;
   start_date?: Maybe<Scalars['date']>;
+  winner_id?: Maybe<Scalars['String']>;
 };
 
 /** order by max() on columns of table "challenge" */
@@ -1457,6 +1471,7 @@ export type Challenge_Max_Order_By = {
   end_date?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
   start_date?: Maybe<Order_By>;
+  winner_id?: Maybe<Order_By>;
 };
 
 /** aggregate min on columns */
@@ -1467,6 +1482,7 @@ export type Challenge_Min_Fields = {
   end_date?: Maybe<Scalars['date']>;
   id?: Maybe<Scalars['Int']>;
   start_date?: Maybe<Scalars['date']>;
+  winner_id?: Maybe<Scalars['String']>;
 };
 
 /** order by min() on columns of table "challenge" */
@@ -1476,6 +1492,7 @@ export type Challenge_Min_Order_By = {
   end_date?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
   start_date?: Maybe<Order_By>;
+  winner_id?: Maybe<Order_By>;
 };
 
 /** response of any mutation on the table "challenge" */
@@ -1510,10 +1527,13 @@ export type Challenge_Order_By = {
   created_by?: Maybe<Order_By>;
   created_by_user?: Maybe<Users_Order_By>;
   end_date?: Maybe<Order_By>;
+  feed?: Maybe<Feed_Order_By>;
   id?: Maybe<Order_By>;
   rules?: Maybe<Order_By>;
   start_date?: Maybe<Order_By>;
   state?: Maybe<Order_By>;
+  winner?: Maybe<Users_Order_By>;
+  winner_id?: Maybe<Order_By>;
 };
 
 /** columns and relationships of "challenge_participant" */
@@ -1524,7 +1544,7 @@ export type Challenge_Participant = {
   challenge_id: Scalars['Int'];
   /** An object relationship */
   challenge_participant_state: Challenge_Participant_State;
-  progress?: Maybe<Scalars['Int']>;
+  progress?: Maybe<Scalars['float8']>;
   state: Challenge_Participant_State_Enum;
   /** An object relationship */
   user: Users;
@@ -1602,7 +1622,7 @@ export type Challenge_Participant_Bool_Exp = {
   challenge?: Maybe<Challenge_Bool_Exp>;
   challenge_id?: Maybe<Int_Comparison_Exp>;
   challenge_participant_state?: Maybe<Challenge_Participant_State_Bool_Exp>;
-  progress?: Maybe<Int_Comparison_Exp>;
+  progress?: Maybe<Float8_Comparison_Exp>;
   state?: Maybe<Challenge_Participant_State_Enum_Comparison_Exp>;
   user?: Maybe<Users_Bool_Exp>;
   user_id?: Maybe<String_Comparison_Exp>;
@@ -1617,7 +1637,7 @@ export enum Challenge_Participant_Constraint {
 /** input type for incrementing integer column in table "challenge_participant" */
 export type Challenge_Participant_Inc_Input = {
   challenge_id?: Maybe<Scalars['Int']>;
-  progress?: Maybe<Scalars['Int']>;
+  progress?: Maybe<Scalars['float8']>;
 };
 
 /** input type for inserting data into table "challenge_participant" */
@@ -1625,7 +1645,7 @@ export type Challenge_Participant_Insert_Input = {
   challenge?: Maybe<Challenge_Obj_Rel_Insert_Input>;
   challenge_id?: Maybe<Scalars['Int']>;
   challenge_participant_state?: Maybe<Challenge_Participant_State_Obj_Rel_Insert_Input>;
-  progress?: Maybe<Scalars['Int']>;
+  progress?: Maybe<Scalars['float8']>;
   state?: Maybe<Challenge_Participant_State_Enum>;
   user?: Maybe<Users_Obj_Rel_Insert_Input>;
   user_id?: Maybe<Scalars['String']>;
@@ -1635,7 +1655,7 @@ export type Challenge_Participant_Insert_Input = {
 export type Challenge_Participant_Max_Fields = {
   __typename?: 'challenge_participant_max_fields';
   challenge_id?: Maybe<Scalars['Int']>;
-  progress?: Maybe<Scalars['Int']>;
+  progress?: Maybe<Scalars['float8']>;
   user_id?: Maybe<Scalars['String']>;
 };
 
@@ -1650,7 +1670,7 @@ export type Challenge_Participant_Max_Order_By = {
 export type Challenge_Participant_Min_Fields = {
   __typename?: 'challenge_participant_min_fields';
   challenge_id?: Maybe<Scalars['Int']>;
-  progress?: Maybe<Scalars['Int']>;
+  progress?: Maybe<Scalars['float8']>;
   user_id?: Maybe<Scalars['String']>;
 };
 
@@ -1715,7 +1735,7 @@ export enum Challenge_Participant_Select_Column {
 /** input type for updating data in table "challenge_participant" */
 export type Challenge_Participant_Set_Input = {
   challenge_id?: Maybe<Scalars['Int']>;
-  progress?: Maybe<Scalars['Int']>;
+  progress?: Maybe<Scalars['float8']>;
   state?: Maybe<Challenge_Participant_State_Enum>;
   user_id?: Maybe<Scalars['String']>;
 };
@@ -1933,7 +1953,7 @@ export type Challenge_Participant_Stddev_Samp_Order_By = {
 export type Challenge_Participant_Sum_Fields = {
   __typename?: 'challenge_participant_sum_fields';
   challenge_id?: Maybe<Scalars['Int']>;
-  progress?: Maybe<Scalars['Int']>;
+  progress?: Maybe<Scalars['float8']>;
 };
 
 /** order by sum() on columns of table "challenge_participant" */
@@ -2016,6 +2036,8 @@ export enum Challenge_Select_Column {
   StartDate = 'start_date',
   /** column name */
   State = 'state',
+  /** column name */
+  WinnerId = 'winner_id',
 }
 
 /** input type for updating data in table "challenge" */
@@ -2028,6 +2050,7 @@ export type Challenge_Set_Input = {
   rules?: Maybe<Scalars['json']>;
   start_date?: Maybe<Scalars['date']>;
   state?: Maybe<Challenge_State_Enum>;
+  winner_id?: Maybe<Scalars['String']>;
 };
 
 /** columns and relationships of "challenge_state" */
@@ -2452,6 +2475,8 @@ export enum Challenge_Update_Column {
   StartDate = 'start_date',
   /** column name */
   State = 'state',
+  /** column name */
+  WinnerId = 'winner_id',
 }
 
 /** aggregate var_pop on columns */
@@ -2840,6 +2865,9 @@ export type Feed = {
   /** An object relationship */
   activityByActivityIdCreatedAtUserId?: Maybe<Activities>;
   activity_id?: Maybe<Scalars['Int']>;
+  /** An object relationship */
+  challenge?: Maybe<Challenge>;
+  challenge_id?: Maybe<Scalars['Int']>;
   created_at?: Maybe<Scalars['timestamptz']>;
   /** An object relationship */
   feedTypeByFeedType: Feed_Type;
@@ -2847,8 +2875,6 @@ export type Feed = {
   id: Scalars['Int'];
   /** An object relationship */
   user?: Maybe<Users>;
-  /** An object relationship */
-  userAchievementByAchievementIdCreatedAtUserId?: Maybe<User_Achievement>;
   /** An object relationship */
   user_achievement?: Maybe<User_Achievement>;
   user_id?: Maybe<Scalars['String']>;
@@ -2909,6 +2935,7 @@ export type Feed_Avg_Fields = {
   __typename?: 'feed_avg_fields';
   achievement_id?: Maybe<Scalars['Float']>;
   activity_id?: Maybe<Scalars['Float']>;
+  challenge_id?: Maybe<Scalars['Float']>;
   id?: Maybe<Scalars['Float']>;
 };
 
@@ -2916,6 +2943,7 @@ export type Feed_Avg_Fields = {
 export type Feed_Avg_Order_By = {
   achievement_id?: Maybe<Order_By>;
   activity_id?: Maybe<Order_By>;
+  challenge_id?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
 };
 
@@ -2928,12 +2956,13 @@ export type Feed_Bool_Exp = {
   activity?: Maybe<Activities_Bool_Exp>;
   activityByActivityIdCreatedAtUserId?: Maybe<Activities_Bool_Exp>;
   activity_id?: Maybe<Int_Comparison_Exp>;
+  challenge?: Maybe<Challenge_Bool_Exp>;
+  challenge_id?: Maybe<Int_Comparison_Exp>;
   created_at?: Maybe<Timestamptz_Comparison_Exp>;
   feedTypeByFeedType?: Maybe<Feed_Type_Bool_Exp>;
   feed_type?: Maybe<Feed_Type_Enum_Comparison_Exp>;
   id?: Maybe<Int_Comparison_Exp>;
   user?: Maybe<Users_Bool_Exp>;
-  userAchievementByAchievementIdCreatedAtUserId?: Maybe<User_Achievement_Bool_Exp>;
   user_achievement?: Maybe<User_Achievement_Bool_Exp>;
   user_id?: Maybe<String_Comparison_Exp>;
 };
@@ -2941,9 +2970,11 @@ export type Feed_Bool_Exp = {
 /** unique or primary key constraints on table "feed" */
 export enum Feed_Constraint {
   /** unique or primary key constraint */
-  FeedAchievementIdKey = 'feed_achievement_id_key',
+  FeedAchievementIdUserIdKey = 'feed_achievement_id_user_id_key',
   /** unique or primary key constraint */
-  FeedActivityIdKey = 'feed_activity_id_key',
+  FeedActivityIdUserIdKey = 'feed_activity_id_user_id_key',
+  /** unique or primary key constraint */
+  FeedChallengeIdUserIdKey = 'feed_challenge_id_user_id_key',
   /** unique or primary key constraint */
   FeedPkey = 'feed_pkey',
 }
@@ -2952,6 +2983,7 @@ export enum Feed_Constraint {
 export type Feed_Inc_Input = {
   achievement_id?: Maybe<Scalars['Int']>;
   activity_id?: Maybe<Scalars['Int']>;
+  challenge_id?: Maybe<Scalars['Int']>;
   id?: Maybe<Scalars['Int']>;
 };
 
@@ -2961,12 +2993,13 @@ export type Feed_Insert_Input = {
   activity?: Maybe<Activities_Obj_Rel_Insert_Input>;
   activityByActivityIdCreatedAtUserId?: Maybe<Activities_Obj_Rel_Insert_Input>;
   activity_id?: Maybe<Scalars['Int']>;
+  challenge?: Maybe<Challenge_Obj_Rel_Insert_Input>;
+  challenge_id?: Maybe<Scalars['Int']>;
   created_at?: Maybe<Scalars['timestamptz']>;
   feedTypeByFeedType?: Maybe<Feed_Type_Obj_Rel_Insert_Input>;
   feed_type?: Maybe<Feed_Type_Enum>;
   id?: Maybe<Scalars['Int']>;
   user?: Maybe<Users_Obj_Rel_Insert_Input>;
-  userAchievementByAchievementIdCreatedAtUserId?: Maybe<User_Achievement_Obj_Rel_Insert_Input>;
   user_achievement?: Maybe<User_Achievement_Obj_Rel_Insert_Input>;
   user_id?: Maybe<Scalars['String']>;
 };
@@ -2976,6 +3009,7 @@ export type Feed_Max_Fields = {
   __typename?: 'feed_max_fields';
   achievement_id?: Maybe<Scalars['Int']>;
   activity_id?: Maybe<Scalars['Int']>;
+  challenge_id?: Maybe<Scalars['Int']>;
   created_at?: Maybe<Scalars['timestamptz']>;
   id?: Maybe<Scalars['Int']>;
   user_id?: Maybe<Scalars['String']>;
@@ -2985,6 +3019,7 @@ export type Feed_Max_Fields = {
 export type Feed_Max_Order_By = {
   achievement_id?: Maybe<Order_By>;
   activity_id?: Maybe<Order_By>;
+  challenge_id?: Maybe<Order_By>;
   created_at?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
   user_id?: Maybe<Order_By>;
@@ -2995,6 +3030,7 @@ export type Feed_Min_Fields = {
   __typename?: 'feed_min_fields';
   achievement_id?: Maybe<Scalars['Int']>;
   activity_id?: Maybe<Scalars['Int']>;
+  challenge_id?: Maybe<Scalars['Int']>;
   created_at?: Maybe<Scalars['timestamptz']>;
   id?: Maybe<Scalars['Int']>;
   user_id?: Maybe<Scalars['String']>;
@@ -3004,6 +3040,7 @@ export type Feed_Min_Fields = {
 export type Feed_Min_Order_By = {
   achievement_id?: Maybe<Order_By>;
   activity_id?: Maybe<Order_By>;
+  challenge_id?: Maybe<Order_By>;
   created_at?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
   user_id?: Maybe<Order_By>;
@@ -3037,12 +3074,13 @@ export type Feed_Order_By = {
   activity?: Maybe<Activities_Order_By>;
   activityByActivityIdCreatedAtUserId?: Maybe<Activities_Order_By>;
   activity_id?: Maybe<Order_By>;
+  challenge?: Maybe<Challenge_Order_By>;
+  challenge_id?: Maybe<Order_By>;
   created_at?: Maybe<Order_By>;
   feedTypeByFeedType?: Maybe<Feed_Type_Order_By>;
   feed_type?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
   user?: Maybe<Users_Order_By>;
-  userAchievementByAchievementIdCreatedAtUserId?: Maybe<User_Achievement_Order_By>;
   user_achievement?: Maybe<User_Achievement_Order_By>;
   user_id?: Maybe<Order_By>;
 };
@@ -3059,6 +3097,8 @@ export enum Feed_Select_Column {
   /** column name */
   ActivityId = 'activity_id',
   /** column name */
+  ChallengeId = 'challenge_id',
+  /** column name */
   CreatedAt = 'created_at',
   /** column name */
   FeedType = 'feed_type',
@@ -3072,6 +3112,7 @@ export enum Feed_Select_Column {
 export type Feed_Set_Input = {
   achievement_id?: Maybe<Scalars['Int']>;
   activity_id?: Maybe<Scalars['Int']>;
+  challenge_id?: Maybe<Scalars['Int']>;
   created_at?: Maybe<Scalars['timestamptz']>;
   feed_type?: Maybe<Feed_Type_Enum>;
   id?: Maybe<Scalars['Int']>;
@@ -3083,6 +3124,7 @@ export type Feed_Stddev_Fields = {
   __typename?: 'feed_stddev_fields';
   achievement_id?: Maybe<Scalars['Float']>;
   activity_id?: Maybe<Scalars['Float']>;
+  challenge_id?: Maybe<Scalars['Float']>;
   id?: Maybe<Scalars['Float']>;
 };
 
@@ -3090,6 +3132,7 @@ export type Feed_Stddev_Fields = {
 export type Feed_Stddev_Order_By = {
   achievement_id?: Maybe<Order_By>;
   activity_id?: Maybe<Order_By>;
+  challenge_id?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
 };
 
@@ -3098,6 +3141,7 @@ export type Feed_Stddev_Pop_Fields = {
   __typename?: 'feed_stddev_pop_fields';
   achievement_id?: Maybe<Scalars['Float']>;
   activity_id?: Maybe<Scalars['Float']>;
+  challenge_id?: Maybe<Scalars['Float']>;
   id?: Maybe<Scalars['Float']>;
 };
 
@@ -3105,6 +3149,7 @@ export type Feed_Stddev_Pop_Fields = {
 export type Feed_Stddev_Pop_Order_By = {
   achievement_id?: Maybe<Order_By>;
   activity_id?: Maybe<Order_By>;
+  challenge_id?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
 };
 
@@ -3113,6 +3158,7 @@ export type Feed_Stddev_Samp_Fields = {
   __typename?: 'feed_stddev_samp_fields';
   achievement_id?: Maybe<Scalars['Float']>;
   activity_id?: Maybe<Scalars['Float']>;
+  challenge_id?: Maybe<Scalars['Float']>;
   id?: Maybe<Scalars['Float']>;
 };
 
@@ -3120,6 +3166,7 @@ export type Feed_Stddev_Samp_Fields = {
 export type Feed_Stddev_Samp_Order_By = {
   achievement_id?: Maybe<Order_By>;
   activity_id?: Maybe<Order_By>;
+  challenge_id?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
 };
 
@@ -3128,6 +3175,7 @@ export type Feed_Sum_Fields = {
   __typename?: 'feed_sum_fields';
   achievement_id?: Maybe<Scalars['Int']>;
   activity_id?: Maybe<Scalars['Int']>;
+  challenge_id?: Maybe<Scalars['Int']>;
   id?: Maybe<Scalars['Int']>;
 };
 
@@ -3135,6 +3183,7 @@ export type Feed_Sum_Fields = {
 export type Feed_Sum_Order_By = {
   achievement_id?: Maybe<Order_By>;
   activity_id?: Maybe<Order_By>;
+  challenge_id?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
 };
 
@@ -3218,6 +3267,7 @@ export enum Feed_Type_Constraint {
 export enum Feed_Type_Enum {
   Achievement = 'ACHIEVEMENT',
   Activity = 'ACTIVITY',
+  Challenge = 'CHALLENGE',
 }
 
 /** expression to compare columns of type feed_type_enum. All fields are combined with logical 'AND'. */
@@ -3314,6 +3364,8 @@ export enum Feed_Update_Column {
   /** column name */
   ActivityId = 'activity_id',
   /** column name */
+  ChallengeId = 'challenge_id',
+  /** column name */
   CreatedAt = 'created_at',
   /** column name */
   FeedType = 'feed_type',
@@ -3328,6 +3380,7 @@ export type Feed_Var_Pop_Fields = {
   __typename?: 'feed_var_pop_fields';
   achievement_id?: Maybe<Scalars['Float']>;
   activity_id?: Maybe<Scalars['Float']>;
+  challenge_id?: Maybe<Scalars['Float']>;
   id?: Maybe<Scalars['Float']>;
 };
 
@@ -3335,6 +3388,7 @@ export type Feed_Var_Pop_Fields = {
 export type Feed_Var_Pop_Order_By = {
   achievement_id?: Maybe<Order_By>;
   activity_id?: Maybe<Order_By>;
+  challenge_id?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
 };
 
@@ -3343,6 +3397,7 @@ export type Feed_Var_Samp_Fields = {
   __typename?: 'feed_var_samp_fields';
   achievement_id?: Maybe<Scalars['Float']>;
   activity_id?: Maybe<Scalars['Float']>;
+  challenge_id?: Maybe<Scalars['Float']>;
   id?: Maybe<Scalars['Float']>;
 };
 
@@ -3350,6 +3405,7 @@ export type Feed_Var_Samp_Fields = {
 export type Feed_Var_Samp_Order_By = {
   achievement_id?: Maybe<Order_By>;
   activity_id?: Maybe<Order_By>;
+  challenge_id?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
 };
 
@@ -3358,6 +3414,7 @@ export type Feed_Variance_Fields = {
   __typename?: 'feed_variance_fields';
   achievement_id?: Maybe<Scalars['Float']>;
   activity_id?: Maybe<Scalars['Float']>;
+  challenge_id?: Maybe<Scalars['Float']>;
   id?: Maybe<Scalars['Float']>;
 };
 
@@ -3365,6 +3422,7 @@ export type Feed_Variance_Fields = {
 export type Feed_Variance_Order_By = {
   achievement_id?: Maybe<Order_By>;
   activity_id?: Maybe<Order_By>;
+  challenge_id?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
 };
 
@@ -3560,6 +3618,314 @@ export enum Followings_Update_Column {
   /** column name */
   UserId = 'user_id',
 }
+
+/** columns and relationships of "friends_tracking" */
+export type Friends_Tracking = {
+  __typename?: 'friends_tracking';
+  geofence_id: Scalars['Int'];
+  id: Scalars['Int'];
+  linking_word: Scalars['String'];
+  user_join?: Maybe<Scalars['String']>;
+  user_start: Scalars['String'];
+};
+
+/** aggregated selection of "friends_tracking" */
+export type Friends_Tracking_Aggregate = {
+  __typename?: 'friends_tracking_aggregate';
+  aggregate?: Maybe<Friends_Tracking_Aggregate_Fields>;
+  nodes: Array<Friends_Tracking>;
+};
+
+/** aggregate fields of "friends_tracking" */
+export type Friends_Tracking_Aggregate_Fields = {
+  __typename?: 'friends_tracking_aggregate_fields';
+  avg?: Maybe<Friends_Tracking_Avg_Fields>;
+  count?: Maybe<Scalars['Int']>;
+  max?: Maybe<Friends_Tracking_Max_Fields>;
+  min?: Maybe<Friends_Tracking_Min_Fields>;
+  stddev?: Maybe<Friends_Tracking_Stddev_Fields>;
+  stddev_pop?: Maybe<Friends_Tracking_Stddev_Pop_Fields>;
+  stddev_samp?: Maybe<Friends_Tracking_Stddev_Samp_Fields>;
+  sum?: Maybe<Friends_Tracking_Sum_Fields>;
+  var_pop?: Maybe<Friends_Tracking_Var_Pop_Fields>;
+  var_samp?: Maybe<Friends_Tracking_Var_Samp_Fields>;
+  variance?: Maybe<Friends_Tracking_Variance_Fields>;
+};
+
+/** aggregate fields of "friends_tracking" */
+export type Friends_Tracking_Aggregate_FieldsCountArgs = {
+  columns?: Maybe<Array<Friends_Tracking_Select_Column>>;
+  distinct?: Maybe<Scalars['Boolean']>;
+};
+
+/** order by aggregate values of table "friends_tracking" */
+export type Friends_Tracking_Aggregate_Order_By = {
+  avg?: Maybe<Friends_Tracking_Avg_Order_By>;
+  count?: Maybe<Order_By>;
+  max?: Maybe<Friends_Tracking_Max_Order_By>;
+  min?: Maybe<Friends_Tracking_Min_Order_By>;
+  stddev?: Maybe<Friends_Tracking_Stddev_Order_By>;
+  stddev_pop?: Maybe<Friends_Tracking_Stddev_Pop_Order_By>;
+  stddev_samp?: Maybe<Friends_Tracking_Stddev_Samp_Order_By>;
+  sum?: Maybe<Friends_Tracking_Sum_Order_By>;
+  var_pop?: Maybe<Friends_Tracking_Var_Pop_Order_By>;
+  var_samp?: Maybe<Friends_Tracking_Var_Samp_Order_By>;
+  variance?: Maybe<Friends_Tracking_Variance_Order_By>;
+};
+
+/** input type for inserting array relation for remote table "friends_tracking" */
+export type Friends_Tracking_Arr_Rel_Insert_Input = {
+  data: Array<Friends_Tracking_Insert_Input>;
+  on_conflict?: Maybe<Friends_Tracking_On_Conflict>;
+};
+
+/** aggregate avg on columns */
+export type Friends_Tracking_Avg_Fields = {
+  __typename?: 'friends_tracking_avg_fields';
+  geofence_id?: Maybe<Scalars['Float']>;
+  id?: Maybe<Scalars['Float']>;
+};
+
+/** order by avg() on columns of table "friends_tracking" */
+export type Friends_Tracking_Avg_Order_By = {
+  geofence_id?: Maybe<Order_By>;
+  id?: Maybe<Order_By>;
+};
+
+/** Boolean expression to filter rows from the table "friends_tracking". All fields are combined with a logical 'AND'. */
+export type Friends_Tracking_Bool_Exp = {
+  _and?: Maybe<Array<Maybe<Friends_Tracking_Bool_Exp>>>;
+  _not?: Maybe<Friends_Tracking_Bool_Exp>;
+  _or?: Maybe<Array<Maybe<Friends_Tracking_Bool_Exp>>>;
+  geofence_id?: Maybe<Int_Comparison_Exp>;
+  id?: Maybe<Int_Comparison_Exp>;
+  linking_word?: Maybe<String_Comparison_Exp>;
+  user_join?: Maybe<String_Comparison_Exp>;
+  user_start?: Maybe<String_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "friends_tracking" */
+export enum Friends_Tracking_Constraint {
+  /** unique or primary key constraint */
+  FriendsTrackingPkey = 'friends_tracking_pkey',
+}
+
+/** input type for incrementing integer column in table "friends_tracking" */
+export type Friends_Tracking_Inc_Input = {
+  geofence_id?: Maybe<Scalars['Int']>;
+  id?: Maybe<Scalars['Int']>;
+};
+
+/** input type for inserting data into table "friends_tracking" */
+export type Friends_Tracking_Insert_Input = {
+  geofence_id?: Maybe<Scalars['Int']>;
+  id?: Maybe<Scalars['Int']>;
+  linking_word?: Maybe<Scalars['String']>;
+  user_join?: Maybe<Scalars['String']>;
+  user_start?: Maybe<Scalars['String']>;
+};
+
+/** aggregate max on columns */
+export type Friends_Tracking_Max_Fields = {
+  __typename?: 'friends_tracking_max_fields';
+  geofence_id?: Maybe<Scalars['Int']>;
+  id?: Maybe<Scalars['Int']>;
+  linking_word?: Maybe<Scalars['String']>;
+  user_join?: Maybe<Scalars['String']>;
+  user_start?: Maybe<Scalars['String']>;
+};
+
+/** order by max() on columns of table "friends_tracking" */
+export type Friends_Tracking_Max_Order_By = {
+  geofence_id?: Maybe<Order_By>;
+  id?: Maybe<Order_By>;
+  linking_word?: Maybe<Order_By>;
+  user_join?: Maybe<Order_By>;
+  user_start?: Maybe<Order_By>;
+};
+
+/** aggregate min on columns */
+export type Friends_Tracking_Min_Fields = {
+  __typename?: 'friends_tracking_min_fields';
+  geofence_id?: Maybe<Scalars['Int']>;
+  id?: Maybe<Scalars['Int']>;
+  linking_word?: Maybe<Scalars['String']>;
+  user_join?: Maybe<Scalars['String']>;
+  user_start?: Maybe<Scalars['String']>;
+};
+
+/** order by min() on columns of table "friends_tracking" */
+export type Friends_Tracking_Min_Order_By = {
+  geofence_id?: Maybe<Order_By>;
+  id?: Maybe<Order_By>;
+  linking_word?: Maybe<Order_By>;
+  user_join?: Maybe<Order_By>;
+  user_start?: Maybe<Order_By>;
+};
+
+/** response of any mutation on the table "friends_tracking" */
+export type Friends_Tracking_Mutation_Response = {
+  __typename?: 'friends_tracking_mutation_response';
+  /** number of affected rows by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data of the affected rows by the mutation */
+  returning: Array<Friends_Tracking>;
+};
+
+/** input type for inserting object relation for remote table "friends_tracking" */
+export type Friends_Tracking_Obj_Rel_Insert_Input = {
+  data: Friends_Tracking_Insert_Input;
+  on_conflict?: Maybe<Friends_Tracking_On_Conflict>;
+};
+
+/** on conflict condition type for table "friends_tracking" */
+export type Friends_Tracking_On_Conflict = {
+  constraint: Friends_Tracking_Constraint;
+  update_columns: Array<Friends_Tracking_Update_Column>;
+  where?: Maybe<Friends_Tracking_Bool_Exp>;
+};
+
+/** ordering options when selecting data from "friends_tracking" */
+export type Friends_Tracking_Order_By = {
+  geofence_id?: Maybe<Order_By>;
+  id?: Maybe<Order_By>;
+  linking_word?: Maybe<Order_By>;
+  user_join?: Maybe<Order_By>;
+  user_start?: Maybe<Order_By>;
+};
+
+/** primary key columns input for table: "friends_tracking" */
+export type Friends_Tracking_Pk_Columns_Input = {
+  id: Scalars['Int'];
+};
+
+/** select columns of table "friends_tracking" */
+export enum Friends_Tracking_Select_Column {
+  /** column name */
+  GeofenceId = 'geofence_id',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  LinkingWord = 'linking_word',
+  /** column name */
+  UserJoin = 'user_join',
+  /** column name */
+  UserStart = 'user_start',
+}
+
+/** input type for updating data in table "friends_tracking" */
+export type Friends_Tracking_Set_Input = {
+  geofence_id?: Maybe<Scalars['Int']>;
+  id?: Maybe<Scalars['Int']>;
+  linking_word?: Maybe<Scalars['String']>;
+  user_join?: Maybe<Scalars['String']>;
+  user_start?: Maybe<Scalars['String']>;
+};
+
+/** aggregate stddev on columns */
+export type Friends_Tracking_Stddev_Fields = {
+  __typename?: 'friends_tracking_stddev_fields';
+  geofence_id?: Maybe<Scalars['Float']>;
+  id?: Maybe<Scalars['Float']>;
+};
+
+/** order by stddev() on columns of table "friends_tracking" */
+export type Friends_Tracking_Stddev_Order_By = {
+  geofence_id?: Maybe<Order_By>;
+  id?: Maybe<Order_By>;
+};
+
+/** aggregate stddev_pop on columns */
+export type Friends_Tracking_Stddev_Pop_Fields = {
+  __typename?: 'friends_tracking_stddev_pop_fields';
+  geofence_id?: Maybe<Scalars['Float']>;
+  id?: Maybe<Scalars['Float']>;
+};
+
+/** order by stddev_pop() on columns of table "friends_tracking" */
+export type Friends_Tracking_Stddev_Pop_Order_By = {
+  geofence_id?: Maybe<Order_By>;
+  id?: Maybe<Order_By>;
+};
+
+/** aggregate stddev_samp on columns */
+export type Friends_Tracking_Stddev_Samp_Fields = {
+  __typename?: 'friends_tracking_stddev_samp_fields';
+  geofence_id?: Maybe<Scalars['Float']>;
+  id?: Maybe<Scalars['Float']>;
+};
+
+/** order by stddev_samp() on columns of table "friends_tracking" */
+export type Friends_Tracking_Stddev_Samp_Order_By = {
+  geofence_id?: Maybe<Order_By>;
+  id?: Maybe<Order_By>;
+};
+
+/** aggregate sum on columns */
+export type Friends_Tracking_Sum_Fields = {
+  __typename?: 'friends_tracking_sum_fields';
+  geofence_id?: Maybe<Scalars['Int']>;
+  id?: Maybe<Scalars['Int']>;
+};
+
+/** order by sum() on columns of table "friends_tracking" */
+export type Friends_Tracking_Sum_Order_By = {
+  geofence_id?: Maybe<Order_By>;
+  id?: Maybe<Order_By>;
+};
+
+/** update columns of table "friends_tracking" */
+export enum Friends_Tracking_Update_Column {
+  /** column name */
+  GeofenceId = 'geofence_id',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  LinkingWord = 'linking_word',
+  /** column name */
+  UserJoin = 'user_join',
+  /** column name */
+  UserStart = 'user_start',
+}
+
+/** aggregate var_pop on columns */
+export type Friends_Tracking_Var_Pop_Fields = {
+  __typename?: 'friends_tracking_var_pop_fields';
+  geofence_id?: Maybe<Scalars['Float']>;
+  id?: Maybe<Scalars['Float']>;
+};
+
+/** order by var_pop() on columns of table "friends_tracking" */
+export type Friends_Tracking_Var_Pop_Order_By = {
+  geofence_id?: Maybe<Order_By>;
+  id?: Maybe<Order_By>;
+};
+
+/** aggregate var_samp on columns */
+export type Friends_Tracking_Var_Samp_Fields = {
+  __typename?: 'friends_tracking_var_samp_fields';
+  geofence_id?: Maybe<Scalars['Float']>;
+  id?: Maybe<Scalars['Float']>;
+};
+
+/** order by var_samp() on columns of table "friends_tracking" */
+export type Friends_Tracking_Var_Samp_Order_By = {
+  geofence_id?: Maybe<Order_By>;
+  id?: Maybe<Order_By>;
+};
+
+/** aggregate variance on columns */
+export type Friends_Tracking_Variance_Fields = {
+  __typename?: 'friends_tracking_variance_fields';
+  geofence_id?: Maybe<Scalars['Float']>;
+  id?: Maybe<Scalars['Float']>;
+};
+
+/** order by variance() on columns of table "friends_tracking" */
+export type Friends_Tracking_Variance_Order_By = {
+  geofence_id?: Maybe<Order_By>;
+  id?: Maybe<Order_By>;
+};
 
 /** columns and relationships of "geofence_variants" */
 export type Geofence_Variants = {
@@ -4575,6 +4941,10 @@ export type Mutation_Root = {
   delete_followings?: Maybe<Followings_Mutation_Response>;
   /** delete single row from the table: "followings" */
   delete_followings_by_pk?: Maybe<Followings>;
+  /** delete data from the table: "friends_tracking" */
+  delete_friends_tracking?: Maybe<Friends_Tracking_Mutation_Response>;
+  /** delete single row from the table: "friends_tracking" */
+  delete_friends_tracking_by_pk?: Maybe<Friends_Tracking>;
   /** delete data from the table: "geofence_variants" */
   delete_geofence_variants?: Maybe<Geofence_Variants_Mutation_Response>;
   /** delete single row from the table: "geofence_variants" */
@@ -4647,6 +5017,10 @@ export type Mutation_Root = {
   insert_followings?: Maybe<Followings_Mutation_Response>;
   /** insert a single row into the table: "followings" */
   insert_followings_one?: Maybe<Followings>;
+  /** insert data into the table: "friends_tracking" */
+  insert_friends_tracking?: Maybe<Friends_Tracking_Mutation_Response>;
+  /** insert a single row into the table: "friends_tracking" */
+  insert_friends_tracking_one?: Maybe<Friends_Tracking>;
   /** insert data into the table: "geofence_variants" */
   insert_geofence_variants?: Maybe<Geofence_Variants_Mutation_Response>;
   /** insert a single row into the table: "geofence_variants" */
@@ -4719,6 +5093,10 @@ export type Mutation_Root = {
   update_followings?: Maybe<Followings_Mutation_Response>;
   /** update single row of the table: "followings" */
   update_followings_by_pk?: Maybe<Followings>;
+  /** update data of the table: "friends_tracking" */
+  update_friends_tracking?: Maybe<Friends_Tracking_Mutation_Response>;
+  /** update single row of the table: "friends_tracking" */
+  update_friends_tracking_by_pk?: Maybe<Friends_Tracking>;
   /** update data of the table: "geofence_variants" */
   update_geofence_variants?: Maybe<Geofence_Variants_Mutation_Response>;
   /** update single row of the table: "geofence_variants" */
@@ -4874,6 +5252,16 @@ export type Mutation_RootDelete_Followings_By_PkArgs = {
 };
 
 /** mutation root */
+export type Mutation_RootDelete_Friends_TrackingArgs = {
+  where: Friends_Tracking_Bool_Exp;
+};
+
+/** mutation root */
+export type Mutation_RootDelete_Friends_Tracking_By_PkArgs = {
+  id: Scalars['Int'];
+};
+
+/** mutation root */
 export type Mutation_RootDelete_Geofence_VariantsArgs = {
   where: Geofence_Variants_Bool_Exp;
 };
@@ -4917,7 +5305,6 @@ export type Mutation_RootDelete_User_AchievementArgs = {
 /** mutation root */
 export type Mutation_RootDelete_User_Achievement_By_PkArgs = {
   achievement_id: Scalars['Int'];
-  created_at: Scalars['timestamptz'];
   user_id: Scalars['String'];
 };
 
@@ -5080,6 +5467,18 @@ export type Mutation_RootInsert_FollowingsArgs = {
 export type Mutation_RootInsert_Followings_OneArgs = {
   object: Followings_Insert_Input;
   on_conflict?: Maybe<Followings_On_Conflict>;
+};
+
+/** mutation root */
+export type Mutation_RootInsert_Friends_TrackingArgs = {
+  objects: Array<Friends_Tracking_Insert_Input>;
+  on_conflict?: Maybe<Friends_Tracking_On_Conflict>;
+};
+
+/** mutation root */
+export type Mutation_RootInsert_Friends_Tracking_OneArgs = {
+  object: Friends_Tracking_Insert_Input;
+  on_conflict?: Maybe<Friends_Tracking_On_Conflict>;
 };
 
 /** mutation root */
@@ -5313,6 +5712,20 @@ export type Mutation_RootUpdate_Followings_By_PkArgs = {
 };
 
 /** mutation root */
+export type Mutation_RootUpdate_Friends_TrackingArgs = {
+  _inc?: Maybe<Friends_Tracking_Inc_Input>;
+  _set?: Maybe<Friends_Tracking_Set_Input>;
+  where: Friends_Tracking_Bool_Exp;
+};
+
+/** mutation root */
+export type Mutation_RootUpdate_Friends_Tracking_By_PkArgs = {
+  _inc?: Maybe<Friends_Tracking_Inc_Input>;
+  _set?: Maybe<Friends_Tracking_Set_Input>;
+  pk_columns: Friends_Tracking_Pk_Columns_Input;
+};
+
+/** mutation root */
 export type Mutation_RootUpdate_Geofence_VariantsArgs = {
   _set?: Maybe<Geofence_Variants_Set_Input>;
   where: Geofence_Variants_Bool_Exp;
@@ -5475,6 +5888,12 @@ export type Query_Root = {
   followings_aggregate: Followings_Aggregate;
   /** fetch data from the table: "followings" using primary key columns */
   followings_by_pk?: Maybe<Followings>;
+  /** fetch data from the table: "friends_tracking" */
+  friends_tracking: Array<Friends_Tracking>;
+  /** fetch aggregated fields from the table: "friends_tracking" */
+  friends_tracking_aggregate: Friends_Tracking_Aggregate;
+  /** fetch data from the table: "friends_tracking" using primary key columns */
+  friends_tracking_by_pk?: Maybe<Friends_Tracking>;
   /** fetch data from the table: "geofence_variants" */
   geofence_variants: Array<Geofence_Variants>;
   /** fetch aggregated fields from the table: "geofence_variants" */
@@ -5813,6 +6232,29 @@ export type Query_RootFollowings_By_PkArgs = {
 };
 
 /** query root */
+export type Query_RootFriends_TrackingArgs = {
+  distinct_on?: Maybe<Array<Friends_Tracking_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Friends_Tracking_Order_By>>;
+  where?: Maybe<Friends_Tracking_Bool_Exp>;
+};
+
+/** query root */
+export type Query_RootFriends_Tracking_AggregateArgs = {
+  distinct_on?: Maybe<Array<Friends_Tracking_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Friends_Tracking_Order_By>>;
+  where?: Maybe<Friends_Tracking_Bool_Exp>;
+};
+
+/** query root */
+export type Query_RootFriends_Tracking_By_PkArgs = {
+  id: Scalars['Int'];
+};
+
+/** query root */
 export type Query_RootGeofence_VariantsArgs = {
   distinct_on?: Maybe<Array<Geofence_Variants_Select_Column>>;
   limit?: Maybe<Scalars['Int']>;
@@ -5928,7 +6370,6 @@ export type Query_RootUser_Achievement_AggregateArgs = {
 /** query root */
 export type Query_RootUser_Achievement_By_PkArgs = {
   achievement_id: Scalars['Int'];
-  created_at: Scalars['timestamptz'];
   user_id: Scalars['String'];
 };
 
@@ -6031,6 +6472,12 @@ export type Subscription_Root = {
   followings_aggregate: Followings_Aggregate;
   /** fetch data from the table: "followings" using primary key columns */
   followings_by_pk?: Maybe<Followings>;
+  /** fetch data from the table: "friends_tracking" */
+  friends_tracking: Array<Friends_Tracking>;
+  /** fetch aggregated fields from the table: "friends_tracking" */
+  friends_tracking_aggregate: Friends_Tracking_Aggregate;
+  /** fetch data from the table: "friends_tracking" using primary key columns */
+  friends_tracking_by_pk?: Maybe<Friends_Tracking>;
   /** fetch data from the table: "geofence_variants" */
   geofence_variants: Array<Geofence_Variants>;
   /** fetch aggregated fields from the table: "geofence_variants" */
@@ -6369,6 +6816,29 @@ export type Subscription_RootFollowings_By_PkArgs = {
 };
 
 /** subscription root */
+export type Subscription_RootFriends_TrackingArgs = {
+  distinct_on?: Maybe<Array<Friends_Tracking_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Friends_Tracking_Order_By>>;
+  where?: Maybe<Friends_Tracking_Bool_Exp>;
+};
+
+/** subscription root */
+export type Subscription_RootFriends_Tracking_AggregateArgs = {
+  distinct_on?: Maybe<Array<Friends_Tracking_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Friends_Tracking_Order_By>>;
+  where?: Maybe<Friends_Tracking_Bool_Exp>;
+};
+
+/** subscription root */
+export type Subscription_RootFriends_Tracking_By_PkArgs = {
+  id: Scalars['Int'];
+};
+
+/** subscription root */
 export type Subscription_RootGeofence_VariantsArgs = {
   distinct_on?: Maybe<Array<Geofence_Variants_Select_Column>>;
   limit?: Maybe<Scalars['Int']>;
@@ -6484,7 +6954,6 @@ export type Subscription_RootUser_Achievement_AggregateArgs = {
 /** subscription root */
 export type Subscription_RootUser_Achievement_By_PkArgs = {
   achievement_id: Scalars['Int'];
-  created_at: Scalars['timestamptz'];
   user_id: Scalars['String'];
 };
 
@@ -6705,7 +7174,6 @@ export type User_Achievement_Order_By = {
 /** primary key columns input for table: "user_achievement" */
 export type User_Achievement_Pk_Columns_Input = {
   achievement_id: Scalars['Int'];
-  created_at: Scalars['timestamptz'];
   user_id: Scalars['String'];
 };
 
@@ -6825,6 +7293,10 @@ export type Users = {
   challenge_participants: Array<Challenge_Participant>;
   /** An aggregated array relationship */
   challenge_participants_aggregate: Challenge_Participant_Aggregate;
+  /** An array relationship */
+  challenges_won: Array<Challenge>;
+  /** An aggregated array relationship */
+  challenges_won_aggregate: Challenge_Aggregate;
   created_at?: Maybe<Scalars['timestamptz']>;
   email: Scalars['String'];
   /** An array relationship */
@@ -6881,6 +7353,24 @@ export type UsersChallenge_Participants_AggregateArgs = {
   offset?: Maybe<Scalars['Int']>;
   order_by?: Maybe<Array<Challenge_Participant_Order_By>>;
   where?: Maybe<Challenge_Participant_Bool_Exp>;
+};
+
+/** columns and relationships of "users" */
+export type UsersChallenges_WonArgs = {
+  distinct_on?: Maybe<Array<Challenge_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Challenge_Order_By>>;
+  where?: Maybe<Challenge_Bool_Exp>;
+};
+
+/** columns and relationships of "users" */
+export type UsersChallenges_Won_AggregateArgs = {
+  distinct_on?: Maybe<Array<Challenge_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Challenge_Order_By>>;
+  where?: Maybe<Challenge_Bool_Exp>;
 };
 
 /** columns and relationships of "users" */
@@ -6979,6 +7469,7 @@ export type Users_Bool_Exp = {
   activities?: Maybe<Activities_Bool_Exp>;
   bio?: Maybe<String_Comparison_Exp>;
   challenge_participants?: Maybe<Challenge_Participant_Bool_Exp>;
+  challenges_won?: Maybe<Challenge_Bool_Exp>;
   created_at?: Maybe<Timestamptz_Comparison_Exp>;
   email?: Maybe<String_Comparison_Exp>;
   followers?: Maybe<Followings_Bool_Exp>;
@@ -7005,6 +7496,7 @@ export type Users_Insert_Input = {
   activities?: Maybe<Activities_Arr_Rel_Insert_Input>;
   bio?: Maybe<Scalars['String']>;
   challenge_participants?: Maybe<Challenge_Participant_Arr_Rel_Insert_Input>;
+  challenges_won?: Maybe<Challenge_Arr_Rel_Insert_Input>;
   created_at?: Maybe<Scalars['timestamptz']>;
   email?: Maybe<Scalars['String']>;
   followers?: Maybe<Followings_Arr_Rel_Insert_Input>;
@@ -7089,6 +7581,7 @@ export type Users_Order_By = {
   activities_aggregate?: Maybe<Activities_Aggregate_Order_By>;
   bio?: Maybe<Order_By>;
   challenge_participants_aggregate?: Maybe<Challenge_Participant_Aggregate_Order_By>;
+  challenges_won_aggregate?: Maybe<Challenge_Aggregate_Order_By>;
   created_at?: Maybe<Order_By>;
   email?: Maybe<Order_By>;
   followers_aggregate?: Maybe<Followings_Aggregate_Order_By>;
