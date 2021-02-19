@@ -7,6 +7,7 @@ import useTracking from '../../hooks/useTracking';
 import { defaultMapLocation } from '../../helpers/objectMappers';
 import GeoFences from '../../components/map/GeoFences';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { TrackingState } from '../providers/TrackingProvider';
 
 interface HoverMapProps {
   customWidth?: number;
@@ -56,7 +57,7 @@ const HoverMap: React.FC<HoverMapProps> = ({ customWidth, customHeight }: HoverM
   };
 
   useEffect(() => {
-    if (tracking.userLocation === null && userLocationMap !== null) {
+    if (tracking.trackingState !== TrackingState.TRACKING && userLocationMap !== null) {
       tracking.updateUserLocation(userLocationMap);
       animateMapToUserPos();
     }

@@ -5,6 +5,7 @@ import { Colors, Spacing, Typography, Buttons } from '../../theme';
 import useTracking from '../../hooks/useTracking';
 import HoverMap from '../../components/map/HoverMap';
 import CustomButton from '../../components/general/Button';
+import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import * as Progress from 'react-native-progress';
 
 const TrackingScreen: React.FC = () => {
@@ -57,45 +58,39 @@ const TrackingScreen: React.FC = () => {
         </View> */}
 
         <View style={styles.collabInfo}>
-          <Text style={{ ...Typography.headerText }}>Hover with friend</Text>
+          <Text style={{ ...Typography.xlBodyText }}>Hover with friend</Text>
+          <FAIcon name={'info-circle'} style={styles.icon} />
 
           {join && <Text style={{ ...Typography.largeBodyText }}>Join</Text>}
           {start && <Text style={{ ...Typography.largeBodyText }}>Start</Text>}
           {!join && !start && (
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'space-evenly',
-                width: '100%',
-                paddingHorizontal: Spacing.base,
-              }}>
+            <View style={styles.collabButtons}>
               {/* <CustomButton>Start session</CustomButton>
             <CustomButton>Join session</CustomButton> */}
-              <Button title={'Start'} onPress={() => setStart(true)} />
-              <Button title={'Join'} onPress={() => setJoin(true)} />
+              <Button title={'Start session'} onPress={() => setStart(true)} />
+              <Button title={'Join friend'} onPress={() => setJoin(true)} />
             </View>
           )}
         </View>
 
         <View style={styles.trackingInfo}>
           <Text style={styles.headerText}>Tracking...</Text>
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'space-evenly',
-              width: '100%',
-              paddingHorizontal: Spacing.base,
-            }}>
+          <View style={styles.progressBarLabels}>
             <Text style={styles.label}>Points</Text>
             <View style={{ marginHorizontal: '35%' }} />
             <Text style={styles.label}>Next</Text>
           </View>
 
-          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-evenly', width: '100%' }}>
+          <View style={styles.progressBar}>
             <Text style={styles.scoreText}>{score}</Text>
-            <Progress.Bar progress={progress} width={200} height={24} borderColor={Colors.blue} color={Colors.blue} />
+            <Progress.Bar
+              progress={progress}
+              width={200}
+              height={24}
+              borderColor={Colors.blue}
+              color={Colors.blue}
+              borderWidth={1.5}
+            />
             <Text style={styles.scoreText}>{nextScore}</Text>
           </View>
 
@@ -132,7 +127,9 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.almostBlackTransparent,
     borderRadius: Spacing.smaller,
     padding: Spacing.smaller,
-    // backgroundColor: Colors.redTransparent,
+  },
+  icon: {
+    ...Typography.icon,
   },
   trackingInfo: {
     alignItems: 'center',
@@ -141,6 +138,26 @@ const styles = StyleSheet.create({
     marginTop: Spacing.smaller,
     backgroundColor: Colors.almostBlackTransparent,
     borderRadius: Spacing.smaller,
+  },
+  progressBar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-evenly',
+    width: '100%',
+  },
+  progressBarLabels: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-evenly',
+    width: '100%',
+    paddingHorizontal: Spacing.base,
+  },
+  collabButtons: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-evenly',
+    width: '100%',
+    paddingHorizontal: Spacing.base,
   },
   stopButtonContainer: {
     justifyContent: 'center',

@@ -139,14 +139,17 @@ export const TrackingProvider = ({ children }: Props) => {
     }
   };
 
-  // Update user location every 5 seconds
-  useInterval(async () => {
-    console.log('Checking user location...');
-    const newUserLocation = await getLocation();
-    const differentLatitude = newUserLocation.coords.latitude !== userLocation?.coords.latitude;
-    const differentLongitude = newUserLocation.coords.longitude !== userLocation?.coords.longitude;
-    if (differentLatitude || differentLongitude) updateUserLocation(newUserLocation);
-  }, 5000);
+  // Update user location every 5 seconds if tracking
+  useInterval(
+    async () => {
+      console.log('Checking user location...');
+      const newUserLocation = await getLocation();
+      const differentLatitude = newUserLocation.coords.latitude !== userLocation?.coords.latitude;
+      const differentLongitude = newUserLocation.coords.longitude !== userLocation?.coords.longitude;
+      if (differentLatitude || differentLongitude) updateUserLocation(newUserLocation);
+    },
+    trackingState === TrackingState.TRACKING ? 5000 : null,
+  );
 
   const addUnUploadedActivity = (activity: Activities_Insert_Input) =>
     setUnUploadedActivities([...unUploadedActivities, activity]);

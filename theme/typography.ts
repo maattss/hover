@@ -37,6 +37,11 @@ export const largeBodyText = {
   fontSize: baseFontSize,
   color: Colors.almostWhite,
 };
+export const xlBodyText = {
+  fontSize: largeFontSize,
+  fontWeight: 'bold' as const,
+  color: Colors.almostWhite,
+};
 
 export const headerText = {
   fontSize: largestFontSize,
