@@ -189,6 +189,12 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.almostBlackTransparent,
     borderRadius: Spacing.smaller,
   },
+  label: {
+    ...Typography.bodyText,
+    fontWeight: 'bold',
+    marginBottom: Spacing.smallest,
+    textAlign: 'left',
+  },
   headerText: {
     ...Typography.headerText,
     marginVertical: Spacing.smaller,
@@ -233,12 +239,6 @@ const styles = StyleSheet.create({
   //   padding: Spacing.base,
   //   marginBottom: Spacing.base,
   //   backgroundColor: Colors.gray900,
-  // },
-  // label: {
-  //   ...Typography.bodyText,
-  //   fontWeight: 'bold',
-  //   marginBottom: Spacing.smallest,
-  //   textAlign: 'left',
   // },
   // mbSmall: {
   //   marginBottom: Spacing.smaller,
