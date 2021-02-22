@@ -16,6 +16,7 @@ interface LeaderboardProps {
   sort?: (data: Item[]) => [];
   onRowPress?: (item: Item, index: number) => void;
   renderItem?: (item: Item, index: number) => JSX.Element;
+  seperator?: React.FC;
   containerStyle?: ViewStyle;
   rowStyle?: ViewStyle;
   scoreStyle?: TextStyle;
@@ -87,6 +88,7 @@ const Leaderboard: React.FC<LeaderboardProps> = (props: LeaderboardProps) => {
       data={sortedData}
       keyExtractor={(_, index) => index.toString()}
       renderItem={({ item, index }) => renderItemS(item, index)}
+      ItemSeparatorComponent={props.seperator}
     />
   );
 };
