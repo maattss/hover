@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -27,6 +27,8 @@ import KeyboardAvoiderNoHeader from '../../components/general/KeyboarAvoiderNoHe
 import { useUpdateFriendTrackingMutation } from '../../graphql/mutations/UpdateFriendTracking.generated';
 import useAuthentication from '../../hooks/useAuthentication';
 import { useInsertFriendTrackingMutation } from '../../graphql/mutations/InserFriendTracking.generated';
+import { useGetFriendTrackingQuery } from '../../graphql/queries/GetFriendTracking.generated';
+import { useInterval } from '../../hooks/useInterval';
 
 const wordConfig: Config = {
   dictionaries: [adjectives, animals],
@@ -46,12 +48,30 @@ const TrackingScreen: React.FC = () => {
   const nextScore = tracking.score == 0 ? 1 : Math.ceil(tracking.score);
   const progress = tracking.score - score;
 
-  const yourCollabCode = useState(uniqueNamesGenerator(wordConfig));
+  const [yourCollabCode] = useState(uniqueNamesGenerator(wordConfig));
   const [friendCollabCode, setFriendCollabCode] = useState('');
+  const [friendName, setFriendName] = useState('');
+  const [friendPicture, setFriendPicture] = useState('');
   const [isEnabled, setIsEnabled] = useState(false);
 
   const [UpdateFriendTracking] = useUpdateFriendTrackingMutation();
   const [InsertFriendTracking] = useInsertFriendTrackingMutation();
+  // const { data: data, error: error, refetch } = useGetFriendTrackingQuery({
+  //   variables: {
+  //     id: id
+  //   },
+  //   nextFetchPolicy: 'network-only',
+  // });
+  // useInterval(() => refreshData, start ? 60000 : null);
+
+  // useEffect(() => {
+  //   const friend = data?.friend_tracking[0].user_join;
+  //   if (friend) {
+  //     setFriendName(friend.name);
+  //     setFriendPicture(friend.picture ?? '');
+  //   }
+  //   if (error) console.error(error.message);
+  // }, [data, error]);
 
   const showInfoPopup = () =>
     Alert.alert(
@@ -60,11 +80,12 @@ const TrackingScreen: React.FC = () => {
     );
   const refreshData = () => {
     console.log('Refresh friend tracking data');
-    // Refetch from db
+    // refetch();
   };
 
   const startFriendTracking = async () => {
     console.log('Start friend tracking');
+    console.log("Vars '" + auth.user?.uid + "' '" + yourCollabCode + "' '" + tracking.insideGeoFence?.id + "'");
     setStart(true);
     try {
       const response = await InsertFriendTracking({
@@ -75,9 +96,9 @@ const TrackingScreen: React.FC = () => {
         },
       });
       console.log('Start response', response);
-      setIsEnabled(true);
     } catch (error) {
       console.error('Mutation error', error.message);
+      Alert.alert('Something went wrong...');
     }
   };
 
@@ -97,6 +118,10 @@ const TrackingScreen: React.FC = () => {
       setIsEnabled(true);
     } catch (error) {
       console.error('Mutation error', error.message);
+      Alert.alert(
+        'Something went wrong...',
+        'Make sure that you have entered the correct code and at the same location as your friend',
+      );
     }
   };
 

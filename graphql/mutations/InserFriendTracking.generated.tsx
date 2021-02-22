@@ -10,21 +10,17 @@ export type InsertFriendTrackingMutationVariables = Types.Exact<{
 }>;
 
 export type InsertFriendTrackingMutation = { readonly __typename: 'mutation_root' } & {
-  readonly insert_friend_tracking?: Types.Maybe<
-    { readonly __typename: 'friend_tracking_mutation_response' } & {
-      readonly returning: ReadonlyArray<{ readonly __typename: 'friend_tracking' } & Pick<Types.Friend_Tracking, 'id'>>;
-    }
+  readonly insert_friend_tracking_one?: Types.Maybe<
+    { readonly __typename: 'friend_tracking' } & Pick<Types.Friend_Tracking, 'id'>
   >;
 };
 
 export const InsertFriendTrackingDocument = gql`
   mutation InsertFriendTracking($geofence_id: Int!, $linking_word: String!, $user_id: String!) {
-    insert_friend_tracking(
-      objects: { geofence_id: $geofence_id, linking_word: $linking_word, user_start_id: $user_id }
+    insert_friend_tracking_one(
+      object: { geofence_id: $geofence_id, linking_word: $linking_word, user_start_id: $user_id }
     ) {
-      returning {
-        id
-      }
+      id
     }
   }
 `;
