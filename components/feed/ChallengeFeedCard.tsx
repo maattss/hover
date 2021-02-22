@@ -10,7 +10,7 @@ import Leaderboard, { Item } from '../leaderboard/Leaderboard';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import { getAchievementColor } from '../profile/Achievement';
 import Divider from '../general/Divider';
-import ProfileButton from '../ProfileButton';
+import TouchableProfile from '../TouchableProfile';
 
 type ChallengeFeedCardProps = {
   data: ChallengeFeedData;
@@ -23,7 +23,11 @@ const ChallengeFeedCard: React.FC<ChallengeFeedCardProps> = ({ data }: Challenge
         <ChallengeLeaderboardRow item={item} index={index} />
       </View>
     );
-    return <ProfileButton user_id={item.id}>{rowJSx}</ProfileButton>;
+    return (
+      <TouchableProfile user_id={item.id} name={item.name}>
+        {rowJSx}
+      </TouchableProfile>
+    );
   };
 
   return (
@@ -31,19 +35,21 @@ const ChallengeFeedCard: React.FC<ChallengeFeedCardProps> = ({ data }: Challenge
       <View style={[styles.topBar, { padding: Spacing.smaller }]}>
         <Text style={{ ...Typography.headerText }}>We have a winner... </Text>
       </View>
-      <View style={styles.topBar}>
-        <View style={styles.avatar}>
-          <Avatar
-            rounded
-            source={{ uri: data.user.picture ? data.user.picture : defaultUserProfile.picture }}
-            size={'medium'}
-          />
+      <TouchableProfile user_id={data.user.id} name={data.user.name}>
+        <View style={styles.topBar}>
+          <View style={styles.avatar}>
+            <Avatar
+              rounded
+              source={{ uri: data.user.picture ? data.user.picture : defaultUserProfile.picture }}
+              size={'medium'}
+            />
+          </View>
+          <View style={styles.infoContainer}>
+            <Text style={styles.nameText}>{data.user.name}</Text>
+            <Text style={styles.descriptionText}>{generateFeedChallengeDescription(data.challenge)}</Text>
+          </View>
         </View>
-        <View style={styles.infoContainer}>
-          <Text style={styles.nameText}>{data.user.name}</Text>
-          <Text style={styles.descriptionText}>{generateFeedChallengeDescription(data.challenge)}</Text>
-        </View>
-      </View>
+      </TouchableProfile>
       <Divider />
       <View style={styles.main}>
         <Leaderboard
