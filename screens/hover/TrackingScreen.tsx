@@ -1,5 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, ActivityIndicator, TextInput, Button, Alert } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  ActivityIndicator,
+  TextInput,
+  Button,
+  Alert,
+  KeyboardAvoidingView,
+} from 'react-native';
 import { uniqueNamesGenerator, Config, adjectives, animals } from 'unique-names-generator';
 import { Colors, Spacing, Typography, Buttons } from '../../theme';
 import useTracking from '../../hooks/useTracking';
@@ -38,6 +48,7 @@ const TrackingScreen: React.FC = () => {
   const [friendName, setFriendName] = useState('');
   const [friendPicture, setFriendPicture] = useState('');
   const [isEnabled, setIsEnabled] = useState(false);
+  const [collabInfoHidden, setCollabInfoHidden] = useState(false);
 
   const [UpdateFriendTracking] = useUpdateFriendTrackingMutation();
   const [InsertFriendTracking] = useInsertFriendTrackingMutation();
@@ -93,7 +104,6 @@ const TrackingScreen: React.FC = () => {
   };
 
   const joinFriendTracking = async () => {
-    setJoin(false);
     try {
       const response = await UpdateFriendTracking({
         variables: {
@@ -109,12 +119,13 @@ const TrackingScreen: React.FC = () => {
         setFriendName(friend.name);
         setFriendPicture(friend.picture ?? defaultUserProfile.picture);
       }
+      setJoin(false);
       setIsEnabled(true);
     } catch (error) {
       console.error('Mutation error', error.message);
       Alert.alert(
         'Something went wrong...',
-        'Make sure that you have entered the correct code and at the same location as your friend',
+        'Make sure that you have entered the correct code and that you are at the same location as your friend',
       );
     }
   };
@@ -125,7 +136,7 @@ const TrackingScreen: React.FC = () => {
         <HoverMap />
       </View>
 
-      <View style={styles.infoContainer}>
+      <KeyboardAvoidingView style={styles.infoContainer}>
         <View style={styles.collabInfo}>
           {join && !isEnabled && (
             <View>
@@ -176,8 +187,11 @@ const TrackingScreen: React.FC = () => {
                 <TouchableOpacity onPress={showInfoPopup} style={styles.iconButton}>
                   <FAIcon name={'info-circle'} style={styles.icon} />
                 </TouchableOpacity>
+                <TouchableOpacity onPress={() => setCollabInfoHidden(!collabInfoHidden)}>
+                  <FAIcon name={collabInfoHidden ? 'chevron-up' : 'chevron-down'} style={styles.icon} />
+                </TouchableOpacity>
               </View>
-              <View style={styles.collabButtonsContainer}>
+              <View style={[styles.collabButtonsContainer, { display: collabInfoHidden ? 'none' : 'flex' }]}>
                 <CustomButton style={styles.collabButton} onPress={startFriendTracking}>
                   Start session
                 </CustomButton>
@@ -189,16 +203,25 @@ const TrackingScreen: React.FC = () => {
           )}
           {isEnabled && (
             <View>
-              <Text style={{ ...Typography.largeBodyText }}>Hovering together with</Text>
-              <View style={{ flexDirection: 'row', justifyContent: 'flex-start', marginVertical: Spacing.small }}>
-                <Avatar
-                  rounded
-                  source={{ uri: friendPicture ? friendPicture : defaultUserProfile.picture }}
-                  size="small"
-                />
-                <Text style={styles.nameText}>{friendName}</Text>
+              <View
+                style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: Spacing.smaller }}>
+                <Text style={styles.collabHeader}>Hovering together with</Text>
+                <TouchableOpacity onPress={() => setCollabInfoHidden(!collabInfoHidden)}>
+                  <FAIcon name={collabInfoHidden ? 'chevron-up' : 'chevron-down'} style={styles.icon} />
+                </TouchableOpacity>
               </View>
-              <Text style={{ ...Typography.xlBodyText }}>Earning double points!</Text>
+
+              <View style={{ display: collabInfoHidden ? 'none' : 'flex' }}>
+                <View style={{ flexDirection: 'row', justifyContent: 'flex-start', marginVertical: Spacing.small }}>
+                  <Avatar
+                    rounded
+                    source={{ uri: friendPicture ? friendPicture : defaultUserProfile.picture }}
+                    size="medium"
+                  />
+                  <Text style={styles.nameText}>{friendName}</Text>
+                </View>
+                <Text style={{ ...Typography.xlBodyText }}>Earning double points!</Text>
+              </View>
             </View>
           )}
         </View>
@@ -231,7 +254,7 @@ const TrackingScreen: React.FC = () => {
             <View />
           </View>
         </View>
-      </View>
+      </KeyboardAvoidingView>
     </View>
   );
 };
