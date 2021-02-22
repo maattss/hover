@@ -1,12 +1,12 @@
-import { ListUserFragmentFragment } from '../graphql/Fragments.generated';
-import { ChallengeRules, OngoingChallenge, PendingChallenge } from '../types/challengeTypes';
+import { ChallengeFeedFragmentFragment, ListUserFragmentFragment } from '../graphql/Fragments.generated';
+import { Challenge, ChallengeRules } from '../types/challengeTypes';
 import { Challenge_Type_Enum } from '../types/types';
 import { toPrettyDate } from './dateTimeHelpers';
 
 /**
  * PENDING CHALLENGES DESCRIPTION HELPERS.
  */
-export const generateDescription = (challenge: PendingChallenge) => {
+export const generateDescription = (challenge: Challenge) => {
   let description;
   switch (challenge.challenge_type) {
     case Challenge_Type_Enum.Score:
@@ -29,7 +29,7 @@ export const generateDescription = (challenge: PendingChallenge) => {
   return description;
 };
 
-const scoreDescription = (challenge: PendingChallenge) => {
+const scoreDescription = (challenge: Challenge) => {
   let description = challenge.created_by.name;
   description += ' challenge you to a Score challenge!';
   description += challenge.rules ? ' Be the first person to reach ' + challenge.rules.score + ' points' : '';
@@ -37,7 +37,7 @@ const scoreDescription = (challenge: PendingChallenge) => {
   return description;
 };
 
-const scoreCategoryDescription = (challenge: PendingChallenge) => {
+const scoreCategoryDescription = (challenge: Challenge) => {
   let description = challenge.created_by.name;
   description += ' challenge you to a Category challenge!';
   description += challenge.rules.score ? ' Be the first person to reach ' + challenge.rules.score + ' points' : '';
@@ -47,14 +47,14 @@ const scoreCategoryDescription = (challenge: PendingChallenge) => {
   description += challenge.end_date ? ' by ' + toPrettyDate(new Date(challenge.end_date)) + '.' : '';
   return description;
 };
-const timeDescription = (challenge: PendingChallenge) => {
+const timeDescription = (challenge: Challenge) => {
   let description = challenge.created_by.name;
   description += ' challenge you to a Time challenge!';
   description += challenge.rules.time ? ' Be the first person to reach ' + challenge.rules.time + ' hours' : '';
   description += challenge.end_date ? ' by ' + toPrettyDate(new Date(challenge.end_date)) + '.' : '';
   return description;
 };
-const timeCategoryDescription = (challenge: PendingChallenge) => {
+const timeCategoryDescription = (challenge: Challenge) => {
   let description = challenge.created_by.name;
   description += ' challenge you to a Time in Category challenge!';
   description += challenge.rules.time ? ' Be the first person to reach ' + challenge.rules.time + ' hours' : '';
@@ -65,7 +65,7 @@ const timeCategoryDescription = (challenge: PendingChallenge) => {
   return description;
 };
 
-const defaultDescription = (challenge: PendingChallenge) => {
+const defaultDescription = (challenge: Challenge) => {
   let description = challenge.created_by.name + ' challenge you to a ';
   description += challenge.challenge_type + ' challenge!';
   description += challenge.end_date ? ' by ' + toPrettyDate(new Date(challenge.end_date)) + '.' : '';
@@ -75,7 +75,7 @@ const defaultDescription = (challenge: PendingChallenge) => {
  * ONGOING CHALLENGES DESCRIPTION HELPERS.
  */
 
-export const generateOngoingChallengeDescription = (challenge: OngoingChallenge) => {
+export const generateOngoingChallengeDescription = (challenge: Challenge) => {
   let description = 'First person to';
   description += challenge.rules.score ? ' get ' + challenge.rules.score + ' points' : '';
   description += challenge.rules.time ? ' spend ' + challenge.rules.time + ' hours' : '';
@@ -106,6 +106,30 @@ export const generateNewChallengeDescription = (
     ? ' at a location within the ' + rules.category.toLowerCase() + ' category'
     : ' at any valid Hover location';
   description += end_date ? ' by ' + toPrettyDate(new Date(end_date)) + '.' : '';
+  return description;
+};
+
+/**
+ * FEED CHALLENGE DESCRIPTION HELPER.
+ */
+
+export const generateFeedChallengeDescription = (challenge: ChallengeFeedFragmentFragment) => {
+  let description =
+    'won the ' + challenge.challenge_type.toLowerCase().toString().replace('_', ' in ') + ' challenge! ';
+  description += 'The challenge was to ';
+  description += challenge.rules.score ? ' get ' + challenge.rules.score + ' points' : '';
+  description += challenge.rules.time ? ' spend ' + challenge.rules.time + ' hours' : '';
+  description += challenge.rules.category
+    ? ' at a location within the ' + challenge.rules.category.toLowerCase() + ' category'
+    : ' at any valid Hover location';
+  description +=
+    challenge.end_date && challenge.start_date
+      ? ' between ' +
+        toPrettyDate(new Date(challenge.start_date)) +
+        ' and ' +
+        toPrettyDate(new Date(challenge.end_date)) +
+        '.'
+      : '';
   return description;
 };
 
