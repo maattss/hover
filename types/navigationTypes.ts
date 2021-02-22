@@ -20,6 +20,7 @@ export type RootTabParamList = {
 
 export type FeedStackParamList = {
   Feed: undefined;
+  UserProfile: { user_id: string };
 } & NotificationsStackParamList;
 
 export type NotificationsStackParamList = {
