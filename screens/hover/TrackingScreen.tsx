@@ -9,6 +9,10 @@ import {
   Switch,
   Button,
   Alert,
+  KeyboardAvoidingView,
+  TouchableWithoutFeedback,
+  Keyboard,
+  Platform,
 } from 'react-native';
 import { uniqueNamesGenerator, Config, adjectives, animals } from 'unique-names-generator';
 import { Colors, Spacing, Typography, Buttons } from '../../theme';
@@ -18,6 +22,8 @@ import CustomButton from '../../components/general/Button';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import * as Progress from 'react-native-progress';
 import { gray900 } from '../../theme/colors';
+import Divider from '../../components/general/Divider';
+import KeyboardAvoiderNoHeader from '../../components/general/KeyboarAvoiderNoHeader';
 
 const wordConfig: Config = {
   dictionaries: [adjectives, animals],
@@ -33,7 +39,7 @@ const TrackingScreen: React.FC = () => {
 
   const stopTracking = () => tracking.pauseTracking();
   const score = Math.floor(tracking.score);
-  const nextScore = Math.ceil(tracking.score + 0.000001);
+  const nextScore = tracking.score == 0 ? 1 : Math.ceil(tracking.score);
   const progress = tracking.score - score;
 
   const [yourCollabCode, setYourCollabCode] = useState(uniqueNamesGenerator(wordConfig));
@@ -69,9 +75,8 @@ const TrackingScreen: React.FC = () => {
             <View>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                 <Button title={'Back'} onPress={() => setJoin(false)} />
+                <Button title={'Join'} onPress={() => setJoin(false)} />
               </View>
-
-              <Text style={styles.label}>Friend&apos;s code</Text>
               <TextInput
                 placeholder="Enter Hover code from your friend"
                 placeholderTextColor={Colors.gray600}
@@ -86,8 +91,12 @@ const TrackingScreen: React.FC = () => {
                 <Button title={'Back'} onPress={() => setStart(false)} />
                 <Button title={'Refresh'} onPress={() => console.log('Refetch from db')} />
               </View>
-              <Text style={styles.collabCode}>{yourCollabCode}</Text>
-              <Text style={{ ...Typography.largeBodyText }}>Waiting for friend to join...</Text>
+              <Text style={{ ...Typography.largeBodyText, margin: Spacing.smaller, textAlign: 'center' }}>
+                Waiting for friend to join...
+              </Text>
+              <View style={styles.collabCodeContainer}>
+                <Text style={styles.collabCode}>{yourCollabCode}</Text>
+              </View>
             </View>
           )}
 
@@ -147,7 +156,7 @@ const styles = StyleSheet.create({
     left: '1%',
     width: '98%',
     backgroundColor: 'red',
-    marginBottom: Spacing.smaller,
+    marginBottom: Spacing.smallest,
   },
   collabInfo: {
     width: '100%',
@@ -159,7 +168,7 @@ const styles = StyleSheet.create({
   collabTopBar: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingHorizontal: Spacing.base,
+    paddingHorizontal: Spacing.smallest,
     paddingVertical: Spacing.small,
   },
   collabHeader: {
@@ -173,12 +182,13 @@ const styles = StyleSheet.create({
   collabCode: {
     ...Typography.xlBodyText,
     textAlign: 'center',
-    backgroundColor: gray900,
     paddingVertical: Spacing.smaller,
-    borderRadius: Spacing.smaller,
-    marginVertical: Spacing.smaller,
   },
-  // Insert join/start styling here
+  collabCodeContainer: {
+    marginVertical: Spacing.smaller,
+    borderRadius: Spacing.smaller,
+    backgroundColor: gray900,
+  },
   collabButtonsContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -255,6 +265,8 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.base,
     backgroundColor: Colors.gray900,
   },
+  inner: {},
+  keyboardAvoider: {},
   // mbSmall: {
   //   marginBottom: Spacing.smaller,
   // },
