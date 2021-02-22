@@ -1,19 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  ActivityIndicator,
-  TextInput,
-  Switch,
-  Button,
-  Alert,
-  KeyboardAvoidingView,
-  TouchableWithoutFeedback,
-  Keyboard,
-  Platform,
-} from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, ActivityIndicator, TextInput, Button, Alert } from 'react-native';
 import { uniqueNamesGenerator, Config, adjectives, animals } from 'unique-names-generator';
 import { Colors, Spacing, Typography, Buttons } from '../../theme';
 import useTracking from '../../hooks/useTracking';
@@ -27,7 +13,10 @@ import KeyboardAvoiderNoHeader from '../../components/general/KeyboarAvoiderNoHe
 import { useUpdateFriendTrackingMutation } from '../../graphql/mutations/UpdateFriendTracking.generated';
 import useAuthentication from '../../hooks/useAuthentication';
 import { useInsertFriendTrackingMutation } from '../../graphql/mutations/InserFriendTracking.generated';
-import { useGetFriendTrackingQuery } from '../../graphql/queries/GetFriendTracking.generated';
+import {
+  useGetFriendTrackingLazyQuery,
+  useGetFriendTrackingQuery,
+} from '../../graphql/queries/GetFriendTracking.generated';
 import { useInterval } from '../../hooks/useInterval';
 import moment from 'moment';
 
@@ -43,11 +32,15 @@ const TrackingScreen: React.FC = () => {
   const auth = useAuthentication();
   const [join, setJoin] = useState(false);
   const [start, setStart] = useState(false);
-
   const stopTracking = () => tracking.pauseTracking();
   const score = Math.floor(tracking.score);
-  const nextScore = tracking.score == 0 ? 1 : Math.ceil(tracking.score);
   const progress = tracking.score - score;
+  const nextScore = () => {
+    if (tracking.score == 0 && tracking.doubleScore) return 2;
+    if (tracking.score == 0) return 1;
+    if (tracking.doubleScore) return Math.ceil(tracking.score + 1);
+    return Math.ceil(tracking.score);
+  };
 
   const [yourCollabCode] = useState(uniqueNamesGenerator(wordConfig));
   const [friendCollabCode, setFriendCollabCode] = useState('');
@@ -58,37 +51,39 @@ const TrackingScreen: React.FC = () => {
 
   const [UpdateFriendTracking] = useUpdateFriendTrackingMutation();
   const [InsertFriendTracking] = useInsertFriendTrackingMutation();
-  // const { data: data, error: error, refetch } = useGetFriendTrackingQuery({
-  //   variables: {
-  //     id: id
-  //   },
-  //   nextFetchPolicy: 'network-only',
-  // });
-  // useInterval(() => refreshData, start ? 60000 : null);
 
-  // useEffect(() => {
-  //   const friend = data?.friend_tracking[0].user_join;
-  //   if (friend) {
-  //     setFriendName(friend.name);
-  //     setFriendPicture(friend.picture ?? '');
-  //   }
-  //   if (error) console.error(error.message);
-  // }, [data, error]);
+  const [getFriend, { data: data, error: error }] = useGetFriendTrackingLazyQuery({ fetchPolicy: 'network-only' });
+
+  useEffect(() => {
+    const friend = data?.friend_tracking[0].user_join;
+    if (friend) {
+      setFriendName(friend.name);
+      setFriendPicture(friend.picture ?? '');
+      tracking.updateDoubleScore(true);
+      setIsEnabled(true);
+    }
+    if (error) console.error(error.message);
+  }, [data, error]);
 
   const showInfoPopup = () =>
     Alert.alert(
       'Hover together with a friend and earn 2x points!',
       'Start a session to get a code you can share, or ' + 'join a friends by inserting their code.',
     );
+
   const refreshData = () => {
-    console.log('Refresh friend tracking data');
-    // refetch();
+    if (trackingWithFriendId) {
+      getFriend({
+        variables: {
+          id: trackingWithFriendId,
+        },
+      });
+    } else {
+      console.error('Undefined trackingWithFriendId...');
+    }
   };
 
   const startFriendTracking = async () => {
-    console.log('Start friend tracking');
-    console.log("Vars '" + auth.user?.uid + "' '" + yourCollabCode + "' '" + tracking.insideGeoFence?.id + "'");
-
     try {
       const response = await InsertFriendTracking({
         variables: {
@@ -106,18 +101,6 @@ const TrackingScreen: React.FC = () => {
   };
 
   const joinFriendTracking = async () => {
-    console.log('Joining friend');
-    console.log(
-      "Vars '" +
-        auth.user?.uid +
-        "' '" +
-        friendCollabCode +
-        "' '" +
-        moment(Date.now()).format('YYYY-MM-DD') +
-        "' '" +
-        tracking.insideGeoFence?.id +
-        "'",
-    );
     setJoin(false);
     try {
       const response = await UpdateFriendTracking({
@@ -204,6 +187,7 @@ const TrackingScreen: React.FC = () => {
           {isEnabled && (
             <View>
               <Text style={{ ...Typography.headerText }}>Earning double points!!</Text>
+              <Text style={{ ...Typography.largeBodyText }}>{friendName}</Text>
             </View>
           )}
         </View>
@@ -226,7 +210,7 @@ const TrackingScreen: React.FC = () => {
               color={Colors.blue}
               borderWidth={1.5}
             />
-            <Text style={styles.scoreText}>{nextScore}</Text>
+            <Text style={styles.scoreText}>{nextScore()}</Text>
           </View>
 
           <View style={styles.stopButtonContainer}>

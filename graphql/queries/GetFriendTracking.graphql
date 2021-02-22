@@ -10,9 +10,7 @@ query GetFriendTracking($id: Int!) {
     user_join {
       ...basicUserFragment
     }
-    updated_at
     geofence_id
     date
-    created_at
   }
 }

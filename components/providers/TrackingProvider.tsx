@@ -43,6 +43,7 @@ interface TrackingContextValues {
   pauseTracking: () => void;
   stopTracking: (caption: string) => void;
   discardActivity: () => void;
+  doubleScore: boolean;
   updateDoubleScore: (value: boolean) => void;
 }
 
@@ -66,6 +67,7 @@ export const TrackingContext = React.createContext<TrackingContextValues>({
   pauseTracking: () => console.error('Function not initialized'),
   stopTracking: () => console.error('Function not initialized'),
   discardActivity: () => console.error('Function not initialized'),
+  doubleScore: false,
   updateDoubleScore: () => console.error('Function not initialized'),
 });
 TrackingContext.displayName = 'TrackingContext';
@@ -231,6 +233,7 @@ export const TrackingProvider = ({ children }: Props) => {
     pauseTracking: pauseTracking,
     stopTracking: stopTracking,
     discardActivity: discardActivity,
+    doubleScore: doubleScore,
     updateDoubleScore: updateDoubleScore,
   };
   return <TrackingContext.Provider value={value}>{children}</TrackingContext.Provider>;
