@@ -31,13 +31,7 @@ const TrackingScreen: React.FC = () => {
   const stopTracking = () => tracking.pauseTracking();
   const score = Math.floor(tracking.score);
   const progress = tracking.score - score;
-  const nextScore = () => {
-    if (tracking.score == 0 && tracking.doubleScore) return 2;
-    if (tracking.score == 0) return 1;
-    if (tracking.doubleScore) return Math.ceil(tracking.score + 1);
-    return Math.ceil(tracking.score);
-  };
-
+  const nextScore = tracking.score == 0 ? 1 : Math.ceil(tracking.score);
   const [yourCollabCode] = useState(uniqueNamesGenerator(wordConfig));
   const [friendCollabCode, setFriendCollabCode] = useState('');
   const [trackingWithFriendId, setTrackingWithFriendId] = useState<number | undefined>();
@@ -140,6 +134,7 @@ const TrackingScreen: React.FC = () => {
                 onChangeText={(val) => setFriendCollabCode(val)}
                 style={styles.formField}
                 autoCapitalize={'characters'}
+                autoCorrect={false}
               />
               <CustomButton onPress={joinFriendTracking}>Join</CustomButton>
             </View>
@@ -215,7 +210,7 @@ const TrackingScreen: React.FC = () => {
               color={Colors.blue}
               borderWidth={1.5}
             />
-            <Text style={styles.scoreText}>{nextScore()}</Text>
+            <Text style={styles.scoreText}>{nextScore}</Text>
           </View>
 
           <View style={styles.stopButtonContainer}>
