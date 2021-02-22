@@ -4,20 +4,14 @@ import { uniqueNamesGenerator, Config, adjectives, animals } from 'unique-names-
 import { Colors, Spacing, Typography, Buttons } from '../../theme';
 import useTracking from '../../hooks/useTracking';
 import HoverMap from '../../components/map/HoverMap';
-import CustomButton, { IconButton } from '../../components/general/Button';
+import CustomButton from '../../components/general/Button';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import * as Progress from 'react-native-progress';
 import { gray900 } from '../../theme/colors';
-import Divider from '../../components/general/Divider';
-import KeyboardAvoiderNoHeader from '../../components/general/KeyboarAvoiderNoHeader';
 import { useUpdateFriendTrackingMutation } from '../../graphql/mutations/UpdateFriendTracking.generated';
 import useAuthentication from '../../hooks/useAuthentication';
 import { useInsertFriendTrackingMutation } from '../../graphql/mutations/InserFriendTracking.generated';
-import {
-  useGetFriendTrackingLazyQuery,
-  useGetFriendTrackingQuery,
-} from '../../graphql/queries/GetFriendTracking.generated';
-import { useInterval } from '../../hooks/useInterval';
+import { useGetFriendTrackingLazyQuery } from '../../graphql/queries/GetFriendTracking.generated';
 import moment from 'moment';
 
 const wordConfig: Config = {
@@ -68,7 +62,7 @@ const TrackingScreen: React.FC = () => {
   const showInfoPopup = () =>
     Alert.alert(
       'Hover together with a friend and earn 2x points!',
-      'Start a session to get a code you can share, or ' + 'join a friends by inserting their code.',
+      'Start a session to get a code you can share, or ' + 'join a friends by entering their code.',
     );
 
   const refreshData = () => {
@@ -132,14 +126,18 @@ const TrackingScreen: React.FC = () => {
         <View style={styles.collabInfo}>
           {join && (
             <View>
-              <View style={{ flexDirection: 'row', justifyContent: 'flex-start' }}>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                 <Button title={'Back'} onPress={() => setJoin(false)} />
+                <TouchableOpacity onPress={showInfoPopup} style={styles.iconButton}>
+                  <FAIcon name={'info-circle'} style={styles.icon} />
+                </TouchableOpacity>
               </View>
               <TextInput
-                placeholder="Enter Hover code from your friend"
+                placeholder="Enter code"
                 placeholderTextColor={Colors.gray600}
                 onChangeText={(val) => setFriendCollabCode(val)}
                 style={styles.formField}
+                autoCapitalize={'characters'}
               />
               <CustomButton onPress={joinFriendTracking}>Join</CustomButton>
             </View>
@@ -236,7 +234,6 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     width: '98%',
-    height: '98%',
     // backgroundColor: 'red',
     margin: Spacing.smallest,
     justifyContent: 'flex-end',
@@ -293,6 +290,7 @@ const styles = StyleSheet.create({
   },
   iconButton: {
     marginTop: Spacing.smaller,
+    marginRight: Spacing.smaller,
   },
   trackingInfo: {
     alignItems: 'center',
@@ -352,11 +350,10 @@ const styles = StyleSheet.create({
     padding: Spacing.base,
     marginVertical: Spacing.small,
     backgroundColor: Colors.gray900,
-    textTransform: 'uppercase',
   },
   waitingForFriendLabel: {
     ...Typography.largeBodyText,
-    margin: Spacing.small,
+    marginTop: Spacing.small,
     textAlign: 'center',
   },
   inner: {},
