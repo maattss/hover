@@ -24,6 +24,9 @@ import * as Progress from 'react-native-progress';
 import { gray900 } from '../../theme/colors';
 import Divider from '../../components/general/Divider';
 import KeyboardAvoiderNoHeader from '../../components/general/KeyboarAvoiderNoHeader';
+import { useUpdateFriendTrackingMutation } from '../../graphql/mutations/UpdateFriendTracking.generated';
+import useAuthentication from '../../hooks/useAuthentication';
+import { useInsertFriendTrackingMutation } from '../../graphql/mutations/InserFriendTracking.generated';
 
 const wordConfig: Config = {
   dictionaries: [adjectives, animals],
@@ -34,6 +37,7 @@ const wordConfig: Config = {
 
 const TrackingScreen: React.FC = () => {
   const tracking = useTracking();
+  const auth = useAuthentication();
   const [join, setJoin] = useState(false);
   const [start, setStart] = useState(false);
 
@@ -42,15 +46,59 @@ const TrackingScreen: React.FC = () => {
   const nextScore = tracking.score == 0 ? 1 : Math.ceil(tracking.score);
   const progress = tracking.score - score;
 
-  const [yourCollabCode, setYourCollabCode] = useState(uniqueNamesGenerator(wordConfig));
+  const yourCollabCode = useState(uniqueNamesGenerator(wordConfig));
   const [friendCollabCode, setFriendCollabCode] = useState('');
   const [isEnabled, setIsEnabled] = useState(false);
+
+  const [UpdateFriendTracking] = useUpdateFriendTrackingMutation();
+  const [InsertFriendTracking] = useInsertFriendTrackingMutation();
 
   const showInfoPopup = () =>
     Alert.alert(
       'Hover together with a friend and earn 2x points!',
       'Start a session to get a code you can share, or ' + 'join a friends by inserting their code.',
     );
+  const refreshData = () => {
+    console.log('Refresh friend tracking data');
+    // Refetch from db
+  };
+
+  const startFriendTracking = async () => {
+    console.log('Start friend tracking');
+    setStart(true);
+    try {
+      const response = await InsertFriendTracking({
+        variables: {
+          user_id: auth.user?.uid ?? '',
+          linking_word: friendCollabCode,
+          geofence_id: tracking.insideGeoFence?.id ?? 0,
+        },
+      });
+      console.log('Start response', response);
+      setIsEnabled(true);
+    } catch (error) {
+      console.error('Mutation error', error.message);
+    }
+  };
+
+  const joinFriendTracking = async () => {
+    console.log('Joining friend');
+    setJoin(false);
+    try {
+      const response = await UpdateFriendTracking({
+        variables: {
+          user_id: auth.user?.uid ?? '',
+          linking_word: friendCollabCode,
+          date: Date.now(),
+          geofence_id: tracking.insideGeoFence?.id ?? 0,
+        },
+      });
+      console.log('Join response', response);
+      setIsEnabled(true);
+    } catch (error) {
+      console.error('Mutation error', error.message);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -75,7 +123,7 @@ const TrackingScreen: React.FC = () => {
             <View>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                 <Button title={'Back'} onPress={() => setJoin(false)} />
-                <Button title={'Join'} onPress={() => setJoin(false)} />
+                <Button title={'Join'} onPress={joinFriendTracking} />
               </View>
               <TextInput
                 placeholder="Enter Hover code from your friend"
@@ -89,25 +137,34 @@ const TrackingScreen: React.FC = () => {
             <View>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                 <Button title={'Back'} onPress={() => setStart(false)} />
-                <Button title={'Refresh'} onPress={() => console.log('Refetch from db')} />
+                <Button title={'Refresh'} onPress={refreshData} />
               </View>
-              <Text style={{ ...Typography.largeBodyText, margin: Spacing.smaller, textAlign: 'center' }}>
-                Waiting for friend to join...
-              </Text>
+              <View>
+                <ActivityIndicator />
+                <Text style={{ ...Typography.largeBodyText, margin: Spacing.smaller, textAlign: 'center' }}>
+                  Waiting for friend to join...
+                </Text>
+              </View>
+
               <View style={styles.collabCodeContainer}>
                 <Text style={styles.collabCode}>{yourCollabCode}</Text>
               </View>
             </View>
           )}
 
-          {!join && !start && (
+          {!join && !start && !isEnabled && (
             <View style={styles.collabButtonsContainer}>
-              <CustomButton style={styles.collabButton} onPress={() => setStart(true)}>
+              <CustomButton style={styles.collabButton} onPress={startFriendTracking}>
                 Start session
               </CustomButton>
               <CustomButton style={styles.collabButton} onPress={() => setJoin(true)}>
                 Join friend
               </CustomButton>
+            </View>
+          )}
+          {isEnabled && (
+            <View>
+              <Text style={{ ...Typography.headerText }}>Earning double points!!</Text>
             </View>
           )}
         </View>
@@ -153,10 +210,12 @@ const styles = StyleSheet.create({
   infoContainer: {
     position: 'absolute',
     bottom: 0,
-    left: '1%',
+    left: 0,
     width: '98%',
-    backgroundColor: 'red',
-    marginBottom: Spacing.smallest,
+    height: '98%',
+    // backgroundColor: 'red',
+    margin: Spacing.smallest,
+    justifyContent: 'flex-end',
   },
   collabInfo: {
     width: '100%',

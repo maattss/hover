@@ -17,6 +17,7 @@ export type UpdateFriendTrackingMutationVariables = Types.Exact<{
   linking_word: Types.Scalars['String'];
   user_id: Types.Scalars['String'];
   date: Types.Scalars['date'];
+  geofence_id: Types.Scalars['Int'];
 }>;
 
 export type UpdateFriendTrackingMutation = { readonly __typename: 'mutation_root' } & {
@@ -32,9 +33,12 @@ export type UpdateFriendTrackingMutation = { readonly __typename: 'mutation_root
 };
 
 export const UpdateFriendTrackingDocument = gql`
-  mutation UpdateFriendTracking($linking_word: String!, $user_id: String!, $date: date!) {
+  mutation UpdateFriendTracking($linking_word: String!, $user_id: String!, $date: date!, $geofence_id: Int!) {
     update_friend_tracking(
-      where: { linking_word: { _eq: $linking_word }, _and: { date: { _eq: $date } } }
+      where: {
+        linking_word: { _eq: $linking_word }
+        _and: { date: { _eq: $date }, _and: { geofence_id: { _eq: $geofence_id } } }
+      }
       _set: { user_join_id: $user_id }
     ) {
       returning {
@@ -63,6 +67,7 @@ export const UpdateFriendTrackingDocument = gql`
  *      linking_word: // value for 'linking_word'
  *      user_id: // value for 'user_id'
  *      date: // value for 'date'
+ *      geofence_id: // value for 'geofence_id'
  *   },
  * });
  */

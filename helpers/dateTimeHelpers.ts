@@ -23,16 +23,16 @@ export const timeStampToHours = (timestamp: string) => {
 };
 
 export const toPrettyDate = (date: Date) => {
-  const a = moment(date);
+  const momentDate = moment(date);
   const duration = moment(date).startOf('day').diff(moment().endOf('day'), 'days');
 
   if (duration < 7) {
-    return a.format('dddd');
+    return momentDate.format('dddd');
   } else if (duration < 30) {
-    return a.format('dddd, Do of MMMM');
+    return momentDate.format('dddd, Do of MMMM');
   } else if (duration < 365) {
-    return a.format('Do of MMMM');
+    return momentDate.format('Do of MMMM');
   } else {
-    return a.format('Do of MMM YYYY');
+    return momentDate.format('Do of MMM YYYY');
   }
 };
