@@ -75,15 +75,17 @@ const TrackingScreen: React.FC = () => {
 
   const startFriendTracking = async () => {
     try {
-      const response = await InsertFriendTracking({
-        variables: {
-          user_id: auth.user?.uid ?? '',
-          linking_word: yourCollabCode,
-          geofence_id: tracking.insideGeoFence?.id ?? 0,
-        },
-      });
+      if (!trackingWithFriendId) {
+        const response = await InsertFriendTracking({
+          variables: {
+            user_id: auth.user?.uid ?? '',
+            linking_word: yourCollabCode,
+            geofence_id: tracking.insideGeoFence?.id ?? 0,
+          },
+        });
+        setTrackingWithFriendId(response.data?.insert_friend_tracking_one?.id);
+      }
       setStart(true);
-      setTrackingWithFriendId(response.data?.insert_friend_tracking_one?.id);
     } catch (error) {
       console.error('Mutation error', error.message);
       Alert.alert('Something went wrong...');
@@ -189,7 +191,11 @@ const TrackingScreen: React.FC = () => {
             <View>
               <Text style={{ ...Typography.largeBodyText }}>Hovering together with</Text>
               <View style={{ flexDirection: 'row', justifyContent: 'flex-start', marginVertical: Spacing.small }}>
-                <Avatar rounded source={{ uri: friendName ? friendName : defaultUserProfile.picture }} size="small" />
+                <Avatar
+                  rounded
+                  source={{ uri: friendPicture ? friendPicture : defaultUserProfile.picture }}
+                  size="small"
+                />
                 <Text style={styles.nameText}>{friendName}</Text>
               </View>
               <Text style={{ ...Typography.xlBodyText }}>Earning double points!</Text>
