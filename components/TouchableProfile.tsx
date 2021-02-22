@@ -12,10 +12,10 @@ type FeedNavigationProp = StackNavigationProp<FeedStackParamList>;
 type Props = {
   children: React.ReactChild;
   user_id: string;
-  title?: string;
+  name: string;
 };
 
-const ProfileButton: React.FC<Props> = ({ user_id, children, title }: Props) => {
+const TouchableProfile: React.FC<Props> = ({ user_id, children, name }: Props) => {
   const bottomNavigation = useNavigation<BottomNavigationProp>();
   const id = useAuthentication().user?.uid;
   const feedNavigation = useNavigation<FeedNavigationProp>();
@@ -25,10 +25,11 @@ const ProfileButton: React.FC<Props> = ({ user_id, children, title }: Props) => 
     } else {
       feedNavigation.navigate('UserProfile', {
         user_id: user_id,
+        titleName: name,
       });
     }
   };
   return <TouchableOpacity onPress={() => navigate()}>{children}</TouchableOpacity>;
 };
 
-export default ProfileButton;
+export default TouchableProfile;
