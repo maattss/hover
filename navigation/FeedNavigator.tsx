@@ -35,9 +35,9 @@ const FeedNavigator: React.FC = () => {
       <FeedStack.Screen
         name="UserProfile"
         component={ProfileScreen}
-        options={{
-          headerTitle: 'User',
-        }}
+        options={({ route }) => ({
+          title: `${route.params.titleName}'s Profile`,
+        })}
       />
     </FeedStack.Navigator>
   );
