@@ -17,6 +17,7 @@ import HoverMap from '../../components/map/HoverMap';
 import CustomButton from '../../components/general/Button';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import * as Progress from 'react-native-progress';
+import { gray900 } from '../../theme/colors';
 
 const wordConfig: Config = {
   dictionaries: [adjectives, animals],
@@ -64,25 +65,31 @@ const TrackingScreen: React.FC = () => {
             </TouchableOpacity>
           </View>
 
-          {/* 
-          <View style={styles.mbSmall}>
-            <Text style={styles.label}>Your code</Text>
-            <Text style={{ ...Typography.headerText, width: '100%', textAlign: 'center' }}>{yourCollabCode}</Text>
-          </View>
-          <View>
-            <Text style={styles.label}>Friend&apos;s code</Text>
-            <TextInput
-              placeholder="Enter Hover code from your friend"
-              placeholderTextColor={Colors.gray600}
-              onChangeText={(val) => setFriendCollabCode(val)}
-              style={styles.formField}
-            />
-          </View> 
-          */}
+          {join && (
+            <View>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                <Button title={'Back'} onPress={() => setJoin(false)} />
+              </View>
 
-          {/* TODO: Replace */}
-          {join && <Text style={{ ...Typography.largeBodyText }}>Join</Text>}
-          {start && <Text style={{ ...Typography.largeBodyText }}>Start</Text>}
+              <Text style={styles.label}>Friend&apos;s code</Text>
+              <TextInput
+                placeholder="Enter Hover code from your friend"
+                placeholderTextColor={Colors.gray600}
+                onChangeText={(val) => setFriendCollabCode(val)}
+                style={styles.formField}
+              />
+            </View>
+          )}
+          {start && (
+            <View>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                <Button title={'Back'} onPress={() => setStart(false)} />
+                <Button title={'Refresh'} onPress={() => console.log('Refetch from db')} />
+              </View>
+              <Text style={styles.collabCode}>{yourCollabCode}</Text>
+              <Text style={{ ...Typography.largeBodyText }}>Waiting for friend to join...</Text>
+            </View>
+          )}
 
           {!join && !start && (
             <View style={styles.collabButtonsContainer}>
@@ -163,6 +170,14 @@ const styles = StyleSheet.create({
     marginTop: Spacing.smallest,
     fontStyle: 'italic',
   },
+  collabCode: {
+    ...Typography.xlBodyText,
+    textAlign: 'center',
+    backgroundColor: gray900,
+    paddingVertical: Spacing.smaller,
+    borderRadius: Spacing.smaller,
+    marginVertical: Spacing.smaller,
+  },
   // Insert join/start styling here
   collabButtonsContainer: {
     flexDirection: 'row',
@@ -233,13 +248,13 @@ const styles = StyleSheet.create({
     fontSize: 24,
     textAlign: 'center',
   },
-  // formField: {
-  //   ...Buttons.button,
-  //   ...Typography.bodyText,
-  //   padding: Spacing.base,
-  //   marginBottom: Spacing.base,
-  //   backgroundColor: Colors.gray900,
-  // },
+  formField: {
+    ...Buttons.button,
+    ...Typography.bodyText,
+    padding: Spacing.base,
+    marginBottom: Spacing.base,
+    backgroundColor: Colors.gray900,
+  },
   // mbSmall: {
   //   marginBottom: Spacing.smaller,
   // },
