@@ -183,13 +183,14 @@ const TrackingScreen: React.FC = () => {
                   <Text style={styles.collabHeader}>Hover with friend</Text>
                   <Text style={styles.collabSubHeader}>Get started to earn 2x points!</Text>
                 </View>
-
-                <TouchableOpacity onPress={showInfoPopup} style={styles.iconButton}>
-                  <FAIcon name={'info-circle'} style={styles.icon} />
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => setCollabInfoHidden(!collabInfoHidden)}>
-                  <FAIcon name={collabInfoHidden ? 'chevron-up' : 'chevron-down'} style={styles.icon} />
-                </TouchableOpacity>
+                <View>
+                  <TouchableOpacity onPress={showInfoPopup} style={styles.iconButton}>
+                    <FAIcon name={'info-circle'} style={styles.icon} />
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={() => setCollabInfoHidden(!collabInfoHidden)}>
+                    <FAIcon name={collabInfoHidden ? 'chevron-up' : 'chevron-down'} style={styles.icon} />
+                  </TouchableOpacity>
+                </View>
               </View>
               <View style={[styles.collabButtonsContainer, { display: collabInfoHidden ? 'none' : 'flex' }]}>
                 <CustomButton style={styles.collabButton} onPress={startFriendTracking}>
@@ -361,8 +362,8 @@ const styles = StyleSheet.create({
   progressBarLabels: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-evenly',
-    width: '100%',
+    justifyContent: 'space-between',
+    width: '97%',
     paddingHorizontal: Spacing.base,
   },
   stopButtonContainer: {
