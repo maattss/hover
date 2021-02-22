@@ -101,7 +101,12 @@ const TrackingScreen: React.FC = () => {
           geofence_id: tracking.insideGeoFence?.id ?? 0,
         },
       });
-      console.log('Join response', response);
+
+      const friend = response.data?.update_friend_tracking?.returning[0].user_start;
+      if (friend) {
+        setFriendName(friend.name);
+        setFriendPicture(friend.picture ?? defaultUserProfile.picture);
+      }
       setIsEnabled(true);
     } catch (error) {
       console.error('Mutation error', error.message);
