@@ -10,7 +10,7 @@ import Leaderboard, { Item } from '../leaderboard/Leaderboard';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import { getAchievementColor } from '../profile/Achievement';
 import Divider from '../general/Divider';
-import TouchableProfile from '../TouchableProfile';
+import TouchableProfile from '../general/TouchableProfile';
 
 type ChallengeFeedCardProps = {
   data: ChallengeFeedData;

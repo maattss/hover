@@ -3,8 +3,8 @@ import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { TouchableOpacity } from 'react-native';
-import useAuthentication from '../hooks/useAuthentication';
-import { FeedStackParamList, RootTabParamList } from '../types/navigationTypes';
+import useAuthentication from '../../hooks/useAuthentication';
+import { FeedStackParamList, RootTabParamList } from '../../types/navigationTypes';
 
 type BottomNavigationProp = BottomTabNavigationProp<RootTabParamList>;
 type FeedNavigationProp = StackNavigationProp<FeedStackParamList>;

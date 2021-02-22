@@ -5,7 +5,7 @@ import { AchievementFeedData } from '../../types/feedTypes';
 import { timeStampToPresentable } from '../../helpers/dateTimeHelpers';
 import Achievement from '../profile/Achievement';
 import { defaultUserProfile } from '../../helpers/objectMappers';
-import TouchableProfile from '../TouchableProfile';
+import TouchableProfile from '../general/TouchableProfile';
 
 interface AchievementFeedCardProps {
   data: AchievementFeedData;

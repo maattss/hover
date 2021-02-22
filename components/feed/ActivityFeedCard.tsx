@@ -8,7 +8,7 @@ import GeoFences from '../map/GeoFences';
 import { getGeoFenceImage } from '../../helpers/geoFenceCalculations';
 import { convertToGeoFence, defaultUserProfile } from '../../helpers/objectMappers';
 import { GeoFenceCategory } from '../../types/geoFenceTypes';
-import TouchableProfile from '../TouchableProfile';
+import TouchableProfile from '../general/TouchableProfile';
 
 interface ActivityFeedCardProps {
   data: ActivityFeedData;
