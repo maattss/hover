@@ -124,15 +124,15 @@ const styles = StyleSheet.create({
   rank: {
     ...Typography.headerText,
     fontSize: 20,
-    marginRight: 5,
+    marginRight: Spacing.smallest,
   },
   singleDidget: {
     paddingLeft: Spacing.base,
-    paddingRight: 6,
+    paddingRight: Spacing.smaller,
   },
   doubleDidget: {
-    paddingLeft: 10,
-    paddingRight: 2,
+    paddingLeft: Spacing.small,
+    paddingRight: Spacing.tiny,
   },
   label: {
     fontSize: 17,
@@ -140,14 +140,14 @@ const styles = StyleSheet.create({
     paddingRight: 80,
   },
   score: {
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: 'bold',
     position: 'absolute',
-    right: 15,
+    right: Spacing.base,
     paddingLeft: Spacing.base,
   },
   avatar: {
-    marginRight: 10,
+    marginRight: Spacing.small,
   },
   text: {
     ...Typography.bodyText,
