@@ -13,6 +13,8 @@ import useAuthentication from '../../hooks/useAuthentication';
 import { useInsertFriendTrackingMutation } from '../../graphql/mutations/InserFriendTracking.generated';
 import { useGetFriendTrackingLazyQuery } from '../../graphql/queries/GetFriendTracking.generated';
 import moment from 'moment';
+import { defaultUserProfile } from '../../helpers/objectMappers';
+import { Avatar } from 'react-native-elements';
 
 const wordConfig: Config = {
   dictionaries: [adjectives, animals],
@@ -124,7 +126,7 @@ const TrackingScreen: React.FC = () => {
 
       <View style={styles.infoContainer}>
         <View style={styles.collabInfo}>
-          {join && (
+          {join && !isEnabled && (
             <View>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                 <Button title={'Back'} onPress={() => setJoin(false)} />
@@ -142,7 +144,7 @@ const TrackingScreen: React.FC = () => {
               <CustomButton onPress={joinFriendTracking}>Join</CustomButton>
             </View>
           )}
-          {start && (
+          {start && !isEnabled && (
             <View>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                 <Button title={'Back'} onPress={() => setStart(false)} />
@@ -185,8 +187,12 @@ const TrackingScreen: React.FC = () => {
           )}
           {isEnabled && (
             <View>
-              <Text style={{ ...Typography.headerText }}>Earning double points!!</Text>
-              <Text style={{ ...Typography.largeBodyText }}>{friendName}</Text>
+              <Text style={{ ...Typography.largeBodyText }}>Hovering together with</Text>
+              <View style={{ flexDirection: 'row', justifyContent: 'flex-start', marginVertical: Spacing.small }}>
+                <Avatar rounded source={{ uri: friendName ? friendName : defaultUserProfile.picture }} size="small" />
+                <Text style={styles.nameText}>{friendName}</Text>
+              </View>
+              <Text style={{ ...Typography.xlBodyText }}>Earning double points!</Text>
             </View>
           )}
         </View>
@@ -356,11 +362,14 @@ const styles = StyleSheet.create({
     marginTop: Spacing.small,
     textAlign: 'center',
   },
+  nameText: {
+    ...Typography.headerText,
+    fontSize: 20,
+    lineHeight: 30,
+    marginLeft: Spacing.small,
+  },
   inner: {},
   keyboardAvoider: {},
-  // mbSmall: {
-  //   marginBottom: Spacing.smaller,
-  // },
 });
 
 export default TrackingScreen;
