@@ -1,9 +1,11 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, ViewStyle } from 'react-native';
 import { Colors, Spacing } from '../../theme';
-
-const Divider: React.FC = () => {
-  return <View style={styles.divider} />;
+type DividerProps = {
+  style?: ViewStyle;
+};
+const Divider: React.FC<DividerProps> = ({ style }: DividerProps) => {
+  return <View style={[styles.divider, style]} />;
 };
 
 const styles = StyleSheet.create({
