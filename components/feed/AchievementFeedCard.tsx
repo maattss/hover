@@ -5,6 +5,7 @@ import { AchievementFeedData } from '../../types/feedTypes';
 import { timeStampToPresentable } from '../../helpers/dateTimeHelpers';
 import Achievement from '../profile/Achievement';
 import { defaultUserProfile } from '../../helpers/objectMappers';
+import TouchableProfile from '../TouchableProfile';
 
 interface AchievementFeedCardProps {
   data: AchievementFeedData;
@@ -13,14 +14,15 @@ interface AchievementFeedCardProps {
 const AchievementFeedCard: React.FC<AchievementFeedCardProps> = ({ data }: AchievementFeedCardProps) => {
   return (
     <View style={styles.card}>
-      <View style={styles.topBar}>
-        <Image
-          source={{ uri: data.user.picture ? data.user.picture : defaultUserProfile.picture }}
-          style={styles.avatar}
-        />
-        <Text style={styles.nameText}>{data.user.name}</Text>
-      </View>
-
+      <TouchableProfile user_id={data.user.id} name={data.user.name}>
+        <View style={styles.topBar}>
+          <Image
+            source={{ uri: data.user.picture ? data.user.picture : defaultUserProfile.picture }}
+            style={styles.avatar}
+          />
+          <Text style={styles.nameText}>{data.user.name}</Text>
+        </View>
+      </TouchableProfile>
       <View style={styles.main}>
         <View style={styles.description}>
           <Text style={styles.descriptionText}>{data.achievement.description}</Text>
