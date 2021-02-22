@@ -8,6 +8,7 @@ import { Avatar } from 'react-native-elements';
 import { generateOngoingChallengeDescription } from '../../helpers/decriptionHelper';
 import { Challenge_Participant_State_Enum, Challenge_Type_Enum } from '../../types/types';
 import { OpponentFragmentFragment, ChallengeFeedFragmentFragment } from '../../graphql/Fragments.generated';
+import TouchableProfile from '../general/TouchableProfile';
 
 interface ChallengeOpponentsProps {
   challenge: Challenge | ChallengeFeedFragmentFragment;
@@ -34,37 +35,39 @@ export const ChallengeOpponents: React.FC<ChallengeOpponentsProps> = ({ challeng
         <Text style={styles.opponentHeaderText}>Challenge partcicipants</Text>
         {challenge.opponents.map((opponent, index) => {
           return (
-            <View key={index} style={styles.opponentRow}>
-              <View style={styles.opponentAvatar}>
-                <Avatar rounded source={{ uri: opponent.user.picture ?? '' }} size="small" />
-              </View>
-              <View style={styles.opponentInfo}>
-                <View style={styles.opponentNameStateRow}>
-                  <Text style={styles.opponentNameText}>{opponent.user.name}</Text>
-                  <Text style={styles.opponentStateText}>{opponent.state}</Text>
+            <TouchableProfile key={index} user_id={opponent.user.id} name={opponent.user.name}>
+              <View style={styles.opponentRow}>
+                <View style={styles.opponentAvatar}>
+                  <Avatar rounded source={{ uri: opponent.user.picture ?? '' }} size="small" />
                 </View>
+                <View style={styles.opponentInfo}>
+                  <View style={styles.opponentNameStateRow}>
+                    <Text style={styles.opponentNameText}>{opponent.user.name}</Text>
+                    <Text style={styles.opponentStateText}>{opponent.state}</Text>
+                  </View>
 
-                <View style={styles.opponentNameStateRow}>
-                  <View style={styles.progressBar}>
-                    {opponent.state != Challenge_Participant_State_Enum.Declined && (
-                      <Animated.View
-                        style={[
-                          [StyleSheet.absoluteFill],
-                          {
-                            backgroundColor:
-                              opponent.state == Challenge_Participant_State_Enum.Accepted
-                                ? Colors.blue
-                                : Colors.gray500,
-                            borderRadius: 5,
-                            width: getProgressPercentage(opponent),
-                          },
-                        ]}
-                      />
-                    )}
+                  <View style={styles.opponentNameStateRow}>
+                    <View style={styles.progressBar}>
+                      {opponent.state != Challenge_Participant_State_Enum.Declined && (
+                        <Animated.View
+                          style={[
+                            [StyleSheet.absoluteFill],
+                            {
+                              backgroundColor:
+                                opponent.state == Challenge_Participant_State_Enum.Accepted
+                                  ? Colors.blue
+                                  : Colors.gray500,
+                              borderRadius: 5,
+                              width: getProgressPercentage(opponent),
+                            },
+                          ]}
+                        />
+                      )}
+                    </View>
                   </View>
                 </View>
               </View>
-            </View>
+            </TouchableProfile>
           );
         })}
       </View>
@@ -78,15 +81,17 @@ interface OngoingChallengeCardProps {
 const OngoingChallengeCard: React.FC<OngoingChallengeCardProps> = ({ challenge }: OngoingChallengeCardProps) => {
   return (
     <View style={styles.card}>
-      <View style={styles.row}>
-        <View style={styles.avatar}>
-          <Avatar rounded source={{ uri: challenge.created_by.picture ?? '' }} size="medium" />
+      <TouchableProfile user_id={challenge.created_by.id} name={challenge.created_by.name}>
+        <View style={styles.row}>
+          <View style={styles.avatar}>
+            <Avatar rounded source={{ uri: challenge.created_by.picture ?? '' }} size="medium" />
+          </View>
+          <View style={styles.infoContainer}>
+            <Text style={styles.nameText}>{challenge.created_by.name}</Text>
+            <Text style={styles.captionText}>{generateOngoingChallengeDescription(challenge)}</Text>
+          </View>
         </View>
-        <View style={styles.infoContainer}>
-          <Text style={styles.nameText}>{challenge.created_by.name}</Text>
-          <Text style={styles.captionText}>{generateOngoingChallengeDescription(challenge)}</Text>
-        </View>
-      </View>
+      </TouchableProfile>
       <Divider />
       <ChallengeOpponents challenge={challenge as Challenge} />
       <Divider />

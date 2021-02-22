@@ -6,6 +6,7 @@ import { generateDescription } from '../../helpers/decriptionHelper';
 import { Colors, Typography, Spacing, Buttons } from '../../theme';
 import { Challenge } from '../../types/challengeTypes';
 import { Challenge_Participant_State_Enum } from '../../types/types';
+import TouchableProfile from '../general/TouchableProfile';
 
 interface PendingChallengeCardProps {
   challenge: Challenge;
@@ -76,28 +77,32 @@ const PendingChallengeCard: React.FC<PendingChallengeCardProps> = ({ challenge }
 
   return (
     <View style={styles.card}>
-      <View style={styles.row}>
-        <View style={styles.avatar}>
-          <Avatar rounded source={{ uri: challenge.created_by.picture ?? '' }} size="medium" />
+      <TouchableProfile user_id={challenge.created_by.id} name={challenge.created_by.name}>
+        <View style={styles.row}>
+          <View style={styles.avatar}>
+            <Avatar rounded source={{ uri: challenge.created_by.picture ?? '' }} size="medium" />
+          </View>
+          <View style={styles.infoContainer}>
+            <Text style={styles.nameText}>{challenge.created_by.name}</Text>
+            <Text style={styles.descriptionText}>{generateDescription(challenge)}</Text>
+          </View>
         </View>
-        <View style={styles.infoContainer}>
-          <Text style={styles.nameText}>{challenge.created_by.name}</Text>
-          <Text style={styles.descriptionText}>{generateDescription(challenge)}</Text>
-        </View>
-      </View>
+      </TouchableProfile>
       {opponents.length > 1 && (
         <View style={styles.opponentContainer}>
           <Text style={styles.opponentHeaderText}>Other partcicipants</Text>
           {opponents.map((opponent) => (
-            <View key={opponent.user.id} style={styles.opponentRow}>
-              <View style={styles.opponentAvatar}>
-                <Avatar rounded source={{ uri: opponent.user.picture ?? '' }} size="medium" />
+            <TouchableProfile key={opponent.user.id} user_id={opponent.user.id} name={opponent.user.name}>
+              <View style={styles.opponentRow}>
+                <View style={styles.opponentAvatar}>
+                  <Avatar rounded source={{ uri: opponent.user.picture ?? '' }} size="medium" />
+                </View>
+                <View style={styles.oppnentNameStateRow}>
+                  <Text style={styles.opponentNameText}>{opponent.user.name}</Text>
+                  <Text style={styles.opponentStateText}>{opponent.state}</Text>
+                </View>
               </View>
-              <View style={styles.oppnentNameStateRow}>
-                <Text style={styles.opponentNameText}>{opponent.user.name}</Text>
-                <Text style={styles.opponentStateText}>{opponent.state}</Text>
-              </View>
-            </View>
+            </TouchableProfile>
           ))}
         </View>
       )}
