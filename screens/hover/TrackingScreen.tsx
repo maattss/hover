@@ -29,6 +29,7 @@ import useAuthentication from '../../hooks/useAuthentication';
 import { useInsertFriendTrackingMutation } from '../../graphql/mutations/InserFriendTracking.generated';
 import { useGetFriendTrackingQuery } from '../../graphql/queries/GetFriendTracking.generated';
 import { useInterval } from '../../hooks/useInterval';
+import moment from 'moment';
 
 const wordConfig: Config = {
   dictionaries: [adjectives, animals],
@@ -50,6 +51,7 @@ const TrackingScreen: React.FC = () => {
 
   const [yourCollabCode] = useState(uniqueNamesGenerator(wordConfig));
   const [friendCollabCode, setFriendCollabCode] = useState('');
+  const [trackingWithFriendId, setTrackingWithFriendId] = useState<number | undefined>();
   const [friendName, setFriendName] = useState('');
   const [friendPicture, setFriendPicture] = useState('');
   const [isEnabled, setIsEnabled] = useState(false);
@@ -86,16 +88,17 @@ const TrackingScreen: React.FC = () => {
   const startFriendTracking = async () => {
     console.log('Start friend tracking');
     console.log("Vars '" + auth.user?.uid + "' '" + yourCollabCode + "' '" + tracking.insideGeoFence?.id + "'");
-    setStart(true);
+
     try {
       const response = await InsertFriendTracking({
         variables: {
           user_id: auth.user?.uid ?? '',
-          linking_word: friendCollabCode,
+          linking_word: yourCollabCode,
           geofence_id: tracking.insideGeoFence?.id ?? 0,
         },
       });
-      console.log('Start response', response);
+      setStart(true);
+      setTrackingWithFriendId(response.data?.insert_friend_tracking_one?.id);
     } catch (error) {
       console.error('Mutation error', error.message);
       Alert.alert('Something went wrong...');
@@ -104,13 +107,24 @@ const TrackingScreen: React.FC = () => {
 
   const joinFriendTracking = async () => {
     console.log('Joining friend');
+    console.log(
+      "Vars '" +
+        auth.user?.uid +
+        "' '" +
+        friendCollabCode +
+        "' '" +
+        moment(Date.now()).format('YYYY-MM-DD') +
+        "' '" +
+        tracking.insideGeoFence?.id +
+        "'",
+    );
     setJoin(false);
     try {
       const response = await UpdateFriendTracking({
         variables: {
           user_id: auth.user?.uid ?? '',
           linking_word: friendCollabCode,
-          date: Date.now(),
+          date: moment(Date.now()).format('YYYY-MM-DD'),
           geofence_id: tracking.insideGeoFence?.id ?? 0,
         },
       });
@@ -348,6 +362,7 @@ const styles = StyleSheet.create({
     padding: Spacing.base,
     marginBottom: Spacing.base,
     backgroundColor: Colors.gray900,
+    textTransform: 'uppercase',
   },
   inner: {},
   keyboardAvoider: {},
