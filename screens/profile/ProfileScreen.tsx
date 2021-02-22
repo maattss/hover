@@ -13,20 +13,16 @@ import Error from '../../components/general/Error';
 import Loading from '../../components/general/Loading';
 import { getGeoFenceImage } from '../../helpers/geoFenceCalculations';
 import { RouteProp } from '@react-navigation/native';
-import { FeedStackParamList, ProfileStackParamList, RootTabParamList } from '../../types/navigationTypes';
-import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
+import { FeedStackParamList, ProfileStackParamList } from '../../types/navigationTypes';
 
-type FeedRouteProp = RouteProp<FeedStackParamList, 'Profile'>;
+type FeedRouteProp = RouteProp<FeedStackParamList, 'UserProfile'>;
 type ProfileRouteProp = RouteProp<ProfileStackParamList, 'Profile'>;
-type NavigationProp = BottomTabNavigationProp<RootTabParamList>;
 
 type Props = {
   route: ProfileRouteProp | FeedRouteProp;
-  navigation: NavigationProp;
 };
 const ProfileScreen: React.FC<Props> = ({ route }: Props) => {
   const id = route && route.params && route.params.user_id ? route.params.user_id : useAuthentication().user?.uid;
-
   if (id) {
     const [userProfile, setUserProfile] = useState<UserProfile>(defaultUserProfile);
     const [refreshing, setRefreshing] = useState(false);
