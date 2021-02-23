@@ -184,7 +184,7 @@ const TrackingScreen: React.FC = () => {
                   <Text style={styles.collabSubHeader}>Get started to earn 2x points!</Text>
                 </View>
                 <View>
-                  <TouchableOpacity onPress={showInfoPopup} style={styles.iconButton}>
+                  <TouchableOpacity onPress={showInfoPopup}>
                     <FAIcon name={'info-circle'} style={styles.icon} />
                   </TouchableOpacity>
                   <TouchableOpacity onPress={() => setCollabInfoHidden(!collabInfoHidden)}>
@@ -206,22 +206,22 @@ const TrackingScreen: React.FC = () => {
             <View>
               <View
                 style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: Spacing.smaller }}>
-                <Text style={styles.collabHeader}>Hovering together with</Text>
+                <Text style={styles.collabHeader}>Hover with friends</Text>
                 <TouchableOpacity onPress={() => setCollabInfoHidden(!collabInfoHidden)}>
                   <FAIcon name={collabInfoHidden ? 'chevron-up' : 'chevron-down'} style={styles.icon} />
                 </TouchableOpacity>
               </View>
 
-              <View style={{ display: collabInfoHidden ? 'none' : 'flex' }}>
+              <View style={{ display: collabInfoHidden ? 'none' : 'flex', marginHorizontal: Spacing.smaller }}>
+                <Text style={styles.collabSubHeader}>Earning 2x points together with</Text>
                 <View style={{ flexDirection: 'row', justifyContent: 'flex-start', marginVertical: Spacing.small }}>
                   <Avatar
                     rounded
                     source={{ uri: friendPicture ? friendPicture : defaultUserProfile.picture }}
                     size="medium"
                   />
-                  <Text style={styles.nameText}>{friendName}</Text>
+                  <Text style={styles.nameText}>{friendName ? friendName : 'Unknown'}</Text>
                 </View>
-                <Text style={{ ...Typography.xlBodyText }}>Earning double points!</Text>
               </View>
             </View>
           )}
@@ -284,7 +284,7 @@ const styles = StyleSheet.create({
   collabTopBar: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingHorizontal: Spacing.smallest,
+    paddingHorizontal: Spacing.small,
     paddingVertical: Spacing.small,
   },
   collabHeader: {
@@ -318,6 +318,9 @@ const styles = StyleSheet.create({
   },
   icon: {
     ...Typography.icon,
+    width: 35,
+    textAlign: 'center',
+    marginVertical: Spacing.smallest,
   },
   iconBlue: {
     color: Colors.blue,
@@ -395,11 +398,9 @@ const styles = StyleSheet.create({
   nameText: {
     ...Typography.headerText,
     fontSize: 20,
-    lineHeight: 30,
+    lineHeight: 50,
     marginLeft: Spacing.small,
   },
-  inner: {},
-  keyboardAvoider: {},
 });
 
 export default TrackingScreen;
