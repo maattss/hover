@@ -3619,188 +3619,226 @@ export enum Followings_Update_Column {
   UserId = 'user_id',
 }
 
-/** columns and relationships of "friends_tracking" */
-export type Friends_Tracking = {
-  __typename?: 'friends_tracking';
+/** columns and relationships of "friend_tracking" */
+export type Friend_Tracking = {
+  __typename?: 'friend_tracking';
+  created_at: Scalars['timestamptz'];
+  date: Scalars['date'];
   geofence_id: Scalars['Int'];
   id: Scalars['Int'];
   linking_word: Scalars['String'];
-  user_join?: Maybe<Scalars['String']>;
-  user_start: Scalars['String'];
+  updated_at: Scalars['timestamptz'];
+  /** An object relationship */
+  user_join?: Maybe<Users>;
+  user_join_id?: Maybe<Scalars['String']>;
+  /** An object relationship */
+  user_start: Users;
+  user_start_id: Scalars['String'];
 };
 
-/** aggregated selection of "friends_tracking" */
-export type Friends_Tracking_Aggregate = {
-  __typename?: 'friends_tracking_aggregate';
-  aggregate?: Maybe<Friends_Tracking_Aggregate_Fields>;
-  nodes: Array<Friends_Tracking>;
+/** aggregated selection of "friend_tracking" */
+export type Friend_Tracking_Aggregate = {
+  __typename?: 'friend_tracking_aggregate';
+  aggregate?: Maybe<Friend_Tracking_Aggregate_Fields>;
+  nodes: Array<Friend_Tracking>;
 };
 
-/** aggregate fields of "friends_tracking" */
-export type Friends_Tracking_Aggregate_Fields = {
-  __typename?: 'friends_tracking_aggregate_fields';
-  avg?: Maybe<Friends_Tracking_Avg_Fields>;
+/** aggregate fields of "friend_tracking" */
+export type Friend_Tracking_Aggregate_Fields = {
+  __typename?: 'friend_tracking_aggregate_fields';
+  avg?: Maybe<Friend_Tracking_Avg_Fields>;
   count?: Maybe<Scalars['Int']>;
-  max?: Maybe<Friends_Tracking_Max_Fields>;
-  min?: Maybe<Friends_Tracking_Min_Fields>;
-  stddev?: Maybe<Friends_Tracking_Stddev_Fields>;
-  stddev_pop?: Maybe<Friends_Tracking_Stddev_Pop_Fields>;
-  stddev_samp?: Maybe<Friends_Tracking_Stddev_Samp_Fields>;
-  sum?: Maybe<Friends_Tracking_Sum_Fields>;
-  var_pop?: Maybe<Friends_Tracking_Var_Pop_Fields>;
-  var_samp?: Maybe<Friends_Tracking_Var_Samp_Fields>;
-  variance?: Maybe<Friends_Tracking_Variance_Fields>;
+  max?: Maybe<Friend_Tracking_Max_Fields>;
+  min?: Maybe<Friend_Tracking_Min_Fields>;
+  stddev?: Maybe<Friend_Tracking_Stddev_Fields>;
+  stddev_pop?: Maybe<Friend_Tracking_Stddev_Pop_Fields>;
+  stddev_samp?: Maybe<Friend_Tracking_Stddev_Samp_Fields>;
+  sum?: Maybe<Friend_Tracking_Sum_Fields>;
+  var_pop?: Maybe<Friend_Tracking_Var_Pop_Fields>;
+  var_samp?: Maybe<Friend_Tracking_Var_Samp_Fields>;
+  variance?: Maybe<Friend_Tracking_Variance_Fields>;
 };
 
-/** aggregate fields of "friends_tracking" */
-export type Friends_Tracking_Aggregate_FieldsCountArgs = {
-  columns?: Maybe<Array<Friends_Tracking_Select_Column>>;
+/** aggregate fields of "friend_tracking" */
+export type Friend_Tracking_Aggregate_FieldsCountArgs = {
+  columns?: Maybe<Array<Friend_Tracking_Select_Column>>;
   distinct?: Maybe<Scalars['Boolean']>;
 };
 
-/** order by aggregate values of table "friends_tracking" */
-export type Friends_Tracking_Aggregate_Order_By = {
-  avg?: Maybe<Friends_Tracking_Avg_Order_By>;
+/** order by aggregate values of table "friend_tracking" */
+export type Friend_Tracking_Aggregate_Order_By = {
+  avg?: Maybe<Friend_Tracking_Avg_Order_By>;
   count?: Maybe<Order_By>;
-  max?: Maybe<Friends_Tracking_Max_Order_By>;
-  min?: Maybe<Friends_Tracking_Min_Order_By>;
-  stddev?: Maybe<Friends_Tracking_Stddev_Order_By>;
-  stddev_pop?: Maybe<Friends_Tracking_Stddev_Pop_Order_By>;
-  stddev_samp?: Maybe<Friends_Tracking_Stddev_Samp_Order_By>;
-  sum?: Maybe<Friends_Tracking_Sum_Order_By>;
-  var_pop?: Maybe<Friends_Tracking_Var_Pop_Order_By>;
-  var_samp?: Maybe<Friends_Tracking_Var_Samp_Order_By>;
-  variance?: Maybe<Friends_Tracking_Variance_Order_By>;
+  max?: Maybe<Friend_Tracking_Max_Order_By>;
+  min?: Maybe<Friend_Tracking_Min_Order_By>;
+  stddev?: Maybe<Friend_Tracking_Stddev_Order_By>;
+  stddev_pop?: Maybe<Friend_Tracking_Stddev_Pop_Order_By>;
+  stddev_samp?: Maybe<Friend_Tracking_Stddev_Samp_Order_By>;
+  sum?: Maybe<Friend_Tracking_Sum_Order_By>;
+  var_pop?: Maybe<Friend_Tracking_Var_Pop_Order_By>;
+  var_samp?: Maybe<Friend_Tracking_Var_Samp_Order_By>;
+  variance?: Maybe<Friend_Tracking_Variance_Order_By>;
 };
 
-/** input type for inserting array relation for remote table "friends_tracking" */
-export type Friends_Tracking_Arr_Rel_Insert_Input = {
-  data: Array<Friends_Tracking_Insert_Input>;
-  on_conflict?: Maybe<Friends_Tracking_On_Conflict>;
+/** input type for inserting array relation for remote table "friend_tracking" */
+export type Friend_Tracking_Arr_Rel_Insert_Input = {
+  data: Array<Friend_Tracking_Insert_Input>;
+  on_conflict?: Maybe<Friend_Tracking_On_Conflict>;
 };
 
 /** aggregate avg on columns */
-export type Friends_Tracking_Avg_Fields = {
-  __typename?: 'friends_tracking_avg_fields';
+export type Friend_Tracking_Avg_Fields = {
+  __typename?: 'friend_tracking_avg_fields';
   geofence_id?: Maybe<Scalars['Float']>;
   id?: Maybe<Scalars['Float']>;
 };
 
-/** order by avg() on columns of table "friends_tracking" */
-export type Friends_Tracking_Avg_Order_By = {
+/** order by avg() on columns of table "friend_tracking" */
+export type Friend_Tracking_Avg_Order_By = {
   geofence_id?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
 };
 
-/** Boolean expression to filter rows from the table "friends_tracking". All fields are combined with a logical 'AND'. */
-export type Friends_Tracking_Bool_Exp = {
-  _and?: Maybe<Array<Maybe<Friends_Tracking_Bool_Exp>>>;
-  _not?: Maybe<Friends_Tracking_Bool_Exp>;
-  _or?: Maybe<Array<Maybe<Friends_Tracking_Bool_Exp>>>;
+/** Boolean expression to filter rows from the table "friend_tracking". All fields are combined with a logical 'AND'. */
+export type Friend_Tracking_Bool_Exp = {
+  _and?: Maybe<Array<Maybe<Friend_Tracking_Bool_Exp>>>;
+  _not?: Maybe<Friend_Tracking_Bool_Exp>;
+  _or?: Maybe<Array<Maybe<Friend_Tracking_Bool_Exp>>>;
+  created_at?: Maybe<Timestamptz_Comparison_Exp>;
+  date?: Maybe<Date_Comparison_Exp>;
   geofence_id?: Maybe<Int_Comparison_Exp>;
   id?: Maybe<Int_Comparison_Exp>;
   linking_word?: Maybe<String_Comparison_Exp>;
-  user_join?: Maybe<String_Comparison_Exp>;
-  user_start?: Maybe<String_Comparison_Exp>;
+  updated_at?: Maybe<Timestamptz_Comparison_Exp>;
+  user_join?: Maybe<Users_Bool_Exp>;
+  user_join_id?: Maybe<String_Comparison_Exp>;
+  user_start?: Maybe<Users_Bool_Exp>;
+  user_start_id?: Maybe<String_Comparison_Exp>;
 };
 
-/** unique or primary key constraints on table "friends_tracking" */
-export enum Friends_Tracking_Constraint {
+/** unique or primary key constraints on table "friend_tracking" */
+export enum Friend_Tracking_Constraint {
   /** unique or primary key constraint */
   FriendsTrackingPkey = 'friends_tracking_pkey',
 }
 
-/** input type for incrementing integer column in table "friends_tracking" */
-export type Friends_Tracking_Inc_Input = {
+/** input type for incrementing integer column in table "friend_tracking" */
+export type Friend_Tracking_Inc_Input = {
   geofence_id?: Maybe<Scalars['Int']>;
   id?: Maybe<Scalars['Int']>;
 };
 
-/** input type for inserting data into table "friends_tracking" */
-export type Friends_Tracking_Insert_Input = {
+/** input type for inserting data into table "friend_tracking" */
+export type Friend_Tracking_Insert_Input = {
+  created_at?: Maybe<Scalars['timestamptz']>;
+  date?: Maybe<Scalars['date']>;
   geofence_id?: Maybe<Scalars['Int']>;
   id?: Maybe<Scalars['Int']>;
   linking_word?: Maybe<Scalars['String']>;
-  user_join?: Maybe<Scalars['String']>;
-  user_start?: Maybe<Scalars['String']>;
+  updated_at?: Maybe<Scalars['timestamptz']>;
+  user_join?: Maybe<Users_Obj_Rel_Insert_Input>;
+  user_join_id?: Maybe<Scalars['String']>;
+  user_start?: Maybe<Users_Obj_Rel_Insert_Input>;
+  user_start_id?: Maybe<Scalars['String']>;
 };
 
 /** aggregate max on columns */
-export type Friends_Tracking_Max_Fields = {
-  __typename?: 'friends_tracking_max_fields';
+export type Friend_Tracking_Max_Fields = {
+  __typename?: 'friend_tracking_max_fields';
+  created_at?: Maybe<Scalars['timestamptz']>;
+  date?: Maybe<Scalars['date']>;
   geofence_id?: Maybe<Scalars['Int']>;
   id?: Maybe<Scalars['Int']>;
   linking_word?: Maybe<Scalars['String']>;
-  user_join?: Maybe<Scalars['String']>;
-  user_start?: Maybe<Scalars['String']>;
+  updated_at?: Maybe<Scalars['timestamptz']>;
+  user_join_id?: Maybe<Scalars['String']>;
+  user_start_id?: Maybe<Scalars['String']>;
 };
 
-/** order by max() on columns of table "friends_tracking" */
-export type Friends_Tracking_Max_Order_By = {
+/** order by max() on columns of table "friend_tracking" */
+export type Friend_Tracking_Max_Order_By = {
+  created_at?: Maybe<Order_By>;
+  date?: Maybe<Order_By>;
   geofence_id?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
   linking_word?: Maybe<Order_By>;
-  user_join?: Maybe<Order_By>;
-  user_start?: Maybe<Order_By>;
+  updated_at?: Maybe<Order_By>;
+  user_join_id?: Maybe<Order_By>;
+  user_start_id?: Maybe<Order_By>;
 };
 
 /** aggregate min on columns */
-export type Friends_Tracking_Min_Fields = {
-  __typename?: 'friends_tracking_min_fields';
+export type Friend_Tracking_Min_Fields = {
+  __typename?: 'friend_tracking_min_fields';
+  created_at?: Maybe<Scalars['timestamptz']>;
+  date?: Maybe<Scalars['date']>;
   geofence_id?: Maybe<Scalars['Int']>;
   id?: Maybe<Scalars['Int']>;
   linking_word?: Maybe<Scalars['String']>;
-  user_join?: Maybe<Scalars['String']>;
-  user_start?: Maybe<Scalars['String']>;
+  updated_at?: Maybe<Scalars['timestamptz']>;
+  user_join_id?: Maybe<Scalars['String']>;
+  user_start_id?: Maybe<Scalars['String']>;
 };
 
-/** order by min() on columns of table "friends_tracking" */
-export type Friends_Tracking_Min_Order_By = {
+/** order by min() on columns of table "friend_tracking" */
+export type Friend_Tracking_Min_Order_By = {
+  created_at?: Maybe<Order_By>;
+  date?: Maybe<Order_By>;
   geofence_id?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
   linking_word?: Maybe<Order_By>;
-  user_join?: Maybe<Order_By>;
-  user_start?: Maybe<Order_By>;
+  updated_at?: Maybe<Order_By>;
+  user_join_id?: Maybe<Order_By>;
+  user_start_id?: Maybe<Order_By>;
 };
 
-/** response of any mutation on the table "friends_tracking" */
-export type Friends_Tracking_Mutation_Response = {
-  __typename?: 'friends_tracking_mutation_response';
+/** response of any mutation on the table "friend_tracking" */
+export type Friend_Tracking_Mutation_Response = {
+  __typename?: 'friend_tracking_mutation_response';
   /** number of affected rows by the mutation */
   affected_rows: Scalars['Int'];
   /** data of the affected rows by the mutation */
-  returning: Array<Friends_Tracking>;
+  returning: Array<Friend_Tracking>;
 };
 
-/** input type for inserting object relation for remote table "friends_tracking" */
-export type Friends_Tracking_Obj_Rel_Insert_Input = {
-  data: Friends_Tracking_Insert_Input;
-  on_conflict?: Maybe<Friends_Tracking_On_Conflict>;
+/** input type for inserting object relation for remote table "friend_tracking" */
+export type Friend_Tracking_Obj_Rel_Insert_Input = {
+  data: Friend_Tracking_Insert_Input;
+  on_conflict?: Maybe<Friend_Tracking_On_Conflict>;
 };
 
-/** on conflict condition type for table "friends_tracking" */
-export type Friends_Tracking_On_Conflict = {
-  constraint: Friends_Tracking_Constraint;
-  update_columns: Array<Friends_Tracking_Update_Column>;
-  where?: Maybe<Friends_Tracking_Bool_Exp>;
+/** on conflict condition type for table "friend_tracking" */
+export type Friend_Tracking_On_Conflict = {
+  constraint: Friend_Tracking_Constraint;
+  update_columns: Array<Friend_Tracking_Update_Column>;
+  where?: Maybe<Friend_Tracking_Bool_Exp>;
 };
 
-/** ordering options when selecting data from "friends_tracking" */
-export type Friends_Tracking_Order_By = {
+/** ordering options when selecting data from "friend_tracking" */
+export type Friend_Tracking_Order_By = {
+  created_at?: Maybe<Order_By>;
+  date?: Maybe<Order_By>;
   geofence_id?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
   linking_word?: Maybe<Order_By>;
-  user_join?: Maybe<Order_By>;
-  user_start?: Maybe<Order_By>;
+  updated_at?: Maybe<Order_By>;
+  user_join?: Maybe<Users_Order_By>;
+  user_join_id?: Maybe<Order_By>;
+  user_start?: Maybe<Users_Order_By>;
+  user_start_id?: Maybe<Order_By>;
 };
 
-/** primary key columns input for table: "friends_tracking" */
-export type Friends_Tracking_Pk_Columns_Input = {
+/** primary key columns input for table: "friend_tracking" */
+export type Friend_Tracking_Pk_Columns_Input = {
   id: Scalars['Int'];
 };
 
-/** select columns of table "friends_tracking" */
-export enum Friends_Tracking_Select_Column {
+/** select columns of table "friend_tracking" */
+export enum Friend_Tracking_Select_Column {
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  Date = 'date',
   /** column name */
   GeofenceId = 'geofence_id',
   /** column name */
@@ -3808,74 +3846,83 @@ export enum Friends_Tracking_Select_Column {
   /** column name */
   LinkingWord = 'linking_word',
   /** column name */
-  UserJoin = 'user_join',
+  UpdatedAt = 'updated_at',
   /** column name */
-  UserStart = 'user_start',
+  UserJoinId = 'user_join_id',
+  /** column name */
+  UserStartId = 'user_start_id',
 }
 
-/** input type for updating data in table "friends_tracking" */
-export type Friends_Tracking_Set_Input = {
+/** input type for updating data in table "friend_tracking" */
+export type Friend_Tracking_Set_Input = {
+  created_at?: Maybe<Scalars['timestamptz']>;
+  date?: Maybe<Scalars['date']>;
   geofence_id?: Maybe<Scalars['Int']>;
   id?: Maybe<Scalars['Int']>;
   linking_word?: Maybe<Scalars['String']>;
-  user_join?: Maybe<Scalars['String']>;
-  user_start?: Maybe<Scalars['String']>;
+  updated_at?: Maybe<Scalars['timestamptz']>;
+  user_join_id?: Maybe<Scalars['String']>;
+  user_start_id?: Maybe<Scalars['String']>;
 };
 
 /** aggregate stddev on columns */
-export type Friends_Tracking_Stddev_Fields = {
-  __typename?: 'friends_tracking_stddev_fields';
+export type Friend_Tracking_Stddev_Fields = {
+  __typename?: 'friend_tracking_stddev_fields';
   geofence_id?: Maybe<Scalars['Float']>;
   id?: Maybe<Scalars['Float']>;
 };
 
-/** order by stddev() on columns of table "friends_tracking" */
-export type Friends_Tracking_Stddev_Order_By = {
+/** order by stddev() on columns of table "friend_tracking" */
+export type Friend_Tracking_Stddev_Order_By = {
   geofence_id?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
 };
 
 /** aggregate stddev_pop on columns */
-export type Friends_Tracking_Stddev_Pop_Fields = {
-  __typename?: 'friends_tracking_stddev_pop_fields';
+export type Friend_Tracking_Stddev_Pop_Fields = {
+  __typename?: 'friend_tracking_stddev_pop_fields';
   geofence_id?: Maybe<Scalars['Float']>;
   id?: Maybe<Scalars['Float']>;
 };
 
-/** order by stddev_pop() on columns of table "friends_tracking" */
-export type Friends_Tracking_Stddev_Pop_Order_By = {
+/** order by stddev_pop() on columns of table "friend_tracking" */
+export type Friend_Tracking_Stddev_Pop_Order_By = {
   geofence_id?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
 };
 
 /** aggregate stddev_samp on columns */
-export type Friends_Tracking_Stddev_Samp_Fields = {
-  __typename?: 'friends_tracking_stddev_samp_fields';
+export type Friend_Tracking_Stddev_Samp_Fields = {
+  __typename?: 'friend_tracking_stddev_samp_fields';
   geofence_id?: Maybe<Scalars['Float']>;
   id?: Maybe<Scalars['Float']>;
 };
 
-/** order by stddev_samp() on columns of table "friends_tracking" */
-export type Friends_Tracking_Stddev_Samp_Order_By = {
+/** order by stddev_samp() on columns of table "friend_tracking" */
+export type Friend_Tracking_Stddev_Samp_Order_By = {
   geofence_id?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
 };
 
 /** aggregate sum on columns */
-export type Friends_Tracking_Sum_Fields = {
-  __typename?: 'friends_tracking_sum_fields';
+export type Friend_Tracking_Sum_Fields = {
+  __typename?: 'friend_tracking_sum_fields';
   geofence_id?: Maybe<Scalars['Int']>;
   id?: Maybe<Scalars['Int']>;
 };
 
-/** order by sum() on columns of table "friends_tracking" */
-export type Friends_Tracking_Sum_Order_By = {
+/** order by sum() on columns of table "friend_tracking" */
+export type Friend_Tracking_Sum_Order_By = {
   geofence_id?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
 };
 
-/** update columns of table "friends_tracking" */
-export enum Friends_Tracking_Update_Column {
+/** update columns of table "friend_tracking" */
+export enum Friend_Tracking_Update_Column {
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  Date = 'date',
   /** column name */
   GeofenceId = 'geofence_id',
   /** column name */
@@ -3883,46 +3930,48 @@ export enum Friends_Tracking_Update_Column {
   /** column name */
   LinkingWord = 'linking_word',
   /** column name */
-  UserJoin = 'user_join',
+  UpdatedAt = 'updated_at',
   /** column name */
-  UserStart = 'user_start',
+  UserJoinId = 'user_join_id',
+  /** column name */
+  UserStartId = 'user_start_id',
 }
 
 /** aggregate var_pop on columns */
-export type Friends_Tracking_Var_Pop_Fields = {
-  __typename?: 'friends_tracking_var_pop_fields';
+export type Friend_Tracking_Var_Pop_Fields = {
+  __typename?: 'friend_tracking_var_pop_fields';
   geofence_id?: Maybe<Scalars['Float']>;
   id?: Maybe<Scalars['Float']>;
 };
 
-/** order by var_pop() on columns of table "friends_tracking" */
-export type Friends_Tracking_Var_Pop_Order_By = {
+/** order by var_pop() on columns of table "friend_tracking" */
+export type Friend_Tracking_Var_Pop_Order_By = {
   geofence_id?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
 };
 
 /** aggregate var_samp on columns */
-export type Friends_Tracking_Var_Samp_Fields = {
-  __typename?: 'friends_tracking_var_samp_fields';
+export type Friend_Tracking_Var_Samp_Fields = {
+  __typename?: 'friend_tracking_var_samp_fields';
   geofence_id?: Maybe<Scalars['Float']>;
   id?: Maybe<Scalars['Float']>;
 };
 
-/** order by var_samp() on columns of table "friends_tracking" */
-export type Friends_Tracking_Var_Samp_Order_By = {
+/** order by var_samp() on columns of table "friend_tracking" */
+export type Friend_Tracking_Var_Samp_Order_By = {
   geofence_id?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
 };
 
 /** aggregate variance on columns */
-export type Friends_Tracking_Variance_Fields = {
-  __typename?: 'friends_tracking_variance_fields';
+export type Friend_Tracking_Variance_Fields = {
+  __typename?: 'friend_tracking_variance_fields';
   geofence_id?: Maybe<Scalars['Float']>;
   id?: Maybe<Scalars['Float']>;
 };
 
-/** order by variance() on columns of table "friends_tracking" */
-export type Friends_Tracking_Variance_Order_By = {
+/** order by variance() on columns of table "friend_tracking" */
+export type Friend_Tracking_Variance_Order_By = {
   geofence_id?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
 };
@@ -4941,10 +4990,10 @@ export type Mutation_Root = {
   delete_followings?: Maybe<Followings_Mutation_Response>;
   /** delete single row from the table: "followings" */
   delete_followings_by_pk?: Maybe<Followings>;
-  /** delete data from the table: "friends_tracking" */
-  delete_friends_tracking?: Maybe<Friends_Tracking_Mutation_Response>;
-  /** delete single row from the table: "friends_tracking" */
-  delete_friends_tracking_by_pk?: Maybe<Friends_Tracking>;
+  /** delete data from the table: "friend_tracking" */
+  delete_friend_tracking?: Maybe<Friend_Tracking_Mutation_Response>;
+  /** delete single row from the table: "friend_tracking" */
+  delete_friend_tracking_by_pk?: Maybe<Friend_Tracking>;
   /** delete data from the table: "geofence_variants" */
   delete_geofence_variants?: Maybe<Geofence_Variants_Mutation_Response>;
   /** delete single row from the table: "geofence_variants" */
@@ -5017,10 +5066,10 @@ export type Mutation_Root = {
   insert_followings?: Maybe<Followings_Mutation_Response>;
   /** insert a single row into the table: "followings" */
   insert_followings_one?: Maybe<Followings>;
-  /** insert data into the table: "friends_tracking" */
-  insert_friends_tracking?: Maybe<Friends_Tracking_Mutation_Response>;
-  /** insert a single row into the table: "friends_tracking" */
-  insert_friends_tracking_one?: Maybe<Friends_Tracking>;
+  /** insert data into the table: "friend_tracking" */
+  insert_friend_tracking?: Maybe<Friend_Tracking_Mutation_Response>;
+  /** insert a single row into the table: "friend_tracking" */
+  insert_friend_tracking_one?: Maybe<Friend_Tracking>;
   /** insert data into the table: "geofence_variants" */
   insert_geofence_variants?: Maybe<Geofence_Variants_Mutation_Response>;
   /** insert a single row into the table: "geofence_variants" */
@@ -5093,10 +5142,10 @@ export type Mutation_Root = {
   update_followings?: Maybe<Followings_Mutation_Response>;
   /** update single row of the table: "followings" */
   update_followings_by_pk?: Maybe<Followings>;
-  /** update data of the table: "friends_tracking" */
-  update_friends_tracking?: Maybe<Friends_Tracking_Mutation_Response>;
-  /** update single row of the table: "friends_tracking" */
-  update_friends_tracking_by_pk?: Maybe<Friends_Tracking>;
+  /** update data of the table: "friend_tracking" */
+  update_friend_tracking?: Maybe<Friend_Tracking_Mutation_Response>;
+  /** update single row of the table: "friend_tracking" */
+  update_friend_tracking_by_pk?: Maybe<Friend_Tracking>;
   /** update data of the table: "geofence_variants" */
   update_geofence_variants?: Maybe<Geofence_Variants_Mutation_Response>;
   /** update single row of the table: "geofence_variants" */
@@ -5252,12 +5301,12 @@ export type Mutation_RootDelete_Followings_By_PkArgs = {
 };
 
 /** mutation root */
-export type Mutation_RootDelete_Friends_TrackingArgs = {
-  where: Friends_Tracking_Bool_Exp;
+export type Mutation_RootDelete_Friend_TrackingArgs = {
+  where: Friend_Tracking_Bool_Exp;
 };
 
 /** mutation root */
-export type Mutation_RootDelete_Friends_Tracking_By_PkArgs = {
+export type Mutation_RootDelete_Friend_Tracking_By_PkArgs = {
   id: Scalars['Int'];
 };
 
@@ -5470,15 +5519,15 @@ export type Mutation_RootInsert_Followings_OneArgs = {
 };
 
 /** mutation root */
-export type Mutation_RootInsert_Friends_TrackingArgs = {
-  objects: Array<Friends_Tracking_Insert_Input>;
-  on_conflict?: Maybe<Friends_Tracking_On_Conflict>;
+export type Mutation_RootInsert_Friend_TrackingArgs = {
+  objects: Array<Friend_Tracking_Insert_Input>;
+  on_conflict?: Maybe<Friend_Tracking_On_Conflict>;
 };
 
 /** mutation root */
-export type Mutation_RootInsert_Friends_Tracking_OneArgs = {
-  object: Friends_Tracking_Insert_Input;
-  on_conflict?: Maybe<Friends_Tracking_On_Conflict>;
+export type Mutation_RootInsert_Friend_Tracking_OneArgs = {
+  object: Friend_Tracking_Insert_Input;
+  on_conflict?: Maybe<Friend_Tracking_On_Conflict>;
 };
 
 /** mutation root */
@@ -5712,17 +5761,17 @@ export type Mutation_RootUpdate_Followings_By_PkArgs = {
 };
 
 /** mutation root */
-export type Mutation_RootUpdate_Friends_TrackingArgs = {
-  _inc?: Maybe<Friends_Tracking_Inc_Input>;
-  _set?: Maybe<Friends_Tracking_Set_Input>;
-  where: Friends_Tracking_Bool_Exp;
+export type Mutation_RootUpdate_Friend_TrackingArgs = {
+  _inc?: Maybe<Friend_Tracking_Inc_Input>;
+  _set?: Maybe<Friend_Tracking_Set_Input>;
+  where: Friend_Tracking_Bool_Exp;
 };
 
 /** mutation root */
-export type Mutation_RootUpdate_Friends_Tracking_By_PkArgs = {
-  _inc?: Maybe<Friends_Tracking_Inc_Input>;
-  _set?: Maybe<Friends_Tracking_Set_Input>;
-  pk_columns: Friends_Tracking_Pk_Columns_Input;
+export type Mutation_RootUpdate_Friend_Tracking_By_PkArgs = {
+  _inc?: Maybe<Friend_Tracking_Inc_Input>;
+  _set?: Maybe<Friend_Tracking_Set_Input>;
+  pk_columns: Friend_Tracking_Pk_Columns_Input;
 };
 
 /** mutation root */
@@ -5888,12 +5937,12 @@ export type Query_Root = {
   followings_aggregate: Followings_Aggregate;
   /** fetch data from the table: "followings" using primary key columns */
   followings_by_pk?: Maybe<Followings>;
-  /** fetch data from the table: "friends_tracking" */
-  friends_tracking: Array<Friends_Tracking>;
-  /** fetch aggregated fields from the table: "friends_tracking" */
-  friends_tracking_aggregate: Friends_Tracking_Aggregate;
-  /** fetch data from the table: "friends_tracking" using primary key columns */
-  friends_tracking_by_pk?: Maybe<Friends_Tracking>;
+  /** fetch data from the table: "friend_tracking" */
+  friend_tracking: Array<Friend_Tracking>;
+  /** fetch aggregated fields from the table: "friend_tracking" */
+  friend_tracking_aggregate: Friend_Tracking_Aggregate;
+  /** fetch data from the table: "friend_tracking" using primary key columns */
+  friend_tracking_by_pk?: Maybe<Friend_Tracking>;
   /** fetch data from the table: "geofence_variants" */
   geofence_variants: Array<Geofence_Variants>;
   /** fetch aggregated fields from the table: "geofence_variants" */
@@ -6232,25 +6281,25 @@ export type Query_RootFollowings_By_PkArgs = {
 };
 
 /** query root */
-export type Query_RootFriends_TrackingArgs = {
-  distinct_on?: Maybe<Array<Friends_Tracking_Select_Column>>;
+export type Query_RootFriend_TrackingArgs = {
+  distinct_on?: Maybe<Array<Friend_Tracking_Select_Column>>;
   limit?: Maybe<Scalars['Int']>;
   offset?: Maybe<Scalars['Int']>;
-  order_by?: Maybe<Array<Friends_Tracking_Order_By>>;
-  where?: Maybe<Friends_Tracking_Bool_Exp>;
+  order_by?: Maybe<Array<Friend_Tracking_Order_By>>;
+  where?: Maybe<Friend_Tracking_Bool_Exp>;
 };
 
 /** query root */
-export type Query_RootFriends_Tracking_AggregateArgs = {
-  distinct_on?: Maybe<Array<Friends_Tracking_Select_Column>>;
+export type Query_RootFriend_Tracking_AggregateArgs = {
+  distinct_on?: Maybe<Array<Friend_Tracking_Select_Column>>;
   limit?: Maybe<Scalars['Int']>;
   offset?: Maybe<Scalars['Int']>;
-  order_by?: Maybe<Array<Friends_Tracking_Order_By>>;
-  where?: Maybe<Friends_Tracking_Bool_Exp>;
+  order_by?: Maybe<Array<Friend_Tracking_Order_By>>;
+  where?: Maybe<Friend_Tracking_Bool_Exp>;
 };
 
 /** query root */
-export type Query_RootFriends_Tracking_By_PkArgs = {
+export type Query_RootFriend_Tracking_By_PkArgs = {
   id: Scalars['Int'];
 };
 
@@ -6472,12 +6521,12 @@ export type Subscription_Root = {
   followings_aggregate: Followings_Aggregate;
   /** fetch data from the table: "followings" using primary key columns */
   followings_by_pk?: Maybe<Followings>;
-  /** fetch data from the table: "friends_tracking" */
-  friends_tracking: Array<Friends_Tracking>;
-  /** fetch aggregated fields from the table: "friends_tracking" */
-  friends_tracking_aggregate: Friends_Tracking_Aggregate;
-  /** fetch data from the table: "friends_tracking" using primary key columns */
-  friends_tracking_by_pk?: Maybe<Friends_Tracking>;
+  /** fetch data from the table: "friend_tracking" */
+  friend_tracking: Array<Friend_Tracking>;
+  /** fetch aggregated fields from the table: "friend_tracking" */
+  friend_tracking_aggregate: Friend_Tracking_Aggregate;
+  /** fetch data from the table: "friend_tracking" using primary key columns */
+  friend_tracking_by_pk?: Maybe<Friend_Tracking>;
   /** fetch data from the table: "geofence_variants" */
   geofence_variants: Array<Geofence_Variants>;
   /** fetch aggregated fields from the table: "geofence_variants" */
@@ -6816,25 +6865,25 @@ export type Subscription_RootFollowings_By_PkArgs = {
 };
 
 /** subscription root */
-export type Subscription_RootFriends_TrackingArgs = {
-  distinct_on?: Maybe<Array<Friends_Tracking_Select_Column>>;
+export type Subscription_RootFriend_TrackingArgs = {
+  distinct_on?: Maybe<Array<Friend_Tracking_Select_Column>>;
   limit?: Maybe<Scalars['Int']>;
   offset?: Maybe<Scalars['Int']>;
-  order_by?: Maybe<Array<Friends_Tracking_Order_By>>;
-  where?: Maybe<Friends_Tracking_Bool_Exp>;
+  order_by?: Maybe<Array<Friend_Tracking_Order_By>>;
+  where?: Maybe<Friend_Tracking_Bool_Exp>;
 };
 
 /** subscription root */
-export type Subscription_RootFriends_Tracking_AggregateArgs = {
-  distinct_on?: Maybe<Array<Friends_Tracking_Select_Column>>;
+export type Subscription_RootFriend_Tracking_AggregateArgs = {
+  distinct_on?: Maybe<Array<Friend_Tracking_Select_Column>>;
   limit?: Maybe<Scalars['Int']>;
   offset?: Maybe<Scalars['Int']>;
-  order_by?: Maybe<Array<Friends_Tracking_Order_By>>;
-  where?: Maybe<Friends_Tracking_Bool_Exp>;
+  order_by?: Maybe<Array<Friend_Tracking_Order_By>>;
+  where?: Maybe<Friend_Tracking_Bool_Exp>;
 };
 
 /** subscription root */
-export type Subscription_RootFriends_Tracking_By_PkArgs = {
+export type Subscription_RootFriend_Tracking_By_PkArgs = {
   id: Scalars['Int'];
 };
 
