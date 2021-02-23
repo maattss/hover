@@ -378,7 +378,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-evenly',
     padding: Spacing.smaller,
-    marginTop: Spacing.smaller,
+    marginTop: Spacing.smallest,
     backgroundColor: Colors.almostBlackTransparent,
     borderRadius: Spacing.smaller,
   },
