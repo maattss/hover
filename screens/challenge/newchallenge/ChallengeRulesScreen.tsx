@@ -13,7 +13,7 @@ import { GeoFenceCategory } from '../../../types/geoFenceTypes';
 import { getChallengeTypeFields } from '../../../helpers/challengeMappers';
 import Divider from '../../../components/general/Divider';
 import KeyboardAvoiderNoHeader from '../../../components/general/KeyboarAvoiderNoHeader';
-import { generateNewChallengeDescription, generateRuleChallengeDescription } from '../../../helpers/decriptionHelper';
+import { generateRuleChallengeDescription } from '../../../helpers/decriptionHelper';
 
 type ChallengeRulesRouteProp = RouteProp<NewChallengeStackParamList, 'ChallengeRules'>;
 type NavigationProp = StackNavigationProp<NewChallengeStackParamList>;
