@@ -112,7 +112,7 @@ export const generateNewChallengeDescription = (
  * NEW CHALLENGE DESCRIPTION HELPERS.
  */
 
-export const generateRuleChallengeDescription = (fields: string[], rules: ChallengeRules, end_date?: string) => {
+export const generateRuleChallengeDescription = (fields: string[], rules: ChallengeRules, end_date?: Date) => {
   let description = 'First person to...';
 
   fields.forEach((field) => {
@@ -125,7 +125,7 @@ export const generateRuleChallengeDescription = (fields: string[], rules: Challe
     }
   });
 
-  description += '\n\t...before ' + (end_date ? toPrettyDate(new Date(end_date)) : '___________') + '.';
+  description += '\n\t...before ' + (end_date ? toPrettyDate(end_date) : '___________') + '.';
   return description;
 };
 

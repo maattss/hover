@@ -19,7 +19,7 @@ const NewChallengeNavigator: React.FC = () => {
         name="PickUsers"
         component={PickUsersScreen}
         options={({ navigation }) => ({
-          headerTitle: 'Pick Users',
+          headerTitle: 'Choose opponents',
           // eslint-disable-next-line react/display-name
           headerRight: () => <HeaderIcon name="info" onPress={() => navigation.navigate('ChallengeInfo')} />,
         })}
@@ -38,7 +38,7 @@ const NewChallengeNavigator: React.FC = () => {
         name="ChallengeRules"
         component={ChallengeRulesScreen}
         options={({ navigation }) => ({
-          headerTitle: 'Define Rules',
+          headerTitle: 'Details',
           // eslint-disable-next-line react/display-name
           headerRight: () => <HeaderIcon name="info" onPress={() => navigation.navigate('ChallengeInfo')} />,
         })}
@@ -47,7 +47,7 @@ const NewChallengeNavigator: React.FC = () => {
         name="NewChallengeOverview"
         component={NewChallengeOverviewScreen}
         options={() => ({
-          headerTitle: 'Create challenge',
+          headerTitle: 'Overview',
         })}
       />
       <NewChallengeStack.Screen
