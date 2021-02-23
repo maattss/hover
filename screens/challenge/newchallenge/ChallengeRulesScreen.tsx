@@ -156,7 +156,7 @@ const ChallengeRulesScreen: React.FC<Props> = ({ route, navigation }: Props) => 
           });
         }}
         disabled={isDisabled}>
-        Save Rules
+        Next
       </Button>
     </KeyboardAvoiderNoHeader>
   );

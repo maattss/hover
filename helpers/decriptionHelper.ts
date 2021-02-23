@@ -114,9 +114,8 @@ export const generateNewChallengeDescription = (
 
 export const generateRuleChallengeDescription = (fields: string[], rules: ChallengeRules, end_date?: string) => {
   let description = 'First person to...';
-  fields.every((key) => rules[key.toLowerCase() as keyof ChallengeRules]);
+
   fields.forEach((field) => {
-    console.log(field);
     if (field === 'SCORE') {
       description += '\n\t...get ' + (rules.score ?? '___') + ' points';
     } else if (field === 'TIME') {

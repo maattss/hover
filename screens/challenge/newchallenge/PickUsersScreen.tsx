@@ -81,7 +81,7 @@ const PickUsersScreen: React.FC<Props> = ({
           });
         }}
         disabled={isDisabled}>
-        Save Participants
+        Next
       </Button>
     </View>
   );
