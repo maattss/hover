@@ -108,6 +108,27 @@ export const generateNewChallengeDescription = (
   description += end_date ? ' by ' + toPrettyDate(new Date(end_date)) + '.' : '';
   return description;
 };
+/**
+ * NEW CHALLENGE DESCRIPTION HELPERS.
+ */
+
+export const generateRuleChallengeDescription = (fields: string[], rules: ChallengeRules, end_date?: string) => {
+  let description = 'First person to...';
+  fields.every((key) => rules[key.toLowerCase() as keyof ChallengeRules]);
+  fields.forEach((field) => {
+    console.log(field);
+    if (field === 'SCORE') {
+      description += '\n\t...get ' + (rules.score ?? '___') + ' points';
+    } else if (field === 'TIME') {
+      description += '\n\t...spend ' + (rules.time ?? '___') + ' hours';
+    } else if (field === 'CATEGORY') {
+      description += '\n\t...at a location within the ' + (rules.category?.toLowerCase() ?? '_______') + ' category';
+    }
+  });
+
+  description += '\n\t...before ' + (end_date ? toPrettyDate(new Date(end_date)) : '___________') + '.';
+  return description;
+};
 
 /**
  * FEED CHALLENGE DESCRIPTION HELPER.

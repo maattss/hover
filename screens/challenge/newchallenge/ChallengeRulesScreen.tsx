@@ -13,6 +13,7 @@ import { GeoFenceCategory } from '../../../types/geoFenceTypes';
 import { getChallengeTypeFields } from '../../../helpers/challengeMappers';
 import Divider from '../../../components/general/Divider';
 import KeyboardAvoiderNoHeader from '../../../components/general/KeyboarAvoiderNoHeader';
+import { generateNewChallengeDescription, generateRuleChallengeDescription } from '../../../helpers/decriptionHelper';
 
 type ChallengeRulesRouteProp = RouteProp<NewChallengeStackParamList, 'ChallengeRules'>;
 type NavigationProp = StackNavigationProp<NewChallengeStackParamList>;
@@ -84,7 +85,8 @@ const ChallengeRulesScreen: React.FC<Props> = ({ route, navigation }: Props) => 
   return (
     <KeyboardAvoiderNoHeader>
       <View style={styles.box}>
-        <Text style={{ ...Typography.headerText }}>Define the rules</Text>
+        <Text style={{ ...Typography.headerText }}>What is the challenge?</Text>
+        <Text style={styles.descriptionText}>{generateRuleChallengeDescription(fields, rules, endDate)}</Text>
         <Divider />
         <View>
           {fields.map((field, index) => {
@@ -166,6 +168,11 @@ const styles = StyleSheet.create({
     width: '100%',
     borderRadius: Spacing.smaller,
     padding: Spacing.base,
+  },
+  descriptionText: {
+    ...Typography.bodyText,
+    fontStyle: 'italic',
+    paddingVertical: Spacing.small,
   },
   section: {
     paddingVertical: Spacing.small,
