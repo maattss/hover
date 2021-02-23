@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, TouchableOpacity, TextStyle, ViewStyle } from '
 import { Avatar } from 'react-native-elements';
 import { useUpdateChallengeParticipationMutation } from '../../graphql/mutations/UpdateChallengeParticipation.generated';
 import { generateDescription } from '../../helpers/decriptionHelper';
+import { defaultUserProfile } from '../../helpers/objectMappers';
 import { Colors, Typography, Spacing, Buttons } from '../../theme';
 import { Challenge } from '../../types/challengeTypes';
 import { Challenge_Participant_State_Enum } from '../../types/types';
@@ -80,7 +81,11 @@ const PendingChallengeCard: React.FC<PendingChallengeCardProps> = ({ challenge }
       <TouchableProfile user_id={challenge.created_by.id} name={challenge.created_by.name}>
         <View style={styles.row}>
           <View style={styles.avatar}>
-            <Avatar rounded source={{ uri: challenge.created_by.picture ?? '' }} size="medium" />
+            <Avatar
+              rounded
+              source={{ uri: challenge.created_by.picture ?? defaultUserProfile.picture }}
+              size="medium"
+            />
           </View>
           <View style={styles.infoContainer}>
             <Text style={styles.nameText}>{challenge.created_by.name}</Text>
@@ -95,7 +100,7 @@ const PendingChallengeCard: React.FC<PendingChallengeCardProps> = ({ challenge }
             <TouchableProfile key={opponent.user.id} user_id={opponent.user.id} name={opponent.user.name}>
               <View style={styles.opponentRow}>
                 <View style={styles.opponentAvatar}>
-                  <Avatar rounded source={{ uri: opponent.user.picture ?? '' }} size="medium" />
+                  <Avatar rounded source={{ uri: opponent.user.picture ?? defaultUserProfile.picture }} size="medium" />
                 </View>
                 <View style={styles.oppnentNameStateRow}>
                   <Text style={styles.opponentNameText}>{opponent.user.name}</Text>

@@ -9,6 +9,7 @@ import { generateOngoingChallengeDescription } from '../../helpers/decriptionHel
 import { Challenge_Participant_State_Enum, Challenge_Type_Enum } from '../../types/types';
 import { OpponentFragmentFragment, ChallengeFeedFragmentFragment } from '../../graphql/Fragments.generated';
 import TouchableProfile from '../general/TouchableProfile';
+import { defaultUserProfile } from '../../helpers/objectMappers';
 
 interface ChallengeOpponentsProps {
   challenge: Challenge | ChallengeFeedFragmentFragment;
@@ -38,7 +39,7 @@ export const ChallengeOpponents: React.FC<ChallengeOpponentsProps> = ({ challeng
             <TouchableProfile key={index} user_id={opponent.user.id} name={opponent.user.name}>
               <View style={styles.opponentRow}>
                 <View style={styles.opponentAvatar}>
-                  <Avatar rounded source={{ uri: opponent.user.picture ?? '' }} size="small" />
+                  <Avatar rounded source={{ uri: opponent.user.picture ?? defaultUserProfile.picture }} size="small" />
                 </View>
                 <View style={styles.opponentInfo}>
                   <View style={styles.opponentNameStateRow}>
@@ -84,7 +85,11 @@ const OngoingChallengeCard: React.FC<OngoingChallengeCardProps> = ({ challenge }
       <TouchableProfile user_id={challenge.created_by.id} name={challenge.created_by.name}>
         <View style={styles.row}>
           <View style={styles.avatar}>
-            <Avatar rounded source={{ uri: challenge.created_by.picture ?? '' }} size="medium" />
+            <Avatar
+              rounded
+              source={{ uri: challenge.created_by.picture ?? defaultUserProfile.picture }}
+              size="medium"
+            />
           </View>
           <View style={styles.infoContainer}>
             <Text style={styles.nameText}>{challenge.created_by.name}</Text>
