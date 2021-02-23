@@ -143,11 +143,19 @@ const TrackingScreen: React.FC = () => {
       <KeyboardAvoidingView style={styles.infoContainer}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View>
-            <View style={styles.collabInfo}>
+            <View style={[styles.collabInfo, { display: collabInfoHidden ? 'none' : 'flex' }]}>
               {join && !isEnabled && (
                 <View>
-                  <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                    <Button title={'Back'} onPress={() => setJoin(false)} />
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      paddingBottom: Spacing.small,
+                    }}>
+                    <View style={{ marginLeft: -Spacing.smaller, marginTop: -Spacing.smallest }}>
+                      <Button title={'Back'} onPress={() => setJoin(false)} />
+                    </View>
+
                     <TouchableOpacity onPress={showInfoPopup}>
                       <FAIcon name={'info-circle'} style={styles.icon} />
                     </TouchableOpacity>
@@ -191,16 +199,11 @@ const TrackingScreen: React.FC = () => {
                       <Text style={styles.collabHeader}>Hover with friend</Text>
                       <Text style={styles.collabSubHeader}>Get started to earn 2x points!</Text>
                     </View>
-                    <View>
-                      <TouchableOpacity onPress={showInfoPopup}>
-                        <FAIcon name={'info-circle'} style={styles.icon} />
-                      </TouchableOpacity>
-                      <TouchableOpacity onPress={() => setCollabInfoHidden(!collabInfoHidden)}>
-                        <FAIcon name={collabInfoHidden ? 'chevron-up' : 'chevron-down'} style={styles.icon} />
-                      </TouchableOpacity>
-                    </View>
+                    <TouchableOpacity onPress={showInfoPopup}>
+                      <FAIcon name={'info-circle'} style={styles.icon} />
+                    </TouchableOpacity>
                   </View>
-                  <View style={[styles.collabButtonsContainer, { display: collabInfoHidden ? 'none' : 'flex' }]}>
+                  <View style={styles.collabButtonsContainer}>
                     <CustomButton style={styles.collabButton} onPress={startFriendTracking}>
                       Start session
                     </CustomButton>
@@ -211,20 +214,10 @@ const TrackingScreen: React.FC = () => {
                 </>
               )}
               {isEnabled && (
-                <View>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
-                      marginHorizontal: Spacing.smaller,
-                    }}>
-                    <Text style={styles.collabHeader}>Hover with friends</Text>
-                    <TouchableOpacity onPress={() => setCollabInfoHidden(!collabInfoHidden)}>
-                      <FAIcon name={collabInfoHidden ? 'chevron-up' : 'chevron-down'} style={styles.icon} />
-                    </TouchableOpacity>
-                  </View>
+                <View style={{ marginHorizontal: Spacing.smaller }}>
+                  <Text style={styles.collabHeader}>Hover with friends</Text>
 
-                  <View style={{ display: collabInfoHidden ? 'none' : 'flex', marginHorizontal: Spacing.smaller }}>
+                  <View>
                     <Text style={styles.collabSubHeader}>Earning 2x points together with</Text>
                     <View style={{ flexDirection: 'row', justifyContent: 'flex-start', marginVertical: Spacing.small }}>
                       <Avatar
@@ -247,7 +240,7 @@ const TrackingScreen: React.FC = () => {
                   width: '100%',
                   paddingHorizontal: Spacing.small,
                 }}>
-                {!isEnabled && (
+                {isEnabled && (
                   <View
                     style={{
                       borderStyle: 'solid',
@@ -274,7 +267,7 @@ const TrackingScreen: React.FC = () => {
                 <Text style={[styles.headerText, { lineHeight: 60 }]}>Tracking...</Text>
                 <TouchableOpacity
                   onPress={() => setCollabInfoHidden(!collabInfoHidden)}
-                  style={{ height: 80, width: 50, justifyContent: 'center', alignItems: 'flex-end' }}>
+                  style={{ height: 80, width: 50, justifyContent: 'center', alignItems: 'center' }}>
                   <FAIcon name={collabInfoHidden ? 'chevron-up' : 'chevron-down'} style={styles.icon} />
                 </TouchableOpacity>
               </View>
