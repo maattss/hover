@@ -114,9 +114,8 @@ export const generateNewChallengeDescription = (
  */
 
 export const generateFeedChallengeDescription = (challenge: ChallengeFeedFragmentFragment) => {
-  let description =
-    'won the ' + challenge.challenge_type.toLowerCase().toString().replace('_', ' in ') + ' challenge! ';
-  description += 'The challenge was to ';
+  let description = 'Won the ' + challenge.challenge_type.toLowerCase().toString().replace('_', ' in ') + ' challenge!';
+  description += 'The challenge was to';
   description += challenge.rules.score ? ' get ' + challenge.rules.score + ' points' : '';
   description += challenge.rules.time ? ' spend ' + challenge.rules.time + ' hours' : '';
   description += challenge.rules.category
