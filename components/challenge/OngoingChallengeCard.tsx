@@ -7,23 +7,39 @@ import { Challenge } from '../../types/challengeTypes';
 import { Avatar } from 'react-native-elements';
 import { generateOngoingChallengeDescription } from '../../helpers/decriptionHelper';
 import { Challenge_Participant_State_Enum, Challenge_Type_Enum } from '../../types/types';
-import { OpponentFragmentFragment } from '../../graphql/Fragments.generated';
+import { OpponentFragmentFragment, ChallengeFeedFragmentFragment } from '../../graphql/Fragments.generated';
+import TouchableProfile from '../general/TouchableProfile';
+import { defaultUserProfile } from '../../helpers/objectMappers';
 
-interface OngoingChallengeCardProps {
-  challenge: Challenge;
+interface ChallengeOpponentsProps {
+  challenge: Challenge | ChallengeFeedFragmentFragment;
 }
-
-const OngoingChallengeCard: React.FC<OngoingChallengeCardProps> = ({ challenge }: OngoingChallengeCardProps) => {
-  const Opponents = () => {
-    return (
-      <View style={styles.row}>
-        <View>
-          <Text style={styles.opponentHeaderText}>Challenge partcicipants</Text>
-          {challenge.opponents.map((opponent, index) => {
-            return (
-              <View key={index} style={styles.opponentRow}>
+export const ChallengeOpponents: React.FC<ChallengeOpponentsProps> = ({ challenge }: ChallengeOpponentsProps) => {
+  const getProgressPercentage = (opponent: OpponentFragmentFragment) => {
+    let width = 0;
+    if (
+      challenge.challenge_type == Challenge_Type_Enum.Score ||
+      challenge.challenge_type == Challenge_Type_Enum.ScoreCategory
+    ) {
+      width = opponent.progress && challenge.rules.score ? (opponent.progress / challenge.rules.score) * 100 : 0;
+    } else if (
+      challenge.challenge_type == Challenge_Type_Enum.Time ||
+      challenge.challenge_type == Challenge_Type_Enum.TimeCategory
+    ) {
+      width = opponent.progress && challenge.rules.time ? (opponent.progress / challenge.rules.time) * 100 : 0;
+    }
+    return (width > 100 ? 100 : width) + '%';
+  };
+  return (
+    <View style={styles.row}>
+      <View>
+        <Text style={styles.opponentHeaderText}>Challenge partcicipants</Text>
+        {challenge.opponents.map((opponent, index) => {
+          return (
+            <TouchableProfile key={index} user_id={opponent.user.id} name={opponent.user.name}>
+              <View style={styles.opponentRow}>
                 <View style={styles.opponentAvatar}>
-                  <Avatar rounded source={{ uri: opponent.user.picture ?? '' }} size="small" />
+                  <Avatar rounded source={{ uri: opponent.user.picture ?? defaultUserProfile.picture }} size="small" />
                 </View>
                 <View style={styles.opponentInfo}>
                   <View style={styles.opponentNameStateRow}>
@@ -52,40 +68,37 @@ const OngoingChallengeCard: React.FC<OngoingChallengeCardProps> = ({ challenge }
                   </View>
                 </View>
               </View>
-            );
-          })}
-        </View>
+            </TouchableProfile>
+          );
+        })}
       </View>
-    );
-  };
-  const getProgressPercentage = (opponent: OpponentFragmentFragment) => {
-    let width = 0;
-    if (
-      challenge.challenge_type == Challenge_Type_Enum.Score ||
-      challenge.challenge_type == Challenge_Type_Enum.ScoreCategory
-    ) {
-      width = opponent.progress && challenge.rules.score ? (opponent.progress / challenge.rules.score) * 100 : 0;
-    } else if (
-      challenge.challenge_type == Challenge_Type_Enum.Time ||
-      challenge.challenge_type == Challenge_Type_Enum.TimeCategory
-    ) {
-      width = opponent.progress && challenge.rules.time ? (opponent.progress / challenge.rules.time) * 100 : 0;
-    }
-    return (width > 100 ? 100 : width) + '%';
-  };
+    </View>
+  );
+};
+interface OngoingChallengeCardProps {
+  challenge: Challenge;
+}
+
+const OngoingChallengeCard: React.FC<OngoingChallengeCardProps> = ({ challenge }: OngoingChallengeCardProps) => {
   return (
     <View style={styles.card}>
-      <View style={styles.row}>
-        <View style={styles.avatar}>
-          <Avatar rounded source={{ uri: challenge.created_by.picture ?? '' }} size="medium" />
+      <TouchableProfile user_id={challenge.created_by.id} name={challenge.created_by.name}>
+        <View style={styles.row}>
+          <View style={styles.avatar}>
+            <Avatar
+              rounded
+              source={{ uri: challenge.created_by.picture ?? defaultUserProfile.picture }}
+              size="medium"
+            />
+          </View>
+          <View style={styles.infoContainer}>
+            <Text style={styles.nameText}>{challenge.created_by.name}</Text>
+            <Text style={styles.captionText}>{generateOngoingChallengeDescription(challenge)}</Text>
+          </View>
         </View>
-        <View style={styles.infoContainer}>
-          <Text style={styles.nameText}>{challenge.created_by.name}</Text>
-          <Text style={styles.captionText}>{generateOngoingChallengeDescription(challenge)}</Text>
-        </View>
-      </View>
+      </TouchableProfile>
       <Divider />
-      <Opponents />
+      <ChallengeOpponents challenge={challenge as Challenge} />
       <Divider />
 
       <View style={styles.footer}>

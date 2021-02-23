@@ -6,6 +6,7 @@ import { StyleSheet } from 'react-native';
 import NotificationsScreen from '../screens/feed/NotificationsScreen';
 import { Typography } from '../theme';
 import FeedScreen from '../screens/feed/FeedScreen';
+import ProfileScreen from '../screens/profile/ProfileScreen';
 
 export const HeaderIcon = (props: { name: string; onPress: () => void }) => {
   return <FAIcon style={styles.headericon} {...props} />;
@@ -30,6 +31,13 @@ const FeedNavigator: React.FC = () => {
         options={{
           headerTitle: 'Notifications',
         }}
+      />
+      <FeedStack.Screen
+        name="UserProfile"
+        component={ProfileScreen}
+        options={({ route }) => ({
+          title: `${route.params.titleName}'s Profile`,
+        })}
       />
     </FeedStack.Navigator>
   );

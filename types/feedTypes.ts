@@ -1,5 +1,6 @@
 import {
   AchievementFragmentFragment,
+  ChallengeFeedFragmentFragment,
   FeedActivityFragmentFragment,
   ListUserFragmentFragment,
 } from '../graphql/Fragments.generated';
@@ -23,4 +24,11 @@ export type AchievementFeedData = {
   feedCategory: FeedCategory;
 };
 
-export type FeedData = ActivityFeedData | AchievementFeedData;
+export type ChallengeFeedData = {
+  user: ListUserFragmentFragment;
+  challenge: ChallengeFeedFragmentFragment;
+  createdAt: string;
+  feedCategory: FeedCategory;
+};
+
+export type FeedData = ActivityFeedData | AchievementFeedData | ChallengeFeedData;

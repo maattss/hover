@@ -38,7 +38,7 @@ export const getCategoryIconName = (category: GeoFenceCategory | undefined) => {
   }
 };
 
-const getAchievementColor = (level: number) => {
+export const getAchievementColor = (level: number) => {
   switch (level) {
     case 1:
       return Colors.gold;

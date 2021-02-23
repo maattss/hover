@@ -3,12 +3,19 @@ import { View, StyleSheet, RefreshControl, ListRenderItem, ActivityIndicator } f
 import ActivityFeedCard from '../../components/feed/ActivityFeedCard';
 import AchievementFeedCard from '../../components/feed/AchievementFeedCard';
 import { Typography, Spacing, Colors } from '../../theme';
-import { FeedData, FeedCategory, ActivityFeedData, AchievementFeedData } from '../../types/feedTypes';
+import {
+  FeedData,
+  FeedCategory,
+  ActivityFeedData,
+  AchievementFeedData,
+  ChallengeFeedData,
+} from '../../types/feedTypes';
 import { useFeedQuery } from '../../graphql/queries/Feed.generated';
 import { FlatList } from 'react-native-gesture-handler';
 import Loading from '../../components/general/Loading';
 import Error from '../../components/general/Error';
 import { convertToFeedData } from '../../helpers/objectMappers';
+import ChallengeFeedCard from '../../components/feed/ChallengeFeedCard';
 
 const getItem = (data: FeedData) => {
   if (data.feedCategory === FeedCategory.ACTIVITY) {
@@ -21,6 +28,13 @@ const getItem = (data: FeedData) => {
     return (
       <View style={styles.element}>
         <AchievementFeedCard data={data as AchievementFeedData} />
+      </View>
+    );
+  } else if (data.feedCategory === FeedCategory.CHALLENGE) {
+    console.log(data);
+    return (
+      <View style={styles.element}>
+        <ChallengeFeedCard data={data as ChallengeFeedData} />
       </View>
     );
   }
