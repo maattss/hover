@@ -11,6 +11,7 @@ import { Buttons, Colors, Spacing, Typography } from '../../../theme';
 import Button from '../../../components/general/Button';
 import { StackNavigationProp } from '@react-navigation/stack';
 import Divider from '../../../components/general/Divider';
+import { defaultUserProfile } from '../../../helpers/objectMappers';
 
 type PickUsersRouteProp = RouteProp<NewChallengeStackParamList, 'PickUsers'>;
 type NavigationProp = StackNavigationProp<NewChallengeStackParamList>;
@@ -111,7 +112,7 @@ const FriendItem: React.FC<FriendItemProps> = (props: FriendItemProps) => {
       <Avatar
         rounded
         source={{
-          uri: props.item.picture ?? '',
+          uri: props.item.picture ?? defaultUserProfile.picture,
         }}
       />
       <Text style={styles.label}>{props.item.name}</Text>

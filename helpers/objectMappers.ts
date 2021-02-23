@@ -8,7 +8,7 @@ import { Item } from '../components/leaderboard/Leaderboard';
 import { HighscoreQuery } from '../graphql/queries/Highscore.generated';
 import { ProfileUserQuery } from '../graphql/queries/ProfileUser.generated';
 import { UserProfile } from '../types/profileTypes';
-import { AchievementFeedData, ActivityFeedData, FeedCategory, FeedData } from '../types/feedTypes';
+import { AchievementFeedData, ActivityFeedData, ChallengeFeedData, FeedCategory, FeedData } from '../types/feedTypes';
 import { Asset } from 'expo-asset';
 import { Challenge_State_Enum, Challenge_Type_Enum } from '../types/types';
 import { Challenge } from '../types/challengeTypes';
@@ -16,6 +16,7 @@ import { GetChallengesQuery } from '../graphql/queries/GetChallenges.generated';
 import {
   AchievementFragmentFragment,
   ActivityFragmentFragment,
+  ChallengeFeedFragmentFragment,
   ChallengeFragmentFragment,
   GeofenceFragmentFragment,
   ListUserFragmentFragment,
@@ -208,6 +209,8 @@ export const convertToFeedData = (data: FeedQuery) => {
       feedData.push(convertToActivityFeedData(obj.activity, obj.user, obj.created_at));
     } else if (obj.user_achievement && obj.user_achievement.achievement) {
       feedData.push(convertToAchievementFeedData(obj.user_achievement.achievement, obj.user, obj.created_at));
+    } else if (obj.challenge) {
+      feedData.push(convertToChallengeFeedData(obj.challenge, obj.user, obj.created_at));
     } else {
       console.log('This feed element does not have a linked activity or achievement.');
     }
@@ -237,4 +240,16 @@ export const convertToAchievementFeedData = (
     createdAt: createdAt,
     feedCategory: FeedCategory.ACHIEVEMENT,
   } as AchievementFeedData;
+};
+export const convertToChallengeFeedData = (
+  challenge: ChallengeFeedFragmentFragment,
+  user: ListUserFragmentFragment | null | undefined,
+  createdAt: string,
+) => {
+  return {
+    challenge: challenge,
+    user: user,
+    createdAt: createdAt,
+    feedCategory: FeedCategory.CHALLENGE,
+  } as ChallengeFeedData;
 };

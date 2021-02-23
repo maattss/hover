@@ -12,9 +12,17 @@ import { convertToUserProfile, defaultUserProfile } from '../../helpers/objectMa
 import Error from '../../components/general/Error';
 import Loading from '../../components/general/Loading';
 import { getGeoFenceImage } from '../../helpers/geoFenceCalculations';
+import { RouteProp } from '@react-navigation/native';
+import { FeedStackParamList, ProfileStackParamList } from '../../types/navigationTypes';
 
-const ProfileScreen: React.FC = () => {
-  const id = useAuthentication().user?.uid;
+type FeedRouteProp = RouteProp<FeedStackParamList, 'UserProfile'>;
+type ProfileRouteProp = RouteProp<ProfileStackParamList, 'Profile'>;
+
+type Props = {
+  route: ProfileRouteProp | FeedRouteProp;
+};
+const ProfileScreen: React.FC<Props> = ({ route }: Props) => {
+  const id = route && route.params && route.params.user_id ? route.params.user_id : useAuthentication().user?.uid;
   if (id) {
     const [userProfile, setUserProfile] = useState<UserProfile>(defaultUserProfile);
     const [refreshing, setRefreshing] = useState(false);

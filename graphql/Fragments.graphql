@@ -88,6 +88,13 @@ fragment challengeFragment on challenge {
   }
 }
 
+fragment challengeFeedFragment on challenge {
+  ...challengeFragment
+  winner {
+    ...listUserFragment
+  }
+}
+
 fragment achievementFragment on achievement {
   id
   description
@@ -164,6 +171,9 @@ fragment fullFeedFragment on feed {
     achievement {
       ...achievementFragment
     }
+  }
+  challenge {
+    ...challengeFeedFragment
   }
   created_at
 }

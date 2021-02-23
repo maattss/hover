@@ -1,7 +1,9 @@
 import { ApolloQueryResult } from '@apollo/client';
 import React, { useState, useEffect } from 'react';
-import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { FlatList, StyleSheet, Text, TextStyle, TouchableOpacity, View, ViewStyle } from 'react-native';
+import { Avatar } from 'react-native-elements';
 import { HighscoreQuery } from '../../graphql/queries/Highscore.generated';
+import { defaultUserProfile } from '../../helpers/objectMappers';
 import { Colors, Spacing, Typography } from '../../theme';
 
 interface SortParam {
@@ -14,12 +16,13 @@ interface LeaderboardProps {
   sort?: (data: Item[]) => [];
   onRowPress?: (item: Item, index: number) => void;
   renderItem?: (item: Item, index: number) => JSX.Element;
-  containerStyle?: Record<string, unknown>;
-  rowStyle?: Record<string, unknown>;
-  scoreStyle?: Record<string, unknown>;
-  rankStyle?: Record<string, unknown>;
-  labelStyle?: Record<string, unknown>;
-  avatarStyle?: Record<string, unknown>;
+  seperator?: React.FC;
+  containerStyle?: ViewStyle;
+  rowStyle?: ViewStyle;
+  scoreStyle?: TextStyle;
+  rankStyle?: TextStyle;
+  labelStyle?: TextStyle;
+  avatarStyle?: ViewStyle;
   oddRowColor?: string;
   evenRowColor?: string;
   refetch?: () => Promise<ApolloQueryResult<HighscoreQuery>>;
@@ -52,7 +55,15 @@ const Leaderboard: React.FC<LeaderboardProps> = (props: LeaderboardProps) => {
             style={[styles.text, styles.rank, props.rankStyle, index < 9 ? styles.singleDidget : styles.doubleDidget]}>
             {index + 1}
           </Text>
-          {item.picture && <Image source={{ uri: item.picture }} style={[styles.avatar, props.avatarStyle]} />}
+          {item.picture && (
+            <View style={[styles.avatar, props.avatarStyle]}>
+              <Avatar
+                rounded
+                source={{ uri: item.picture ? item.picture : defaultUserProfile.picture }}
+                size={'small'}
+              />
+            </View>
+          )}
           <Text style={[styles.text, styles.label, props.labelStyle]} numberOfLines={1}>
             {item.name}
           </Text>
@@ -72,13 +83,13 @@ const Leaderboard: React.FC<LeaderboardProps> = (props: LeaderboardProps) => {
     props.renderItem ? props.renderItem(item, index) : defaultRenderItem(item, index);
 
   return (
-    <View style={styles.container}>
-      <FlatList
-        data={sortedData}
-        keyExtractor={(_, index) => index.toString()}
-        renderItem={({ item, index }) => renderItemS(item, index)}
-      />
-    </View>
+    <FlatList
+      contentContainerStyle={[props.containerStyle, styles.container]}
+      data={sortedData}
+      keyExtractor={(_, index) => index.toString()}
+      renderItem={({ item, index }) => renderItemS(item, index)}
+      ItemSeparatorComponent={props.seperator}
+    />
   );
 };
 
@@ -100,13 +111,10 @@ export const sortData = (sortParam: SortParam) => {
 
 const styles = StyleSheet.create({
   container: {
-    justifyContent: 'center',
-    alignItems: 'center',
     flex: 1,
   },
   row: {
-    paddingTop: Spacing.base,
-    paddingBottom: 15,
+    paddingVertical: Spacing.small,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -116,17 +124,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   rank: {
-    fontSize: 17,
-    fontWeight: 'bold',
-    marginRight: 5,
+    ...Typography.headerText,
+    fontSize: 20,
+    marginRight: Spacing.smallest,
   },
   singleDidget: {
     paddingLeft: Spacing.base,
-    paddingRight: 6,
+    paddingRight: Spacing.smaller,
   },
   doubleDidget: {
-    paddingLeft: 10,
-    paddingRight: 2,
+    paddingLeft: Spacing.small,
+    paddingRight: Spacing.tiny,
   },
   label: {
     fontSize: 17,
@@ -134,17 +142,14 @@ const styles = StyleSheet.create({
     paddingRight: 80,
   },
   score: {
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: 'bold',
     position: 'absolute',
-    right: 15,
+    right: Spacing.base,
     paddingLeft: Spacing.base,
   },
   avatar: {
-    height: 30,
-    width: 30,
-    borderRadius: 30 / 2,
-    marginRight: 10,
+    marginRight: Spacing.small,
   },
   text: {
     ...Typography.bodyText,

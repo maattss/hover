@@ -8,6 +8,7 @@ import GeoFences from '../map/GeoFences';
 import { getGeoFenceImage } from '../../helpers/geoFenceCalculations';
 import { convertToGeoFence, defaultUserProfile } from '../../helpers/objectMappers';
 import { GeoFenceCategory } from '../../types/geoFenceTypes';
+import TouchableProfile from '../general/TouchableProfile';
 
 interface ActivityFeedCardProps {
   data: ActivityFeedData;
@@ -27,16 +28,18 @@ const ActivityFeedCard: React.FC<ActivityFeedCardProps> = ({ data }: ActivityFee
   const activityGeoFence = convertToGeoFence(data.activity.geofence);
   return (
     <View style={styles.card}>
-      <View style={styles.topBar}>
-        <Image
-          source={{ uri: data.user.picture ? data.user.picture : defaultUserProfile.picture }}
-          style={styles.avatar}
-        />
-        <View>
-          <Text style={styles.nameText}>{data.user.name}</Text>
-          <Text style={styles.captionText}>{data.activity.caption}</Text>
+      <TouchableProfile user_id={data.user.id} name={data.user.name}>
+        <View style={styles.topBar}>
+          <Image
+            source={{ uri: data.user.picture ? data.user.picture : defaultUserProfile.picture }}
+            style={styles.avatar}
+          />
+          <View>
+            <Text style={styles.nameText}>{data.user.name}</Text>
+            <Text style={styles.captionText}>{data.activity.caption}</Text>
+          </View>
         </View>
-      </View>
+      </TouchableProfile>
       <View style={styles.main}>
         <View style={styles.category}>
           <Image
