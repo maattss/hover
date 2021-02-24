@@ -28,60 +28,67 @@ const PublishScreen: React.FC = () => {
 
   return (
     <KeyboardAvoiderNoHeader>
-      <View style={styles.topBar}>
-        <View style={styles.topBarIcon}>
-          <FAIcon name={'question-circle'} style={styles.questionIcon} />
-        </View>
+      <View style={styles.container}>
+        <View style={styles.topBar}>
+          <View style={styles.topBarIcon}>
+            <FAIcon name={'question-circle'} style={styles.questionIcon} />
+          </View>
 
-        <View style={styles.resumeDiscardContainer}>
-          <Text style={styles.infoTextSmall}>Not ready to publish{'\n'}this activity yet?</Text>
-          <View style={styles.resumeDiscardButtons}>
-            <TouchableOpacity style={[styles.resumeButton, { backgroundColor: Colors.green }]} onPress={resumeTracking}>
-              <Text style={{ ...Buttons.buttonText }}>Resume</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.discardButton} onPress={discardActivity}>
-              <Text style={{ ...Buttons.buttonText }}>Discard</Text>
-            </TouchableOpacity>
+          <View style={styles.resumeDiscardContainer}>
+            <Text style={styles.infoTextSmall}>Not ready to publish{'\n'}this activity yet?</Text>
+            <View style={styles.resumeDiscardButtons}>
+              <TouchableOpacity
+                style={[styles.resumeButton, { backgroundColor: Colors.green }]}
+                onPress={resumeTracking}>
+                <Text style={{ ...Buttons.buttonText }}>Resume</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.discardButton} onPress={discardActivity}>
+                <Text style={{ ...Buttons.buttonText }}>Discard</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
-      </View>
 
-      <View style={styles.summaryContainer}>
-        <Text style={styles.infoScore}>{Math.floor(tracking.score)} points</Text>
-        <View style={styles.infoContainer}>
-          <Text style={styles.infoText}>Duration</Text>
-          <Text style={styles.infoTextSmall}>{durationToTimestamp(tracking.duration)}</Text>
-        </View>
-        <View style={styles.infoContainer}>
-          <Text style={styles.infoText}>Started at</Text>
-          <Text style={styles.infoTextSmall}>{timeStampToHours(tracking.trackingStart)}</Text>
-        </View>
-        <View style={styles.infoContainer}>
-          <Text style={styles.infoText}>Location</Text>
-          <Text style={styles.infoTextSmall}>{tracking.insideGeoFence?.name}</Text>
-        </View>
-        <View style={[styles.infoContainer, { marginBottom: 0 }]}>
-          <Text style={styles.infoText}>Category</Text>
-          <Image source={{ uri: getGeoFenceImage(tracking.insideGeoFence?.category) }} style={styles.categoryIcon} />
-        </View>
+        <View style={styles.summaryContainer}>
+          <Text style={styles.infoScore}>{Math.floor(tracking.score)} points</Text>
+          <View style={styles.infoContainer}>
+            <Text style={styles.infoText}>Duration</Text>
+            <Text style={styles.infoTextSmall}>{durationToTimestamp(tracking.duration)}</Text>
+          </View>
+          <View style={styles.infoContainer}>
+            <Text style={styles.infoText}>Started at</Text>
+            <Text style={styles.infoTextSmall}>{timeStampToHours(tracking.trackingStart)}</Text>
+          </View>
+          <View style={styles.infoContainer}>
+            <Text style={styles.infoText}>Location</Text>
+            <Text style={styles.infoTextSmall}>{tracking.insideGeoFence?.name}</Text>
+          </View>
+          <View style={[styles.infoContainer, { marginBottom: 0 }]}>
+            <Text style={styles.infoText}>Category</Text>
+            <Image source={{ uri: getGeoFenceImage(tracking.insideGeoFence?.category) }} style={styles.categoryIcon} />
+          </View>
 
-        <TextInput
-          placeholder="Insert a funny text that describes the activity!"
-          placeholderTextColor={Colors.gray600}
-          onChangeText={(val) => setCaption(val)}
-          style={styles.formField}
-          multiline>
-          {caption}
-        </TextInput>
+          <TextInput
+            placeholder="Insert a funny text that describes the activity!"
+            placeholderTextColor={Colors.gray600}
+            onChangeText={(val) => setCaption(val)}
+            style={styles.formField}
+            multiline>
+            {caption}
+          </TextInput>
+        </View>
+        <Button onPress={publishActivity}>
+          <Text style={styles.publishButtonText}>Publish</Text>
+        </Button>
       </View>
-      <Button onPress={publishActivity}>
-        <Text style={styles.publishButtonText}>Publish</Text>
-      </Button>
     </KeyboardAvoiderNoHeader>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    padding: Spacing.base,
+  },
   categoryIcon: {
     height: 50,
     width: 50,
@@ -117,9 +124,6 @@ const styles = StyleSheet.create({
     paddingTop: Spacing.small,
     marginVertical: Spacing.smaller,
     backgroundColor: Colors.gray900,
-  },
-  publishButtonContainer: {
-    marginBottom: 0,
   },
   publishButton: {
     ...Buttons.button,
