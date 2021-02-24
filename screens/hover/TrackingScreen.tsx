@@ -11,7 +11,6 @@ import {
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
   Keyboard,
-  Platform,
 } from 'react-native';
 import { uniqueNamesGenerator, Config, adjectives, animals } from 'unique-names-generator';
 import { Colors, Spacing, Typography, Buttons } from '../../theme';
@@ -25,11 +24,18 @@ import { useUpdateFriendTrackingMutation } from '../../graphql/mutations/UpdateF
 import useAuthentication from '../../hooks/useAuthentication';
 import { useInsertFriendTrackingMutation } from '../../graphql/mutations/InserFriendTracking.generated';
 import { useGetFriendTrackingLazyQuery } from '../../graphql/queries/GetFriendTracking.generated';
-import moment from 'moment';
 import { defaultUserProfile } from '../../helpers/objectMappers';
 import { Avatar } from 'react-native-elements';
 import { ListUserFragmentFragment } from '../../graphql/Fragments.generated';
 import { getCurrentTimestamp } from '../../helpers/dateTimeHelpers';
+import { useInterval } from '../../hooks/useInterval';
+
+enum HoverWithFriendState {
+  NONE,
+  STARTING,
+  JOINING,
+  ONGOING,
+}
 
 const wordConfig: Config = {
   dictionaries: [adjectives, animals],
@@ -41,8 +47,7 @@ const wordConfig: Config = {
 const TrackingScreen: React.FC = () => {
   const tracking = useTracking();
   const auth = useAuthentication();
-  const [join, setJoin] = useState(false);
-  const [start, setStart] = useState(false);
+
   const stopTracking = () => tracking.pauseTracking();
   const score = Math.floor(tracking.score);
   const progress = tracking.score - score;
@@ -51,7 +56,7 @@ const TrackingScreen: React.FC = () => {
   const [friendCollabCode, setFriendCollabCode] = useState('');
   const [trackingWithFriendId, setTrackingWithFriendId] = useState<number | undefined>();
   const [friend, setFriend] = useState<ListUserFragmentFragment>();
-  const [isEnabled, setIsEnabled] = useState(false);
+  const [collabState, setCollabState] = useState<HoverWithFriendState>(HoverWithFriendState.NONE);
   const [collabInfoHidden, setCollabInfoHidden] = useState(false);
 
   const [UpdateFriendTracking] = useUpdateFriendTrackingMutation();
@@ -65,13 +70,23 @@ const TrackingScreen: React.FC = () => {
     if (error) console.error(error.message);
   }, [data, error]);
 
+  // Refresh friend data every 5 seconds if session is ongoing
+  useInterval(() => refreshFriendData, collabState === HoverWithFriendState.ONGOING ? 5000 : null);
+
   const showInfoPopup = () =>
     Alert.alert(
       'Hover together with a friend and earn 2x points!',
       'Start a session to get a code you can share, or ' + 'join a friends by entering their code.',
     );
 
-  const refreshData = () => {
+  const updateFriendData = (friend: ListUserFragmentFragment) => {
+    setFriend(friend);
+    tracking.setFriendId(friend.id);
+    tracking.updateDoubleScore(true);
+    setCollabState(HoverWithFriendState.ONGOING);
+  };
+
+  const refreshFriendData = () => {
     if (trackingWithFriendId) {
       getFriend({
         variables: {
@@ -81,13 +96,6 @@ const TrackingScreen: React.FC = () => {
     } else {
       console.error('Undefined trackingWithFriendId...');
     }
-  };
-
-  const updateFriendData = (friend: ListUserFragmentFragment) => {
-    setFriend(friend);
-    tracking.setFriendId(friend.id);
-    tracking.updateDoubleScore(true);
-    setIsEnabled(true);
   };
 
   const startFriendTracking = async () => {
@@ -102,7 +110,7 @@ const TrackingScreen: React.FC = () => {
         });
         setTrackingWithFriendId(response.data?.insert_friend_tracking_one?.id);
       }
-      setStart(true);
+      setCollabState(HoverWithFriendState.STARTING);
     } catch (error) {
       console.error('Mutation error', error.message);
       Alert.alert('Something went wrong...');
@@ -124,7 +132,6 @@ const TrackingScreen: React.FC = () => {
       console.log('Response', response);
       const friend = response.data?.update_friend_tracking?.returning[0].user_start;
       if (friend) updateFriendData(friend);
-      setJoin(false);
     } catch (error) {
       console.error('Mutation error', error.message);
       Alert.alert(
@@ -144,9 +151,9 @@ const TrackingScreen: React.FC = () => {
       <KeyboardAvoidingView style={styles.infoContainer}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View>
-            {!collabInfoHidden && (
+            {!collabInfoHidden && !collabInfoHidden && (
               <View style={styles.collabInfo}>
-                {join && !isEnabled && !collabInfoHidden && (
+                {collabState === HoverWithFriendState.JOINING && (
                   <>
                     <View
                       style={{
@@ -155,7 +162,7 @@ const TrackingScreen: React.FC = () => {
                         paddingBottom: Spacing.small,
                       }}>
                       <View style={{ marginLeft: -Spacing.smaller, marginTop: -Spacing.smallest }}>
-                        <Button title={'Back'} onPress={() => setJoin(false)} />
+                        <Button title={'Back'} onPress={() => setCollabState(HoverWithFriendState.NONE)} />
                       </View>
 
                       <TouchableOpacity onPress={showInfoPopup}>
@@ -175,11 +182,12 @@ const TrackingScreen: React.FC = () => {
                     <CustomButton onPress={joinFriendTracking}>Join</CustomButton>
                   </>
                 )}
-                {start && !isEnabled && (
+
+                {collabState === HoverWithFriendState.STARTING && (
                   <>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                      <Button title={'Back'} onPress={() => setStart(false)} />
-                      <TouchableOpacity onPress={refreshData} style={styles.iconButton}>
+                      <Button title={'Back'} onPress={() => setCollabState(HoverWithFriendState.NONE)} />
+                      <TouchableOpacity onPress={refreshFriendData} style={styles.iconButton}>
                         <FAIcon name={'sync'} style={styles.iconBlue} />
                       </TouchableOpacity>
                     </View>
@@ -194,7 +202,7 @@ const TrackingScreen: React.FC = () => {
                   </>
                 )}
 
-                {!join && !start && !isEnabled && !collabInfoHidden && (
+                {collabState === HoverWithFriendState.NONE && !collabInfoHidden && (
                   <>
                     <View style={styles.collabTopBar}>
                       <View>
@@ -216,13 +224,16 @@ const TrackingScreen: React.FC = () => {
                       <CustomButton style={styles.collabButton} onPress={startFriendTracking}>
                         Start session
                       </CustomButton>
-                      <CustomButton style={styles.collabButton} onPress={() => setJoin(true)}>
+                      <CustomButton
+                        style={styles.collabButton}
+                        onPress={() => setCollabState(HoverWithFriendState.JOINING)}>
                         Join friend
                       </CustomButton>
                     </View>
                   </>
                 )}
-                {isEnabled && (
+
+                {collabState === HoverWithFriendState.ONGOING && !collabInfoHidden && (
                   <View style={{ marginHorizontal: Spacing.smaller }}>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                       <Text style={styles.collabHeader}>Hover with friend</Text>
@@ -266,7 +277,7 @@ const TrackingScreen: React.FC = () => {
                   width: '100%',
                   marginBottom: Spacing.smaller,
                 }}>
-                {isEnabled && (
+                {collabState === HoverWithFriendState.ONGOING && (
                   <View
                     style={{
                       borderStyle: 'solid',
