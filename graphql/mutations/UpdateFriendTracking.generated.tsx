@@ -42,7 +42,13 @@ export const UpdateFriendTrackingDocument = gql`
     update_friend_tracking(
       where: {
         linking_word: { _eq: $linking_word }
-        _and: { join_limit: { _gte: $timestamp }, _and: { geofence_id: { _eq: $geofence_id } } }
+        _and: {
+          join_limit: { _gte: $timestamp }
+          _and: {
+            geofence_id: { _eq: $geofence_id }
+            _and: { user_start_id: { _is_null: true }, _and: { user_start_id: { _neq: $user_id } } }
+          }
+        }
       }
       _set: { user_join_id: $user_id }
     ) {

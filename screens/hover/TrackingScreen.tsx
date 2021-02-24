@@ -70,8 +70,8 @@ const TrackingScreen: React.FC = () => {
     if (error) console.error(error.message);
   }, [data, error]);
 
-  // Refresh friend data every 5 seconds if session is ongoing
-  useInterval(() => refreshFriendData, collabState === HoverWithFriendState.ONGOING ? 5000 : null);
+  // Refresh friend data every 5 seconds if session is STARTING
+  useInterval(() => refreshFriendData(), collabState === HoverWithFriendState.STARTING ? 5000 : null);
 
   const showInfoPopup = () =>
     Alert.alert(
@@ -87,6 +87,7 @@ const TrackingScreen: React.FC = () => {
   };
 
   const refreshFriendData = () => {
+    console.log('REfresh friend data');
     if (trackingWithFriendId) {
       getFriend({
         variables: {
@@ -274,7 +275,7 @@ const TrackingScreen: React.FC = () => {
               </View>
               <View style={styles.progressBarLabels}>
                 <Text style={styles.label}>Points</Text>
-                <View style={{ flex: 1 }} />
+                <View style={{ width: 240 }} />
                 <Text style={styles.label}>Next</Text>
               </View>
 
@@ -467,18 +468,18 @@ const styles = StyleSheet.create({
   progressBarLabels: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: Spacing.base,
+    justifyContent: 'space-between',
   },
   progressBar: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-evenly',
+    justifyContent: 'center',
     width: '100%',
   },
   scoreText: {
     ...Typography.headerText,
     marginVertical: Spacing.small,
+    marginHorizontal: Spacing.largest,
   },
   stopButtonContainer: {
     justifyContent: 'center',
