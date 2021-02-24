@@ -46,7 +46,7 @@ export const UpdateFriendTrackingDocument = gql`
           join_limit: { _gte: $timestamp }
           _and: {
             geofence_id: { _eq: $geofence_id }
-            _and: { user_start_id: { _is_null: true }, _and: { user_start_id: { _neq: $user_id } } }
+            _and: { user_join_id: { _is_null: true }, _and: { user_start_id: { _neq: $user_id } } }
           }
         }
       }
