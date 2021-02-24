@@ -16,7 +16,7 @@ import * as Apollo from '@apollo/client';
 export type UpdateFriendTrackingMutationVariables = Types.Exact<{
   linking_word: Types.Scalars['String'];
   user_id: Types.Scalars['String'];
-  date: Types.Scalars['date'];
+  join_limit: Types.Scalars['timestamptz'];
   geofence_id: Types.Scalars['Int'];
 }>;
 
@@ -33,11 +33,16 @@ export type UpdateFriendTrackingMutation = { readonly __typename: 'mutation_root
 };
 
 export const UpdateFriendTrackingDocument = gql`
-  mutation UpdateFriendTracking($linking_word: String!, $user_id: String!, $date: date!, $geofence_id: Int!) {
+  mutation UpdateFriendTracking(
+    $linking_word: String!
+    $user_id: String!
+    $join_limit: timestamptz!
+    $geofence_id: Int!
+  ) {
     update_friend_tracking(
       where: {
         linking_word: { _eq: $linking_word }
-        _and: { date: { _eq: $date }, _and: { geofence_id: { _eq: $geofence_id } } }
+        _and: { join_limit: { _lte: $join_limit }, _and: { geofence_id: { _eq: $geofence_id } } }
       }
       _set: { user_join_id: $user_id }
     ) {
@@ -66,7 +71,7 @@ export const UpdateFriendTrackingDocument = gql`
  *   variables: {
  *      linking_word: // value for 'linking_word'
  *      user_id: // value for 'user_id'
- *      date: // value for 'date'
+ *      join_limit: // value for 'join_limit'
  *      geofence_id: // value for 'geofence_id'
  *   },
  * });

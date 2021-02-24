@@ -3654,9 +3654,9 @@ export enum Followings_Update_Column {
 export type Friend_Tracking = {
   __typename?: 'friend_tracking';
   created_at: Scalars['timestamptz'];
-  date: Scalars['date'];
   geofence_id: Scalars['Int'];
   id: Scalars['Int'];
+  join_limit?: Maybe<Scalars['timestamptz']>;
   linking_word: Scalars['String'];
   updated_at: Scalars['timestamptz'];
   /** An object relationship */
@@ -3736,9 +3736,9 @@ export type Friend_Tracking_Bool_Exp = {
   _not?: Maybe<Friend_Tracking_Bool_Exp>;
   _or?: Maybe<Array<Maybe<Friend_Tracking_Bool_Exp>>>;
   created_at?: Maybe<Timestamptz_Comparison_Exp>;
-  date?: Maybe<Date_Comparison_Exp>;
   geofence_id?: Maybe<Int_Comparison_Exp>;
   id?: Maybe<Int_Comparison_Exp>;
+  join_limit?: Maybe<Timestamptz_Comparison_Exp>;
   linking_word?: Maybe<String_Comparison_Exp>;
   updated_at?: Maybe<Timestamptz_Comparison_Exp>;
   user_join?: Maybe<Users_Bool_Exp>;
@@ -3762,9 +3762,9 @@ export type Friend_Tracking_Inc_Input = {
 /** input type for inserting data into table "friend_tracking" */
 export type Friend_Tracking_Insert_Input = {
   created_at?: Maybe<Scalars['timestamptz']>;
-  date?: Maybe<Scalars['date']>;
   geofence_id?: Maybe<Scalars['Int']>;
   id?: Maybe<Scalars['Int']>;
+  join_limit?: Maybe<Scalars['timestamptz']>;
   linking_word?: Maybe<Scalars['String']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
   user_join?: Maybe<Users_Obj_Rel_Insert_Input>;
@@ -3777,9 +3777,9 @@ export type Friend_Tracking_Insert_Input = {
 export type Friend_Tracking_Max_Fields = {
   __typename?: 'friend_tracking_max_fields';
   created_at?: Maybe<Scalars['timestamptz']>;
-  date?: Maybe<Scalars['date']>;
   geofence_id?: Maybe<Scalars['Int']>;
   id?: Maybe<Scalars['Int']>;
+  join_limit?: Maybe<Scalars['timestamptz']>;
   linking_word?: Maybe<Scalars['String']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
   user_join_id?: Maybe<Scalars['String']>;
@@ -3789,9 +3789,9 @@ export type Friend_Tracking_Max_Fields = {
 /** order by max() on columns of table "friend_tracking" */
 export type Friend_Tracking_Max_Order_By = {
   created_at?: Maybe<Order_By>;
-  date?: Maybe<Order_By>;
   geofence_id?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
+  join_limit?: Maybe<Order_By>;
   linking_word?: Maybe<Order_By>;
   updated_at?: Maybe<Order_By>;
   user_join_id?: Maybe<Order_By>;
@@ -3802,9 +3802,9 @@ export type Friend_Tracking_Max_Order_By = {
 export type Friend_Tracking_Min_Fields = {
   __typename?: 'friend_tracking_min_fields';
   created_at?: Maybe<Scalars['timestamptz']>;
-  date?: Maybe<Scalars['date']>;
   geofence_id?: Maybe<Scalars['Int']>;
   id?: Maybe<Scalars['Int']>;
+  join_limit?: Maybe<Scalars['timestamptz']>;
   linking_word?: Maybe<Scalars['String']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
   user_join_id?: Maybe<Scalars['String']>;
@@ -3814,9 +3814,9 @@ export type Friend_Tracking_Min_Fields = {
 /** order by min() on columns of table "friend_tracking" */
 export type Friend_Tracking_Min_Order_By = {
   created_at?: Maybe<Order_By>;
-  date?: Maybe<Order_By>;
   geofence_id?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
+  join_limit?: Maybe<Order_By>;
   linking_word?: Maybe<Order_By>;
   updated_at?: Maybe<Order_By>;
   user_join_id?: Maybe<Order_By>;
@@ -3848,9 +3848,9 @@ export type Friend_Tracking_On_Conflict = {
 /** ordering options when selecting data from "friend_tracking" */
 export type Friend_Tracking_Order_By = {
   created_at?: Maybe<Order_By>;
-  date?: Maybe<Order_By>;
   geofence_id?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
+  join_limit?: Maybe<Order_By>;
   linking_word?: Maybe<Order_By>;
   updated_at?: Maybe<Order_By>;
   user_join?: Maybe<Users_Order_By>;
@@ -3869,11 +3869,11 @@ export enum Friend_Tracking_Select_Column {
   /** column name */
   CreatedAt = 'created_at',
   /** column name */
-  Date = 'date',
-  /** column name */
   GeofenceId = 'geofence_id',
   /** column name */
   Id = 'id',
+  /** column name */
+  JoinLimit = 'join_limit',
   /** column name */
   LinkingWord = 'linking_word',
   /** column name */
@@ -3887,9 +3887,9 @@ export enum Friend_Tracking_Select_Column {
 /** input type for updating data in table "friend_tracking" */
 export type Friend_Tracking_Set_Input = {
   created_at?: Maybe<Scalars['timestamptz']>;
-  date?: Maybe<Scalars['date']>;
   geofence_id?: Maybe<Scalars['Int']>;
   id?: Maybe<Scalars['Int']>;
+  join_limit?: Maybe<Scalars['timestamptz']>;
   linking_word?: Maybe<Scalars['String']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
   user_join_id?: Maybe<Scalars['String']>;
@@ -3953,11 +3953,11 @@ export enum Friend_Tracking_Update_Column {
   /** column name */
   CreatedAt = 'created_at',
   /** column name */
-  Date = 'date',
-  /** column name */
   GeofenceId = 'geofence_id',
   /** column name */
   Id = 'id',
+  /** column name */
+  JoinLimit = 'join_limit',
   /** column name */
   LinkingWord = 'linking_word',
   /** column name */

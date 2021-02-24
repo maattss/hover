@@ -1,8 +1,13 @@
-mutation UpdateFriendTracking($linking_word: String!, $user_id: String!, $date: date!, $geofence_id: Int!) {
+mutation UpdateFriendTracking(
+  $linking_word: String!
+  $user_id: String!
+  $join_limit: timestamptz!
+  $geofence_id: Int!
+) {
   update_friend_tracking(
     where: {
       linking_word: { _eq: $linking_word }
-      _and: { date: { _eq: $date }, _and: { geofence_id: { _eq: $geofence_id } } }
+      _and: { join_limit: { _lte: $join_limit }, _and: { geofence_id: { _eq: $geofence_id } } }
     }
     _set: { user_join_id: $user_id }
   ) {

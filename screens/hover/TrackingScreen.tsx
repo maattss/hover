@@ -28,7 +28,6 @@ import { useGetFriendTrackingLazyQuery } from '../../graphql/queries/GetFriendTr
 import moment from 'moment';
 import { defaultUserProfile } from '../../helpers/objectMappers';
 import { Avatar } from 'react-native-elements';
-import Divider from '../../components/general/Divider';
 import { ListUserFragmentFragment } from '../../graphql/Fragments.generated';
 
 const wordConfig: Config = {

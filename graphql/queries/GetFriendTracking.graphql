@@ -11,6 +11,6 @@ query GetFriendTracking($id: Int!) {
       ...basicUserFragment
     }
     geofence_id
-    date
+    join_limit
   }
 }

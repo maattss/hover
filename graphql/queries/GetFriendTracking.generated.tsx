@@ -21,7 +21,7 @@ export type GetFriendTrackingQuery = { readonly __typename: 'query_root' } & {
   readonly friend_tracking: ReadonlyArray<
     { readonly __typename: 'friend_tracking' } & Pick<
       Types.Friend_Tracking,
-      'id' | 'linking_word' | 'user_start_id' | 'user_join_id' | 'geofence_id' | 'date'
+      'id' | 'linking_word' | 'user_start_id' | 'user_join_id' | 'geofence_id' | 'join_limit'
     > & {
         readonly user_start: { readonly __typename: 'users' } & BasicUserFragmentFragment;
         readonly user_join?: Types.Maybe<{ readonly __typename: 'users' } & BasicUserFragmentFragment>;
@@ -43,7 +43,7 @@ export const GetFriendTrackingDocument = gql`
         ...basicUserFragment
       }
       geofence_id
-      date
+      join_limit
     }
   }
   ${BasicUserFragmentFragmentDoc}
