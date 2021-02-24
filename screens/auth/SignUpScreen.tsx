@@ -16,7 +16,7 @@ import Firebase, { fns } from '../../lib/firebase';
 import { Buttons, Colors, Spacing, Typography } from '../../theme';
 import CustomButton from '../../components/general/Button';
 import Loading from '../../components/general/Loading';
-import KeyboardAvoiderNoHeader from '../../components/general/KeyboarAvoiderNoHeader';
+import KeyboardAvoiderNoHeader from '../../components/general/KeyboardAvoiderNoHeader';
 
 export const randomPictureURI = () => {
   const random = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
@@ -93,54 +93,56 @@ const SignUpScreen = ({ navigation }: StackScreenProps<AuthStackParamList, 'Sign
   } else {
     return (
       <KeyboardAvoiderNoHeader>
-        <View style={styles.avatarContainer}>
-          <Image
-            source={{ uri: picture }}
-            style={styles.avatar}
-            onLoadStart={() => setLoadingImage(true)}
-            onLoadEnd={() => setLoadingImage(false)}
+        <View style={styles.container}>
+          <View style={styles.avatarContainer}>
+            <Image
+              source={{ uri: picture }}
+              style={styles.avatar}
+              onLoadStart={() => setLoadingImage(true)}
+              onLoadEnd={() => setLoadingImage(false)}
+            />
+            {loadingImage && <ActivityIndicator style={styles.avatarLoading} color={Colors.blue} />}
+            <Button onPress={() => setPicture(randomPictureURI())} title="Regenerate picture" />
+          </View>
+
+          <Text style={styles.label}>Username</Text>
+          <TextInput
+            placeholder="Enter your username"
+            placeholderTextColor={Colors.gray600}
+            onChangeText={(val) => setName(val)}
+            autoCapitalize="words"
+            autoCorrect={false}
+            style={styles.formField}
           />
-          {loadingImage && <ActivityIndicator style={styles.avatarLoading} color={Colors.blue} />}
-          <Button onPress={() => setPicture(randomPictureURI())} title="Regenerate picture" />
-        </View>
+          <Text style={styles.label}>Password</Text>
+          <TextInput
+            placeholder="Enter your password (at least 8 characters)"
+            placeholderTextColor={Colors.gray600}
+            onChangeText={(val) => setPassword(val)}
+            autoCapitalize="none"
+            secureTextEntry
+            autoCorrect={false}
+            style={styles.formField}
+          />
+          <Text style={styles.label}>Confirm password</Text>
+          <TextInput
+            placeholder="Confirm your password"
+            placeholderTextColor={Colors.gray600}
+            onChangeText={(val) => setConfirmPassword(val)}
+            autoCapitalize="none"
+            secureTextEntry
+            autoCorrect={false}
+            style={styles.formField}
+            onSubmitEditing={handleSignup}
+          />
+          <CustomButton onPress={handleSignup}>Sign up</CustomButton>
 
-        <Text style={styles.label}>Username</Text>
-        <TextInput
-          placeholder="Enter your username"
-          placeholderTextColor={Colors.gray600}
-          onChangeText={(val) => setName(val)}
-          autoCapitalize="words"
-          autoCorrect={false}
-          style={styles.formField}
-        />
-        <Text style={styles.label}>Password</Text>
-        <TextInput
-          placeholder="Enter your password (at least 8 characters)"
-          placeholderTextColor={Colors.gray600}
-          onChangeText={(val) => setPassword(val)}
-          autoCapitalize="none"
-          secureTextEntry
-          autoCorrect={false}
-          style={styles.formField}
-        />
-        <Text style={styles.label}>Confirm password</Text>
-        <TextInput
-          placeholder="Confirm your password"
-          placeholderTextColor={Colors.gray600}
-          onChangeText={(val) => setConfirmPassword(val)}
-          autoCapitalize="none"
-          secureTextEntry
-          autoCorrect={false}
-          style={styles.formField}
-          onSubmitEditing={handleSignup}
-        />
-        <CustomButton onPress={handleSignup}>Sign up</CustomButton>
-
-        <View style={styles.loginContainer}>
-          <Text style={{ ...Typography.bodyText }}>Already have an account?</Text>
-          <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-            <Text style={styles.loginLink}>Login</Text>
-          </TouchableOpacity>
+          <View style={styles.loginContainer}>
+            <Text style={{ ...Typography.bodyText }}>Already have an account?</Text>
+            <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+              <Text style={styles.loginLink}>Login</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </KeyboardAvoiderNoHeader>
     );
@@ -148,9 +150,8 @@ const SignUpScreen = ({ navigation }: StackScreenProps<AuthStackParamList, 'Sign
 };
 
 const styles = StyleSheet.create({
-  signUpContainer: {
-    alignItems: 'center',
-    marginBottom: Spacing.base,
+  container: {
+    padding: Spacing.base,
   },
   label: {
     ...Typography.bodyText,
@@ -180,10 +181,6 @@ const styles = StyleSheet.create({
     padding: Spacing.base,
     marginBottom: Spacing.base,
     backgroundColor: Colors.gray900,
-  },
-  infoText: {
-    ...Typography.bodyText,
-    paddingTop: Spacing.base,
   },
   loginLink: {
     ...Typography.bodyText,

@@ -101,7 +101,7 @@ const NewChallengeOverviewScreen: React.FC<Props> = ({ route, navigation }: Prop
             })
             .catch((error) => console.error('Mutation error', error.message))
         }>
-        Challenge!
+        Create Challenge
       </Button>
     </View>
   );

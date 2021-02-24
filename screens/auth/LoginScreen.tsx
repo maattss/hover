@@ -7,7 +7,7 @@ import { Buttons, Colors, Spacing, Typography } from '../../theme';
 import Button from '../../components/general/Button';
 import Loading from '../../components/general/Loading';
 import { Asset } from 'expo-asset';
-import KeyboardAvoiderNoHeader from '../../components/general/KeyboarAvoiderNoHeader';
+import KeyboardAvoiderNoHeader from '../../components/general/KeyboardAvoiderNoHeader';
 import { getSanitizedEmail } from './SignUpScreen';
 
 const LoginScreen = ({ navigation }: StackScreenProps<AuthStackParamList, 'Login'>) => {
@@ -29,47 +29,52 @@ const LoginScreen = ({ navigation }: StackScreenProps<AuthStackParamList, 'Login
   if (loading) return <Loading text={'Logging you in... Please wait'} />;
   return (
     <KeyboardAvoiderNoHeader>
-      <View style={styles.hover}>
-        {/* eslint-disable @typescript-eslint/no-var-requires */}
-        <Image
-          source={{ uri: Asset.fromModule(require('../../assets/images/adaptive-icon.png')).uri }}
-          style={styles.image}
+      <View style={styles.container}>
+        <View style={styles.hover}>
+          {/* eslint-disable @typescript-eslint/no-var-requires */}
+          <Image
+            source={{ uri: Asset.fromModule(require('../../assets/images/adaptive-icon.png')).uri }}
+            style={styles.image}
+          />
+          <Text style={styles.header}>Hover</Text>
+        </View>
+
+        <Text style={styles.label}>Username</Text>
+        <TextInput
+          placeholder="Enter your username"
+          placeholderTextColor={Colors.gray600}
+          onChangeText={(val) => setName(val)}
+          autoCapitalize="words"
+          autoCorrect={false}
+          style={styles.formField}
         />
-        <Text style={styles.header}>Hover</Text>
-      </View>
+        <Text style={styles.label}>Password</Text>
+        <TextInput
+          placeholder="Enter your password"
+          placeholderTextColor={Colors.gray600}
+          onChangeText={(val) => setPassword(val)}
+          secureTextEntry
+          style={styles.formField}
+          onSubmitEditing={handleLogin}
+        />
 
-      <Text style={styles.label}>Username</Text>
-      <TextInput
-        placeholder="Enter your username"
-        placeholderTextColor={Colors.gray600}
-        onChangeText={(val) => setName(val)}
-        autoCapitalize="words"
-        autoCorrect={false}
-        style={styles.formField}
-      />
-      <Text style={styles.label}>Password</Text>
-      <TextInput
-        placeholder="Enter your password"
-        placeholderTextColor={Colors.gray600}
-        onChangeText={(val) => setPassword(val)}
-        secureTextEntry
-        style={styles.formField}
-        onSubmitEditing={handleLogin}
-      />
+        <Button onPress={handleLogin}>Log in</Button>
 
-      <Button onPress={handleLogin}>Log in</Button>
-
-      <View style={styles.signupContainer}>
-        <Text style={{ ...Typography.bodyText }}>Not a member yet?</Text>
-        <TouchableOpacity onPress={() => navigation.navigate('Signup')}>
-          <Text style={styles.signupLink}>Sign up</Text>
-        </TouchableOpacity>
+        <View style={styles.signupContainer}>
+          <Text style={{ ...Typography.bodyText }}>Not a member yet?</Text>
+          <TouchableOpacity onPress={() => navigation.navigate('Signup')}>
+            <Text style={styles.signupLink}>Sign up</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </KeyboardAvoiderNoHeader>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    padding: Spacing.base,
+  },
   hover: {
     alignItems: 'center',
     paddingTop: Spacing.largest,
@@ -95,10 +100,6 @@ const styles = StyleSheet.create({
     padding: Spacing.base,
     marginBottom: Spacing.base,
     backgroundColor: Colors.gray900,
-  },
-  infoText: {
-    ...Typography.bodyText,
-    paddingTop: Spacing.base,
   },
   signupLink: {
     ...Typography.bodyText,
