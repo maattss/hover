@@ -8,7 +8,6 @@ import {
   Dimensions,
   TouchableWithoutFeedback,
 } from 'react-native';
-import { Spacing } from '../../theme';
 
 interface Props {
   children: ReactNode;
@@ -34,7 +33,6 @@ const styles = StyleSheet.create({
   },
   inner: {
     justifyContent: 'flex-end',
-    padding: Spacing.small,
   },
   keyboardAvoider: {
     flex: 1,

@@ -16,7 +16,7 @@ import Firebase, { fns } from '../../lib/firebase';
 import { Buttons, Colors, Spacing, Typography } from '../../theme';
 import CustomButton from '../../components/general/Button';
 import Loading from '../../components/general/Loading';
-import KeyboardAvoiderNoHeader from '../../components/general/KeyboarAvoiderNoHeader';
+import KeyboardAvoiderNoHeader from '../../components/general/KeyboardAvoiderNoHeader';
 
 export const randomPictureURI = () => {
   const random = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);

@@ -7,7 +7,7 @@ import { Buttons, Colors, Spacing, Typography } from '../../theme';
 import Button from '../../components/general/Button';
 import Loading from '../../components/general/Loading';
 import { Asset } from 'expo-asset';
-import KeyboardAvoiderNoHeader from '../../components/general/KeyboarAvoiderNoHeader';
+import KeyboardAvoiderNoHeader from '../../components/general/KeyboardAvoiderNoHeader';
 import { getSanitizedEmail } from './SignUpScreen';
 
 const LoginScreen = ({ navigation }: StackScreenProps<AuthStackParamList, 'Login'>) => {
