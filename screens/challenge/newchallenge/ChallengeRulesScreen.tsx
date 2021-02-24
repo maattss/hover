@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Text, Alert } from 'react-native';
+import { StyleSheet, View, Image, Text, Alert } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -10,7 +10,7 @@ import { ChallengeRules } from '../../../types/challengeTypes';
 import { NewChallengeStackParamList } from '../../../types/navigationTypes';
 import moment from 'moment';
 import { GeoFenceCategory } from '../../../types/geoFenceTypes';
-import { getChallengeTypeFields } from '../../../helpers/challengeMappers';
+import { getChallengeTypeFields, getChallengeIcon } from '../../../helpers/challengeMappers';
 import Divider from '../../../components/general/Divider';
 import { generateRuleChallengeDescription } from '../../../helpers/decriptionHelper';
 import KeyboardAvoider from '../../../components/general/KeyboardAvoider';
@@ -87,7 +87,16 @@ const ChallengeRulesScreen: React.FC<Props> = ({ route, navigation }: Props) => 
       <View style={styles.container}>
         <View style={styles.box}>
           <Text style={{ ...Typography.headerText }}>Define challenge details</Text>
-          <Text style={styles.descriptionText}>{generateRuleChallengeDescription(fields, rules, endDate)}</Text>
+          <View style={styles.infoContainer}>
+            <Text style={styles.descriptionText}>{generateRuleChallengeDescription(fields, rules, endDate)}</Text>
+            <Image
+              source={{
+                uri: getChallengeIcon(),
+              }}
+              style={styles.challengeIcon}
+            />
+          </View>
+
           <Divider />
           <View>
             {fields.map((field, index) => {
@@ -181,10 +190,19 @@ const styles = StyleSheet.create({
     marginHorizontal: Spacing.smaller,
     marginVertical: Spacing.smaller,
   },
+  infoContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
   descriptionText: {
     ...Typography.bodyText,
     fontStyle: 'italic',
     paddingVertical: Spacing.small,
+  },
+  challengeIcon: {
+    width: 75,
+    height: 75,
   },
   section: {
     paddingVertical: Spacing.small,

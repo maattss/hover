@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
+import { Asset } from 'expo-asset';
 import { ChallengeRules } from '../types/challengeTypes';
 import { Challenge_Type_Enum } from '../types/types';
 
@@ -17,4 +19,8 @@ export const getChallengeTypeFields = (challengeType: Challenge_Type_Enum): stri
     case Challenge_Type_Enum.TimeCategory:
       return ['TIME', 'CATEGORY'];
   }
+};
+
+export const getChallengeIcon = () => {
+  return Asset.fromModule(require('../assets/images/trophy.png')).uri;
 };
