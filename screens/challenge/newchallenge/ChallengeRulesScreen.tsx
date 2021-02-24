@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, Alert } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -12,8 +12,8 @@ import moment from 'moment';
 import { GeoFenceCategory } from '../../../types/geoFenceTypes';
 import { getChallengeTypeFields } from '../../../helpers/challengeMappers';
 import Divider from '../../../components/general/Divider';
-import KeyboardAvoiderNoHeader from '../../../components/general/KeyboarAvoiderNoHeader';
 import { generateRuleChallengeDescription } from '../../../helpers/decriptionHelper';
+import KeyboardAvoider from '../../../components/general/KeyboardAvoider';
 
 type ChallengeRulesRouteProp = RouteProp<NewChallengeStackParamList, 'ChallengeRules'>;
 type NavigationProp = StackNavigationProp<NewChallengeStackParamList>;
@@ -83,91 +83,103 @@ const ChallengeRulesScreen: React.FC<Props> = ({ route, navigation }: Props) => 
   };
 
   return (
-    <KeyboardAvoiderNoHeader>
-      <View style={styles.box}>
-        <Text style={{ ...Typography.headerText }}>What is the challenge?</Text>
-        <Text style={styles.descriptionText}>{generateRuleChallengeDescription(fields, rules, endDate)}</Text>
-        <Divider />
-        <View>
-          {fields.map((field, index) => {
-            if (field == 'SCORE') {
-              return (
-                <View key={index} style={styles.section}>
-                  <Text style={styles.label}>Goal score</Text>
-                  <TextInput
-                    placeholder="Enter your goal score"
-                    placeholderTextColor={Colors.gray600}
-                    onChangeText={(val) => setScore(parseNumber(val))}
-                    value={score?.toString()}
-                    keyboardType="numeric"
-                    style={styles.formField}
-                  />
-                </View>
-              );
-            } else if (field == 'CATEGORY') {
-              return (
-                <View key={index} style={styles.section}>
-                  <Text style={styles.label}>Pick a category</Text>
-                  <View style={styles.categoryButtonsContainer}>{renderCategories()}</View>
-                </View>
-              );
-            } else if (field == 'TIME') {
-              return (
-                <View key={index} style={styles.section}>
-                  <Text style={styles.label}>Hours</Text>
-                  <TextInput
-                    placeholder="Enter number of hours"
-                    placeholderTextColor={Colors.gray600}
-                    onChangeText={(val) => setHours(parseNumber(val))}
-                    value={hours?.toString()}
-                    keyboardType="numeric"
-                    style={styles.formField}
-                  />
-                </View>
-              );
-            } else {
-              return (
-                <Text key={index} style={styles.label}>
-                  Invalid field: {field}
-                </Text>
-              );
-            }
-          })}
+    <KeyboardAvoider>
+      <View style={styles.container}>
+        <View style={styles.box}>
+          <Text style={{ ...Typography.headerText }}>Define challenge details</Text>
+          <Text style={styles.descriptionText}>{generateRuleChallengeDescription(fields, rules, endDate)}</Text>
+          <Divider />
+          <View>
+            {fields.map((field, index) => {
+              if (field == 'SCORE') {
+                return (
+                  <View key={index} style={styles.section}>
+                    <Text style={styles.label}>Goal score</Text>
+                    <TextInput
+                      placeholder="Enter your goal score"
+                      placeholderTextColor={Colors.gray600}
+                      onChangeText={(val) => setScore(parseNumber(val))}
+                      value={score?.toString()}
+                      keyboardType="numeric"
+                      style={styles.formField}
+                    />
+                  </View>
+                );
+              } else if (field == 'CATEGORY') {
+                return (
+                  <View key={index} style={styles.section}>
+                    <Text style={styles.label}>Pick a category</Text>
+                    <View style={styles.categoryButtonsContainer}>{renderCategories()}</View>
+                  </View>
+                );
+              } else if (field == 'TIME') {
+                return (
+                  <View key={index} style={styles.section}>
+                    <Text style={styles.label}>Hours</Text>
+                    <TextInput
+                      placeholder="Enter number of hours"
+                      placeholderTextColor={Colors.gray600}
+                      onChangeText={(val) => setHours(parseNumber(val))}
+                      value={hours?.toString()}
+                      keyboardType="numeric"
+                      style={styles.formField}
+                    />
+                  </View>
+                );
+              } else {
+                return (
+                  <Text key={index} style={styles.label}>
+                    Invalid field: {field}
+                  </Text>
+                );
+              }
+            })}
+          </View>
+          <View style={styles.section}>
+            <Text style={styles.label}>Last day of challenge?</Text>
+            <Button style={styles.formField} onPress={showDatePicker}>
+              {moment(endDate).format('DD. MMM YYYY')}
+            </Button>
+            <DateTimePickerModal
+              isVisible={isDatePickerVisible}
+              mode="date"
+              onConfirm={handleConfirm}
+              onCancel={hideDatePicker}
+            />
+          </View>
         </View>
-        <View style={styles.section}>
-          <Text style={styles.label}>Last day of challenge?</Text>
-          <Button style={styles.formField} onPress={showDatePicker}>
-            {moment(endDate).format('DD. MMM YYYY')}
-          </Button>
-          <DateTimePickerModal
-            isVisible={isDatePickerVisible}
-            mode="date"
-            onConfirm={handleConfirm}
-            onCancel={hideDatePicker}
-          />
-        </View>
+
+        <Button
+          onPress={() =>
+            isDisabled
+              ? Alert.alert('You are not finished', 'Fill out all fields to proceed!', [{ text: 'OK' }])
+              : navigation.push('NewChallengeOverview', {
+                  ...route.params,
+                  rules: rules,
+                  end_date: endDate?.toISOString() ?? new Date().toISOString(),
+                })
+          }
+          style={isDisabled ? { backgroundColor: Colors.gray600 } : {}}>
+          Next
+        </Button>
       </View>
-      <Button
-        onPress={() => {
-          navigation.push('NewChallengeOverview', {
-            ...route.params,
-            rules: rules,
-            end_date: endDate?.toISOString() ?? new Date().toISOString(),
-          });
-        }}
-        disabled={isDisabled}>
-        Next
-      </Button>
-    </KeyboardAvoiderNoHeader>
+    </KeyboardAvoider>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    padding: Spacing.base,
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
   box: {
     backgroundColor: Colors.gray900,
     width: '100%',
     borderRadius: Spacing.smaller,
     padding: Spacing.base,
+    marginHorizontal: Spacing.smaller,
+    marginVertical: Spacing.smaller,
   },
   descriptionText: {
     ...Typography.bodyText,
@@ -187,7 +199,7 @@ const styles = StyleSheet.create({
     ...Buttons.button,
     ...Typography.bodyText,
     padding: Spacing.base,
-    marginBottom: Spacing.base,
+    marginBottom: Spacing.smaller,
     backgroundColor: Colors.gray800,
   },
   categoryButtonsContainer: {

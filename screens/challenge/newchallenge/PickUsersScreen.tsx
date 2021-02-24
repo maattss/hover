@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Alert } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import { Avatar, CheckBox } from 'react-native-elements';
 import Loading from '../../../components/general/Loading';
@@ -62,7 +62,7 @@ const PickUsersScreen: React.FC<Props> = ({
       <FlatList
         ListHeaderComponent={
           <>
-            <Text style={styles.title}>Who?</Text>
+            <Text style={styles.title}>Choose opponents</Text>
             <Divider />
           </>
         }
@@ -74,13 +74,15 @@ const PickUsersScreen: React.FC<Props> = ({
         ListFooterComponent={<Divider />}
       />
       <Button
-        onPress={() => {
-          navigation.push('ChallengeType', {
-            user_id: user_id,
-            participants: participants,
-          });
-        }}
-        disabled={isDisabled}>
+        onPress={() =>
+          isDisabled
+            ? Alert.alert('You are not finished', 'Choose a least one opponent to proceed!', [{ text: 'OK' }])
+            : navigation.push('ChallengeType', {
+                user_id: user_id,
+                participants: participants,
+              })
+        }
+        style={isDisabled ? { backgroundColor: Colors.gray600 } : {}}>
         Next
       </Button>
     </View>
