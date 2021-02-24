@@ -205,7 +205,7 @@ const TrackingScreen: React.FC = () => {
 
                 {collabState === HoverWithFriendState.JOINING && (
                   <>
-                    <View style={styles.rowFlexSpaceBetween}>
+                    <View style={[styles.rowFlexSpaceBetween, { paddingVertical: Spacing.smaller }]}>
                       <View style={styles.collabJoiningBack}>
                         <Button title={'Back'} onPress={() => setCollabState(HoverWithFriendState.NONE)} />
                       </View>
@@ -236,8 +236,8 @@ const TrackingScreen: React.FC = () => {
                         <FAIcon name={'chevron-down'} style={styles.icon} />
                       </TouchableOpacity>
                     </View>
-                    <View>
-                      <Text style={styles.collabSubHeader}>Earning 2x points together with: </Text>
+                    <Text style={styles.collabSubHeader}>Earning 2x points together with: </Text>
+                    <View style={styles.friendContainer}>
                       <View style={styles.rowFlexJustifyStart}>
                         <Avatar
                           rounded
@@ -314,6 +314,7 @@ const styles = StyleSheet.create({
   rowFlexSpaceBetween: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
   },
   rowFlexJustifyStart: {
     flexDirection: 'row',
@@ -403,7 +404,6 @@ const styles = StyleSheet.create({
   collabJoiningBack: {
     marginLeft: -Spacing.smaller,
     marginTop: -Spacing.smallest,
-    paddingTop: Spacing.small,
   },
   label: {
     ...Typography.bodyText,
@@ -417,10 +417,12 @@ const styles = StyleSheet.create({
     marginVertical: Spacing.small,
     backgroundColor: Colors.gray900,
   },
+  friendContainer: {
+    marginVertical: Spacing.smaller,
+  },
   collabFriendName: {
     ...Typography.headerText,
-    fontSize: 20,
-    lineHeight: 50,
+    fontSize: 25,
     margin: Spacing.small,
   },
   collabShowContainer: {
@@ -438,7 +440,6 @@ const styles = StyleSheet.create({
     borderRadius: Spacing.smaller,
   },
   trackingInfoTopBar: {
-    //ok
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
