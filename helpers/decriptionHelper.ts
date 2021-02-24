@@ -109,7 +109,7 @@ export const generateNewChallengeDescription = (
   return description;
 };
 /**
- * NEW CHALLENGE DESCRIPTION HELPERS.
+ * CHALLENGE RULE DESCRIPTION.
  */
 
 export const generateRuleChallengeDescription = (fields: string[], rules: ChallengeRules, end_date?: Date) => {
