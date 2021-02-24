@@ -31,7 +31,6 @@ const getItem = (data: FeedData) => {
       </View>
     );
   } else if (data.feedCategory === FeedCategory.CHALLENGE) {
-    console.log(data);
     return (
       <View style={styles.element}>
         <ChallengeFeedCard data={data as ChallengeFeedData} />

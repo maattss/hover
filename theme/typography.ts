@@ -22,6 +22,10 @@ export const icon = {
   fontSize: largeFontSize,
   color: Colors.almostWhite,
 };
+export const smallIcon = {
+  fontSize: baseFontSize,
+  color: Colors.almostWhite,
+};
 
 export const smallText = {
   fontSize: smallestFontSize,

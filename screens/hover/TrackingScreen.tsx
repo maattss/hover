@@ -122,9 +122,10 @@ const TrackingScreen: React.FC = () => {
       if (friend) {
         setFriendName(friend.name);
         setFriendPicture(friend.picture ?? defaultUserProfile.picture);
+        tracking.updateDoubleScore(true);
+        setIsEnabled(true);
       }
       setJoin(false);
-      setIsEnabled(true);
     } catch (error) {
       console.error('Mutation error', error.message);
       Alert.alert(
@@ -197,12 +198,16 @@ const TrackingScreen: React.FC = () => {
                   <>
                     <View style={styles.collabTopBar}>
                       <View>
-                        <Text style={styles.collabHeader}>Hover with friend</Text>
+                        <View style={{ flexDirection: 'row' }}>
+                          <Text style={styles.collabHeader}>Hover with friend</Text>
+                          <TouchableOpacity onPress={showInfoPopup}>
+                            <FAIcon name={'info-circle'} style={styles.iconSmall} />
+                          </TouchableOpacity>
+                        </View>
+
                         <Text style={styles.collabSubHeader}>Get started to earn 2x points!</Text>
                       </View>
-                      <TouchableOpacity onPress={showInfoPopup}>
-                        <FAIcon name={'info-circle'} style={styles.icon} />
-                      </TouchableOpacity>
+
                       <TouchableOpacity onPress={() => setCollabInfoHidden(!collabInfoHidden)}>
                         <FAIcon name={'chevron-down'} style={styles.icon} />
                       </TouchableOpacity>
@@ -219,9 +224,14 @@ const TrackingScreen: React.FC = () => {
                 )}
                 {isEnabled && (
                   <View style={{ marginHorizontal: Spacing.smaller }}>
-                    <Text style={styles.collabHeader}>Hover with friend</Text>
+                    <View style={{ flexDirection: 'row' }}>
+                      <Text style={styles.collabHeader}>Hover with friend</Text>
+                      <TouchableOpacity onPress={() => setCollabInfoHidden(!collabInfoHidden)}>
+                        <FAIcon name={'chevron-down'} style={styles.icon} />
+                      </TouchableOpacity>
+                    </View>
                     <View>
-                      <Text style={styles.collabSubHeader}>Earning 2x points together with</Text>
+                      <Text style={styles.collabSubHeader}>Earning 2x points together with: </Text>
                       <View
                         style={{ flexDirection: 'row', justifyContent: 'flex-start', marginVertical: Spacing.small }}>
                         <Avatar
@@ -251,9 +261,10 @@ const TrackingScreen: React.FC = () => {
               <View
                 style={{
                   flexDirection: 'row',
-                  justifyContent: 'space-evenly',
+                  justifyContent: 'center',
+                  alignItems: 'center',
                   width: '100%',
-                  paddingHorizontal: Spacing.small,
+                  marginBottom: Spacing.smaller,
                 }}>
                 {isEnabled && (
                   <View
@@ -261,25 +272,26 @@ const TrackingScreen: React.FC = () => {
                       borderStyle: 'solid',
                       borderWidth: 1,
                       backgroundColor: Colors.gray900,
+                      height: '70%',
                       borderColor: Colors.gold,
-                      width: 70,
-                      height: 70,
-                      borderRadius: 70 / 2,
-                      justifyContent: 'flex-start',
+                      borderRadius: Spacing.smaller,
+                      padding: Spacing.smaller,
+                      marginLeft: -Spacing.extraLarge,
+                      marginRight: Spacing.base,
                     }}>
                     <Text
                       style={{
                         ...Typography.largeBodyText,
                         fontWeight: 'bold',
                         color: Colors.gold,
-                        textAlign: 'center',
-                        paddingTop: Spacing.smaller,
                       }}>
                       2x points
                     </Text>
                   </View>
                 )}
-                <Text style={[styles.headerText, { lineHeight: 60 }]}>Tracking...</Text>
+                <View>
+                  <Text style={styles.headerText}>Tracking...</Text>
+                </View>
               </View>
               <View style={styles.progressBarLabels}>
                 <Text style={styles.label}>Points</Text>
@@ -378,6 +390,11 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing.smallest,
     backgroundColor: Colors.almostBlackTransparent,
     borderRadius: Spacing.smaller,
+  },
+  iconSmall: {
+    ...Typography.smallIcon,
+    marginHorizontal: Spacing.smaller,
+    marginVertical: Spacing.smallest,
   },
   icon: {
     ...Typography.icon,

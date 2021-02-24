@@ -15,33 +15,32 @@ interface HoverMapProps {
 }
 
 const HoverMap: React.FC<HoverMapProps> = ({ customWidth, customHeight }: HoverMapProps) => {
-  const width = customWidth ? customWidth : Dimensions.get('window').height;
-  const height = customHeight ? customHeight : Dimensions.get('window').height;
+  const width = customWidth ? customWidth : Dimensions.get('screen').width;
+  const height = customHeight ? customHeight : Dimensions.get('screen').height;
 
   const [chosenMapType, setChosenMapType] = useState<MapTypes>('standard');
   const [userLocationMap, setUserLocationMap] = useState<LatLng | null>(null);
   const [centreOnUser, setCentreOnUser] = useState(false);
   const [zoom, setZoom] = useState<number>(0.02);
   const tracking = useTracking();
+  const centreVerticalOffset = -0.005;
 
   const insets = useSafeAreaInsets();
   const userRegion: Region = {
     latitude: tracking.userLocation
-      ? tracking.userLocation.coords.latitude
-      : userLocationMap
-      ? userLocationMap.latitude
+      ? tracking.userLocation.coords.latitude + centreVerticalOffset
       : defaultMapLocation.latitude,
-    longitude: tracking.userLocation
-      ? tracking.userLocation.coords.longitude
-      : userLocationMap
-      ? userLocationMap.longitude
-      : defaultMapLocation.longitude,
+    longitude: tracking.userLocation ? tracking.userLocation.coords.longitude : defaultMapLocation.longitude,
     latitudeDelta: 0.02,
     longitudeDelta: 0.02,
   };
 
   // Refetch geofences and animate map to user position on init render
   useEffect(() => {
+    setUserLocationMap({
+      latitude: tracking.userLocation ? tracking.userLocation.coords.latitude : defaultMapLocation.latitude,
+      longitude: tracking.userLocation ? tracking.userLocation.coords.longitude : defaultMapLocation.longitude,
+    });
     tracking.refetchGeofences();
     animateMapToUserPos();
   }, []);
@@ -59,7 +58,6 @@ const HoverMap: React.FC<HoverMapProps> = ({ customWidth, customHeight }: HoverM
   useEffect(() => {
     if (tracking.trackingState !== TrackingState.TRACKING && userLocationMap !== null) {
       tracking.updateUserLocation(userLocationMap);
-      animateMapToUserPos();
     }
   }, [userLocationMap]);
 

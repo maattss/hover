@@ -100,15 +100,16 @@ export const TrackingProvider = ({ children }: Props) => {
   useEffect(() => {
     if (locationPermission && locationPermission.status === 'granted') {
       console.log('Start background update');
-      startBackgroundUpdate();
+      //startBackgroundUpdate();
     } else if (locationPermission && locationPermission.status !== 'granted') {
       console.log('Stopped background update. Permission not accepted');
-      stopBackgroundUpdate();
+      //stopBackgroundUpdate();
     }
   }, [locationPermission]);
 
   const externalUpdateUserLocation = (newUserLocation: LatLng) => {
     if (userLocation === null) {
+      console.log('Update user location. [' + newUserLocation.latitude + ',' + newUserLocation.longitude + ']');
       updateUserLocation({
         coords: {
           latitude: newUserLocation.latitude,
@@ -204,7 +205,7 @@ export const TrackingProvider = ({ children }: Props) => {
   // Update score and duration every second
   useInterval(
     () => {
-      console.log('Tracking...');
+      console.log('Tracking... Score: ', score);
       if (insideGeoFence) {
         setDuration(duration + 1);
         const scoreRatio = getGeoFenceScoreRatio(insideGeoFence.category);
