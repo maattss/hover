@@ -143,109 +143,115 @@ const TrackingScreen: React.FC = () => {
       <KeyboardAvoidingView style={styles.infoContainer}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View>
-            <View>
-              {join && !isEnabled && !collabInfoHidden && (
-                <>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
-                      paddingBottom: Spacing.small,
-                    }}>
-                    <View style={{ marginLeft: -Spacing.smaller, marginTop: -Spacing.smallest }}>
-                      <Button title={'Back'} onPress={() => setJoin(false)} />
+            {!collabInfoHidden && (
+              <View style={styles.collabInfo}>
+                {join && !isEnabled && !collabInfoHidden && (
+                  <>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        paddingBottom: Spacing.small,
+                      }}>
+                      <View style={{ marginLeft: -Spacing.smaller, marginTop: -Spacing.smallest }}>
+                        <Button title={'Back'} onPress={() => setJoin(false)} />
+                      </View>
+
+                      <TouchableOpacity onPress={showInfoPopup}>
+                        <FAIcon name={'info-circle'} style={styles.icon} />
+                      </TouchableOpacity>
                     </View>
 
-                    <TouchableOpacity onPress={showInfoPopup}>
-                      <FAIcon name={'info-circle'} style={styles.icon} />
-                    </TouchableOpacity>
-                  </View>
+                    <Text style={styles.label}>Your friend&apos;s hover code</Text>
+                    <TextInput
+                      placeholder="Enter code"
+                      placeholderTextColor={Colors.gray600}
+                      onChangeText={(val) => setFriendCollabCode(val)}
+                      style={styles.formField}
+                      autoCapitalize={'characters'}
+                      autoCorrect={false}
+                    />
+                    <CustomButton onPress={joinFriendTracking}>Join</CustomButton>
+                  </>
+                )}
+                {start && !isEnabled && (
+                  <>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                      <Button title={'Back'} onPress={() => setStart(false)} />
+                      <TouchableOpacity onPress={refreshData} style={styles.iconButton}>
+                        <FAIcon name={'sync'} style={styles.iconBlue} />
+                      </TouchableOpacity>
+                    </View>
+                    <View style={{ flexDirection: 'column', justifyContent: 'center' }}>
+                      <ActivityIndicator />
+                      <Text style={styles.waitingForFriendLabel}>Waiting for friend to join...</Text>
+                    </View>
 
-                  <Text style={styles.label}>Your friend&apos;s hover code</Text>
-                  <TextInput
-                    placeholder="Enter code"
-                    placeholderTextColor={Colors.gray600}
-                    onChangeText={(val) => setFriendCollabCode(val)}
-                    style={styles.formField}
-                    autoCapitalize={'characters'}
-                    autoCorrect={false}
-                  />
-                  <CustomButton onPress={joinFriendTracking}>Join</CustomButton>
-                </>
-              )}
-              {start && !isEnabled && (
-                <>
-                  <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                    <Button title={'Back'} onPress={() => setStart(false)} />
-                    <TouchableOpacity onPress={refreshData} style={styles.iconButton}>
-                      <FAIcon name={'sync'} style={styles.iconBlue} />
-                    </TouchableOpacity>
-                  </View>
-                  <View style={{ flexDirection: 'column', justifyContent: 'center' }}>
-                    <ActivityIndicator />
-                    <Text style={styles.waitingForFriendLabel}>Waiting for friend to join...</Text>
-                  </View>
+                    <View style={styles.collabCodeContainer}>
+                      <Text style={styles.collabCode}>{yourCollabCode}</Text>
+                    </View>
+                  </>
+                )}
 
-                  <View style={styles.collabCodeContainer}>
-                    <Text style={styles.collabCode}>{yourCollabCode}</Text>
-                  </View>
-                </>
-              )}
-
-              {!join && !start && !isEnabled && !collabInfoHidden && (
-                <>
-                  <View style={styles.collabTopBar}>
+                {!join && !start && !isEnabled && !collabInfoHidden && (
+                  <>
+                    <View style={styles.collabTopBar}>
+                      <View>
+                        <Text style={styles.collabHeader}>Hover with friend</Text>
+                        <Text style={styles.collabSubHeader}>Get started to earn 2x points!</Text>
+                      </View>
+                      <TouchableOpacity onPress={showInfoPopup}>
+                        <FAIcon name={'info-circle'} style={styles.icon} />
+                      </TouchableOpacity>
+                      <TouchableOpacity onPress={() => setCollabInfoHidden(!collabInfoHidden)}>
+                        <FAIcon name={'chevron-down'} style={styles.icon} />
+                      </TouchableOpacity>
+                    </View>
+                    <View style={styles.collabButtonsContainer}>
+                      <CustomButton style={styles.collabButton} onPress={startFriendTracking}>
+                        Start session
+                      </CustomButton>
+                      <CustomButton style={styles.collabButton} onPress={() => setJoin(true)}>
+                        Join friend
+                      </CustomButton>
+                    </View>
+                  </>
+                )}
+                {isEnabled && (
+                  <View style={{ marginHorizontal: Spacing.smaller }}>
+                    <Text style={styles.collabHeader}>Hover with friend</Text>
                     <View>
-                      <Text style={styles.collabHeader}>Hover with friend</Text>
-                      <Text style={styles.collabSubHeader}>Get started to earn 2x points!</Text>
-                    </View>
-                    <TouchableOpacity onPress={showInfoPopup}>
-                      <FAIcon name={'info-circle'} style={styles.icon} />
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => setCollabInfoHidden(!collabInfoHidden)}>
-                      <FAIcon name={'chevron-down'} style={styles.icon} />
-                    </TouchableOpacity>
-                  </View>
-                  <View style={styles.collabButtonsContainer}>
-                    <CustomButton style={styles.collabButton} onPress={startFriendTracking}>
-                      Start session
-                    </CustomButton>
-                    <CustomButton style={styles.collabButton} onPress={() => setJoin(true)}>
-                      Join friend
-                    </CustomButton>
-                  </View>
-                </>
-              )}
-              {isEnabled && (
-                <View style={{ marginHorizontal: Spacing.smaller }}>
-                  <Text style={styles.collabHeader}>Hover with friend</Text>
-                  <View>
-                    <Text style={styles.collabSubHeader}>Earning 2x points together with</Text>
-                    <View style={{ flexDirection: 'row', justifyContent: 'flex-start', marginVertical: Spacing.small }}>
-                      <Avatar
-                        rounded
-                        source={{ uri: friendPicture ? friendPicture : defaultUserProfile.picture }}
-                        size="medium"
-                      />
-                      <Text style={styles.nameText}>{friendName ? friendName : 'Unknown'}</Text>
+                      <Text style={styles.collabSubHeader}>Earning 2x points together with</Text>
+                      <View
+                        style={{ flexDirection: 'row', justifyContent: 'flex-start', marginVertical: Spacing.small }}>
+                        <Avatar
+                          rounded
+                          source={{ uri: friendPicture ? friendPicture : defaultUserProfile.picture }}
+                          size="medium"
+                        />
+                        <Text style={styles.nameText}>{friendName ? friendName : 'Unknown'}</Text>
+                      </View>
                     </View>
                   </View>
-                </View>
-              )}
-              {collabInfoHidden && (
-                <View style={styles.collabTopBar}>
+                )}
+              </View>
+            )}
+
+            {collabInfoHidden && (
+              <View style={styles.collabHidden}>
+                <View style={styles.collabShowContainer}>
                   <TouchableOpacity onPress={() => setCollabInfoHidden(!collabInfoHidden)}>
                     <FAIcon name={'chevron-up'} style={styles.icon} />
                   </TouchableOpacity>
                 </View>
-              )}
-            </View>
+              </View>
+            )}
 
             <View style={styles.trackingInfo}>
               <View
                 style={{
                   flexDirection: 'row',
-                  justifyContent: 'space-between',
+                  justifyContent: 'space-evenly',
                   width: '100%',
                   paddingHorizontal: Spacing.small,
                 }}>
@@ -362,6 +368,16 @@ const styles = StyleSheet.create({
   collabButton: {
     width: '47%',
     padding: Spacing.small,
+  },
+  collabHidden: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+  },
+  collabShowContainer: {
+    paddingHorizontal: Spacing.smaller,
+    paddingVertical: Spacing.smallest,
+    backgroundColor: Colors.almostBlackTransparent,
+    borderRadius: Spacing.smaller,
   },
   icon: {
     ...Typography.icon,
