@@ -29,6 +29,7 @@ import moment from 'moment';
 import { defaultUserProfile } from '../../helpers/objectMappers';
 import { Avatar } from 'react-native-elements';
 import Divider from '../../components/general/Divider';
+import { ListUserFragmentFragment } from '../../graphql/Fragments.generated';
 
 const wordConfig: Config = {
   dictionaries: [adjectives, animals],
@@ -49,24 +50,18 @@ const TrackingScreen: React.FC = () => {
   const [yourCollabCode] = useState(uniqueNamesGenerator(wordConfig));
   const [friendCollabCode, setFriendCollabCode] = useState('');
   const [trackingWithFriendId, setTrackingWithFriendId] = useState<number | undefined>();
-  const [friendName, setFriendName] = useState('');
-  const [friendPicture, setFriendPicture] = useState('');
+  const [friend, setFriend] = useState<ListUserFragmentFragment>();
   const [isEnabled, setIsEnabled] = useState(false);
   const [collabInfoHidden, setCollabInfoHidden] = useState(false);
 
   const [UpdateFriendTracking] = useUpdateFriendTrackingMutation();
   const [InsertFriendTracking] = useInsertFriendTrackingMutation();
-
   const [getFriend, { data: data, error: error }] = useGetFriendTrackingLazyQuery({ fetchPolicy: 'network-only' });
 
   useEffect(() => {
     const friend = data?.friend_tracking[0].user_join;
-    if (friend) {
-      setFriendName(friend.name);
-      setFriendPicture(friend.picture ?? '');
-      tracking.updateDoubleScore(true);
-      setIsEnabled(true);
-    }
+    if (friend) updateFriendData(friend);
+
     if (error) console.error(error.message);
   }, [data, error]);
 
@@ -86,6 +81,13 @@ const TrackingScreen: React.FC = () => {
     } else {
       console.error('Undefined trackingWithFriendId...');
     }
+  };
+
+  const updateFriendData = (friend: ListUserFragmentFragment) => {
+    setFriend(friend);
+    tracking.setFriendId(friend.id);
+    tracking.updateDoubleScore(true);
+    setIsEnabled(true);
   };
 
   const startFriendTracking = async () => {
@@ -119,12 +121,7 @@ const TrackingScreen: React.FC = () => {
       });
 
       const friend = response.data?.update_friend_tracking?.returning[0].user_start;
-      if (friend) {
-        setFriendName(friend.name);
-        setFriendPicture(friend.picture ?? defaultUserProfile.picture);
-        tracking.updateDoubleScore(true);
-        setIsEnabled(true);
-      }
+      if (friend) updateFriendData(friend);
       setJoin(false);
     } catch (error) {
       console.error('Mutation error', error.message);
@@ -224,7 +221,7 @@ const TrackingScreen: React.FC = () => {
                 )}
                 {isEnabled && (
                   <View style={{ marginHorizontal: Spacing.smaller }}>
-                    <View style={{ flexDirection: 'row' }}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                       <Text style={styles.collabHeader}>Hover with friend</Text>
                       <TouchableOpacity onPress={() => setCollabInfoHidden(!collabInfoHidden)}>
                         <FAIcon name={'chevron-down'} style={styles.icon} />
@@ -236,10 +233,10 @@ const TrackingScreen: React.FC = () => {
                         style={{ flexDirection: 'row', justifyContent: 'flex-start', marginVertical: Spacing.small }}>
                         <Avatar
                           rounded
-                          source={{ uri: friendPicture ? friendPicture : defaultUserProfile.picture }}
+                          source={{ uri: friend?.picture ? friend.picture : defaultUserProfile.picture }}
                           size="medium"
                         />
-                        <Text style={styles.nameText}>{friendName ? friendName : 'Unknown'}</Text>
+                        <Text style={styles.nameText}>{friend ? friend.name : 'Unknown'}</Text>
                       </View>
                     </View>
                   </View>
@@ -272,7 +269,7 @@ const TrackingScreen: React.FC = () => {
                       borderStyle: 'solid',
                       borderWidth: 1,
                       backgroundColor: Colors.gray900,
-                      height: '70%',
+                      height: '75%',
                       borderColor: Colors.gold,
                       borderRadius: Spacing.smaller,
                       padding: Spacing.smaller,

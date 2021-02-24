@@ -28,7 +28,7 @@ export type UserFragmentFragment = { readonly __typename: 'users' } & {
 
 export type BasicActivityFragmentFragment = { readonly __typename: 'activities' } & Pick<
   Types.Activities,
-  'activity_id' | 'caption' | 'duration' | 'geofence_id' | 'score' | 'started_at' | 'stopped_at'
+  'activity_id' | 'caption' | 'duration' | 'geofence_id' | 'score' | 'started_at' | 'stopped_at' | 'friend_id'
 >;
 
 export type ActivityFragmentFragment = { readonly __typename: 'activities' } & Pick<
@@ -93,7 +93,10 @@ export type AchievementFeedFragmentFragment = { readonly __typename: 'feed' } & 
 export type FeedActivityFragmentFragment = { readonly __typename: 'activities' } & Pick<
   Types.Activities,
   'activity_id' | 'caption' | 'duration' | 'geofence_id' | 'score' | 'started_at' | 'stopped_at'
-> & { readonly geofence: { readonly __typename: 'geofences' } & GeofenceFragmentFragment };
+> & {
+    readonly geofence: { readonly __typename: 'geofences' } & GeofenceFragmentFragment;
+    readonly friend?: Types.Maybe<{ readonly __typename: 'users' } & BasicUserFragmentFragment>;
+  };
 
 export type FullFeedFragmentFragment = { readonly __typename: 'feed' } & Pick<
   Types.Feed,
@@ -199,6 +202,7 @@ export const BasicActivityFragmentFragmentDoc = gql`
     score
     started_at
     stopped_at
+    friend_id
   }
 `;
 export const ActivityFeedFragmentFragmentDoc = gql`
@@ -254,8 +258,12 @@ export const FeedActivityFragmentFragmentDoc = gql`
     score
     started_at
     stopped_at
+    friend {
+      ...basicUserFragment
+    }
   }
   ${GeofenceFragmentFragmentDoc}
+  ${BasicUserFragmentFragmentDoc}
 `;
 export const OpponentFragmentFragmentDoc = gql`
   fragment opponentFragment on challenge_participant {

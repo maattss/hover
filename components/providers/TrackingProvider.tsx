@@ -45,6 +45,8 @@ interface TrackingContextValues {
   discardActivity: () => void;
   doubleScore: boolean;
   updateDoubleScore: (value: boolean) => void;
+  friendId: string;
+  setFriendId: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export const TrackingContext = React.createContext<TrackingContextValues>({
@@ -53,9 +55,7 @@ export const TrackingContext = React.createContext<TrackingContextValues>({
   userLocation: null,
   updateUserLocation: () => console.error('Function not initialized'),
   geoFences: [],
-  refetchGeofences: () => {
-    console.error('Function not initialized');
-  },
+  refetchGeofences: () => console.error('Function not initialized'),
   unUploadedActivities: [],
   insideGeoFence: null,
   trackingState: TrackingState.EXPLORE,
@@ -69,6 +69,8 @@ export const TrackingContext = React.createContext<TrackingContextValues>({
   discardActivity: () => console.error('Function not initialized'),
   doubleScore: false,
   updateDoubleScore: () => console.error('Function not initialized'),
+  friendId: '',
+  setFriendId: () => console.error('Function not initialized'),
 });
 TrackingContext.displayName = 'TrackingContext';
 
@@ -85,6 +87,7 @@ export const TrackingProvider = ({ children }: Props) => {
   const [score, setScore] = useState(0);
   const [duration, setDuration] = useState(0);
   const [doubleScore, setDoubleScore] = useState(false);
+  const [friendId, setFriendId] = useState('');
 
   const [InsertActivity] = useInsertActivityMutation();
   const { data: geoFenceData, error: geoFenceFetchError, refetch } = useGeofencesQuery({
@@ -100,10 +103,10 @@ export const TrackingProvider = ({ children }: Props) => {
   useEffect(() => {
     if (locationPermission && locationPermission.status === 'granted') {
       console.log('Start background update');
-      //startBackgroundUpdate();
+      startBackgroundUpdate();
     } else if (locationPermission && locationPermission.status !== 'granted') {
       console.log('Stopped background update. Permission not accepted');
-      //stopBackgroundUpdate();
+      stopBackgroundUpdate();
     }
   }, [locationPermission]);
 
@@ -178,7 +181,7 @@ export const TrackingProvider = ({ children }: Props) => {
 
   const stopTracking = async (caption: string) => {
     setTrackingState(TrackingState.EXPLORE);
-    const activity = {
+    const activity: Activities_Insert_Input = {
       caption: caption,
       geofence_id: insideGeoFence?.id,
       user_id: userId ?? '0',
@@ -186,6 +189,7 @@ export const TrackingProvider = ({ children }: Props) => {
       started_at: trackingStart,
       duration: durationToTimestamp(duration),
     };
+    if (friendId) activity.friend_id = friendId;
 
     try {
       const response = await InsertActivity({
@@ -236,6 +240,8 @@ export const TrackingProvider = ({ children }: Props) => {
     discardActivity: discardActivity,
     doubleScore: doubleScore,
     updateDoubleScore: updateDoubleScore,
+    friendId: friendId,
+    setFriendId: setFriendId,
   };
   return <TrackingContext.Provider value={value}>{children}</TrackingContext.Provider>;
 };
