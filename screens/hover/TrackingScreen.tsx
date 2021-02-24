@@ -114,7 +114,7 @@ const TrackingScreen: React.FC = () => {
         variables: {
           user_id: auth.user?.uid ?? '',
           linking_word: friendCollabCode,
-          date: moment(Date.now()).format('YYYY-MM-DD'),
+          timestamp: new Date().toISOString(),
           geofence_id: tracking.insideGeoFence?.id ?? 0,
         },
       });
