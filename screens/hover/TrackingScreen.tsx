@@ -143,9 +143,9 @@ const TrackingScreen: React.FC = () => {
       <KeyboardAvoidingView style={styles.infoContainer}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View>
-            <View style={[styles.collabInfo, { display: collabInfoHidden ? 'none' : 'flex' }]}>
-              {join && !isEnabled && (
-                <View>
+            <View>
+              {join && !isEnabled && !collabInfoHidden && (
+                <>
                   <View
                     style={{
                       flexDirection: 'row',
@@ -171,10 +171,10 @@ const TrackingScreen: React.FC = () => {
                     autoCorrect={false}
                   />
                   <CustomButton onPress={joinFriendTracking}>Join</CustomButton>
-                </View>
+                </>
               )}
               {start && !isEnabled && (
-                <View>
+                <>
                   <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                     <Button title={'Back'} onPress={() => setStart(false)} />
                     <TouchableOpacity onPress={refreshData} style={styles.iconButton}>
@@ -189,10 +189,10 @@ const TrackingScreen: React.FC = () => {
                   <View style={styles.collabCodeContainer}>
                     <Text style={styles.collabCode}>{yourCollabCode}</Text>
                   </View>
-                </View>
+                </>
               )}
 
-              {!join && !start && !isEnabled && (
+              {!join && !start && !isEnabled && !collabInfoHidden && (
                 <>
                   <View style={styles.collabTopBar}>
                     <View>
@@ -201,6 +201,9 @@ const TrackingScreen: React.FC = () => {
                     </View>
                     <TouchableOpacity onPress={showInfoPopup}>
                       <FAIcon name={'info-circle'} style={styles.icon} />
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => setCollabInfoHidden(!collabInfoHidden)}>
+                      <FAIcon name={'chevron-down'} style={styles.icon} />
                     </TouchableOpacity>
                   </View>
                   <View style={styles.collabButtonsContainer}>
@@ -215,8 +218,7 @@ const TrackingScreen: React.FC = () => {
               )}
               {isEnabled && (
                 <View style={{ marginHorizontal: Spacing.smaller }}>
-                  <Text style={styles.collabHeader}>Hover with friends</Text>
-
+                  <Text style={styles.collabHeader}>Hover with friend</Text>
                   <View>
                     <Text style={styles.collabSubHeader}>Earning 2x points together with</Text>
                     <View style={{ flexDirection: 'row', justifyContent: 'flex-start', marginVertical: Spacing.small }}>
@@ -228,6 +230,13 @@ const TrackingScreen: React.FC = () => {
                       <Text style={styles.nameText}>{friendName ? friendName : 'Unknown'}</Text>
                     </View>
                   </View>
+                </View>
+              )}
+              {collabInfoHidden && (
+                <View style={styles.collabTopBar}>
+                  <TouchableOpacity onPress={() => setCollabInfoHidden(!collabInfoHidden)}>
+                    <FAIcon name={'chevron-up'} style={styles.icon} />
+                  </TouchableOpacity>
                 </View>
               )}
             </View>
@@ -265,11 +274,6 @@ const TrackingScreen: React.FC = () => {
                   </View>
                 )}
                 <Text style={[styles.headerText, { lineHeight: 60 }]}>Tracking...</Text>
-                <TouchableOpacity
-                  onPress={() => setCollabInfoHidden(!collabInfoHidden)}
-                  style={{ height: 80, width: 50, justifyContent: 'center', alignItems: 'center' }}>
-                  <FAIcon name={collabInfoHidden ? 'chevron-up' : 'chevron-down'} style={styles.icon} />
-                </TouchableOpacity>
               </View>
               <View style={styles.progressBarLabels}>
                 <Text style={styles.label}>Points</Text>
