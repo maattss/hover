@@ -19,7 +19,7 @@ const NewChallengeNavigator: React.FC = () => {
         name="PickUsers"
         component={PickUsersScreen}
         options={({ navigation }) => ({
-          headerTitle: 'Choose opponents',
+          headerTitle: 'Opponents',
           // eslint-disable-next-line react/display-name
           headerRight: () => <HeaderIcon name="info" onPress={() => navigation.navigate('ChallengeInfo')} />,
         })}

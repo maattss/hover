@@ -117,7 +117,7 @@ export const generateRuleChallengeDescription = (fields: string[], rules: Challe
 
   fields.forEach((field) => {
     if (field === 'SCORE') {
-      description += '\n\t...get ' + (rules.score ?? '___') + ' points';
+      description += '\n\t...get ' + (rules.score ?? '____') + ' points';
     } else if (field === 'TIME') {
       description += '\n\t...spend ' + (rules.time ?? '___') + ' hours';
     } else if (field === 'CATEGORY') {

@@ -44,7 +44,7 @@ const ChallengeTypeScreen: React.FC<Props> = ({ route, navigation }: Props) => {
       <FlatList
         ListHeaderComponent={
           <>
-            <Text style={styles.title}>What type of challenge?</Text>
+            <Text style={styles.title}>Choose challenge type</Text>
             <Divider />
           </>
         }
