@@ -10,7 +10,6 @@ import { ListUserFragmentFragment } from '../../../graphql/Fragments.generated';
 import { Buttons, Colors, Spacing, Typography } from '../../../theme';
 import Button from '../../../components/general/Button';
 import { StackNavigationProp } from '@react-navigation/stack';
-import Divider from '../../../components/general/Divider';
 import { defaultUserProfile } from '../../../helpers/objectMappers';
 
 type PickUsersRouteProp = RouteProp<NewChallengeStackParamList, 'PickUsers'>;
@@ -51,46 +50,47 @@ const PickUsersScreen: React.FC<Props> = ({
     return false;
   };
 
-  const renderItem = (item: ListUserFragmentFragment) => {
-    return <FriendItem item={item} checked={isFriendChecked(item.id)} onValueChanged={() => onChecked(item)} />;
+  const renderItem = (item: ListUserFragmentFragment, index: number) => {
+    return (
+      <FriendItem item={item} index={index} checked={isFriendChecked(item.id)} onValueChanged={() => onChecked(item)} />
+    );
   };
 
   if (loading) return <Loading />;
 
   return (
     <View style={styles.container}>
-      <FlatList
-        ListHeaderComponent={
-          <>
-            <Text style={styles.title}>Choose opponents</Text>
-            <Divider />
-          </>
-        }
-        style={styles.box}
-        data={friends?.users as ListUserFragmentFragment[]}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => renderItem(item)}
-        ItemSeparatorComponent={() => <Divider />}
-        ListFooterComponent={<Divider />}
-      />
-      <Button
-        onPress={() =>
-          isDisabled
-            ? Alert.alert('You are not finished', 'Choose a least one opponent to proceed!', [{ text: 'OK' }])
-            : navigation.push('ChallengeType', {
-                user_id: user_id,
-                participants: participants,
-              })
-        }
-        style={isDisabled ? { backgroundColor: Colors.gray600 } : {}}>
-        Next
-      </Button>
+      <View style={styles.flatlist}>
+        <FlatList
+          ListHeaderComponent={<Text style={styles.title}>Choose opponents</Text>}
+          data={friends?.users as ListUserFragmentFragment[]}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={({ item, index }) => renderItem(item, index)}
+          ListFooterComponent={<View style={{ height: 70 }}></View>}
+        />
+      </View>
+
+      <View style={styles.stickyFooter}>
+        <Button
+          onPress={() =>
+            isDisabled
+              ? Alert.alert('You are not finished', 'Choose a least one opponent to proceed!', [{ text: 'OK' }])
+              : navigation.push('ChallengeType', {
+                  user_id: user_id,
+                  participants: participants,
+                })
+          }
+          style={isDisabled ? { backgroundColor: Colors.gray600 } : {}}>
+          Next
+        </Button>
+      </View>
     </View>
   );
 };
 
 interface FriendItemProps {
   item: ListUserFragmentFragment;
+  index: number;
   checked: boolean;
   onValueChanged: (id: ListUserFragmentFragment) => void;
 }
@@ -101,8 +101,11 @@ const FriendItem: React.FC<FriendItemProps> = (props: FriendItemProps) => {
     props.onValueChanged(props.item);
     setChecked(!checked);
   };
+  const evenColor = Colors.gray900;
+  const oddColor = Colors.black;
+  const rowColor = props.index % 2 === 0 ? evenColor : oddColor;
   return (
-    <TouchableOpacity style={styles.friendRow} onPress={onPressed}>
+    <TouchableOpacity style={[styles.friendRow, { backgroundColor: rowColor }]} onPress={onPressed}>
       <CheckBox
         center
         onPress={onPressed}
@@ -124,26 +127,25 @@ const FriendItem: React.FC<FriendItemProps> = (props: FriendItemProps) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: Spacing.base,
     alignItems: 'center',
-    justifyContent: 'space-between',
   },
-  box: {
-    backgroundColor: Colors.gray900,
+  flatlist: {
     width: '100%',
-    borderRadius: Spacing.smaller,
+  },
+  stickyFooter: {
+    width: '100%',
     paddingHorizontal: Spacing.base,
-    marginHorizontal: Spacing.smaller,
-    marginVertical: Spacing.smaller,
+    paddingVertical: Spacing.smaller,
+    position: 'absolute',
+    bottom: 0,
   },
   title: {
-    paddingVertical: Spacing.base,
+    padding: Spacing.large,
     ...Typography.headerText,
   },
   friendRow: {
     flexDirection: 'row',
     width: '100%',
-    backgroundColor: Colors.gray900,
     alignItems: 'center',
   },
   checkbox: {

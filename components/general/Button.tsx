@@ -46,6 +46,7 @@ interface MenuButtonProps {
   onPress?: () => void;
   label: string;
   icon?: string;
+  index?: number;
   disabled?: boolean;
   textStyle?: TextStyle;
   style?: ViewStyle;
@@ -53,9 +54,15 @@ interface MenuButtonProps {
 }
 
 export const MenuButton: React.FC<MenuButtonProps> = (props: MenuButtonProps) => {
+  const evenColor = Colors.gray900;
+  const oddColor = Colors.black;
+  const rowColor = props.index && props.index % 2 !== 0 ? oddColor : evenColor;
   return (
-    <TouchableOpacity style={[styles.menuButton, props.style]} disabled={props.disabled} onPress={props.onPress}>
-      <Text style={{ ...Buttons.buttonText }}>{props.label}</Text>
+    <TouchableOpacity
+      style={[styles.menuButton, props.style, { backgroundColor: rowColor }]}
+      disabled={props.disabled}
+      onPress={props.onPress}>
+      <Text style={{ ...Buttons.largeButtonText }}>{props.label}</Text>
       <FAIcon name={props.icon ?? 'chevron-right'} style={{ ...Buttons.buttonText }} />
     </TouchableOpacity>
   );
@@ -96,16 +103,16 @@ const styles = StyleSheet.create({
     paddingLeft: Spacing.small,
   },
   menuButton: {
-    ...Buttons.button,
+    padding: Spacing.large,
+    backgroundColor: Colors.blue,
+    alignItems: 'center' as const,
     marginBottom: Spacing.smaller,
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    backgroundColor: Colors.gray900,
   },
   categoryButton: {
     ...Typography.bodyText,
-    backgroundColor: Colors.gray800,
     borderRadius: Spacing.smaller,
     paddingVertical: Spacing.base,
     width: '22%',

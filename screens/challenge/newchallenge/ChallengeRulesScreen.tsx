@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Image, Text, Alert } from 'react-native';
+import { StyleSheet, View, Image, Text, Alert, ScrollView } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -83,81 +83,89 @@ const ChallengeRulesScreen: React.FC<Props> = ({ route, navigation }: Props) => 
   };
 
   return (
-    <KeyboardAvoider>
-      <View style={styles.container}>
-        <View style={styles.box}>
-          <Text style={{ ...Typography.headerText }}>Define challenge details</Text>
-          <View style={styles.infoContainer}>
-            <Text style={styles.descriptionText}>{generateRuleChallengeDescription(fields, rules, endDate)}</Text>
-            <Image
-              source={{
-                uri: getChallengeIcon(),
-              }}
-              style={styles.challengeIcon}
-            />
-          </View>
+    <View>
+      <ScrollView>
+        <KeyboardAvoider>
+          <View style={styles.container}>
+            <Text style={{ ...Typography.headerText }}>Define challenge details</Text>
+            <View style={styles.infoContainer}>
+              <Text style={styles.descriptionText}>{generateRuleChallengeDescription(fields, rules, endDate)}</Text>
+              <Image
+                source={{
+                  uri: getChallengeIcon(),
+                }}
+                style={styles.challengeIcon}
+              />
+            </View>
 
-          <Divider />
-          <View>
-            {fields.map((field, index) => {
-              if (field == 'SCORE') {
-                return (
-                  <View key={index} style={styles.section}>
-                    <Text style={styles.label}>Goal score</Text>
-                    <TextInput
-                      placeholder="Enter your goal score"
-                      placeholderTextColor={Colors.gray600}
-                      onChangeText={(val) => setScore(parseNumber(val))}
-                      value={score?.toString()}
-                      keyboardType="numeric"
-                      style={styles.formField}
-                    />
-                  </View>
-                );
-              } else if (field == 'CATEGORY') {
-                return (
-                  <View key={index} style={styles.section}>
-                    <Text style={styles.label}>Pick a category</Text>
-                    <View style={styles.categoryButtonsContainer}>{renderCategories()}</View>
-                  </View>
-                );
-              } else if (field == 'TIME') {
-                return (
-                  <View key={index} style={styles.section}>
-                    <Text style={styles.label}>Hours</Text>
-                    <TextInput
-                      placeholder="Enter number of hours"
-                      placeholderTextColor={Colors.gray600}
-                      onChangeText={(val) => setHours(parseNumber(val))}
-                      value={hours?.toString()}
-                      keyboardType="numeric"
-                      style={styles.formField}
-                    />
-                  </View>
-                );
-              } else {
-                return (
-                  <Text key={index} style={styles.label}>
-                    Invalid field: {field}
-                  </Text>
-                );
-              }
-            })}
+            <Divider />
+            <View>
+              {fields.map((field, index) => {
+                if (field == 'SCORE') {
+                  return (
+                    <View key={index} style={styles.section}>
+                      <Text style={styles.label}>Goal score</Text>
+                      <TextInput
+                        placeholder="Enter your goal score"
+                        placeholderTextColor={Colors.gray600}
+                        onChangeText={(val) => setScore(parseNumber(val))}
+                        value={score?.toString()}
+                        keyboardType="numeric"
+                        style={styles.formField}
+                      />
+                    </View>
+                  );
+                } else if (field == 'CATEGORY') {
+                  return (
+                    <View key={index} style={styles.section}>
+                      <Text style={styles.label}>Pick a category</Text>
+                      <View style={styles.categoryButtonsContainer}>{renderCategories()}</View>
+                    </View>
+                  );
+                } else if (field == 'TIME') {
+                  return (
+                    <View key={index} style={styles.section}>
+                      <Text style={styles.label}>Hours</Text>
+                      <TextInput
+                        placeholder="Enter number of hours"
+                        placeholderTextColor={Colors.gray600}
+                        onChangeText={(val) => setHours(parseNumber(val))}
+                        value={hours?.toString()}
+                        keyboardType="numeric"
+                        style={styles.formField}
+                      />
+                    </View>
+                  );
+                } else {
+                  return (
+                    <Text key={index} style={styles.label}>
+                      Invalid field: {field}
+                    </Text>
+                  );
+                }
+              })}
+            </View>
+            <View style={styles.section}>
+              <Text style={styles.label}>Last day of challenge?</Text>
+              <Button
+                style={styles.formField}
+                textStyle={endDate ? { fontWeight: 'normal' } : { fontWeight: 'normal', color: Colors.gray700 }}
+                onPress={showDatePicker}>
+                {endDate ? moment(endDate).format('DD. MMM YYYY') : 'Choose a date'}
+              </Button>
+              <DateTimePickerModal
+                isVisible={isDatePickerVisible}
+                mode="date"
+                minimumDate={new Date()}
+                onDateChange={(date) => setEndDate(date)}
+                onConfirm={handleConfirm}
+                onCancel={hideDatePicker}
+              />
+            </View>
           </View>
-          <View style={styles.section}>
-            <Text style={styles.label}>Last day of challenge?</Text>
-            <Button style={styles.formField} onPress={showDatePicker}>
-              {moment(endDate).format('DD. MMM YYYY')}
-            </Button>
-            <DateTimePickerModal
-              isVisible={isDatePickerVisible}
-              mode="date"
-              onConfirm={handleConfirm}
-              onCancel={hideDatePicker}
-            />
-          </View>
-        </View>
-
+        </KeyboardAvoider>
+      </ScrollView>
+      <View style={styles.stickyFooter}>
         <Button
           onPress={() =>
             isDisabled
@@ -172,23 +180,14 @@ const ChallengeRulesScreen: React.FC<Props> = ({ route, navigation }: Props) => 
           Next
         </Button>
       </View>
-    </KeyboardAvoider>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    padding: Spacing.base,
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  box: {
-    backgroundColor: Colors.gray900,
     width: '100%',
-    borderRadius: Spacing.smaller,
     padding: Spacing.base,
-    marginHorizontal: Spacing.smaller,
-    marginVertical: Spacing.smaller,
   },
   infoContainer: {
     flexDirection: 'row',
@@ -215,15 +214,25 @@ const styles = StyleSheet.create({
   },
   formField: {
     ...Buttons.button,
-    ...Typography.bodyText,
+    ...Typography.largeBodyText,
+    fontWeight: 'normal',
+    textAlign: 'center',
     padding: Spacing.base,
     marginBottom: Spacing.smaller,
-    backgroundColor: Colors.gray800,
+    backgroundColor: Colors.gray900,
+    width: '100%',
   },
   categoryButtonsContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
+  },
+  stickyFooter: {
+    width: '100%',
+    paddingHorizontal: Spacing.base,
+    paddingVertical: Spacing.smaller,
+    position: 'absolute',
+    bottom: 0,
   },
 });
 

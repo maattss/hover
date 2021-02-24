@@ -5,11 +5,10 @@ import Loading from '../../../components/general/Loading';
 import { NewChallengeStackParamList } from '../../../types/navigationTypes';
 import { RouteProp } from '@react-navigation/native';
 import { ChallengeTypeFragmentFragment } from '../../../graphql/Fragments.generated';
-import { Colors, Spacing, Typography } from '../../../theme';
+import { Spacing, Typography } from '../../../theme';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useChallengeTypesQuery } from '../../../graphql/queries/ChallengeTypes.generated';
 import { MenuButton } from '../../../components/general/Button';
-import Divider from '../../../components/general/Divider';
 import { Challenge_Type_Enum } from '../../../types/types';
 
 type ChallengeTypeRouteProp = RouteProp<NewChallengeStackParamList, 'ChallengeType'>;
@@ -22,10 +21,11 @@ type Props = {
 const ChallengeTypeScreen: React.FC<Props> = ({ route, navigation }: Props) => {
   const { data: challengeTypes, loading } = useChallengeTypesQuery();
 
-  const renderItem = (item: ChallengeTypeFragmentFragment) => {
+  const renderItem = (item: ChallengeTypeFragmentFragment, index: number) => {
     return (
       <MenuButton
         style={styles.challengeTypeRow}
+        index={index}
         onPress={() => {
           navigation.push('ChallengeRules', {
             ...route.params,
@@ -42,18 +42,12 @@ const ChallengeTypeScreen: React.FC<Props> = ({ route, navigation }: Props) => {
   return (
     <View style={styles.container}>
       <FlatList
-        ListHeaderComponent={
-          <>
-            <Text style={styles.title}>Choose challenge type</Text>
-            <Divider />
-          </>
-        }
-        style={styles.box}
+        style={{ flex: 1, width: '100%' }}
+        ListHeaderComponent={<Text style={styles.title}>Choose challenge type</Text>}
+        bounces={false}
         data={challengeTypes?.challenge_type as ChallengeTypeFragmentFragment[]}
         keyExtractor={({ name }) => name}
-        renderItem={({ item }) => renderItem(item)}
-        ItemSeparatorComponent={() => <Divider />}
-        ListFooterComponent={<Divider />}
+        renderItem={({ item, index }) => renderItem(item, index)}
       />
     </View>
   );
@@ -62,32 +56,20 @@ const ChallengeTypeScreen: React.FC<Props> = ({ route, navigation }: Props) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: Spacing.base,
     alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  box: {
-    backgroundColor: Colors.gray900,
-    width: '100%',
-    borderRadius: Spacing.smaller,
-    paddingHorizontal: Spacing.base,
-    marginHorizontal: Spacing.smaller,
-    marginVertical: Spacing.smaller,
   },
   title: {
-    paddingVertical: Spacing.base,
+    padding: Spacing.large,
     ...Typography.headerText,
   },
   challengeTypeRow: {
     flexDirection: 'row',
-    width: '100%',
-    backgroundColor: Colors.gray900,
     alignItems: 'center',
   },
   label: {
     ...Typography.headerText,
     fontSize: 20,
-    marginLeft: Spacing.base,
+    marginLeft: Spacing.large,
   },
 });
 
