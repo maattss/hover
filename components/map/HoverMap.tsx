@@ -82,7 +82,7 @@ const HoverMap: React.FC<HoverMapProps> = ({ customWidth, customHeight }: HoverM
   };
 
   return (
-    <View>
+    <>
       <MapView
         ref={mapView}
         mapType={chosenMapType}
@@ -104,14 +104,14 @@ const HoverMap: React.FC<HoverMapProps> = ({ customWidth, customHeight }: HoverM
           <FAIcon style={centreOnUserIconStyle} name="crosshairs" />
         </TouchableOpacity>
       </View>
-    </View>
+    </>
   );
 };
 
 const styles = StyleSheet.create({
   mapInfo: {
     position: 'absolute',
-    left: Spacing.smaller,
+    left: Spacing.smallest,
   },
   infoText: {
     ...Typography.bodyText,
