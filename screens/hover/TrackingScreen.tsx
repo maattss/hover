@@ -29,6 +29,7 @@ import moment from 'moment';
 import { defaultUserProfile } from '../../helpers/objectMappers';
 import { Avatar } from 'react-native-elements';
 import { ListUserFragmentFragment } from '../../graphql/Fragments.generated';
+import { getCurrentTimestamp } from '../../helpers/dateTimeHelpers';
 
 const wordConfig: Config = {
   dictionaries: [adjectives, animals],
@@ -110,15 +111,17 @@ const TrackingScreen: React.FC = () => {
 
   const joinFriendTracking = async () => {
     try {
+      const timestamp = new Date().toISOString();
+      console.log(timestamp, tracking.insideGeoFence?.id ?? 0);
       const response = await UpdateFriendTracking({
         variables: {
           user_id: auth.user?.uid ?? '',
           linking_word: friendCollabCode,
-          timestamp: new Date().toISOString(),
+          timestamp: getCurrentTimestamp(),
           geofence_id: tracking.insideGeoFence?.id ?? 0,
         },
       });
-
+      console.log('Response', response);
       const friend = response.data?.update_friend_tracking?.returning[0].user_start;
       if (friend) updateFriendData(friend);
       setJoin(false);
@@ -126,7 +129,8 @@ const TrackingScreen: React.FC = () => {
       console.error('Mutation error', error.message);
       Alert.alert(
         'Something went wrong...',
-        'Make sure that you have entered the correct code and that you are at the same location as your friend',
+        'Make sure that you have entered the correct code and that you are at the same location as your friend. ' +
+          'Also you cannot join a session where someone already has joined',
       );
     }
   };
