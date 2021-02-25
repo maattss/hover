@@ -112,6 +112,11 @@ export type FullFeedFragmentFragment = { readonly __typename: 'feed' } & Pick<
     readonly challenge?: Types.Maybe<{ readonly __typename: 'challenge' } & ChallengeFeedFragmentFragment>;
   };
 
+export type NotificationFragmentFragment = { readonly __typename: 'notifications' } & Pick<
+  Types.Notifications,
+  'id' | 'type' | 'text' | 'seen' | 'user_id' | 'created_at'
+>;
+
 export const ListUserFragmentFragmentDoc = gql`
   fragment listUserFragment on users {
     id
@@ -330,4 +335,14 @@ export const FullFeedFragmentFragmentDoc = gql`
   ${FeedActivityFragmentFragmentDoc}
   ${AchievementFragmentFragmentDoc}
   ${ChallengeFeedFragmentFragmentDoc}
+`;
+export const NotificationFragmentFragmentDoc = gql`
+  fragment notificationFragment on notifications {
+    id
+    type
+    text
+    seen
+    user_id
+    created_at
+  }
 `;
