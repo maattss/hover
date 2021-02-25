@@ -1,5 +1,14 @@
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, ViewStyle, ActivityIndicator, Alert } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  ViewStyle,
+  ActivityIndicator,
+  Alert,
+  Dimensions,
+} from 'react-native';
 import { Colors, Spacing, Buttons } from '../../theme';
 import useTracking from '../../hooks/useTracking';
 import HoverMap from '../../components/map/HoverMap';
@@ -29,10 +38,16 @@ const ExploreScreen: React.FC = () => {
     }
   };
 
+  const startButtonLeft = () => {
+    return {
+      left: Dimensions.get('screen').width / 2 - 55,
+    } as ViewStyle;
+  };
+
   return (
     <>
       <HoverMap />
-      <View style={styles.startButtonContainer}>
+      <View style={[styles.startButtonContainer, startButtonLeft()]}>
         <TouchableOpacity
           style={[styles.startButton, getDynamicButtonStyles()]}
           onPress={!tracking.insideGeoFence ? notInsideGeoFenceAlert : startTracking}
@@ -49,9 +64,6 @@ const styles = StyleSheet.create({
   startButtonContainer: {
     position: 'absolute',
     bottom: Spacing.smaller,
-    width: '100%',
-    flexDirection: 'row',
-    justifyContent: 'center',
   },
   startButton: {
     padding: Spacing.smallest,
