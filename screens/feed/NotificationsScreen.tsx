@@ -88,6 +88,33 @@ const NotificationsScreen: React.FC<NotificationProps> = ({ navigation, route }:
       ListFooterComponent={renderFooter}
     />
   );
+  const renderFooter = () => {
+    return (
+      <View style={styles.footer}>
+        {loading ? <Loading /> : null}
+        {endReached ? (
+          <Text style={{ ...Typography.bodyText }}>
+            {notifications.length > 0 ? 'There are no more notifications.' : 'You have no notifications'}
+          </Text>
+        ) : null}
+      </View>
+    );
+  };
+
+  if (error) return <Error message={error.message} apolloError={error} />;
+
+  return (
+    <FlatList
+      data={notifications}
+      bounces={false}
+      keyExtractor={(_, index) => index.toString()}
+      renderItem={({ item }) => renderItem(item)}
+      onEndReachedThreshold={0.5}
+      onEndReached={loadMore}
+      ListHeaderComponent={renderHeader}
+      ListFooterComponent={renderFooter}
+    />
+  );
 };
 
 const styles = StyleSheet.create({
