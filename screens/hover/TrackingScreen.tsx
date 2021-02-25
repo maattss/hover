@@ -212,7 +212,7 @@ const TrackingScreen: React.FC = () => {
                     </TouchableOpacity>
                   </View>
 
-                  <Text style={styles.label}>Your friend&apos;s hover code</Text>
+                  <Text style={styles.collabJoiningLabel}>Your friend&apos;s hover code</Text>
                   <TextInput
                     placeholder="Enter code"
                     placeholderTextColor={Colors.gray600}
@@ -394,8 +394,14 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing.smaller,
   },
   collabJoiningBack: {
-    marginLeft: -Spacing.smaller,
+    marginLeft: 0,
     marginTop: -Spacing.smallest,
+  },
+  collabJoiningLabel: {
+    ...Typography.bodyText,
+    fontWeight: 'bold',
+    textAlign: 'left',
+    marginLeft: Spacing.smaller,
   },
   label: {
     ...Typography.bodyText,
