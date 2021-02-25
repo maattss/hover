@@ -86,7 +86,6 @@ const TrackingScreen: React.FC = () => {
   };
 
   const refreshFriendData = () => {
-    console.log('REfresh friend data');
     if (trackingWithFriendId) {
       getFriend({
         variables: {

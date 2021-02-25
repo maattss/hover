@@ -112,7 +112,6 @@ export const TrackingProvider = ({ children }: Props) => {
 
   const externalUpdateUserLocation = (newUserLocation: LatLng) => {
     if (userLocation === null) {
-      console.log('Update user location. [' + newUserLocation.latitude + ',' + newUserLocation.longitude + ']');
       updateUserLocation({
         coords: {
           latitude: newUserLocation.latitude,
@@ -209,7 +208,6 @@ export const TrackingProvider = ({ children }: Props) => {
   // Update score and duration every second
   useInterval(
     () => {
-      console.log('Tracking... Score: ' + score);
       if (insideGeoFence) {
         setDuration(duration + 1);
         const scoreRatio = getGeoFenceScoreRatio(insideGeoFence.category);
