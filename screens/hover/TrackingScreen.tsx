@@ -11,7 +11,6 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from 'react-native';
-import { SafeAreaView, useSafeAreaFrame, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { uniqueNamesGenerator, Config, adjectives, animals } from 'unique-names-generator';
 import { Colors, Spacing, Typography, Buttons } from '../../theme';
 import useTracking from '../../hooks/useTracking';
