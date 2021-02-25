@@ -181,3 +181,12 @@ fragment fullFeedFragment on feed {
   }
   created_at
 }
+
+fragment notificationFragment on notifications {
+  id
+  type
+  text
+  seen
+  user_id
+  created_at
+}
