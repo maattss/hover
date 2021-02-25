@@ -211,8 +211,6 @@ export const convertToFeedData = (data: FeedQuery) => {
       feedData.push(convertToAchievementFeedData(obj.user_achievement.achievement, obj.user, obj.created_at));
     } else if (obj.challenge) {
       feedData.push(convertToChallengeFeedData(obj.challenge, obj.user, obj.created_at));
-    } else {
-      console.log('This feed element does not have a linked activity or achievement.');
     }
   }
   return feedData;

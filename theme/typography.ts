@@ -22,6 +22,10 @@ export const icon = {
   fontSize: largeFontSize,
   color: Colors.almostWhite,
 };
+export const smallIcon = {
+  fontSize: baseFontSize,
+  color: Colors.almostWhite,
+};
 
 export const smallText = {
   fontSize: smallestFontSize,
@@ -35,6 +39,11 @@ export const bodyText = {
 
 export const largeBodyText = {
   fontSize: baseFontSize,
+  color: Colors.almostWhite,
+};
+export const xlBodyText = {
+  fontSize: largeFontSize,
+  fontWeight: 'bold' as const,
   color: Colors.almostWhite,
 };
 

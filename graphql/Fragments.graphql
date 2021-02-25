@@ -40,6 +40,7 @@ fragment basicActivityFragment on activities {
   score
   started_at
   stopped_at
+  friend_id
 }
 
 fragment activityFragment on activities {
@@ -155,6 +156,9 @@ fragment feedActivityFragment on activities {
   score
   started_at
   stopped_at
+  friend {
+    ...basicUserFragment
+  }
 }
 
 fragment fullFeedFragment on feed {

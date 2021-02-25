@@ -1,0 +1,16 @@
+query GetFriendTracking($id: Int!) {
+  friend_tracking(where: { id: { _eq: $id } }) {
+    id
+    linking_word
+    user_start_id
+    user_start {
+      ...basicUserFragment
+    }
+    user_join_id
+    user_join {
+      ...basicUserFragment
+    }
+    geofence_id
+    join_limit
+  }
+}

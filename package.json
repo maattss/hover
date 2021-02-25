@@ -58,13 +58,15 @@
     "react-native-gesture-handler": "~1.8.0",
     "react-native-maps": "0.27.1",
     "react-native-modal-datetime-picker": "^9.1.0",
+    "react-native-progress": "^4.1.2",
     "react-native-reanimated": "~1.13.0",
     "react-native-safe-area-context": "3.1.9",
     "react-native-screens": "~2.15.0",
     "react-native-tab-view": "^2.15.2",
     "react-native-web": "~0.13.12",
     "react-scripts": "^4.0.0",
-    "robust-point-in-polygon": "^1.0.3"
+    "robust-point-in-polygon": "^1.0.3",
+    "unique-names-generator": "^4.3.1"
   },
   "devDependencies": {
     "@babel/core": "~7.9.0",

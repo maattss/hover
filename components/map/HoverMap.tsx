@@ -7,33 +7,40 @@ import useTracking from '../../hooks/useTracking';
 import { defaultMapLocation } from '../../helpers/objectMappers';
 import GeoFences from '../../components/map/GeoFences';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { TrackingState } from '../providers/TrackingProvider';
 
-const { width, height } = Dimensions.get('window');
+interface HoverMapProps {
+  customWidth?: number;
+  customHeight?: number;
+}
 
-const HoverMap: React.FC = () => {
+const HoverMap: React.FC<HoverMapProps> = ({ customWidth, customHeight }: HoverMapProps) => {
+  const width = customWidth ? customWidth : Dimensions.get('screen').width;
+  const height = customHeight ? customHeight : Dimensions.get('screen').height;
+
   const [chosenMapType, setChosenMapType] = useState<MapTypes>('standard');
   const [userLocationMap, setUserLocationMap] = useState<LatLng | null>(null);
   const [centreOnUser, setCentreOnUser] = useState(false);
   const [zoom, setZoom] = useState<number>(0.02);
   const tracking = useTracking();
+  const centreVerticalOffset = -0.005;
+
   const insets = useSafeAreaInsets();
   const userRegion: Region = {
     latitude: tracking.userLocation
-      ? tracking.userLocation.coords.latitude
-      : userLocationMap
-      ? userLocationMap.latitude
+      ? tracking.userLocation.coords.latitude + centreVerticalOffset
       : defaultMapLocation.latitude,
-    longitude: tracking.userLocation
-      ? tracking.userLocation.coords.longitude
-      : userLocationMap
-      ? userLocationMap.longitude
-      : defaultMapLocation.longitude,
+    longitude: tracking.userLocation ? tracking.userLocation.coords.longitude : defaultMapLocation.longitude,
     latitudeDelta: 0.02,
     longitudeDelta: 0.02,
   };
 
   // Refetch geofences and animate map to user position on init render
   useEffect(() => {
+    setUserLocationMap({
+      latitude: tracking.userLocation ? tracking.userLocation.coords.latitude : defaultMapLocation.latitude,
+      longitude: tracking.userLocation ? tracking.userLocation.coords.longitude : defaultMapLocation.longitude,
+    });
     tracking.refetchGeofences();
     animateMapToUserPos();
   }, []);
@@ -49,9 +56,8 @@ const HoverMap: React.FC = () => {
   };
 
   useEffect(() => {
-    if (tracking.userLocation === null && userLocationMap !== null) {
+    if (tracking.trackingState !== TrackingState.TRACKING && userLocationMap !== null) {
       tracking.updateUserLocation(userLocationMap);
-      animateMapToUserPos();
     }
   }, [userLocationMap]);
 
@@ -76,13 +82,13 @@ const HoverMap: React.FC = () => {
   };
 
   return (
-    <View>
+    <>
       <MapView
         ref={mapView}
         mapType={chosenMapType}
         initialRegion={userRegion}
         showsUserLocation
-        style={styles.mapStyle}
+        style={{ width: width, height: height }}
         onUserLocationChange={userLocationChange}
         onDoublePress={() => setCentreOnUser(false)}
         onPanDrag={() => setCentreOnUser(false)}
@@ -98,18 +104,14 @@ const HoverMap: React.FC = () => {
           <FAIcon style={centreOnUserIconStyle} name="crosshairs" />
         </TouchableOpacity>
       </View>
-    </View>
+    </>
   );
 };
 
 const styles = StyleSheet.create({
-  mapStyle: {
-    width,
-    height,
-  },
   mapInfo: {
     position: 'absolute',
-    left: Spacing.smaller,
+    left: Spacing.smallest,
   },
   infoText: {
     ...Typography.bodyText,

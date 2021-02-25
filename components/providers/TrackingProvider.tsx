@@ -43,6 +43,10 @@ interface TrackingContextValues {
   pauseTracking: () => void;
   stopTracking: (caption: string) => void;
   discardActivity: () => void;
+  doubleScore: boolean;
+  updateDoubleScore: (value: boolean) => void;
+  friendId: string;
+  setFriendId: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export const TrackingContext = React.createContext<TrackingContextValues>({
@@ -51,9 +55,7 @@ export const TrackingContext = React.createContext<TrackingContextValues>({
   userLocation: null,
   updateUserLocation: () => console.error('Function not initialized'),
   geoFences: [],
-  refetchGeofences: () => {
-    console.error('Function not initialized');
-  },
+  refetchGeofences: () => console.error('Function not initialized'),
   unUploadedActivities: [],
   insideGeoFence: null,
   trackingState: TrackingState.EXPLORE,
@@ -65,6 +67,10 @@ export const TrackingContext = React.createContext<TrackingContextValues>({
   pauseTracking: () => console.error('Function not initialized'),
   stopTracking: () => console.error('Function not initialized'),
   discardActivity: () => console.error('Function not initialized'),
+  doubleScore: false,
+  updateDoubleScore: () => console.error('Function not initialized'),
+  friendId: '',
+  setFriendId: () => console.error('Function not initialized'),
 });
 TrackingContext.displayName = 'TrackingContext';
 
@@ -80,6 +86,8 @@ export const TrackingProvider = ({ children }: Props) => {
   const [trackingStart, setTrackingStart] = useState('');
   const [score, setScore] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [doubleScore, setDoubleScore] = useState(false);
+  const [friendId, setFriendId] = useState('');
 
   const [InsertActivity] = useInsertActivityMutation();
   const { data: geoFenceData, error: geoFenceFetchError, refetch } = useGeofencesQuery({
@@ -102,7 +110,6 @@ export const TrackingProvider = ({ children }: Props) => {
     }
   }, [locationPermission]);
 
-  const getLocation = async () => await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Highest });
   const externalUpdateUserLocation = (newUserLocation: LatLng) => {
     if (userLocation === null) {
       updateUserLocation({
@@ -136,14 +143,18 @@ export const TrackingProvider = ({ children }: Props) => {
     }
   };
 
-  // Update user location every 5 seconds
-  useInterval(async () => {
-    console.log('Checking user location...');
-    const newUserLocation = await getLocation();
-    const differentLatitude = newUserLocation.coords.latitude !== userLocation?.coords.latitude;
-    const differentLongitude = newUserLocation.coords.longitude !== userLocation?.coords.longitude;
-    if (differentLatitude || differentLongitude) updateUserLocation(newUserLocation);
-  }, 5000);
+  // Update user location every 5 seconds if tracking
+  useInterval(
+    async () => {
+      console.log('Checking user location...');
+      const newUserLocation = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Highest });
+
+      const differentLatitude = newUserLocation.coords.latitude !== userLocation?.coords.latitude;
+      const differentLongitude = newUserLocation.coords.longitude !== userLocation?.coords.longitude;
+      if (differentLatitude || differentLongitude) updateUserLocation(newUserLocation);
+    },
+    trackingState === TrackingState.TRACKING ? 5000 : null,
+  );
 
   const addUnUploadedActivity = (activity: Activities_Insert_Input) =>
     setUnUploadedActivities([...unUploadedActivities, activity]);
@@ -169,7 +180,7 @@ export const TrackingProvider = ({ children }: Props) => {
 
   const stopTracking = async (caption: string) => {
     setTrackingState(TrackingState.EXPLORE);
-    const activity = {
+    const activity: Activities_Insert_Input = {
       caption: caption,
       geofence_id: insideGeoFence?.id,
       user_id: userId ?? '0',
@@ -177,6 +188,7 @@ export const TrackingProvider = ({ children }: Props) => {
       started_at: trackingStart,
       duration: durationToTimestamp(duration),
     };
+    if (friendId) activity.friend_id = friendId;
 
     try {
       const response = await InsertActivity({
@@ -191,14 +203,16 @@ export const TrackingProvider = ({ children }: Props) => {
       addUnUploadedActivity(activity);
     }
   };
+  const updateDoubleScore = (value: boolean) => setDoubleScore(value);
 
   // Update score and duration every second
   useInterval(
     () => {
-      console.log('Tracking...');
       if (insideGeoFence) {
         setDuration(duration + 1);
-        setScore(score + 1 * getGeoFenceScoreRatio(insideGeoFence.category));
+        const scoreRatio = getGeoFenceScoreRatio(insideGeoFence.category);
+        const scoreIncrease = doubleScore ? 2 * scoreRatio : scoreRatio;
+        setScore(score + scoreIncrease);
       }
     },
     trackingState === TrackingState.TRACKING ? 1000 : null,
@@ -222,6 +236,10 @@ export const TrackingProvider = ({ children }: Props) => {
     pauseTracking: pauseTracking,
     stopTracking: stopTracking,
     discardActivity: discardActivity,
+    doubleScore: doubleScore,
+    updateDoubleScore: updateDoubleScore,
+    friendId: friendId,
+    setFriendId: setFriendId,
   };
   return <TrackingContext.Provider value={value}>{children}</TrackingContext.Provider>;
 };
