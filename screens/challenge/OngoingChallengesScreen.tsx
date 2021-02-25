@@ -10,11 +10,6 @@ import Error from '../../components/general/Error';
 import Loading from '../../components/general/Loading';
 import OngoingChallengeCard from '../../components/challenge/OngoingChallengeCard';
 
-export interface OngoingChallengesScreenProps {
-  user_id: string;
-  ongoingChallenges: Challenge[];
-}
-
 type ChallengeScreenRouteProp = RouteProp<ChallengeStackParamList, 'OngoingChallenges'>;
 
 type Props = {
