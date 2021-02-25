@@ -30,7 +30,7 @@ const ExploreScreen: React.FC = () => {
   };
 
   return (
-    <View>
+    <>
       <HoverMap />
       <View style={styles.startButtonContainer}>
         <TouchableOpacity
@@ -41,14 +41,14 @@ const ExploreScreen: React.FC = () => {
           {!tracking.loadingUserLocation && <Text style={styles.startButtonText}>Start</Text>}
         </TouchableOpacity>
       </View>
-    </View>
+    </>
   );
 };
 
 const styles = StyleSheet.create({
   startButtonContainer: {
     position: 'absolute',
-    bottom: '10%',
+    bottom: Spacing.smaller,
     width: '100%',
     flexDirection: 'row',
     justifyContent: 'center',
