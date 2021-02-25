@@ -1,6 +1,4 @@
 import { ListUserFragmentFragment } from '../graphql/Fragments.generated';
-import { OngoingChallengesScreenProps } from '../screens/challenge/OngoingChallengesScreen';
-import { PendingChallengesScreenProps } from '../screens/challenge/PendingChallengesScreen';
 import { ChallengeRules } from './challengeTypes';
 import { Challenge_Type_Enum } from './types';
 
@@ -28,8 +26,12 @@ export type NotificationsStackParamList = {
 };
 export type ChallengeStackParamList = {
   Challenge: undefined;
-  PendingChallenges: PendingChallengesScreenProps;
-  OngoingChallenges: OngoingChallengesScreenProps;
+  PendingChallenges: {
+    user_id: string;
+  };
+  OngoingChallenges: {
+    user_id: string;
+  };
   NewChallenge: undefined;
 };
 
