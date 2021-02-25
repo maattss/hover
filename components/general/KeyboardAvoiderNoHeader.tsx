@@ -9,7 +9,7 @@ import {
   ViewStyle,
   TouchableWithoutFeedback,
 } from 'react-native';
-import { Colors, Spacing } from '../../theme';
+import { Colors } from '../../theme';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface Props {
@@ -48,7 +48,6 @@ const styles = StyleSheet.create({
   },
   inner: {
     justifyContent: 'flex-end',
-    padding: Spacing.small,
   },
   keyboardAvoider: {
     flex: 1,

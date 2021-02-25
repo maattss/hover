@@ -70,36 +70,38 @@ const UserSettingsScreen: React.FC<SettingsProps> = ({ navigation }: SettingsPro
     if (fetchLoading || mutationLoading) return <Loading />;
     return (
       <KeyboardAvoider>
-        <View style={styles.avatarContainer}>
-          <Image
-            source={{ uri: picture }}
-            style={styles.avatar}
-            onLoadStart={() => setLoadingImage(true)}
-            onLoadEnd={() => setLoadingImage(false)}
-          />
-          {loadingImage && <ActivityIndicator style={styles.avatarLoading} color={Colors.blue} />}
-          <Button onPress={() => setPicture(randomPictureURI())} title="Regenerate picture" />
-        </View>
+        <View style={styles.container}>
+          <View style={styles.avatarContainer}>
+            <Image
+              source={{ uri: picture }}
+              style={styles.avatar}
+              onLoadStart={() => setLoadingImage(true)}
+              onLoadEnd={() => setLoadingImage(false)}
+            />
+            {loadingImage && <ActivityIndicator style={styles.avatarLoading} color={Colors.blue} />}
+            <Button onPress={() => setPicture(randomPictureURI())} title="Regenerate picture" />
+          </View>
 
-        <Text style={styles.label}>Name</Text>
-        <TextInput
-          placeholder={'Enter your name'}
-          placeholderTextColor={Colors.gray600}
-          value={name}
-          onChangeText={(val) => setName(val)}
-          style={styles.formField}
-        />
-        <Text style={styles.label}>Bio</Text>
-        <TextInput
-          placeholder={'Enter something funny about yourself!'}
-          placeholderTextColor={Colors.gray600}
-          value={bio}
-          onChangeText={(val) => setBio(val)}
-          style={styles.formFieldMultiLine}
-          multiline={true}
-          numberOfLines={3}
-        />
-        <CustomButton onPress={onSubmit}>Save changes</CustomButton>
+          <Text style={styles.label}>Name</Text>
+          <TextInput
+            placeholder={'Enter your name'}
+            placeholderTextColor={Colors.gray600}
+            value={name}
+            onChangeText={(val) => setName(val)}
+            style={styles.formField}
+          />
+          <Text style={styles.label}>Bio</Text>
+          <TextInput
+            placeholder={'Enter something funny about yourself!'}
+            placeholderTextColor={Colors.gray600}
+            value={bio}
+            onChangeText={(val) => setBio(val)}
+            style={styles.formFieldMultiLine}
+            multiline={true}
+            numberOfLines={3}
+          />
+          <CustomButton onPress={onSubmit}>Save changes</CustomButton>
+        </View>
       </KeyboardAvoider>
     );
   }
@@ -107,6 +109,9 @@ const UserSettingsScreen: React.FC<SettingsProps> = ({ navigation }: SettingsPro
 export default UserSettingsScreen;
 
 const styles = StyleSheet.create({
+  container: {
+    padding: Spacing.base,
+  },
   label: {
     ...Typography.bodyText,
     fontWeight: 'bold',
