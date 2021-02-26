@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, TouchableOpacity, Platform } from 'react-native';
 import { Colors, Spacing, Typography } from '../../theme';
 import HoverMap from '../../components/map/HoverMap';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
@@ -22,7 +22,7 @@ const TrackingScreen: React.FC = () => {
     <>
       <HoverMap />
       <View>
-        <KeyboardAvoiderAbsolutePosition customMargin={100} customTransitionDuration={500}>
+        <KeyboardAvoiderAbsolutePosition newBottom={Platform.OS == 'ios' ? 10 : -100}>
           <View style={[styles.infoContainer, bottomPosition]}>
             {!collabInfoHidden && (
               <HoverWithFriends
