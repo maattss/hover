@@ -1,41 +1,50 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, TouchableOpacity, Keyboard, TouchableWithoutFeedback } from 'react-native';
 import { Colors, Spacing, Typography } from '../../theme';
 import HoverMap from '../../components/map/HoverMap';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import HoverWithFriends from '../../components/tracking/HoverWithFriends';
 import TrackingInformation from '../../components/tracking/TrackingInformation';
 import { HoverWithFriendState } from '../../types/hoverWithFriendsType';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const TrackingScreen: React.FC = () => {
   const [collabState, setCollabState] = useState<HoverWithFriendState>(HoverWithFriendState.NONE);
   const [collabInfoHidden, setCollabInfoHidden] = useState(false);
 
+  const insets = useSafeAreaInsets();
+  const bottomPosition = {
+    bottom: insets.bottom + 50,
+  };
+
   return (
     <>
       <HoverMap />
+      <View>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <View style={[styles.infoContainer, bottomPosition]}>
+            {!collabInfoHidden && (
+              <HoverWithFriends
+                collabState={collabState}
+                setCollabState={setCollabState}
+                collabInfoHidden={collabInfoHidden}
+                setCollabInfoHidden={setCollabInfoHidden}
+              />
+            )}
 
-      <View style={styles.infoContainer}>
-        {!collabInfoHidden && (
-          <HoverWithFriends
-            collabState={collabState}
-            setCollabState={setCollabState}
-            collabInfoHidden={collabInfoHidden}
-            setCollabInfoHidden={setCollabInfoHidden}
-          />
-        )}
+            {collabInfoHidden && (
+              <View style={styles.rowFlexJustifyEnd}>
+                <View style={styles.collabShowContainer}>
+                  <TouchableOpacity onPress={() => setCollabInfoHidden(!collabInfoHidden)}>
+                    <FAIcon name={'chevron-up'} style={styles.icon} />
+                  </TouchableOpacity>
+                </View>
+              </View>
+            )}
 
-        {collabInfoHidden && (
-          <View style={styles.rowFlexJustifyEnd}>
-            <View style={styles.collabShowContainer}>
-              <TouchableOpacity onPress={() => setCollabInfoHidden(!collabInfoHidden)}>
-                <FAIcon name={'chevron-up'} style={styles.icon} />
-              </TouchableOpacity>
-            </View>
+            <TrackingInformation collabState={collabState} />
           </View>
-        )}
-
-        <TrackingInformation collabState={collabState} />
+        </TouchableWithoutFeedback>
       </View>
     </>
   );
@@ -44,10 +53,8 @@ const TrackingScreen: React.FC = () => {
 const styles = StyleSheet.create({
   infoContainer: {
     position: 'absolute',
-    bottom: 0,
-    left: 0,
-    width: '98%',
-    margin: Spacing.smallest,
+    left: Spacing.smallest,
+    right: Spacing.smallest,
   },
   rowFlexJustifyEnd: {
     flexDirection: 'row',
