@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, ViewStyle } from 'react-native';
 import { Colors, Typography, Spacing } from '../../theme';
 import { ChallengeFeedData } from '../../types/feedTypes';
 import { timeStampToPresentable } from '../../helpers/dateTimeHelpers';
@@ -9,7 +9,6 @@ import { Avatar } from 'react-native-elements';
 import Leaderboard, { Item } from '../leaderboard/Leaderboard';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import { getAchievementColor } from '../profile/Achievement';
-import Divider from '../general/Divider';
 import TouchableProfile from '../general/TouchableProfile';
 
 type ChallengeFeedCardProps = {
@@ -32,8 +31,8 @@ const ChallengeFeedCard: React.FC<ChallengeFeedCardProps> = ({ data }: Challenge
 
   return (
     <View style={styles.card}>
-      <View style={[styles.topBar, { padding: Spacing.smaller }]}>
-        <Text style={{ ...Typography.headerText }}>We have a winner... </Text>
+      <View style={styles.topBar}>
+        <Text style={{ ...Typography.headerText }}>We have a winner!</Text>
       </View>
       <TouchableProfile user_id={data.user.id} name={data.user.name}>
         <View style={styles.topBar}>
@@ -50,14 +49,12 @@ const ChallengeFeedCard: React.FC<ChallengeFeedCardProps> = ({ data }: Challenge
           </View>
         </View>
       </TouchableProfile>
-      <Divider />
       <View style={styles.main}>
         <Leaderboard
           data={data.challenge.opponents.map<Item>((item) => {
             return { id: item.user.id, name: item.user.name, picture: item.user.picture, score: item.progress } as Item;
           })}
           renderItem={renderItem}
-          seperator={() => <Divider style={{ borderBottomColor: Colors.gray800 }} />}
         />
       </View>
       <View style={styles.footer}>
@@ -71,24 +68,12 @@ const ChallengeLeaderboardRow = ({ item, index }: { item: Item; index: number })
   const iconColor = {
     color: getAchievementColor(index + 1),
   };
-  const textSize =
-    index == 0
-      ? {
-          fontSize: 28,
-        }
-      : {
-          fontSize: 20,
-        };
-  const rowHeight =
-    index == 0
-      ? {
-          height: 60,
-        }
-      : {
-          height: 35,
-        };
+  const textSize = {
+    fontSize: 20,
+  };
+
   return (
-    <View style={[styles.row, rowHeight]}>
+    <View style={[styles.row]}>
       <View style={styles.left}>
         <Text style={[styles.text, styles.rank, index < 9 ? styles.singleDidget : styles.doubleDidget]}>
           {index < 3 ? <FAIcon name={'medal'} style={[iconColor, textSize]} /> : index + 1}
@@ -115,7 +100,8 @@ const styles = StyleSheet.create({
   },
   topBar: {
     flexDirection: 'row',
-    justifyContent: 'flex-start',
+    justifyContent: 'center',
+    padding: Spacing.smaller,
   },
   avatar: {
     marginRight: Spacing.small,
@@ -137,9 +123,6 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
   },
   main: {
-    borderRadius: Spacing.smaller,
-    backgroundColor: Colors.almostBlack,
-    paddingVertical: Spacing.small,
     marginBottom: Spacing.small,
   },
   footer: {
@@ -152,10 +135,13 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   row: {
-    paddingVertical: Spacing.smallest,
+    borderRadius: Spacing.smaller,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    marginVertical: Spacing.smallest,
+    paddingVertical: Spacing.smaller,
+    backgroundColor: Colors.gray800,
   },
   left: {
     flexDirection: 'row',
