@@ -1,14 +1,5 @@
 import React from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  ViewStyle,
-  ActivityIndicator,
-  Alert,
-  Dimensions,
-} from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, ViewStyle, ActivityIndicator, Dimensions } from 'react-native';
 import { Colors, Spacing, Buttons } from '../../theme';
 import useTracking from '../../hooks/useTracking';
 import HoverMap from '../../components/map/HoverMap';

@@ -3,29 +3,32 @@ import { Keyboard, TouchableWithoutFeedback, Animated, KeyboardEventListener, Ke
 
 interface Props {
   children: ReactNode;
+  customMargin?: number;
+  customTransitionDuration?: number;
 }
-const KeyboardAvoiderAbsolutePosition = ({ children }: Props) => {
+
+const KeyboardAvoiderAbsolutePosition = ({ children, customMargin, customTransitionDuration }: Props) => {
   const marginAnimation = useRef(new Animated.Value(0)).current;
 
   const keyboardWillShow: KeyboardEventListener = (event: KeyboardEvent) => {
     Animated.timing(marginAnimation, {
-      duration: event.duration,
-      toValue: event.endCoordinates.height,
+      duration: customTransitionDuration ? customTransitionDuration : event.duration,
+      toValue: customMargin ? customMargin : event.endCoordinates.height,
       useNativeDriver: false,
     }).start();
   };
 
   const keyboardWillHide: KeyboardEventListener = (event: KeyboardEvent) => {
     Animated.timing(marginAnimation, {
-      duration: event.duration,
+      duration: customTransitionDuration ? customTransitionDuration : event.duration,
       toValue: 0,
       useNativeDriver: false,
     }).start();
   };
 
   useEffect(() => {
-    Keyboard.addListener('keyboardDidShow', keyboardWillShow);
-    Keyboard.addListener('keyboardDidHide', keyboardWillHide);
+    Keyboard.addListener('keyboardWillShow', keyboardWillShow);
+    Keyboard.addListener('keyboardWillHide', keyboardWillHide);
   }, []);
 
   return (
