@@ -48,32 +48,36 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: Colors.gray900,
     borderRadius: Spacing.smaller,
-    padding: Spacing.smallest,
+    padding: Spacing.small,
   },
   topBar: {
     flexDirection: 'row',
     justifyContent: 'flex-start',
   },
   infoContainer: {
-    width: '55%',
+    width: '68%',
   },
   nameText: {
     ...Typography.headerText,
     fontSize: 20,
-    lineHeight: 50,
+    lineHeight: 30,
     flexWrap: 'wrap',
+    marginTop: Spacing.smaller,
+    width: '80%',
   },
   description: {
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
+    marginTop: Spacing.smaller,
   },
   descriptionText: {
     ...Typography.headerText,
-    fontSize: 24,
+    fontSize: 20,
     flexWrap: 'wrap',
     flexDirection: 'column',
     paddingLeft: Spacing.smaller,
+    width: '100%',
   },
   main: {
     flexDirection: 'row',
