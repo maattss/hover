@@ -60,8 +60,10 @@ const NotificationsScreen: React.FC<NotificationProps> = ({ navigation, route }:
   const renderFooter = () => {
     return (
       <View style={styles.footer}>
-        {loading ? <Loading /> : null}
-        <Text style={{ ...Typography.bodyText }}>There are no more notifications.</Text>
+        {loading && <Loading />}
+        <Text style={{ ...Typography.bodyText }}>
+          {sections?.length == 0 ? 'You have no notifications' : 'There are no more notifications.'}
+        </Text>
       </View>
     );
   };
@@ -87,71 +89,6 @@ const NotificationsScreen: React.FC<NotificationProps> = ({ navigation, route }:
       )}
       ListFooterComponent={renderFooter}
     />
-  );
-  const renderFooter = () => {
-    return (
-      <View style={styles.footer}>
-        {loading ? <Loading /> : null}
-        {endReached ? (
-          <Text style={{ ...Typography.bodyText }}>
-            {notifications.length > 0 ? 'There are no more notifications.' : 'You have no notifications'}
-          </Text>
-        ) : null}
-      </View>
-    );
-  };
-
-  if (error) return <Error message={error.message} apolloError={error} />;
-
-  return (
-    <FlatList
-      data={notifications}
-      bounces={false}
-      keyExtractor={(_, index) => index.toString()}
-      renderItem={({ item }) => renderItem(item)}
-      onEndReachedThreshold={0.5}
-      onEndReached={loadMore}
-      ListHeaderComponent={renderHeader}
-      ListFooterComponent={renderFooter}
-    />
-  );
-  const renderFooter = () => {
-    return (
-      <View style={styles.footer}>
-        {loading ? <Loading /> : null}
-        {endReached ? <Text style={{ ...Typography.bodyText }}>There are no more notifications.</Text> : null}
-      </View>
-    );
-  };
-
-  if (error) return <Error message={error.message} apolloError={error} />;
-
-  return (
-    <View>
-      <FlatList
-        data={newNotifications}
-        bounces={false}
-        keyExtractor={(_, index) => index.toString()}
-        renderItem={({ item }) => renderItem(item)}
-        ListHeaderComponent={
-          <View style={styles.header}>
-            <Text style={{ ...Typography.subHeaderText, marginTop: Spacing.base }}>New</Text>
-          </View>
-        }
-      />
-      <FlatList
-        data={earlierNotifications}
-        bounces={false}
-        keyExtractor={(_, index) => index.toString()}
-        renderItem={({ item }) => renderItem(item)}
-        ListHeaderComponent={
-          <View style={styles.header}>
-            <Text style={{ ...Typography.subHeaderText, marginTop: Spacing.base }}>Earlier</Text>
-          </View>
-        }
-        ListFooterComponent={renderFooter}
-      />
-    </View>
   );
 };
 
