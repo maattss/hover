@@ -148,6 +148,7 @@ export const TrackingProvider = ({ children }: Props) => {
     if (differentLatitude || differentLongitude) updateUserLocation(newUserLocation);
 
     if (!insideGeoFence) setTrackingState(TrackingState.TRACKINGPAUSED);
+    if (insideGeoFence) setTrackingState(TrackingState.TRACKING);
   }, locationInterval());
 
   const addUnUploadedActivity = (activity: Activities_Insert_Input) =>

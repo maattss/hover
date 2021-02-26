@@ -33,7 +33,7 @@ const KeyboardAvoiderAbsolutePosition = ({ children, customMargin, customTransit
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <Animated.View style={{ paddingBottom: marginAnimation }}>{children}</Animated.View>
+      <Animated.View style={{ bottom: marginAnimation }}>{children}</Animated.View>
     </TouchableWithoutFeedback>
   );
 };

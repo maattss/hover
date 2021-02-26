@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, TouchableOpacity, Keyboard, TouchableWithoutFeedback } from 'react-native';
+import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import { Colors, Spacing, Typography } from '../../theme';
 import HoverMap from '../../components/map/HoverMap';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
@@ -7,6 +7,7 @@ import HoverWithFriends from '../../components/tracking/HoverWithFriends';
 import TrackingInformation from '../../components/tracking/TrackingInformation';
 import { HoverWithFriendState } from '../../types/hoverWithFriendsType';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import KeyboardAvoiderAbsolutePosition from '../../components/keyboard/KeyboardAvoiderAbsolutePosition';
 
 const TrackingScreen: React.FC = () => {
   const [collabState, setCollabState] = useState<HoverWithFriendState>(HoverWithFriendState.NONE);
@@ -21,7 +22,7 @@ const TrackingScreen: React.FC = () => {
     <>
       <HoverMap />
       <View>
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <KeyboardAvoiderAbsolutePosition customMargin={100} customTransitionDuration={500}>
           <View style={[styles.infoContainer, bottomPosition]}>
             {!collabInfoHidden && (
               <HoverWithFriends
@@ -44,7 +45,7 @@ const TrackingScreen: React.FC = () => {
 
             <TrackingInformation collabState={collabState} />
           </View>
-        </TouchableWithoutFeedback>
+        </KeyboardAvoiderAbsolutePosition>
       </View>
     </>
   );
