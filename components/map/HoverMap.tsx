@@ -77,7 +77,7 @@ const HoverMap: React.FC<HoverMapProps> = ({ customWidth, customHeight }: HoverM
   };
   const getSafeAreaTop = () => {
     return {
-      marginTop: insets.top,
+      marginTop: insets.top + Spacing.smallest,
     } as ViewStyle;
   };
 
