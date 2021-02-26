@@ -3,7 +3,6 @@ import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { Colors, Spacing, Typography, Buttons } from '../../theme';
 import useTracking from '../../hooks/useTracking';
 import * as Progress from 'react-native-progress';
-import { gray900 } from '../../theme/colors';
 import { HoverWithFriendState } from '../../screens/hover/TrackingScreen';
 
 interface Props {
@@ -65,6 +64,68 @@ const styles = StyleSheet.create({
     marginTop: Spacing.smallest,
     backgroundColor: Colors.almostBlackTransparent,
     borderRadius: Spacing.smaller,
+  },
+  trackingInfoTopBar: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+    marginBottom: Spacing.smaller,
+  },
+  collabIcon: {
+    borderStyle: 'solid',
+    borderWidth: 1,
+    backgroundColor: Colors.gray900,
+    height: '75%',
+    borderColor: Colors.gold,
+    borderRadius: Spacing.smaller,
+    padding: Spacing.smaller,
+    marginLeft: -Spacing.extraLarge,
+    marginRight: Spacing.base,
+  },
+  collabIconText: {
+    ...Typography.largeBodyText,
+    fontWeight: 'bold',
+    color: Colors.gold,
+  },
+  trackingHeader: {
+    ...Typography.headerText,
+    marginVertical: Spacing.smaller,
+  },
+  progressBarLabels: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  label: {
+    ...Typography.bodyText,
+    fontWeight: 'bold',
+    textAlign: 'left',
+  },
+  progressBar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+  },
+  scoreText: {
+    ...Typography.headerText,
+    marginVertical: Spacing.small,
+    marginHorizontal: Spacing.largest,
+  },
+  stopButtonContainer: {
+    justifyContent: 'center',
+    width: '100%',
+  },
+  stopButton: {
+    ...Buttons.button,
+    justifyContent: 'center',
+    backgroundColor: Colors.redTransparent,
+  },
+  stopButtonText: {
+    ...Buttons.buttonText,
+    fontSize: 24,
+    textAlign: 'center',
   },
 });
 

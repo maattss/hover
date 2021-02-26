@@ -329,11 +329,6 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     marginLeft: Spacing.smaller,
   },
-  label: {
-    ...Typography.bodyText,
-    fontWeight: 'bold',
-    textAlign: 'left',
-  },
   formField: {
     ...Buttons.button,
     ...Typography.bodyText,
@@ -348,65 +343,6 @@ const styles = StyleSheet.create({
     ...Typography.headerText,
     fontSize: 25,
     margin: Spacing.small,
-  },
-
-
-  trackingInfoTopBar: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '100%',
-    marginBottom: Spacing.smaller,
-  },
-  collabIcon: {
-    borderStyle: 'solid',
-    borderWidth: 1,
-    backgroundColor: Colors.gray900,
-    height: '75%',
-    borderColor: Colors.gold,
-    borderRadius: Spacing.smaller,
-    padding: Spacing.smaller,
-    marginLeft: -Spacing.extraLarge,
-    marginRight: Spacing.base,
-  },
-  collabIconText: {
-    ...Typography.largeBodyText,
-    fontWeight: 'bold',
-    color: Colors.gold,
-  },
-  trackingHeader: {
-    ...Typography.headerText,
-    marginVertical: Spacing.smaller,
-  },
-  progressBarLabels: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  progressBar: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '100%',
-  },
-  scoreText: {
-    ...Typography.headerText,
-    marginVertical: Spacing.small,
-    marginHorizontal: Spacing.largest,
-  },
-  stopButtonContainer: {
-    justifyContent: 'center',
-    width: '100%',
-  },
-  stopButton: {
-    ...Buttons.button,
-    justifyContent: 'center',
-    backgroundColor: Colors.redTransparent,
-  },
-  stopButtonText: {
-    ...Buttons.buttonText,
-    fontSize: 24,
-    textAlign: 'center',
   },
 });
 
