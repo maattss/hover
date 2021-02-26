@@ -133,7 +133,7 @@ export const TrackingProvider = ({ children }: Props) => {
     }
   };
 
-  // Update user location every 5 seconds if tracking
+  // Update user location every 10 seconds if tracking
   useInterval(
     async () => {
       const newUserLocation = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Highest });
@@ -143,7 +143,7 @@ export const TrackingProvider = ({ children }: Props) => {
 
       // Check if location is outside hover zone. Pause/resume tracking
     },
-    trackingState === TrackingState.TRACKING ? 5000 : null,
+    trackingState === TrackingState.TRACKING ? 10000 : null,
   );
 
   const addUnUploadedActivity = (activity: Activities_Insert_Input) =>
@@ -180,7 +180,15 @@ export const TrackingProvider = ({ children }: Props) => {
   };
 
   const stopTracking = async (caption: string) => {
-    // TODO: Check geofence id
+    if (startGeoFence?.id !== insideGeoFence?.id) {
+      Alert.alert(
+        'Moved Hover zone during activity',
+        "You cannot end your activity in another Hover zone than where you started! Move back to: '" +
+          startGeoFence?.name +
+          "' to finish this activity. Or discard it...",
+      );
+      return;
+    }
     setTrackingState(TrackingState.EXPLORE);
     const activity: Activities_Insert_Input = {
       caption: caption,
