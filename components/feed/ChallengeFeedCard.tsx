@@ -65,29 +65,27 @@ const ChallengeFeedCard: React.FC<ChallengeFeedCardProps> = ({ data }: Challenge
 };
 
 const ChallengeLeaderboardRow = ({ item, index }: { item: Item; index: number }) => {
-  const iconColor = {
+  const iconStyle = {
     color: getAchievementColor(index + 1),
-  };
-  const textSize = {
-    fontSize: 20,
+    fontSize: 30,
   };
 
   return (
     <View style={[styles.row]}>
       <View style={styles.left}>
         <Text style={[styles.text, styles.rank, index < 9 ? styles.singleDidget : styles.doubleDidget]}>
-          {index < 3 ? <FAIcon name={'medal'} style={[iconColor, textSize]} /> : index + 1}
+          {index < 3 ? <FAIcon name={'medal'} style={iconStyle} /> : index + 1}
         </Text>
         {item.picture && (
           <View style={styles.avatar}>
             <Avatar rounded source={{ uri: item.picture ? item.picture : defaultUserProfile.picture }} size={'small'} />
           </View>
         )}
-        <Text style={[styles.text, styles.label, textSize]} numberOfLines={1}>
+        <Text style={[styles.text, styles.label]} numberOfLines={1}>
           {item.name}
         </Text>
       </View>
-      <Text style={[styles.text, styles.score, textSize]}>{item.score || 0}</Text>
+      <Text style={[styles.text, styles.score]}>{item.score || 0}</Text>
     </View>
   );
 };
@@ -101,7 +99,6 @@ const styles = StyleSheet.create({
   topBar: {
     flexDirection: 'row',
     justifyContent: 'center',
-    padding: Spacing.smaller,
   },
   avatar: {
     marginRight: Spacing.small,
@@ -162,12 +159,14 @@ const styles = StyleSheet.create({
   },
   label: {
     flex: 1,
+    fontSize: 20,
   },
   score: {
     fontWeight: 'bold',
     position: 'absolute',
     right: Spacing.base,
     paddingLeft: Spacing.base,
+    fontSize: 20,
   },
   text: {
     ...Typography.bodyText,

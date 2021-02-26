@@ -14,15 +14,15 @@ import useAuthentication from '../../hooks/useAuthentication';
 import { LatLng } from 'react-native-maps';
 import { Activities_Insert_Input } from '../../types/types';
 
-interface Props {
-  children: ReactNode;
-}
-
 export enum TrackingState {
   EXPLORE,
   TRACKING,
   TRACKINGPAUSED,
   PUBLISH,
+}
+
+interface Props {
+  children: ReactNode;
 }
 
 interface TrackingContextValues {

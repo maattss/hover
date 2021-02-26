@@ -35,7 +35,6 @@ const ChallengeScreen: React.FC<ChallengesProps> = (props: ChallengesProps) => {
   });
   useEffect(() => {
     if (data && data.user) {
-      console.log('Sorting new data...');
       const { pendingChallenges, ongoingChallenges } = convertChallenge(data);
       setPendingChallenges(pendingChallenges);
       setOngoingChallenges(ongoingChallenges);
