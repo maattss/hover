@@ -12,7 +12,7 @@ const BadgeIcon: React.FC<BadgeIconProps> = ({ value, children }: BadgeIconProps
     <View style={styles.container}>
       <View style={styles.row}>
         {children}
-        <Badge value={value} status={'error'} containerStyle={styles.badgeStyle} />
+        {value > 0 && <Badge value={value} status={'error'} containerStyle={styles.badgeStyle} />}
       </View>
     </View>
   );

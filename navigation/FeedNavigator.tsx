@@ -8,6 +8,7 @@ import { Typography } from '../theme';
 import FeedScreen from '../screens/feed/FeedScreen';
 import ProfileScreen from '../screens/profile/ProfileScreen';
 import BadgeIcon from '../components/general/BadgeIcon';
+import { useNotificationCountQuery } from '../graphql/queries/NotificationCount.generated';
 
 export const HeaderIcon = (props: { name: string; onPress: () => void }) => {
   return <FAIcon style={styles.headericon} {...props} />;
@@ -15,6 +16,7 @@ export const HeaderIcon = (props: { name: string; onPress: () => void }) => {
 const FeedStack = createStackNavigator<FeedStackParamList>();
 
 const FeedNavigator: React.FC = () => {
+  const { data } = useNotificationCountQuery();
   return (
     <FeedStack.Navigator>
       <FeedStack.Screen
@@ -24,7 +26,7 @@ const FeedNavigator: React.FC = () => {
           headerTitle: 'Feed',
           // eslint-disable-next-line react/display-name
           headerRight: () => (
-            <BadgeIcon value={3}>
+            <BadgeIcon value={data?.notifications_aggregate.aggregate?.count ?? 0}>
               <HeaderIcon name="bell" onPress={() => navigation.navigate('Notifications')} />
             </BadgeIcon>
           ),
