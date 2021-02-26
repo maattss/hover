@@ -98,6 +98,7 @@ const styles = StyleSheet.create({
     paddingTop: Spacing.small,
     flexDirection: 'row',
     justifyContent: 'flex-start',
+    alignItems: 'center',
   },
   body: {
     width: '80%',
