@@ -16,7 +16,7 @@ export type NotifiactionsQuery = { readonly __typename: 'query_root' } & {
 
 export const NotifiactionsDocument = gql`
   query Notifiactions($limit: Int, $offset: Int) {
-    notifications(limit: $limit, offset: $offset, order_by: { seen: asc, created_at: desc }) {
+    notifications(order_by: { seen: asc, created_at: desc }) {
       ...notificationFragment
     }
   }
