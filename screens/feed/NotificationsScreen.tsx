@@ -6,6 +6,8 @@ import Loading from '../../components/general/Loading';
 import { NotificationFragmentFragment } from '../../graphql/Fragments.generated';
 import { useNotifiactionsQuery } from '../../graphql/queries/Notifications.generated';
 import NotificationCard from '../../components/feed/notification/NotificationCard';
+import { useUpdateNotificationsMutation } from '../../graphql/mutations/UpdateNotifications.generated';
+import useAuthentication from '../../hooks/useAuthentication';
 
 const NotificationsScreen: React.FC = () => {
   const allData = {
@@ -83,6 +85,8 @@ const NotificationsScreen: React.FC = () => {
   const { data, loading, error } = useNotifiactionsQuery({
     fetchPolicy: 'network-only',
   });
+  const user_id = useAuthentication().user?.uid ?? '';
+  const [readNotifications] = useUpdateNotificationsMutation();
 
   useEffect(() => {
     if (data && data.notifications) {
@@ -102,11 +106,12 @@ const NotificationsScreen: React.FC = () => {
   }, [data]);
 
   const renderItem = (item: NotificationFragmentFragment) => <NotificationCard notification={item} />;
+  // Make sure footer is rendered
   const renderFooter = () => {
     return (
       <View style={styles.footer}>
         {loading ? <Loading /> : null}
-        {endReached ? <Text style={{ ...Typography.bodyText }}>There are no more notifications.</Text> : null}
+        <Text style={{ ...Typography.bodyText }}>There are no more notifications.</Text>
       </View>
     );
   };
@@ -115,29 +120,33 @@ const NotificationsScreen: React.FC = () => {
 
   return (
     <View>
-      <FlatList
-        data={newNotifications}
-        bounces={false}
-        keyExtractor={(_, index) => index.toString()}
-        renderItem={({ item }) => renderItem(item)}
-        ListHeaderComponent={
-          <View style={styles.header}>
-            <Text style={{ ...Typography.subHeaderText, marginTop: Spacing.base }}>New</Text>
-          </View>
-        }
-      />
-      <FlatList
-        data={earlierNotifications}
-        bounces={false}
-        keyExtractor={(_, index) => index.toString()}
-        renderItem={({ item }) => renderItem(item)}
-        ListHeaderComponent={
-          <View style={styles.header}>
-            <Text style={{ ...Typography.subHeaderText, marginTop: Spacing.base }}>Earlier</Text>
-          </View>
-        }
-        ListFooterComponent={renderFooter}
-      />
+      {newNotifications && (
+        <FlatList
+          data={newNotifications}
+          bounces={false}
+          keyExtractor={(_, index) => index.toString()}
+          renderItem={({ item }) => renderItem(item)}
+          ListHeaderComponent={
+            <View style={styles.header}>
+              <Text style={{ ...Typography.subHeaderText, marginTop: Spacing.base }}>New</Text>
+            </View>
+          }
+        />
+      )}
+      {earlierNotifications && (
+        <FlatList
+          data={earlierNotifications}
+          bounces={false}
+          keyExtractor={(_, index) => index.toString()}
+          renderItem={({ item }) => renderItem(item)}
+          ListHeaderComponent={
+            <View style={styles.header}>
+              <Text style={{ ...Typography.subHeaderText, marginTop: Spacing.base }}>Earlier</Text>
+            </View>
+          }
+        />
+      )}
+      {renderFooter}
     </View>
   );
 };
