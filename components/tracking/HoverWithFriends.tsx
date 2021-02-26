@@ -25,7 +25,7 @@ import { Avatar } from 'react-native-elements';
 import { ListUserFragmentFragment } from '../../graphql/Fragments.generated';
 import { getCurrentTimestamp } from '../../helpers/dateTimeHelpers';
 import { useInterval } from '../../hooks/useInterval';
-import { HoverWithFriendState } from '../../screens/hover/TrackingScreen';
+import { HoverWithFriendState } from '../../types/hoverWithFriendsType';
 
 const wordConfig: Config = {
   dictionaries: [adjectives, animals],

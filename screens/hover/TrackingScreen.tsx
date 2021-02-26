@@ -5,13 +5,7 @@ import HoverMap from '../../components/map/HoverMap';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import HoverWithFriends from '../../components/tracking/HoverWithFriends';
 import TrackingInformation from '../../components/tracking/TrackingInformation';
-
-export enum HoverWithFriendState {
-  NONE,
-  STARTING,
-  JOINING,
-  ONGOING,
-}
+import { HoverWithFriendState } from '../../types/hoverWithFriendsType';
 
 const TrackingScreen: React.FC = () => {
   const [collabState, setCollabState] = useState<HoverWithFriendState>(HoverWithFriendState.NONE);

@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { Colors, Spacing, Typography, Buttons } from '../../theme';
 import useTracking from '../../hooks/useTracking';
 import * as Progress from 'react-native-progress';
-import { HoverWithFriendState } from '../../screens/hover/TrackingScreen';
+import { HoverWithFriendState } from '../../types/hoverWithFriendsType';
 
 interface Props {
   collabState: HoverWithFriendState;
