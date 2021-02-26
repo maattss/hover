@@ -7,6 +7,7 @@ import NotificationsScreen from '../screens/feed/NotificationsScreen';
 import { Typography } from '../theme';
 import FeedScreen from '../screens/feed/FeedScreen';
 import ProfileScreen from '../screens/profile/ProfileScreen';
+import BadgeIcon from '../components/general/BadgeIcon';
 
 export const HeaderIcon = (props: { name: string; onPress: () => void }) => {
   return <FAIcon style={styles.headericon} {...props} />;
@@ -22,7 +23,11 @@ const FeedNavigator: React.FC = () => {
         options={({ navigation }) => ({
           headerTitle: 'Feed',
           // eslint-disable-next-line react/display-name
-          headerRight: () => <HeaderIcon name="bell" onPress={() => navigation.navigate('Notifications')} />,
+          headerRight: () => (
+            <BadgeIcon value={3}>
+              <HeaderIcon name="bell" onPress={() => navigation.navigate('Notifications')} />
+            </BadgeIcon>
+          ),
         })}
       />
       <FeedStack.Screen
