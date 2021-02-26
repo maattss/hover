@@ -72,15 +72,15 @@ const NotificationsScreen: React.FC = () => {
     },
   };
 
-  const [notifications, setNotification] = useState<NotificationFragmentFragment[]>(
+  const [newNotifications, setNewNotification] = useState<NotificationFragmentFragment[]>(
     allData.data.notifications as NotificationFragmentFragment[],
   );
-  const limit = 5;
-  const [offset, setOffset] = useState(0);
+  const [earlierNotifications, setEarlierNotification] = useState<NotificationFragmentFragment[]>(
+    allData.data.notifications as NotificationFragmentFragment[],
+  );
   const [endReached, setEndReached] = useState(false);
 
-  const { data, loading, error, fetchMore } = useNotifiactionsQuery({
-    variables: { limit: limit, offset: offset },
+  const { data, loading, error } = useNotifiactionsQuery({
     fetchPolicy: 'network-only',
   });
 
@@ -89,43 +89,24 @@ const NotificationsScreen: React.FC = () => {
       if (data.notifications.length == 0) {
         setEndReached(true);
       } else {
-        const newNotification: NotificationFragmentFragment[] = notifications;
+        const newest: NotificationFragmentFragment[] = [];
+        const earlier: NotificationFragmentFragment[] = [];
         data.notifications.forEach((obj: NotificationFragmentFragment) => {
-          newNotification.push(obj);
+          if (!obj.seen) newest.push(obj);
+          else earlier.push(obj);
         });
-        //setNotification(newNotification);
+        setNewNotification(newest);
+        setEarlierNotification(earlier);
       }
     }
   }, [data]);
 
-  const loadMore = () => {
-    if (!endReached && !loading) {
-      const newOffset = offset + limit;
-      setOffset(newOffset);
-      fetchMore({
-        variables: {
-          limit: limit,
-          offset: newOffset,
-        },
-      });
-    }
-  };
-
-  const renderHeader = () => (
-    <View style={styles.header}>
-      <Text style={{ ...Typography.headerText, marginTop: Spacing.base }}>Notifications</Text>
-    </View>
-  );
   const renderItem = (item: NotificationFragmentFragment) => <NotificationCard notification={item} />;
   const renderFooter = () => {
     return (
       <View style={styles.footer}>
         {loading ? <Loading /> : null}
-        {endReached ? (
-          <Text style={{ ...Typography.bodyText }}>
-            {notifications.length > 0 ? 'There are no more notifications.' : 'You have no notifications'}
-          </Text>
-        ) : null}
+        {endReached ? <Text style={{ ...Typography.bodyText }}>There are no more notifications.</Text> : null}
       </View>
     );
   };
@@ -133,23 +114,38 @@ const NotificationsScreen: React.FC = () => {
   if (error) return <Error message={error.message} apolloError={error} />;
 
   return (
-    <FlatList
-      data={notifications}
-      bounces={false}
-      keyExtractor={(_, index) => index.toString()}
-      renderItem={({ item }) => renderItem(item)}
-      onEndReachedThreshold={0.5}
-      onEndReached={loadMore}
-      ListHeaderComponent={renderHeader}
-      ListFooterComponent={renderFooter}
-    />
+    <View>
+      <FlatList
+        data={newNotifications}
+        bounces={false}
+        keyExtractor={(_, index) => index.toString()}
+        renderItem={({ item }) => renderItem(item)}
+        ListHeaderComponent={
+          <View style={styles.header}>
+            <Text style={{ ...Typography.subHeaderText, marginTop: Spacing.base }}>New</Text>
+          </View>
+        }
+      />
+      <FlatList
+        data={earlierNotifications}
+        bounces={false}
+        keyExtractor={(_, index) => index.toString()}
+        renderItem={({ item }) => renderItem(item)}
+        ListHeaderComponent={
+          <View style={styles.header}>
+            <Text style={{ ...Typography.subHeaderText, marginTop: Spacing.base }}>Earlier</Text>
+          </View>
+        }
+        ListFooterComponent={renderFooter}
+      />
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   header: {
     justifyContent: 'center',
-    alignItems: 'center',
+    paddingHorizontal: Spacing.base,
     flex: 1,
     paddingBottom: Spacing.base,
   },

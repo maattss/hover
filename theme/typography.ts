@@ -53,6 +53,12 @@ export const headerText = {
   color: Colors.almostWhite,
 };
 
+export const subHeaderText = {
+  fontSize: smallFontSize,
+  fontWeight: 'bold' as const,
+  color: Colors.almostWhite,
+};
+
 export const screenHeader = {
   ...base,
   fontSize: largeFontSize,

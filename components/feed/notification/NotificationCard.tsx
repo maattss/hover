@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Alert } from 'react-native';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import { Colors, Spacing, Typography } from '../../../theme';
 import { NotificationFragmentFragment } from '../../../graphql/Fragments.generated';
-import { getNotificationTitle } from '../../../helpers/notificationHelpers';
+import { getNotificationColor, getNotificationIcon, getNotificationTitle } from '../../../helpers/notificationHelpers';
 import { timeStampToPresentable } from '../../../helpers/dateTimeHelpers';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
@@ -48,11 +48,18 @@ const NotificationCard: React.FC<NotificationCardProps> = (props: NotificationCa
         break;
     }
   };
+  const color = getNotificationColor(props.notification.type);
   return (
     <TouchableOpacity onPress={() => getNotificationGoToAction()}>
       <View style={[styles.card, { backgroundColor: bgColor }]}>
         <Text style={styles.title}>{getNotificationTitle(props.notification.type)}</Text>
         <View style={styles.main}>
+          <View style={styles.notificationIcon}>
+            <FAIcon
+              name={getNotificationIcon(props.notification.type)}
+              style={[{ ...Typography.headerText, color: color }]}
+            />
+          </View>
           <View style={styles.body}>
             <Text style={{ ...Typography.bodyText }}>{props.notification.text}</Text>
           </View>
@@ -85,14 +92,22 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  body: {
-    width: '90%',
+  notificationIcon: {
+    width: '15%',
     paddingRight: Spacing.small,
+    paddingTop: Spacing.small,
     flexDirection: 'row',
     justifyContent: 'flex-start',
   },
+  body: {
+    width: '80%',
+    paddingRight: Spacing.small,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
   goTo: {
-    width: '10%',
+    width: '5%',
     paddingLeft: Spacing.small,
     flexDirection: 'row',
     justifyContent: 'flex-end',
