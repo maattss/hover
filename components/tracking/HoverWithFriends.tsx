@@ -33,19 +33,19 @@ const wordConfig: Config = {
   style: 'upperCase',
   length: 2,
 };
-type HoverWithFriendsProps = {
+interface Props {
   collabState: HoverWithFriendState;
   setCollabState: React.Dispatch<React.SetStateAction<HoverWithFriendState>>;
   collabInfoHidden: boolean;
   setCollabInfoHidden: React.Dispatch<React.SetStateAction<boolean>>;
-};
+}
 
-const HoverWithFriends = ({
+const HoverWithFriends: React.FC<Props> = ({
   collabState,
   setCollabState,
   collabInfoHidden,
   setCollabInfoHidden,
-}: HoverWithFriendsProps) => {
+}: Props) => {
   const tracking = useTracking();
   const auth = useAuthentication();
   const [yourCollabCode] = useState(uniqueNamesGenerator(wordConfig));
@@ -239,7 +239,6 @@ const HoverWithFriends = ({
 };
 
 const styles = StyleSheet.create({
-  // Common
   rowFlex: {
     flexDirection: 'row',
   },
@@ -275,15 +274,6 @@ const styles = StyleSheet.create({
   iconButton: {
     marginTop: Spacing.smaller,
     marginRight: Spacing.smaller,
-  },
-
-  // Specific
-  infoContainer: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    width: '98%',
-    margin: Spacing.smallest,
   },
   collabInfo: {
     width: '100%',
@@ -359,20 +349,8 @@ const styles = StyleSheet.create({
     fontSize: 25,
     margin: Spacing.small,
   },
-  collabShowContainer: {
-    paddingHorizontal: Spacing.smaller,
-    paddingVertical: Spacing.smallest,
-    backgroundColor: Colors.almostBlackTransparent,
-    borderRadius: Spacing.smaller,
-  },
-  trackingInfo: {
-    alignItems: 'center',
-    justifyContent: 'space-evenly',
-    padding: Spacing.smaller,
-    marginTop: Spacing.smallest,
-    backgroundColor: Colors.almostBlackTransparent,
-    borderRadius: Spacing.smaller,
-  },
+
+
   trackingInfoTopBar: {
     flexDirection: 'row',
     justifyContent: 'center',
