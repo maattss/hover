@@ -1,16 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {
-  Text,
-  View,
-  TouchableOpacity,
-  ActivityIndicator,
-  TextInput,
-  Button,
-  Alert,
-  TouchableWithoutFeedback,
-  Keyboard,
-  StyleSheet,
-} from 'react-native';
+import { Text, View, TouchableOpacity, ActivityIndicator, TextInput, Button, Alert, StyleSheet } from 'react-native';
 import { uniqueNamesGenerator, Config, adjectives, animals } from 'unique-names-generator';
 import { Buttons, Colors, Spacing, Typography } from '../../theme';
 import useTracking from '../../hooks/useTracking';
@@ -26,6 +15,7 @@ import { ListUserFragmentFragment } from '../../graphql/Fragments.generated';
 import { getCurrentTimestamp } from '../../helpers/dateTimeHelpers';
 import { useInterval } from '../../hooks/useInterval';
 import { HoverWithFriendState } from '../../types/hoverWithFriendsType';
+import KeyboardAvoiderAbsolutePosition from '../keyboard/KeyboardAvoiderAbsolutePosition';
 
 const wordConfig: Config = {
   dictionaries: [adjectives, animals],
@@ -137,104 +127,102 @@ const HoverWithFriends: React.FC<Props> = ({
   };
 
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <View style={styles.collabInfo}>
-        {collabState === HoverWithFriendState.NONE && (
-          <>
-            <View style={styles.collabTopBar}>
-              <View>
-                <View style={styles.rowFlex}>
-                  <Text style={{ ...Typography.xlBodyText }}>Hover with friend</Text>
-                  <TouchableOpacity onPress={showInfoPopup}>
-                    <FAIcon name={'info-circle'} style={styles.iconSmall} />
-                  </TouchableOpacity>
-                </View>
-                <Text style={styles.collabSubHeader}>Get started to earn 2x points!</Text>
+    <View style={styles.collabInfo}>
+      {collabState === HoverWithFriendState.NONE && (
+        <>
+          <View style={styles.collabTopBar}>
+            <View>
+              <View style={styles.rowFlex}>
+                <Text style={{ ...Typography.xlBodyText }}>Hover with friend</Text>
+                <TouchableOpacity onPress={showInfoPopup}>
+                  <FAIcon name={'info-circle'} style={styles.iconSmall} />
+                </TouchableOpacity>
               </View>
-
-              <TouchableOpacity onPress={() => setCollabInfoHidden(!collabInfoHidden)}>
-                <FAIcon name={'chevron-down'} style={styles.icon} />
-              </TouchableOpacity>
+              <Text style={styles.collabSubHeader}>Get started to earn 2x points!</Text>
             </View>
 
-            <View style={styles.collabButtonsContainer}>
-              <CustomButton style={styles.collabButton} onPress={startFriendTracking}>
-                Start session
-              </CustomButton>
-              <CustomButton style={styles.collabButton} onPress={() => setCollabState(HoverWithFriendState.JOINING)}>
-                Join friend
-              </CustomButton>
-            </View>
-          </>
-        )}
+            <TouchableOpacity onPress={() => setCollabInfoHidden(!collabInfoHidden)}>
+              <FAIcon name={'chevron-down'} style={styles.icon} />
+            </TouchableOpacity>
+          </View>
 
-        {collabState === HoverWithFriendState.STARTING && (
-          <>
-            <View style={styles.rowFlexSpaceBetween}>
+          <View style={styles.collabButtonsContainer}>
+            <CustomButton style={styles.collabButton} onPress={startFriendTracking}>
+              Start session
+            </CustomButton>
+            <CustomButton style={styles.collabButton} onPress={() => setCollabState(HoverWithFriendState.JOINING)}>
+              Join friend
+            </CustomButton>
+          </View>
+        </>
+      )}
+
+      {collabState === HoverWithFriendState.STARTING && (
+        <>
+          <View style={styles.rowFlexSpaceBetween}>
+            <Button title={'Back'} onPress={() => setCollabState(HoverWithFriendState.NONE)} />
+            <TouchableOpacity onPress={refreshFriendData} style={styles.iconButton}>
+              <FAIcon name={'sync'} style={styles.iconBlue} />
+            </TouchableOpacity>
+          </View>
+          <View style={{ justifyContent: 'center' }}>
+            <ActivityIndicator />
+            <Text style={styles.waitingForFriendLabel}>Waiting for friend to join...</Text>
+          </View>
+
+          <View style={styles.collabCodeContainer}>
+            <Text style={styles.collabCode}>{yourCollabCode}</Text>
+          </View>
+        </>
+      )}
+
+      {collabState === HoverWithFriendState.JOINING && (
+        <KeyboardAvoiderAbsolutePosition>
+          <View style={[styles.rowFlexSpaceBetween, { paddingVertical: Spacing.smaller }]}>
+            <View style={styles.collabJoiningBack}>
               <Button title={'Back'} onPress={() => setCollabState(HoverWithFriendState.NONE)} />
-              <TouchableOpacity onPress={refreshFriendData} style={styles.iconButton}>
-                <FAIcon name={'sync'} style={styles.iconBlue} />
-              </TouchableOpacity>
-            </View>
-            <View style={{ justifyContent: 'center' }}>
-              <ActivityIndicator />
-              <Text style={styles.waitingForFriendLabel}>Waiting for friend to join...</Text>
             </View>
 
-            <View style={styles.collabCodeContainer}>
-              <Text style={styles.collabCode}>{yourCollabCode}</Text>
-            </View>
-          </>
-        )}
+            <TouchableOpacity onPress={showInfoPopup}>
+              <FAIcon name={'info-circle'} style={styles.icon} />
+            </TouchableOpacity>
+          </View>
 
-        {collabState === HoverWithFriendState.JOINING && (
-          <>
-            <View style={[styles.rowFlexSpaceBetween, { paddingVertical: Spacing.smaller }]}>
-              <View style={styles.collabJoiningBack}>
-                <Button title={'Back'} onPress={() => setCollabState(HoverWithFriendState.NONE)} />
-              </View>
+          <Text style={styles.collabJoiningLabel}>Your friend&apos;s hover code</Text>
+          <TextInput
+            placeholder="Enter code"
+            placeholderTextColor={Colors.gray600}
+            onChangeText={(val) => setFriendCollabCode(val)}
+            style={styles.formField}
+            autoCapitalize={'characters'}
+            autoCorrect={false}
+          />
+          <CustomButton onPress={joinFriendTracking}>Join</CustomButton>
+        </KeyboardAvoiderAbsolutePosition>
+      )}
 
-              <TouchableOpacity onPress={showInfoPopup}>
-                <FAIcon name={'info-circle'} style={styles.icon} />
-              </TouchableOpacity>
-            </View>
-
-            <Text style={styles.collabJoiningLabel}>Your friend&apos;s hover code</Text>
-            <TextInput
-              placeholder="Enter code"
-              placeholderTextColor={Colors.gray600}
-              onChangeText={(val) => setFriendCollabCode(val)}
-              style={styles.formField}
-              autoCapitalize={'characters'}
-              autoCorrect={false}
-            />
-            <CustomButton onPress={joinFriendTracking}>Join</CustomButton>
-          </>
-        )}
-
-        {collabState === HoverWithFriendState.ONGOING && (
-          <View style={{ marginHorizontal: Spacing.smaller }}>
-            <View style={styles.rowFlexSpaceBetween}>
-              <Text style={{ ...Typography.xlBodyText }}>Hover with friend</Text>
-              <TouchableOpacity onPress={() => setCollabInfoHidden(!collabInfoHidden)}>
-                <FAIcon name={'chevron-down'} style={styles.icon} />
-              </TouchableOpacity>
-            </View>
-            <Text style={styles.collabSubHeader}>Earning 2x points together with: </Text>
-            <View style={styles.friendContainer}>
-              <View style={styles.rowFlexJustifyStart}>
-                <Avatar
-                  rounded
-                  source={{ uri: friend?.picture ? friend.picture : defaultUserProfile.picture }}
-                  size="medium"
-                />
-                <Text style={styles.collabFriendName}>{friend ? friend.name : 'Unknown'}</Text>
-              </View>
+      {collabState === HoverWithFriendState.ONGOING && (
+        <View style={{ marginHorizontal: Spacing.smaller }}>
+          <View style={styles.rowFlexSpaceBetween}>
+            <Text style={{ ...Typography.xlBodyText }}>Hover with friend</Text>
+            <TouchableOpacity onPress={() => setCollabInfoHidden(!collabInfoHidden)}>
+              <FAIcon name={'chevron-down'} style={styles.icon} />
+            </TouchableOpacity>
+          </View>
+          <Text style={styles.collabSubHeader}>Earning 2x points together with: </Text>
+          <View style={styles.friendContainer}>
+            <View style={styles.rowFlexJustifyStart}>
+              <Avatar
+                rounded
+                source={{ uri: friend?.picture ? friend.picture : defaultUserProfile.picture }}
+                size="medium"
+              />
+              <Text style={styles.collabFriendName}>{friend ? friend.name : 'Unknown'}</Text>
             </View>
           </View>
-        )}
-      </View>
-    </TouchableWithoutFeedback>
+        </View>
+      )}
+    </View>
   );
 };
 
