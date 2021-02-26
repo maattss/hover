@@ -2,7 +2,6 @@ import React, { useState, ReactNode, useEffect } from 'react';
 import { GeoFence } from '../../types/geoFenceTypes';
 import { convertToGeoFences } from '../../helpers/objectMappers';
 import { usePermissions, LOCATION, PermissionResponse } from 'expo-permissions';
-import { startBackgroundUpdate, stopBackgroundUpdate } from '../../tasks/locationBackgroundTasks';
 import { useGeofencesQuery } from '../../graphql/queries/Geofences.generated';
 import { useInsertActivityMutation } from '../../graphql/mutations/InsertActivity.generated';
 import { Alert } from 'react-native';
@@ -82,6 +81,7 @@ export const TrackingProvider = ({ children }: Props) => {
   const [geoFences, setGeoFences] = useState<GeoFence[]>([]);
   const [unUploadedActivities, setUnUploadedActivities] = useState<Activities_Insert_Input[]>([]);
   const [insideGeoFence, setInsideGeoFence] = useState<GeoFence | null>(null);
+  const [startGeoFence, setStartGeofence] = useState<GeoFence | null>(null);
   const [trackingState, setTrackingState] = useState<TrackingState>(TrackingState.EXPLORE);
   const [trackingStart, setTrackingStart] = useState('');
   const [score, setScore] = useState(0);
@@ -99,16 +99,6 @@ export const TrackingProvider = ({ children }: Props) => {
     }
     if (geoFenceFetchError) console.error(geoFenceFetchError.message);
   }, [geoFenceData, geoFenceFetchError]);
-
-  useEffect(() => {
-    if (locationPermission && locationPermission.status === 'granted') {
-      console.log('Start background update');
-      startBackgroundUpdate();
-    } else if (locationPermission && locationPermission.status !== 'granted') {
-      console.log('Stopped background update. Permission not accepted');
-      stopBackgroundUpdate();
-    }
-  }, [locationPermission]);
 
   const externalUpdateUserLocation = (newUserLocation: LatLng) => {
     if (userLocation === null) {
@@ -146,12 +136,12 @@ export const TrackingProvider = ({ children }: Props) => {
   // Update user location every 5 seconds if tracking
   useInterval(
     async () => {
-      console.log('Checking user location...');
       const newUserLocation = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Highest });
-
       const differentLatitude = newUserLocation.coords.latitude !== userLocation?.coords.latitude;
       const differentLongitude = newUserLocation.coords.longitude !== userLocation?.coords.longitude;
       if (differentLatitude || differentLongitude) updateUserLocation(newUserLocation);
+
+      // Check if location is outside hover zone. Pause/resume tracking
     },
     trackingState === TrackingState.TRACKING ? 5000 : null,
   );
@@ -161,12 +151,23 @@ export const TrackingProvider = ({ children }: Props) => {
 
   // Tracking
   const startTracking = () => {
-    if (insideGeoFence) {
-      setScore(0);
-      setDuration(0);
-      setTrackingState(TrackingState.TRACKING);
-      setTrackingStart(getCurrentTimestamp());
+    if (locationPermission && locationPermission.status !== 'granted') {
+      Alert.alert('Location permission not accepted', 'Location permission is required to start tracking');
+      return;
     }
+    if (!insideGeoFence) {
+      Alert.alert(
+        'Not inside a Hover zone',
+        "Sorry, you can't start tracking here! Move to a Hover zone to start earning points.",
+      );
+      return;
+    }
+
+    setScore(0);
+    setDuration(0);
+    setTrackingState(TrackingState.TRACKING);
+    setTrackingStart(getCurrentTimestamp());
+    setStartGeofence(insideGeoFence);
   };
   const resumeTracking = () => {
     setTrackingState(TrackingState.TRACKING);
@@ -179,6 +180,7 @@ export const TrackingProvider = ({ children }: Props) => {
   };
 
   const stopTracking = async (caption: string) => {
+    // TODO: Check geofence id
     setTrackingState(TrackingState.EXPLORE);
     const activity: Activities_Insert_Input = {
       caption: caption,

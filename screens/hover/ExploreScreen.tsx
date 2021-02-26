@@ -16,18 +16,8 @@ import HoverMap from '../../components/map/HoverMap';
 const ExploreScreen: React.FC = () => {
   const tracking = useTracking();
 
-  const startTracking = () => {
-    if (tracking.insideGeoFence) tracking.startTracking();
-  };
-  const notInsideGeoFenceAlert = () => {
-    Alert.alert(
-      'Not inside a Hover zone',
-      "Sorry, you can't start tracking here! Move to a Hover zone to start earning points.",
-      [{ text: 'Ok', style: 'cancel' }],
-    );
-  };
   const getDynamicButtonStyles = () => {
-    if (!tracking.insideGeoFence) {
+    if (!tracking.insideGeoFence || (tracking.locationPermission && tracking.locationPermission.status !== 'granted')) {
       return {
         backgroundColor: Colors.grayTransparent,
       } as ViewStyle;
@@ -50,7 +40,7 @@ const ExploreScreen: React.FC = () => {
       <View style={[styles.startButtonContainer, startButtonLeft()]}>
         <TouchableOpacity
           style={[styles.startButton, getDynamicButtonStyles()]}
-          onPress={!tracking.insideGeoFence ? notInsideGeoFenceAlert : startTracking}
+          onPress={tracking.startTracking}
           disabled={tracking.loadingUserLocation}>
           {tracking.loadingUserLocation && <ActivityIndicator />}
           {!tracking.loadingUserLocation && <Text style={styles.startButtonText}>Start</Text>}
