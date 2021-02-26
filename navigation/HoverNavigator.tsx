@@ -19,7 +19,7 @@ const HoverNavigator: React.FC = () => {
       {tracking.trackingState === TrackingState.TRACKING && (
         <ExploreStack.Screen name="Tracking" component={TrackingScreen} />
       )}
-      {tracking.trackingState === TrackingState.PUBLISH && (
+      {tracking.trackingState === (TrackingState.TRACKINGPAUSED || TrackingState.PUBLISH) && (
         <ExploreStack.Screen name="Publish" component={PublishScreen} />
       )}
     </ExploreStack.Navigator>

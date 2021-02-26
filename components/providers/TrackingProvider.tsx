@@ -21,6 +21,7 @@ interface Props {
 export enum TrackingState {
   EXPLORE,
   TRACKING,
+  TRACKINGPAUSED,
   PUBLISH,
 }
 
@@ -71,6 +72,7 @@ export const TrackingContext = React.createContext<TrackingContextValues>({
   friendId: '',
   setFriendId: () => console.error('Function not initialized'),
 });
+
 TrackingContext.displayName = 'TrackingContext';
 
 export const TrackingProvider = ({ children }: Props) => {
@@ -141,9 +143,11 @@ export const TrackingProvider = ({ children }: Props) => {
       const differentLongitude = newUserLocation.coords.longitude !== userLocation?.coords.longitude;
       if (differentLatitude || differentLongitude) updateUserLocation(newUserLocation);
 
+      if (!insideGeoFence) setTrackingState(TrackingState.TRACKINGPAUSED);
+
       // Check if location is outside hover zone. Pause/resume tracking
     },
-    trackingState === TrackingState.TRACKING ? 10000 : null,
+    trackingState === (TrackingState.TRACKING || TrackingState.TRACKINGPAUSED) ? 10000 : null,
   );
 
   const addUnUploadedActivity = (activity: Activities_Insert_Input) =>
