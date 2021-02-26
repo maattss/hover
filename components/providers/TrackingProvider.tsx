@@ -135,20 +135,20 @@ export const TrackingProvider = ({ children }: Props) => {
     }
   };
 
-  // Update user location every 10 seconds if tracking
-  useInterval(
-    async () => {
-      const newUserLocation = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Highest });
-      const differentLatitude = newUserLocation.coords.latitude !== userLocation?.coords.latitude;
-      const differentLongitude = newUserLocation.coords.longitude !== userLocation?.coords.longitude;
-      if (differentLatitude || differentLongitude) updateUserLocation(newUserLocation);
+  const locationInterval = () => {
+    if (trackingState === TrackingState.TRACKING) return 15000;
+    if (trackingState === TrackingState.TRACKINGPAUSED) return 5000;
+    return null;
+  };
 
-      if (!insideGeoFence) setTrackingState(TrackingState.TRACKINGPAUSED);
+  useInterval(async () => {
+    const newUserLocation = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Highest });
+    const differentLatitude = newUserLocation.coords.latitude !== userLocation?.coords.latitude;
+    const differentLongitude = newUserLocation.coords.longitude !== userLocation?.coords.longitude;
+    if (differentLatitude || differentLongitude) updateUserLocation(newUserLocation);
 
-      // Check if location is outside hover zone. Pause/resume tracking
-    },
-    trackingState === (TrackingState.TRACKING || TrackingState.TRACKINGPAUSED) ? 10000 : null,
-  );
+    if (!insideGeoFence) setTrackingState(TrackingState.TRACKINGPAUSED);
+  }, locationInterval());
 
   const addUnUploadedActivity = (activity: Activities_Insert_Input) =>
     setUnUploadedActivities([...unUploadedActivities, activity]);
