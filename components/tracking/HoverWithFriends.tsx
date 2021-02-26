@@ -1,15 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {
-  Text,
-  View,
-  TouchableOpacity,
-  ActivityIndicator,
-  TextInput,
-  Button,
-  Alert,
-  StyleSheet,
-  Keyboard,
-} from 'react-native';
+import { Text, View, TouchableOpacity, ActivityIndicator, TextInput, Button, Alert, StyleSheet } from 'react-native';
 import { uniqueNamesGenerator, Config, adjectives, animals } from 'unique-names-generator';
 import { Buttons, Colors, Spacing, Typography } from '../../theme';
 import useTracking from '../../hooks/useTracking';
@@ -25,8 +15,6 @@ import { ListUserFragmentFragment } from '../../graphql/Fragments.generated';
 import { getCurrentTimestamp } from '../../helpers/dateTimeHelpers';
 import { useInterval } from '../../hooks/useInterval';
 import { HoverWithFriendState } from '../../types/hoverWithFriendsType';
-import KeyboardAvoiderAbsolutePosition from '../keyboard/KeyboardAvoiderAbsolutePosition';
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
 const wordConfig: Config = {
   dictionaries: [adjectives, animals],
