@@ -10,6 +10,7 @@ import { Challenge_Participant_State_Enum, Challenge_Type_Enum } from '../../typ
 import { OpponentFragmentFragment, ChallengeFeedFragmentFragment } from '../../graphql/Fragments.generated';
 import TouchableProfile from '../general/TouchableProfile';
 import { defaultUserProfile } from '../../helpers/objectMappers';
+import * as Progress from 'react-native-progress';
 
 interface ChallengeOpponentsProps {
   challenge: Challenge | ChallengeFeedFragmentFragment;
@@ -30,10 +31,31 @@ export const ChallengeOpponents: React.FC<ChallengeOpponentsProps> = ({ challeng
     }
     return (width > 100 ? 100 : width) + '%';
   };
+
+  const getProgressPercentageNew = (opponent: OpponentFragmentFragment) => {
+    let percentage = 0;
+    if (
+      challenge.challenge_type == Challenge_Type_Enum.Score ||
+      challenge.challenge_type == Challenge_Type_Enum.ScoreCategory
+    ) {
+      percentage = opponent.progress && challenge.rules.score ? opponent.progress / challenge.rules.score : 0;
+    } else if (
+      challenge.challenge_type == Challenge_Type_Enum.Time ||
+      challenge.challenge_type == Challenge_Type_Enum.TimeCategory
+    ) {
+      percentage = opponent.progress && challenge.rules.time ? opponent.progress / challenge.rules.time : 0;
+    }
+    return percentage > 1 ? 1 : percentage;
+  };
+
+  const getColor = (opponent: OpponentFragmentFragment) => {
+    return opponent.state == Challenge_Participant_State_Enum.Accepted ? Colors.blue : Colors.gray700;
+  };
+
   return (
     <View style={styles.row}>
       <View>
-        <Text style={styles.opponentHeaderText}>Challenge partcicipants</Text>
+        <Text style={styles.opponentHeaderText}>Participants</Text>
         {challenge.opponents.map((opponent, index) => {
           return (
             <TouchableProfile key={index} user_id={opponent.user.id} name={opponent.user.name}>
@@ -44,27 +66,20 @@ export const ChallengeOpponents: React.FC<ChallengeOpponentsProps> = ({ challeng
                 <View style={styles.opponentInfo}>
                   <View style={styles.opponentNameStateRow}>
                     <Text style={styles.opponentNameText}>{opponent.user.name}</Text>
-                    <Text style={styles.opponentStateText}>{opponent.state}</Text>
+                    <Text style={styles.opponentStateText}>Status: {opponent.state.toLowerCase()}</Text>
                   </View>
 
-                  <View style={styles.opponentNameStateRow}>
-                    <View style={styles.progressBar}>
-                      {opponent.state != Challenge_Participant_State_Enum.Declined && (
-                        <Animated.View
-                          style={[
-                            [StyleSheet.absoluteFill],
-                            {
-                              backgroundColor:
-                                opponent.state == Challenge_Participant_State_Enum.Accepted
-                                  ? Colors.blue
-                                  : Colors.gray500,
-                              borderRadius: 5,
-                              width: getProgressPercentage(opponent),
-                            },
-                          ]}
-                        />
-                      )}
-                    </View>
+                  <View style={styles.opponentProgressRow}>
+                    {opponent.state !== Challenge_Participant_State_Enum.Declined && (
+                      <Progress.Bar
+                        progress={getProgressPercentageNew(opponent)}
+                        height={10}
+                        width={null}
+                        borderColor={getColor(opponent)}
+                        color={getColor(opponent)}
+                        borderWidth={2}
+                      />
+                    )}
                   </View>
                 </View>
               </View>
@@ -99,7 +114,6 @@ const OngoingChallengeCard: React.FC<OngoingChallengeCardProps> = ({ challenge }
       </TouchableProfile>
       <Divider />
       <ChallengeOpponents challenge={challenge as Challenge} />
-      <Divider />
 
       <View style={styles.footer}>
         <Text style={styles.footerText}>{timeStampToPresentable(challenge.created_at)}</Text>
@@ -113,10 +127,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.gray900,
     borderRadius: Spacing.smaller,
     padding: Spacing.base,
-    shadowOpacity: 0.75,
-    shadowRadius: 3,
-    shadowColor: Colors.black,
-    shadowOffset: { height: 0, width: 0 },
+    marginVertical: Spacing.smallest,
   },
   row: {
     flexDirection: 'row',
@@ -149,22 +160,14 @@ const styles = StyleSheet.create({
   captionText: {
     color: Colors.almostWhite,
     fontSize: 12,
-    fontStyle: 'italic',
     flexWrap: 'wrap',
-  },
-  progressBar: {
-    height: 10,
-    width: '100%',
-    backgroundColor: Colors.almostWhite,
-    borderColor: Colors.almostBlack,
-    borderWidth: 2,
-    borderRadius: 5,
   },
   opponentHeaderText: {
     color: Colors.almostWhite,
-    fontSize: 12,
+    fontSize: 16,
     fontWeight: 'bold',
-    paddingVertical: Spacing.base,
+    marginTop: Spacing.smallest,
+    marginBottom: Spacing.small,
   },
   opponentRow: {
     flex: 1,
@@ -173,27 +176,28 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.base,
   },
   opponentNameStateRow: {
-    width: '90%',
+    width: '85%',
     flexDirection: 'row',
-    justifyContent: 'center',
-    flexShrink: 1,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  opponentProgressRow: {
+    width: '85%',
+    marginTop: Spacing.smallest,
   },
   opponentNameText: {
     ...Typography.bodyText,
     fontWeight: 'bold',
-    width: '70%',
   },
   opponentStateText: {
     ...Typography.bodyText,
     fontSize: 10,
     fontStyle: 'italic',
-    width: '30%',
   },
   footer: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
     width: '100%',
-    marginTop: Spacing.smaller,
   },
   footerText: {
     color: Colors.almostWhite,

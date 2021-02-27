@@ -129,6 +129,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.gray900,
     borderRadius: Spacing.smaller,
     padding: Spacing.small,
+    marginVertical: Spacing.smallest,
   },
   avatar: {
     marginRight: Spacing.base,
