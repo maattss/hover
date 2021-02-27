@@ -152,7 +152,7 @@ const ChallengeRulesScreen: React.FC<Props> = ({ route, navigation }: Props) => 
             <View>{renderFields()}</View>
 
             <View style={styles.section}>
-              <Text style={styles.label}>Last day of challenge?</Text>
+              <Text style={styles.label}>Choose last day in the challenge</Text>
               <Button
                 style={styles.formField}
                 textStyle={endDate ? { fontWeight: 'normal' } : { fontWeight: 'normal', color: Colors.gray700 }}
@@ -195,6 +195,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: Spacing.smaller,
     paddingHorizontal: Spacing.smallest,
+    width: '100%',
   },
   descriptionText: {
     ...Typography.bodyText,
@@ -203,6 +204,7 @@ const styles = StyleSheet.create({
   challengeIcon: {
     width: 75,
     height: 75,
+    marginTop: Spacing.smallest,
   },
   section: {
     paddingVertical: Spacing.smaller,
