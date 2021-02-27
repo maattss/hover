@@ -25,83 +25,9 @@ const PREVIEW_SIZE = 2;
 
 const showPendingInfoPopup = () =>
   Alert.alert('Your pending invites', 'Accept the challenges to compete with other players.');
+
 const showOngoingInfoPopup = () =>
   Alert.alert('Your ongoing challenges', 'All your current challenges and their status.');
-
-const ChallengeScreen: React.FC<ChallengesProps> = (props: ChallengesProps) => {
-  const user_id = useAuthentication().user?.uid;
-  const [refreshing, setRefreshing] = useState(false);
-  const [pendingChallenges, setPendingChallenges] = useState<Challenge[]>();
-  const [ongoingChallenges, setOngoingChallenges] = useState<Challenge[]>();
-
-  const { data, loading, error, refetch } = useGetChallengesQuery({
-    variables: { user_id: user_id ? user_id : '', limit: PREVIEW_SIZE + 1 },
-    nextFetchPolicy: 'network-only',
-  });
-
-  useEffect(() => {
-    if (data && data.user) {
-      const { pendingChallenges, ongoingChallenges } = convertChallenge(data);
-      setPendingChallenges(pendingChallenges);
-      setOngoingChallenges(ongoingChallenges);
-    }
-  }, [data]);
-
-  const handleRefresh = useCallback(async () => {
-    if (refetch) {
-      setRefreshing(true);
-      await refetch();
-      setRefreshing(false);
-    }
-  }, [refreshing]);
-
-  const isFocused = useIsFocused();
-  useEffect(() => {
-    if (isFocused) {
-      handleRefresh();
-    }
-  }, [isFocused]);
-
-  const pendingChallengesExists = pendingChallenges && pendingChallenges.length > 0;
-  const ongoingChallengesExists = ongoingChallenges && ongoingChallenges.length > 0;
-
-  if (loading) return <Loading />;
-
-  if (error) return <Error message={error.message} apolloError={error} />;
-
-  return (
-    <ScrollView
-      style={styles.scrollView}
-      contentContainerStyle={styles.scrollContentContainer}
-      refreshControl={
-        <RefreshControl
-          refreshing={refreshing}
-          onRefresh={handleRefresh}
-          tintColor={Colors.blue}
-          colors={[Colors.blue]}
-          progressBackgroundColor={Colors.transparent}
-        />
-      }>
-      {pendingChallengesExists &&
-        renderPendingChallenges(props, pendingChallenges ? pendingChallenges : [], user_id ? user_id : '')}
-      {ongoingChallengesExists &&
-        renderOngoingChallenges(props, ongoingChallenges ? ongoingChallenges : [], user_id ? user_id : '')}
-      {user_id && !pendingChallengesExists && !ongoingChallengesExists && (
-        <View style={styles.box}>
-          <View style={styles.newChallengeHeader}>
-            <Text style={{ ...Typography.headerText }}>Want a new challenge?</Text>
-            <Text style={{ ...Typography.bodyText, padding: Spacing.smallest }}>
-              Create a challenge for you and your friends!
-            </Text>
-          </View>
-          <Button style={styles.challengeButton} onPress={() => props.navigation.navigate('NewChallenge')}>
-            Create new challenge
-          </Button>
-        </View>
-      )}
-    </ScrollView>
-  );
-};
 
 const renderPendingChallenges = ({ navigation }: ChallengesProps, pendingChallenges: Challenge[], user_id: string) => {
   return (
@@ -153,9 +79,81 @@ const renderOngoingChallenges = ({ navigation }: ChallengesProps, ongoingChallen
   );
 };
 
+const ChallengeScreen: React.FC<ChallengesProps> = (props: ChallengesProps) => {
+  const user_id = useAuthentication().user?.uid;
+  const [refreshing, setRefreshing] = useState(false);
+  const [pendingChallenges, setPendingChallenges] = useState<Challenge[]>();
+  const [ongoingChallenges, setOngoingChallenges] = useState<Challenge[]>();
+
+  const { data, loading, error, refetch } = useGetChallengesQuery({
+    variables: { user_id: user_id ? user_id : '', limit: PREVIEW_SIZE + 1 },
+    nextFetchPolicy: 'network-only',
+  });
+
+  useEffect(() => {
+    if (data && data.user) {
+      const { pendingChallenges, ongoingChallenges } = convertChallenge(data);
+      setPendingChallenges(pendingChallenges);
+      setOngoingChallenges(ongoingChallenges);
+    }
+  }, [data]);
+
+  const handleRefresh = useCallback(async () => {
+    if (refetch) {
+      setRefreshing(true);
+      await refetch();
+      setRefreshing(false);
+    }
+  }, [refreshing]);
+
+  const isFocused = useIsFocused();
+  useEffect(() => {
+    if (isFocused) handleRefresh();
+  }, [isFocused]);
+
+  const pendingChallengesExists = pendingChallenges && pendingChallenges.length > 0;
+  const ongoingChallengesExists = ongoingChallenges && ongoingChallenges.length > 0;
+
+  if (loading) return <Loading />;
+
+  if (error) return <Error message={error.message} apolloError={error} />;
+
+  return (
+    <ScrollView
+      style={styles.scrollView}
+      contentContainerStyle={styles.scrollContentContainer}
+      refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={handleRefresh}
+          tintColor={Colors.blue}
+          colors={[Colors.blue]}
+          progressBackgroundColor={Colors.transparent}
+        />
+      }>
+      {pendingChallengesExists &&
+        renderPendingChallenges(props, pendingChallenges ? pendingChallenges : [], user_id ? user_id : '')}
+      {ongoingChallengesExists &&
+        renderOngoingChallenges(props, ongoingChallenges ? ongoingChallenges : [], user_id ? user_id : '')}
+      {user_id && !pendingChallengesExists && !ongoingChallengesExists && (
+        <View style={styles.box}>
+          <View style={styles.newChallengeHeader}>
+            <Text style={{ ...Typography.headerText }}>Want a new challenge?</Text>
+            <Text style={{ ...Typography.bodyText, padding: Spacing.smallest }}>
+              Create a challenge for you and your friends!
+            </Text>
+          </View>
+          <Button style={styles.challengeButton} onPress={() => props.navigation.navigate('NewChallenge')}>
+            Create new challenge
+          </Button>
+        </View>
+      )}
+    </ScrollView>
+  );
+};
+
 const styles = StyleSheet.create({
   scrollView: {
-    flex: 1,
     paddingHorizontal: Spacing.smaller,
   },
   scrollContentContainer: {

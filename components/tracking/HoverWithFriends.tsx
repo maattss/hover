@@ -120,7 +120,7 @@ const HoverWithFriends: React.FC<Props> = ({
       Alert.alert(
         'Something went wrong...',
         'Make sure that you have entered the correct code and that you are at the same location as your friend. ' +
-          'Also you cannot join a session where someone already has joined',
+          'Also you cannot join a session where someone already has joined.',
       );
     }
   };
