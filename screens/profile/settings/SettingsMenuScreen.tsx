@@ -108,7 +108,6 @@ const styles = StyleSheet.create({
   },
   settingsContainer: {
     width: '100%',
-    display: 'flex',
     alignItems: 'center',
   },
   settingsList: {
@@ -117,7 +116,6 @@ const styles = StyleSheet.create({
   settingsItem: {
     ...Buttons.button,
     marginBottom: Spacing.smaller,
-    display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
     backgroundColor: Colors.gray900,
