@@ -16,18 +16,21 @@ type ChallengeFeedCardProps = {
 };
 
 const ChallengeFeedCard: React.FC<ChallengeFeedCardProps> = ({ data }: ChallengeFeedCardProps) => {
-  const renderItem = (item: Item, index: number) => {
-    const rowJSx = (
+  const renderItem = (item: Item, index: number) => (
+    <TouchableProfile user_id={item.id} name={item.name}>
       <View key={item.id}>
         <ChallengeLeaderboardRow item={item} index={index} />
       </View>
-    );
-    return (
-      <TouchableProfile user_id={item.id} name={item.name}>
-        {rowJSx}
-      </TouchableProfile>
-    );
-  };
+    </TouchableProfile>
+  );
+  const listData = data.challenge.opponents.map<Item>((item) => {
+    return {
+      id: item.user.id,
+      name: item.user.name,
+      picture: item.user.picture,
+      score: item.progress,
+    } as Item;
+  });
 
   return (
     <View style={styles.card}>
@@ -50,12 +53,7 @@ const ChallengeFeedCard: React.FC<ChallengeFeedCardProps> = ({ data }: Challenge
         </View>
       </TouchableProfile>
       <View style={styles.main}>
-        <Leaderboard
-          data={data.challenge.opponents.map<Item>((item) => {
-            return { id: item.user.id, name: item.user.name, picture: item.user.picture, score: item.progress } as Item;
-          })}
-          renderItem={renderItem}
-        />
+        <Leaderboard data={listData} renderItem={renderItem} />
       </View>
       <View style={styles.footer}>
         <Text style={styles.footerText}>{timeStampToPresentable(data.createdAt)}</Text>
