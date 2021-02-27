@@ -1,10 +1,11 @@
 import React from 'react';
-import { Alert, View, StyleSheet, FlatList } from 'react-native';
+import { Alert, View, StyleSheet, FlatList, ScrollView } from 'react-native';
 import Firebase from '../../../lib/firebase';
-import { Buttons, Spacing, Colors } from '../../../theme';
+import { Buttons, Spacing, Colors, Typography } from '../../../theme';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { SettingsNavigationStackParamList } from '../../../types/navigationTypes';
 import Button, { MenuButton } from '../../../components/general/Button';
+import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 
 type NavigationProp = StackNavigationProp<SettingsNavigationStackParamList>;
 
@@ -80,26 +81,29 @@ const SettingsScreen: React.FC<SettingsProps> = ({ navigation }: SettingsProps) 
   );
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <View style={styles.settingsContainer}>
+        <FAIcon
+          name={'cog'}
+          style={{ ...Typography.icon, margin: Spacing.large, paddingBottom: Spacing.small, fontSize: 50 }}
+        />
         <FlatList
           data={SettingMenu}
           renderItem={renderItem}
           keyExtractor={(item) => item.id}
           style={styles.settingsList}
+          scrollEnabled={false}
         />
       </View>
-      <Button style={{ backgroundColor: Colors.red }} onPress={areYouSure}>
+      <Button style={styles.logoutButton} onPress={areYouSure}>
         Sign out
       </Button>
-    </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    display: 'flex',
-    alignItems: 'center',
     padding: Spacing.smaller,
   },
   settingsContainer: {
@@ -120,6 +124,10 @@ const styles = StyleSheet.create({
   },
   settingsItemDisabled: {
     display: 'none',
+  },
+  logoutButton: {
+    backgroundColor: Colors.red,
+    marginTop: Spacing.base,
   },
 });
 
