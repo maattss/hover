@@ -88,7 +88,7 @@ const ChallengeScreen: React.FC<ChallengesProps> = (props: ChallengesProps) => {
         renderOngoingChallenges(props, ongoingChallenges ? ongoingChallenges : [], user_id ? user_id : '')}
       {user_id && !pendingChallengesExists && !ongoingChallengesExists && (
         <View style={styles.box}>
-          <View style={styles.boxTitle}>
+          <View style={styles.newChallengeHeader}>
             <Text style={{ ...Typography.headerText }}>Want a new challenge?</Text>
             <Text style={{ ...Typography.bodyText, padding: Spacing.smallest }}>
               Create a challenge for you and your friends!
@@ -156,7 +156,7 @@ const renderOngoingChallenges = ({ navigation }: ChallengesProps, ongoingChallen
 const styles = StyleSheet.create({
   scrollView: {
     flex: 1,
-    paddingHorizontal: Spacing.smaller,
+    paddingHorizontal: Spacing.base,
   },
   scrollContentContainer: {
     justifyContent: 'center',
@@ -185,6 +185,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: Spacing.smaller,
     width: '100%',
+  },
+  newChallengeHeader: {
+    width: '100%',
+    marginVertical: Spacing.small,
   },
   challengeButton: {
     backgroundColor: Colors.green,
