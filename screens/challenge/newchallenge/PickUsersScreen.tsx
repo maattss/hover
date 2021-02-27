@@ -74,7 +74,7 @@ const PickUsersScreen: React.FC<Props> = ({
         <Button
           onPress={() =>
             isDisabled
-              ? Alert.alert('You are not finished', 'Choose a least one opponent to proceed!', [{ text: 'OK' }])
+              ? Alert.alert('No opponents selected', 'Choose a least one opponent to proceed!')
               : navigation.push('ChallengeType', {
                   user_id: user_id,
                   participants: participants,
@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
   },
   stickyFooter: {
     width: '100%',
-    paddingHorizontal: Spacing.base,
+    paddingHorizontal: Spacing.smaller,
     paddingVertical: Spacing.smaller,
     position: 'absolute',
     bottom: 0,
