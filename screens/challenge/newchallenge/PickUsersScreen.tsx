@@ -100,11 +100,8 @@ const FriendItem: React.FC<FriendItemProps> = (props: FriendItemProps) => {
     props.onValueChanged(props.item);
     setChecked(!checked);
   };
-  const evenColor = Colors.gray900;
-  const oddColor = Colors.black;
-  const rowColor = props.index % 2 === 0 ? evenColor : oddColor;
   return (
-    <TouchableOpacity style={[styles.friendRow, { backgroundColor: rowColor }]} onPress={onPressed}>
+    <TouchableOpacity style={styles.friendRow} onPress={onPressed}>
       <CheckBox
         center
         onPress={onPressed}
@@ -138,9 +135,14 @@ const styles = StyleSheet.create({
     ...Typography.headerText,
   },
   friendRow: {
+    ...Buttons.button,
+    padding: 0,
+    margin: 0,
+    marginBottom: Spacing.smaller,
+    marginHorizontal: Spacing.smallest,
     flexDirection: 'row',
-    width: '100%',
     alignItems: 'center',
+    backgroundColor: Colors.gray900,
   },
   checkbox: {
     alignSelf: 'center',
