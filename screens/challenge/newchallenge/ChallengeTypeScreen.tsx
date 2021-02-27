@@ -53,7 +53,7 @@ const ChallengeTypeScreen: React.FC<Props> = ({ route, navigation }: Props) => {
   );
 
   if (loading) return <Loading />;
-  console.log('Data:', challengeTypes?.challenge_type);
+
   return (
     <View style={styles.container}>
       <FlatList
