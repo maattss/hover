@@ -25,7 +25,6 @@ const PREVIEW_SIZE = 2;
 const ChallengeScreen: React.FC<ChallengesProps> = (props: ChallengesProps) => {
   const user_id = useAuthentication().user?.uid;
   const [refreshing, setRefreshing] = useState(false);
-
   const [pendingChallenges, setPendingChallenges] = useState<Challenge[]>();
   const [ongoingChallenges, setOngoingChallenges] = useState<Challenge[]>();
 
@@ -33,6 +32,7 @@ const ChallengeScreen: React.FC<ChallengesProps> = (props: ChallengesProps) => {
     variables: { user_id: user_id ? user_id : '', limit: PREVIEW_SIZE + 1 },
     nextFetchPolicy: 'network-only',
   });
+
   useEffect(() => {
     if (data && data.user) {
       const { pendingChallenges, ongoingChallenges } = convertChallenge(data);
@@ -56,6 +56,9 @@ const ChallengeScreen: React.FC<ChallengesProps> = (props: ChallengesProps) => {
     }
   }, [isFocused]);
 
+  const pendingChallengesExists = pendingChallenges && pendingChallenges.length > 0;
+  const ongoingChallengesExists = ongoingChallenges && ongoingChallenges.length > 0;
+
   if (loading) return <Loading />;
 
   if (error) return <Error message={error.message} apolloError={error} />;
@@ -73,17 +76,17 @@ const ChallengeScreen: React.FC<ChallengesProps> = (props: ChallengesProps) => {
           progressBackgroundColor={Colors.transparent}
         />
       }>
-      {pendingChallenges &&
-        pendingChallenges.length > 0 &&
-        renderPendingChallenges(props, pendingChallenges, user_id ? user_id : '')}
-      {ongoingChallenges &&
-        ongoingChallenges.length > 0 &&
-        renderOngoingChallenges(props, ongoingChallenges, user_id ? user_id : '')}
-      {user_id && (
+      {pendingChallengesExists &&
+        renderPendingChallenges(props, pendingChallenges ? pendingChallenges : [], user_id ? user_id : '')}
+      {ongoingChallengesExists &&
+        renderOngoingChallenges(props, ongoingChallenges ? ongoingChallenges : [], user_id ? user_id : '')}
+      {user_id && pendingChallengesExists && ongoingChallengesExists && (
         <View style={styles.box}>
           <View style={styles.boxTitle}>
             <Text style={{ ...Typography.headerText }}>Want a new challenge?</Text>
-            <Text style={{ ...Typography.bodyText }}>Create a challenge for you and your friends!</Text>
+            <Text style={{ ...Typography.bodyText, padding: Spacing.smallest }}>
+              Create a challenge for you and your friends!
+            </Text>
           </View>
           <Button style={styles.challengeButton} onPress={() => props.navigation.navigate('NewChallenge')}>
             Create new challenge
@@ -145,10 +148,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.base,
   },
   scrollContentContainer: {
-    paddingTop: Spacing.base,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingBottom: Spacing.base,
   },
   previewContainer: {
     width: '100%',
@@ -163,20 +164,18 @@ const styles = StyleSheet.create({
     marginTop: '20%',
   },
   box: {
-    backgroundColor: Colors.gray900,
     width: '100%',
     flex: 1,
     alignItems: 'center',
-    borderRadius: Spacing.smaller,
-    padding: Spacing.base,
     marginVertical: Spacing.smaller,
   },
   boxTitle: {
-    marginBottom: Spacing.base,
+    marginBottom: Spacing.smaller,
+    width: '100%',
   },
   challengeButton: {
     backgroundColor: Colors.green,
-    marginVertical: Spacing.base,
+    marginVertical: Spacing.smaller,
   },
 });
 

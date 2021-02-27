@@ -128,7 +128,6 @@ const FeedScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     padding: Spacing.smaller,
-    marginBottom: Spacing.smaller,
   },
   header: {
     ...Typography.headerText,

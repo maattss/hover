@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
   },
   main: {
-    marginBottom: Spacing.small,
+    marginBottom: Spacing.smaller,
   },
   footer: {
     flexDirection: 'row',
