@@ -25,12 +25,11 @@ const PickUsersScreen: React.FC<Props> = ({
   },
   navigation,
 }: Props) => {
+  const [participants, setParticipants] = useState<ListUserFragmentFragment[]>([]);
+  const [isDisabled, setDisabled] = useState(participants.length == 0);
   const { data: friends, loading } = useGetFriendsQuery({
     variables: { user_id: user_id },
   });
-
-  const [participants, setParticipants] = useState<ListUserFragmentFragment[]>([]);
-  const [isDisabled, setDisabled] = useState(participants.length == 0);
 
   const onChecked = (user: ListUserFragmentFragment) => {
     const index = participants.findIndex((x) => x.id == user.id);
@@ -44,17 +43,26 @@ const PickUsersScreen: React.FC<Props> = ({
     setParticipants(newParticipants);
     setDisabled(participants.length == 0);
   };
+  const goNext = () => {
+    if (isDisabled) {
+      Alert.alert('No opponents selected', 'Choose a least one opponent to proceed!');
+      return;
+    }
+
+    navigation.push('ChallengeType', {
+      user_id: user_id,
+      participants: participants,
+    });
+  };
 
   const isFriendChecked = (id: string) => {
     if (participants.findIndex((x) => x.id == id) > -1) return true;
     return false;
   };
 
-  const renderItem = (item: ListUserFragmentFragment, index: number) => {
-    return (
-      <FriendItem item={item} index={index} checked={isFriendChecked(item.id)} onValueChanged={() => onChecked(item)} />
-    );
-  };
+  const renderItem = (item: ListUserFragmentFragment, index: number) => (
+    <FriendItem item={item} index={index} checked={isFriendChecked(item.id)} onValueChanged={() => onChecked(item)} />
+  );
 
   if (loading) return <Loading />;
 
@@ -71,16 +79,7 @@ const PickUsersScreen: React.FC<Props> = ({
       </View>
 
       <View style={styles.stickyFooter}>
-        <Button
-          onPress={() =>
-            isDisabled
-              ? Alert.alert('No opponents selected', 'Choose a least one opponent to proceed!')
-              : navigation.push('ChallengeType', {
-                  user_id: user_id,
-                  participants: participants,
-                })
-          }
-          style={isDisabled ? { backgroundColor: Colors.gray600 } : {}}>
+        <Button onPress={goNext} style={isDisabled ? { backgroundColor: Colors.gray600 } : {}}>
           Next
         </Button>
       </View>
@@ -114,12 +113,7 @@ const FriendItem: React.FC<FriendItemProps> = (props: FriendItemProps) => {
         uncheckedIcon="circle"
         checked={checked}
       />
-      <Avatar
-        rounded
-        source={{
-          uri: props.item.picture ?? defaultUserProfile.picture,
-        }}
-      />
+      <Avatar rounded source={{ uri: props.item.picture ?? defaultUserProfile.picture }} />
       <Text style={styles.label}>{props.item.name}</Text>
     </TouchableOpacity>
   );
