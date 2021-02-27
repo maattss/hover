@@ -23,6 +23,23 @@ type Props = {
 };
 
 const NewChallengeOverviewScreen: React.FC<Props> = ({ route, navigation }: Props) => {
+  const createNewChallenge = () =>
+    createChallenge({
+      variables: {
+        challenge_type: route.params.challenge_type,
+        end_date: route.params.end_date,
+        participants: toParticipantList(),
+        created_by: route.params.user_id,
+        rules: convertToJsonRule(route.params.rules),
+      },
+    })
+      .then((response) => {
+        navigation.navigate('Challenge');
+        console.log('Challenge inserted to db', response);
+        Alert.alert('Upload complete', 'Challenge uploaded successfully!');
+      })
+      .catch((error) => console.error('Mutation error', error.message));
+
   const toParticipantList = () => {
     const list: Challenge_Participant_Insert_Input[] = [
       { user_id: route.params.user_id, state: Challenge_Participant_State_Enum.Accepted },
@@ -44,7 +61,7 @@ const NewChallengeOverviewScreen: React.FC<Props> = ({ route, navigation }: Prop
     <View style={styles.container}>
       <View style={styles.box}>
         <Text style={{ ...Typography.headerText }}>Overview</Text>
-        <Divider />
+
         <View style={styles.infoContainer}>
           <Text style={{ ...Typography.bodyText }}>
             {generateNewChallengeDescription(
@@ -56,7 +73,7 @@ const NewChallengeOverviewScreen: React.FC<Props> = ({ route, navigation }: Prop
           </Text>
         </View>
         <Divider />
-        <View style={[styles.infoContainer, { alignItems: 'flex-start' }]}>
+        <View style={styles.infoContainer}>
           <Text style={styles.infoText}>Against</Text>
           <OpponentsRowList opponents={route.params.participants} />
         </View>
@@ -83,26 +100,7 @@ const NewChallengeOverviewScreen: React.FC<Props> = ({ route, navigation }: Prop
           <Text style={styles.infoTextSmall}>{new Date(route.params.end_date).toDateString()}</Text>
         </View>
       </View>
-      <Button
-        onPress={() =>
-          createChallenge({
-            variables: {
-              challenge_type: route.params.challenge_type,
-              end_date: route.params.end_date,
-              participants: toParticipantList(),
-              created_by: route.params.user_id,
-              rules: convertToJsonRule(route.params.rules),
-            },
-          })
-            .then((response) => {
-              navigation.navigate('Challenge');
-              console.log('Chalenge inserted to db', response);
-              Alert.alert('Upload complete', 'Challenge uploaded successfully!', [{ text: 'OK' }]);
-            })
-            .catch((error) => console.error('Mutation error', error.message))
-        }>
-        Create Challenge
-      </Button>
+      <Button onPress={createNewChallenge}>Create challenge</Button>
     </View>
   );
 };
@@ -110,7 +108,7 @@ const NewChallengeOverviewScreen: React.FC<Props> = ({ route, navigation }: Prop
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: Spacing.base,
+    padding: Spacing.smaller,
     alignItems: 'center',
     justifyContent: 'space-between',
   },
@@ -119,18 +117,16 @@ const styles = StyleSheet.create({
     width: '100%',
     borderRadius: Spacing.smaller,
     padding: Spacing.base,
-    marginHorizontal: Spacing.smaller,
-    marginVertical: Spacing.smaller,
   },
   infoContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: Spacing.base,
+    marginVertical: Spacing.smallest,
     alignItems: 'center',
   },
   infoText: {
     ...Typography.largeBodyText,
-    fontSize: 26,
+    fontSize: 20,
     fontWeight: 'bold',
   },
   infoTextSmall: {
