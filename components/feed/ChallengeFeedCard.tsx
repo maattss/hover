@@ -67,11 +67,16 @@ const ChallengeLeaderboardRow = ({ item, index }: { item: Item; index: number })
     color: getAchievementColor(index + 1),
     fontSize: 30,
   };
+  const border = {
+    borderBottomColor: getAchievementColor(index + 1),
+    borderBottomWidth: 3,
+    borderRadius: 0,
+  };
 
   return (
-    <View style={[styles.row]}>
+    <View style={[styles.row, border]}>
       <View style={styles.left}>
-        <Text style={[styles.text, styles.rank, index < 9 ? styles.singleDidget : styles.doubleDidget]}>
+        <Text style={[{ ...Typography.bodyText }, styles.rank, index < 9 ? styles.singleDidget : styles.doubleDidget]}>
           {index < 3 ? <FAIcon name={'medal'} style={iconStyle} /> : index + 1}
         </Text>
         {item.picture && (
@@ -79,11 +84,11 @@ const ChallengeLeaderboardRow = ({ item, index }: { item: Item; index: number })
             <Avatar rounded source={{ uri: item.picture ? item.picture : defaultUserProfile.picture }} size={'small'} />
           </View>
         )}
-        <Text style={[styles.text, styles.label]} numberOfLines={1}>
+        <Text style={[{ ...Typography.bodyText }, styles.label]} numberOfLines={1}>
           {item.name}
         </Text>
       </View>
-      <Text style={[styles.text, styles.score]}>{item.score || 0}</Text>
+      <Text style={[{ ...Typography.bodyText }, styles.score]}>{item.score || 0}</Text>
     </View>
   );
 };
@@ -130,13 +135,11 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   row: {
-    borderRadius: Spacing.smaller,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     marginVertical: Spacing.smallest,
     paddingVertical: Spacing.smaller,
-    backgroundColor: Colors.gray800,
   },
   left: {
     flexDirection: 'row',
