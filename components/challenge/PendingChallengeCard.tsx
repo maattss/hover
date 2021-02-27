@@ -29,7 +29,7 @@ const PendingChallengeCard: React.FC<PendingChallengeCardProps> = ({ challenge }
     let buttonText = 'Accept';
     if (state === Challenge_Participant_State_Enum.Declined) {
       buttonStyle = styles.declineButton;
-      buttonTextStyle.push({ color: Colors.gray600 });
+      buttonTextStyle.push({ color: Colors.almostBlack });
       buttonText = 'Decline';
     }
 
@@ -121,11 +121,7 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: Colors.gray900,
     borderRadius: Spacing.smaller,
-    padding: Spacing.base,
-    shadowOpacity: 0.75,
-    shadowRadius: 3,
-    shadowColor: Colors.black,
-    shadowOffset: { height: 0, width: 0 },
+    padding: Spacing.small,
   },
   avatar: {
     marginRight: Spacing.base,
@@ -195,17 +191,16 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   acceptButton: {
-    width: '45%',
     ...Buttons.button,
+    width: '48%',
     backgroundColor: Colors.blue,
-    marginVertical: Spacing.base,
+    marginTop: Spacing.small,
   },
   declineButton: {
-    width: '45%',
     ...Buttons.button,
+    width: '48%',
     backgroundColor: Colors.gray100,
-    marginTop: Spacing.base,
-    marginBottom: Spacing.base,
+    marginTop: Spacing.small,
   },
 });
 
