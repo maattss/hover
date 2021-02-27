@@ -5,7 +5,7 @@ import Loading from '../../../components/general/Loading';
 import { NewChallengeStackParamList } from '../../../types/navigationTypes';
 import { RouteProp } from '@react-navigation/native';
 import { ChallengeTypeFragmentFragment } from '../../../graphql/Fragments.generated';
-import { Spacing, Typography } from '../../../theme';
+import { Buttons, Colors, Spacing, Typography } from '../../../theme';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useChallengeTypesQuery } from '../../../graphql/queries/ChallengeTypes.generated';
 import { MenuButton } from '../../../components/general/Button';
@@ -21,21 +21,16 @@ type Props = {
 const ChallengeTypeScreen: React.FC<Props> = ({ route, navigation }: Props) => {
   const { data: challengeTypes, loading } = useChallengeTypesQuery();
 
-  const renderItem = (item: ChallengeTypeFragmentFragment, index: number) => {
-    return (
-      <MenuButton
-        style={styles.challengeTypeRow}
-        index={index}
-        onPress={() => {
-          navigation.push('ChallengeRules', {
-            ...route.params,
-            challenge_type: item.name as Challenge_Type_Enum,
-          });
-        }}
-        label={item.description ?? item.name}
-      />
-    );
+  const goNext = (item: ChallengeTypeFragmentFragment) => {
+    navigation.push('ChallengeRules', {
+      ...route.params,
+      challenge_type: item.name as Challenge_Type_Enum,
+    });
   };
+
+  const renderItem = (item: ChallengeTypeFragmentFragment, index: number) => (
+    <MenuButton style={styles.challengeTypeRow} onPress={() => goNext(item)} label={item.description ?? item.name} />
+  );
 
   if (loading) return <Loading />;
 
@@ -57,14 +52,19 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
+    marginHorizontal: Spacing.smaller,
   },
   title: {
     padding: Spacing.large,
     ...Typography.headerText,
   },
   challengeTypeRow: {
+    ...Buttons.button,
     flexDirection: 'row',
     alignItems: 'center',
+    marginBottom: Spacing.smaller,
+    justifyContent: 'space-between',
+    backgroundColor: Colors.gray900,
   },
   label: {
     ...Typography.headerText,
