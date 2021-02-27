@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: Colors.gray900,
     borderRadius: Spacing.smaller,
-    padding: Spacing.small,
+    padding: Spacing.base,
     marginVertical: Spacing.smallest,
   },
   avatar: {

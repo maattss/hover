@@ -114,10 +114,6 @@ const OngoingChallengeCard: React.FC<OngoingChallengeCardProps> = ({ challenge }
       </TouchableProfile>
       <Divider />
       <ChallengeOpponents challenge={challenge as Challenge} />
-
-      <View style={styles.footer}>
-        <Text style={styles.footerText}>{timeStampToPresentable(challenge.created_at)}</Text>
-      </View>
     </View>
   );
 };
@@ -127,6 +123,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.gray900,
     borderRadius: Spacing.smaller,
     padding: Spacing.base,
+    paddingBottom: Spacing.smaller,
     marginVertical: Spacing.smallest,
   },
   row: {
@@ -193,16 +190,6 @@ const styles = StyleSheet.create({
     ...Typography.bodyText,
     fontSize: 10,
     fontStyle: 'italic',
-  },
-  footer: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    width: '100%',
-  },
-  footerText: {
-    color: Colors.almostWhite,
-    fontStyle: 'italic',
-    fontSize: 14,
   },
 });
 

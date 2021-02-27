@@ -63,7 +63,6 @@ const OngoingChallengesScreen: React.FC<Props> = ({ route }: Props) => {
   const renderHeader = () => (
     <View style={styles.header}>
       <Text style={{ ...Typography.headerText, marginTop: Spacing.base }}>Ongoing challenges</Text>
-      <Text style={{ ...Typography.bodyText, marginTop: Spacing.base }}>Here are your active challenges.</Text>
     </View>
   );
   const renderItem = (item: Challenge) => (
@@ -103,10 +102,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     flex: 1,
-    paddingBottom: Spacing.base,
+    paddingBottom: Spacing.smaller,
   },
   footer: {
-    padding: 10,
+    padding: Spacing.smaller,
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',

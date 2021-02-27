@@ -107,7 +107,7 @@ const renderPendingChallenges = ({ navigation }: ChallengesProps, pendingChallen
   return (
     <View style={styles.box}>
       <View style={styles.boxTitle}>
-        <Text style={{ ...Typography.headerText }}>Pending invites</Text>
+        <Text style={styles.header}>Pending invites</Text>
         <TouchableOpacity onPress={showPendingInfoPopup}>
           <FAIcon name={'info-circle'} style={styles.iconSmall} />
         </TouchableOpacity>
@@ -132,7 +132,7 @@ const renderOngoingChallenges = ({ navigation }: ChallengesProps, ongoingChallen
   return (
     <View style={styles.box}>
       <View style={styles.boxTitle}>
-        <Text style={{ ...Typography.headerText }}>Ongoing challenges</Text>
+        <Text style={styles.header}>Ongoing challenges</Text>
         <TouchableOpacity onPress={showOngoingInfoPopup}>
           <FAIcon name={'info-circle'} style={styles.iconSmall} />
         </TouchableOpacity>
@@ -156,7 +156,7 @@ const renderOngoingChallenges = ({ navigation }: ChallengesProps, ongoingChallen
 const styles = StyleSheet.create({
   scrollView: {
     flex: 1,
-    paddingHorizontal: Spacing.base,
+    paddingHorizontal: Spacing.smaller,
   },
   scrollContentContainer: {
     justifyContent: 'center',
@@ -172,6 +172,10 @@ const styles = StyleSheet.create({
     height: '100%',
     width: '100%',
     marginTop: '20%',
+  },
+  header: {
+    ...Typography.headerText,
+    marginLeft: Spacing.smallest,
   },
   box: {
     width: '100%',

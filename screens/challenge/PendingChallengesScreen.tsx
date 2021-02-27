@@ -62,10 +62,7 @@ const PendingChallengesScreen: React.FC<Props> = ({ route }: Props) => {
 
   const renderHeader = () => (
     <View style={styles.header}>
-      <Text style={{ ...Typography.headerText, marginTop: Spacing.base }}>Pending challenges</Text>
-      <Text style={{ ...Typography.bodyText, marginTop: Spacing.base }}>
-        Accept challenges to compete with other players
-      </Text>
+      <Text style={{ ...Typography.headerText, marginTop: Spacing.base }}>Pending invites</Text>
     </View>
   );
   const renderItem = (item: Challenge) => (

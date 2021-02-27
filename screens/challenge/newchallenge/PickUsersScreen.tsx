@@ -117,6 +117,7 @@ const FriendItem: React.FC<FriendItemProps> = (props: FriendItemProps) => {
 };
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     alignItems: 'center',
     paddingHorizontal: Spacing.smaller,
   },

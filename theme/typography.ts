@@ -1,6 +1,6 @@
 import * as Colors from './colors';
 
-const smallestFontSize = 10;
+const smallestFontSize = 12;
 const smallFontSize = 14;
 const baseFontSize = 18;
 const largeFontSize = 24;
