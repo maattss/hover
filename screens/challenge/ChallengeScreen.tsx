@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { ScrollView, RefreshControl, StyleSheet, Text, View } from 'react-native';
+import { ScrollView, RefreshControl, StyleSheet, Text, View, TouchableOpacity, Alert } from 'react-native';
 import { useGetChallengesQuery } from '../../graphql/queries/GetChallenges.generated';
 import { Colors, Spacing, Typography } from '../../theme';
 import useAuthentication from '../../hooks/useAuthentication';
@@ -13,6 +13,7 @@ import Button from '../../components/general/Button';
 import Error from '../../components/general/Error';
 import Loading from '../../components/general/Loading';
 import { useIsFocused } from '@react-navigation/native';
+import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 
 type NavigationProp = StackNavigationProp<ChallengeStackParamList>;
 
@@ -21,6 +22,11 @@ export type ChallengesProps = {
 };
 
 const PREVIEW_SIZE = 2;
+
+const showPendingInfoPopup = () =>
+  Alert.alert('Your pending invites', 'Accept the challenges to compete with other players.');
+const showOngoingInfoPopup = () =>
+  Alert.alert('Your ongoing challenges', 'All your current challenges and their status.');
 
 const ChallengeScreen: React.FC<ChallengesProps> = (props: ChallengesProps) => {
   const user_id = useAuthentication().user?.uid;
@@ -80,7 +86,7 @@ const ChallengeScreen: React.FC<ChallengesProps> = (props: ChallengesProps) => {
         renderPendingChallenges(props, pendingChallenges ? pendingChallenges : [], user_id ? user_id : '')}
       {ongoingChallengesExists &&
         renderOngoingChallenges(props, ongoingChallenges ? ongoingChallenges : [], user_id ? user_id : '')}
-      {user_id && pendingChallengesExists && ongoingChallengesExists && (
+      {user_id && !pendingChallengesExists && !ongoingChallengesExists && (
         <View style={styles.box}>
           <View style={styles.boxTitle}>
             <Text style={{ ...Typography.headerText }}>Want a new challenge?</Text>
@@ -101,8 +107,10 @@ const renderPendingChallenges = ({ navigation }: ChallengesProps, pendingChallen
   return (
     <View style={styles.box}>
       <View style={styles.boxTitle}>
-        <Text style={{ ...Typography.headerText }}>Pending challenges</Text>
-        <Text style={{ ...Typography.bodyText }}>Accept the challenges to compete with other players.</Text>
+        <Text style={{ ...Typography.headerText }}>Pending invites</Text>
+        <TouchableOpacity onPress={showPendingInfoPopup}>
+          <FAIcon name={'info-circle'} style={styles.iconSmall} />
+        </TouchableOpacity>
       </View>
       {pendingChallenges.slice(0, PREVIEW_SIZE).map((item, index) => (
         <View key={index} style={styles.previewContainer}>
@@ -124,7 +132,10 @@ const renderOngoingChallenges = ({ navigation }: ChallengesProps, ongoingChallen
   return (
     <View style={styles.box}>
       <View style={styles.boxTitle}>
-        <Text style={{ ...Typography.headerText }}>Ongoing Challenges</Text>
+        <Text style={{ ...Typography.headerText }}>Ongoing challenges</Text>
+        <TouchableOpacity onPress={showOngoingInfoPopup}>
+          <FAIcon name={'info-circle'} style={styles.iconSmall} />
+        </TouchableOpacity>
       </View>
       {ongoingChallenges.slice(0, PREVIEW_SIZE).map((item, index) => (
         <View key={index} style={styles.previewContainer}>
@@ -145,7 +156,7 @@ const renderOngoingChallenges = ({ navigation }: ChallengesProps, ongoingChallen
 const styles = StyleSheet.create({
   scrollView: {
     flex: 1,
-    paddingHorizontal: Spacing.base,
+    paddingHorizontal: Spacing.smaller,
   },
   scrollContentContainer: {
     justifyContent: 'center',
@@ -153,7 +164,6 @@ const styles = StyleSheet.create({
   },
   previewContainer: {
     width: '100%',
-    marginVertical: Spacing.smaller,
   },
   errorContainer: {
     display: 'flex',
@@ -170,12 +180,20 @@ const styles = StyleSheet.create({
     marginVertical: Spacing.smaller,
   },
   boxTitle: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     marginBottom: Spacing.smaller,
     width: '100%',
   },
   challengeButton: {
     backgroundColor: Colors.green,
-    marginVertical: Spacing.smaller,
+    marginVertical: Spacing.smallest,
+  },
+  iconSmall: {
+    ...Typography.icon,
+    marginHorizontal: Spacing.smaller,
+    marginVertical: Spacing.smallest,
   },
 });
 
