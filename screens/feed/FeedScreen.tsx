@@ -91,7 +91,7 @@ const FeedScreen: React.FC = () => {
   };
   const renderFooter = () => {
     if (loading && !endReached) return <ActivityIndicator color={Colors.blue} />;
-    if (endReached && !loading) return <Text style={{ ...Typography.bodyText }}>The end...</Text>;
+    if (endReached && !loading) return <Text style={styles.theEnd}>The end...</Text>;
     return <></>;
   };
 
@@ -139,6 +139,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
+  },
+  theEnd: {
+    ...Typography.bodyText,
+    textAlign: 'center',
+    paddingBottom: Spacing.base,
+    paddingTop: Spacing.smaller,
   },
 });
 
