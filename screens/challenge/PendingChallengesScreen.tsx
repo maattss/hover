@@ -6,7 +6,6 @@ import { ChallengeStackParamList } from '../../types/navigationTypes';
 import { Colors, Spacing, Typography } from '../../theme';
 import PendingChallengeCard from '../../components/challenge/PendingChallengeCard';
 import Error from '../../components/general/Error';
-import Loading from '../../components/general/Loading';
 import { convertToChallenge } from '../../helpers/objectMappers';
 import { useGetPendingChallengesQuery } from '../../graphql/queries/GetPendingChallenges.generated';
 

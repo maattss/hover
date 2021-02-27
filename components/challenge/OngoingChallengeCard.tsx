@@ -1,7 +1,6 @@
 import React from 'react';
-import { Animated, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { Colors, Typography, Spacing } from '../../theme';
-import { timeStampToPresentable } from '../../helpers/dateTimeHelpers';
 import Divider from '../general/Divider';
 import { Challenge } from '../../types/challengeTypes';
 import { Avatar } from 'react-native-elements';
@@ -17,22 +16,6 @@ interface ChallengeOpponentsProps {
 }
 export const ChallengeOpponents: React.FC<ChallengeOpponentsProps> = ({ challenge }: ChallengeOpponentsProps) => {
   const getProgressPercentage = (opponent: OpponentFragmentFragment) => {
-    let width = 0;
-    if (
-      challenge.challenge_type == Challenge_Type_Enum.Score ||
-      challenge.challenge_type == Challenge_Type_Enum.ScoreCategory
-    ) {
-      width = opponent.progress && challenge.rules.score ? (opponent.progress / challenge.rules.score) * 100 : 0;
-    } else if (
-      challenge.challenge_type == Challenge_Type_Enum.Time ||
-      challenge.challenge_type == Challenge_Type_Enum.TimeCategory
-    ) {
-      width = opponent.progress && challenge.rules.time ? (opponent.progress / challenge.rules.time) * 100 : 0;
-    }
-    return (width > 100 ? 100 : width) + '%';
-  };
-
-  const getProgressPercentageNew = (opponent: OpponentFragmentFragment) => {
     let percentage = 0;
     if (
       challenge.challenge_type == Challenge_Type_Enum.Score ||
@@ -72,7 +55,7 @@ export const ChallengeOpponents: React.FC<ChallengeOpponentsProps> = ({ challeng
                   <View style={styles.opponentProgressRow}>
                     {opponent.state !== Challenge_Participant_State_Enum.Declined && (
                       <Progress.Bar
-                        progress={getProgressPercentageNew(opponent)}
+                        progress={getProgressPercentage(opponent)}
                         height={10}
                         width={null}
                         borderColor={getColor(opponent)}

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Alert, View, StyleSheet, FlatList, ScrollView } from 'react-native';
+import { Alert, View, StyleSheet, FlatList } from 'react-native';
 import Firebase from '../../../lib/firebase';
 import { Buttons, Spacing, Colors, Typography } from '../../../theme';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -81,7 +81,7 @@ const SettingsScreen: React.FC<SettingsProps> = ({ navigation }: SettingsProps) 
   );
 
   return (
-    <ScrollView style={styles.container}>
+    <View style={styles.container}>
       <View style={styles.settingsContainer}>
         <FAIcon name={'cog'} style={styles.icon} />
         <FlatList
@@ -95,7 +95,7 @@ const SettingsScreen: React.FC<SettingsProps> = ({ navigation }: SettingsProps) 
       <Button style={styles.logoutButton} onPress={areYouSure}>
         Sign out
       </Button>
-    </ScrollView>
+    </View>
   );
 };
 
