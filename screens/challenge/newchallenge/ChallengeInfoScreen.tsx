@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
     ...Typography.headerText,
     paddingTop: Spacing.base,
     width: '100%',
-    textAlign: 'center',
+    textAlign: 'left',
   },
   bodyText: {
     ...Typography.bodyText,
