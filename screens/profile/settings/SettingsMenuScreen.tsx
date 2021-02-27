@@ -100,10 +100,7 @@ const styles = StyleSheet.create({
   container: {
     display: 'flex',
     alignItems: 'center',
-    padding: Spacing.large,
-    paddingRight: Spacing.large,
-    paddingTop: Spacing.small,
-    paddingBottom: Spacing.small,
+    padding: Spacing.smaller,
   },
   settingsContainer: {
     width: '100%',
