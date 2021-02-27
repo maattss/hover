@@ -83,10 +83,7 @@ const SettingsScreen: React.FC<SettingsProps> = ({ navigation }: SettingsProps) 
   return (
     <ScrollView style={styles.container}>
       <View style={styles.settingsContainer}>
-        <FAIcon
-          name={'cog'}
-          style={{ ...Typography.icon, margin: Spacing.large, paddingBottom: Spacing.small, fontSize: 50 }}
-        />
+        <FAIcon name={'cog'} style={styles.icon} />
         <FlatList
           data={SettingMenu}
           renderItem={renderItem}
@@ -112,6 +109,12 @@ const styles = StyleSheet.create({
   },
   settingsList: {
     width: '100%',
+  },
+  icon: {
+    ...Typography.icon,
+    margin: Spacing.large,
+    paddingBottom: Spacing.small,
+    fontSize: 50,
   },
   settingsItem: {
     ...Buttons.button,
