@@ -125,8 +125,9 @@ const styles = StyleSheet.create({
     ...Typography.bodyText,
     borderRadius: Spacing.smaller,
     paddingVertical: Spacing.base,
-    width: '22%',
+    width: '23%',
     alignItems: 'center',
+    backgroundColor: Colors.gray900,
   },
   categoryIcon: {
     width: 50,
@@ -134,6 +135,6 @@ const styles = StyleSheet.create({
     marginVertical: Spacing.smallest,
   },
   isSelected: {
-    backgroundColor: Colors.gray900,
+    backgroundColor: Colors.blue,
   },
 });
