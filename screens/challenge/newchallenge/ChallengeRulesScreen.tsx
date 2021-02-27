@@ -186,7 +186,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.smaller,
   },
   title: {
-    padding: Spacing.large,
+    paddingVertical: Spacing.large,
+    paddingHorizontal: Spacing.smallest,
     ...Typography.headerText,
   },
   infoContainer: {

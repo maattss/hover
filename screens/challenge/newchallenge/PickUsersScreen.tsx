@@ -117,21 +117,22 @@ const FriendItem: React.FC<FriendItemProps> = (props: FriendItemProps) => {
 };
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     alignItems: 'center',
+    paddingHorizontal: Spacing.smaller,
   },
   flatlist: {
     width: '100%',
   },
   stickyFooter: {
     width: '100%',
-    paddingHorizontal: Spacing.smaller,
+
     paddingVertical: Spacing.smaller,
     position: 'absolute',
     bottom: 0,
   },
   title: {
-    padding: Spacing.large,
+    paddingVertical: Spacing.large,
+    paddingHorizontal: Spacing.smaller,
     ...Typography.headerText,
   },
   friendRow: {
@@ -139,7 +140,6 @@ const styles = StyleSheet.create({
     padding: 0,
     margin: 0,
     marginBottom: Spacing.smaller,
-    marginHorizontal: Spacing.smallest,
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: Colors.gray900,
