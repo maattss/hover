@@ -16,18 +16,21 @@ type ChallengeFeedCardProps = {
 };
 
 const ChallengeFeedCard: React.FC<ChallengeFeedCardProps> = ({ data }: ChallengeFeedCardProps) => {
-  const renderItem = (item: Item, index: number) => {
-    const rowJSx = (
+  const renderItem = (item: Item, index: number) => (
+    <TouchableProfile user_id={item.id} name={item.name}>
       <View key={item.id}>
         <ChallengeLeaderboardRow item={item} index={index} />
       </View>
-    );
-    return (
-      <TouchableProfile user_id={item.id} name={item.name}>
-        {rowJSx}
-      </TouchableProfile>
-    );
-  };
+    </TouchableProfile>
+  );
+  const listData = data.challenge.opponents.map<Item>((item) => {
+    return {
+      id: item.user.id,
+      name: item.user.name,
+      picture: item.user.picture,
+      score: item.progress,
+    } as Item;
+  });
 
   return (
     <View style={styles.card}>
@@ -50,12 +53,7 @@ const ChallengeFeedCard: React.FC<ChallengeFeedCardProps> = ({ data }: Challenge
         </View>
       </TouchableProfile>
       <View style={styles.main}>
-        <Leaderboard
-          data={data.challenge.opponents.map<Item>((item) => {
-            return { id: item.user.id, name: item.user.name, picture: item.user.picture, score: item.progress } as Item;
-          })}
-          renderItem={renderItem}
-        />
+        <Leaderboard data={listData} renderItem={renderItem} />
       </View>
       <View style={styles.footer}>
         <Text style={styles.footerText}>{timeStampToPresentable(data.createdAt)}</Text>
@@ -69,11 +67,16 @@ const ChallengeLeaderboardRow = ({ item, index }: { item: Item; index: number })
     color: getAchievementColor(index + 1),
     fontSize: 30,
   };
+  const border = {
+    borderBottomColor: getAchievementColor(index + 1),
+    borderBottomWidth: 3,
+    borderRadius: 0,
+  };
 
   return (
-    <View style={[styles.row]}>
+    <View style={[styles.row, border]}>
       <View style={styles.left}>
-        <Text style={[styles.text, styles.rank, index < 9 ? styles.singleDidget : styles.doubleDidget]}>
+        <Text style={[{ ...Typography.bodyText }, styles.rank, index < 9 ? styles.singleDidget : styles.doubleDidget]}>
           {index < 3 ? <FAIcon name={'medal'} style={iconStyle} /> : index + 1}
         </Text>
         {item.picture && (
@@ -81,11 +84,11 @@ const ChallengeLeaderboardRow = ({ item, index }: { item: Item; index: number })
             <Avatar rounded source={{ uri: item.picture ? item.picture : defaultUserProfile.picture }} size={'small'} />
           </View>
         )}
-        <Text style={[styles.text, styles.label]} numberOfLines={1}>
+        <Text style={[{ ...Typography.bodyText }, styles.label]} numberOfLines={1}>
           {item.name}
         </Text>
       </View>
-      <Text style={[styles.text, styles.score]}>{item.score || 0}</Text>
+      <Text style={[{ ...Typography.bodyText }, styles.score]}>{item.score || 0}</Text>
     </View>
   );
 };
@@ -132,13 +135,11 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   row: {
-    borderRadius: Spacing.smaller,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     marginVertical: Spacing.smallest,
     paddingVertical: Spacing.smaller,
-    backgroundColor: Colors.gray800,
   },
   left: {
     flexDirection: 'row',

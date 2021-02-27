@@ -87,7 +87,7 @@ const PublishScreen: React.FC = () => {
 
 const styles = StyleSheet.create({
   container: {
-    padding: Spacing.base,
+    padding: Spacing.smaller,
   },
   categoryIcon: {
     height: 50,
