@@ -24,27 +24,34 @@ const PendingChallengeCard: React.FC<PendingChallengeCardProps> = ({ challenge }
   }: {
     state: Challenge_Participant_State_Enum.Accepted | Challenge_Participant_State_Enum.Declined;
   }) => {
-    let buttonStyle: ViewStyle = styles.acceptButton;
-    const buttonTextStyle: TextStyle[] = [{ ...Buttons.buttonText }];
-    let buttonText = 'Accept';
-    if (state === Challenge_Participant_State_Enum.Declined) {
-      buttonStyle = styles.declineButton;
-      buttonTextStyle.push({ color: Colors.almostBlack });
-      buttonText = 'Decline';
+    const buttonTextStyle: TextStyle[] = [];
+    const buttonStyle: ViewStyle[] = [];
+    let buttonText = '';
+
+    if (state === Challenge_Participant_State_Enum.Accepted) {
+      buttonText = 'Accept';
+      buttonStyle.push(styles.acceptButton);
+      buttonTextStyle.push({ ...Buttons.buttonText });
     }
 
+    if (state === Challenge_Participant_State_Enum.Declined) {
+      buttonText = 'Decline';
+      buttonStyle.push(styles.declineButton);
+      buttonTextStyle.push({ color: Colors.almostBlack });
+    }
+
+    const updateChallengeParticipation = () => {
+      updateMutation({
+        variables: {
+          challenge_id: challenge.id,
+          user_id: challenge.user.id,
+          state: state,
+        },
+      }).then(() => setPartcipationState(state));
+    };
+
     return (
-      <TouchableOpacity
-        style={buttonStyle}
-        onPress={() => {
-          updateMutation({
-            variables: {
-              challenge_id: challenge.id,
-              user_id: challenge.user.id,
-              state: state,
-            },
-          }).then(() => setPartcipationState(state));
-        }}>
+      <TouchableOpacity style={buttonStyle} onPress={updateChallengeParticipation}>
         <Text style={buttonTextStyle}>{buttonText}</Text>
       </TouchableOpacity>
     );
@@ -61,7 +68,7 @@ const PendingChallengeCard: React.FC<PendingChallengeCardProps> = ({ challenge }
       case Challenge_Participant_State_Enum.Accepted:
         return (
           <View style={styles.buttonsContainer}>
-            <Text style={styles.stateUpdateMessage}>You accepted the challenge</Text>
+            <Text style={styles.stateUpdateMessage}>You accepted the challenge. Game on!</Text>
           </View>
         );
       case Challenge_Participant_State_Enum.Declined:
@@ -180,9 +187,11 @@ const styles = StyleSheet.create({
     width: '40%',
   },
   stateUpdateMessage: {
-    marginVertical: Spacing.base,
     ...Typography.bodyText,
-    fontStyle: 'italic',
+    marginTop: Spacing.base,
+    marginBottom: Spacing.smallest,
+    textAlign: 'center',
+    fontWeight: 'bold',
     width: '100%',
   },
   buttonsContainer: {
