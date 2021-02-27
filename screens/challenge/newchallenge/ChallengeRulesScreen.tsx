@@ -11,7 +11,6 @@ import { NewChallengeStackParamList } from '../../../types/navigationTypes';
 import moment from 'moment';
 import { GeoFenceCategory } from '../../../types/geoFenceTypes';
 import { getChallengeTypeFields, getChallengeIcon } from '../../../helpers/challengeMappers';
-import Divider from '../../../components/general/Divider';
 import { generateRuleChallengeDescription } from '../../../helpers/decriptionHelper';
 import KeyboardAvoider from '../../../components/keyboard/KeyboardAvoider';
 
@@ -29,10 +28,26 @@ const ChallengeRulesScreen: React.FC<Props> = ({ route, navigation }: Props) => 
   const [category, setCategory] = useState<GeoFenceCategory>();
   const [hours, setHours] = useState<number>();
   const [endDate, setEndDate] = useState<Date>();
-
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-  const fields = getChallengeTypeFields(route.params.challenge_type);
   const [isDisabled, setDisabled] = useState(true);
+  const fields = getChallengeTypeFields(route.params.challenge_type);
+
+  const showDatePicker = () => setDatePickerVisibility(true);
+  const hideDatePicker = () => setDatePickerVisibility(false);
+
+  const goNext = () => {
+    if (isDisabled) {
+      Alert.alert('You are not finished', 'Fill out all fields to proceed!');
+      return;
+    }
+
+    navigation.push('NewChallengeOverview', {
+      ...route.params,
+      rules: rules,
+      end_date: endDate?.toISOString() ?? new Date().toISOString(),
+    });
+  };
+
   const validateRule = () => {
     if (fields.every((key) => rules[key.toLowerCase() as keyof ChallengeRules]) && endDate) {
       setDisabled(false);
@@ -40,23 +55,17 @@ const ChallengeRulesScreen: React.FC<Props> = ({ route, navigation }: Props) => 
       setDisabled(true);
     }
   };
-  const showDatePicker = () => {
-    setDatePickerVisibility(true);
-  };
-  const hideDatePicker = () => {
-    setDatePickerVisibility(false);
-  };
+
   const handleConfirm = (date: Date) => {
     setEndDate(date);
     hideDatePicker();
   };
 
   const parseNumber = (val: string): number => {
-    if (isNaN(parseInt(val))) {
-      return 0;
-    }
+    if (isNaN(parseInt(val))) return 0;
     return parseInt(val);
   };
+
   useEffect(() => {
     setRules({
       category: category,
@@ -82,6 +91,53 @@ const ChallengeRulesScreen: React.FC<Props> = ({ route, navigation }: Props) => 
     });
   };
 
+  const renderFields = () =>
+    fields.map((field, index) => {
+      switch (field) {
+        case 'SCORE':
+          return (
+            <View key={index} style={styles.section}>
+              <Text style={styles.label}>Goal score</Text>
+              <TextInput
+                placeholder="Enter your goal score"
+                placeholderTextColor={Colors.gray600}
+                onChangeText={(val) => setScore(parseNumber(val))}
+                value={score?.toString()}
+                keyboardType="numeric"
+                style={styles.formField}
+              />
+            </View>
+          );
+        case 'CATEGORY':
+          return (
+            <View key={index} style={styles.section}>
+              <Text style={styles.label}>Pick a category</Text>
+              <View style={styles.categoryButtonsContainer}>{renderCategories()}</View>
+            </View>
+          );
+        case 'TIME':
+          return (
+            <View key={index} style={styles.section}>
+              <Text style={styles.label}>Hours</Text>
+              <TextInput
+                placeholder="Enter number of hours"
+                placeholderTextColor={Colors.gray600}
+                onChangeText={(val) => setHours(parseNumber(val))}
+                value={hours?.toString()}
+                keyboardType="numeric"
+                style={styles.formField}
+              />
+            </View>
+          );
+        default:
+          return (
+            <Text key={index} style={styles.label}>
+              Invalid field: {field}
+            </Text>
+          );
+      }
+    });
+
   return (
     <View>
       <ScrollView>
@@ -90,61 +146,11 @@ const ChallengeRulesScreen: React.FC<Props> = ({ route, navigation }: Props) => 
             <Text style={{ ...Typography.headerText }}>Define challenge details</Text>
             <View style={styles.infoContainer}>
               <Text style={styles.descriptionText}>{generateRuleChallengeDescription(fields, rules, endDate)}</Text>
-              <Image
-                source={{
-                  uri: getChallengeIcon(),
-                }}
-                style={styles.challengeIcon}
-              />
+              <Image source={{ uri: getChallengeIcon() }} style={styles.challengeIcon} />
             </View>
 
-            <Divider />
-            <View>
-              {fields.map((field, index) => {
-                if (field == 'SCORE') {
-                  return (
-                    <View key={index} style={styles.section}>
-                      <Text style={styles.label}>Goal score</Text>
-                      <TextInput
-                        placeholder="Enter your goal score"
-                        placeholderTextColor={Colors.gray600}
-                        onChangeText={(val) => setScore(parseNumber(val))}
-                        value={score?.toString()}
-                        keyboardType="numeric"
-                        style={styles.formField}
-                      />
-                    </View>
-                  );
-                } else if (field == 'CATEGORY') {
-                  return (
-                    <View key={index} style={styles.section}>
-                      <Text style={styles.label}>Pick a category</Text>
-                      <View style={styles.categoryButtonsContainer}>{renderCategories()}</View>
-                    </View>
-                  );
-                } else if (field == 'TIME') {
-                  return (
-                    <View key={index} style={styles.section}>
-                      <Text style={styles.label}>Hours</Text>
-                      <TextInput
-                        placeholder="Enter number of hours"
-                        placeholderTextColor={Colors.gray600}
-                        onChangeText={(val) => setHours(parseNumber(val))}
-                        value={hours?.toString()}
-                        keyboardType="numeric"
-                        style={styles.formField}
-                      />
-                    </View>
-                  );
-                } else {
-                  return (
-                    <Text key={index} style={styles.label}>
-                      Invalid field: {field}
-                    </Text>
-                  );
-                }
-              })}
-            </View>
+            <View>{renderFields()}</View>
+
             <View style={styles.section}>
               <Text style={styles.label}>Last day of challenge?</Text>
               <Button
@@ -166,17 +172,7 @@ const ChallengeRulesScreen: React.FC<Props> = ({ route, navigation }: Props) => 
         </KeyboardAvoider>
       </ScrollView>
       <View style={styles.stickyFooter}>
-        <Button
-          onPress={() =>
-            isDisabled
-              ? Alert.alert('You are not finished', 'Fill out all fields to proceed!', [{ text: 'OK' }])
-              : navigation.push('NewChallengeOverview', {
-                  ...route.params,
-                  rules: rules,
-                  end_date: endDate?.toISOString() ?? new Date().toISOString(),
-                })
-          }
-          style={isDisabled ? { backgroundColor: Colors.gray600 } : {}}>
+        <Button onPress={goNext} style={isDisabled ? { backgroundColor: Colors.gray600 } : {}}>
           Next
         </Button>
       </View>
@@ -187,24 +183,25 @@ const ChallengeRulesScreen: React.FC<Props> = ({ route, navigation }: Props) => 
 const styles = StyleSheet.create({
   container: {
     width: '100%',
-    padding: Spacing.base,
+    padding: Spacing.smaller,
   },
   infoContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    paddingVertical: Spacing.smaller,
+    paddingHorizontal: Spacing.smallest,
   },
   descriptionText: {
     ...Typography.bodyText,
     fontStyle: 'italic',
-    paddingVertical: Spacing.small,
   },
   challengeIcon: {
     width: 75,
     height: 75,
   },
   section: {
-    paddingVertical: Spacing.small,
+    paddingVertical: Spacing.smaller,
   },
   label: {
     ...Typography.bodyText,
@@ -229,7 +226,7 @@ const styles = StyleSheet.create({
   },
   stickyFooter: {
     width: '100%',
-    paddingHorizontal: Spacing.base,
+    paddingHorizontal: Spacing.smaller,
     paddingVertical: Spacing.smaller,
     position: 'absolute',
     bottom: 0,
