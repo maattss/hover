@@ -1,5 +1,5 @@
 import React from 'react';
-import { TouchableOpacity, Text, TextStyle, ViewStyle, StyleSheet, Image } from 'react-native';
+import { TouchableOpacity, Text, TextStyle, ViewStyle, StyleSheet, Image, View } from 'react-native';
 import { Buttons, Colors, Spacing, Typography } from '../../theme';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import { GeoFenceCategory } from '../../types/geoFenceTypes';
@@ -45,6 +45,7 @@ export const IconButton: React.FC<IconButtonProps> = (props: IconButtonProps) =>
 interface MenuButtonProps {
   onPress?: () => void;
   label: string;
+  leftIcon?: string;
   icon?: string;
   index?: number;
   disabled?: boolean;
@@ -62,7 +63,11 @@ export const MenuButton: React.FC<MenuButtonProps> = (props: MenuButtonProps) =>
       style={[styles.menuButton, props.style, { backgroundColor: rowColor }]}
       disabled={props.disabled}
       onPress={props.onPress}>
-      <Text style={{ ...Buttons.largeButtonText }}>{props.label}</Text>
+      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        {props.leftIcon ? <FAIcon name={props.leftIcon} style={styles.leftIcon} /> : null}
+        <Text style={{ ...Buttons.largeButtonText }}>{props.label}</Text>
+      </View>
+
       <FAIcon name={props.icon ?? 'chevron-right'} style={{ ...Buttons.buttonText }} />
     </TouchableOpacity>
   );
@@ -97,6 +102,11 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.gray500,
     width: '100%',
     marginVertical: Spacing.small,
+  },
+  leftIcon: {
+    ...Buttons.largeButtonText,
+    marginRight: Spacing.smaller,
+    width: 25,
   },
   buttonIcon: {
     ...Buttons.buttonText,
