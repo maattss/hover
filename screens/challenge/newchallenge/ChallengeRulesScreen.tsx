@@ -143,7 +143,7 @@ const ChallengeRulesScreen: React.FC<Props> = ({ route, navigation }: Props) => 
       <ScrollView>
         <KeyboardAvoider>
           <View style={styles.container}>
-            <Text style={{ ...Typography.headerText }}>Define challenge details</Text>
+            <Text style={styles.title}>Define challenge details</Text>
             <View style={styles.infoContainer}>
               <Text style={styles.descriptionText}>{generateRuleChallengeDescription(fields, rules, endDate)}</Text>
               <Image source={{ uri: getChallengeIcon() }} style={styles.challengeIcon} />
@@ -183,7 +183,11 @@ const ChallengeRulesScreen: React.FC<Props> = ({ route, navigation }: Props) => 
 const styles = StyleSheet.create({
   container: {
     width: '100%',
-    padding: Spacing.smaller,
+    paddingHorizontal: Spacing.smaller,
+  },
+  title: {
+    padding: Spacing.large,
+    ...Typography.headerText,
   },
   infoContainer: {
     flexDirection: 'row',
