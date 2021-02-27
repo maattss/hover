@@ -74,9 +74,7 @@ const OngoingChallengesScreen: React.FC<Props> = ({ route }: Props) => {
     return (
       <View style={styles.footer}>
         {loading ? <Loading /> : null}
-        {endReached ? (
-          <Text style={{ ...Typography.bodyText }}>You have reached the end. There are no more challenges.</Text>
-        ) : null}
+        {endReached ? <Text style={{ ...Typography.bodyText }}>No more challenges ongoing challenges...</Text> : null}
       </View>
     );
   };

@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, FlatList } from 'react-native';
+import { View, Text, StyleSheet, FlatList, ActivityIndicator } from 'react-native';
 import { Challenge } from '../../types/challengeTypes';
 import { RouteProp } from '@react-navigation/native';
 import { ChallengeStackParamList } from '../../types/navigationTypes';
-import { Spacing, Typography } from '../../theme';
+import { Colors, Spacing, Typography } from '../../theme';
 import PendingChallengeCard from '../../components/challenge/PendingChallengeCard';
 import Error from '../../components/general/Error';
 import Loading from '../../components/general/Loading';
@@ -73,8 +73,8 @@ const PendingChallengesScreen: React.FC<Props> = ({ route }: Props) => {
   const renderFooter = () => {
     return (
       <View style={styles.footer}>
-        {loading ? <Loading /> : null}
-        {endReached ? <Text style={{ ...Typography.bodyText }}>There are no more pending challenges.</Text> : null}
+        {loading ? <ActivityIndicator color={Colors.blue} /> : null}
+        {endReached ? <Text style={{ ...Typography.bodyText }}>No more pending challenges...</Text> : null}
       </View>
     );
   };

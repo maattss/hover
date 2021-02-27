@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, RefreshControl, ListRenderItem, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, RefreshControl, ListRenderItem, ActivityIndicator, Text } from 'react-native';
 import ActivityFeedCard from '../../components/feed/ActivityFeedCard';
 import AchievementFeedCard from '../../components/feed/AchievementFeedCard';
 import { Typography, Spacing, Colors } from '../../theme';
@@ -90,12 +90,8 @@ const FeedScreen: React.FC = () => {
     }
   };
   const renderFooter = () => {
-    if (loading && !endReached)
-      return (
-        <View>
-          <ActivityIndicator color={Colors.blue} />
-        </View>
-      );
+    if (loading && !endReached) return <ActivityIndicator color={Colors.blue} />;
+    if (endReached && !loading) return <Text style={{ ...Typography.bodyText }}>The end...</Text>;
     return <></>;
   };
 
@@ -103,6 +99,7 @@ const FeedScreen: React.FC = () => {
   if (loading && !fetchingMore) return <Loading />;
 
   const renderItem: ListRenderItem<FeedData> = ({ item }) => getItem(item);
+
   return (
     <FlatList<FeedData>
       style={styles.container}
