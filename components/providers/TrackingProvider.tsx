@@ -129,12 +129,16 @@ export const TrackingProvider = ({ children }: Props) => {
     if (insideGeoFenceCheck) {
       console.log('Inside geo fence!');
       setInsideGeoFence(insideGeoFenceCheck);
-      setTrackingState(TrackingState.TRACKING);
+      if (trackingState === TrackingState.TRACKINGPAUSED) {
+        setTrackingState(TrackingState.TRACKING);
+      }
     } else {
       console.log('Outside geofence!');
       setInsideGeoFence(null);
-      setTrackingState(TrackingState.TRACKINGPAUSED);
-      // TODO: Insert push notification
+      if (trackingState === TrackingState.TRACKING) {
+        setTrackingState(TrackingState.TRACKINGPAUSED);
+        // TODO: Insert push notification
+      }
     }
   };
 
@@ -154,7 +158,6 @@ export const TrackingProvider = ({ children }: Props) => {
   const addUnUploadedActivity = (activity: Activities_Insert_Input) =>
     setUnUploadedActivities([...unUploadedActivities, activity]);
 
-  // Tracking
   const startTracking = () => {
     if (locationPermission && locationPermission.status !== 'granted') {
       Alert.alert('Location permission not accepted', 'Location permission is required to start tracking');

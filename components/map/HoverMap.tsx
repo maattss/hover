@@ -55,13 +55,10 @@ const HoverMap: React.FC<HoverMapProps> = ({ customWidth, customHeight }: HoverM
     color: centreOnUser ? Colors.blue : Colors.white,
   };
 
-  const shouldUpdateUserLocation = () => {
-    if (tracking.trackingState === TrackingState.TRACKING) return true;
-    if (tracking.trackingState === TrackingState.TRACKINGPAUSED) return true;
-  };
-
   useEffect(() => {
-    if (shouldUpdateUserLocation() && userLocationMap) tracking.updateUserLocation(userLocationMap);
+    if (tracking.trackingState === TrackingState.EXPLORE && userLocationMap) {
+      tracking.updateUserLocation(userLocationMap);
+    }
   }, [userLocationMap]);
 
   // Map event functions
