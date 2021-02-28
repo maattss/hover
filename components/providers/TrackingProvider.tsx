@@ -103,20 +103,18 @@ export const TrackingProvider = ({ children }: Props) => {
   }, [geoFenceData, geoFenceFetchError]);
 
   const externalUpdateUserLocation = (newUserLocation: LatLng) => {
-    if (userLocation === null) {
-      updateUserLocation({
-        coords: {
-          latitude: newUserLocation.latitude,
-          longitude: newUserLocation.longitude,
-          altitude: null,
-          accuracy: null,
-          altitudeAccuracy: null,
-          heading: null,
-          speed: null,
-        },
-        timestamp: Date.now(),
-      });
-    }
+    updateUserLocation({
+      coords: {
+        latitude: newUserLocation.latitude,
+        longitude: newUserLocation.longitude,
+        altitude: null,
+        accuracy: null,
+        altitudeAccuracy: null,
+        heading: null,
+        speed: null,
+      },
+      timestamp: Date.now(),
+    });
   };
 
   const updateUserLocation = (newUserLocation: LocationObject) => {
@@ -127,11 +125,20 @@ export const TrackingProvider = ({ children }: Props) => {
     );
 
     const insideGeoFenceCheck = insideGeoFences(newUserLocation, geoFences);
+
     if (insideGeoFenceCheck) {
-      setInsideGeoFence(insideGeoFenceCheck);
       console.log('Inside geo fence!');
+      setInsideGeoFence(insideGeoFenceCheck);
+      if (trackingState === TrackingState.TRACKINGPAUSED) {
+        setTrackingState(TrackingState.TRACKING);
+      }
     } else {
       console.log('Outside geofence!');
+      setInsideGeoFence(null);
+      if (trackingState === TrackingState.TRACKING) {
+        setTrackingState(TrackingState.TRACKINGPAUSED);
+        // TODO: Insert push notification
+      }
     }
   };
 
@@ -146,15 +153,11 @@ export const TrackingProvider = ({ children }: Props) => {
     const differentLatitude = newUserLocation.coords.latitude !== userLocation?.coords.latitude;
     const differentLongitude = newUserLocation.coords.longitude !== userLocation?.coords.longitude;
     if (differentLatitude || differentLongitude) updateUserLocation(newUserLocation);
-
-    if (!insideGeoFence) setTrackingState(TrackingState.TRACKINGPAUSED);
-    if (insideGeoFence) setTrackingState(TrackingState.TRACKING);
   }, locationInterval());
 
   const addUnUploadedActivity = (activity: Activities_Insert_Input) =>
     setUnUploadedActivities([...unUploadedActivities, activity]);
 
-  // Tracking
   const startTracking = () => {
     if (locationPermission && locationPermission.status !== 'granted') {
       Alert.alert('Location permission not accepted', 'Location permission is required to start tracking');

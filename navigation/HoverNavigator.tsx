@@ -16,11 +16,11 @@ const HoverNavigator: React.FC = () => {
       {tracking.trackingState === TrackingState.EXPLORE && (
         <ExploreStack.Screen name="Explore" component={ExploreScreen} />
       )}
-      {tracking.trackingState === TrackingState.TRACKING && (
+      {(tracking.trackingState === TrackingState.TRACKING ||
+        tracking.trackingState === TrackingState.TRACKINGPAUSED) && (
         <ExploreStack.Screen name="Tracking" component={TrackingScreen} />
       )}
-      {(tracking.trackingState === TrackingState.TRACKINGPAUSED ||
-        tracking.trackingState === TrackingState.PUBLISH) && (
+      {tracking.trackingState === TrackingState.PUBLISH && (
         <ExploreStack.Screen name="Publish" component={PublishScreen} />
       )}
     </ExploreStack.Navigator>
