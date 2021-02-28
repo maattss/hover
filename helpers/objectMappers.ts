@@ -25,8 +25,8 @@ import { FeedQuery } from '../graphql/queries/Feed.generated';
 
 // Default location NTNU Trondheim
 export const defaultMapLocation: LatLng = {
-  latitude: 63.419,
-  longitude: 10.4025,
+  latitude: 63.42,
+  longitude: 10.4015,
 };
 
 export const convertToRegion = (data: GeofencesQuery): LocationRegion[] => {

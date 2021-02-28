@@ -4,6 +4,7 @@ import { Colors, Spacing, Typography, Buttons } from '../../theme';
 import useTracking from '../../hooks/useTracking';
 import * as Progress from 'react-native-progress';
 import { HoverWithFriendState } from '../../types/hoverWithFriendsType';
+import { TrackingState } from '../providers/TrackingProvider';
 
 interface Props {
   collabState: HoverWithFriendState;
@@ -15,6 +16,7 @@ const TrackingInformation: React.FC<Props> = ({ collabState }: Props) => {
   const score = Math.floor(tracking.score);
   const progress = tracking.score - score;
   const nextScore = tracking.score == 0 ? 1 : Math.ceil(tracking.score);
+
   return (
     <View style={styles.trackingInfo}>
       <View style={styles.trackingInfoTopBar}>
@@ -24,7 +26,13 @@ const TrackingInformation: React.FC<Props> = ({ collabState }: Props) => {
           </View>
         )}
         <View>
-          <Text style={styles.trackingHeader}>Tracking...</Text>
+          {tracking.trackingState === TrackingState.TRACKING && <Text style={styles.trackingHeader}>Tracking...</Text>}
+          {tracking.trackingState === TrackingState.TRACKINGPAUSED && (
+            <>
+              <Text style={styles.trackingHeader}>Tracking paused...</Text>
+              <Text style={styles.trackingSubHeader}>Move to Hover zone to resume!</Text>
+            </>
+          )}
         </View>
       </View>
       <View style={styles.progressBarLabels}>
@@ -91,6 +99,10 @@ const styles = StyleSheet.create({
   trackingHeader: {
     ...Typography.headerText,
     marginVertical: Spacing.smaller,
+  },
+  trackingSubHeader: {
+    ...Typography.bodyText,
+    textAlign: 'center',
   },
   progressBarLabels: {
     flexDirection: 'row',
