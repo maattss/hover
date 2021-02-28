@@ -9,6 +9,7 @@ import { Avatar } from 'react-native-elements';
 import Leaderboard, { Item } from '../leaderboard/Leaderboard';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import { getAchievementColor } from '../profile/Achievement';
+import Divider from '../general/Divider';
 import TouchableProfile from '../general/TouchableProfile';
 
 type ChallengeFeedCardProps = {
@@ -16,26 +17,23 @@ type ChallengeFeedCardProps = {
 };
 
 const ChallengeFeedCard: React.FC<ChallengeFeedCardProps> = ({ data }: ChallengeFeedCardProps) => {
-  const renderItem = (item: Item, index: number) => (
-    <TouchableProfile user_id={item.id} name={item.name}>
+  const renderItem = (item: Item, index: number) => {
+    const rowJSx = (
       <View key={item.id}>
         <ChallengeLeaderboardRow item={item} index={index} />
       </View>
-    </TouchableProfile>
-  );
-  const listData = data.challenge.opponents.map<Item>((item) => {
-    return {
-      id: item.user.id,
-      name: item.user.name,
-      picture: item.user.picture,
-      score: item.progress,
-    } as Item;
-  });
+    );
+    return (
+      <TouchableProfile user_id={item.id} name={item.name}>
+        {rowJSx}
+      </TouchableProfile>
+    );
+  };
 
   return (
     <View style={styles.card}>
-      <View style={styles.topBar}>
-        <Text style={{ ...Typography.headerText }}>We have a winner!</Text>
+      <View style={[styles.topBar, { padding: Spacing.smaller }]}>
+        <Text style={{ ...Typography.headerText }}>We have a winner... </Text>
       </View>
       <TouchableProfile user_id={data.user.id} name={data.user.name}>
         <View style={styles.topBar}>
@@ -52,8 +50,15 @@ const ChallengeFeedCard: React.FC<ChallengeFeedCardProps> = ({ data }: Challenge
           </View>
         </View>
       </TouchableProfile>
+      <Divider />
       <View style={styles.main}>
-        <Leaderboard data={listData} renderItem={renderItem} />
+        <Leaderboard
+          data={data.challenge.opponents.map<Item>((item) => {
+            return { id: item.user.id, name: item.user.name, picture: item.user.picture, score: item.progress } as Item;
+          })}
+          renderItem={renderItem}
+          seperator={() => <Divider style={{ borderBottomColor: Colors.gray800 }} />}
+        />
       </View>
       <View style={styles.footer}>
         <Text style={styles.footerText}>{timeStampToPresentable(data.createdAt)}</Text>
@@ -63,32 +68,41 @@ const ChallengeFeedCard: React.FC<ChallengeFeedCardProps> = ({ data }: Challenge
 };
 
 const ChallengeLeaderboardRow = ({ item, index }: { item: Item; index: number }) => {
-  const iconStyle = {
+  const iconColor = {
     color: getAchievementColor(index + 1),
-    fontSize: 30,
   };
-  const border = {
-    borderBottomColor: getAchievementColor(index + 1),
-    borderBottomWidth: 3,
-    borderRadius: 0,
-  };
-
+  const textSize =
+    index == 0
+      ? {
+          fontSize: 28,
+        }
+      : {
+          fontSize: 20,
+        };
+  const rowHeight =
+    index == 0
+      ? {
+          height: 60,
+        }
+      : {
+          height: 35,
+        };
   return (
-    <View style={[styles.row, border]}>
+    <View style={[styles.row, rowHeight]}>
       <View style={styles.left}>
-        <Text style={[{ ...Typography.bodyText }, styles.rank, index < 9 ? styles.singleDidget : styles.doubleDidget]}>
-          {index < 3 ? <FAIcon name={'medal'} style={iconStyle} /> : index + 1}
+        <Text style={[styles.text, styles.rank, index < 9 ? styles.singleDidget : styles.doubleDidget]}>
+          {index < 3 ? <FAIcon name={'medal'} style={[iconColor, textSize]} /> : index + 1}
         </Text>
         {item.picture && (
           <View style={styles.avatar}>
             <Avatar rounded source={{ uri: item.picture ? item.picture : defaultUserProfile.picture }} size={'small'} />
           </View>
         )}
-        <Text style={[{ ...Typography.bodyText }, styles.label]} numberOfLines={1}>
+        <Text style={[styles.text, styles.label, textSize]} numberOfLines={1}>
           {item.name}
         </Text>
       </View>
-      <Text style={[{ ...Typography.bodyText }, styles.score]}>{item.score || 0}</Text>
+      <Text style={[styles.text, styles.score, textSize]}>{item.score || 0}</Text>
     </View>
   );
 };
@@ -101,7 +115,7 @@ const styles = StyleSheet.create({
   },
   topBar: {
     flexDirection: 'row',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
   },
   avatar: {
     marginRight: Spacing.small,
@@ -123,6 +137,9 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
   },
   main: {
+    borderRadius: Spacing.smaller,
+    backgroundColor: Colors.almostBlack,
+    paddingVertical: Spacing.small,
     marginBottom: Spacing.small,
   },
   footer: {
@@ -135,11 +152,10 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   row: {
+    paddingVertical: Spacing.smallest,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginVertical: Spacing.smallest,
-    paddingVertical: Spacing.smaller,
   },
   left: {
     flexDirection: 'row',
@@ -160,14 +176,12 @@ const styles = StyleSheet.create({
   },
   label: {
     flex: 1,
-    fontSize: 20,
   },
   score: {
     fontWeight: 'bold',
     position: 'absolute',
     right: Spacing.base,
     paddingLeft: Spacing.base,
-    fontSize: 20,
   },
   text: {
     ...Typography.bodyText,
