@@ -10,13 +10,13 @@ import ProfileScreen from '../screens/profile/ProfileScreen';
 import BadgeIcon from '../components/general/BadgeIcon';
 import { useNotificationCountQuery } from '../graphql/queries/NotificationCount.generated';
 
-export const HeaderIcon = (props: { name: string; onPress: () => void }) => {
+export const HeaderIcon = (props: { name: string; onPress?: () => void }) => {
   return <FAIcon style={styles.headericon} {...props} />;
 };
 const FeedStack = createStackNavigator<FeedStackParamList>();
 
 const FeedNavigator: React.FC = () => {
-  const { data } = useNotificationCountQuery();
+  const { data, refetch } = useNotificationCountQuery({ nextFetchPolicy: 'network-only' });
   return (
     <FeedStack.Navigator>
       <FeedStack.Screen
@@ -26,11 +26,14 @@ const FeedNavigator: React.FC = () => {
           headerTitle: 'Feed',
           // eslint-disable-next-line react/display-name
           headerRight: () => (
-            <BadgeIcon value={data?.notifications_aggregate.aggregate?.count ?? 0}>
-              <HeaderIcon name="bell" onPress={() => navigation.navigate('Notifications')} />
+            <BadgeIcon
+              value={data?.notifications_aggregate.aggregate?.count ?? 0}
+              onPress={() => navigation.navigate('Notifications')}>
+              <HeaderIcon name="bell" />
             </BadgeIcon>
           ),
         })}
+        initialParams={{ refreshNotification: refetch }}
       />
       <FeedStack.Screen
         name="Notifications"
