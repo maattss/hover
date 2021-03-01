@@ -1,20 +1,21 @@
 import React, { ReactNode } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import { Badge } from 'react-native-elements';
 import { Spacing } from '../../theme';
 
 interface BadgeIconProps {
   value: number;
   children: ReactNode;
+  onPress: () => void;
 }
-const BadgeIcon: React.FC<BadgeIconProps> = ({ value, children }: BadgeIconProps) => {
+const BadgeIcon: React.FC<BadgeIconProps> = ({ value, children, onPress }: BadgeIconProps) => {
   return (
-    <View style={styles.container}>
+    <TouchableOpacity style={styles.container} onPress={onPress}>
       <View style={styles.row}>
         {children}
         {value > 0 && <Badge value={value} status={'error'} containerStyle={styles.badgeStyle} />}
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
