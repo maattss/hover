@@ -44,8 +44,6 @@ const getItem = (data: FeedData) => {
 
 type FeedRouteProp = RouteProp<FeedStackParamList, 'Feed'>;
 
-type FeedRouteProp = RouteProp<FeedStackParamList, 'Feed'>;
-
 export type FeedProps = {
   route: FeedRouteProp;
 };
