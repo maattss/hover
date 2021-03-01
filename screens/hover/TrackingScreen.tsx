@@ -15,15 +15,15 @@ const TrackingScreen: React.FC = () => {
 
   const insets = useSafeAreaInsets();
   const bottomPosition = {
-    bottom: insets.bottom + 50,
+    bottom: insets.bottom,
   };
 
   return (
     <>
       <HoverMap />
-      <View>
+      <View style={[styles.infoContainer, bottomPosition]}>
         <KeyboardAvoiderAbsolutePosition newBottom={Platform.OS == 'ios' ? 10 : -100}>
-          <View style={[styles.infoContainer, bottomPosition]}>
+          <View>
             {!collabInfoHidden && (
               <HoverWithFriends
                 collabState={collabState}
@@ -56,6 +56,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: Spacing.smallest,
     right: Spacing.smallest,
+    marginBottom: Spacing.smallest,
   },
   rowFlexJustifyEnd: {
     flexDirection: 'row',
