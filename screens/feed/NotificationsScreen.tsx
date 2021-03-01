@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, FlatList } from 'react-native';
-import { Spacing, Typography } from '../../theme';
+import { Colors, Spacing, Typography } from '../../theme';
 import Error from '../../components/general/Error';
 import Loading from '../../components/general/Loading';
 import { NotificationFragmentFragment } from '../../graphql/Fragments.generated';
@@ -8,6 +8,7 @@ import { useNotifiactionsQuery } from '../../graphql/queries/Notifications.gener
 import NotificationCard from '../../components/feed/notification/NotificationCard';
 import { useUpdateNotificationsMutation } from '../../graphql/mutations/UpdateNotifications.generated';
 import useAuthentication from '../../hooks/useAuthentication';
+import Divider from '../../components/general/Divider';
 
 const NotificationsScreen: React.FC = () => {
   const allData = {
@@ -34,7 +35,7 @@ const NotificationsScreen: React.FC = () => {
           id: 90,
           type: 'CHALLENGE_FINISHED',
           text: 'Ronny invited you to a time in category challenge.',
-          seen: false,
+          seen: true,
           user_id: 'uqoRoWbmv7P457uvGk9IbX8sH143',
           created_at: '2021-02-25T12:17:40.496442+00:00',
         },
@@ -66,21 +67,16 @@ const NotificationsScreen: React.FC = () => {
           id: 1,
           type: 'PARTICIPANT_UPDATE',
           text: 'Siri Mykland accepted your time challenge.',
-          seen: false,
+          seen: true,
           user_id: 't1Kg1gYha8hwez4Wzqs1Kvr9FXf2',
           created_at: '2021-02-25T12:17:40.496442+00:00',
         },
-      ],
+      ] as NotificationFragmentFragment[],
     },
   };
 
-  const [newNotifications, setNewNotification] = useState<NotificationFragmentFragment[]>(
-    allData.data.notifications as NotificationFragmentFragment[],
-  );
-  const [earlierNotifications, setEarlierNotification] = useState<NotificationFragmentFragment[]>(
-    allData.data.notifications as NotificationFragmentFragment[],
-  );
-  const [endReached, setEndReached] = useState(false);
+  const [newNotifications, setNewNotification] = useState<NotificationFragmentFragment[]>();
+  const [earlierNotifications, setEarlierNotification] = useState<NotificationFragmentFragment[]>();
 
   const { data, loading, error } = useNotifiactionsQuery({
     fetchPolicy: 'network-only',
@@ -90,18 +86,14 @@ const NotificationsScreen: React.FC = () => {
 
   useEffect(() => {
     if (data && data.notifications) {
-      if (data.notifications.length == 0) {
-        setEndReached(true);
-      } else {
-        const newest: NotificationFragmentFragment[] = [];
-        const earlier: NotificationFragmentFragment[] = [];
-        data.notifications.forEach((obj: NotificationFragmentFragment) => {
-          if (!obj.seen) newest.push(obj);
-          else earlier.push(obj);
-        });
-        setNewNotification(newest);
-        setEarlierNotification(earlier);
-      }
+      const newest: NotificationFragmentFragment[] = [];
+      const earlier: NotificationFragmentFragment[] = [];
+      allData.data.notifications.forEach((obj: NotificationFragmentFragment) => {
+        if (!obj.seen) newest.push(obj);
+        else earlier.push(obj);
+      });
+      setNewNotification(newest);
+      setEarlierNotification(earlier);
     }
   }, [data]);
 
@@ -131,6 +123,7 @@ const NotificationsScreen: React.FC = () => {
               <Text style={{ ...Typography.subHeaderText, marginTop: Spacing.base }}>New</Text>
             </View>
           }
+          ItemSeparatorComponent={() => <Divider style={styles.divider} />}
         />
       )}
       {earlierNotifications && (
@@ -144,6 +137,7 @@ const NotificationsScreen: React.FC = () => {
               <Text style={{ ...Typography.subHeaderText, marginTop: Spacing.base }}>Earlier</Text>
             </View>
           }
+          ItemSeparatorComponent={() => <Divider style={styles.divider} />}
         />
       )}
       {renderFooter}
@@ -167,6 +161,10 @@ const styles = StyleSheet.create({
   cardbox: {
     marginHorizontal: Spacing.smaller,
     marginVertical: Spacing.smallest,
+  },
+  divider: {
+    borderBottomColor: Colors.gray600,
+    marginVertical: 0,
   },
 });
 export default NotificationsScreen;
