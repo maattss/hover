@@ -42,15 +42,14 @@ const getItem = (data: FeedData) => {
   }
   return <></>;
 };
-type NavigationProp = StackNavigationProp<FeedStackParamList>;
+
 type FeedRouteProp = RouteProp<FeedStackParamList, 'Feed'>;
 
 export type FeedProps = {
-  navigation: NavigationProp;
   route: FeedRouteProp;
 };
 
-const FeedScreen: React.FC<FeedProps> = ({ navigation, route }: FeedProps) => {
+const FeedScreen: React.FC<FeedProps> = ({ route }: FeedProps) => {
   const pageSize = 10;
   const [refreshing, setRefreshing] = useState(false);
   const [offset, setOffset] = useState(0);
