@@ -13,6 +13,7 @@ import { LocationObject } from 'expo-location';
 import useAuthentication from '../../hooks/useAuthentication';
 import { LatLng } from 'react-native-maps';
 import { Activities_Insert_Input } from '../../types/types';
+import usePushNotification from '../../hooks/usePushNotification';
 
 export enum TrackingState {
   EXPLORE,
@@ -77,6 +78,7 @@ TrackingContext.displayName = 'TrackingContext';
 
 export const TrackingProvider = ({ children }: Props) => {
   const userId = useAuthentication().user?.uid;
+  const pushNotification = usePushNotification();
   const [locationPermission] = usePermissions(LOCATION, { ask: true });
   const [loadingUserLocation, setLoadingUserLocation] = useState(false);
   const [userLocation, setUserLocation] = useState<LocationObject | null>(null);
@@ -137,7 +139,11 @@ export const TrackingProvider = ({ children }: Props) => {
       setInsideGeoFence(null);
       if (trackingState === TrackingState.TRACKING) {
         setTrackingState(TrackingState.TRACKINGPAUSED);
-        // TODO: Insert push notification
+        pushNotification.sendPushNotification(
+          'Ooh no! Tracking was paused...',
+          'Seems like you left the Hover zone. Please check your tracking status in the application.',
+          true,
+        );
       }
     }
   };
