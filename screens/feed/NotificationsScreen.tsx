@@ -9,6 +9,7 @@ import NotificationCard from '../../components/feed/notification/NotificationCar
 import { useUpdateNotificationsMutation } from '../../graphql/mutations/UpdateNotifications.generated';
 import useAuthentication from '../../hooks/useAuthentication';
 import Divider from '../../components/general/Divider';
+import { useNavigation } from '@react-navigation/native';
 
 type SectionItem = { title: string; innerArray?: NotificationFragmentFragment[] };
 const NotificationsScreen: React.FC = () => {
@@ -82,12 +83,12 @@ const NotificationsScreen: React.FC = () => {
   });
   const user_id = useAuthentication().user?.uid ?? '';
   const [readNotifications] = useUpdateNotificationsMutation();
-
+  const navigation = useNavigation();
   useEffect(() => {
     if (data && data.notifications) {
       const newest: NotificationFragmentFragment[] = [];
       const earlier: NotificationFragmentFragment[] = [];
-      allData.data.notifications.forEach((obj: NotificationFragmentFragment) => {
+      data.notifications.forEach((obj: NotificationFragmentFragment) => {
         if (!obj.seen) newest.push(obj);
         else earlier.push(obj);
       });
@@ -97,6 +98,13 @@ const NotificationsScreen: React.FC = () => {
       setSections(tempSections);
     }
   }, [data]);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('beforeRemove', () => readNotifications({ variables: { user_id } }));
+    return () => {
+      unsubscribe;
+    };
+  }, [navigation]);
 
   const renderItem = (item: NotificationFragmentFragment) => <NotificationCard notification={item} />;
 
