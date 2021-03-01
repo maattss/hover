@@ -41,7 +41,7 @@ const getItem = (data: FeedData) => {
   }
   return <></>;
 };
-type NavigationProp = StackNavigationProp<FeedStackParamList>;
+
 type FeedRouteProp = RouteProp<FeedStackParamList, 'Feed'>;
 
 type FeedRouteProp = RouteProp<FeedStackParamList, 'Feed'>;
