@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, FlatList } from 'react-native';
+import { View, Text, StyleSheet, FlatList, ActivityIndicator } from 'react-native';
 import { Challenge } from '../../types/challengeTypes';
 import { RouteProp } from '@react-navigation/native';
 import { ChallengeStackParamList } from '../../types/navigationTypes';
-import { Spacing, Typography } from '../../theme';
+import { Colors, Spacing, Typography } from '../../theme';
 import PendingChallengeCard from '../../components/challenge/PendingChallengeCard';
 import Error from '../../components/general/Error';
-import Loading from '../../components/general/Loading';
 import { convertToChallenge } from '../../helpers/objectMappers';
 import { useGetPendingChallengesQuery } from '../../graphql/queries/GetPendingChallenges.generated';
 
@@ -62,10 +61,7 @@ const PendingChallengesScreen: React.FC<Props> = ({ route }: Props) => {
 
   const renderHeader = () => (
     <View style={styles.header}>
-      <Text style={{ ...Typography.headerText, marginTop: Spacing.base }}>Pending challenges</Text>
-      <Text style={{ ...Typography.bodyText, marginTop: Spacing.base }}>
-        Accept challenges to compete with other players
-      </Text>
+      <Text style={{ ...Typography.headerText, marginTop: Spacing.base }}>Pending invites</Text>
     </View>
   );
   const renderItem = (item: Challenge) => (
@@ -76,8 +72,8 @@ const PendingChallengesScreen: React.FC<Props> = ({ route }: Props) => {
   const renderFooter = () => {
     return (
       <View style={styles.footer}>
-        {loading ? <Loading /> : null}
-        {endReached ? <Text style={{ ...Typography.bodyText }}>There are no more pending challenges.</Text> : null}
+        {loading ? <ActivityIndicator color={Colors.blue} /> : null}
+        {endReached ? <Text style={{ ...Typography.bodyText }}>No more pending challenges...</Text> : null}
       </View>
     );
   };

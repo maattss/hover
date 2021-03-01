@@ -6,11 +6,12 @@ import { SettingsProps } from './SettingsMenuScreen';
 const AboutScreen: React.FC<SettingsProps> = () => {
   return (
     <View style={styles.container}>
-      <Text style={styles.titleText}>Application information</Text>
+      <Text style={styles.titleText}>About Hover</Text>
       <Text style={styles.bodyText}>
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis sapiente error maiores, corporis molestias
         mollitia numquam voluptatem, sunt corrupti fugiat inventore hic doloribus, quidem odit quas consectetur eius
         labore ad!
+        {/* TODO: Insert description of applciation */}
       </Text>
       <Text style={styles.bodyText}>Version 0.0.1 (alpha)</Text>
     </View>

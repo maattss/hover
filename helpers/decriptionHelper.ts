@@ -103,7 +103,7 @@ export const generateNewChallengeDescription = (
   description += rules.score ? ' get ' + rules.score + ' points' : '';
   description += rules.time ? ' spend ' + rules.time + ' hours' : '';
   description += rules.category
-    ? ' at a location within the ' + rules.category.toLowerCase() + ' category'
+    ? ' at a location in the ' + rules.category.toLowerCase() + ' category'
     : ' at any valid Hover location';
   description += end_date ? ' by ' + toPrettyDate(new Date(end_date)) + '.' : '';
   return description;
@@ -117,15 +117,15 @@ export const generateRuleChallengeDescription = (fields: string[], rules: Challe
 
   fields.forEach((field) => {
     if (field === 'SCORE') {
-      description += '\n\t...get ' + (rules.score ?? '____') + ' points';
+      description += '\n  ...get ' + (rules.score ?? '____') + ' points';
     } else if (field === 'TIME') {
-      description += '\n\t...spend ' + (rules.time ?? '___') + ' hours';
+      description += '\n  ...spend ' + (rules.time ?? '___') + ' hours';
     } else if (field === 'CATEGORY') {
-      description += '\n\t...at a location within the ' + (rules.category?.toLowerCase() ?? '_______') + ' category';
+      description += '\n  ...at a location in the ' + (rules.category?.toLowerCase() ?? '_______') + ' category';
     }
   });
 
-  description += '\n\t...before ' + (end_date ? toPrettyDate(end_date) : '___________') + '.';
+  description += '\n  ...before ' + (end_date ? toPrettyDate(end_date) : '___________') + '.';
   return description;
 };
 

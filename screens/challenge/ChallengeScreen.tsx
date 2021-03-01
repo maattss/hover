@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { ScrollView, RefreshControl, StyleSheet, Text, View } from 'react-native';
+import { ScrollView, RefreshControl, StyleSheet, Text, View, TouchableOpacity, Alert } from 'react-native';
 import { useGetChallengesQuery } from '../../graphql/queries/GetChallenges.generated';
 import { Colors, Spacing, Typography } from '../../theme';
 import useAuthentication from '../../hooks/useAuthentication';
@@ -13,6 +13,7 @@ import Button from '../../components/general/Button';
 import Error from '../../components/general/Error';
 import Loading from '../../components/general/Loading';
 import { useIsFocused } from '@react-navigation/native';
+import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 
 type NavigationProp = StackNavigationProp<ChallengeStackParamList>;
 
@@ -22,84 +23,20 @@ export type ChallengesProps = {
 
 const PREVIEW_SIZE = 2;
 
-const ChallengeScreen: React.FC<ChallengesProps> = (props: ChallengesProps) => {
-  const user_id = useAuthentication().user?.uid;
-  const [refreshing, setRefreshing] = useState(false);
+const showPendingInfoPopup = () =>
+  Alert.alert('Your pending invites', 'Accept the challenges to compete with other players.');
 
-  const [pendingChallenges, setPendingChallenges] = useState<Challenge[]>();
-  const [ongoingChallenges, setOngoingChallenges] = useState<Challenge[]>();
-
-  const { data, loading, error, refetch } = useGetChallengesQuery({
-    variables: { user_id: user_id ? user_id : '', limit: PREVIEW_SIZE + 1 },
-    nextFetchPolicy: 'network-only',
-  });
-  useEffect(() => {
-    if (data && data.user) {
-      const { pendingChallenges, ongoingChallenges } = convertChallenge(data);
-      setPendingChallenges(pendingChallenges);
-      setOngoingChallenges(ongoingChallenges);
-    }
-  }, [data]);
-
-  const handleRefresh = useCallback(async () => {
-    if (refetch) {
-      setRefreshing(true);
-      await refetch();
-      setRefreshing(false);
-    }
-  }, [refreshing]);
-
-  const isFocused = useIsFocused();
-  useEffect(() => {
-    if (isFocused) {
-      handleRefresh();
-    }
-  }, [isFocused]);
-
-  if (loading) return <Loading />;
-
-  if (error) return <Error message={error.message} apolloError={error} />;
-
-  return (
-    <ScrollView
-      style={styles.scrollView}
-      contentContainerStyle={styles.scrollContentContainer}
-      refreshControl={
-        <RefreshControl
-          refreshing={refreshing}
-          onRefresh={handleRefresh}
-          tintColor={Colors.blue}
-          colors={[Colors.blue]}
-          progressBackgroundColor={Colors.transparent}
-        />
-      }>
-      {pendingChallenges &&
-        pendingChallenges.length > 0 &&
-        renderPendingChallenges(props, pendingChallenges, user_id ? user_id : '')}
-      {ongoingChallenges &&
-        ongoingChallenges.length > 0 &&
-        renderOngoingChallenges(props, ongoingChallenges, user_id ? user_id : '')}
-      {user_id && (
-        <View style={styles.box}>
-          <View style={styles.boxTitle}>
-            <Text style={{ ...Typography.headerText }}>Want a new challenge?</Text>
-            <Text style={{ ...Typography.bodyText }}>Create a challenge for you and your friends!</Text>
-          </View>
-          <Button style={styles.challengeButton} onPress={() => props.navigation.navigate('NewChallenge')}>
-            Create new challenge
-          </Button>
-        </View>
-      )}
-    </ScrollView>
-  );
-};
+const showOngoingInfoPopup = () =>
+  Alert.alert('Your ongoing challenges', 'All your current challenges and their status.');
 
 const renderPendingChallenges = ({ navigation }: ChallengesProps, pendingChallenges: Challenge[], user_id: string) => {
   return (
     <View style={styles.box}>
       <View style={styles.boxTitle}>
-        <Text style={{ ...Typography.headerText }}>Pending challenges</Text>
-        <Text style={{ ...Typography.bodyText }}>Accept the challenges to compete with other players.</Text>
+        <Text style={styles.header}>Pending invites</Text>
+        <TouchableOpacity onPress={showPendingInfoPopup}>
+          <FAIcon name={'info-circle'} style={styles.iconSmall} />
+        </TouchableOpacity>
       </View>
       {pendingChallenges.slice(0, PREVIEW_SIZE).map((item, index) => (
         <View key={index} style={styles.previewContainer}>
@@ -121,7 +58,10 @@ const renderOngoingChallenges = ({ navigation }: ChallengesProps, ongoingChallen
   return (
     <View style={styles.box}>
       <View style={styles.boxTitle}>
-        <Text style={{ ...Typography.headerText }}>Ongoing Challenges</Text>
+        <Text style={styles.header}>Ongoing challenges</Text>
+        <TouchableOpacity onPress={showOngoingInfoPopup}>
+          <FAIcon name={'info-circle'} style={styles.iconSmall} />
+        </TouchableOpacity>
       </View>
       {ongoingChallenges.slice(0, PREVIEW_SIZE).map((item, index) => (
         <View key={index} style={styles.previewContainer}>
@@ -139,20 +79,87 @@ const renderOngoingChallenges = ({ navigation }: ChallengesProps, ongoingChallen
   );
 };
 
+const ChallengeScreen: React.FC<ChallengesProps> = (props: ChallengesProps) => {
+  const user_id = useAuthentication().user?.uid;
+  const [refreshing, setRefreshing] = useState(false);
+  const [pendingChallenges, setPendingChallenges] = useState<Challenge[]>();
+  const [ongoingChallenges, setOngoingChallenges] = useState<Challenge[]>();
+
+  const { data, loading, error, refetch } = useGetChallengesQuery({
+    variables: { user_id: user_id ? user_id : '', limit: PREVIEW_SIZE + 1 },
+    nextFetchPolicy: 'network-only',
+  });
+
+  useEffect(() => {
+    if (data && data.user) {
+      const { pendingChallenges, ongoingChallenges } = convertChallenge(data);
+      setPendingChallenges(pendingChallenges);
+      setOngoingChallenges(ongoingChallenges);
+    }
+  }, [data]);
+
+  const handleRefresh = useCallback(async () => {
+    if (refetch) {
+      setRefreshing(true);
+      await refetch();
+      setRefreshing(false);
+    }
+  }, [refreshing]);
+
+  const isFocused = useIsFocused();
+  useEffect(() => {
+    if (isFocused) handleRefresh();
+  }, [isFocused]);
+
+  const pendingChallengesExists = pendingChallenges && pendingChallenges.length > 0;
+  const ongoingChallengesExists = ongoingChallenges && ongoingChallenges.length > 0;
+
+  if (loading) return <Loading />;
+  if (error) return <Error message={error.message} apolloError={error} />;
+  return (
+    <ScrollView
+      style={styles.scrollView}
+      contentContainerStyle={styles.scrollContentContainer}
+      refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={handleRefresh}
+          tintColor={Colors.blue}
+          colors={[Colors.blue]}
+          progressBackgroundColor={Colors.transparent}
+        />
+      }>
+      {pendingChallengesExists &&
+        renderPendingChallenges(props, pendingChallenges ? pendingChallenges : [], user_id ? user_id : '')}
+      {ongoingChallengesExists &&
+        renderOngoingChallenges(props, ongoingChallenges ? ongoingChallenges : [], user_id ? user_id : '')}
+      {user_id && !pendingChallengesExists && !ongoingChallengesExists && (
+        <View style={styles.box}>
+          <View style={styles.newChallengeHeader}>
+            <Text style={{ ...Typography.headerText }}>Want a new challenge?</Text>
+            <Text style={{ ...Typography.bodyText, padding: Spacing.smallest }}>
+              Create a challenge for you and your friends!
+            </Text>
+          </View>
+          <Button style={styles.challengeButton} onPress={() => props.navigation.navigate('NewChallenge')}>
+            Create new challenge
+          </Button>
+        </View>
+      )}
+    </ScrollView>
+  );
+};
+
 const styles = StyleSheet.create({
   scrollView: {
-    flex: 1,
-    paddingHorizontal: Spacing.base,
+    paddingHorizontal: Spacing.smaller,
   },
   scrollContentContainer: {
-    paddingTop: Spacing.base,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingBottom: Spacing.base,
   },
   previewContainer: {
     width: '100%',
-    marginVertical: Spacing.smaller,
   },
   errorContainer: {
     display: 'flex',
@@ -162,21 +169,35 @@ const styles = StyleSheet.create({
     width: '100%',
     marginTop: '20%',
   },
+  header: {
+    ...Typography.headerText,
+    marginLeft: Spacing.smallest,
+  },
   box: {
-    backgroundColor: Colors.gray900,
     width: '100%',
     flex: 1,
     alignItems: 'center',
-    borderRadius: Spacing.smaller,
-    padding: Spacing.base,
     marginVertical: Spacing.smaller,
   },
   boxTitle: {
-    marginBottom: Spacing.base,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: Spacing.smaller,
+    width: '100%',
+  },
+  newChallengeHeader: {
+    width: '100%',
+    marginVertical: Spacing.small,
   },
   challengeButton: {
     backgroundColor: Colors.green,
-    marginVertical: Spacing.base,
+    marginVertical: Spacing.smallest,
+  },
+  iconSmall: {
+    ...Typography.icon,
+    marginHorizontal: Spacing.smaller,
+    marginVertical: Spacing.smallest,
   },
 });
 

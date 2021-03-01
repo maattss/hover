@@ -21,7 +21,7 @@ const NewChallengeNavigator: React.FC = () => {
         options={({ navigation }) => ({
           headerTitle: 'Opponents',
           // eslint-disable-next-line react/display-name
-          headerRight: () => <HeaderIcon name="info" onPress={() => navigation.navigate('ChallengeInfo')} />,
+          headerRight: () => <HeaderIcon name="info-circle" onPress={() => navigation.navigate('ChallengeInfo')} />,
         })}
         initialParams={{ user_id: user_id }}
       />
@@ -31,7 +31,7 @@ const NewChallengeNavigator: React.FC = () => {
         options={({ navigation }) => ({
           headerTitle: 'Challenge type',
           // eslint-disable-next-line react/display-name
-          headerRight: () => <HeaderIcon name="info" onPress={() => navigation.navigate('ChallengeInfo')} />,
+          headerRight: () => <HeaderIcon name="info-circle" onPress={() => navigation.navigate('ChallengeInfo')} />,
         })}
       />
       <NewChallengeStack.Screen
@@ -40,7 +40,7 @@ const NewChallengeNavigator: React.FC = () => {
         options={({ navigation }) => ({
           headerTitle: 'Details',
           // eslint-disable-next-line react/display-name
-          headerRight: () => <HeaderIcon name="info" onPress={() => navigation.navigate('ChallengeInfo')} />,
+          headerRight: () => <HeaderIcon name="info-circle" onPress={() => navigation.navigate('ChallengeInfo')} />,
         })}
       />
       <NewChallengeStack.Screen
