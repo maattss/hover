@@ -1,10 +1,11 @@
 import React from 'react';
 import { Alert, View, StyleSheet, FlatList } from 'react-native';
 import Firebase from '../../../lib/firebase';
-import { Buttons, Spacing, Colors } from '../../../theme';
+import { Buttons, Spacing, Colors, Typography } from '../../../theme';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { SettingsNavigationStackParamList } from '../../../types/navigationTypes';
 import Button, { MenuButton } from '../../../components/general/Button';
+import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 
 type NavigationProp = StackNavigationProp<SettingsNavigationStackParamList>;
 
@@ -82,14 +83,16 @@ const SettingsScreen: React.FC<SettingsProps> = ({ navigation }: SettingsProps) 
   return (
     <View style={styles.container}>
       <View style={styles.settingsContainer}>
+        <FAIcon name={'cog'} style={styles.icon} />
         <FlatList
           data={SettingMenu}
           renderItem={renderItem}
           keyExtractor={(item) => item.id}
           style={styles.settingsList}
+          scrollEnabled={false}
         />
       </View>
-      <Button style={{ backgroundColor: Colors.red }} onPress={areYouSure}>
+      <Button style={styles.logoutButton} onPress={areYouSure}>
         Sign out
       </Button>
     </View>
@@ -98,31 +101,34 @@ const SettingsScreen: React.FC<SettingsProps> = ({ navigation }: SettingsProps) 
 
 const styles = StyleSheet.create({
   container: {
-    display: 'flex',
-    alignItems: 'center',
-    padding: Spacing.large,
-    paddingRight: Spacing.large,
-    paddingTop: Spacing.small,
-    paddingBottom: Spacing.small,
+    padding: Spacing.smaller,
   },
   settingsContainer: {
     width: '100%',
-    display: 'flex',
     alignItems: 'center',
   },
   settingsList: {
     width: '100%',
   },
+  icon: {
+    ...Typography.icon,
+    margin: Spacing.large,
+    paddingBottom: Spacing.small,
+    fontSize: 50,
+  },
   settingsItem: {
     ...Buttons.button,
     marginBottom: Spacing.smaller,
-    display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
     backgroundColor: Colors.gray900,
   },
   settingsItemDisabled: {
     display: 'none',
+  },
+  logoutButton: {
+    backgroundColor: Colors.red,
+    marginTop: Spacing.base,
   },
 });
 

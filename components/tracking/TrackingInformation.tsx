@@ -35,23 +35,26 @@ const TrackingInformation: React.FC<Props> = ({ collabState }: Props) => {
           )}
         </View>
       </View>
-      <View style={styles.progressBarLabels}>
-        <Text style={styles.label}>Points</Text>
-        <View style={{ width: 240 }} />
-        <Text style={styles.label}>Next</Text>
-      </View>
-
       <View style={styles.progressBar}>
-        <Text style={styles.scoreText}>{score}</Text>
-        <Progress.Bar
-          progress={progress}
-          width={200}
-          height={24}
-          borderColor={Colors.blue}
-          color={Colors.blue}
-          borderWidth={1.5}
-        />
-        <Text style={styles.scoreText}>{nextScore}</Text>
+        <View style={styles.progressBarLabels}>
+          <Text style={styles.label}>Points</Text>
+          <Text style={styles.scoreText}>{score}</Text>
+        </View>
+
+        <View style={{ width: '65%' }}>
+          <Progress.Bar
+            progress={progress}
+            width={null}
+            height={24}
+            borderColor={Colors.blue}
+            color={Colors.blue}
+            borderWidth={2}
+          />
+        </View>
+        <View style={styles.progressBarLabels}>
+          <Text style={styles.label}>Next</Text>
+          <Text style={styles.scoreText}>{nextScore}</Text>
+        </View>
       </View>
 
       <View style={styles.stopButtonContainer}>
@@ -105,25 +108,24 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   progressBarLabels: {
-    flexDirection: 'row',
+    width: '15%',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
+    marginVertical: Spacing.smallest,
+    paddingBottom: Spacing.base,
   },
   label: {
     ...Typography.bodyText,
     fontWeight: 'bold',
-    textAlign: 'left',
   },
   progressBar: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     width: '100%',
   },
   scoreText: {
     ...Typography.headerText,
-    marginVertical: Spacing.small,
-    marginHorizontal: Spacing.largest,
   },
   stopButtonContainer: {
     justifyContent: 'center',

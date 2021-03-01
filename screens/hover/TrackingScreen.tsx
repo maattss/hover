@@ -15,7 +15,7 @@ const TrackingScreen: React.FC = () => {
 
   const insets = useSafeAreaInsets();
   const bottomPosition = {
-    bottom: insets.bottom,
+    bottom: Platform.OS == 'ios' ? 0 : insets.bottom,
   };
 
   return (

@@ -25,12 +25,11 @@ const PickUsersScreen: React.FC<Props> = ({
   },
   navigation,
 }: Props) => {
+  const [participants, setParticipants] = useState<ListUserFragmentFragment[]>([]);
+  const [isDisabled, setDisabled] = useState(participants.length == 0);
   const { data: friends, loading } = useGetFriendsQuery({
     variables: { user_id: user_id },
   });
-
-  const [participants, setParticipants] = useState<ListUserFragmentFragment[]>([]);
-  const [isDisabled, setDisabled] = useState(participants.length == 0);
 
   const onChecked = (user: ListUserFragmentFragment) => {
     const index = participants.findIndex((x) => x.id == user.id);
@@ -44,17 +43,26 @@ const PickUsersScreen: React.FC<Props> = ({
     setParticipants(newParticipants);
     setDisabled(participants.length == 0);
   };
+  const goNext = () => {
+    if (isDisabled) {
+      Alert.alert('No opponents selected', 'Choose a least one opponent to proceed!');
+      return;
+    }
+
+    navigation.push('ChallengeType', {
+      user_id: user_id,
+      participants: participants,
+    });
+  };
 
   const isFriendChecked = (id: string) => {
     if (participants.findIndex((x) => x.id == id) > -1) return true;
     return false;
   };
 
-  const renderItem = (item: ListUserFragmentFragment, index: number) => {
-    return (
-      <FriendItem item={item} index={index} checked={isFriendChecked(item.id)} onValueChanged={() => onChecked(item)} />
-    );
-  };
+  const renderItem = (item: ListUserFragmentFragment, index: number) => (
+    <FriendItem item={item} index={index} checked={isFriendChecked(item.id)} onValueChanged={() => onChecked(item)} />
+  );
 
   if (loading) return <Loading />;
 
@@ -71,16 +79,7 @@ const PickUsersScreen: React.FC<Props> = ({
       </View>
 
       <View style={styles.stickyFooter}>
-        <Button
-          onPress={() =>
-            isDisabled
-              ? Alert.alert('You are not finished', 'Choose a least one opponent to proceed!', [{ text: 'OK' }])
-              : navigation.push('ChallengeType', {
-                  user_id: user_id,
-                  participants: participants,
-                })
-          }
-          style={isDisabled ? { backgroundColor: Colors.gray600 } : {}}>
+        <Button onPress={goNext} style={isDisabled ? { backgroundColor: Colors.gray600 } : {}}>
           Next
         </Button>
       </View>
@@ -101,11 +100,8 @@ const FriendItem: React.FC<FriendItemProps> = (props: FriendItemProps) => {
     props.onValueChanged(props.item);
     setChecked(!checked);
   };
-  const evenColor = Colors.gray900;
-  const oddColor = Colors.black;
-  const rowColor = props.index % 2 === 0 ? evenColor : oddColor;
   return (
-    <TouchableOpacity style={[styles.friendRow, { backgroundColor: rowColor }]} onPress={onPressed}>
+    <TouchableOpacity style={styles.friendRow} onPress={onPressed}>
       <CheckBox
         center
         onPress={onPressed}
@@ -114,12 +110,7 @@ const FriendItem: React.FC<FriendItemProps> = (props: FriendItemProps) => {
         uncheckedIcon="circle"
         checked={checked}
       />
-      <Avatar
-        rounded
-        source={{
-          uri: props.item.picture ?? defaultUserProfile.picture,
-        }}
-      />
+      <Avatar rounded source={{ uri: props.item.picture ?? defaultUserProfile.picture }} />
       <Text style={styles.label}>{props.item.name}</Text>
     </TouchableOpacity>
   );
@@ -128,25 +119,31 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
+    paddingHorizontal: Spacing.smaller,
   },
   flatlist: {
     width: '100%',
   },
   stickyFooter: {
     width: '100%',
-    paddingHorizontal: Spacing.base,
+
     paddingVertical: Spacing.smaller,
     position: 'absolute',
     bottom: 0,
   },
   title: {
-    padding: Spacing.large,
+    paddingVertical: Spacing.large,
+    paddingHorizontal: Spacing.smaller,
     ...Typography.headerText,
   },
   friendRow: {
+    ...Buttons.button,
+    padding: 0,
+    margin: 0,
+    marginBottom: Spacing.smaller,
     flexDirection: 'row',
-    width: '100%',
     alignItems: 'center',
+    backgroundColor: Colors.gray900,
   },
   checkbox: {
     alignSelf: 'center',

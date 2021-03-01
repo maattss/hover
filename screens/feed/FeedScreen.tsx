@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, RefreshControl, ListRenderItem, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, RefreshControl, ListRenderItem, ActivityIndicator, Text } from 'react-native';
 import ActivityFeedCard from '../../components/feed/ActivityFeedCard';
 import AchievementFeedCard from '../../components/feed/AchievementFeedCard';
 import { Typography, Spacing, Colors } from '../../theme';
@@ -90,12 +90,8 @@ const FeedScreen: React.FC = () => {
     }
   };
   const renderFooter = () => {
-    if (loading && !endReached)
-      return (
-        <View>
-          <ActivityIndicator color={Colors.blue} />
-        </View>
-      );
+    if (loading && !endReached) return <ActivityIndicator color={Colors.blue} />;
+    if (endReached && !loading) return <Text style={styles.theEnd}>The end...</Text>;
     return <></>;
   };
 
@@ -103,6 +99,7 @@ const FeedScreen: React.FC = () => {
   if (loading && !fetchingMore) return <Loading />;
 
   const renderItem: ListRenderItem<FeedData> = ({ item }) => getItem(item);
+
   return (
     <FlatList<FeedData>
       style={styles.container}
@@ -128,7 +125,6 @@ const FeedScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     padding: Spacing.smaller,
-    marginBottom: Spacing.smaller,
   },
   header: {
     ...Typography.headerText,
@@ -143,6 +139,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
+  },
+  theEnd: {
+    ...Typography.bodyText,
+    textAlign: 'center',
+    paddingBottom: Spacing.base,
+    paddingTop: Spacing.smaller,
   },
 });
 

@@ -110,7 +110,8 @@ export default UserSettingsScreen;
 
 const styles = StyleSheet.create({
   container: {
-    padding: Spacing.base,
+    marginTop: Spacing.base,
+    padding: Spacing.smaller,
   },
   label: {
     ...Typography.bodyText,
