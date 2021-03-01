@@ -66,12 +66,6 @@ const FeedScreen: React.FC<FeedProps> = ({ navigation, route }: FeedProps) => {
     nextFetchPolicy: 'network-only',
   });
   useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
-      route.params.refreshNotification();
-    });
-    return unsubscribe;
-  }, [navigation, route]);
-  useEffect(() => {
     if (data && data.feed) {
       if (data.feed.length == 0) {
         setEndReached(true);
@@ -159,7 +153,6 @@ const styles = StyleSheet.create({
     padding: Spacing.base,
     justifyContent: 'center',
     alignItems: 'center',
-    flexDirection: 'row',
   },
 });
 
