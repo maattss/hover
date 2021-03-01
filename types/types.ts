@@ -2380,13 +2380,13 @@ export enum Challenge_Type_Constraint {
 }
 
 export enum Challenge_Type_Enum {
-  /** Score challenge */
+  /** Total score */
   Score = 'SCORE',
-  /** Score in specific category challenge */
+  /** Total score in category */
   ScoreCategory = 'SCORE_CATEGORY',
-  /** Time challenge */
+  /** Total time */
   Time = 'TIME',
-  /** Time in specific category challenge */
+  /** Total time in category */
   TimeCategory = 'TIME_CATEGORY',
 }
 
@@ -6137,6 +6137,7 @@ export enum Notification_Type_Update_Column {
 /** columns and relationships of "notifications" */
 export type Notifications = {
   __typename?: 'notifications';
+  created_at: Scalars['timestamptz'];
   id: Scalars['Int'];
   seen: Scalars['Boolean'];
   text: Scalars['String'];
@@ -6210,6 +6211,7 @@ export type Notifications_Bool_Exp = {
   _and?: Maybe<Array<Maybe<Notifications_Bool_Exp>>>;
   _not?: Maybe<Notifications_Bool_Exp>;
   _or?: Maybe<Array<Maybe<Notifications_Bool_Exp>>>;
+  created_at?: Maybe<Timestamptz_Comparison_Exp>;
   id?: Maybe<Int_Comparison_Exp>;
   seen?: Maybe<Boolean_Comparison_Exp>;
   text?: Maybe<String_Comparison_Exp>;
@@ -6230,6 +6232,7 @@ export type Notifications_Inc_Input = {
 
 /** input type for inserting data into table "notifications" */
 export type Notifications_Insert_Input = {
+  created_at?: Maybe<Scalars['timestamptz']>;
   id?: Maybe<Scalars['Int']>;
   seen?: Maybe<Scalars['Boolean']>;
   text?: Maybe<Scalars['String']>;
@@ -6240,6 +6243,7 @@ export type Notifications_Insert_Input = {
 /** aggregate max on columns */
 export type Notifications_Max_Fields = {
   __typename?: 'notifications_max_fields';
+  created_at?: Maybe<Scalars['timestamptz']>;
   id?: Maybe<Scalars['Int']>;
   text?: Maybe<Scalars['String']>;
   user_id?: Maybe<Scalars['String']>;
@@ -6247,6 +6251,7 @@ export type Notifications_Max_Fields = {
 
 /** order by max() on columns of table "notifications" */
 export type Notifications_Max_Order_By = {
+  created_at?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
   text?: Maybe<Order_By>;
   user_id?: Maybe<Order_By>;
@@ -6255,6 +6260,7 @@ export type Notifications_Max_Order_By = {
 /** aggregate min on columns */
 export type Notifications_Min_Fields = {
   __typename?: 'notifications_min_fields';
+  created_at?: Maybe<Scalars['timestamptz']>;
   id?: Maybe<Scalars['Int']>;
   text?: Maybe<Scalars['String']>;
   user_id?: Maybe<Scalars['String']>;
@@ -6262,6 +6268,7 @@ export type Notifications_Min_Fields = {
 
 /** order by min() on columns of table "notifications" */
 export type Notifications_Min_Order_By = {
+  created_at?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
   text?: Maybe<Order_By>;
   user_id?: Maybe<Order_By>;
@@ -6291,6 +6298,7 @@ export type Notifications_On_Conflict = {
 
 /** ordering options when selecting data from "notifications" */
 export type Notifications_Order_By = {
+  created_at?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
   seen?: Maybe<Order_By>;
   text?: Maybe<Order_By>;
@@ -6306,6 +6314,8 @@ export type Notifications_Pk_Columns_Input = {
 /** select columns of table "notifications" */
 export enum Notifications_Select_Column {
   /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
   Id = 'id',
   /** column name */
   Seen = 'seen',
@@ -6319,6 +6329,7 @@ export enum Notifications_Select_Column {
 
 /** input type for updating data in table "notifications" */
 export type Notifications_Set_Input = {
+  created_at?: Maybe<Scalars['timestamptz']>;
   id?: Maybe<Scalars['Int']>;
   seen?: Maybe<Scalars['Boolean']>;
   text?: Maybe<Scalars['String']>;
@@ -6372,6 +6383,8 @@ export type Notifications_Sum_Order_By = {
 
 /** update columns of table "notifications" */
 export enum Notifications_Update_Column {
+  /** column name */
+  CreatedAt = 'created_at',
   /** column name */
   Id = 'id',
   /** column name */
@@ -8052,6 +8065,7 @@ export type Users = {
   id: Scalars['String'];
   name: Scalars['String'];
   picture?: Maybe<Scalars['String']>;
+  push_token?: Maybe<Scalars['String']>;
   /** A computed field, executes function "totalscore" */
   totalScore?: Maybe<Scalars['bigint']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
@@ -8219,6 +8233,7 @@ export type Users_Bool_Exp = {
   id?: Maybe<String_Comparison_Exp>;
   name?: Maybe<String_Comparison_Exp>;
   picture?: Maybe<String_Comparison_Exp>;
+  push_token?: Maybe<String_Comparison_Exp>;
   updated_at?: Maybe<Timestamptz_Comparison_Exp>;
   user_achievement?: Maybe<User_Achievement_Bool_Exp>;
 };
@@ -8246,6 +8261,7 @@ export type Users_Insert_Input = {
   id?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
   picture?: Maybe<Scalars['String']>;
+  push_token?: Maybe<Scalars['String']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
   user_achievement?: Maybe<User_Achievement_Arr_Rel_Insert_Input>;
 };
@@ -8259,6 +8275,7 @@ export type Users_Max_Fields = {
   id?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
   picture?: Maybe<Scalars['String']>;
+  push_token?: Maybe<Scalars['String']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
 };
 
@@ -8270,6 +8287,7 @@ export type Users_Max_Order_By = {
   id?: Maybe<Order_By>;
   name?: Maybe<Order_By>;
   picture?: Maybe<Order_By>;
+  push_token?: Maybe<Order_By>;
   updated_at?: Maybe<Order_By>;
 };
 
@@ -8282,6 +8300,7 @@ export type Users_Min_Fields = {
   id?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
   picture?: Maybe<Scalars['String']>;
+  push_token?: Maybe<Scalars['String']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
 };
 
@@ -8293,6 +8312,7 @@ export type Users_Min_Order_By = {
   id?: Maybe<Order_By>;
   name?: Maybe<Order_By>;
   picture?: Maybe<Order_By>;
+  push_token?: Maybe<Order_By>;
   updated_at?: Maybe<Order_By>;
 };
 
@@ -8331,6 +8351,7 @@ export type Users_Order_By = {
   id?: Maybe<Order_By>;
   name?: Maybe<Order_By>;
   picture?: Maybe<Order_By>;
+  push_token?: Maybe<Order_By>;
   updated_at?: Maybe<Order_By>;
   user_achievement_aggregate?: Maybe<User_Achievement_Aggregate_Order_By>;
 };
@@ -8355,6 +8376,8 @@ export enum Users_Select_Column {
   /** column name */
   Picture = 'picture',
   /** column name */
+  PushToken = 'push_token',
+  /** column name */
   UpdatedAt = 'updated_at',
 }
 
@@ -8366,6 +8389,7 @@ export type Users_Set_Input = {
   id?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
   picture?: Maybe<Scalars['String']>;
+  push_token?: Maybe<Scalars['String']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
 };
 
@@ -8383,6 +8407,8 @@ export enum Users_Update_Column {
   Name = 'name',
   /** column name */
   Picture = 'picture',
+  /** column name */
+  PushToken = 'push_token',
   /** column name */
   UpdatedAt = 'updated_at',
 }
