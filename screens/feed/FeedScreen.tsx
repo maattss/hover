@@ -41,6 +41,8 @@ const getItem = (data: FeedData) => {
   }
   return <></>;
 };
+type NavigationProp = StackNavigationProp<FeedStackParamList>;
+type FeedRouteProp = RouteProp<FeedStackParamList, 'Feed'>;
 
 type FeedRouteProp = RouteProp<FeedStackParamList, 'Feed'>;
 
@@ -63,6 +65,12 @@ const FeedScreen: React.FC<FeedProps> = ({ route }: FeedProps) => {
     },
     nextFetchPolicy: 'network-only',
   });
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      route.params.refreshNotification();
+    });
+    return unsubscribe;
+  }, [navigation, route]);
   useEffect(() => {
     if (data && data.feed) {
       if (data.feed.length == 0) {
