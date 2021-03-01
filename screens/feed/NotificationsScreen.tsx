@@ -10,6 +10,7 @@ import { useUpdateNotificationsMutation } from '../../graphql/mutations/UpdateNo
 import useAuthentication from '../../hooks/useAuthentication';
 import Divider from '../../components/general/Divider';
 
+type SectionItem = { title: string; innerArray?: NotificationFragmentFragment[] };
 const NotificationsScreen: React.FC = () => {
   const allData = {
     data: {
@@ -75,9 +76,7 @@ const NotificationsScreen: React.FC = () => {
     },
   };
 
-  const [newNotifications, setNewNotification] = useState<NotificationFragmentFragment[]>();
-  const [earlierNotifications, setEarlierNotification] = useState<NotificationFragmentFragment[]>();
-
+  const [sections, setSections] = useState<SectionItem[]>();
   const { data, loading, error } = useNotifiactionsQuery({
     fetchPolicy: 'network-only',
   });
@@ -92,13 +91,15 @@ const NotificationsScreen: React.FC = () => {
         if (!obj.seen) newest.push(obj);
         else earlier.push(obj);
       });
-      setNewNotification(newest);
-      setEarlierNotification(earlier);
+      const tempSections: SectionItem[] = [];
+      if (newest.length > 0) tempSections.push({ title: 'New', innerArray: newest });
+      if (earlier.length > 0) tempSections.push({ title: 'Earlier', innerArray: earlier });
+      setSections(tempSections);
     }
   }, [data]);
 
   const renderItem = (item: NotificationFragmentFragment) => <NotificationCard notification={item} />;
-  // Make sure footer is rendered
+
   const renderFooter = () => {
     return (
       <View style={styles.footer}>
@@ -109,10 +110,6 @@ const NotificationsScreen: React.FC = () => {
   };
 
   if (error) return <Error message={error.message} apolloError={error} />;
-  const sections = [
-    { title: 'New', innerArray: newNotifications },
-    { title: 'Earlier', innerArray: earlierNotifications },
-  ];
   return (
     <FlatList
       data={sections}
