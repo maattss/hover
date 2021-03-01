@@ -1,9 +1,8 @@
 import Constants from 'expo-constants';
 import * as Notifications from 'expo-notifications';
-import { Platform } from 'react-native';
+import { Platform, Alert } from 'react-native';
 
-// TODO: Add psuh notification type
-export const sendPushNotification = async (expoPushToken: any) => {
+export const sendPushNotification = async (expoPushToken: string) => {
   const message = {
     to: expoPushToken,
     sound: 'default',
@@ -33,13 +32,19 @@ export const registerForPushNotificationsAsync = async () => {
       finalStatus = status;
     }
     if (finalStatus !== 'granted') {
-      alert('Failed to get push token for push notification!');
+      Alert.alert(
+        'Push notifications disabled',
+        'Please enable push notifications in the settings for the applications to work properly.' +
+          'We will not spam you with unimportant notifications.',
+      );
       return;
     }
     token = (await Notifications.getExpoPushTokenAsync()).data;
+
+    // TODO: Insert token in db
     console.log(token);
   } else {
-    alert('Must use physical device for Push Notifications');
+    Alert.alert('Must use physical device for Push Notifications');
   }
 
   if (Platform.OS === 'android') {
