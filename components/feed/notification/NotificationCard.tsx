@@ -52,7 +52,6 @@ const NotificationCard: React.FC<NotificationCardProps> = (props: NotificationCa
   return (
     <TouchableOpacity onPress={() => getNotificationGoToAction()}>
       <View style={[styles.card, { backgroundColor: bgColor }]}>
-        <Text style={styles.title}>{getNotificationTitle(props.notification.type)}</Text>
         <View style={styles.main}>
           <View style={styles.notificationIcon}>
             <FAIcon
@@ -61,6 +60,7 @@ const NotificationCard: React.FC<NotificationCardProps> = (props: NotificationCa
             />
           </View>
           <View style={styles.body}>
+            <Text style={styles.title}>{getNotificationTitle(props.notification.type)}</Text>
             <Text style={{ ...Typography.bodyText }}>{props.notification.text}</Text>
           </View>
           <View style={styles.goTo}>
@@ -102,9 +102,6 @@ const styles = StyleSheet.create({
   body: {
     width: '80%',
     paddingRight: Spacing.small,
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
   },
   goTo: {
     width: '5%',
