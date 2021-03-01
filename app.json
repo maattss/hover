@@ -19,7 +19,6 @@
     "ios": {
       "supportsTablet": true,
       "infoPlist": {
-        "UIBackgroundModes": ["location"],
         "NSLocationAlwaysUsage": "YES",
         "NSLocationWhenInUseUsageDescription": "Your location will be used to determine if you are within a valid geofencing region.",
         "NSLocationAlwaysAndWhenInUseUsageDescription": "Your location will be used to determine and notify you if you are within a valid geofencing region.",

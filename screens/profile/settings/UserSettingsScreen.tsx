@@ -9,7 +9,7 @@ import CustomButton from '../../../components/general/Button';
 import Loading from '../../../components/general/Loading';
 import { randomPictureURI } from '../../auth/SignUpScreen';
 import { Asset } from 'expo-asset';
-import KeyboardAvoider from '../../../components/general/KeyboardAvoider';
+import KeyboardAvoider from '../../../components/keyboard/KeyboardAvoider';
 
 const UserSettingsScreen: React.FC<SettingsProps> = ({ navigation }: SettingsProps) => {
   const id = useAuthentication().user?.uid;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, ViewStyle, ActivityIndicator, Alert } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, ViewStyle, ActivityIndicator, Dimensions } from 'react-native';
 import { Colors, Spacing, Buttons } from '../../theme';
 import useTracking from '../../hooks/useTracking';
 import HoverMap from '../../components/map/HoverMap';
@@ -7,18 +7,8 @@ import HoverMap from '../../components/map/HoverMap';
 const ExploreScreen: React.FC = () => {
   const tracking = useTracking();
 
-  const startTracking = () => {
-    if (tracking.insideGeoFence) tracking.startTracking();
-  };
-  const notInsideGeoFenceAlert = () => {
-    Alert.alert(
-      'Not inside a Hover zone',
-      "Sorry, you can't start tracking here! Move to a Hover zone to start earning points.",
-      [{ text: 'Ok', style: 'cancel' }],
-    );
-  };
   const getDynamicButtonStyles = () => {
-    if (!tracking.insideGeoFence) {
+    if (!tracking.insideGeoFence || (tracking.locationPermission && tracking.locationPermission.status !== 'granted')) {
       return {
         backgroundColor: Colors.grayTransparent,
       } as ViewStyle;
@@ -29,29 +19,32 @@ const ExploreScreen: React.FC = () => {
     }
   };
 
+  const startButtonLeft = () => {
+    return {
+      left: Dimensions.get('screen').width / 2 - 55,
+    } as ViewStyle;
+  };
+
   return (
-    <View>
+    <>
       <HoverMap />
-      <View style={styles.startButtonContainer}>
+      <View style={[styles.startButtonContainer, startButtonLeft()]}>
         <TouchableOpacity
           style={[styles.startButton, getDynamicButtonStyles()]}
-          onPress={!tracking.insideGeoFence ? notInsideGeoFenceAlert : startTracking}
+          onPress={tracking.startTracking}
           disabled={tracking.loadingUserLocation}>
           {tracking.loadingUserLocation && <ActivityIndicator />}
           {!tracking.loadingUserLocation && <Text style={styles.startButtonText}>Start</Text>}
         </TouchableOpacity>
       </View>
-    </View>
+    </>
   );
 };
 
 const styles = StyleSheet.create({
   startButtonContainer: {
     position: 'absolute',
-    bottom: '10%',
-    width: '100%',
-    flexDirection: 'row',
-    justifyContent: 'center',
+    bottom: Spacing.smaller,
   },
   startButton: {
     padding: Spacing.smallest,
