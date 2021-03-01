@@ -24,36 +24,32 @@ export const PushNotificationContext = React.createContext<PushNotificationConte
 PushNotificationContext.displayName = 'PushNotificationContext';
 
 export const PushNotificationProvider = ({ children }: Props) => {
-  const auth = useAuthentication();
+  const id = useAuthentication().user?.uid;
   const [expoPushToken, setExpoPushToken] = useState<string>('');
   const [notification, setNotification] = useState<Notifications.Notification>();
   const notificationListener = useRef<Subscription>();
   const responseListener = useRef<Subscription>();
   const [updateUserPushNotification] = useUpdateUserPushTokenMutation();
 
-  const updateTokenInDb = () => {
-    const id = auth.user?.uid;
-    const push_token = expoPushToken;
-    try {
-      if (id === undefined) throw Error('Missing user id...');
-      if (push_token !== '') throw Error('Missing push token...');
+  useEffect(() => {
+    if (id && expoPushToken !== '') {
+      try {
+        const push_token = expoPushToken;
 
-      updateUserPushNotification({
-        variables: {
-          id,
-          push_token,
-        },
-      });
-    } catch (error) {
-      console.error(error.message);
+        updateUserPushNotification({
+          variables: {
+            id,
+            push_token,
+          },
+        });
+      } catch (error) {
+        console.error(error.message);
+      }
     }
-  };
+  }, [id, expoPushToken]);
 
   useEffect(() => {
-    registerForPushNotificationsAsync().then((token) => {
-      setExpoPushToken(token ?? '');
-      updateTokenInDb();
-    });
+    registerForPushNotificationsAsync().then((token) => setExpoPushToken(token ?? ''));
 
     // This listener is fired whenever a notification is received while the app is foregrounded
     notificationListener.current = Notifications.addNotificationReceivedListener((notification) => {
