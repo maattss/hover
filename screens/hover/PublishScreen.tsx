@@ -235,8 +235,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   categoryIcon: {
-    height: '65%',
-    width: '65%',
+    height: 100,
+    width: 100,
     marginBottom: Spacing.small,
   },
   label: {
