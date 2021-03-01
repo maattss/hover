@@ -10,25 +10,25 @@ interface Props {
 interface PushNotificationContextValues {
   token: string | undefined;
   notification: Notifications.Notification | undefined;
-  sendPushNotification: () => void;
+  sendPushNotification: (title: string, body: string, sound: boolean) => Promise<void>;
 }
 
 export const PushNotificationContext = React.createContext<PushNotificationContextValues>({
   token: undefined,
   notification: undefined,
-  sendPushNotification: () => console.error('Function not initialized'),
+  sendPushNotification: () => new Promise(() => console.error('Function not initialized')),
 });
 
 PushNotificationContext.displayName = 'PushNotificationContext';
 
 export const PushNotificationProvider = ({ children }: Props) => {
-  const [expoPushToken, setExpoPushToken] = useState<string | undefined>('');
+  const [expoPushToken, setExpoPushToken] = useState<string>('');
   const [notification, setNotification] = useState<Notifications.Notification>();
   const notificationListener = useRef<Subscription>();
   const responseListener = useRef<Subscription>();
 
   useEffect(() => {
-    registerForPushNotificationsAsync().then((token) => setExpoPushToken(token));
+    registerForPushNotificationsAsync().then((token) => setExpoPushToken(token ?? ''));
 
     // This listener is fired whenever a notification is received while the app is foregrounded
     notificationListener.current = Notifications.addNotificationReceivedListener((notification) => {
@@ -47,10 +47,13 @@ export const PushNotificationProvider = ({ children }: Props) => {
     };
   }, []);
 
+  const notify = (title: string, body: string, sound: boolean) =>
+    sendPushNotification(expoPushToken, title, body, sound);
+
   const value: PushNotificationContextValues = {
     token: expoPushToken,
     notification: notification,
-    sendPushNotification: sendPushNotification,
+    sendPushNotification: notify,
   };
 
   return <PushNotificationContext.Provider value={value}>{children}</PushNotificationContext.Provider>;
