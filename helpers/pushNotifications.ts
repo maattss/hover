@@ -44,7 +44,7 @@ export const registerForPushNotificationsAsync = async () => {
     // TODO: Insert token in db
     console.log(token);
   } else {
-    Alert.alert('Must use physical device for Push Notifications');
+    Alert.alert('Error', 'Must use physical device for Push Notifications');
   }
 
   if (Platform.OS === 'android') {
