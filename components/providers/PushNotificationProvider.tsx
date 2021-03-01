@@ -2,6 +2,8 @@ import React, { useEffect, useState, useRef, ReactNode } from 'react';
 import * as Notifications from 'expo-notifications';
 import { registerForPushNotificationsAsync, sendPushNotification } from '../../helpers/pushNotifications';
 import { Subscription } from '@unimodules/core';
+import { useUpdateUserPushTokenMutation } from '../../graphql/mutations/UpdateUserPushToken.generated';
+import useAuthentication from '../../hooks/useAuthentication';
 
 interface Props {
   children: ReactNode;
@@ -22,13 +24,36 @@ export const PushNotificationContext = React.createContext<PushNotificationConte
 PushNotificationContext.displayName = 'PushNotificationContext';
 
 export const PushNotificationProvider = ({ children }: Props) => {
+  const auth = useAuthentication();
   const [expoPushToken, setExpoPushToken] = useState<string>('');
   const [notification, setNotification] = useState<Notifications.Notification>();
   const notificationListener = useRef<Subscription>();
   const responseListener = useRef<Subscription>();
+  const [updateUserPushNotification] = useUpdateUserPushTokenMutation();
+
+  const updateTokenInDb = () => {
+    const id = auth.user?.uid;
+    const push_token = expoPushToken;
+    try {
+      if (id === undefined) throw Error('Missing user id...');
+      if (push_token !== '') throw Error('Missing push token...');
+
+      updateUserPushNotification({
+        variables: {
+          id,
+          push_token,
+        },
+      });
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
 
   useEffect(() => {
-    registerForPushNotificationsAsync().then((token) => setExpoPushToken(token ?? ''));
+    registerForPushNotificationsAsync().then((token) => {
+      setExpoPushToken(token ?? '');
+      updateTokenInDb();
+    });
 
     // This listener is fired whenever a notification is received while the app is foregrounded
     notificationListener.current = Notifications.addNotificationReceivedListener((notification) => {

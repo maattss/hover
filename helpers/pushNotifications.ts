@@ -41,8 +41,7 @@ export const registerForPushNotificationsAsync = async () => {
     }
     token = (await Notifications.getExpoPushTokenAsync()).data;
 
-    // TODO: Insert token in db
-    console.log(token);
+    console.log('Push notifactions token', token);
   } else {
     Alert.alert('Error', 'Must use physical device for Push Notifications');
   }
