@@ -1,6 +1,16 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, Alert, Image, ViewStyle } from 'react-native';
-import { ScrollView, TextInput, TouchableOpacity } from 'react-native-gesture-handler';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Alert,
+  Image,
+  ViewStyle,
+  ScrollView,
+  TextInput,
+  TouchableOpacity,
+  Keyboard,
+} from 'react-native';
 import useTracking from '../../hooks/useTracking';
 import { Buttons, Colors, Spacing, Typography } from '../../theme';
 import { FontAwesome as FAIcon } from '@expo/vector-icons';
@@ -10,6 +20,7 @@ import { getGeoFenceImage } from '../../helpers/geoFenceCalculations';
 import MapView, { LatLng, Marker, Region } from 'react-native-maps';
 import GeoFences from '../../components/map/GeoFences';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
 const PublishScreen: React.FC = () => {
   const tracking = useTracking();
@@ -68,80 +79,83 @@ const PublishScreen: React.FC = () => {
 
   return (
     <View style={safeTop()}>
-      <ScrollView contentInset={{ bottom: 100 }} style={styles.scroll}>
-        <View style={styles.topBar}>
-          <View style={styles.topBarIcon}>
-            <FAIcon name={'question-circle'} style={styles.questionIcon} />
-          </View>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <ScrollView style={styles.scroll}>
+          <View style={styles.topBar}>
+            <View style={styles.topBarIcon}>
+              <FAIcon name={'question-circle'} style={styles.questionIcon} />
+            </View>
 
-          <View style={styles.resumeDiscardContainer}>
-            <Text style={styles.infoTextSmall}>Not ready to publish{'\n'}this activity yet?</Text>
-            <View style={styles.resumeDiscardButtons}>
-              <TouchableOpacity
-                style={[styles.resumeButton, { backgroundColor: Colors.green }]}
-                onPress={resumeTracking}>
-                <Text style={{ ...Buttons.buttonText }}>Resume</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.discardButton} onPress={discardActivity}>
-                <Text style={{ ...Buttons.buttonText }}>Discard</Text>
-              </TouchableOpacity>
+            <View style={styles.resumeDiscardContainer}>
+              <Text style={styles.infoTextSmall}>Not ready to publish{'\n'}this activity yet?</Text>
+              <View style={styles.resumeDiscardButtons}>
+                <TouchableOpacity
+                  style={[styles.resumeButton, { backgroundColor: Colors.green }]}
+                  onPress={resumeTracking}>
+                  <Text style={{ ...Buttons.buttonText }}>Resume</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.discardButton} onPress={discardActivity}>
+                  <Text style={{ ...Buttons.buttonText }}>Discard</Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
-        </View>
+          <View style={styles.summaryContainer}>
+            <Text style={styles.infoScore}>{Math.floor(tracking.score)} points</Text>
 
-        <View style={styles.summaryContainer}>
-          <Text style={styles.infoScore}>{Math.floor(tracking.score)} points</Text>
-
-          <View style={styles.infoContainer}>
-            <View style={{ width: '49%' }}>
-              <View style={[styles.infoCard, { justifyContent: 'flex-start' }]}>
-                <View style={styles.mbSmall}>
-                  <Text style={styles.infoText}>Duration</Text>
-                  <Text style={styles.infoTextSmall}>{durationToTimestamp(tracking.duration)}</Text>
-                </View>
-                <View style={styles.mbSmall}>
-                  <Text style={styles.infoText}>Started at</Text>
-                  <Text style={styles.infoTextSmall}>{timeStampToHours(tracking.trackingStart)}</Text>
-                </View>
-                {tracking.insideGeoFence && (
+            <Text style={styles.label}>Summary</Text>
+            <View style={styles.infoContainer}>
+              <View style={{ width: '49%' }}>
+                <View style={[styles.infoCard, { alignItems: 'flex-start' }]}>
                   <View style={styles.mbSmall}>
-                    <Text style={styles.infoText}>Location</Text>
-                    <Text style={styles.infoTextSmall}>{tracking.insideGeoFence?.name}</Text>
+                    <Text style={styles.infoText}>Duration</Text>
+                    <Text style={styles.infoTextSmall}>{durationToTimestamp(tracking.duration)}</Text>
                   </View>
-                )}
+                  <View style={styles.mbSmall}>
+                    <Text style={styles.infoText}>Started at</Text>
+                    <Text style={styles.infoTextSmall}>{timeStampToHours(tracking.trackingStart)}</Text>
+                  </View>
+                  {tracking.insideGeoFence && (
+                    <View style={styles.mbSmall}>
+                      <Text style={styles.infoText}>Location</Text>
+                      <Text style={styles.infoTextSmall}>{tracking.insideGeoFence?.name}</Text>
+                    </View>
+                  )}
+                </View>
+              </View>
+              <View style={{ width: '49%' }}>
+                <View style={[styles.infoCard, { alignItems: 'center' }]}>
+                  <Image
+                    source={{ uri: getGeoFenceImage(tracking.insideGeoFence?.category) }}
+                    style={styles.categoryIcon}
+                  />
+                  <Text style={{ ...Typography.largeBodyText }}>{tracking.insideGeoFence?.category}</Text>
+                </View>
               </View>
             </View>
-            <View style={{ width: '49%' }}>
-              <View style={[styles.infoCard, { justifyContent: 'center' }]}>
-                <Image
-                  source={{ uri: getGeoFenceImage(tracking.insideGeoFence?.category) }}
-                  style={styles.categoryIcon}
-                />
-                <Text style={{ ...Typography.largeBodyText }}>{tracking.insideGeoFence?.category}</Text>
-              </View>
-            </View>
-          </View>
 
-          {tracking.insideGeoFence && (
             <View style={{ marginBottom: Spacing.base }}>
-              <Text style={styles.label}>Map</Text>
-              {renderMap()}
+              <Text style={styles.label}>Caption</Text>
+              <TextInput
+                placeholder="Insert a funny text that describes the activity!"
+                placeholderTextColor={Colors.gray600}
+                onChangeText={(val) => setCaption(val)}
+                style={styles.formField}
+                multiline>
+                {caption}
+              </TextInput>
             </View>
-          )}
 
-          <View>
-            <Text style={styles.label}>Caption</Text>
-            <TextInput
-              placeholder="Insert a funny text that describes the activity!"
-              placeholderTextColor={Colors.gray600}
-              onChangeText={(val) => setCaption(val)}
-              style={styles.formField}
-              multiline>
-              {caption}
-            </TextInput>
+            {tracking.insideGeoFence && (
+              <View style={{ marginBottom: 150 }}>
+                <Text style={styles.label}>Map</Text>
+                {renderMap()}
+              </View>
+            )}
           </View>
-        </View>
-      </ScrollView>
+        </ScrollView>
+      </TouchableWithoutFeedback>
+
       <View style={styles.publishContainer}>
         <Button onPress={publishActivity}>
           <Text style={styles.publishButtonText}>Publish</Text>
@@ -154,6 +168,7 @@ const PublishScreen: React.FC = () => {
 const styles = StyleSheet.create({
   scroll: {
     padding: Spacing.smaller,
+    height: '100%',
   },
   topBar: {
     flexDirection: 'row',
@@ -202,13 +217,14 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginBottom: Spacing.base,
     alignItems: 'center',
-    height: '35%',
+    height: 170,
   },
   infoCard: {
     backgroundColor: Colors.gray900,
     borderRadius: Spacing.smaller,
     padding: Spacing.smaller,
     height: '100%',
+    justifyContent: 'center',
   },
   infoText: {
     ...Typography.largeBodyText,
@@ -219,8 +235,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   categoryIcon: {
-    height: '50%',
-    width: '50%',
+    height: '65%',
+    width: '65%',
     marginBottom: Spacing.small,
   },
   label: {
@@ -251,7 +267,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   map: {
-    height: 130,
+    height: 150,
     borderRadius: Spacing.smaller,
   },
   mbSmall: {
