@@ -54,7 +54,7 @@ export const headerText = {
 };
 
 export const subHeaderText = {
-  fontSize: smallFontSize,
+  fontSize: baseFontSize,
   fontWeight: 'bold' as const,
   color: Colors.almostWhite,
 };
