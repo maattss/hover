@@ -109,39 +109,30 @@ const NotificationsScreen: React.FC = () => {
   };
 
   if (error) return <Error message={error.message} apolloError={error} />;
-
+  const sections = [
+    { title: 'New', innerArray: newNotifications },
+    { title: 'Earlier', innerArray: earlierNotifications },
+  ];
   return (
-    <View>
-      {newNotifications && (
+    <FlatList
+      data={sections}
+      keyExtractor={(item) => item.title}
+      renderItem={({ item }) => (
         <FlatList
-          data={newNotifications}
+          data={item.innerArray}
           bounces={false}
-          keyExtractor={(_, index) => index.toString()}
+          keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) => renderItem(item)}
           ListHeaderComponent={
             <View style={styles.header}>
-              <Text style={{ ...Typography.subHeaderText, marginTop: Spacing.base }}>New</Text>
+              <Text style={{ ...Typography.subHeaderText, marginTop: Spacing.base }}>{item.title}</Text>
             </View>
           }
           ItemSeparatorComponent={() => <Divider style={styles.divider} />}
         />
       )}
-      {earlierNotifications && (
-        <FlatList
-          data={earlierNotifications}
-          bounces={false}
-          keyExtractor={(_, index) => index.toString()}
-          renderItem={({ item }) => renderItem(item)}
-          ListHeaderComponent={
-            <View style={styles.header}>
-              <Text style={{ ...Typography.subHeaderText, marginTop: Spacing.base }}>Earlier</Text>
-            </View>
-          }
-          ItemSeparatorComponent={() => <Divider style={styles.divider} />}
-        />
-      )}
-      {renderFooter}
-    </View>
+      ListFooterComponent={renderFooter}
+    />
   );
 };
 
@@ -163,7 +154,7 @@ const styles = StyleSheet.create({
     marginVertical: Spacing.smallest,
   },
   divider: {
-    borderBottomColor: Colors.gray600,
+    borderBottomColor: Colors.gray700,
     marginVertical: 0,
   },
 });
