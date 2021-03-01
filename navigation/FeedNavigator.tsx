@@ -41,6 +41,7 @@ const FeedNavigator: React.FC = () => {
         options={{
           headerTitle: 'Notifications',
         }}
+        initialParams={{ refreshNotification: refetch }}
       />
       <FeedStack.Screen
         name="UserProfile"
