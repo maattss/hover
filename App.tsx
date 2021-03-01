@@ -13,6 +13,7 @@ import AuthProvider from './components/providers/AuthProvider';
 import TrackingProvider from './components/providers/TrackingProvider';
 import { GRAPHQL_API_URL } from './lib/config';
 import fragmentMatcher from './types/fragmentMatcher';
+import PushNotificationProvider from './components/providers/PushNotificationProvider';
 
 const asyncAuthLink = setContext(async () => {
   return {
@@ -55,10 +56,12 @@ export default function App() {
     <AuthProvider>
       <ApolloProvider client={apolloClient}>
         <TrackingProvider>
-          <SafeAreaProvider>
-            <AppNavigation />
-            <StatusBar animated barStyle={'light-content'} />
-          </SafeAreaProvider>
+          <PushNotificationProvider>
+            <SafeAreaProvider>
+              <AppNavigation />
+              <StatusBar animated barStyle={'light-content'} />
+            </SafeAreaProvider>
+          </PushNotificationProvider>
         </TrackingProvider>
       </ApolloProvider>
     </AuthProvider>
