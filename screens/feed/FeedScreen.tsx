@@ -16,7 +16,6 @@ import Loading from '../../components/general/Loading';
 import Error from '../../components/general/Error';
 import { convertToFeedData } from '../../helpers/objectMappers';
 import ChallengeFeedCard from '../../components/feed/ChallengeFeedCard';
-import { StackNavigationProp } from '@react-navigation/stack';
 import { FeedStackParamList } from '../../types/navigationTypes';
 import { RouteProp } from '@react-navigation/native';
 
