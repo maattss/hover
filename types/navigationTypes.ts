@@ -22,7 +22,7 @@ export type FeedStackParamList = {
 } & NotificationsStackParamList;
 
 export type NotificationsStackParamList = {
-  Notifications: undefined;
+  Notifications: { refreshNotification: () => void };
 };
 export type ChallengeStackParamList = {
   Challenge: undefined;
