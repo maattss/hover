@@ -16,6 +16,9 @@ import Loading from '../../components/general/Loading';
 import Error from '../../components/general/Error';
 import { convertToFeedData } from '../../helpers/objectMappers';
 import ChallengeFeedCard from '../../components/feed/ChallengeFeedCard';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { FeedStackParamList } from '../../types/navigationTypes';
+import { RouteProp } from '@react-navigation/native';
 
 const getItem = (data: FeedData) => {
   if (data.feedCategory === FeedCategory.ACTIVITY) {
@@ -39,8 +42,15 @@ const getItem = (data: FeedData) => {
   }
   return <></>;
 };
+type NavigationProp = StackNavigationProp<FeedStackParamList>;
+type FeedRouteProp = RouteProp<FeedStackParamList, 'Feed'>;
 
-const FeedScreen: React.FC = () => {
+export type FeedProps = {
+  navigation: NavigationProp;
+  route: FeedRouteProp;
+};
+
+const FeedScreen: React.FC<FeedProps> = ({ navigation, route }: FeedProps) => {
   const pageSize = 10;
   const [refreshing, setRefreshing] = useState(false);
   const [offset, setOffset] = useState(0);
@@ -55,6 +65,12 @@ const FeedScreen: React.FC = () => {
     },
     nextFetchPolicy: 'network-only',
   });
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      route.params.refreshNotification();
+    });
+    return unsubscribe;
+  }, [navigation, route]);
   useEffect(() => {
     if (data && data.feed) {
       if (data.feed.length == 0) {
@@ -75,6 +91,7 @@ const FeedScreen: React.FC = () => {
     setRefreshing(true);
     await refetch();
     setRefreshing(false);
+    route.params.refreshNotification();
   };
   const loadMoreFeedElements = async () => {
     if (!endReached && !loading) {
