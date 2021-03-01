@@ -318,8 +318,8 @@ const styles = StyleSheet.create({
   },
   formField: {
     ...Buttons.button,
-    ...Typography.bodyText,
-    padding: Spacing.base,
+    ...Typography.xlBodyText,
+    padding: Spacing.small,
     marginVertical: Spacing.small,
     backgroundColor: Colors.gray900,
   },
@@ -328,7 +328,8 @@ const styles = StyleSheet.create({
   },
   collabFriendName: {
     ...Typography.headerText,
-    fontSize: 25,
+    fontSize: 24,
+    fontWeight: 'bold',
     margin: Spacing.small,
   },
 });
