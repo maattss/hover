@@ -1,0 +1,5 @@
+mutation UpdateUserPushToken($id: String!, $push_token: String!) {
+  update_user(pk_columns: { id: $id }, _set: { push_token: $push_token }) {
+    ...basicUserFragment
+  }
+}
