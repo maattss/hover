@@ -17,12 +17,12 @@ export type RootTabParamList = {
 };
 
 export type FeedStackParamList = {
-  Feed: { refreshNotification: () => void };
+  Feed: undefined;
   UserProfile: { user_id: string; titleName: string };
 } & NotificationsStackParamList;
 
 export type NotificationsStackParamList = {
-  Notifications: { refreshNotification: () => void };
+  Notifications: undefined;
 };
 export type ChallengeStackParamList = {
   Challenge: undefined;

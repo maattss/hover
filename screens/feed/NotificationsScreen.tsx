@@ -1,55 +1,41 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, FlatList } from 'react-native';
+import { View, Text, StyleSheet, FlatList, RefreshControl } from 'react-native';
 import { Colors, Spacing, Typography } from '../../theme';
-import Error from '../../components/general/Error';
-import Loading from '../../components/general/Loading';
 import { NotificationFragmentFragment } from '../../graphql/Fragments.generated';
-import { useNotifiactionsQuery } from '../../graphql/queries/Notifications.generated';
 import NotificationCard from '../../components/feed/notification/NotificationCard';
-import { useUpdateNotificationsMutation } from '../../graphql/mutations/UpdateNotifications.generated';
-import useAuthentication from '../../hooks/useAuthentication';
 import Divider from '../../components/general/Divider';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { FeedStackParamList } from '../../types/navigationTypes';
-import { RouteProp } from '@react-navigation/native';
+import useNotification from '../../hooks/useNotification';
+import { useIsFocused } from '@react-navigation/native';
 
 type SectionItem = { title: string; innerArray?: NotificationFragmentFragment[] };
 
 type NavigationProp = StackNavigationProp<FeedStackParamList>;
-type FeedRouteProp = RouteProp<FeedStackParamList, 'Notifications'>;
 export type NotificationProps = {
   navigation: NavigationProp;
-  route: FeedRouteProp;
 };
 
-const NotificationsScreen: React.FC<NotificationProps> = ({ navigation, route }: NotificationProps) => {
+const NotificationsScreen: React.FC<NotificationProps> = ({ navigation }: NotificationProps) => {
   const [sections, setSections] = useState<SectionItem[]>();
-  const user_id = useAuthentication().user?.uid ?? '';
-  const [readNotifications] = useUpdateNotificationsMutation();
-
-  const { data, loading, error } = useNotifiactionsQuery({
-    fetchPolicy: 'network-only',
+  const { newNotifications, earlierNotifications, readNotifications, refetchNotifications } = useNotification();
+  const [refreshing, setRefreshing] = useState(false);
+  const isFocus = useIsFocused();
+  useEffect(() => {
+    if (isFocus && !sections?.length) refetchNotifications();
   });
   useEffect(() => {
-    if (data && data.notifications) {
-      const newest: NotificationFragmentFragment[] = [];
-      const earlier: NotificationFragmentFragment[] = [];
-      data.notifications.forEach((obj: NotificationFragmentFragment) => {
-        if (!obj.seen) newest.push(obj);
-        else earlier.push(obj);
-      });
-      const tempSections: SectionItem[] = [];
-      if (newest.length > 0) tempSections.push({ title: 'New', innerArray: newest });
-      if (earlier.length > 0) tempSections.push({ title: 'Earlier', innerArray: earlier });
-      setSections(tempSections);
-    }
-  }, [data]);
+    const tempSections: SectionItem[] = [];
+    if (newNotifications && newNotifications.length > 0)
+      tempSections.push({ title: 'New', innerArray: newNotifications });
+    if (earlierNotifications && earlierNotifications.length > 0)
+      tempSections.push({ title: 'Earlier', innerArray: earlierNotifications });
+    setSections(tempSections);
+  }, [newNotifications, earlierNotifications]);
 
   useEffect(() => {
-    const unsubscribe = navigation.addListener(
-      'beforeRemove',
-      async () => await readNotifications({ variables: { user_id } }).then(() => route.params.refreshNotification()),
-    );
+    const unsubscribe = navigation.addListener('beforeRemove', async () => readNotifications());
+
     return () => {
       unsubscribe;
     };
@@ -60,19 +46,28 @@ const NotificationsScreen: React.FC<NotificationProps> = ({ navigation, route }:
   const renderFooter = () => {
     return (
       <View style={styles.footer}>
-        {loading && <Loading />}
-        <Text style={{ ...Typography.bodyText }}>
-          {sections?.length == 0 ? 'You have no notifications' : 'There are no more notifications.'}
-        </Text>
+        <Text style={{ ...Typography.bodyText }}>{sections?.length == 0 && 'You have no notifications'}</Text>
       </View>
     );
   };
 
-  if (error) return <Error message={error.message} apolloError={error} />;
   return (
     <FlatList
       data={sections}
       keyExtractor={(item) => item.title}
+      refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={() => {
+            setRefreshing(true);
+            refetchNotifications();
+            setRefreshing(false);
+          }}
+          tintColor={Colors.blue}
+          colors={[Colors.blue]}
+          progressBackgroundColor={Colors.transparent}
+        />
+      }
       renderItem={({ item }) => (
         <FlatList
           data={item.innerArray}

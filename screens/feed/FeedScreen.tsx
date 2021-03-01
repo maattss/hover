@@ -16,8 +16,7 @@ import Loading from '../../components/general/Loading';
 import Error from '../../components/general/Error';
 import { convertToFeedData } from '../../helpers/objectMappers';
 import ChallengeFeedCard from '../../components/feed/ChallengeFeedCard';
-import { FeedStackParamList } from '../../types/navigationTypes';
-import { RouteProp } from '@react-navigation/native';
+import useNotification from '../../hooks/useNotification';
 
 const getItem = (data: FeedData) => {
   if (data.feedCategory === FeedCategory.ACTIVITY) {
@@ -42,20 +41,14 @@ const getItem = (data: FeedData) => {
   return <></>;
 };
 
-type FeedRouteProp = RouteProp<FeedStackParamList, 'Feed'>;
-
-export type FeedProps = {
-  route: FeedRouteProp;
-};
-
-const FeedScreen: React.FC<FeedProps> = ({ route }: FeedProps) => {
+const FeedScreen: React.FC = () => {
   const pageSize = 10;
   const [refreshing, setRefreshing] = useState(false);
   const [offset, setOffset] = useState(0);
   const [fetchingMore, setFetchingMore] = useState(false);
   const [endReached, setEndReached] = useState(false);
   const [feedElements, setFeedElements] = useState<FeedData[]>([]);
-
+  const { refetchNotifications } = useNotification();
   const { loading: loading, error: error, data: data, refetch, fetchMore } = useFeedQuery({
     variables: {
       limit: pageSize,
@@ -63,12 +56,6 @@ const FeedScreen: React.FC<FeedProps> = ({ route }: FeedProps) => {
     },
     nextFetchPolicy: 'network-only',
   });
-  useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
-      route.params.refreshNotification();
-    });
-    return unsubscribe;
-  }, [navigation, route]);
   useEffect(() => {
     if (data && data.feed) {
       if (data.feed.length == 0) {
@@ -89,7 +76,7 @@ const FeedScreen: React.FC<FeedProps> = ({ route }: FeedProps) => {
     setRefreshing(true);
     await refetch();
     setRefreshing(false);
-    route.params.refreshNotification();
+    refetchNotifications();
   };
   const loadMoreFeedElements = async () => {
     if (!endReached && !loading) {

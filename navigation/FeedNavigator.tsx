@@ -8,7 +8,7 @@ import { Typography } from '../theme';
 import FeedScreen from '../screens/feed/FeedScreen';
 import ProfileScreen from '../screens/profile/ProfileScreen';
 import BadgeIcon from '../components/general/BadgeIcon';
-import { useNotificationCountQuery } from '../graphql/queries/NotificationCount.generated';
+import useNotification from '../hooks/useNotification';
 
 export const HeaderIcon = (props: { name: string; onPress?: () => void }) => {
   return <FAIcon style={styles.headericon} {...props} />;
@@ -16,7 +16,7 @@ export const HeaderIcon = (props: { name: string; onPress?: () => void }) => {
 const FeedStack = createStackNavigator<FeedStackParamList>();
 
 const FeedNavigator: React.FC = () => {
-  const { data, refetch } = useNotificationCountQuery({ nextFetchPolicy: 'network-only' });
+  const { count } = useNotification();
   return (
     <FeedStack.Navigator>
       <FeedStack.Screen
@@ -26,14 +26,11 @@ const FeedNavigator: React.FC = () => {
           headerTitle: 'Feed',
           // eslint-disable-next-line react/display-name
           headerRight: () => (
-            <BadgeIcon
-              value={data?.notifications_aggregate.aggregate?.count ?? 0}
-              onPress={() => navigation.navigate('Notifications')}>
+            <BadgeIcon value={count} onPress={() => navigation.navigate('Notifications')}>
               <HeaderIcon name="bell" />
             </BadgeIcon>
           ),
         })}
-        initialParams={{ refreshNotification: refetch }}
       />
       <FeedStack.Screen
         name="Notifications"
@@ -41,7 +38,6 @@ const FeedNavigator: React.FC = () => {
         options={{
           headerTitle: 'Notifications',
         }}
-        initialParams={{ refreshNotification: refetch }}
       />
       <FeedStack.Screen
         name="UserProfile"
