@@ -1,7 +1,0 @@
-query NotificationCount {
-  notifications_aggregate(where: { seen: { _eq: false } }) {
-    aggregate {
-      count(columns: id)
-    }
-  }
-}
