@@ -84,6 +84,7 @@ const styles = StyleSheet.create({
     ...Typography.headerText,
     fontSize: 20,
     lineHeight: 30,
+    marginTop: Spacing.smallest,
   },
   captionText: {
     color: Colors.almostWhite,
@@ -97,7 +98,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   main: {
-    marginVertical: Spacing.small,
+    marginVertical: Spacing.smaller,
     flexDirection: 'row',
     justifyContent: 'space-between',
   },

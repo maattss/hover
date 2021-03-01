@@ -7,7 +7,7 @@ import { FontAwesome as FAIcon } from '@expo/vector-icons';
 import { durationToTimestamp, timeStampToHours } from '../../helpers/dateTimeHelpers';
 import Button from '../../components/general/Button';
 import { getGeoFenceImage } from '../../helpers/geoFenceCalculations';
-import KeyboardAvoiderNoHeader from '../../components/general/KeyboardAvoiderNoHeader';
+import KeyboardAvoiderNoHeader from '../../components/keyboard/KeyboardAvoiderNoHeader';
 
 const PublishScreen: React.FC = () => {
   const tracking = useTracking();
@@ -87,7 +87,7 @@ const PublishScreen: React.FC = () => {
 
 const styles = StyleSheet.create({
   container: {
-    padding: Spacing.base,
+    padding: Spacing.smaller,
   },
   categoryIcon: {
     height: 50,
