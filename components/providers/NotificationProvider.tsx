@@ -35,7 +35,7 @@ export const NotificationProvider = ({ children }: Props) => {
   const [newNotifications, setNewNotifications] = useState<NotificationFragmentFragment[]>([]);
   const [earlierNotifications, setEarlierNotifications] = useState<NotificationFragmentFragment[]>([]);
   const { data: notificationData, error: notificationsError, refetch: refetchNotifications } = useNotifiactionsQuery({
-    fetchPolicy: 'network-only',
+    fetchPolicy: 'cache-and-network',
   });
 
   const [readNotifications] = useUpdateNotificationsMutation();
