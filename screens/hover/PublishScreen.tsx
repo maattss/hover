@@ -7,8 +7,6 @@ import { FontAwesome as FAIcon } from '@expo/vector-icons';
 import { durationToTimestamp, timeStampToHours } from '../../helpers/dateTimeHelpers';
 import Button from '../../components/general/Button';
 import { getGeoFenceImage } from '../../helpers/geoFenceCalculations';
-import KeyboardAvoiderNoHeader from '../../components/keyboard/KeyboardAvoiderNoHeader';
-import HoverMap from '../../components/map/HoverMap';
 import MapView, { LatLng, Marker, Region } from 'react-native-maps';
 import GeoFences from '../../components/map/GeoFences';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -70,8 +68,8 @@ const PublishScreen: React.FC = () => {
 
   return (
     <View style={safeTop()}>
-      <ScrollView contentInset={{ bottom: 100 }} style={{ padding: Spacing.smaller }}>
-        <View style={[styles.topBar]}>
+      <ScrollView contentInset={{ bottom: 100 }} style={styles.scroll}>
+        <View style={styles.topBar}>
           <View style={styles.topBarIcon}>
             <FAIcon name={'question-circle'} style={styles.questionIcon} />
           </View>
@@ -96,24 +94,17 @@ const PublishScreen: React.FC = () => {
 
           <View style={styles.infoContainer}>
             <View style={{ width: '49%' }}>
-              <View
-                style={{
-                  backgroundColor: Colors.gray900,
-                  borderRadius: Spacing.smaller,
-                  padding: Spacing.smaller,
-                  height: '100%',
-                  justifyContent: 'center',
-                }}>
-                <View style={{ marginBottom: Spacing.smaller }}>
+              <View style={[styles.infoCard, { justifyContent: 'flex-start' }]}>
+                <View style={styles.mbSmall}>
                   <Text style={styles.infoText}>Duration</Text>
                   <Text style={styles.infoTextSmall}>{durationToTimestamp(tracking.duration)}</Text>
                 </View>
-                <View style={{ marginBottom: Spacing.smaller }}>
+                <View style={styles.mbSmall}>
                   <Text style={styles.infoText}>Started at</Text>
                   <Text style={styles.infoTextSmall}>{timeStampToHours(tracking.trackingStart)}</Text>
                 </View>
                 {tracking.insideGeoFence && (
-                  <View style={{ marginBottom: Spacing.smaller }}>
+                  <View style={styles.mbSmall}>
                     <Text style={styles.infoText}>Location</Text>
                     <Text style={styles.infoTextSmall}>{tracking.insideGeoFence?.name}</Text>
                   </View>
@@ -121,15 +112,7 @@ const PublishScreen: React.FC = () => {
               </View>
             </View>
             <View style={{ width: '49%' }}>
-              <View
-                style={{
-                  backgroundColor: Colors.gray900,
-                  borderRadius: Spacing.smaller,
-                  padding: Spacing.smallest,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  height: '100%',
-                }}>
+              <View style={[styles.infoCard, { justifyContent: 'center' }]}>
                 <Image
                   source={{ uri: getGeoFenceImage(tracking.insideGeoFence?.category) }}
                   style={styles.categoryIcon}
@@ -159,13 +142,7 @@ const PublishScreen: React.FC = () => {
           </View>
         </View>
       </ScrollView>
-      <View
-        style={{
-          position: 'absolute',
-          bottom: Spacing.smaller,
-          left: Spacing.smaller,
-          right: Spacing.smaller,
-        }}>
+      <View style={styles.publishContainer}>
         <Button onPress={publishActivity}>
           <Text style={styles.publishButtonText}>Publish</Text>
         </Button>
@@ -175,54 +152,8 @@ const PublishScreen: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
-  label: {
-    ...Typography.largeBodyText,
-    fontWeight: 'bold',
-    marginBottom: Spacing.smallest,
-    marginLeft: Spacing.smallest,
-  },
-  categoryIcon: {
-    height: '50%',
-    width: '50%',
-    marginBottom: Spacing.small,
-  },
-  summaryContainer: {
-    marginTop: Spacing.base,
-  },
-  infoContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: Spacing.base,
-    alignItems: 'center',
-    height: '35%',
-  },
-  infoText: {
-    ...Typography.largeBodyText,
-    fontWeight: 'bold',
-  },
-  infoTextSmall: {
-    ...Typography.largeBodyText,
-    fontSize: 16,
-  },
-  infoScore: {
-    ...Typography.headerText,
-    marginBottom: Spacing.base,
-    textAlign: 'center',
-  },
-  formField: {
-    ...Buttons.button,
-    ...Typography.bodyText,
-    paddingTop: Spacing.small,
-    backgroundColor: Colors.gray900,
-  },
-  publishButton: {
-    ...Buttons.button,
-    paddingHorizontal: Spacing.extraLarge,
-  },
-  publishButtonText: {
-    ...Buttons.buttonText,
-    fontSize: 24,
-    textAlign: 'center',
+  scroll: {
+    padding: Spacing.smaller,
   },
   topBar: {
     flexDirection: 'row',
@@ -258,9 +189,73 @@ const styles = StyleSheet.create({
     fontSize: 60,
     color: Colors.almostWhite,
   },
+  summaryContainer: {
+    marginTop: Spacing.base,
+  },
+  infoScore: {
+    ...Typography.headerText,
+    marginBottom: Spacing.base,
+    textAlign: 'center',
+  },
+  infoContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: Spacing.base,
+    alignItems: 'center',
+    height: '35%',
+  },
+  infoCard: {
+    backgroundColor: Colors.gray900,
+    borderRadius: Spacing.smaller,
+    padding: Spacing.smaller,
+    height: '100%',
+  },
+  infoText: {
+    ...Typography.largeBodyText,
+    fontWeight: 'bold',
+  },
+  infoTextSmall: {
+    ...Typography.largeBodyText,
+    fontSize: 16,
+  },
+  categoryIcon: {
+    height: '50%',
+    width: '50%',
+    marginBottom: Spacing.small,
+  },
+  label: {
+    ...Typography.largeBodyText,
+    fontWeight: 'bold',
+    marginBottom: Spacing.smallest,
+    marginLeft: Spacing.smallest,
+  },
+  formField: {
+    ...Buttons.button,
+    ...Typography.bodyText,
+    paddingTop: Spacing.small,
+    backgroundColor: Colors.gray900,
+  },
+  publishContainer: {
+    position: 'absolute',
+    bottom: Spacing.smaller,
+    left: Spacing.smaller,
+    right: Spacing.smaller,
+  },
+  publishButton: {
+    ...Buttons.button,
+    paddingHorizontal: Spacing.extraLarge,
+  },
+  publishButtonText: {
+    ...Buttons.buttonText,
+    fontSize: 24,
+    textAlign: 'center',
+  },
   map: {
     height: 130,
     borderRadius: Spacing.smaller,
+  },
+  mbSmall: {
+    marginBottom: Spacing.smaller,
   },
 });
 
