@@ -111,7 +111,8 @@ const styles = StyleSheet.create({
     width: '15%',
     alignItems: 'center',
     justifyContent: 'center',
-    marginVertical: Spacing.smaller,
+    marginVertical: Spacing.smallest,
+    paddingBottom: Spacing.base,
   },
   label: {
     ...Typography.bodyText,

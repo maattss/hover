@@ -115,9 +115,7 @@ const ChallengeScreen: React.FC<ChallengesProps> = (props: ChallengesProps) => {
   const ongoingChallengesExists = ongoingChallenges && ongoingChallenges.length > 0;
 
   if (loading) return <Loading />;
-
   if (error) return <Error message={error.message} apolloError={error} />;
-
   return (
     <ScrollView
       style={styles.scrollView}
