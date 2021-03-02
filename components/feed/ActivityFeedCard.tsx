@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, Image } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import { Colors, Typography, Spacing } from '../../theme';
 import { ActivityFeedData } from '../../types/feedTypes';
 import { timeStampToPresentable } from '../../helpers/dateTimeHelpers';
@@ -14,17 +14,27 @@ import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import { Avatar } from 'react-native-elements';
 import useAuthentication from '../../hooks/useAuthentication';
 import { Asset } from 'expo-asset';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import Reaction from './Reaction';
 
 interface ActivityFeedCardProps {
   data: ActivityFeedData;
 }
 
+export const getReactionText = (reactionCount: number, userReacted: boolean) => {
+  if (reactionCount === 0) return 'No reactions yet... Tap to be the first!';
+  if (reactionCount === 1 && userReacted) return 'You reacted to this activity.';
+  if (reactionCount === 1 && !userReacted) return '1 user reacted to this activity.';
+  if (userReacted) return 'You and ' + (reactionCount - 1) + ' users reacted to this activity.';
+  return reactionCount + ' users reacted to this activity.';
+};
+export const getImageURI = (userReacted: boolean) => {
+  if (userReacted) return require('../../assets/images/clap.png');
+  return require('../../assets/images/clap-gray.png');
+};
+
 const ActivityFeedCard: React.FC<ActivityFeedCardProps> = ({ data }: ActivityFeedCardProps) => {
   const auth = useAuthentication();
-  const [reactionCount, setReactionCount] = useState(0);
-  const [userReacted, setUserReacted] = useState(false);
-
+  const activityGeoFence = convertToGeoFence(data.activity.geofence);
   const mapRegion: Region = {
     latitude: data.activity.geofence.latitude,
     longitude: data.activity.geofence.longitude,
@@ -35,32 +45,12 @@ const ActivityFeedCard: React.FC<ActivityFeedCardProps> = ({ data }: ActivityFee
     latitude: data.activity.geofence.latitude,
     longitude: data.activity.geofence.longitude,
   };
-  const activityGeoFence = convertToGeoFence(data.activity.geofence);
+
   const getName = () => {
     if (auth.user?.uid === data.user.id) return 'You';
     return data.user.name;
   };
-  const reactToActivity = () => {
-    if (!userReacted) {
-      setReactionCount(reactionCount + 1);
-      setUserReacted(true);
-    } else {
-      setReactionCount(reactionCount - 1);
-      setUserReacted(false);
-    }
-    // TODO: Insert likes mutation here
-  };
-  const getReactionText = () => {
-    if (reactionCount === 0) return 'No reactions yet.. Tap to be the first!';
-    if (reactionCount === 1 && userReacted) return 'You reacted to this activity.';
-    if (reactionCount === 1 && !userReacted) return '1 user reacted to this activity.';
-    if (userReacted) return 'You and ' + (reactionCount - 1) + ' users reacted to this activity.';
-    return reactionCount + ' users reacted to this activity.';
-  };
-  const getImageURI = () => {
-    if (userReacted) return require('../../assets/images/clap.png');
-    return require('../../assets/images/clap-gray.png');
-  };
+
   return (
     <View style={styles.card}>
       <TouchableProfile user_id={data.user.id} name={data.user.name}>
@@ -129,10 +119,7 @@ const ActivityFeedCard: React.FC<ActivityFeedCardProps> = ({ data }: ActivityFee
         </MapView>
       </View>
 
-      <TouchableOpacity onPress={reactToActivity} style={styles.reactionContainer}>
-        <Image source={{ uri: Asset.fromModule(getImageURI()).uri }} style={styles.reactionIcon} />
-        <Text style={styles.reactionText}>{getReactionText()}</Text>
-      </TouchableOpacity>
+      <Reaction />
 
       <View style={styles.footer}>
         <Text style={styles.footerText}>{timeStampToPresentable(data.createdAt)}</Text>
