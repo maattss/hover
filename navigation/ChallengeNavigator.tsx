@@ -3,9 +3,9 @@ import { ChallengeStackParamList } from '../types/navigationTypes';
 import { createStackNavigator } from '@react-navigation/stack';
 import ChallengeScreen from '../screens/challenge/ChallengeScreen';
 import PendingChallengesScreen from '../screens/challenge/PendingChallengesScreen';
-import { HeaderIcon } from './FeedNavigator';
 import OngoingChallengesScreen from '../screens/challenge/OngoingChallengesScreen';
 import NewChallengeNavigator from './NewChallengeNavigator';
+import { HeaderIcon } from '../components/general/HeaderIcon';
 
 const ChallengeStack = createStackNavigator<ChallengeStackParamList>();
 

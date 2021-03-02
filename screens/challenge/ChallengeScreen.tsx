@@ -44,9 +44,7 @@ const renderPendingChallenges = ({ navigation }: ChallengesProps, pendingChallen
         </View>
       ))}
       {pendingChallenges.length > PREVIEW_SIZE && (
-        <Button
-          style={styles.challengeButton}
-          onPress={() => navigation.push('PendingChallenges', { user_id, pendingChallenges })}>
+        <Button style={styles.challengeButton} onPress={() => navigation.push('PendingChallenges', { user_id })}>
           View all
         </Button>
       )}
@@ -69,9 +67,7 @@ const renderOngoingChallenges = ({ navigation }: ChallengesProps, ongoingChallen
         </View>
       ))}
       {ongoingChallenges.length > PREVIEW_SIZE && (
-        <Button
-          style={styles.challengeButton}
-          onPress={() => navigation.push('OngoingChallenges', { user_id, ongoingChallenges })}>
+        <Button style={styles.challengeButton} onPress={() => navigation.push('OngoingChallenges', { user_id })}>
           View all
         </Button>
       )}

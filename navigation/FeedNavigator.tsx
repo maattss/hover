@@ -1,19 +1,17 @@
 import React from 'react';
 import { FeedStackParamList } from '../types/navigationTypes';
 import { createStackNavigator } from '@react-navigation/stack';
-import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
-import { StyleSheet } from 'react-native';
 import NotificationsScreen from '../screens/feed/NotificationsScreen';
-import { Typography } from '../theme';
 import FeedScreen from '../screens/feed/FeedScreen';
 import ProfileScreen from '../screens/profile/ProfileScreen';
+import BadgeIcon from '../components/general/BadgeIcon';
+import useNotification from '../hooks/useNotification';
+import { HeaderIcon } from '../components/general/HeaderIcon';
 
-export const HeaderIcon = (props: { name: string; onPress: () => void }) => {
-  return <FAIcon style={styles.headericon} {...props} />;
-};
 const FeedStack = createStackNavigator<FeedStackParamList>();
 
 const FeedNavigator: React.FC = () => {
+  const { count } = useNotification();
   return (
     <FeedStack.Navigator>
       <FeedStack.Screen
@@ -22,7 +20,11 @@ const FeedNavigator: React.FC = () => {
         options={({ navigation }) => ({
           headerTitle: 'Feed',
           // eslint-disable-next-line react/display-name
-          headerRight: () => <HeaderIcon name="bell" onPress={() => navigation.navigate('Notifications')} />,
+          headerRight: () => (
+            <BadgeIcon value={count} onPress={() => navigation.navigate('Notifications')}>
+              <HeaderIcon name="bell" />
+            </BadgeIcon>
+          ),
         })}
       />
       <FeedStack.Screen
@@ -44,10 +46,3 @@ const FeedNavigator: React.FC = () => {
 };
 
 export default FeedNavigator;
-
-const styles = StyleSheet.create({
-  headericon: {
-    ...Typography.icon,
-    marginRight: 20,
-  },
-});

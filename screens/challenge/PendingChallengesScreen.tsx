@@ -9,11 +9,6 @@ import Error from '../../components/general/Error';
 import { convertToChallenge } from '../../helpers/objectMappers';
 import { useGetPendingChallengesQuery } from '../../graphql/queries/GetPendingChallenges.generated';
 
-export interface PendingChallengesScreenProps {
-  pendingChallenges: Challenge[];
-  user_id: string;
-}
-
 type ChallengeScreenRouteProp = RouteProp<ChallengeStackParamList, 'PendingChallenges'>;
 type Props = {
   route: ChallengeScreenRouteProp;

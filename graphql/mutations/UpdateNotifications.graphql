@@ -1,0 +1,8 @@
+mutation UpdateNotifications($user_id: String!) {
+  update_notifications(_set: { seen: true }, where: { user_id: { _eq: $user_id } }) {
+    returning {
+      id
+      seen
+    }
+  }
+}
