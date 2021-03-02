@@ -16,6 +16,7 @@ import Loading from '../../components/general/Loading';
 import Error from '../../components/general/Error';
 import { convertToFeedData } from '../../helpers/objectMappers';
 import ChallengeFeedCard from '../../components/feed/ChallengeFeedCard';
+import useNotification from '../../hooks/useNotification';
 
 const getItem = (data: FeedData) => {
   if (data.feedCategory === FeedCategory.ACTIVITY) {
@@ -47,7 +48,7 @@ const FeedScreen: React.FC = () => {
   const [fetchingMore, setFetchingMore] = useState(false);
   const [endReached, setEndReached] = useState(false);
   const [feedElements, setFeedElements] = useState<FeedData[]>([]);
-
+  const { refetchNotifications } = useNotification();
   const { loading: loading, error: error, data: data, refetch, fetchMore } = useFeedQuery({
     variables: {
       limit: pageSize,
@@ -75,6 +76,7 @@ const FeedScreen: React.FC = () => {
     setRefreshing(true);
     await refetch();
     setRefreshing(false);
+    refetchNotifications();
   };
   const loadMoreFeedElements = async () => {
     if (!endReached && !loading) {
@@ -138,7 +140,6 @@ const styles = StyleSheet.create({
     padding: Spacing.base,
     justifyContent: 'center',
     alignItems: 'center',
-    flexDirection: 'row',
   },
   theEnd: {
     ...Typography.bodyText,

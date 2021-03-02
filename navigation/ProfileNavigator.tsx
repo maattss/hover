@@ -5,13 +5,8 @@ import ProfileScreen from '../screens/profile/ProfileScreen';
 import UserSettingsScreen from '../screens/profile/settings/UserSettingsScreen';
 import AboutScreen from '../screens/profile/settings/AboutScreen';
 import SettingsScreen from '../screens/profile/settings/SettingsMenuScreen';
-import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
-import { StyleSheet } from 'react-native';
-import { Typography } from '../theme';
+import { HeaderIcon } from '../components/general/HeaderIcon';
 
-const HeaderIcon = (props: { name: string; onPress: () => void }) => {
-  return <FAIcon style={styles.headericon} {...props} />;
-};
 const ProfileStack = createStackNavigator<ProfileStackParamList>();
 
 const ProfileNavigator: React.FC = () => {
@@ -38,11 +33,5 @@ const ProfileNavigator: React.FC = () => {
     </ProfileStack.Navigator>
   );
 };
-const styles = StyleSheet.create({
-  headericon: {
-    ...Typography.icon,
-    marginRight: 10,
-  },
-});
 
 export default ProfileNavigator;

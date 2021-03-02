@@ -1,0 +1,5 @@
+query Notifiactions($limit: Int, $offset: Int) {
+  notifications(order_by: { seen: asc, created_at: desc }) {
+    ...notificationFragment
+  }
+}

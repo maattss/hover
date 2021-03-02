@@ -4680,8 +4680,8 @@ export type Likes = {
   __typename?: 'likes';
   /** An object relationship */
   activity: Activities;
-  activity_id: Scalars['Int'];
   created_at?: Maybe<Scalars['timestamptz']>;
+  feed_id: Scalars['Int'];
   updated_at?: Maybe<Scalars['timestamptz']>;
   /** An object relationship */
   user: Users;
@@ -4741,12 +4741,12 @@ export type Likes_Arr_Rel_Insert_Input = {
 /** aggregate avg on columns */
 export type Likes_Avg_Fields = {
   __typename?: 'likes_avg_fields';
-  activity_id?: Maybe<Scalars['Float']>;
+  feed_id?: Maybe<Scalars['Float']>;
 };
 
 /** order by avg() on columns of table "likes" */
 export type Likes_Avg_Order_By = {
-  activity_id?: Maybe<Order_By>;
+  feed_id?: Maybe<Order_By>;
 };
 
 /** Boolean expression to filter rows from the table "likes". All fields are combined with a logical 'AND'. */
@@ -4755,8 +4755,8 @@ export type Likes_Bool_Exp = {
   _not?: Maybe<Likes_Bool_Exp>;
   _or?: Maybe<Array<Maybe<Likes_Bool_Exp>>>;
   activity?: Maybe<Activities_Bool_Exp>;
-  activity_id?: Maybe<Int_Comparison_Exp>;
   created_at?: Maybe<Timestamptz_Comparison_Exp>;
+  feed_id?: Maybe<Int_Comparison_Exp>;
   updated_at?: Maybe<Timestamptz_Comparison_Exp>;
   user?: Maybe<Users_Bool_Exp>;
   user_id?: Maybe<String_Comparison_Exp>;
@@ -4772,14 +4772,14 @@ export enum Likes_Constraint {
 
 /** input type for incrementing integer column in table "likes" */
 export type Likes_Inc_Input = {
-  activity_id?: Maybe<Scalars['Int']>;
+  feed_id?: Maybe<Scalars['Int']>;
 };
 
 /** input type for inserting data into table "likes" */
 export type Likes_Insert_Input = {
   activity?: Maybe<Activities_Obj_Rel_Insert_Input>;
-  activity_id?: Maybe<Scalars['Int']>;
   created_at?: Maybe<Scalars['timestamptz']>;
+  feed_id?: Maybe<Scalars['Int']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
   user?: Maybe<Users_Obj_Rel_Insert_Input>;
   user_id?: Maybe<Scalars['String']>;
@@ -4788,16 +4788,16 @@ export type Likes_Insert_Input = {
 /** aggregate max on columns */
 export type Likes_Max_Fields = {
   __typename?: 'likes_max_fields';
-  activity_id?: Maybe<Scalars['Int']>;
   created_at?: Maybe<Scalars['timestamptz']>;
+  feed_id?: Maybe<Scalars['Int']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
   user_id?: Maybe<Scalars['String']>;
 };
 
 /** order by max() on columns of table "likes" */
 export type Likes_Max_Order_By = {
-  activity_id?: Maybe<Order_By>;
   created_at?: Maybe<Order_By>;
+  feed_id?: Maybe<Order_By>;
   updated_at?: Maybe<Order_By>;
   user_id?: Maybe<Order_By>;
 };
@@ -4805,16 +4805,16 @@ export type Likes_Max_Order_By = {
 /** aggregate min on columns */
 export type Likes_Min_Fields = {
   __typename?: 'likes_min_fields';
-  activity_id?: Maybe<Scalars['Int']>;
   created_at?: Maybe<Scalars['timestamptz']>;
+  feed_id?: Maybe<Scalars['Int']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
   user_id?: Maybe<Scalars['String']>;
 };
 
 /** order by min() on columns of table "likes" */
 export type Likes_Min_Order_By = {
-  activity_id?: Maybe<Order_By>;
   created_at?: Maybe<Order_By>;
+  feed_id?: Maybe<Order_By>;
   updated_at?: Maybe<Order_By>;
   user_id?: Maybe<Order_By>;
 };
@@ -4844,8 +4844,8 @@ export type Likes_On_Conflict = {
 /** ordering options when selecting data from "likes" */
 export type Likes_Order_By = {
   activity?: Maybe<Activities_Order_By>;
-  activity_id?: Maybe<Order_By>;
   created_at?: Maybe<Order_By>;
+  feed_id?: Maybe<Order_By>;
   updated_at?: Maybe<Order_By>;
   user?: Maybe<Users_Order_By>;
   user_id?: Maybe<Order_By>;
@@ -4853,16 +4853,16 @@ export type Likes_Order_By = {
 
 /** primary key columns input for table: "likes" */
 export type Likes_Pk_Columns_Input = {
-  activity_id: Scalars['Int'];
+  feed_id: Scalars['Int'];
   user_id: Scalars['String'];
 };
 
 /** select columns of table "likes" */
 export enum Likes_Select_Column {
   /** column name */
-  ActivityId = 'activity_id',
-  /** column name */
   CreatedAt = 'created_at',
+  /** column name */
+  FeedId = 'feed_id',
   /** column name */
   UpdatedAt = 'updated_at',
   /** column name */
@@ -4871,8 +4871,8 @@ export enum Likes_Select_Column {
 
 /** input type for updating data in table "likes" */
 export type Likes_Set_Input = {
-  activity_id?: Maybe<Scalars['Int']>;
   created_at?: Maybe<Scalars['timestamptz']>;
+  feed_id?: Maybe<Scalars['Int']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
   user_id?: Maybe<Scalars['String']>;
 };
@@ -4880,53 +4880,53 @@ export type Likes_Set_Input = {
 /** aggregate stddev on columns */
 export type Likes_Stddev_Fields = {
   __typename?: 'likes_stddev_fields';
-  activity_id?: Maybe<Scalars['Float']>;
+  feed_id?: Maybe<Scalars['Float']>;
 };
 
 /** order by stddev() on columns of table "likes" */
 export type Likes_Stddev_Order_By = {
-  activity_id?: Maybe<Order_By>;
+  feed_id?: Maybe<Order_By>;
 };
 
 /** aggregate stddev_pop on columns */
 export type Likes_Stddev_Pop_Fields = {
   __typename?: 'likes_stddev_pop_fields';
-  activity_id?: Maybe<Scalars['Float']>;
+  feed_id?: Maybe<Scalars['Float']>;
 };
 
 /** order by stddev_pop() on columns of table "likes" */
 export type Likes_Stddev_Pop_Order_By = {
-  activity_id?: Maybe<Order_By>;
+  feed_id?: Maybe<Order_By>;
 };
 
 /** aggregate stddev_samp on columns */
 export type Likes_Stddev_Samp_Fields = {
   __typename?: 'likes_stddev_samp_fields';
-  activity_id?: Maybe<Scalars['Float']>;
+  feed_id?: Maybe<Scalars['Float']>;
 };
 
 /** order by stddev_samp() on columns of table "likes" */
 export type Likes_Stddev_Samp_Order_By = {
-  activity_id?: Maybe<Order_By>;
+  feed_id?: Maybe<Order_By>;
 };
 
 /** aggregate sum on columns */
 export type Likes_Sum_Fields = {
   __typename?: 'likes_sum_fields';
-  activity_id?: Maybe<Scalars['Int']>;
+  feed_id?: Maybe<Scalars['Int']>;
 };
 
 /** order by sum() on columns of table "likes" */
 export type Likes_Sum_Order_By = {
-  activity_id?: Maybe<Order_By>;
+  feed_id?: Maybe<Order_By>;
 };
 
 /** update columns of table "likes" */
 export enum Likes_Update_Column {
   /** column name */
-  ActivityId = 'activity_id',
-  /** column name */
   CreatedAt = 'created_at',
+  /** column name */
+  FeedId = 'feed_id',
   /** column name */
   UpdatedAt = 'updated_at',
   /** column name */
@@ -4936,34 +4936,34 @@ export enum Likes_Update_Column {
 /** aggregate var_pop on columns */
 export type Likes_Var_Pop_Fields = {
   __typename?: 'likes_var_pop_fields';
-  activity_id?: Maybe<Scalars['Float']>;
+  feed_id?: Maybe<Scalars['Float']>;
 };
 
 /** order by var_pop() on columns of table "likes" */
 export type Likes_Var_Pop_Order_By = {
-  activity_id?: Maybe<Order_By>;
+  feed_id?: Maybe<Order_By>;
 };
 
 /** aggregate var_samp on columns */
 export type Likes_Var_Samp_Fields = {
   __typename?: 'likes_var_samp_fields';
-  activity_id?: Maybe<Scalars['Float']>;
+  feed_id?: Maybe<Scalars['Float']>;
 };
 
 /** order by var_samp() on columns of table "likes" */
 export type Likes_Var_Samp_Order_By = {
-  activity_id?: Maybe<Order_By>;
+  feed_id?: Maybe<Order_By>;
 };
 
 /** aggregate variance on columns */
 export type Likes_Variance_Fields = {
   __typename?: 'likes_variance_fields';
-  activity_id?: Maybe<Scalars['Float']>;
+  feed_id?: Maybe<Scalars['Float']>;
 };
 
 /** order by variance() on columns of table "likes" */
 export type Likes_Variance_Order_By = {
-  activity_id?: Maybe<Order_By>;
+  feed_id?: Maybe<Order_By>;
 };
 
 /** mutation root */
@@ -5392,7 +5392,7 @@ export type Mutation_RootDelete_LikesArgs = {
 
 /** mutation root */
 export type Mutation_RootDelete_Likes_By_PkArgs = {
-  activity_id: Scalars['Int'];
+  feed_id: Scalars['Int'];
   user_id: Scalars['String'];
 };
 
@@ -6971,7 +6971,7 @@ export type Query_RootLikes_AggregateArgs = {
 
 /** query root */
 export type Query_RootLikes_By_PkArgs = {
-  activity_id: Scalars['Int'];
+  feed_id: Scalars['Int'];
   user_id: Scalars['String'];
 };
 
@@ -7613,7 +7613,7 @@ export type Subscription_RootLikes_AggregateArgs = {
 
 /** subscription root */
 export type Subscription_RootLikes_By_PkArgs = {
-  activity_id: Scalars['Int'];
+  feed_id: Scalars['Int'];
   user_id: Scalars['String'];
 };
 
