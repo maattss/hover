@@ -10,6 +10,7 @@ import Leaderboard, { Item } from '../leaderboard/Leaderboard';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import { getAchievementColor } from '../profile/Achievement';
 import TouchableProfile from '../general/TouchableProfile';
+import Reaction from './Reaction';
 
 type ChallengeFeedCardProps = {
   data: ChallengeFeedData;
@@ -55,6 +56,7 @@ const ChallengeFeedCard: React.FC<ChallengeFeedCardProps> = ({ data }: Challenge
       <View style={styles.main}>
         <Leaderboard data={listData} renderItem={renderItem} />
       </View>
+      <Reaction />
       <View style={styles.footer}>
         <Text style={styles.footerText}>{timeStampToPresentable(data.createdAt)}</Text>
       </View>

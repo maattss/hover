@@ -6,6 +6,7 @@ import { timeStampToPresentable } from '../../helpers/dateTimeHelpers';
 import Achievement from '../profile/Achievement';
 import { defaultUserProfile } from '../../helpers/objectMappers';
 import TouchableProfile from '../general/TouchableProfile';
+import Reaction from './Reaction';
 
 interface AchievementFeedCardProps {
   data: AchievementFeedData;
@@ -36,6 +37,8 @@ const AchievementFeedCard: React.FC<AchievementFeedCardProps> = ({ data }: Achie
           <Achievement achievement={data.achievement} />
         </View>
       </View>
+
+      <Reaction />
 
       <View style={styles.footer}>
         <Text style={styles.footerText}>{timeStampToPresentable(data.createdAt)}</Text>
