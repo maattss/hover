@@ -54,6 +54,7 @@ const styles = StyleSheet.create({
   topBar: {
     flexDirection: 'row',
     justifyContent: 'flex-start',
+    marginVertical: Spacing.smallest,
   },
   infoContainer: {
     width: '68%',
@@ -88,7 +89,7 @@ const styles = StyleSheet.create({
   },
   achievement: {
     width: '35%',
-    marginTop: Spacing.smallest,
+    marginTop: Spacing.base,
   },
 });
 

@@ -70,7 +70,7 @@ const ActivityFeedCard: React.FC<ActivityFeedCardProps> = ({ data }: ActivityFee
           </View>
         </View>
       </TouchableProfile>
-      <Divider />
+
       <View style={styles.innerCard}>
         <View style={data.activity.friend ? { width: '60%' } : { width: '100%' }}>
           <View style={[styles.flexRowLeft, { marginBottom: Spacing.smaller }]}>
@@ -157,7 +157,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   main: {
-    marginVertical: Spacing.small,
+    marginVertical: Spacing.smallest,
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
@@ -212,6 +212,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: Spacing.smallest,
+    marginVertical: Spacing.smallest,
   },
   collabIcon: {
     borderStyle: 'solid',
@@ -221,6 +222,7 @@ const styles = StyleSheet.create({
     borderRadius: Spacing.smaller,
     padding: Spacing.smaller,
     width: '30%',
+    alignItems: 'center',
   },
   collabIconText: {
     ...Typography.largeBodyText,

@@ -11,12 +11,20 @@ import { getAchievementColor } from '../profile/Achievement';
 import TouchableProfile from '../general/TouchableProfile';
 import Reaction from './Reaction';
 import Footer from './Footer';
+import useAuthentication from '../../hooks/useAuthentication';
 
 type ChallengeFeedCardProps = {
   data: ChallengeFeedData;
 };
 
 const ChallengeFeedCard: React.FC<ChallengeFeedCardProps> = ({ data }: ChallengeFeedCardProps) => {
+  const auth = useAuthentication();
+
+  const checkName = (name: string, id: string) => {
+    if (auth.user?.uid === id) return 'You';
+    return name;
+  };
+
   const renderItem = (item: Item, index: number) => (
     <TouchableProfile user_id={item.id} name={item.name}>
       <View key={item.id}>
@@ -24,10 +32,11 @@ const ChallengeFeedCard: React.FC<ChallengeFeedCardProps> = ({ data }: Challenge
       </View>
     </TouchableProfile>
   );
+
   const listData = data.challenge.opponents.map<Item>((item) => {
     return {
       id: item.user.id,
-      name: item.user.name,
+      name: checkName(item.user.name, item.user.id),
       picture: item.user.picture,
       score: item.progress,
     } as Item;
@@ -40,16 +49,11 @@ const ChallengeFeedCard: React.FC<ChallengeFeedCardProps> = ({ data }: Challenge
       </View>
       <TouchableProfile user_id={data.user.id} name={data.user.name}>
         <View style={styles.topBar}>
-          <View style={styles.avatar}>
-            <Avatar
-              rounded
-              source={{ uri: data.user.picture ? data.user.picture : defaultUserProfile.picture }}
-              size={'medium'}
-            />
-          </View>
           <View style={styles.infoContainer}>
-            <Text style={styles.nameText}>{data.user.name}</Text>
-            <Text style={styles.descriptionText}>{generateFeedChallengeDescription(data.challenge)}</Text>
+            <Text style={styles.descriptionText}>
+              <Text style={{ fontWeight: 'bold', fontSize: 16 }}>{data.user.name} </Text>
+              {generateFeedChallengeDescription(data.challenge)}
+            </Text>
           </View>
         </View>
       </TouchableProfile>
@@ -72,7 +76,6 @@ const ChallengeLeaderboardRow = ({ item, index }: { item: Item; index: number })
     borderBottomWidth: 3,
     borderRadius: 0,
   };
-
   return (
     <View style={[styles.row, border]}>
       <View style={styles.left}>
@@ -108,18 +111,11 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   infoContainer: {
-    padding: Spacing.smaller,
     justifyContent: 'center',
-    flexShrink: 1,
-  },
-  nameText: {
-    ...Typography.headerText,
-    fontSize: 20,
+    paddingVertical: Spacing.smaller,
   },
   descriptionText: {
-    color: Colors.almostWhite,
-    fontSize: 12,
-    fontStyle: 'italic',
+    ...Typography.bodyText,
     flexWrap: 'wrap',
   },
   main: {
