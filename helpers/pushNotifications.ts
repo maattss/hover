@@ -43,7 +43,7 @@ export const registerForPushNotificationsAsync = async () => {
 
     console.log('Push notifactions token', token);
   } else {
-    Alert.alert('Error', 'Must use physical device for Push Notifications');
+    console.log('Error', 'Must use physical device for Push Notifications');
   }
 
   if (Platform.OS === 'android') {
