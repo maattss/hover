@@ -7,7 +7,7 @@ import PickUsersScreen from '../screens/challenge/newchallenge/PickUsersScreen';
 import ChallengeRulesScreen from '../screens/challenge/newchallenge/ChallengeRulesScreen';
 import ChallengeTypeScreen from '../screens/challenge/newchallenge/ChallengeTypeScreen';
 import ChallengeInfoScreen from '../screens/challenge/newchallenge/ChallengeInfoScreen';
-import { HeaderIcon } from './FeedNavigator';
+import { HeaderIcon } from '../components/general/HeaderIcon';
 
 const NewChallengeStack = createStackNavigator<NewChallengeStackParamList>();
 

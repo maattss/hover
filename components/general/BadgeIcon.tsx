@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
-import { StyleSheet, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 import { Badge } from 'react-native-elements';
-import { Spacing } from '../../theme';
+import { Colors, Spacing } from '../../theme';
 
 interface BadgeIconProps {
   value: number;
@@ -10,11 +10,11 @@ interface BadgeIconProps {
 }
 const BadgeIcon: React.FC<BadgeIconProps> = ({ value, children, onPress }: BadgeIconProps) => {
   return (
-    <TouchableOpacity style={styles.container} onPress={onPress}>
-      <View style={styles.row}>
-        {children}
-        {value > 0 && <Badge value={value} status={'error'} containerStyle={styles.badgeStyle} />}
-      </View>
+    <TouchableOpacity onPress={onPress}>
+      {children}
+      {value > 0 && (
+        <Badge value={value} badgeStyle={styles.badgeStyle} status={'error'} containerStyle={styles.badgeContainer} />
+      )}
     </TouchableOpacity>
   );
 };
@@ -22,22 +22,12 @@ const BadgeIcon: React.FC<BadgeIconProps> = ({ value, children, onPress }: Badge
 export default BadgeIcon;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginLeft: Spacing.small,
-    marginRight: Spacing.small,
-  },
-  text: {
-    fontSize: Spacing.base,
-  },
-  row: {
-    flexDirection: 'row',
+  badgeContainer: {
+    position: 'absolute',
+    right: Spacing.small,
   },
   badgeStyle: {
-    position: 'absolute',
-    top: -4,
-    right: 10,
+    backgroundColor: Colors.red,
+    borderColor: Colors.red,
   },
 });
