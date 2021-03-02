@@ -46,7 +46,9 @@ const NotificationsScreen: React.FC<NotificationProps> = ({ navigation }: Notifi
   const renderFooter = () => {
     return (
       <View style={styles.footer}>
-        <Text style={{ ...Typography.bodyText }}>{sections?.length == 0 && 'You have no notifications'}</Text>
+        <Text style={{ ...Typography.largeBodyText }}>
+          {sections?.length == 0 ? 'You have no notifications' : "You've reached the end"}
+        </Text>
       </View>
     );
   };
@@ -95,7 +97,7 @@ const styles = StyleSheet.create({
     paddingBottom: Spacing.base,
   },
   footer: {
-    padding: 10,
+    padding: Spacing.base,
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
