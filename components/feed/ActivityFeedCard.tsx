@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
 import { Colors, Typography, Spacing } from '../../theme';
 import { ActivityFeedData } from '../../types/feedTypes';
 import { timeStampToPresentable } from '../../helpers/dateTimeHelpers';
 import MapView, { LatLng, Marker, Region } from 'react-native-maps';
 import GeoFences from '../map/GeoFences';
-import { getGeoFenceColor, getGeoFenceImage } from '../../helpers/geoFenceCalculations';
+import { getGeoFenceImage } from '../../helpers/geoFenceCalculations';
 import { convertToGeoFence, defaultUserProfile } from '../../helpers/objectMappers';
 import { GeoFenceCategory } from '../../types/geoFenceTypes';
 import TouchableProfile from '../general/TouchableProfile';
@@ -13,7 +13,6 @@ import Divider from '../general/Divider';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import { Avatar } from 'react-native-elements';
 import useAuthentication from '../../hooks/useAuthentication';
-import { gray800 } from '../../theme/colors';
 import { Asset } from 'expo-asset';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
@@ -23,6 +22,9 @@ interface ActivityFeedCardProps {
 
 const ActivityFeedCard: React.FC<ActivityFeedCardProps> = ({ data }: ActivityFeedCardProps) => {
   const auth = useAuthentication();
+  const [reactionCount, setReactionCount] = useState(0);
+  const [userReacted, setUserReacted] = useState(false);
+
   const mapRegion: Region = {
     latitude: data.activity.geofence.latitude,
     longitude: data.activity.geofence.longitude,
@@ -38,10 +40,27 @@ const ActivityFeedCard: React.FC<ActivityFeedCardProps> = ({ data }: ActivityFee
     if (auth.user?.uid === data.user.id) return 'You';
     return data.user.name;
   };
+  const react = () => {
+    if (!userReacted) {
+      setReactionCount(reactionCount + 1);
+      setUserReacted(true);
+    } else {
+      setReactionCount(reactionCount - 1);
+      setUserReacted(false);
+    }
+    // TODO: Insert likes mutation here
+  };
+  const getReactionText = () => {
+    if (reactionCount === 0) return 'No reactions yet.. Tap to be the first!';
+    if (reactionCount === 1 && userReacted) return 'You reacted to this activity.';
+    if (reactionCount === 1 && !userReacted) return '1 user reacted to this activity.';
+    if (userReacted) return 'You and ' + (reactionCount - 1) + ' users reacted to this activity.';
+    return reactionCount + ' users reacted to this activity.';
+  };
   return (
     <View style={styles.card}>
       <TouchableProfile user_id={data.user.id} name={data.user.name}>
-        <View style={styles.flexRowSpaceBetween}>
+        <View style={styles.flexRowLeft}>
           <View style={styles.topBar}>
             <Avatar
               source={{ uri: data.user.picture ? data.user.picture : defaultUserProfile.picture }}
@@ -49,40 +68,36 @@ const ActivityFeedCard: React.FC<ActivityFeedCardProps> = ({ data }: ActivityFee
             />
             <View style={{ marginLeft: Spacing.smaller }}>
               <Text style={styles.nameText}>{getName()}</Text>
-              <Text style={styles.captionText}>{data.activity.caption}</Text>
+              <Text style={styles.captionText} numberOfLines={3}>
+                {data.activity.caption}
+              </Text>
             </View>
           </View>
-
-          <FAIcon name={'chevron-right'} style={{ ...Typography.icon, paddingRight: Spacing.smaller }} />
         </View>
       </TouchableProfile>
       <Divider />
       <View style={styles.innerCard}>
-        <View>
+        <View style={data.activity.friend ? { width: '60%' } : { width: '100%' }}>
           <View style={[styles.flexRowLeft, { marginBottom: Spacing.smaller }]}>
-            <FAIcon name={'map-marker-alt'} style={[styles.label, { marginRight: Spacing.smaller }]} />
+            <FAIcon name={'map-marker-alt'} style={styles.infoIcons} />
             <Text style={styles.label}>{data.activity.geofence.name}</Text>
           </View>
-          <View style={styles.flexRowLeft}>
-            <FAIcon name={'stopwatch'} style={[styles.label, { marginRight: Spacing.smaller }]} />
+          <View style={[styles.flexRowLeft, { marginBottom: Spacing.smaller }]}>
+            <FAIcon name={'stopwatch'} style={styles.infoIcons} />
             <Text style={styles.label}>{data.activity.duration}</Text>
           </View>
+          {data.activity.friend && (
+            <TouchableProfile user_id={data.activity.friend.id} name={data.activity.friend.name}>
+              <View style={styles.flexRowLeft}>
+                <FAIcon name={'user-friends'} style={styles.infoIcons} />
+                <Text style={styles.label}>{data.activity.friend?.name}</Text>
+              </View>
+            </TouchableProfile>
+          )}
         </View>
         {data.activity.friend && (
-          <View>
-            <View style={[styles.collabIcon, { marginBottom: Spacing.smaller }]}>
-              <Text style={styles.collabIconText}>2x points</Text>
-            </View>
-            <View>
-              <TouchableProfile user_id={data.activity.friend.id} name={data.activity.friend.name}>
-                <View style={styles.flexRowSpaceEven}>
-                  <Text style={{ ...Typography.largeBodyText, marginRight: Spacing.smallest, fontWeight: 'bold' }}>
-                    With
-                  </Text>
-                  <Avatar source={{ uri: data.activity.friend.picture ?? defaultUserProfile.picture }} size={'small'} />
-                </View>
-              </TouchableProfile>
-            </View>
+          <View style={styles.collabIcon}>
+            <Text style={styles.collabIconText}>2x points</Text>
           </View>
         )}
       </View>
@@ -109,13 +124,26 @@ const ActivityFeedCard: React.FC<ActivityFeedCardProps> = ({ data }: ActivityFee
           {activityGeoFence && <GeoFences geofences={[activityGeoFence]} />}
         </MapView>
       </View>
+      <View>
+        <Text style={{ ...Typography.bodyText, marginLeft: Spacing.smaller, marginVertical: Spacing.smallest }}>
+          {getReactionText()}
+        </Text>
+      </View>
       <View style={styles.footer}>
-        <TouchableOpacity>
-          <Image
-            // eslint-disable-next-line @typescript-eslint/no-var-requires
-            source={{ uri: Asset.fromModule(require('../../assets/images/clap.png')).uri }}
-            style={styles.reactionIcon}
-          />
+        <TouchableOpacity onPress={react}>
+          {reactionCount === 0 ? (
+            <Image
+              // eslint-disable-next-line @typescript-eslint/no-var-requires
+              source={{ uri: Asset.fromModule(require('../../assets/images/clap-gray.png')).uri }}
+              style={styles.reactionIcon}
+            />
+          ) : (
+            <Image
+              // eslint-disable-next-line @typescript-eslint/no-var-requires
+              source={{ uri: Asset.fromModule(require('../../assets/images/clap.png')).uri }}
+              style={styles.reactionIcon}
+            />
+          )}
         </TouchableOpacity>
         <Text style={styles.footerText}>{timeStampToPresentable(data.createdAt)}</Text>
       </View>
@@ -134,6 +162,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     borderRadius: Spacing.smaller,
     padding: Spacing.smallest,
+    maxWidth: '80%',
   },
   nameText: {
     ...Typography.headerText,
@@ -189,10 +218,10 @@ const styles = StyleSheet.create({
     fontStyle: 'italic',
     fontSize: 14,
   },
-  avatar: {
-    height: 45,
-    width: 45,
-    borderRadius: 45 / 2,
+  miniAvatar: {
+    height: 25,
+    width: 25,
+    borderRadius: 25 / 2,
     marginRight: Spacing.small,
   },
   // New
@@ -201,8 +230,14 @@ const styles = StyleSheet.create({
     width: 25,
     marginVertical: Spacing.smallest,
   },
+  infoIcons: {
+    ...Typography.smallIcon,
+    marginRight: Spacing.smaller,
+    width: 30,
+    textAlign: 'center',
+  },
   label: {
-    ...Typography.largeBodyText,
+    ...Typography.bodyText,
     fontWeight: 'bold',
   },
   flexRowLeft: {
@@ -233,6 +268,7 @@ const styles = StyleSheet.create({
     borderColor: Colors.gold,
     borderRadius: Spacing.smaller,
     padding: Spacing.smaller,
+    width: '30%',
   },
   collabIconText: {
     ...Typography.largeBodyText,
