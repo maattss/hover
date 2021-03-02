@@ -101,6 +101,7 @@ const styles = StyleSheet.create({
   },
   achievement: {
     width: '35%',
+    marginTop: Spacing.smallest,
   },
 });
 

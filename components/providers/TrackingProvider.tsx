@@ -129,15 +129,15 @@ export const TrackingProvider = ({ children }: Props) => {
     const insideGeoFenceCheck = insideGeoFences(newUserLocation, geoFences);
 
     if (insideGeoFenceCheck) {
-      console.log('Inside geo fence!');
       setInsideGeoFence(insideGeoFenceCheck);
       if (trackingState === TrackingState.TRACKINGPAUSED) {
+        console.log('Inside geofence! Tracking auto start');
         setTrackingState(TrackingState.TRACKING);
       }
     } else {
-      console.log('Outside geofence!');
       setInsideGeoFence(null);
       if (trackingState === TrackingState.TRACKING) {
+        console.log('Outside geofence! Tracking auto paused');
         setTrackingState(TrackingState.TRACKINGPAUSED);
         pushNotification.sendPushNotification(
           'Ooh no! Tracking was paused...',
