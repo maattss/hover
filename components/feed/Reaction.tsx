@@ -40,8 +40,8 @@ const Reaction: React.FC = () => {
 
 const styles = StyleSheet.create({
   reactionIcon: {
-    height: 25,
-    width: 25,
+    height: 30,
+    width: 30,
     marginVertical: Spacing.smallest,
   },
   reactionContainer: {

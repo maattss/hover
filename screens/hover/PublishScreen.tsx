@@ -105,7 +105,7 @@ const PublishScreen: React.FC = () => {
 
             <Text style={styles.label}>Summary</Text>
             <View style={styles.infoContainer}>
-              <View style={{ width: '49%' }}>
+              <View style={{ width: '59%' }}>
                 <View style={[styles.infoCard, { alignItems: 'flex-start' }]}>
                   <View style={styles.mbSmall}>
                     <Text style={styles.infoText}>Duration</Text>
@@ -123,7 +123,7 @@ const PublishScreen: React.FC = () => {
                   )}
                 </View>
               </View>
-              <View style={{ width: '49%' }}>
+              <View style={{ width: '39%' }}>
                 <View style={[styles.infoCard, { alignItems: 'center' }]}>
                   <Image
                     source={{ uri: getGeoFenceImage(tracking.insideGeoFence?.category) }}
@@ -217,7 +217,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginBottom: Spacing.base,
     alignItems: 'center',
-    height: 170,
+    height: 150,
   },
   infoCard: {
     backgroundColor: Colors.gray900,
@@ -235,8 +235,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   categoryIcon: {
-    height: 100,
-    width: 100,
+    height: 80,
+    width: 80,
     marginBottom: Spacing.small,
   },
   label: {
