@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
   },
   goTo: {
     width: '5%',
-    paddingLeft: Spacing.small,
+    paddingVertical: Spacing.small,
     flexDirection: 'row',
     justifyContent: 'flex-end',
     alignItems: 'center',
