@@ -1,12 +1,13 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { Colors, Typography, Spacing } from '../../theme';
 import { AchievementFeedData } from '../../types/feedTypes';
-import { timeStampToPresentable } from '../../helpers/dateTimeHelpers';
 import Achievement from '../profile/Achievement';
 import { defaultUserProfile } from '../../helpers/objectMappers';
 import TouchableProfile from '../general/TouchableProfile';
 import Reaction from './Reaction';
+import Footer from './Footer';
+import { Avatar } from 'react-native-elements';
 
 interface AchievementFeedCardProps {
   data: AchievementFeedData;
@@ -19,9 +20,9 @@ const AchievementFeedCard: React.FC<AchievementFeedCardProps> = ({ data }: Achie
         <View style={styles.infoContainer}>
           <TouchableProfile user_id={data.user.id} name={data.user.name}>
             <View style={styles.topBar}>
-              <Image
+              <Avatar
                 source={{ uri: data.user.picture ? data.user.picture : defaultUserProfile.picture }}
-                style={styles.avatar}
+                size={'medium'}
               />
               <Text style={styles.nameText} numberOfLines={1}>
                 {data.user.name}
@@ -39,10 +40,7 @@ const AchievementFeedCard: React.FC<AchievementFeedCardProps> = ({ data }: Achie
       </View>
 
       <Reaction />
-
-      <View style={styles.footer}>
-        <Text style={styles.footerText}>{timeStampToPresentable(data.createdAt)}</Text>
-      </View>
+      <Footer createdAt={data.createdAt} />
     </View>
   );
 };
@@ -67,6 +65,7 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     marginTop: Spacing.smaller,
     width: '80%',
+    marginLeft: Spacing.small,
   },
   description: {
     flexDirection: 'row',
@@ -86,21 +85,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: Spacing.smaller,
-  },
-  footer: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-  },
-  footerText: {
-    color: Colors.almostWhite,
-    fontStyle: 'italic',
-    fontSize: 14,
-  },
-  avatar: {
-    height: 45,
-    width: 45,
-    borderRadius: 45 / 2,
-    marginRight: Spacing.small,
   },
   achievement: {
     width: '35%',

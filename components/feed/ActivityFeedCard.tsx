@@ -15,6 +15,7 @@ import { Avatar } from 'react-native-elements';
 import useAuthentication from '../../hooks/useAuthentication';
 import { Asset } from 'expo-asset';
 import Reaction from './Reaction';
+import Footer from './Footer';
 
 interface ActivityFeedCardProps {
   data: ActivityFeedData;
@@ -120,10 +121,7 @@ const ActivityFeedCard: React.FC<ActivityFeedCardProps> = ({ data }: ActivityFee
       </View>
 
       <Reaction />
-
-      <View style={styles.footer}>
-        <Text style={styles.footerText}>{timeStampToPresentable(data.createdAt)}</Text>
-      </View>
+      <Footer createdAt={data.createdAt} />
     </View>
   );
 };
@@ -183,29 +181,11 @@ const styles = StyleSheet.create({
     height: 120,
     borderRadius: Spacing.smallest,
   },
-  footer: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-    paddingHorizontal: Spacing.smaller,
-    width: '100%',
-  },
-  footerText: {
-    color: Colors.almostWhite,
-    fontStyle: 'italic',
-    fontSize: 14,
-  },
   miniAvatar: {
     height: 25,
     width: 25,
     borderRadius: 25 / 2,
     marginRight: Spacing.small,
-  },
-  // New
-  reactionIcon: {
-    height: 25,
-    width: 25,
-    marginVertical: Spacing.smallest,
   },
   infoIcons: {
     ...Typography.smallIcon,
@@ -226,18 +206,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-evenly',
     alignItems: 'center',
-  },
-  reactionContainer: {
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    paddingHorizontal: Spacing.smaller,
-    paddingVertical: Spacing.smallest,
-  },
-  reactionText: {
-    ...Typography.bodyText,
-    fontWeight: 'bold',
-    marginLeft: Spacing.base,
   },
   innerCard: {
     flexDirection: 'row',

@@ -2,7 +2,6 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Colors, Typography, Spacing } from '../../theme';
 import { ChallengeFeedData } from '../../types/feedTypes';
-import { timeStampToPresentable } from '../../helpers/dateTimeHelpers';
 import { defaultUserProfile } from '../../helpers/objectMappers';
 import { generateFeedChallengeDescription } from '../../helpers/decriptionHelper';
 import { Avatar } from 'react-native-elements';
@@ -11,6 +10,7 @@ import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import { getAchievementColor } from '../profile/Achievement';
 import TouchableProfile from '../general/TouchableProfile';
 import Reaction from './Reaction';
+import Footer from './Footer';
 
 type ChallengeFeedCardProps = {
   data: ChallengeFeedData;
@@ -57,9 +57,7 @@ const ChallengeFeedCard: React.FC<ChallengeFeedCardProps> = ({ data }: Challenge
         <Leaderboard data={listData} renderItem={renderItem} />
       </View>
       <Reaction />
-      <View style={styles.footer}>
-        <Text style={styles.footerText}>{timeStampToPresentable(data.createdAt)}</Text>
-      </View>
+      <Footer createdAt={data.createdAt} />
     </View>
   );
 };
@@ -126,15 +124,6 @@ const styles = StyleSheet.create({
   },
   main: {
     marginBottom: Spacing.small,
-  },
-  footer: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-  },
-  footerText: {
-    color: Colors.almostWhite,
-    fontStyle: 'italic',
-    fontSize: 14,
   },
   row: {
     flexDirection: 'row',
