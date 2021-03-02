@@ -40,7 +40,7 @@ const ActivityFeedCard: React.FC<ActivityFeedCardProps> = ({ data }: ActivityFee
     if (auth.user?.uid === data.user.id) return 'You';
     return data.user.name;
   };
-  const react = () => {
+  const reactToActivity = () => {
     if (!userReacted) {
       setReactionCount(reactionCount + 1);
       setUserReacted(true);
@@ -56,6 +56,10 @@ const ActivityFeedCard: React.FC<ActivityFeedCardProps> = ({ data }: ActivityFee
     if (reactionCount === 1 && !userReacted) return '1 user reacted to this activity.';
     if (userReacted) return 'You and ' + (reactionCount - 1) + ' users reacted to this activity.';
     return reactionCount + ' users reacted to this activity.';
+  };
+  const getImageURI = () => {
+    if (userReacted) return require('../../assets/images/clap.png');
+    return require('../../assets/images/clap-gray.png');
   };
   return (
     <View style={styles.card}>
@@ -124,27 +128,13 @@ const ActivityFeedCard: React.FC<ActivityFeedCardProps> = ({ data }: ActivityFee
           {activityGeoFence && <GeoFences geofences={[activityGeoFence]} />}
         </MapView>
       </View>
-      <View>
-        <Text style={{ ...Typography.bodyText, marginLeft: Spacing.smaller, marginVertical: Spacing.smallest }}>
-          {getReactionText()}
-        </Text>
-      </View>
+
+      <TouchableOpacity onPress={reactToActivity} style={styles.reactionContainer}>
+        <Image source={{ uri: Asset.fromModule(getImageURI()).uri }} style={styles.reactionIcon} />
+        <Text style={styles.reactionText}>{getReactionText()}</Text>
+      </TouchableOpacity>
+
       <View style={styles.footer}>
-        <TouchableOpacity onPress={react}>
-          {reactionCount === 0 ? (
-            <Image
-              // eslint-disable-next-line @typescript-eslint/no-var-requires
-              source={{ uri: Asset.fromModule(require('../../assets/images/clap-gray.png')).uri }}
-              style={styles.reactionIcon}
-            />
-          ) : (
-            <Image
-              // eslint-disable-next-line @typescript-eslint/no-var-requires
-              source={{ uri: Asset.fromModule(require('../../assets/images/clap.png')).uri }}
-              style={styles.reactionIcon}
-            />
-          )}
-        </TouchableOpacity>
         <Text style={styles.footerText}>{timeStampToPresentable(data.createdAt)}</Text>
       </View>
     </View>
@@ -182,7 +172,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   main: {
-    marginVertical: Spacing.smaller,
+    marginVertical: Spacing.small,
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
@@ -208,7 +198,7 @@ const styles = StyleSheet.create({
   },
   footer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-end',
     alignItems: 'center',
     paddingHorizontal: Spacing.smaller,
     width: '100%',
@@ -250,10 +240,17 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
     alignItems: 'center',
   },
-  flexRowSpaceBetween: {
+  reactionContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-start',
     alignItems: 'center',
+    paddingHorizontal: Spacing.smaller,
+    paddingVertical: Spacing.smallest,
+  },
+  reactionText: {
+    ...Typography.bodyText,
+    fontWeight: 'bold',
+    marginLeft: Spacing.base,
   },
   innerCard: {
     flexDirection: 'row',
