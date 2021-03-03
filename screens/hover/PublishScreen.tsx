@@ -10,6 +10,7 @@ import {
   TextInput,
   TouchableOpacity,
   Keyboard,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import useTracking from '../../hooks/useTracking';
 import { Buttons, Colors, Spacing, Typography } from '../../theme';
@@ -20,7 +21,6 @@ import { getGeoFenceImage } from '../../helpers/geoFenceCalculations';
 import MapView, { LatLng, Marker, Region } from 'react-native-maps';
 import GeoFences from '../../components/map/GeoFences';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
 const PublishScreen: React.FC = () => {
   const tracking = useTracking();

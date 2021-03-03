@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Image, RefreshControl, Button } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
+import { StyleSheet, Text, View, Image, RefreshControl, Button, ScrollView } from 'react-native';
 import { useProfileUserQuery } from '../../graphql/queries/ProfileUser.generated';
 import useAuthentication from '../../hooks/useAuthentication';
 import { Buttons, Colors, Spacing, Typography } from '../../theme';

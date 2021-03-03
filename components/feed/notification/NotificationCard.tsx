@@ -1,11 +1,10 @@
 import React from 'react';
-import { View, Text, StyleSheet, Alert } from 'react-native';
+import { View, Text, StyleSheet, Alert, TouchableOpacity } from 'react-native';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import { Colors, Spacing, Typography } from '../../../theme';
 import { NotificationFragmentFragment } from '../../../graphql/Fragments.generated';
 import { getNotificationColor, getNotificationIcon, getNotificationTitle } from '../../../helpers/notificationHelpers';
 import { timeStampToPresentable } from '../../../helpers/dateTimeHelpers';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import { RootTabParamList } from '../../../types/navigationTypes';
 import { useNavigation } from '@react-navigation/native';

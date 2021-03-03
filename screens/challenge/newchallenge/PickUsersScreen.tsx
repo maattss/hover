@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Alert } from 'react-native';
-import { FlatList } from 'react-native-gesture-handler';
+import { StyleSheet, Text, View, TouchableOpacity, Alert, FlatList } from 'react-native';
 import { Avatar, CheckBox } from 'react-native-elements';
 import Loading from '../../../components/general/Loading';
 import { NewChallengeStackParamList } from '../../../types/navigationTypes';

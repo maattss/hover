@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, RefreshControl, ListRenderItem, ActivityIndicator, Text } from 'react-native';
+import { View, StyleSheet, RefreshControl, ListRenderItem, ActivityIndicator, Text, FlatList } from 'react-native';
 import ActivityFeedCard from '../../components/feed/ActivityFeedCard';
 import AchievementFeedCard from '../../components/feed/AchievementFeedCard';
 import { Typography, Spacing, Colors } from '../../theme';
@@ -11,7 +11,6 @@ import {
   ChallengeFeedData,
 } from '../../types/feedTypes';
 import { useFeedQuery } from '../../graphql/queries/Feed.generated';
-import { FlatList } from 'react-native-gesture-handler';
 import Loading from '../../components/general/Loading';
 import Error from '../../components/general/Error';
 import { convertToFeedData } from '../../helpers/objectMappers';

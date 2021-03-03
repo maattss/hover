@@ -1,6 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { FlatList } from 'react-native-gesture-handler';
+import { StyleSheet, Text, View, FlatList } from 'react-native';
 import Loading from '../../../components/general/Loading';
 import { NewChallengeStackParamList } from '../../../types/navigationTypes';
 import { RouteProp } from '@react-navigation/native';
