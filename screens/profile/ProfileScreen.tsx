@@ -33,6 +33,22 @@ type ProfileRouteProp = RouteProp<ProfileStackParamList, 'Profile'>;
 type Props = {
   route: ProfileRouteProp | FeedRouteProp;
 };
+
+const getScore = (category: GeoFenceCategory, userProfile: UserProfile) => {
+  switch (category) {
+    case GeoFenceCategory.CULTURE:
+      return userProfile.cultureScore;
+    case GeoFenceCategory.SOCIAL:
+      return userProfile.socialScore;
+    case GeoFenceCategory.EXERCISE:
+      return userProfile.exerciseScore;
+    case GeoFenceCategory.EDUCATION:
+      return userProfile.educationScore;
+    default:
+      return 0;
+  }
+};
+
 const ProfileScreen: React.FC<Props> = ({ route }: Props) => {
   const id = route && route.params && route.params.user_id ? route.params.user_id : useAuthentication().user?.uid;
   if (id) {
@@ -110,32 +126,6 @@ const ProfileScreen: React.FC<Props> = ({ route }: Props) => {
         });
       }
     };
-    const renderFooter = () => {
-      if (activitiesLoading && !endReached) return <ActivityIndicator color={Colors.blue} />;
-      if (!activitiesLoading && !endReached)
-        return (
-          <TouchableOpacity onPress={loadMoreActivities}>
-            <Text style={styles.loadMoreText}>Load more...</Text>
-          </TouchableOpacity>
-        );
-      if (endReached && !activitiesLoading) return <Text style={styles.theEnd}>No more activites...</Text>;
-      return <></>;
-    };
-
-    const getScore = (category: GeoFenceCategory) => {
-      switch (category) {
-        case GeoFenceCategory.CULTURE:
-          return userProfile.cultureScore;
-        case GeoFenceCategory.SOCIAL:
-          return userProfile.socialScore;
-        case GeoFenceCategory.EXERCISE:
-          return userProfile.exerciseScore;
-        case GeoFenceCategory.EDUCATION:
-          return userProfile.educationScore;
-        default:
-          return 0;
-      }
-    };
 
     const renderScore = () => {
       return Object.keys(GeoFenceCategory).map((category, index) => {
@@ -143,12 +133,21 @@ const ProfileScreen: React.FC<Props> = ({ route }: Props) => {
         return (
           <View key={index} style={styles.score}>
             <Image source={{ uri: getGeoFenceImage(categoryEnum) }} style={styles.categoryIcon} />
-            <Text style={{ ...Typography.headerText, textAlign: 'center' }}>{getScore(categoryEnum)}</Text>
+            <Text style={{ ...Typography.headerText, textAlign: 'center' }}>{getScore(categoryEnum, userProfile)}</Text>
           </View>
         );
       });
     };
+
     const renderAchievements = () => {
+      if (userProfile.achievements.length < 1) {
+        return (
+          <View style={styles.noData}>
+            <Text style={{ ...Typography.largeBodyText }}>No achievements...</Text>
+          </View>
+        );
+      }
+
       return userProfile.achievements
         .slice(0)
         .reverse()
@@ -159,6 +158,22 @@ const ProfileScreen: React.FC<Props> = ({ route }: Props) => {
         ));
     };
     const renderActivities = () => {
+      if (activities.length < 1) {
+        return (
+          <View style={styles.noData}>
+            <Text style={{ ...Typography.largeBodyText }}>No activites...</Text>
+          </View>
+        );
+      }
+
+      if (activitiesError) {
+        return (
+          <View style={styles.noData}>
+            <Text style={{ ...Typography.largeBodyText }}>Error loading your activities...</Text>
+          </View>
+        );
+      }
+
       return activities.map((activity, index) => {
         const data: ActivityFeedData = {
           activity: activity,
@@ -179,9 +194,20 @@ const ProfileScreen: React.FC<Props> = ({ route }: Props) => {
       });
     };
 
+    const renderActivitiesFooter = () => {
+      if (activitiesLoading && !endReached) return <ActivityIndicator color={Colors.blue} />;
+      if (!activitiesLoading && !endReached)
+        return (
+          <TouchableOpacity onPress={loadMoreActivities}>
+            <Text style={styles.loadMoreText}>Load more...</Text>
+          </TouchableOpacity>
+        );
+      if (endReached && !activitiesLoading) return <Text style={styles.theEnd}>No more activites...</Text>;
+      return <></>;
+    };
+
     if (userError) return <Error message={userError.message} apolloError={userError} />;
     if (userLoading) return <Loading />;
-
     return (
       <ScrollView
         style={styles.container}
@@ -222,19 +248,14 @@ const ProfileScreen: React.FC<Props> = ({ route }: Props) => {
           </View>
         </View>
         <Text style={styles.header}>Activities</Text>
-        {activities.length < 1 ? (
-          <View style={styles.noData}>
-            <Text style={{ ...Typography.largeBodyText }}>No activites...</Text>
-          </View>
-        ) : (
-          renderActivities()
-        )}
-        <View style={{ marginBottom: Spacing.base }}>{renderFooter()}</View>
+
+        {renderActivities()}
+
+        <View style={{ marginBottom: Spacing.base }}>{renderActivitiesFooter()}</View>
       </ScrollView>
     );
-  } else {
-    return <></>;
   }
+  return <Text style={{ ...Typography.largeBodyText }}>Error: Missing user id</Text>;
 };
 
 const styles = StyleSheet.create({
