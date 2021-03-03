@@ -14,7 +14,7 @@ import useAuthentication from '../../hooks/useAuthentication';
 import { Buttons, Colors, Spacing, Typography } from '../../theme';
 import { UserProfile } from '../../types/profileTypes';
 import { GeoFenceCategory } from '../../types/geoFenceTypes';
-import Achievement from '../../components/profile/Achievement';
+import Achievement from '../../components/general/Achievement';
 import { convertToUserProfile, defaultUserProfile } from '../../helpers/objectMappers';
 import Error from '../../components/general/Error';
 import Loading from '../../components/general/Loading';
@@ -25,6 +25,7 @@ import ActivityFeedCard from '../../components/feed/ActivityFeedCard';
 import { useProfileActivitiesQuery } from '../../graphql/queries/ProfileActivities.generated';
 import { FeedActivityFragmentFragment } from '../../graphql/Fragments.generated';
 import { ActivityFeedData, FeedCategory } from '../../types/feedTypes';
+import { Avatar } from 'react-native-elements';
 
 type FeedRouteProp = RouteProp<FeedStackParamList, 'UserProfile'>;
 type ProfileRouteProp = RouteProp<ProfileStackParamList, 'Profile'>;
@@ -44,10 +45,11 @@ const ProfileScreen: React.FC<Props> = ({ route }: Props) => {
     const [fetchingMore, setFetchingMore] = useState(false);
     const onRefresh = useCallback(async () => {
       setRefreshing(true);
-      await userRefetch();
-      await activitiesRefetch();
       setEndReached(false);
       setOffset(0);
+      setFetchingMore(false);
+      await userRefetch();
+      await activitiesRefetch();
       setRefreshing(false);
     }, []);
 
@@ -116,7 +118,7 @@ const ProfileScreen: React.FC<Props> = ({ route }: Props) => {
             <Text style={styles.loadMoreText}>Load more...</Text>
           </TouchableOpacity>
         );
-      if (endReached && !activitiesLoading) return <Text style={styles.theEnd}>The end...</Text>;
+      if (endReached && !activitiesLoading) return <Text style={styles.theEnd}>No more activites...</Text>;
       return <></>;
     };
 
@@ -193,7 +195,10 @@ const ProfileScreen: React.FC<Props> = ({ route }: Props) => {
           />
         }>
         <View style={styles.topContainer}>
-          <Image source={{ uri: userProfile.picture }} style={styles.avatar} />
+          <View style={{ marginVertical: Spacing.small, marginLeft: Spacing.small }}>
+            <Avatar source={{ uri: userProfile.picture }} size={'large'} />
+          </View>
+
           <View style={styles.infoContainer}>
             <Text style={styles.name}>{userProfile.name}</Text>
             <Text style={styles.bio}>{userProfile.bio}</Text>
@@ -245,13 +250,6 @@ const styles = StyleSheet.create({
     fontStyle: 'italic',
     marginTop: Spacing.smallest,
     flexWrap: 'wrap',
-  },
-  avatar: {
-    height: 80,
-    width: 80,
-    borderRadius: 80 / 2,
-    margin: Spacing.small,
-    backgroundColor: Colors.white, // Default color
   },
   topContainer: {
     flexDirection: 'row',
@@ -320,8 +318,7 @@ const styles = StyleSheet.create({
   theEnd: {
     ...Typography.bodyText,
     textAlign: 'center',
-    paddingBottom: Spacing.base,
-    paddingTop: Spacing.smaller,
+    padding: Spacing.smaller,
   },
   loadMoreText: {
     ...Typography.largeBodyText,
