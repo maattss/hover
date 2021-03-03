@@ -1,5 +1,14 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Image, RefreshControl, Button, ScrollView, ActivityIndicator } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  RefreshControl,
+  ScrollView,
+  ActivityIndicator,
+  TouchableOpacity,
+} from 'react-native';
 import { useProfileUserQuery } from '../../graphql/queries/ProfileUser.generated';
 import useAuthentication from '../../hooks/useAuthentication';
 import { Buttons, Colors, Spacing, Typography } from '../../theme';
@@ -12,10 +21,10 @@ import Loading from '../../components/general/Loading';
 import { getGeoFenceImage } from '../../helpers/geoFenceCalculations';
 import { RouteProp } from '@react-navigation/native';
 import { FeedStackParamList, ProfileStackParamList } from '../../types/navigationTypes';
-import { ActivityFeedData, FeedCategory } from '../../types/feedTypes';
 import ActivityFeedCard from '../../components/feed/ActivityFeedCard';
 import { useProfileActivitiesQuery } from '../../graphql/queries/ProfileActivities.generated';
 import { FeedActivityFragmentFragment } from '../../graphql/Fragments.generated';
+import { ActivityFeedData, FeedCategory } from '../../types/feedTypes';
 
 type FeedRouteProp = RouteProp<FeedStackParamList, 'UserProfile'>;
 type ProfileRouteProp = RouteProp<ProfileStackParamList, 'Profile'>;
@@ -37,6 +46,8 @@ const ProfileScreen: React.FC<Props> = ({ route }: Props) => {
       setRefreshing(true);
       await userRefetch();
       await activitiesRefetch();
+      setEndReached(false);
+      setOffset(0);
       setRefreshing(false);
     }, []);
 
@@ -99,6 +110,12 @@ const ProfileScreen: React.FC<Props> = ({ route }: Props) => {
     };
     const renderFooter = () => {
       if (activitiesLoading && !endReached) return <ActivityIndicator color={Colors.blue} />;
+      if (!activitiesLoading && !endReached)
+        return (
+          <TouchableOpacity onPress={loadMoreActivities}>
+            <Text style={styles.loadMoreText}>Load more...</Text>
+          </TouchableOpacity>
+        );
       if (endReached && !activitiesLoading) return <Text style={styles.theEnd}>The end...</Text>;
       return <></>;
     };
@@ -205,12 +222,9 @@ const ProfileScreen: React.FC<Props> = ({ route }: Props) => {
             <Text style={{ ...Typography.largeBodyText }}>No activites...</Text>
           </View>
         ) : (
-          <View style={styles.activitiesContainer}>
-            {renderActivities()}
-            <Button title={'Load more...'} onPress={loadMoreActivities}></Button>
-          </View>
+          renderActivities()
         )}
-        {renderFooter()}
+        <View style={{ marginBottom: Spacing.base }}>{renderFooter()}</View>
       </ScrollView>
     );
   } else {
@@ -290,9 +304,6 @@ const styles = StyleSheet.create({
     marginHorizontal: Spacing.smallest,
     marginBottom: Spacing.smaller,
   },
-  activitiesContainer: {
-    marginBottom: Spacing.base,
-  },
   categoryIcon: {
     height: 70,
     width: 70,
@@ -311,6 +322,12 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     paddingBottom: Spacing.base,
     paddingTop: Spacing.smaller,
+  },
+  loadMoreText: {
+    ...Typography.largeBodyText,
+    color: Colors.blue,
+    textAlign: 'center',
+    padding: Spacing.smaller,
   },
 });
 
