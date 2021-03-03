@@ -14,6 +14,7 @@ import useAuthentication from '../../hooks/useAuthentication';
 import { LatLng } from 'react-native-maps';
 import { Activities_Insert_Input } from '../../types/types';
 import usePushNotification from '../../hooks/usePushNotification';
+import { startBackgroundUpdate, stopBackgroundUpdate } from '../../tasks/locationBackgroundtasks';
 
 export enum TrackingState {
   EXPLORE,
@@ -177,6 +178,7 @@ export const TrackingProvider = ({ children }: Props) => {
       return;
     }
 
+    startBackgroundUpdate();
     setScore(0);
     setDuration(0);
     setTrackingState(TrackingState.TRACKING);
@@ -187,6 +189,7 @@ export const TrackingProvider = ({ children }: Props) => {
     setTrackingState(TrackingState.TRACKING);
   };
   const pauseTracking = () => {
+    stopBackgroundUpdate();
     setTrackingState(TrackingState.PUBLISH);
   };
   const discardActivity = () => {
