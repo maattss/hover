@@ -1,5 +1,5 @@
-query ProfileActivities($user_id: String!, $limit: Int!, $offset: Int!) {
-  activities(where: { user_id: { _eq: $user_id } }, order_by: { created_at: asc }, limit: $limit, offset: $offset) {
+query ProfileActivities($id: String!, $limit: Int!, $offset: Int!) {
+  activities(where: { user_id: { _eq: $id } }, order_by: { created_at: asc }, limit: $limit, offset: $offset) {
     ...feedActivityFragment
   }
 }

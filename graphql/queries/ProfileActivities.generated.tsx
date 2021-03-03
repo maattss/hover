@@ -6,7 +6,7 @@ import { gql } from '@apollo/client';
 import { FeedActivityFragmentFragmentDoc } from '../Fragments.generated';
 import * as Apollo from '@apollo/client';
 export type ProfileActivitiesQueryVariables = Types.Exact<{
-  user_id: Types.Scalars['String'];
+  id: Types.Scalars['String'];
   limit: Types.Scalars['Int'];
   offset: Types.Scalars['Int'];
 }>;
@@ -16,8 +16,8 @@ export type ProfileActivitiesQuery = { readonly __typename: 'query_root' } & {
 };
 
 export const ProfileActivitiesDocument = gql`
-  query ProfileActivities($user_id: String!, $limit: Int!, $offset: Int!) {
-    activities(where: { user_id: { _eq: $user_id } }, order_by: { created_at: asc }, limit: $limit, offset: $offset) {
+  query ProfileActivities($id: String!, $limit: Int!, $offset: Int!) {
+    activities(where: { user_id: { _eq: $id } }, order_by: { created_at: asc }, limit: $limit, offset: $offset) {
       ...feedActivityFragment
     }
   }
@@ -36,7 +36,7 @@ export const ProfileActivitiesDocument = gql`
  * @example
  * const { data, loading, error } = useProfileActivitiesQuery({
  *   variables: {
- *      user_id: // value for 'user_id'
+ *      id: // value for 'id'
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
  *   },
