@@ -7,7 +7,7 @@ import { generateFeedChallengeDescription } from '../../helpers/decriptionHelper
 import { Avatar } from 'react-native-elements';
 import Leaderboard, { Item } from '../leaderboard/Leaderboard';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
-import { getAchievementColor } from '../profile/Achievement';
+import { getAchievementColor } from '../general/Achievement';
 import TouchableProfile from '../general/TouchableProfile';
 import Reaction from './Reaction';
 import Footer from './Footer';

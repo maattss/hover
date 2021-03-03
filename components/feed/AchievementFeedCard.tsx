@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Colors, Typography, Spacing } from '../../theme';
 import { AchievementFeedData } from '../../types/feedTypes';
-import Achievement from '../profile/Achievement';
+import Achievement from '../general/Achievement';
 import { defaultUserProfile } from '../../helpers/objectMappers';
 import TouchableProfile from '../general/TouchableProfile';
 import Reaction from './Reaction';
