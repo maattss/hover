@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Alert } from 'react-native';
-import { FlatList } from 'react-native-gesture-handler';
+import { StyleSheet, Text, View, TouchableOpacity, Alert, FlatList, ViewStyle } from 'react-native';
 import { Avatar, CheckBox } from 'react-native-elements';
 import Loading from '../../../components/general/Loading';
 import { NewChallengeStackParamList } from '../../../types/navigationTypes';
@@ -100,8 +99,16 @@ const FriendItem: React.FC<FriendItemProps> = (props: FriendItemProps) => {
     props.onValueChanged(props.item);
     setChecked(!checked);
   };
+  const getBorder = () => {
+    if (checked)
+      return {
+        borderColor: Colors.blue,
+        borderWidth: 2,
+        borderStyle: 'solid',
+      } as ViewStyle;
+  };
   return (
-    <TouchableOpacity style={styles.friendRow} onPress={onPressed}>
+    <TouchableOpacity style={[styles.friendRow, getBorder()]} onPress={onPressed}>
       <CheckBox
         center
         onPress={onPressed}
@@ -117,33 +124,33 @@ const FriendItem: React.FC<FriendItemProps> = (props: FriendItemProps) => {
 };
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     alignItems: 'center',
-    paddingHorizontal: Spacing.smaller,
   },
   flatlist: {
     width: '100%',
   },
   stickyFooter: {
     width: '100%',
-
-    paddingVertical: Spacing.smaller,
+    padding: Spacing.smaller,
     position: 'absolute',
     bottom: 0,
   },
   title: {
     paddingVertical: Spacing.large,
-    paddingHorizontal: Spacing.smaller,
+    paddingHorizontal: Spacing.small,
     ...Typography.headerText,
   },
   friendRow: {
-    ...Buttons.button,
-    padding: 0,
-    margin: 0,
-    marginBottom: Spacing.smaller,
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: Colors.gray900,
+    borderColor: Colors.gray900,
+    borderWidth: 2,
+    borderStyle: 'solid',
+    borderRadius: Spacing.smaller,
+    padding: 0,
+    marginHorizontal: Spacing.smaller,
+    marginBottom: Spacing.smaller,
   },
   checkbox: {
     alignSelf: 'center',

@@ -154,6 +154,7 @@ fragment feedActivityFragment on activities {
     ...geofenceFragment
   }
   score
+  created_at
   started_at
   stopped_at
   friend {

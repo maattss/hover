@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Image, Text, Alert, ScrollView } from 'react-native';
-import { TextInput } from 'react-native-gesture-handler';
+import { StyleSheet, View, Image, Text, Alert, ScrollView, TextInput } from 'react-native';
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';

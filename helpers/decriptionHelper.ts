@@ -135,12 +135,12 @@ export const generateRuleChallengeDescription = (fields: string[], rules: Challe
 
 export const generateFeedChallengeDescription = (challenge: ChallengeFeedFragmentFragment) => {
   let description =
-    'Won the ' + challenge.challenge_type.toLowerCase().toString().replace('_', ' in ') + ' challenge! ';
+    'won the ' + challenge.challenge_type.toLowerCase().toString().replace('_', ' in ') + ' challenge! ';
   description += 'The challenge was to';
   description += challenge.rules.score ? ' get ' + challenge.rules.score + ' points' : '';
   description += challenge.rules.time ? ' spend ' + challenge.rules.time + ' hours' : '';
   description += challenge.rules.category
-    ? ' at a location within the ' + challenge.rules.category.toLowerCase() + ' category'
+    ? ' at a location in the ' + challenge.rules.category.toLowerCase() + ' category'
     : ' at any valid Hover location';
   description +=
     challenge.end_date && challenge.start_date
@@ -150,6 +150,7 @@ export const generateFeedChallengeDescription = (challenge: ChallengeFeedFragmen
         toPrettyDate(new Date(challenge.end_date)) +
         '.'
       : '';
+  description += ' Congrats!';
   return description;
 };
 

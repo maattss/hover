@@ -128,16 +128,16 @@ export const TrackingProvider = ({ children }: Props) => {
 
     const insideGeoFenceCheck = insideGeoFences(newUserLocation, geoFences);
 
-    if (insideGeoFenceCheck) {
-      console.log('Inside geo fence!');
+    if (insideGeoFenceCheck && insideGeoFenceCheck.id === startGeoFence?.id) {
       setInsideGeoFence(insideGeoFenceCheck);
       if (trackingState === TrackingState.TRACKINGPAUSED) {
+        console.log('Inside geofence! Tracking auto start');
         setTrackingState(TrackingState.TRACKING);
       }
     } else {
-      console.log('Outside geofence!');
       setInsideGeoFence(null);
       if (trackingState === TrackingState.TRACKING) {
+        console.log('Outside geofence! Tracking auto paused');
         setTrackingState(TrackingState.TRACKINGPAUSED);
         pushNotification.sendPushNotification(
           'Ooh no! Tracking was paused...',
@@ -194,19 +194,10 @@ export const TrackingProvider = ({ children }: Props) => {
   };
 
   const stopTracking = async (caption: string) => {
-    if (startGeoFence?.id !== insideGeoFence?.id) {
-      Alert.alert(
-        'Moved Hover zone during activity',
-        "You cannot end your activity in another Hover zone than where you started! Move back to: '" +
-          startGeoFence?.name +
-          "' to finish this activity. Or discard it...",
-      );
-      return;
-    }
     setTrackingState(TrackingState.EXPLORE);
     const activity: Activities_Insert_Input = {
       caption: caption,
-      geofence_id: insideGeoFence?.id,
+      geofence_id: startGeoFence?.id,
       user_id: userId ?? '0',
       score: Math.floor(score),
       started_at: trackingStart,

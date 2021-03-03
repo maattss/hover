@@ -1,4 +1,4 @@
-import { AchievementFragmentFragment, FeedActivityFragmentFragment } from '../graphql/Fragments.generated';
+import { AchievementFragmentFragment } from '../graphql/Fragments.generated';
 
 export enum AchievementVariant {
   DEFAULT,
@@ -23,5 +23,4 @@ export type UserProfile = {
   socialScore: number;
   exerciseScore: number;
   achievements: readonly AchievementFragmentFragment[];
-  activities: readonly FeedActivityFragmentFragment[];
 };

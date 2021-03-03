@@ -1,17 +1,9 @@
 /* eslint-disable */
 import * as Types from '../../types/types';
 
-import {
-  BasicUserFragmentFragment,
-  AchievementFragmentFragment,
-  FeedActivityFragmentFragment,
-} from '../Fragments.generated';
+import { BasicUserFragmentFragment, AchievementFragmentFragment } from '../Fragments.generated';
 import { gql } from '@apollo/client';
-import {
-  BasicUserFragmentFragmentDoc,
-  AchievementFragmentFragmentDoc,
-  FeedActivityFragmentFragmentDoc,
-} from '../Fragments.generated';
+import { BasicUserFragmentFragmentDoc, AchievementFragmentFragmentDoc } from '../Fragments.generated';
 import * as Apollo from '@apollo/client';
 export type UserQueryVariables = Types.Exact<{
   id: Types.Scalars['String'];
