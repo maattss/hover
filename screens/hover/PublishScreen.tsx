@@ -15,6 +15,7 @@ import {
 import useTracking from '../../hooks/useTracking';
 import { Buttons, Colors, Spacing, Typography } from '../../theme';
 import { FontAwesome as FAIcon } from '@expo/vector-icons';
+import { FontAwesome5 as FA5Icon } from '@expo/vector-icons';
 import { durationToTimestamp, timeStampToHours } from '../../helpers/dateTimeHelpers';
 import Button from '../../components/general/Button';
 import { getGeoFenceImage } from '../../helpers/geoFenceCalculations';
@@ -87,7 +88,7 @@ const PublishScreen: React.FC = () => {
             </View>
 
             <View style={styles.resumeDiscardContainer}>
-              <Text style={styles.infoTextSmall}>Not ready to publish{'\n'}this activity yet?</Text>
+              <Text style={styles.infoText}>Not ready to publish{'\n'}this activity yet?</Text>
               <View style={styles.resumeDiscardButtons}>
                 <TouchableOpacity
                   style={[styles.resumeButton, { backgroundColor: Colors.green }]}
@@ -107,18 +108,18 @@ const PublishScreen: React.FC = () => {
             <View style={styles.infoContainer}>
               <View style={{ width: '59%' }}>
                 <View style={[styles.infoCard, { alignItems: 'flex-start' }]}>
-                  <View style={styles.mbSmall}>
-                    <Text style={styles.infoText}>Duration</Text>
-                    <Text style={styles.infoTextSmall}>{durationToTimestamp(tracking.duration)}</Text>
+                  <View style={[styles.mbSmall, styles.flexRowLeft]}>
+                    <FA5Icon name={'stopwatch'} style={styles.infoIcons} />
+                    <Text style={styles.infoText}>{durationToTimestamp(tracking.duration)}</Text>
                   </View>
-                  <View style={styles.mbSmall}>
-                    <Text style={styles.infoText}>Started at</Text>
-                    <Text style={styles.infoTextSmall}>{timeStampToHours(tracking.trackingStart)}</Text>
+                  <View style={[styles.mbSmall, styles.flexRowLeft]}>
+                    <FA5Icon name={'clock'} style={styles.infoIcons} />
+                    <Text style={styles.infoText}>{timeStampToHours(tracking.trackingStart)}</Text>
                   </View>
                   {tracking.insideGeoFence && (
-                    <View style={styles.mbSmall}>
-                      <Text style={styles.infoText}>Location</Text>
-                      <Text style={styles.infoTextSmall}>{tracking.insideGeoFence?.name}</Text>
+                    <View style={styles.flexRowLeft}>
+                      <FA5Icon name={'map-marker-alt'} style={styles.infoIcons} />
+                      <Text style={styles.infoText}>{tracking.insideGeoFence?.name}</Text>
                     </View>
                   )}
                 </View>
@@ -216,8 +217,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: Spacing.base,
-    alignItems: 'center',
-    height: 150,
+    height: 100,
   },
   infoCard: {
     backgroundColor: Colors.gray900,
@@ -225,19 +225,17 @@ const styles = StyleSheet.create({
     padding: Spacing.smaller,
     height: '100%',
     justifyContent: 'center',
+    alignItems: 'center',
   },
   infoText: {
     ...Typography.largeBodyText,
-    fontWeight: 'bold',
-  },
-  infoTextSmall: {
-    ...Typography.largeBodyText,
-    fontSize: 16,
+    fontSize: 18,
+    lineHeight: 22,
   },
   categoryIcon: {
-    height: 80,
-    width: 80,
-    marginBottom: Spacing.small,
+    height: 60,
+    width: 60,
+    marginBottom: Spacing.smaller,
   },
   label: {
     ...Typography.largeBodyText,
@@ -272,6 +270,16 @@ const styles = StyleSheet.create({
   },
   mbSmall: {
     marginBottom: Spacing.smaller,
+  },
+  infoIcons: {
+    ...Typography.smallIcon,
+    marginRight: Spacing.smaller,
+    width: 26,
+    textAlign: 'center',
+  },
+  flexRowLeft: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
   },
 });
 

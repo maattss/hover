@@ -190,7 +190,7 @@ const styles = StyleSheet.create({
   infoIcons: {
     ...Typography.smallIcon,
     marginRight: Spacing.smaller,
-    width: 30,
+    width: 26,
     textAlign: 'center',
   },
   label: {
