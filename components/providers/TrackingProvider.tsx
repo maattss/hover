@@ -128,9 +128,9 @@ export const TrackingProvider = ({ children }: Props) => {
 
     const insideGeoFenceCheck = insideGeoFences(newUserLocation, geoFences);
 
-    if (insideGeoFenceCheck && insideGeoFenceCheck.id === startGeoFence?.id) {
+    if (insideGeoFenceCheck) {
       setInsideGeoFence(insideGeoFenceCheck);
-      if (trackingState === TrackingState.TRACKINGPAUSED) {
+      if (trackingState === TrackingState.TRACKINGPAUSED && insideGeoFenceCheck.id === startGeoFence?.id) {
         console.log('Inside geofence! Tracking auto start');
         setTrackingState(TrackingState.TRACKING);
       }
