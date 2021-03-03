@@ -1,37 +1,22 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
+import React from 'react';
+import { StyleSheet, Text, View, Image } from 'react-native';
 import { Colors, Typography, Spacing } from '../../theme';
 import { ActivityFeedData } from '../../types/feedTypes';
-import { timeStampToPresentable } from '../../helpers/dateTimeHelpers';
 import MapView, { LatLng, Marker, Region } from 'react-native-maps';
 import GeoFences from '../map/GeoFences';
 import { getGeoFenceImage } from '../../helpers/geoFenceCalculations';
 import { convertToGeoFence, defaultUserProfile } from '../../helpers/objectMappers';
 import { GeoFenceCategory } from '../../types/geoFenceTypes';
 import TouchableProfile from '../general/TouchableProfile';
-import Divider from '../general/Divider';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import { Avatar } from 'react-native-elements';
 import useAuthentication from '../../hooks/useAuthentication';
-import { Asset } from 'expo-asset';
 import Reaction from './Reaction';
 import Footer from './Footer';
 
 interface ActivityFeedCardProps {
   data: ActivityFeedData;
 }
-
-export const getReactionText = (reactionCount: number, userReacted: boolean) => {
-  if (reactionCount === 0) return 'No reactions yet... Tap to be the first!';
-  if (reactionCount === 1 && userReacted) return 'You reacted to this activity.';
-  if (reactionCount === 1 && !userReacted) return '1 user reacted to this activity.';
-  if (userReacted) return 'You and ' + (reactionCount - 1) + ' users reacted to this activity.';
-  return reactionCount + ' users reacted to this activity.';
-};
-export const getImageURI = (userReacted: boolean) => {
-  if (userReacted) return require('../../assets/images/clap.png');
-  return require('../../assets/images/clap-gray.png');
-};
 
 const ActivityFeedCard: React.FC<ActivityFeedCardProps> = ({ data }: ActivityFeedCardProps) => {
   const auth = useAuthentication();
@@ -48,7 +33,7 @@ const ActivityFeedCard: React.FC<ActivityFeedCardProps> = ({ data }: ActivityFee
   };
 
   const getName = () => {
-    if (auth.user?.uid === data.user.id) return 'You';
+    if (auth.user?.uid === data.user.id) return 'Your activity';
     return data.user.name;
   };
 
@@ -74,12 +59,12 @@ const ActivityFeedCard: React.FC<ActivityFeedCardProps> = ({ data }: ActivityFee
       <View style={styles.innerCard}>
         <View style={data.activity.friend ? { width: '60%' } : { width: '100%' }}>
           <View style={[styles.flexRowLeft, { marginBottom: Spacing.smaller }]}>
-            <FAIcon name={'map-marker-alt'} style={styles.infoIcons} />
-            <Text style={styles.label}>{data.activity.geofence.name}</Text>
-          </View>
-          <View style={[styles.flexRowLeft, { marginBottom: Spacing.smaller }]}>
             <FAIcon name={'stopwatch'} style={styles.infoIcons} />
             <Text style={styles.label}>{data.activity.duration}</Text>
+          </View>
+          <View style={[styles.flexRowLeft, { marginBottom: Spacing.smaller }]}>
+            <FAIcon name={'map-marker-alt'} style={styles.infoIcons} />
+            <Text style={styles.label}>{data.activity.geofence.name}</Text>
           </View>
           {data.activity.friend && (
             <TouchableProfile user_id={data.activity.friend.id} name={data.activity.friend.name}>
