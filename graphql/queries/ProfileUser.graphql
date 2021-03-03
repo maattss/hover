@@ -1,4 +1,4 @@
-query ProfileUser($id: String!, $limit: Int!) {
+query ProfileUser($id: String!) {
   user(id: $id) {
     ...basicUserFragment
     totalScore
@@ -6,9 +6,6 @@ query ProfileUser($id: String!, $limit: Int!) {
       achievement {
         ...achievementFragment
       }
-    }
-    activities(order_by: { created_at: desc }, limit: $limit) {
-      ...feedActivityFragment
     }
     education_score: activities_aggregate(where: { geofence: { category: { _eq: "EDUCATION" } } }) {
       aggregate {

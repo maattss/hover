@@ -453,7 +453,7 @@ export enum Achievement_Type_Constraint {
 }
 
 export enum Achievement_Type_Enum {
-  /** First activity on the app */
+  /** First activity in the app */
   FirstActivity = 'FIRST_ACTIVITY',
   Score = 'SCORE',
   ScoreInCategory = 'SCORE_IN_CATEGORY',
@@ -6036,6 +6036,8 @@ export enum Notification_Type_Enum {
   NewAchievement = 'NEW_ACHIEVEMENT',
   /** Someone responded to your challenge */
   ParticipantUpdate = 'PARTICIPANT_UPDATE',
+  /** This notification is a test */
+  TestNotification = 'TEST_NOTIFICATION',
 }
 
 /** expression to compare columns of type notification_type_enum. All fields are combined with logical 'AND'. */
@@ -6139,9 +6141,13 @@ export type Notifications = {
   __typename?: 'notifications';
   created_at: Scalars['timestamptz'];
   id: Scalars['Int'];
+  /** An object relationship */
+  notification_type: Notification_Type;
   seen: Scalars['Boolean'];
   text: Scalars['String'];
   type: Notification_Type_Enum;
+  /** An object relationship */
+  user: Users;
   user_id: Scalars['String'];
 };
 
@@ -6213,9 +6219,11 @@ export type Notifications_Bool_Exp = {
   _or?: Maybe<Array<Maybe<Notifications_Bool_Exp>>>;
   created_at?: Maybe<Timestamptz_Comparison_Exp>;
   id?: Maybe<Int_Comparison_Exp>;
+  notification_type?: Maybe<Notification_Type_Bool_Exp>;
   seen?: Maybe<Boolean_Comparison_Exp>;
   text?: Maybe<String_Comparison_Exp>;
   type?: Maybe<Notification_Type_Enum_Comparison_Exp>;
+  user?: Maybe<Users_Bool_Exp>;
   user_id?: Maybe<String_Comparison_Exp>;
 };
 
@@ -6234,9 +6242,11 @@ export type Notifications_Inc_Input = {
 export type Notifications_Insert_Input = {
   created_at?: Maybe<Scalars['timestamptz']>;
   id?: Maybe<Scalars['Int']>;
+  notification_type?: Maybe<Notification_Type_Obj_Rel_Insert_Input>;
   seen?: Maybe<Scalars['Boolean']>;
   text?: Maybe<Scalars['String']>;
   type?: Maybe<Notification_Type_Enum>;
+  user?: Maybe<Users_Obj_Rel_Insert_Input>;
   user_id?: Maybe<Scalars['String']>;
 };
 
@@ -6300,9 +6310,11 @@ export type Notifications_On_Conflict = {
 export type Notifications_Order_By = {
   created_at?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
+  notification_type?: Maybe<Notification_Type_Order_By>;
   seen?: Maybe<Order_By>;
   text?: Maybe<Order_By>;
   type?: Maybe<Order_By>;
+  user?: Maybe<Users_Order_By>;
   user_id?: Maybe<Order_By>;
 };
 
@@ -8064,6 +8076,10 @@ export type Users = {
   following_aggregate: Followings_Aggregate;
   id: Scalars['String'];
   name: Scalars['String'];
+  /** An array relationship */
+  notifications: Array<Notifications>;
+  /** An aggregated array relationship */
+  notifications_aggregate: Notifications_Aggregate;
   picture?: Maybe<Scalars['String']>;
   push_token?: Maybe<Scalars['String']>;
   /** A computed field, executes function "totalscore" */
@@ -8166,6 +8182,24 @@ export type UsersFollowing_AggregateArgs = {
 };
 
 /** columns and relationships of "users" */
+export type UsersNotificationsArgs = {
+  distinct_on?: Maybe<Array<Notifications_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Notifications_Order_By>>;
+  where?: Maybe<Notifications_Bool_Exp>;
+};
+
+/** columns and relationships of "users" */
+export type UsersNotifications_AggregateArgs = {
+  distinct_on?: Maybe<Array<Notifications_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Notifications_Order_By>>;
+  where?: Maybe<Notifications_Bool_Exp>;
+};
+
+/** columns and relationships of "users" */
 export type UsersUser_AchievementArgs = {
   distinct_on?: Maybe<Array<User_Achievement_Select_Column>>;
   limit?: Maybe<Scalars['Int']>;
@@ -8232,6 +8266,7 @@ export type Users_Bool_Exp = {
   following?: Maybe<Followings_Bool_Exp>;
   id?: Maybe<String_Comparison_Exp>;
   name?: Maybe<String_Comparison_Exp>;
+  notifications?: Maybe<Notifications_Bool_Exp>;
   picture?: Maybe<String_Comparison_Exp>;
   push_token?: Maybe<String_Comparison_Exp>;
   updated_at?: Maybe<Timestamptz_Comparison_Exp>;
@@ -8260,6 +8295,7 @@ export type Users_Insert_Input = {
   following?: Maybe<Followings_Arr_Rel_Insert_Input>;
   id?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
+  notifications?: Maybe<Notifications_Arr_Rel_Insert_Input>;
   picture?: Maybe<Scalars['String']>;
   push_token?: Maybe<Scalars['String']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
@@ -8350,6 +8386,7 @@ export type Users_Order_By = {
   following_aggregate?: Maybe<Followings_Aggregate_Order_By>;
   id?: Maybe<Order_By>;
   name?: Maybe<Order_By>;
+  notifications_aggregate?: Maybe<Notifications_Aggregate_Order_By>;
   picture?: Maybe<Order_By>;
   push_token?: Maybe<Order_By>;
   updated_at?: Maybe<Order_By>;

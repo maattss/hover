@@ -92,7 +92,7 @@ export type AchievementFeedFragmentFragment = { readonly __typename: 'feed' } & 
 
 export type FeedActivityFragmentFragment = { readonly __typename: 'activities' } & Pick<
   Types.Activities,
-  'activity_id' | 'caption' | 'duration' | 'geofence_id' | 'score' | 'started_at' | 'stopped_at'
+  'activity_id' | 'caption' | 'duration' | 'geofence_id' | 'score' | 'created_at' | 'started_at' | 'stopped_at'
 > & {
     readonly geofence: { readonly __typename: 'geofences' } & GeofenceFragmentFragment;
     readonly friend?: Types.Maybe<{ readonly __typename: 'users' } & BasicUserFragmentFragment>;
@@ -261,6 +261,7 @@ export const FeedActivityFragmentFragmentDoc = gql`
       ...geofenceFragment
     }
     score
+    created_at
     started_at
     stopped_at
     friend {

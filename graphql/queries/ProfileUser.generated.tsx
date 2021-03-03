@@ -1,21 +1,12 @@
 /* eslint-disable */
 import * as Types from '../../types/types';
 
-import {
-  BasicUserFragmentFragment,
-  AchievementFragmentFragment,
-  FeedActivityFragmentFragment,
-} from '../Fragments.generated';
+import { BasicUserFragmentFragment, AchievementFragmentFragment } from '../Fragments.generated';
 import { gql } from '@apollo/client';
-import {
-  BasicUserFragmentFragmentDoc,
-  AchievementFragmentFragmentDoc,
-  FeedActivityFragmentFragmentDoc,
-} from '../Fragments.generated';
+import { BasicUserFragmentFragmentDoc, AchievementFragmentFragmentDoc } from '../Fragments.generated';
 import * as Apollo from '@apollo/client';
 export type ProfileUserQueryVariables = Types.Exact<{
   id: Types.Scalars['String'];
-  limit: Types.Scalars['Int'];
 }>;
 
 export type ProfileUserQuery = { readonly __typename: 'query_root' } & {
@@ -26,7 +17,6 @@ export type ProfileUserQuery = { readonly __typename: 'query_root' } & {
             readonly achievement: { readonly __typename: 'achievement' } & AchievementFragmentFragment;
           }
         >;
-        readonly activities: ReadonlyArray<{ readonly __typename: 'activities' } & FeedActivityFragmentFragment>;
         readonly education_score: { readonly __typename: 'activities_aggregate' } & {
           readonly aggregate?: Types.Maybe<
             { readonly __typename: 'activities_aggregate_fields' } & {
@@ -68,7 +58,7 @@ export type ProfileUserQuery = { readonly __typename: 'query_root' } & {
 };
 
 export const ProfileUserDocument = gql`
-  query ProfileUser($id: String!, $limit: Int!) {
+  query ProfileUser($id: String!) {
     user(id: $id) {
       ...basicUserFragment
       totalScore
@@ -76,9 +66,6 @@ export const ProfileUserDocument = gql`
         achievement {
           ...achievementFragment
         }
-      }
-      activities(order_by: { created_at: desc }, limit: $limit) {
-        ...feedActivityFragment
       }
       education_score: activities_aggregate(where: { geofence: { category: { _eq: "EDUCATION" } } }) {
         aggregate {
@@ -112,7 +99,6 @@ export const ProfileUserDocument = gql`
   }
   ${BasicUserFragmentFragmentDoc}
   ${AchievementFragmentFragmentDoc}
-  ${FeedActivityFragmentFragmentDoc}
 `;
 
 /**
@@ -128,7 +114,6 @@ export const ProfileUserDocument = gql`
  * const { data, loading, error } = useProfileUserQuery({
  *   variables: {
  *      id: // value for 'id'
- *      limit: // value for 'limit'
  *   },
  * });
  */
