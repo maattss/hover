@@ -57,7 +57,7 @@ const FeedScreen: React.FC = () => {
   });
   useEffect(() => {
     if (data && data.feed) {
-      if (data.feed.length == 0) {
+      if (data.feed.length === 0) {
         setEndReached(true);
       } else {
         const newFeedData = convertToFeedData(data);

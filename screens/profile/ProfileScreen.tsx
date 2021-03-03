@@ -1,11 +1,10 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Image, RefreshControl, Button, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, Image, RefreshControl, Button, ScrollView, ActivityIndicator } from 'react-native';
 import { useProfileUserQuery } from '../../graphql/queries/ProfileUser.generated';
 import useAuthentication from '../../hooks/useAuthentication';
 import { Buttons, Colors, Spacing, Typography } from '../../theme';
 import { UserProfile } from '../../types/profileTypes';
 import { GeoFenceCategory } from '../../types/geoFenceTypes';
-import ProfileActivityCard from '../../components/profile/ProfileActivityCard';
 import Achievement from '../../components/profile/Achievement';
 import { convertToUserProfile, defaultUserProfile } from '../../helpers/objectMappers';
 import Error from '../../components/general/Error';
@@ -13,6 +12,10 @@ import Loading from '../../components/general/Loading';
 import { getGeoFenceImage } from '../../helpers/geoFenceCalculations';
 import { RouteProp } from '@react-navigation/native';
 import { FeedStackParamList, ProfileStackParamList } from '../../types/navigationTypes';
+import { ActivityFeedData, FeedCategory } from '../../types/feedTypes';
+import ActivityFeedCard from '../../components/feed/ActivityFeedCard';
+import { useProfileActivitiesQuery } from '../../graphql/queries/ProfileActivities.generated';
+import { FeedActivityFragmentFragment } from '../../graphql/Fragments.generated';
 
 type FeedRouteProp = RouteProp<FeedStackParamList, 'UserProfile'>;
 type ProfileRouteProp = RouteProp<ProfileStackParamList, 'Profile'>;
@@ -23,28 +26,82 @@ type Props = {
 const ProfileScreen: React.FC<Props> = ({ route }: Props) => {
   const id = route && route.params && route.params.user_id ? route.params.user_id : useAuthentication().user?.uid;
   if (id) {
+    const pageSize = 3;
     const [userProfile, setUserProfile] = useState<UserProfile>(defaultUserProfile);
+    const [activities, setActivities] = useState<readonly FeedActivityFragmentFragment[]>([]);
     const [refreshing, setRefreshing] = useState(false);
-    const [limit, setLimit] = useState(3);
+    const [endReached, setEndReached] = useState(false);
+    const [offset, setOffset] = useState(0);
+    const [fetchingMore, setFetchingMore] = useState(false);
     const onRefresh = useCallback(async () => {
       setRefreshing(true);
-      await refetch();
+      await userRefetch();
+      await activitiesRefetch();
       setRefreshing(false);
     }, []);
-    const { loading: loading, error: error, data: data, refetch, fetchMore } = useProfileUserQuery({
+
+    const { loading: userLoading, error: userError, data: userData, refetch: userRefetch } = useProfileUserQuery({
       variables: {
         id: id,
-        limit: limit,
+      },
+      nextFetchPolicy: 'network-only',
+    });
+    const {
+      loading: activitiesLoading,
+      error: activitiesError,
+      data: activitiesData,
+      refetch: activitiesRefetch,
+      fetchMore,
+    } = useProfileActivitiesQuery({
+      variables: {
+        id: id,
+        limit: pageSize,
+        offset: offset,
       },
       nextFetchPolicy: 'network-only',
     });
 
     useEffect(() => {
-      if (data && data.user) {
-        const userData = convertToUserProfile(data);
-        if (userData) setUserProfile(userData);
+      if (userData && userData.user) {
+        const data = convertToUserProfile(userData);
+        if (data) setUserProfile(data);
       }
-    }, [data]);
+    }, [userData]);
+    useEffect(() => {
+      if (activitiesData && activitiesData.activities) {
+        if (activitiesData.activities.length === 0) {
+          setEndReached(true);
+        } else {
+          if (fetchingMore) {
+            setActivities(activities.concat(activitiesData.activities));
+            setFetchingMore(false);
+          } else {
+            setActivities(activitiesData.activities);
+          }
+        }
+        const data = convertToUserProfile(userData);
+        if (data) setUserProfile(data);
+      }
+    }, [activitiesData]);
+
+    const loadMoreActivities = async () => {
+      if (!endReached && !activitiesLoading) {
+        const newOffset = offset + pageSize;
+        setOffset(newOffset);
+        setFetchingMore(true);
+        await fetchMore({
+          variables: {
+            limit: pageSize,
+            offset: newOffset,
+          },
+        });
+      }
+    };
+    const renderFooter = () => {
+      if (activitiesLoading && !endReached) return <ActivityIndicator color={Colors.blue} />;
+      if (endReached && !activitiesLoading) return <Text style={styles.theEnd}>The end...</Text>;
+      return <></>;
+    };
 
     const getScore = (category: GeoFenceCategory) => {
       switch (category) {
@@ -76,29 +133,35 @@ const ProfileScreen: React.FC<Props> = ({ route }: Props) => {
       return userProfile.achievements
         .slice(0)
         .reverse()
-        .map((achievement, index) => {
-          return (
-            <View key={index} style={styles.achievement}>
-              <Achievement achievement={achievement} key={index} />
-            </View>
-          );
-        });
+        .map((achievement, index) => (
+          <View key={index} style={styles.achievement}>
+            <Achievement achievement={achievement} key={index} />
+          </View>
+        ));
     };
     const renderActivities = () => {
-      return userProfile.activities.map((activity, index) => <ProfileActivityCard key={index} activity={activity} />);
-    };
-    const loadMoreActivities = () => {
-      const newLimit = limit + 3;
-      setLimit(newLimit);
-      fetchMore({
-        variables: {
-          limit: newLimit,
-        },
+      return activities.map((activity, index) => {
+        const data: ActivityFeedData = {
+          activity: activity,
+          user: {
+            __typename: 'users',
+            id: userProfile.id,
+            name: userProfile.name,
+            picture: userProfile.picture,
+          },
+          createdAt: activity.created_at,
+          feedCategory: FeedCategory.ACTIVITY,
+        };
+        return (
+          <View key={index} style={{ marginBottom: Spacing.smaller }}>
+            <ActivityFeedCard data={data} />
+          </View>
+        );
       });
     };
 
-    if (error) return <Error message={error.message} apolloError={error} />;
-    if (loading) return <Loading />;
+    if (userError) return <Error message={userError.message} apolloError={userError} />;
+    if (userLoading) return <Loading />;
 
     return (
       <ScrollView
@@ -119,7 +182,6 @@ const ProfileScreen: React.FC<Props> = ({ route }: Props) => {
             <Text style={styles.bio}>{userProfile.bio}</Text>
           </View>
         </View>
-
         <Text style={styles.header}>Achievements</Text>
         {userProfile.achievements.length < 1 ? (
           <View style={styles.noData}>
@@ -130,7 +192,6 @@ const ProfileScreen: React.FC<Props> = ({ route }: Props) => {
             {renderAchievements()}
           </ScrollView>
         )}
-
         <Text style={styles.header}>Score</Text>
         <View style={styles.scoreContainer}>
           <View style={styles.categoryScore}>{renderScore()}</View>
@@ -138,9 +199,8 @@ const ProfileScreen: React.FC<Props> = ({ route }: Props) => {
             <Text style={styles.totalScore}>Total: {userProfile.totalScore}</Text>
           </View>
         </View>
-
         <Text style={styles.header}>Activities</Text>
-        {userProfile.activities.length < 1 ? (
+        {activities.length < 1 ? (
           <View style={styles.noData}>
             <Text style={{ ...Typography.largeBodyText }}>No activites...</Text>
           </View>
@@ -150,6 +210,7 @@ const ProfileScreen: React.FC<Props> = ({ route }: Props) => {
             <Button title={'Load more...'} onPress={loadMoreActivities}></Button>
           </View>
         )}
+        {renderFooter()}
       </ScrollView>
     );
   } else {
@@ -244,6 +305,12 @@ const styles = StyleSheet.create({
   noData: {
     marginLeft: Spacing.smaller,
     marginBottom: Spacing.small,
+  },
+  theEnd: {
+    ...Typography.bodyText,
+    textAlign: 'center',
+    paddingBottom: Spacing.base,
+    paddingTop: Spacing.smaller,
   },
 });
 
