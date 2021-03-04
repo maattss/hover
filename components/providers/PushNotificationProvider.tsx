@@ -4,6 +4,7 @@ import { registerForPushNotificationsAsync, sendPushNotification } from '../../h
 import { Subscription } from '@unimodules/core';
 import { useUpdateUserPushTokenMutation } from '../../graphql/mutations/UpdateUserPushToken.generated';
 import useAuthentication from '../../hooks/useAuthentication';
+import { storePushToken } from '../../helpers/storage';
 
 interface Props {
   children: ReactNode;
@@ -42,6 +43,7 @@ export const PushNotificationProvider = ({ children }: Props) => {
             push_token,
           },
         });
+        storePushToken(expoPushToken);
       } catch (error) {
         console.error(error.message);
       }
