@@ -4790,9 +4790,9 @@ export type Likes_Bool_Exp = {
 /** unique or primary key constraints on table "likes" */
 export enum Likes_Constraint {
   /** unique or primary key constraint */
-  LikesPkey = 'Likes_pkey',
-  /** unique or primary key constraint */
   LikesUserIdActivityIdKey = 'Likes_user_id_activity_id_key',
+  /** unique or primary key constraint */
+  LikesPkey = 'likes_pkey',
 }
 
 /** input type for incrementing integer column in table "likes" */
