@@ -1,6 +1,5 @@
 import React, { ReactNode, useEffect } from 'react';
-import { Animated, Easing, StyleSheet, View, ViewStyle } from 'react-native';
-import { Colors, Spacing } from '../../theme';
+import { Animated, StyleSheet, View, ViewStyle } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 import { generateSparkle, range, SparkleType, useRandomInterval } from '../../helpers/sparkleHelpers';
 
@@ -10,26 +9,22 @@ type SparkleProps = {
 
 const Sparkles: React.FC<SparkleProps> = ({ children }: SparkleProps) => {
   const [sparkles, setSparkles] = React.useState<SparkleType[]>(() => {
-    return range(0, 1).map(() => generateSparkle());
+    return range(0, 2).map(() => generateSparkle());
   });
 
   useRandomInterval(
     () => {
       const now = Date.now();
-      // Create a new sparkle
       const sparkle = generateSparkle();
-      // Clean up any "expired" sparkles
       const nextSparkles = sparkles.filter((spark) => {
         const delta = now - spark.createdAt;
-        return delta < 3000;
+        return delta < 900;
       });
-      // Include our new sparkle
       nextSparkles.push(sparkle);
-      // Make it so!
       setSparkles(nextSparkles);
     },
-    50,
-    500,
+    100,
+    450,
   );
   return (
     <View style={styles.wrapper}>
@@ -59,18 +54,20 @@ const SparkleInstance: React.FC<SparkleInstanceProps> = ({ size, color, style }:
   const animateSparkle = () => {
     sparkleRotation.setValue(0);
     sparkleOpacity.setValue(0);
-    Animated.parallel([
-      Animated.timing(sparkleRotation, {
-        toValue: 1,
-        duration: 1500,
-        useNativeDriver: true,
-      }),
-      Animated.timing(sparkleOpacity, {
-        toValue: 2,
-        duration: 1500,
-        useNativeDriver: true,
-      }),
-    ]).start(); // start the sequence group
+    Animated.loop(
+      Animated.parallel([
+        Animated.timing(sparkleRotation, {
+          toValue: 1,
+          duration: 1500,
+          useNativeDriver: true,
+        }),
+        Animated.timing(sparkleOpacity, {
+          toValue: 2,
+          duration: 1500,
+          useNativeDriver: true,
+        }),
+      ]),
+    ).start();
   };
 
   const interpolateRotation = sparkleRotation.interpolate({
@@ -107,20 +104,12 @@ const styles = StyleSheet.create({
   },
   sparkleWrapper: {
     position: 'relative',
-    backgroundColor: Colors.red,
-    justifyContent: 'center',
-    alignContent: 'center',
-    zIndex: 5,
-    top: 0,
-    bottom: 0,
-    left: 0,
-    right: 0,
+    zIndex: 1,
   },
   sparkle: {
     position: 'absolute',
   },
   childWrapper: {
-    position: 'absolute',
-    backgroundColor: Colors.green,
+    position: 'relative',
   },
 });

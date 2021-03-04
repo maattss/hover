@@ -61,14 +61,14 @@ const Achievement: React.FC<AchievementProps> = ({ achievement }: AchievementPro
   };
 
   return (
-    <Sparkles>
-      <View style={styles.achievement}>
-        <View style={[styles.trophy, trophyBorderColor]}>
+    <View style={styles.achievement}>
+      <View style={[styles.trophy, trophyBorderColor]}>
+        <Sparkles>
           <FAIcon name={getAchievementIcon(achievement)} style={[styles.icon, iconColor]}></FAIcon>
-        </View>
-        <Text style={styles.text}>{achievement.name}</Text>
+        </Sparkles>
       </View>
-    </Sparkles>
+      <Text style={styles.text}>{achievement.name}</Text>
+    </View>
   );
 };
 

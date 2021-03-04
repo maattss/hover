@@ -29,7 +29,7 @@ export const useRandomInterval = (callback: () => void, minDelay: number, maxDel
   return cancel;
 };
 
-export const range = (start = 0, end: number, step = 1) => {
+export const range = (start: number, end?: number, step = 1) => {
   const output = [];
   if (typeof end === 'undefined') {
     end = start;
