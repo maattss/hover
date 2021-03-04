@@ -1,4 +1,6 @@
 import { useCallback, useEffect, useRef } from 'react';
+import { ViewStyle } from 'react-native';
+import { Colors } from '../theme';
 // Utility helper for random number generation
 export const random = (min: number, max: number) => Math.floor(Math.random() * (max - min)) + min;
 export const useRandomInterval = (callback: () => void, minDelay: number, maxDelay: number) => {
@@ -37,4 +39,28 @@ export const range = (start = 0, end: number, step = 1) => {
     output.push(i);
   }
   return output;
+};
+
+export type SparkleType = {
+  id: string;
+  createdAt: number;
+  color: string;
+  size: number;
+  style: ViewStyle;
+};
+
+const DEFAULT_COLOR = Colors.gold;
+export const generateSparkle = (color: string = DEFAULT_COLOR): SparkleType => {
+  const sparkle = {
+    id: String(random(100, 99999)),
+    createdAt: Date.now(),
+    color,
+    size: random(10, 80),
+    style: {
+      top: random(0, 80) + '%',
+      left: random(0, 80) + '%',
+      zIndex: 7,
+    },
+  } as SparkleType;
+  return sparkle;
 };
