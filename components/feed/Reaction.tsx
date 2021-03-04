@@ -1,10 +1,19 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, Image, TouchableOpacity, View, Alert, Modal, Pressable } from 'react-native';
 import { Typography, Spacing } from '../../theme';
 import { Asset } from 'expo-asset';
-import { LikesFragmentFragment } from '../../graphql/Fragments.generated';
+import {
+  LikesFragmentFragment,
+  LikesFragmentFragmentDoc,
+  ListUserFragmentFragment,
+} from '../../graphql/Fragments.generated';
 import { useLikeMutation } from '../../graphql/mutations/Like.generated';
 import { useUnlikeMutation } from '../../graphql/mutations/Unlike.generated';
+import { Colors } from '../../theme';
+import Button from '../general/Button';
+import { FlatList, ScrollView } from 'react-native-gesture-handler';
+import { Avatar } from 'react-native-elements';
+import { defaultUserProfile } from '../../helpers/objectMappers';
 
 const getReactionText = (reactionCount: number, userReacted: boolean) => {
   if (reactionCount === 0) return 'No reactions yet... Tap to be the first!';
@@ -30,6 +39,7 @@ const Reaction: React.FC<ReactionProps> = (props: ReactionProps) => {
 
   const [reactionCount, setReactionCount] = useState(props.likes.length);
   const [userReacted, setUserReacted] = useState(isLiked(props.likes));
+  const [modalVisible, setModalVisible] = useState(false);
 
   const [like] = useLikeMutation({ variables: { user_id: props.user_id, feed_id: props.feed_id } });
   const [unlike] = useUnlikeMutation({ variables: { user_id: props.user_id, feed_id: props.feed_id } });
@@ -55,19 +65,59 @@ const Reaction: React.FC<ReactionProps> = (props: ReactionProps) => {
       });
     }
   };
+  const openModal = () => setModalVisible(true);
+  const renderItem = (like: LikesFragmentFragment, index: number) => (
+    <View key={index}>
+      <View style={styles.row}>
+        <View style={styles.avatar}>
+          <Avatar rounded source={{ uri: like.user.picture ?? defaultUserProfile.picture }} size="small" />
+        </View>
+        <Text style={styles.nameText}>{like.user.name}</Text>
+      </View>
+    </View>
+  );
 
   return (
-    <TouchableOpacity onPress={reactToActivity} style={styles.reactionContainer}>
-      <Image source={{ uri: Asset.fromModule(getImageURI(userReacted)).uri }} style={styles.reactionIcon} />
-      <Text style={styles.reactionText}>{getReactionText(reactionCount, userReacted)}</Text>
-    </TouchableOpacity>
+    <View style={styles.reactionContainer}>
+      <TouchableOpacity onPress={reactToActivity}>
+        <Image source={{ uri: Asset.fromModule(getImageURI(userReacted)).uri }} style={styles.reactionIcon} />
+      </TouchableOpacity>
+      <TouchableOpacity onPress={openModal}>
+        <Text style={styles.reactionText}>{getReactionText(reactionCount, userReacted)}</Text>
+      </TouchableOpacity>
+      {modalVisible && (
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => {
+            setModalVisible(!modalVisible);
+          }}>
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <FlatList
+                data={props.likes}
+                renderItem={({ item, index }) => renderItem(item, index)}
+                ListHeaderComponent={<Text style={styles.header}>Likes</Text>}
+                ListFooterComponent={
+                  <Button style={styles.footer} onPress={() => setModalVisible(!modalVisible)}>
+                    Close
+                  </Button>
+                }
+              />
+            </View>
+          </View>
+        </Modal>
+      )}
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   reactionIcon: {
-    height: 30,
-    width: 30,
+    padding: Spacing.base,
+    height: 45,
+    width: 45,
     marginVertical: Spacing.smallest,
   },
   reactionContainer: {
@@ -81,6 +131,48 @@ const styles = StyleSheet.create({
     ...Typography.bodyText,
     fontWeight: 'bold',
     marginLeft: Spacing.base,
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+  },
+  modalView: {
+    margin: Spacing.base,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    padding: 35,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+    width: '80%',
+  },
+  header: {
+    ...Typography.headerText,
+    color: Colors.almostBlack,
+    marginBottom: Spacing.base,
+  },
+  footer: {
+    marginTop: Spacing.base,
+  },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+  },
+  nameText: {
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    ...Typography.bodyText,
+    color: Colors.almostBlack,
+  },
+  avatar: {
+    marginRight: Spacing.small,
   },
 });
 
