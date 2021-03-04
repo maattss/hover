@@ -1,4 +1,4 @@
-import React, { useState, ReactNode, useEffect } from 'react';
+import React, { useState, ReactNode, useEffect, useCallback } from 'react';
 import { GeoFence } from '../../types/geoFenceTypes';
 import { convertToGeoFences } from '../../helpers/objectMappers';
 import { usePermissions, LOCATION, PermissionResponse } from 'expo-permissions';
@@ -20,6 +20,7 @@ import {
   TrackingLocation,
 } from '../../helpers/storage';
 import { console, Date } from '@ungap/global-this';
+import { useInterval } from '../../hooks/useInterval';
 
 export enum TrackingState {
   EXPLORE,
@@ -56,6 +57,8 @@ interface TrackingContextValues {
   discardActivity: () => void;
   getScore: () => Promise<number>;
   getDuration: () => Promise<number>;
+  score: number;
+  duration: number;
 }
 
 export const TrackingContext = React.createContext<TrackingContextValues>({
@@ -80,8 +83,10 @@ export const TrackingContext = React.createContext<TrackingContextValues>({
   pauseTracking: () => console.error('Function not initialized'),
   stopTracking: () => console.error('Function not initialized'),
   discardActivity: () => console.error('Function not initialized'),
-  getScore: async () => 0,
-  getDuration: async () => 0,
+  getScore: async () => 0, // TODO: Remove
+  getDuration: async () => 0, // TODO: remove
+  score: 0,
+  duration: 0,
 });
 
 TrackingContext.displayName = 'TrackingContext';
@@ -98,6 +103,8 @@ export const TrackingProvider = ({ children }: Props) => {
   const [trackingState, setTrackingState] = useState<TrackingState>(TrackingState.EXPLORE);
   const [trackingStart, setTrackingStart] = useState<number>();
   const [trackingEnd, setTrackingEnd] = useState<number>();
+  const [score, setScore] = useState<number>(0);
+  const [duration, setDuration] = useState<number>(0);
   const [doubleScore, setDoubleScore] = useState(false);
   const [friendId, setFriendId] = useState('');
 
@@ -109,6 +116,15 @@ export const TrackingProvider = ({ children }: Props) => {
     if (geoFenceData) setGeoFences(convertToGeoFences(geoFenceData));
     if (geoFenceFetchError) console.error(geoFenceFetchError.message);
   }, [geoFenceData, geoFenceFetchError]);
+
+  const getUpdatedInfo = useCallback(async () => {
+    const currentScore = await getScore();
+    const currentDuration = await getDuration();
+    setScore(currentScore);
+    setDuration(currentDuration);
+  }, [score, duration]);
+
+  useInterval(getUpdatedInfo, trackingState === TrackingState.TRACKING ? 1000 : null);
 
   const getLocationObject = (latitude: number | undefined, longitude: number | undefined, timestamp: number) => ({
     coords: {
@@ -135,7 +151,7 @@ export const TrackingProvider = ({ children }: Props) => {
 
     if (insideGeoFence) {
       setCurrentGeofence(insideGeoFence);
-      //TODO: Is this needed?
+      // TODO: Update this
       if (trackingState === TrackingState.TRACKINGPAUSED && insideGeoFence.id === trackingGeoFence?.id) {
         console.log('Inside geofence! Tracking auto start');
         setTrackingState(TrackingState.TRACKING);
@@ -144,7 +160,7 @@ export const TrackingProvider = ({ children }: Props) => {
 
     if (!insideGeoFence) {
       setCurrentGeofence(undefined);
-      //TODO: Is this needed?
+      // TODO: Update this
       if (trackingState === TrackingState.TRACKING) {
         console.log('Outside geofence! Tracking auto paused');
         setTrackingState(TrackingState.TRACKINGPAUSED);
@@ -247,7 +263,7 @@ export const TrackingProvider = ({ children }: Props) => {
       previousEntry.timestamp = location.location.timestamp;
       previousEntry.inside = location.insideGeofence;
     }
-    console.log('Duration outside: ', duration); //TODO: Remove, only for debugging
+    console.log('Duration outside: ', duration); // TODO: Remove, only for debugging
     return duration;
   };
 
@@ -263,7 +279,7 @@ export const TrackingProvider = ({ children }: Props) => {
       }
     }
     if (!alwaysInsideGeofence) duration -= getOutsideDuration(locations);
-    console.log('Duration: ' + Math.floor(duration / 1000)); //TODO: Remove, only for debugging
+    console.log('Duration: ' + Math.floor(duration / 1000)); // TODO: Remove, only for debugging
     return Math.floor(duration / 1000);
   };
 
@@ -302,6 +318,8 @@ export const TrackingProvider = ({ children }: Props) => {
     updateDoubleScore: updateDoubleScore,
     friendId: friendId,
     setFriendId: setFriendId,
+    score: score,
+    duration: duration,
   };
   return <TrackingContext.Provider value={value}>{children}</TrackingContext.Provider>;
 };
