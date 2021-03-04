@@ -6,6 +6,7 @@ import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import { GeoFenceCategory } from '../../types/geoFenceTypes';
 import { AchievementFragmentFragment } from '../../graphql/Fragments.generated';
 import { Achievement_Type_Enum } from '../../types/types';
+import Sparkles from '../general/Sparkles';
 
 interface AchievementProps {
   achievement: AchievementFragmentFragment;
@@ -62,7 +63,9 @@ const Achievement: React.FC<AchievementProps> = ({ achievement }: AchievementPro
   return (
     <View style={styles.achievement}>
       <View style={[styles.trophy, trophyBorderColor]}>
-        <FAIcon name={getAchievementIcon(achievement)} style={[styles.icon, iconColor]}></FAIcon>
+        <Sparkles>
+          <FAIcon name={getAchievementIcon(achievement)} style={[styles.icon, iconColor]}></FAIcon>
+        </Sparkles>
       </View>
       <Text style={styles.text}>{achievement.name}</Text>
     </View>
