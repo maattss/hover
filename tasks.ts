@@ -1,5 +1,4 @@
 import * as TaskManager from 'expo-task-manager';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const LOCATION_BACKGROUND_TRACKING = 'location-background-tracking';
 TaskManager.defineTask(LOCATION_BACKGROUND_TRACKING, async ({ data: { locations }, error }) => {
