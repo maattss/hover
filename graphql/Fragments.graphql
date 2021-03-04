@@ -181,6 +181,15 @@ fragment fullFeedFragment on feed {
     ...challengeFeedFragment
   }
   created_at
+  likes {
+    ...likesFragment
+  }
+}
+
+fragment likesFragment on likes {
+  user {
+    ...listUserFragment
+  }
 }
 
 fragment notificationFragment on notifications {
