@@ -60,7 +60,7 @@ const ChallengeFeedCard: React.FC<ChallengeFeedCardProps> = ({ data }: Challenge
       <View style={styles.main}>
         <Leaderboard data={listData} renderItem={renderItem} />
       </View>
-      <Reaction />
+      <Reaction feed_id={data.id} user_id={auth.user?.uid ?? ''} />
       <Footer createdAt={data.createdAt} />
     </View>
   );

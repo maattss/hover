@@ -14,8 +14,12 @@ const getImageURI = (userReacted: boolean) => {
   if (userReacted) return require('../../assets/images/clap.png');
   return require('../../assets/images/clap-gray.png');
 };
+type ReactionProps = {
+  feed_id: number;
+  user_id: string;
+};
 
-const Reaction: React.FC = () => {
+const Reaction: React.FC<ReactionProps> = (props: ReactionProps) => {
   const [reactionCount, setReactionCount] = useState(0);
   const [userReacted, setUserReacted] = useState(false);
 

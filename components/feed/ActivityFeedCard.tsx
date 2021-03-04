@@ -105,7 +105,7 @@ const ActivityFeedCard: React.FC<ActivityFeedCardProps> = ({ data }: ActivityFee
         </MapView>
       </View>
 
-      <Reaction />
+      <Reaction feed_id={data.id} user_id={auth.user?.uid ?? ''} />
       <Footer createdAt={data.createdAt} />
     </View>
   );
