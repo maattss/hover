@@ -45,6 +45,10 @@ const PublishScreen: React.FC = () => {
       marginTop: insets.top,
     } as ViewStyle;
   };
+  const getTimestamp = (date: Date | undefined) => {
+    if (date) return date.toISOString();
+    return new Date().toISOString();
+  };
 
   const renderMap = () => {
     if (tracking.trackingGeoFence) {
@@ -114,7 +118,7 @@ const PublishScreen: React.FC = () => {
                   </View>
                   <View style={[styles.mbSmall, styles.flexRowLeft]}>
                     <FA5Icon name={'clock'} style={styles.infoIcons} />
-                    <Text style={styles.infoText}>{timeStampToHours(tracking.trackingStart)}</Text>
+                    <Text style={styles.infoText}>{timeStampToHours(getTimestamp(tracking.trackingStart))}</Text>
                   </View>
                   <View style={styles.flexRowLeft}>
                     <FA5Icon name={'map-marker-alt'} style={styles.infoIcons} />

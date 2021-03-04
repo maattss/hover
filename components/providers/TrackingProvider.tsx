@@ -35,7 +35,7 @@ interface TrackingContextValues {
   trackingGeoFence: GeoFence | undefined;
   currentGeoFence: GeoFence | undefined;
   trackingState: TrackingState;
-  trackingStart: string;
+  trackingStart: Date | undefined;
   score: number;
   friendId: string;
   duration: number;
@@ -60,7 +60,7 @@ export const TrackingContext = React.createContext<TrackingContextValues>({
   trackingGeoFence: undefined,
   currentGeoFence: undefined,
   trackingState: TrackingState.EXPLORE,
-  trackingStart: '',
+  trackingStart: undefined,
   score: 0,
   duration: 0,
   friendId: '',
@@ -80,13 +80,13 @@ export const TrackingProvider = ({ children }: Props) => {
   const userId = useAuthentication().user?.uid;
   const [locationPermission] = usePermissions(LOCATION, { ask: true });
   const [loadingUserLocation, setLoadingUserLocation] = useState(false);
-  const [userLocation, setUserLocation] = useState<LocationObject | undefined>(undefined);
+  const [userLocation, setUserLocation] = useState<LocationObject>();
   const [geoFences, setGeoFences] = useState<GeoFence[]>([]);
   const [unUploadedActivities, setUnUploadedActivities] = useState<Activities_Insert_Input[]>([]);
-  const [currentGeoFence, setCurrentGeofence] = useState<GeoFence | undefined>(undefined);
-  const [trackingGeoFence, setTrackingGeofence] = useState<GeoFence | undefined>(undefined);
+  const [currentGeoFence, setCurrentGeofence] = useState<GeoFence>();
+  const [trackingGeoFence, setTrackingGeofence] = useState<GeoFence>();
   const [trackingState, setTrackingState] = useState<TrackingState>(TrackingState.EXPLORE);
-  const [trackingStart, setTrackingStart] = useState('');
+  const [trackingStart, setTrackingStart] = useState<Date>();
   const [score, setScore] = useState(0);
   const [duration, setDuration] = useState(0);
   const [doubleScore, setDoubleScore] = useState(false);
@@ -166,7 +166,7 @@ export const TrackingProvider = ({ children }: Props) => {
     setScore(0);
     setDuration(0);
     setTrackingState(TrackingState.TRACKING);
-    setTrackingStart(getCurrentTimestamp());
+    setTrackingStart(new Date());
     setTrackingGeofence(currentGeoFence);
   };
   const resumeTracking = () => {
