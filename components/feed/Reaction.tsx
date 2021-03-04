@@ -3,6 +3,8 @@ import { StyleSheet, Text, Image, TouchableOpacity } from 'react-native';
 import { Typography, Spacing } from '../../theme';
 import { Asset } from 'expo-asset';
 import { LikesFragmentFragment } from '../../graphql/Fragments.generated';
+import { useLikeMutation } from '../../graphql/mutations/Like.generated';
+import { useUnlikeMutation } from '../../graphql/mutations/Unlike.generated';
 
 const getReactionText = (reactionCount: number, userReacted: boolean) => {
   if (reactionCount === 0) return 'No reactions yet... Tap to be the first!';
@@ -22,18 +24,36 @@ type ReactionProps = {
 };
 
 const Reaction: React.FC<ReactionProps> = (props: ReactionProps) => {
+  const isLiked = (likes: readonly LikesFragmentFragment[]) => {
+    return likes.find((like) => like.user.id === props.user_id) ? true : false;
+  };
+
   const [reactionCount, setReactionCount] = useState(props.likes.length);
-  const [userReacted, setUserReacted] = useState(false);
+  const [userReacted, setUserReacted] = useState(isLiked(props.likes));
+
+  const [like] = useLikeMutation({ variables: { user_id: props.user_id, feed_id: props.feed_id } });
+  const [unlike] = useUnlikeMutation({ variables: { user_id: props.user_id, feed_id: props.feed_id } });
 
   const reactToActivity = () => {
     if (!userReacted) {
       setReactionCount(reactionCount + 1);
       setUserReacted(true);
+      like().then((response) => {
+        if (response.data?.insert_likes_one?.feed) {
+          setUserReacted(isLiked(response.data?.insert_likes_one?.feed.likes));
+          setReactionCount(response.data?.insert_likes_one?.feed.likes.length);
+        }
+      });
     } else {
       setReactionCount(reactionCount - 1);
       setUserReacted(false);
+      unlike().then((response) => {
+        if (response.data?.delete_likes_by_pk?.feed) {
+          setUserReacted(isLiked(response.data?.delete_likes_by_pk?.feed.likes));
+          setReactionCount(response.data?.delete_likes_by_pk?.feed.likes.length);
+        }
+      });
     }
-    // TODO: Insert reaction mutation here
   };
 
   return (
