@@ -1,22 +1,19 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, Image, TouchableOpacity, View, Alert, Modal, Pressable } from 'react-native';
+import { StyleSheet, Text, Image, TouchableOpacity, View, Modal, Alert } from 'react-native';
 import { Typography, Spacing } from '../../theme';
 import { Asset } from 'expo-asset';
-import {
-  LikesFragmentFragment,
-  LikesFragmentFragmentDoc,
-  ListUserFragmentFragment,
-} from '../../graphql/Fragments.generated';
+import { LikesFragmentFragment } from '../../graphql/Fragments.generated';
 import { useLikeMutation } from '../../graphql/mutations/Like.generated';
 import { useUnlikeMutation } from '../../graphql/mutations/Unlike.generated';
 import { Colors } from '../../theme';
-import Button from '../general/Button';
-import { FlatList, ScrollView } from 'react-native-gesture-handler';
+import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
+import { FlatList } from 'react-native-gesture-handler';
 import { Avatar } from 'react-native-elements';
 import { defaultUserProfile } from '../../helpers/objectMappers';
+import TouchableProfile from '../general/TouchableProfile';
 
 const getReactionText = (reactionCount: number, userReacted: boolean) => {
-  if (reactionCount === 0) return 'No reactions yet... Tap to be the first!';
+  if (reactionCount === 0) return 'Be the first to react to this activity!';
   if (reactionCount === 1 && userReacted) return 'You reacted to this activity.';
   if (reactionCount === 1 && !userReacted) return '1 user reacted to this activity.';
   if (userReacted) return 'You and ' + (reactionCount - 1) + ' users reacted to this activity.';
@@ -65,16 +62,18 @@ const Reaction: React.FC<ReactionProps> = (props: ReactionProps) => {
       });
     }
   };
+  const showInfoPopup = () => Alert.alert('Likes', 'These people have reacted to this post!');
+
   const openModal = () => setModalVisible(true);
-  const renderItem = (like: LikesFragmentFragment, index: number) => (
-    <View key={index}>
+  const renderItem = (like: LikesFragmentFragment) => (
+    <TouchableProfile user_id={like.user.id} name={like.user.name}>
       <View style={styles.row}>
         <View style={styles.avatar}>
           <Avatar rounded source={{ uri: like.user.picture ?? defaultUserProfile.picture }} size="small" />
         </View>
         <Text style={styles.nameText}>{like.user.name}</Text>
       </View>
-    </View>
+    </TouchableProfile>
   );
 
   return (
@@ -82,7 +81,7 @@ const Reaction: React.FC<ReactionProps> = (props: ReactionProps) => {
       <TouchableOpacity onPress={reactToActivity}>
         <Image source={{ uri: Asset.fromModule(getImageURI(userReacted)).uri }} style={styles.reactionIcon} />
       </TouchableOpacity>
-      <TouchableOpacity onPress={openModal}>
+      <TouchableOpacity onPress={openModal} disabled={props.likes.length < 1}>
         <Text style={styles.reactionText}>{getReactionText(reactionCount, userReacted)}</Text>
       </TouchableOpacity>
       {modalVisible && (
@@ -95,15 +94,21 @@ const Reaction: React.FC<ReactionProps> = (props: ReactionProps) => {
           }}>
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
+              <View style={styles.header}>
+                <View style={styles.headerleft}>
+                  <Text style={styles.headerText}>Liked by</Text>
+                  <TouchableOpacity style={styles.infoIcon} onPress={showInfoPopup}>
+                    <FAIcon name={'info-circle'} style={styles.icon} />
+                  </TouchableOpacity>
+                </View>
+                <TouchableOpacity style={styles.exitIcon} onPress={() => setModalVisible(!modalVisible)}>
+                  <FAIcon name={'times'} style={styles.icon} />
+                </TouchableOpacity>
+              </View>
               <FlatList
                 data={props.likes}
-                renderItem={({ item, index }) => renderItem(item, index)}
-                ListHeaderComponent={<Text style={styles.header}>Likes</Text>}
-                ListFooterComponent={
-                  <Button style={styles.footer} onPress={() => setModalVisible(!modalVisible)}>
-                    Close
-                  </Button>
-                }
+                keyExtractor={(item) => item.user.id}
+                renderItem={({ item }) => renderItem(item)}
               />
             </View>
           </View>
@@ -116,8 +121,8 @@ const Reaction: React.FC<ReactionProps> = (props: ReactionProps) => {
 const styles = StyleSheet.create({
   reactionIcon: {
     padding: Spacing.base,
-    height: 45,
-    width: 45,
+    height: 50,
+    width: 50,
     marginVertical: Spacing.smallest,
   },
   reactionContainer: {
@@ -137,10 +142,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 22,
+    backgroundColor: Colors.almostBlackTransparent,
   },
   modalView: {
     margin: Spacing.base,
-    backgroundColor: 'white',
+    backgroundColor: Colors.gray900,
     borderRadius: 10,
     padding: 35,
     shadowColor: '#000',
@@ -151,28 +157,49 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
-    width: '80%',
+    width: '90%',
   },
   header: {
-    ...Typography.headerText,
-    color: Colors.almostBlack,
-    marginBottom: Spacing.base,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
-  footer: {
-    marginTop: Spacing.base,
+  headerText: {
+    ...Typography.headerText,
+  },
+  headerleft: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
   },
   row: {
     flexDirection: 'row',
     justifyContent: 'flex-start',
+    width: '100%',
+    alignItems: 'center',
+    paddingVertical: Spacing.smallest,
   },
   nameText: {
     justifyContent: 'flex-start',
     alignItems: 'center',
     ...Typography.bodyText,
-    color: Colors.almostBlack,
   },
   avatar: {
     marginRight: Spacing.small,
+  },
+  infoIcon: {
+    ...Typography.smallIcon,
+    marginHorizontal: Spacing.smaller,
+  },
+  exitIcon: {
+    ...Typography.smallIcon,
+
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+  },
+  icon: {
+    ...Typography.icon,
+    textAlign: 'center',
   },
 });
 
