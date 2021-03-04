@@ -42,7 +42,7 @@ const AchievementFeedCard: React.FC<AchievementFeedCardProps> = ({ data }: Achie
         </View>
       </View>
 
-      <Reaction feed_id={data.id} user_id={auth.user?.uid ?? ''} />
+      <Reaction feed_id={data.id} user_id={auth.user?.uid ?? ''} likes={data.likes} />
       <Footer createdAt={data.createdAt} />
     </View>
   );

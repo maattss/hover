@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, Image, TouchableOpacity } from 'react-native';
 import { Typography, Spacing } from '../../theme';
 import { Asset } from 'expo-asset';
+import { LikesFragmentFragment } from '../../graphql/Fragments.generated';
 
 const getReactionText = (reactionCount: number, userReacted: boolean) => {
   if (reactionCount === 0) return 'No reactions yet... Tap to be the first!';
@@ -17,10 +18,11 @@ const getImageURI = (userReacted: boolean) => {
 type ReactionProps = {
   feed_id: number;
   user_id: string;
+  likes: LikesFragmentFragment[];
 };
 
 const Reaction: React.FC<ReactionProps> = (props: ReactionProps) => {
-  const [reactionCount, setReactionCount] = useState(0);
+  const [reactionCount, setReactionCount] = useState(props.likes.length);
   const [userReacted, setUserReacted] = useState(false);
 
   const reactToActivity = () => {
