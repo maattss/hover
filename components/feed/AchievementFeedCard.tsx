@@ -8,12 +8,15 @@ import TouchableProfile from '../general/TouchableProfile';
 import Reaction from './Reaction';
 import Footer from './Footer';
 import { Avatar } from 'react-native-elements';
+import useAuthentication from '../../hooks/useAuthentication';
 
 interface AchievementFeedCardProps {
   data: AchievementFeedData;
 }
 
 const AchievementFeedCard: React.FC<AchievementFeedCardProps> = ({ data }: AchievementFeedCardProps) => {
+  const auth = useAuthentication();
+
   return (
     <View style={styles.card}>
       <View style={styles.main}>
@@ -40,7 +43,7 @@ const AchievementFeedCard: React.FC<AchievementFeedCardProps> = ({ data }: Achie
         </View>
       </View>
 
-      <Reaction />
+      <Reaction feed_id={data.id} user_id={auth.user?.uid ?? ''} />
       <Footer createdAt={data.createdAt} />
     </View>
   );
