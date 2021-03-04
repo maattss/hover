@@ -46,7 +46,7 @@ export type SparkleType = {
 const DEFAULT_COLOR = Colors.gold;
 export const generateSparkle = (color: string = DEFAULT_COLOR): SparkleType => {
   const sparkle = {
-    id: String(random(100, 99999)),
+    id: '' + random(1, Number.MAX_SAFE_INTEGER) + '-' + random(1, Number.MAX_SAFE_INTEGER),
     createdAt: Date.now(),
     color,
     size: random(50, 100),
