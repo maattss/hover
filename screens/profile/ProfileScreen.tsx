@@ -222,7 +222,7 @@ const ProfileScreen: React.FC<Props> = ({ route }: Props) => {
         }>
         <View style={styles.topContainer}>
           <View style={{ marginVertical: Spacing.small, marginLeft: Spacing.small }}>
-            <Avatar source={{ uri: userProfile.picture }} size={'large'} />
+            <Avatar rounded source={{ uri: userProfile.picture }} size={'large'} />
           </View>
 
           <View style={styles.infoContainer}>
