@@ -9,23 +9,28 @@ import {
   TrackingLocation,
 } from './helpers/storage';
 import { sendPushNotification } from './helpers/pushNotifications';
+import * as TaskManager from 'expo-task-manager';
 
 export const LOCATION_BACKGROUND_TRACKING = 'location-background-tracking';
 
-const task: TaskManagerTaskExecutor = async ({ data, error }) => {
+TaskManager.defineTask(LOCATION_BACKGROUND_TRACKING, async ({ data, error }) => {
   if (error) {
-    console.log('LOCATION_BACKGROUND_TRACKING task ERROR:', error.message);
+    console.error('LOCATION_BACKGROUND_TRACKING: ', error.message);
     return;
   }
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const anyData: any = data;
   if (anyData.locations) {
     const currentLocation: LocationObject = anyData.locations[0];
+    console.log('Tracking... [' + currentLocation.coords.latitude + ',' + currentLocation.coords.longitude + ']');
+
     const geoFence = await readGeofence();
+    if (!geoFence) {
+      console.error('LOCATION_BACKGROUND_TRACKING: No geofence present in storage.');
+      return;
+    }
     const insideGeoFence = insideGeoFences(currentLocation, [geoFence]);
     const trackingLocations = await readTrackingLocations();
-    console.log('Tracking...');
-    console.log(trackingLocations);
 
     if (!insideGeoFence) {
       if (trackingLocations.length === 0) {
@@ -57,7 +62,6 @@ const task: TaskManagerTaskExecutor = async ({ data, error }) => {
       }
     } else {
       if (trackingLocations.length === 0) {
-        console.log('Moved back in to the Hover zone');
         const location: TrackingLocation = {
           location: currentLocation,
           insideGeofence: true,
@@ -67,6 +71,7 @@ const task: TaskManagerTaskExecutor = async ({ data, error }) => {
       }
       const lastStoredLocation = trackingLocations[trackingLocations.length - 1];
       if (lastStoredLocation.insideGeofence === false) {
+        console.log('Moved back in to the Hover zone');
         const location: TrackingLocation = {
           location: currentLocation,
           insideGeofence: true,
@@ -75,6 +80,4 @@ const task: TaskManagerTaskExecutor = async ({ data, error }) => {
       }
     }
   }
-};
-
-defineTask(LOCATION_BACKGROUND_TRACKING, task);
+});
