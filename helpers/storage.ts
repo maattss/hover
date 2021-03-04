@@ -1,22 +1,29 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { GeoFence } from '../types/geoFenceTypes';
 
-export const storePushToken = async (value: string) => {
-  storeString('@hover_push', value);
-};
-export const readPushToken = async () => {
-  return readString('@hover_push');
-};
-export const storeGeofence = async (value: unknown) => {
-  storeObject('@hover_current_geofence', value);
-};
+export interface TrackingLocation {
+  dateTime: Date;
+  longitude: string;
+  latitude: string;
+}
+
+export const storePushToken = async (value: string) => storeString('@hover_push', value);
+
+export const readPushToken = async () => await readString('@hover_push');
+
+export const storeGeofence = async (value: GeoFence) => storeObject('@hover_current_geofence', value);
+
 export const readGeofence = async () => {
-  return readObject('@hover_current_geofence');
+  const geoFence: GeoFence = await readObject('@hover_current_geofence');
+  return geoFence;
 };
-export const storeTrackingLocations = async (value: unknown) => {
+
+export const storeTrackingLocations = async (value: TrackingLocation[]) =>
   storeObject('@hover_tracking_locations', value);
-};
+
 export const readTrackingLocations = async () => {
-  return readObject('@hover_tracking_locations');
+  const locations: TrackingLocation[] = await readObject('@hover_tracking_locations');
+  return locations;
 };
 
 // General
