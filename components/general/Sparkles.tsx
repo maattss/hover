@@ -2,6 +2,7 @@ import React, { ReactNode, useEffect } from 'react';
 import { Animated, StyleSheet, View, ViewStyle } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 import { generateSparkle, range, SparkleType, useRandomInterval } from '../../helpers/sparkleHelpers';
+import { Colors } from '../../theme';
 
 type SparkleProps = {
   children: ReactNode;
@@ -29,7 +30,7 @@ const Sparkles: React.FC<SparkleProps> = ({ children }: SparkleProps) => {
   return (
     <View style={styles.wrapper}>
       <View style={styles.childWrapper}>{children}</View>
-      <View style={{ position: 'absolute', width: '80%', height: '100%' }}>
+      <View style={styles.sparkleOverlayWrapper}>
         <View style={styles.sparkleWrapper}>
           {sparkles.map((sparkle) => (
             <SparkleInstance key={sparkle.id} color={sparkle.color} size={sparkle.size} style={sparkle.style} />
@@ -101,6 +102,11 @@ const SparkleInstance: React.FC<SparkleInstanceProps> = ({ size, color, style }:
 const styles = StyleSheet.create({
   wrapper: {
     position: 'relative',
+  },
+  sparkleOverlayWrapper: {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
   },
   sparkleWrapper: {
     position: 'relative',

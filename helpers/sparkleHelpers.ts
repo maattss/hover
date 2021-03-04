@@ -29,7 +29,7 @@ export const useRandomInterval = (callback: () => void, minDelay: number, maxDel
   return cancel;
 };
 
-export const range = (start: number, end?: number, step = 1) => {
+export const range = (start: number, end: number, step = 1) => {
   const output = [];
   if (typeof end === 'undefined') {
     end = start;
@@ -55,10 +55,10 @@ export const generateSparkle = (color: string = DEFAULT_COLOR): SparkleType => {
     id: String(random(100, 99999)),
     createdAt: Date.now(),
     color,
-    size: random(10, 80),
+    size: random(50, 100),
     style: {
-      top: random(0, 80) + '%',
-      left: random(0, 80) + '%',
+      top: random(-30, 60) + '%',
+      left: random(-30, 60) + '%',
       zIndex: 7,
     },
   } as SparkleType;
