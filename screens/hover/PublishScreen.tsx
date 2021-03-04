@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -27,6 +27,13 @@ const PublishScreen: React.FC = () => {
   const tracking = useTracking();
   const insets = useSafeAreaInsets();
   const [caption, setCaption] = useState('');
+  const [score, setScore] = useState<number>();
+  const [duration, setDuration] = useState<number>();
+
+  useCallback(async () => {
+    setScore(Math.floor(await tracking.getScore()));
+    setDuration(await tracking.getDuration());
+  }, []);
 
   const publishActivity = () => tracking.stopTracking(caption);
   const resumeTracking = () => tracking.resumeTracking();
@@ -44,10 +51,6 @@ const PublishScreen: React.FC = () => {
     return {
       marginTop: insets.top,
     } as ViewStyle;
-  };
-  const getTimestamp = (date: Date | undefined) => {
-    if (date) return date.toISOString();
-    return new Date().toISOString();
   };
 
   const renderMap = () => {
@@ -106,7 +109,7 @@ const PublishScreen: React.FC = () => {
             </View>
           </View>
           <View style={styles.summaryContainer}>
-            <Text style={styles.infoScore}>{Math.floor(tracking.score)} points</Text>
+            <Text style={styles.infoScore}>{score} points</Text>
 
             <Text style={styles.label}>Summary</Text>
             <View style={styles.infoContainer}>
@@ -114,11 +117,11 @@ const PublishScreen: React.FC = () => {
                 <View style={[styles.infoCard, { alignItems: 'flex-start' }]}>
                   <View style={[styles.mbSmall, styles.flexRowLeft]}>
                     <FA5Icon name={'stopwatch'} style={styles.infoIcons} />
-                    <Text style={styles.infoText}>{durationToTimestamp(tracking.duration)}</Text>
+                    <Text style={styles.infoText}>{durationToTimestamp(duration)}</Text>
                   </View>
                   <View style={[styles.mbSmall, styles.flexRowLeft]}>
                     <FA5Icon name={'clock'} style={styles.infoIcons} />
-                    <Text style={styles.infoText}>{timeStampToHours(getTimestamp(tracking.trackingStart))}</Text>
+                    <Text style={styles.infoText}>{timeStampToHours(tracking.trackingStart)}</Text>
                   </View>
                   <View style={styles.flexRowLeft}>
                     <FA5Icon name={'map-marker-alt'} style={styles.infoIcons} />

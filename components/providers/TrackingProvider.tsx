@@ -263,7 +263,7 @@ export const TrackingProvider = ({ children }: Props) => {
     }
     if (outsideGeofence) duration -= getOutsideDuration(locations);
 
-    return duration;
+    return Math.ceil(duration / 1000);
   };
 
   const getScore = async () => {
