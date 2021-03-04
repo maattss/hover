@@ -34,7 +34,7 @@ export const clearTrackingStorage = async () => {
   try {
     await AsyncStorage.multiRemove([GEOFENCE_KEY, TRACKING_KEY]);
   } catch (e) {
-    console.error('STORAGE: Error clearing Hover storage', e);
+    console.error('STORAGE: Error clearing tracking storage', e);
   }
 };
 
@@ -51,7 +51,7 @@ const storeString = async (value: string, key: string) => {
   try {
     await AsyncStorage.setItem(key, value);
   } catch (e) {
-    console.error('STORAGE: Error saving', value, 'to async storage.', e);
+    console.error("STORAGE: Error saving string with key '" + key + "' to async storage.", value, e);
   }
 };
 const readString = async (key: string) => {
@@ -62,7 +62,7 @@ const readString = async (key: string) => {
     }
     throw Error('Value is null');
   } catch (e) {
-    console.error('STORAGE: Error reading value from async storage.');
+    console.error("STORAGE: Error reading string with key '" + key + "' from async storage.", e);
   }
 };
 const storeObject = async (key: string, value: unknown) => {
@@ -70,7 +70,7 @@ const storeObject = async (key: string, value: unknown) => {
     const jsonValue = JSON.stringify(value);
     await AsyncStorage.setItem(key, jsonValue);
   } catch (e) {
-    console.error('STORAGE: Error saving', value, 'to async storage.');
+    console.error("STORAGE: Error saving object with key '" + key + "' to async storage. ", value, e);
   }
 };
 const readObject = async (key: string) => {
@@ -78,6 +78,6 @@ const readObject = async (key: string) => {
     const jsonValue = await AsyncStorage.getItem(key);
     return jsonValue != null ? JSON.parse(jsonValue) : null;
   } catch (e) {
-    console.error('Error reading value from async storage.');
+    console.error("STORAGE: Error reading object with key '" + key + "' from async storage. ", e);
   }
 };
