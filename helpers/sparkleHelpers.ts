@@ -51,8 +51,9 @@ export const generateSparkle = (color: string = DEFAULT_COLOR): SparkleType => {
     color,
     size: random(50, 100),
     style: {
-      top: random(-30, 60) + '%',
-      left: random(-30, 60) + '%',
+      position: 'absolute',
+      top: -50 + random(0, 50) + '%',
+      left: -20 + random(0, 50) + '%',
     },
   } as SparkleType;
   return sparkle;

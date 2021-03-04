@@ -84,7 +84,7 @@ const SparkleInstance: React.FC<SparkleInstanceProps> = ({ size, color, style }:
   }, []);
 
   return (
-    <View style={[styles.sparkle, style]}>
+    <View style={style}>
       <Animated.View
         style={[{ transform: [{ rotate: interpolateRotation }, { scale: interpolateScale }, { perspective: 1000 }] }]}>
         <Svg height={size} width={size} viewBox="0 0 160 160">
@@ -110,9 +110,6 @@ const styles = StyleSheet.create({
   sparkleWrapper: {
     position: 'relative',
     zIndex: 1,
-  },
-  sparkle: {
-    position: 'absolute',
   },
   childWrapper: {
     position: 'relative',
