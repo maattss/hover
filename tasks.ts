@@ -9,6 +9,7 @@ import {
 } from './helpers/storage';
 import { sendPushNotification } from './helpers/pushNotifications';
 import * as TaskManager from 'expo-task-manager';
+import Constants from 'expo-constants';
 
 export const LOCATION_BACKGROUND_TRACKING = 'location-background-tracking';
 
@@ -48,14 +49,16 @@ TaskManager.defineTask(LOCATION_BACKGROUND_TRACKING, async ({ data, error }) => 
           insideGeofence: false,
         };
         storeTrackingLocations([...trackingLocations, location]);
-        const pushToken = await readPushToken();
-        if (pushToken) {
-          sendPushNotification(
-            pushToken,
-            'Oh noo! Outside Hover zone...',
-            'Move back to continue earning points.',
-            true,
-          );
+        if (Constants.isDevice) {
+          const pushToken = await readPushToken();
+          if (pushToken) {
+            sendPushNotification(
+              pushToken,
+              'Oh noo! Outside Hover zone...',
+              'Move back to continue earning points.',
+              true,
+            );
+          }
         }
       }
     } else {
