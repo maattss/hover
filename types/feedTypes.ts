@@ -13,6 +13,7 @@ export enum FeedCategory {
 }
 
 export type ActivityFeedData = {
+  id: number;
   user: ListUserFragmentFragment;
   activity: FeedActivityFragmentFragment;
   createdAt: string;
@@ -20,6 +21,7 @@ export type ActivityFeedData = {
   likes: LikesFragmentFragment[];
 };
 export type AchievementFeedData = {
+  id: number;
   user: ListUserFragmentFragment;
   achievement: AchievementFragmentFragment;
   createdAt: string;
@@ -28,6 +30,7 @@ export type AchievementFeedData = {
 };
 
 export type ChallengeFeedData = {
+  id: number;
   user: ListUserFragmentFragment;
   challenge: ChallengeFeedFragmentFragment;
   createdAt: string;
