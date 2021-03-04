@@ -136,7 +136,6 @@ export const defaultUserProfile: UserProfile = {
   socialScore: 0,
   exerciseScore: 0,
   achievements: [],
-  activities: [],
 };
 
 export const convertToUserProfile = (data: ProfileUserQuery | undefined) => {
@@ -156,7 +155,6 @@ export const convertToUserProfile = (data: ProfileUserQuery | undefined) => {
       socialScore: data.user.social_score.aggregate?.sum?.score ?? defaultUserProfile.socialScore,
       exerciseScore: data.user.exercise_score.aggregate?.sum?.score ?? defaultUserProfile.exerciseScore,
       achievements: achievements,
-      activities: data.user.activities,
     } as UserProfile;
   }
 };
