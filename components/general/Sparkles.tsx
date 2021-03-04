@@ -1,8 +1,8 @@
 import React, { ReactNode, useEffect } from 'react';
 import { Animated, Easing, StyleSheet, View, ViewStyle } from 'react-native';
-import { Colors } from '../../theme';
+import { Colors, Spacing } from '../../theme';
 import Svg, { Path } from 'react-native-svg';
-import { random, range, useRandomInterval } from '../../helpers/sparkleHelpers';
+import { generateSparkle, range, SparkleType, useRandomInterval } from '../../helpers/sparkleHelpers';
 
 type SparkleProps = {
   children: ReactNode;
@@ -10,7 +10,7 @@ type SparkleProps = {
 
 const Sparkles: React.FC<SparkleProps> = ({ children }: SparkleProps) => {
   const [sparkles, setSparkles] = React.useState<SparkleType[]>(() => {
-    return range(0, 6).map(() => generateSparkle());
+    return range(0, 1).map(() => generateSparkle());
   });
 
   useRandomInterval(
@@ -21,7 +21,7 @@ const Sparkles: React.FC<SparkleProps> = ({ children }: SparkleProps) => {
       // Clean up any "expired" sparkles
       const nextSparkles = sparkles.filter((spark) => {
         const delta = now - spark.createdAt;
-        return delta < 1000;
+        return delta < 3000;
       });
       // Include our new sparkle
       nextSparkles.push(sparkle);
@@ -29,14 +29,18 @@ const Sparkles: React.FC<SparkleProps> = ({ children }: SparkleProps) => {
       setSparkles(nextSparkles);
     },
     50,
-    450,
+    500,
   );
   return (
     <View style={styles.wrapper}>
-      <View style={styles.childwrapper}>{children}</View>
-      {sparkles.map((sparkle) => (
-        <SparkleInstance key={sparkle.id} color={sparkle.color} size={sparkle.size} style={sparkle.style} />
-      ))}
+      <View style={styles.childWrapper}>{children}</View>
+      <View style={{ position: 'absolute', width: '80%', height: '100%' }}>
+        <View style={styles.sparkleWrapper}>
+          {sparkles.map((sparkle) => (
+            <SparkleInstance key={sparkle.id} color={sparkle.color} size={sparkle.size} style={sparkle.style} />
+          ))}
+        </View>
+      </View>
     </View>
   );
 };
@@ -48,65 +52,48 @@ type SparkleInstanceProps = {
   style: ViewStyle;
 };
 
-const SparkleInstance: React.FC<SparkleInstanceProps> = (props: SparkleInstanceProps) => {
+const SparkleInstance: React.FC<SparkleInstanceProps> = ({ size, color, style }: SparkleInstanceProps) => {
   const sparkleRotation = new Animated.Value(0);
   const sparkleOpacity = new Animated.Value(0);
 
   const animateSparkle = () => {
-    Animated.sequence([
-      Animated.parallel([
-        Animated.timing(sparkleRotation, {
-          toValue: 1,
-          duration: 3300,
-          easing: Easing.ease,
-          useNativeDriver: false,
-        }),
-        Animated.timing(sparkleOpacity, {
-          toValue: 1,
-          duration: 330,
-          easing: Easing.ease,
-          useNativeDriver: false,
-        }),
-      ]),
-      Animated.parallel([
-        Animated.timing(sparkleRotation, {
-          toValue: 2,
-          duration: 330,
-          easing: Easing.ease,
-          useNativeDriver: false,
-        }),
-        Animated.timing(sparkleOpacity, {
-          toValue: 2,
-          duration: 330,
-          easing: Easing.ease,
-          useNativeDriver: false,
-        }),
-      ]),
+    sparkleRotation.setValue(0);
+    sparkleOpacity.setValue(0);
+    Animated.parallel([
+      Animated.timing(sparkleRotation, {
+        toValue: 1,
+        duration: 1500,
+        useNativeDriver: true,
+      }),
+      Animated.timing(sparkleOpacity, {
+        toValue: 2,
+        duration: 1500,
+        useNativeDriver: true,
+      }),
     ]).start(); // start the sequence group
   };
 
   const interpolateRotation = sparkleRotation.interpolate({
-    inputRange: [0, 1, 2],
-    outputRange: ['0deg', '90deg', '360deg'],
+    inputRange: [0, 1],
+    outputRange: ['0deg', '180deg'],
   });
   const interpolateScale = sparkleOpacity.interpolate({
-    inputRange: [0, 1, 2],
-    outputRange: [0, 1, 0],
+    inputRange: [0, 1],
+    outputRange: [0, 1],
   });
-
-  const ballRotationStyle = { transform: [{ rotate: interpolateRotation }] };
-  const ballOpacityStyle = { transform: [{ scale: interpolateScale }] };
 
   useEffect(() => {
     animateSparkle();
   }, []);
+
   return (
-    <View style={styles.explosionBoundary}>
-      <Animated.View style={[ballRotationStyle, ballOpacityStyle]}>
-        <Svg height={props.size} width={props.size} viewBox="0 0 160 160" {...props}>
+    <View style={[styles.sparkle, style]}>
+      <Animated.View
+        style={[{ transform: [{ rotate: interpolateRotation }, { scale: interpolateScale }, { perspective: 1000 }] }]}>
+        <Svg height={size} width={size} viewBox="0 0 160 160">
           <Path
             d="M80 0C80 0 84.2846 41.2925 101.496 58.504C118.707 75.7154 160 80 160 80C160 80 118.707 84.2846 101.496 101.496C84.2846 118.707 80 160 80 160C80 160 75.7154 118.707 58.504 101.496C41.2925 84.2846 0 80 0 80C0 80 41.2925 75.7154 58.504 58.504C75.7154 41.2925 80 0 80 0Z"
-            fill={props.color}
+            fill={color}
           />
         </Svg>
       </Animated.View>
@@ -115,38 +102,25 @@ const SparkleInstance: React.FC<SparkleInstanceProps> = (props: SparkleInstanceP
 };
 
 const styles = StyleSheet.create({
-  svg: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   wrapper: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  explosionBoundary: {
-    position: 'absolute',
-  },
-  childwrapper: {
     position: 'relative',
   },
+  sparkleWrapper: {
+    position: 'relative',
+    backgroundColor: Colors.red,
+    justifyContent: 'center',
+    alignContent: 'center',
+    zIndex: 5,
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+  },
+  sparkle: {
+    position: 'absolute',
+  },
+  childWrapper: {
+    position: 'absolute',
+    backgroundColor: Colors.green,
+  },
 });
-
-type SparkleType = {
-  id: string;
-  createdAt: number;
-  color: string;
-  size: number;
-  style: ViewStyle;
-};
-const DEFAULT_COLOR = Colors.gold;
-const generateSparkle = (color: string = DEFAULT_COLOR): SparkleType => {
-  return {
-    id: String(random(100, 99999)),
-    createdAt: Date.now(),
-    color,
-    size: random(10, 20),
-    style: { top: random(0, 100) + '%', left: random(0, 100) + '%', zIndex: 2 },
-  } as SparkleType;
-};
