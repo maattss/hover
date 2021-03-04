@@ -2,7 +2,6 @@ import React, { ReactNode, useEffect } from 'react';
 import { Animated, StyleSheet, View, ViewStyle } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 import { generateSparkle, range, SparkleType, useRandomInterval } from '../../helpers/sparkleHelpers';
-import { Colors } from '../../theme';
 
 type SparkleProps = {
   children: ReactNode;
@@ -10,7 +9,7 @@ type SparkleProps = {
 
 const Sparkles: React.FC<SparkleProps> = ({ children }: SparkleProps) => {
   const [sparkles, setSparkles] = React.useState<SparkleType[]>(() => {
-    return range(0, 2).map(() => generateSparkle());
+    return range(2).map(() => generateSparkle());
   });
 
   useRandomInterval(

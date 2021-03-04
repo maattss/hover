@@ -53,7 +53,6 @@ export const generateSparkle = (color: string = DEFAULT_COLOR): SparkleType => {
     style: {
       top: random(-30, 60) + '%',
       left: random(-30, 60) + '%',
-      zIndex: 7,
     },
   } as SparkleType;
   return sparkle;
