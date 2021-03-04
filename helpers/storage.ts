@@ -30,6 +30,14 @@ export const readTrackingLocations = async () => {
   return locations;
 };
 
+export const clearTrackingStorage = async () => {
+  try {
+    await AsyncStorage.multiRemove([GEOFENCE_KEY, TRACKING_KEY]);
+  } catch (e) {
+    console.error('STORAGE: Error clearing Hover storage', e);
+  }
+};
+
 export const clearHoverStorage = async () => {
   try {
     await AsyncStorage.multiRemove([GEOFENCE_KEY, TRACKING_KEY, PUSH_KEY]);

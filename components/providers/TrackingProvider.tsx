@@ -13,13 +13,12 @@ import { LatLng } from 'react-native-maps';
 import { Activities_Insert_Input } from '../../types/types';
 import { startBackgroundUpdate, stopBackgroundUpdate } from '../../tasks/locationBackgroundtasks';
 import {
-  clearHoverStorage,
+  clearTrackingStorage,
   readTrackingLocations,
   storeGeofence,
   storeTrackingLocations,
   TrackingLocation,
 } from '../../helpers/storage';
-import { Date, length } from '@ungap/global-this';
 
 export enum TrackingState {
   EXPLORE,
@@ -176,7 +175,7 @@ export const TrackingProvider = ({ children }: Props) => {
     setTrackingState(TrackingState.TRACKING);
     setTrackingEnd(undefined);
     setTrackingStart(Date.now());
-    await clearHoverStorage();
+    await clearTrackingStorage();
     await storeGeofence(currentGeoFence);
     setTrackingGeofence(currentGeoFence);
     startBackgroundUpdate();

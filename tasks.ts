@@ -1,5 +1,4 @@
 import { LocationObject } from 'expo-location';
-import { defineTask, TaskManagerTaskExecutor } from 'expo-task-manager';
 import { insideGeoFences } from './helpers/geoFenceCalculations';
 import {
   readGeofence,
