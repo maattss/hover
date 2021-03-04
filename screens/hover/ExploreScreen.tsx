@@ -8,7 +8,10 @@ const ExploreScreen: React.FC = () => {
   const tracking = useTracking();
 
   const getDynamicButtonStyles = () => {
-    if (!tracking.insideGeoFence || (tracking.locationPermission && tracking.locationPermission.status !== 'granted')) {
+    if (
+      !tracking.currentGeoFence ||
+      (tracking.locationPermission && tracking.locationPermission.status !== 'granted')
+    ) {
       return {
         backgroundColor: Colors.grayTransparent,
       } as ViewStyle;

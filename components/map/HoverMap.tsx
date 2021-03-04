@@ -41,7 +41,7 @@ const HoverMap: React.FC<HoverMapProps> = ({ customWidth, customHeight }: HoverM
       latitude: tracking.userLocation ? tracking.userLocation.coords.latitude : defaultMapLocation.latitude,
       longitude: tracking.userLocation ? tracking.userLocation.coords.longitude : defaultMapLocation.longitude,
     });
-    tracking.refetchGeofences();
+    tracking.refetchGeoFences();
     animateMapToUserPos();
   }, []);
 
