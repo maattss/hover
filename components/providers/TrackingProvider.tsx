@@ -106,9 +106,7 @@ export const TrackingProvider = ({ children }: Props) => {
     nextFetchPolicy: 'network-only',
   });
   useEffect(() => {
-    if (geoFenceData) {
-      setGeoFences(convertToGeoFences(geoFenceData));
-    }
+    if (geoFenceData) setGeoFences(convertToGeoFences(geoFenceData));
     if (geoFenceFetchError) console.error(geoFenceFetchError.message);
   }, [geoFenceData, geoFenceFetchError]);
 
@@ -125,27 +123,28 @@ export const TrackingProvider = ({ children }: Props) => {
     timestamp: timestamp,
   });
 
-  const externalUpdateUserLocation = (newUserLocation: LatLng) => {
+  const externalUpdateUserLocation = (newUserLocation: LatLng) =>
     updateUserLocation(getLocationObject(newUserLocation.latitude, newUserLocation.longitude, Date.now()));
-  };
 
   const updateUserLocation = (newUserLocation: LocationObject) => {
+    console.log('Location update [' + newUserLocation.coords.latitude + ',' + newUserLocation.coords.longitude + ']');
     setUserLocation(newUserLocation);
-    if (loadingUserLocation) setLoadingUserLocation(false);
-    console.log(
-      'Updated user location... [' + newUserLocation.coords.latitude + ',' + newUserLocation.coords.longitude + ']',
-    );
-
     const insideGeoFence = insideGeoFences(newUserLocation, geoFences);
+
+    if (loadingUserLocation) setLoadingUserLocation(false);
 
     if (insideGeoFence) {
       setCurrentGeofence(insideGeoFence);
+      //TODO: Is this needed?
       if (trackingState === TrackingState.TRACKINGPAUSED && insideGeoFence.id === trackingGeoFence?.id) {
         console.log('Inside geofence! Tracking auto start');
         setTrackingState(TrackingState.TRACKING);
       }
-    } else {
+    }
+
+    if (!insideGeoFence) {
       setCurrentGeofence(undefined);
+      //TODO: Is this needed?
       if (trackingState === TrackingState.TRACKING) {
         console.log('Outside geofence! Tracking auto paused');
         setTrackingState(TrackingState.TRACKINGPAUSED);
@@ -226,7 +225,7 @@ export const TrackingProvider = ({ children }: Props) => {
         },
       });
       console.log('Activity inserted to db', response);
-      Alert.alert('Upload complete', 'Activity uploaded successfully!', [{ text: 'OK' }]);
+      Alert.alert('Upload complete', 'Activity uploaded successfully!');
     } catch (error) {
       console.error('Mutation error', error.message);
       addUnUploadedActivity(activity);
@@ -248,7 +247,7 @@ export const TrackingProvider = ({ children }: Props) => {
       previousEntry.timestamp = location.location.timestamp;
       previousEntry.inside = location.insideGeofence;
     }
-    console.log('Duration outside: ', duration);
+    console.log('Duration outside: ', duration); //TODO: Remove, only for debugging
     return duration;
   };
 
@@ -264,7 +263,7 @@ export const TrackingProvider = ({ children }: Props) => {
       }
     }
     if (!alwaysInsideGeofence) duration -= getOutsideDuration(locations);
-    console.log('Duration: ' + Math.floor(duration / 1000));
+    console.log('Duration: ' + Math.floor(duration / 1000)); //TODO: Remove, only for debugging
     return Math.floor(duration / 1000);
   };
 
@@ -276,7 +275,6 @@ export const TrackingProvider = ({ children }: Props) => {
     const score = duration * scoreRatio;
 
     if (doubleScore) return score * 2;
-    console.log('Score: ' + score);
     return score;
   };
 

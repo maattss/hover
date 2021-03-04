@@ -48,16 +48,15 @@ TaskManager.defineTask(LOCATION_BACKGROUND_TRACKING, async ({ data, error }) => 
           insideGeofence: false,
         };
         storeTrackingLocations([...trackingLocations, location]);
-        // TODO: Uncomment to send push token
-        // const pushToken = await readPushToken();
-        // if (pushToken) {
-        //   sendPushNotification(
-        //     pushToken,
-        //     'Oh noo! Outside Hover zone...',
-        //     'Move back to continue earning points.',
-        //     true,
-        //   );
-        // }
+        const pushToken = await readPushToken();
+        if (pushToken) {
+          sendPushNotification(
+            pushToken,
+            'Oh noo! Outside Hover zone...',
+            'Move back to continue earning points.',
+            true,
+          );
+        }
       }
     } else {
       if (trackingLocations.length === 0) {

@@ -8,9 +8,8 @@ export const startBackgroundUpdate = async () => {
     timeInterval: 1000,
     // Android behavior
     foregroundService: {
-      notificationTitle: 'Location background service is active',
-      notificationBody: 'Monitoring your location to alert you of entering a valid area.',
-      notificationColor: '#333333',
+      notificationTitle: 'Location tracking in Hover is active',
+      notificationBody: 'Monitoring your location during an activity to calculate your score.',
     },
     // iOS behavior
     activityType: Location.ActivityType.Fitness,

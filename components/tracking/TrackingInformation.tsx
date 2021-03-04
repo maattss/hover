@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { Colors, Spacing, Typography, Buttons } from '../../theme';
 import useTracking from '../../hooks/useTracking';
@@ -14,19 +14,20 @@ interface Props {
 const TrackingInformation: React.FC<Props> = ({ collabState }: Props) => {
   const tracking = useTracking();
   const stopTracking = () => tracking.pauseTracking();
+
   const [score, setScore] = useState<number>(0);
   const [progress, setProgress] = useState<number>(0);
   const [nextScore, setNextScore] = useState<number>(0);
-  useInterval(
-    async () => {
-      const currentScore = await tracking.getScore();
-      console.log('Tracking info score: ' + currentScore);
-      setScore(Math.floor(currentScore));
-      setProgress(currentScore - Math.floor(currentScore));
-      setNextScore(currentScore == 0 ? 1 : Math.ceil(currentScore));
-    },
-    tracking.trackingState === TrackingState.TRACKING ? 1000 : null,
-  );
+
+  const getUpdatedInfo = useCallback(async () => {
+    const currentScore = await tracking.getScore();
+    setScore(Math.floor(currentScore));
+    setProgress(currentScore - Math.floor(currentScore));
+    setNextScore(currentScore == 0 ? 1 : Math.ceil(currentScore));
+  }, [score, progress, nextScore]);
+
+  // Update info every second when tracking
+  useInterval(getUpdatedInfo, tracking.trackingState === TrackingState.TRACKING ? 1000 : null);
 
   return (
     <View style={styles.trackingInfo}>

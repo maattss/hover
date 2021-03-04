@@ -17,18 +17,21 @@ interface HoverMapProps {
 const HoverMap: React.FC<HoverMapProps> = ({ customWidth, customHeight }: HoverMapProps) => {
   const width = customWidth ? customWidth : Dimensions.get('screen').width;
   const height = customHeight ? customHeight : Dimensions.get('screen').height;
+  const defaultZoom = 0.02;
+  const centreVerticalOffset = -0.005;
   const defaultRegion: Region = {
-    latitude: defaultMapLocation.latitude,
+    latitude: defaultMapLocation.latitude + centreVerticalOffset,
     longitude: defaultMapLocation.longitude,
-    latitudeDelta: 0.02,
-    longitudeDelta: 0.02,
+    latitudeDelta: defaultZoom,
+    longitudeDelta: defaultZoom,
   };
 
   const [chosenMapType, setChosenMapType] = useState<MapTypes>('standard');
   const [userLocationMap, setUserLocationMap] = useState<LatLng>();
   const [mapRegion, setMapRegion] = useState<Region>(defaultRegion);
   const [centreOnUser, setCentreOnUser] = useState(false);
-  const [zoom, setZoom] = useState<number>(0.02);
+  const [zoom, setZoom] = useState<number>(defaultZoom);
+
   const tracking = useTracking();
   const insets = useSafeAreaInsets();
 
@@ -40,10 +43,10 @@ const HoverMap: React.FC<HoverMapProps> = ({ customWidth, customHeight }: HoverM
         longitude: tracking.userLocation.coords.longitude,
       });
       setMapRegion({
-        latitude: tracking.userLocation.coords.latitude,
+        latitude: tracking.userLocation.coords.latitude + centreVerticalOffset,
         longitude: tracking.userLocation.coords.longitude,
-        latitudeDelta: 0.02,
-        longitudeDelta: 0.02,
+        latitudeDelta: defaultZoom,
+        longitudeDelta: defaultZoom,
       });
     } else if (userLocationMap) {
       setUserLocationMap({
@@ -51,10 +54,10 @@ const HoverMap: React.FC<HoverMapProps> = ({ customWidth, customHeight }: HoverM
         longitude: userLocationMap.longitude,
       });
       setMapRegion({
-        latitude: userLocationMap.latitude,
+        latitude: userLocationMap.latitude + centreVerticalOffset,
         longitude: userLocationMap.longitude,
-        latitudeDelta: 0.02,
-        longitudeDelta: 0.02,
+        latitudeDelta: defaultZoom,
+        longitudeDelta: defaultZoom,
       });
     }
 
@@ -73,9 +76,8 @@ const HoverMap: React.FC<HoverMapProps> = ({ customWidth, customHeight }: HoverM
   };
 
   useEffect(() => {
-    if (tracking.trackingState === TrackingState.EXPLORE && userLocationMap) {
+    if (tracking.trackingState === TrackingState.EXPLORE && userLocationMap)
       tracking.updateUserLocation(userLocationMap);
-    }
   }, [userLocationMap]);
 
   // Map event functions
