@@ -20,6 +20,7 @@ const TrackingInformation: React.FC<Props> = ({ collabState }: Props) => {
   useInterval(
     async () => {
       const currentScore = await tracking.getScore();
+      console.log('Tracking info score: ' + currentScore);
       setScore(Math.floor(currentScore));
       setProgress(currentScore - Math.floor(currentScore));
       setNextScore(currentScore == 0 ? 1 : Math.ceil(currentScore));

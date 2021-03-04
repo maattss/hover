@@ -19,6 +19,7 @@ import {
   storeTrackingLocations,
   TrackingLocation,
 } from '../../helpers/storage';
+import { console, Date } from '@ungap/global-this';
 
 export enum TrackingState {
   EXPLORE,
@@ -241,29 +242,30 @@ export const TrackingProvider = ({ children }: Props) => {
     };
 
     for (const location of locations) {
-      if (previousEntry.inside === false && location.insideGeofence === true) {
+      if (previousEntry.inside === false && location.insideGeofence === true)
         duration += location.location.timestamp - previousEntry.timestamp;
-        previousEntry.timestamp = location.location.timestamp;
-        previousEntry.inside = true;
-      }
+
+      previousEntry.timestamp = location.location.timestamp;
+      previousEntry.inside = location.insideGeofence;
     }
+    console.log('Duration outside: ', duration);
     return duration;
   };
 
   const getDuration = async () => {
     if (!trackingGeoFence || !trackingStart) return 0;
-    let duration = trackingEnd ?? Date.now() - trackingStart;
+    let duration = trackingEnd ? trackingEnd - trackingStart : Date.now() - trackingStart;
     const locations = await readTrackingLocations();
-    let outsideGeofence = false;
+    let alwaysInsideGeofence = true;
     for (const location of locations) {
       if (location.insideGeofence === false) {
-        outsideGeofence = true;
+        alwaysInsideGeofence = false;
         break;
       }
     }
-    if (outsideGeofence) duration -= getOutsideDuration(locations);
-
-    return Math.ceil(duration / 1000);
+    if (!alwaysInsideGeofence) duration -= getOutsideDuration(locations);
+    console.log('Duration: ' + Math.floor(duration / 1000));
+    return Math.floor(duration / 1000);
   };
 
   const getScore = async () => {
@@ -274,6 +276,7 @@ export const TrackingProvider = ({ children }: Props) => {
     const score = duration * scoreRatio;
 
     if (doubleScore) return score * 2;
+    console.log('Score: ' + score);
     return score;
   };
 
