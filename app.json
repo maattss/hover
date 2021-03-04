@@ -20,9 +20,9 @@
       "supportsTablet": true,
       "infoPlist": {
         "NSLocationAlwaysUsage": "YES",
-        "NSLocationWhenInUseUsageDescription": "Your location will be used to determine if you are within a valid geofencing region.",
-        "NSLocationAlwaysAndWhenInUseUsageDescription": "Your location will be used to determine and notify you if you are within a valid geofencing region.",
-        "NSLocationAlwaysUsageDescription": "Your location will be used to notify you when you are located at valid geofencing region."
+        "NSLocationWhenInUseUsageDescription": "Your location will only be used to determine if you are in a valid geofence.",
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "Your location will only be used to determine if you are in a valid geofence.",
+        "NSLocationAlwaysUsageDescription": "Your location will only be used to determine if you are in a valid geofence."
       }
     },
     "android": {

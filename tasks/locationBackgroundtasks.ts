@@ -5,7 +5,7 @@ export const startBackgroundUpdate = async () => {
   console.log('Started background location tracking...');
   await Location.startLocationUpdatesAsync(LOCATION_BACKGROUND_TRACKING, {
     accuracy: Location.Accuracy.Highest,
-    timeInterval: 60 * 1000,
+    timeInterval: 1000,
     // Android behavior
     foregroundService: {
       notificationTitle: 'Location background service is active',
