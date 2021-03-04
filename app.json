@@ -2,7 +2,8 @@
   "expo": {
     "name": "Hover",
     "slug": "hover",
-    "version": "1.0.0",
+    "version": "1.0.1",
+    "owner": "mmaattss",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
@@ -32,7 +33,7 @@
       },
       "useNextNotificationsApi": true,
       "permissions": ["ACCESS_COARSE_LOCATION", "ACCESS_FINE_LOCATION", "ACCESS_BACKGROUND_LOCATION"],
-      "package": "com.sirimykland.hover"
+      "package": "com.hoverapp.hover"
     },
     "web": {
       "favicon": "./assets/images/favicon.png"
