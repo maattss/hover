@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { Colors, Spacing, Typography, Buttons } from '../../theme';
 import useTracking from '../../hooks/useTracking';
 import * as Progress from 'react-native-progress';
 import { HoverWithFriendState } from '../../types/hoverWithFriendsType';
 import { TrackingState } from '../providers/TrackingProvider';
+import { useInterval } from '../../hooks/useInterval';
 
 interface Props {
   collabState: HoverWithFriendState;
@@ -13,9 +14,18 @@ interface Props {
 const TrackingInformation: React.FC<Props> = ({ collabState }: Props) => {
   const tracking = useTracking();
   const stopTracking = () => tracking.pauseTracking();
-  const score = Math.floor(tracking.score);
-  const progress = tracking.score - score;
-  const nextScore = tracking.score == 0 ? 1 : Math.ceil(tracking.score);
+  const [score, setScore] = useState<number>(0);
+  const [progress, setProgress] = useState<number>(0);
+  const [nextScore, setNextScore] = useState<number>(0);
+  useInterval(
+    async () => {
+      const currentScore = await tracking.getScore();
+      setScore(Math.floor(currentScore));
+      setProgress(currentScore - Math.floor(currentScore));
+      setNextScore(currentScore == 0 ? 1 : Math.ceil(currentScore));
+    },
+    tracking.trackingState === TrackingState.TRACKING ? 1000 : null,
+  );
 
   return (
     <View style={styles.trackingInfo}>
