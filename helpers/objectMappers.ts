@@ -205,24 +205,26 @@ export const convertToFeedData = (data: FeedQuery) => {
   const feedData: FeedData[] = [];
   for (const obj of data.feed) {
     if (obj.activity) {
-      feedData.push(convertToActivityFeedData(obj.activity, obj.user, obj.created_at, obj.likes));
+      feedData.push(convertToActivityFeedData(obj.id, obj.activity, obj.user, obj.created_at, obj.likes));
     } else if (obj.user_achievement && obj.user_achievement.achievement) {
       feedData.push(
-        convertToAchievementFeedData(obj.user_achievement.achievement, obj.user, obj.created_at, obj.likes),
+        convertToAchievementFeedData(obj.id, obj.user_achievement.achievement, obj.user, obj.created_at, obj.likes),
       );
     } else if (obj.challenge) {
-      feedData.push(convertToChallengeFeedData(obj.challenge, obj.user, obj.created_at, obj.likes));
+      feedData.push(convertToChallengeFeedData(obj.id, obj.challenge, obj.user, obj.created_at, obj.likes));
     }
   }
   return feedData;
 };
 export const convertToActivityFeedData = (
+  id: number,
   activity: ActivityFragmentFragment,
   user: ListUserFragmentFragment | null | undefined,
   createdAt: string,
   likes: readonly LikesFragmentFragment[],
 ) => {
   return {
+    id: id,
     activity: activity,
     user: user,
     createdAt: createdAt,
@@ -231,12 +233,14 @@ export const convertToActivityFeedData = (
   } as ActivityFeedData;
 };
 export const convertToAchievementFeedData = (
+  id: number,
   achievement: AchievementFragmentFragment,
   user: ListUserFragmentFragment | null | undefined,
   createdAt: string,
   likes: readonly LikesFragmentFragment[],
 ) => {
   return {
+    id: id,
     achievement: achievement,
     user: user,
     createdAt: createdAt,
@@ -245,12 +249,14 @@ export const convertToAchievementFeedData = (
   } as AchievementFeedData;
 };
 export const convertToChallengeFeedData = (
+  id: number,
   challenge: ChallengeFeedFragmentFragment,
   user: ListUserFragmentFragment | null | undefined,
   createdAt: string,
   likes: readonly LikesFragmentFragment[],
 ) => {
   return {
+    id: id,
     challenge: challenge,
     user: user,
     createdAt: createdAt,
