@@ -1,10 +1,10 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { LocationObject } from 'expo-location';
 import { GeoFence } from '../types/geoFenceTypes';
 
 export interface TrackingLocation {
-  dateTime: Date;
-  longitude: string;
-  latitude: string;
+  location: LocationObject;
+  insideGeofence: boolean;
 }
 
 export const storePushToken = async (value: string) => storeString('@hover_push', value);
@@ -23,6 +23,7 @@ export const storeTrackingLocations = async (value: TrackingLocation[]) =>
 
 export const readTrackingLocations = async () => {
   const locations: TrackingLocation[] = await readObject('@hover_tracking_locations');
+  if (!locations) return [];
   return locations;
 };
 

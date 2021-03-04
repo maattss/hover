@@ -1,7 +1,14 @@
 import { LocationObject } from 'expo-location';
 import { defineTask, TaskManagerTaskExecutor } from 'expo-task-manager';
 import { insideGeoFences } from './helpers/geoFenceCalculations';
-import { readGeofence } from './helpers/storage';
+import {
+  readGeofence,
+  readTrackingLocations,
+  readPushToken,
+  storeTrackingLocations,
+  TrackingLocation,
+} from './helpers/storage';
+import { sendPushNotification } from './helpers/pushNotifications';
 
 export const LOCATION_BACKGROUND_TRACKING = 'location-background-tracking';
 
@@ -16,18 +23,57 @@ const task: TaskManagerTaskExecutor = async ({ data, error }) => {
     const currentLocation: LocationObject = anyData.locations[0];
     const geoFence = await readGeofence();
     const insideGeoFence = insideGeoFences(currentLocation, [geoFence]);
-    if (!insideGeoFence) {
-      const currentTime = new Date().toJSON;
-      console.log('Oh no, outside geofence');
-      // If prev location was inside geofence add to storage and send push
-    } else {
-      // If prev location was outside geofence add to storage
-      console.log('Yay, you are inside geofence');
-    }
+    const trackingLocations = await readTrackingLocations();
+    console.log('Tracking...');
+    console.log(trackingLocations);
 
-    const { coords, timestamp } = currentLocation;
-    const { latitude, longitude } = coords;
-    console.log(`[Background update] ${timestamp}:  ${latitude}, ${longitude}`);
+    if (!insideGeoFence) {
+      if (trackingLocations.length === 0) {
+        const location: TrackingLocation = {
+          location: currentLocation,
+          insideGeofence: false,
+        };
+        storeTrackingLocations([location]);
+        return;
+      }
+      const lastStoredLocation = trackingLocations[trackingLocations.length - 1];
+      if (lastStoredLocation.insideGeofence === true) {
+        console.log('Moved out of Hover zone');
+        const location: TrackingLocation = {
+          location: currentLocation,
+          insideGeofence: false,
+        };
+        storeTrackingLocations([...trackingLocations, location]);
+        // TODO: Uncomment to send push token
+        // const pushToken = await readPushToken();
+        // if (pushToken) {
+        //   sendPushNotification(
+        //     pushToken,
+        //     'Oh noo! Outside Hover zone...',
+        //     'Move back to continue earning points.',
+        //     true,
+        //   );
+        // }
+      }
+    } else {
+      if (trackingLocations.length === 0) {
+        console.log('Moved back in to the Hover zone');
+        const location: TrackingLocation = {
+          location: currentLocation,
+          insideGeofence: true,
+        };
+        storeTrackingLocations([location]);
+        return;
+      }
+      const lastStoredLocation = trackingLocations[trackingLocations.length - 1];
+      if (lastStoredLocation.insideGeofence === false) {
+        const location: TrackingLocation = {
+          location: currentLocation,
+          insideGeofence: true,
+        };
+        storeTrackingLocations([...trackingLocations, location]);
+      }
+    }
   }
 };
 
