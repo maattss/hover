@@ -2,6 +2,7 @@ import {
   AchievementFragmentFragment,
   ChallengeFeedFragmentFragment,
   FeedActivityFragmentFragment,
+  LikesFragmentFragment,
   ListUserFragmentFragment,
 } from '../graphql/Fragments.generated';
 
@@ -16,12 +17,14 @@ export type ActivityFeedData = {
   activity: FeedActivityFragmentFragment;
   createdAt: string;
   feedCategory: FeedCategory;
+  likes: LikesFragmentFragment[];
 };
 export type AchievementFeedData = {
   user: ListUserFragmentFragment;
   achievement: AchievementFragmentFragment;
   createdAt: string;
   feedCategory: FeedCategory;
+  likes: LikesFragmentFragment[];
 };
 
 export type ChallengeFeedData = {
@@ -29,6 +32,7 @@ export type ChallengeFeedData = {
   challenge: ChallengeFeedFragmentFragment;
   createdAt: string;
   feedCategory: FeedCategory;
+  likes: LikesFragmentFragment[];
 };
 
 export type FeedData = ActivityFeedData | AchievementFeedData | ChallengeFeedData;
