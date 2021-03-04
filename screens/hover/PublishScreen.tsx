@@ -30,9 +30,17 @@ const PublishScreen: React.FC = () => {
   const [score, setScore] = useState<number>();
   const [duration, setDuration] = useState<number>();
 
-  useCallback(async () => {
+  const updateScore = useCallback(async () => {
     setScore(Math.floor(await tracking.getScore()));
+    console.log('Publish screen score', score);
+  }, [score]);
+  const updateDuration = useCallback(async () => {
     setDuration(await tracking.getDuration());
+    console.log('Publish screen duration', duration);
+  }, [duration]);
+  useEffect(() => {
+    updateDuration();
+    updateScore();
   }, []);
 
   const publishActivity = () => tracking.stopTracking(caption);
