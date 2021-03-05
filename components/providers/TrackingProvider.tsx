@@ -1,4 +1,4 @@
-import React, { useState, ReactNode, useEffect, useCallback } from 'react';
+import React, { useState, ReactNode, useEffect } from 'react';
 import { GeoFence } from '../../types/geoFenceTypes';
 import { convertToGeoFences } from '../../helpers/objectMappers';
 import { usePermissions, LOCATION, PermissionResponse } from 'expo-permissions';
@@ -55,8 +55,6 @@ interface TrackingContextValues {
   pauseTracking: () => void;
   stopTracking: (caption: string) => void;
   discardActivity: () => void;
-  getScore: () => Promise<number>;
-  getDuration: () => Promise<number>;
   score: number;
   duration: number;
 }
@@ -83,8 +81,6 @@ export const TrackingContext = React.createContext<TrackingContextValues>({
   pauseTracking: () => console.error('Function not initialized'),
   stopTracking: () => console.error('Function not initialized'),
   discardActivity: () => console.error('Function not initialized'),
-  getScore: async () => 0, // TODO: Remove
-  getDuration: async () => 0, // TODO: remove
   score: 0,
   duration: 0,
 });
@@ -117,14 +113,15 @@ export const TrackingProvider = ({ children }: Props) => {
     if (geoFenceFetchError) console.error(geoFenceFetchError.message);
   }, [geoFenceData, geoFenceFetchError]);
 
-  const getUpdatedInfo = useCallback(async () => {
+  const getUpdatedInfo = async () => {
     const currentScore = await getScore();
     const currentDuration = await getDuration();
     setScore(currentScore);
     setDuration(currentDuration);
-  }, [score, duration]);
+  };
 
-  useInterval(getUpdatedInfo, trackingState === TrackingState.TRACKING ? 1000 : null);
+  // Update info every second when tracking
+  useInterval(() => getUpdatedInfo(), trackingState === TrackingState.TRACKING ? 1000 : null);
 
   const getLocationObject = (latitude: number | undefined, longitude: number | undefined, timestamp: number) => ({
     coords: {
@@ -325,8 +322,6 @@ export const TrackingProvider = ({ children }: Props) => {
     trackingState: trackingState,
     trackingStart: trackingStart,
     trackingEnd: trackingEnd,
-    getScore: getScore,
-    getDuration: getDuration,
     startTracking: startTracking,
     resumeTracking: resumeTracking,
     pauseTracking: pauseTracking,
