@@ -292,6 +292,7 @@ export const TrackingProvider = ({ children }: Props) => {
       }
     }
     if (!alwaysInsideGeofence) duration -= getOutsideDuration(locations);
+    console.log('Duration', duration / 1000);
     return Math.floor(duration / 1000);
   };
 

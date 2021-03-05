@@ -2,7 +2,6 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Spacing, Typography } from '../../../theme';
 import { SettingsProps } from './SettingsMenuScreen';
-import Constants from 'expo-constants';
 
 const AboutScreen: React.FC<SettingsProps> = () => {
   return (
@@ -13,7 +12,7 @@ const AboutScreen: React.FC<SettingsProps> = () => {
         the Norwegian University of Science and Technology (NTNU) during the spring of 2021. The goal of the project was
         to invent and develop an alternative game where Hover is the result of this work.
       </Text>
-      <Text style={styles.bodyText}>Version {Constants.nativeAppVersion} (beta)</Text>
+      <Text style={styles.versionText}>Version 1.0.1 (beta)</Text>
     </View>
   );
 };
@@ -23,7 +22,7 @@ const styles = StyleSheet.create({
   container: {
     display: 'flex',
     alignItems: 'center',
-    paddingHorizontal: Spacing.base,
+    paddingHorizontal: Spacing.large,
   },
   titleText: {
     ...Typography.headerText,
@@ -34,5 +33,10 @@ const styles = StyleSheet.create({
   bodyText: {
     ...Typography.bodyText,
     paddingTop: Spacing.base,
+  },
+  versionText: {
+    ...Typography.bodyText,
+    paddingTop: Spacing.base,
+    fontWeight: 'bold',
   },
 });
