@@ -93,7 +93,7 @@ const HoverMap: React.FC<HoverMapProps> = ({ customWidth, customHeight }: HoverM
 
     if (userLocationMap) {
       const userRegion: Region = {
-        latitude: userLocationMap.latitude,
+        latitude: userLocationMap.latitude + centreVerticalOffset,
         longitude: userLocationMap.longitude,
         latitudeDelta: 0.02,
         longitudeDelta: 0.02,
