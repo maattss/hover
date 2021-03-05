@@ -277,7 +277,7 @@ export const TrackingProvider = ({ children }: Props) => {
       previousEntry.timestamp = location.location.timestamp;
       previousEntry.inside = location.insideGeofence;
     }
-    return duration;
+    return Math.floor(duration / 1000);
   };
 
   const getDuration = async () => {
