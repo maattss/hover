@@ -76,8 +76,7 @@ const HoverMap: React.FC<HoverMapProps> = ({ customWidth, customHeight }: HoverM
   };
 
   useEffect(() => {
-    if (tracking.trackingState === TrackingState.EXPLORE && userLocationMap)
-      tracking.updateUserLocation(userLocationMap);
+    if (userLocationMap) tracking.updateUserLocation(userLocationMap);
   }, [userLocationMap]);
 
   // Map event functions

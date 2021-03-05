@@ -151,19 +151,17 @@ export const TrackingProvider = ({ children }: Props) => {
 
     if (insideGeoFence) {
       setCurrentGeofence(insideGeoFence);
-      // TODO: Update this
       if (trackingState === TrackingState.TRACKINGPAUSED && insideGeoFence.id === trackingGeoFence?.id) {
         console.log('Inside geofence! Tracking auto start');
-        setTrackingState(TrackingState.TRACKING);
+        autoResumeTracking();
       }
     }
 
     if (!insideGeoFence) {
       setCurrentGeofence(undefined);
-      // TODO: Update this
       if (trackingState === TrackingState.TRACKING) {
         console.log('Outside geofence! Tracking auto paused');
-        setTrackingState(TrackingState.TRACKINGPAUSED);
+        autoPauseTracking();
       }
     }
   };
@@ -196,6 +194,16 @@ export const TrackingProvider = ({ children }: Props) => {
     setTrackingGeofence(currentGeoFence);
     startBackgroundUpdate();
   };
+  const autoResumeTracking = async () => {
+    const locations = await readTrackingLocations();
+    const location: TrackingLocation = {
+      location: getLocationObject(userLocation?.coords.latitude, userLocation?.coords.longitude, Date.now()),
+      insideGeofence: true,
+    };
+    await storeTrackingLocations([...locations, location]);
+    setTrackingEnd(undefined);
+    setTrackingState(TrackingState.TRACKING);
+  };
   const resumeTracking = async () => {
     const locations = await readTrackingLocations();
     const location: TrackingLocation = {
@@ -206,6 +214,16 @@ export const TrackingProvider = ({ children }: Props) => {
     setTrackingEnd(undefined);
     startBackgroundUpdate();
     setTrackingState(TrackingState.TRACKING);
+  };
+  const autoPauseTracking = async () => {
+    const locations = await readTrackingLocations();
+    const location: TrackingLocation = {
+      location: getLocationObject(userLocation?.coords.latitude, userLocation?.coords.longitude, Date.now()),
+      insideGeofence: false,
+    };
+    await storeTrackingLocations([...locations, location]);
+    setTrackingEnd(Date.now());
+    setTrackingState(TrackingState.TRACKINGPAUSED);
   };
   const pauseTracking = async () => {
     const locations = await readTrackingLocations();

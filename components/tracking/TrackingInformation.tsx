@@ -38,7 +38,9 @@ const TrackingInformation: React.FC<Props> = ({ collabState }: Props) => {
           </View>
         )}
         <View>
-          {tracking.trackingState === TrackingState.TRACKING && <Text style={styles.trackingHeader}>Tracking...</Text>}
+          {tracking.trackingState !== TrackingState.TRACKINGPAUSED && (
+            <Text style={styles.trackingHeader}>Tracking...</Text>
+          )}
           {tracking.trackingState === TrackingState.TRACKINGPAUSED && (
             <>
               <Text style={styles.trackingHeader}>Tracking paused...</Text>
