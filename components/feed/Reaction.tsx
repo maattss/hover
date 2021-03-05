@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, Image, TouchableOpacity, View, Modal, Alert } from 'react-native';
+import { StyleSheet, Text, Image, TouchableOpacity, View, Modal, FlatList, Alert } from 'react-native';
 import { Typography, Spacing } from '../../theme';
 import { Asset } from 'expo-asset';
 import { LikesFragmentFragment } from '../../graphql/Fragments.generated';
@@ -7,7 +7,6 @@ import { useLikeMutation } from '../../graphql/mutations/Like.generated';
 import { useUnlikeMutation } from '../../graphql/mutations/Unlike.generated';
 import { Colors } from '../../theme';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
-import { FlatList } from 'react-native-gesture-handler';
 import { Avatar } from 'react-native-elements';
 import { defaultUserProfile } from '../../helpers/objectMappers';
 import TouchableProfile from '../general/TouchableProfile';

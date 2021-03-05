@@ -12,7 +12,8 @@ import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import { Avatar } from 'react-native-elements';
 import useAuthentication from '../../hooks/useAuthentication';
 import Reaction from './Reaction';
-import Footer from './Footer';
+import { timeStampToPresentable } from '../../helpers/dateTimeHelpers';
+import Divider from '../general/Divider';
 
 interface ActivityFeedCardProps {
   data: ActivityFeedData;
@@ -49,14 +50,19 @@ const ActivityFeedCard: React.FC<ActivityFeedCardProps> = ({ data }: ActivityFee
             />
             <View style={{ marginLeft: Spacing.smaller }}>
               <Text style={styles.nameText}>{getName()}</Text>
-              <Text style={styles.captionText} numberOfLines={3}>
-                {data.activity.caption}
-              </Text>
+              <Text style={styles.timeText}>{timeStampToPresentable(data.createdAt)}</Text>
             </View>
           </View>
         </View>
       </TouchableProfile>
 
+      {data.activity.caption ? (
+        <View style={styles.captionCard}>
+          <Text style={styles.captionText} numberOfLines={3}>
+            {data.activity.caption}
+          </Text>
+        </View>
+      ) : null}
       <View style={styles.innerCard}>
         <View style={data.activity.friend ? { width: '60%' } : { width: '100%' }}>
           <View style={[styles.flexRowLeft, { marginBottom: Spacing.smaller }]}>
@@ -105,9 +111,8 @@ const ActivityFeedCard: React.FC<ActivityFeedCardProps> = ({ data }: ActivityFee
           {activityGeoFence && <GeoFences geofences={[activityGeoFence]} />}
         </MapView>
       </View>
-
+      <Divider style={{ borderBottomColor: Colors.gray800 }} />
       <Reaction feed_id={data.id} user_id={auth.user?.uid ?? ''} likes={data.likes} />
-      <Footer createdAt={data.createdAt} />
     </View>
   );
 };
@@ -131,10 +136,18 @@ const styles = StyleSheet.create({
     lineHeight: 30,
     marginTop: Spacing.smallest,
   },
-  captionText: {
+  timeText: {
     color: Colors.almostWhite,
     fontSize: 12,
     fontStyle: 'italic',
+    flexWrap: 'wrap',
+  },
+  captionCard: {
+    marginVertical: Spacing.smallest,
+    marginHorizontal: Spacing.smaller,
+  },
+  captionText: {
+    ...Typography.bodyText,
     flexWrap: 'wrap',
   },
   scoreText: {

@@ -10,7 +10,6 @@ import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import { getAchievementColor } from '../general/Achievement';
 import TouchableProfile from '../general/TouchableProfile';
 import Reaction from './Reaction';
-import Footer from './Footer';
 import useAuthentication from '../../hooks/useAuthentication';
 
 type ChallengeFeedCardProps = {
@@ -61,7 +60,6 @@ const ChallengeFeedCard: React.FC<ChallengeFeedCardProps> = ({ data }: Challenge
         <Leaderboard data={listData} renderItem={renderItem} />
       </View>
       <Reaction feed_id={data.id} user_id={auth.user?.uid ?? ''} likes={data.likes} />
-      <Footer createdAt={data.createdAt} />
     </View>
   );
 };
