@@ -9,6 +9,7 @@ import Reaction from './Reaction';
 import Footer from './Footer';
 import { Avatar } from 'react-native-elements';
 import useAuthentication from '../../hooks/useAuthentication';
+import { timeStampToPresentable } from '../../helpers/dateTimeHelpers';
 
 interface AchievementFeedCardProps {
   data: AchievementFeedData;
@@ -27,9 +28,10 @@ const AchievementFeedCard: React.FC<AchievementFeedCardProps> = ({ data }: Achie
                 source={{ uri: data.user.picture ? data.user.picture : defaultUserProfile.picture }}
                 size={'medium'}
               />
-              <Text style={styles.nameText} numberOfLines={1}>
-                {data.user.name}
-              </Text>
+              <View style={{ marginLeft: Spacing.smaller, width: '80%' }}>
+                <Text style={styles.nameText}>{data.user.name}</Text>
+                <Text style={styles.timeText}>{timeStampToPresentable(data.createdAt)}</Text>
+              </View>
             </View>
           </TouchableProfile>
           <View style={styles.description}>
@@ -43,7 +45,6 @@ const AchievementFeedCard: React.FC<AchievementFeedCardProps> = ({ data }: Achie
       </View>
 
       <Reaction feed_id={data.id} user_id={auth.user?.uid ?? ''} likes={data.likes} />
-      <Footer createdAt={data.createdAt} />
     </View>
   );
 };
@@ -66,10 +67,13 @@ const styles = StyleSheet.create({
     ...Typography.headerText,
     fontSize: 20,
     lineHeight: 30,
+    marginTop: Spacing.smallest,
+  },
+  timeText: {
+    color: Colors.almostWhite,
+    fontSize: 12,
+    fontStyle: 'italic',
     flexWrap: 'wrap',
-    marginTop: Spacing.smaller,
-    width: '80%',
-    marginLeft: Spacing.small,
   },
   description: {
     flexDirection: 'row',
