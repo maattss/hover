@@ -39,7 +39,6 @@ const AchievementFeedCard: React.FC<AchievementFeedCardProps> = ({ data }: Achie
             <Text style={styles.descriptionText}>{data.achievement.description}</Text>
           </View>
         </View>
-
         <View style={styles.achievement}>
           <Achievement achievement={data.achievement} />
         </View>

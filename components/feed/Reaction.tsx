@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, Image, TouchableOpacity, View, Modal, FlatList, Alert } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, Modal, FlatList, Alert, Image } from 'react-native';
 import { Typography, Spacing } from '../../theme';
 import { Asset } from 'expo-asset';
 import { LikesFragmentFragment } from '../../graphql/Fragments.generated';
@@ -21,7 +21,7 @@ const getReactionText = (reactionCount: number, userReacted: boolean) => {
 };
 const getImageURI = (userReacted: boolean) => {
   if (userReacted) return require('../../assets/images/clap.png');
-  return require('../../assets/images/clap-gray.png');
+  return require('../../assets/images/clap-gray.gif');
 };
 type ReactionProps = {
   feed_id: number;
@@ -46,6 +46,7 @@ const Reaction: React.FC<ReactionProps> = (props: ReactionProps) => {
   useEffect(() => {
     updateLikes(props.likes);
   }, []);
+
   const updateLikes = (newLikes: readonly LikesFragmentFragment[]) => {
     setUserReacted(isLiked(newLikes));
     setLikedBy(newLikes);
@@ -85,13 +86,13 @@ const Reaction: React.FC<ReactionProps> = (props: ReactionProps) => {
     }
   };
   const showInfoPopup = () => Alert.alert('Likes', 'These people have reacted to this post!');
-
   const openModal = () => setModalVisible(true);
   const renderItem = (like: LikesFragmentFragment) => {
     const getName = () => {
       if (auth.user?.uid === like.user.id) return 'You';
       return like.user.name;
     };
+
     return (
       <TouchableProfile user_id={like.user.id} name={like.user.name} onPress={() => setModalVisible(false)}>
         <View style={styles.row}>
