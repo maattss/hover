@@ -7,7 +7,8 @@
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
-    "userInterfaceStyle": "automatic",
+    "userInterfaceStyle": "dark",
+    "backgroundColor": "#121212'",
     "splash": {
       "image": "./assets/images/splash.png",
       "resizeMode": "contain",
@@ -24,7 +25,9 @@
         "NSLocationWhenInUseUsageDescription": "Your location will only be used to determine if you are in a valid geofence.",
         "NSLocationAlwaysAndWhenInUseUsageDescription": "Your location will only be used to determine if you are in a valid geofence.",
         "NSLocationAlwaysUsageDescription": "Your location will only be used to determine if you are in a valid geofence."
-      }
+      },
+      "bundleIdentifier": "com.hoverapp.hover",
+      "buildNumber": "1.0.1"
     },
     "android": {
       "adaptiveIcon": {
@@ -33,10 +36,14 @@
       },
       "useNextNotificationsApi": true,
       "permissions": ["ACCESS_COARSE_LOCATION", "ACCESS_FINE_LOCATION", "ACCESS_BACKGROUND_LOCATION"],
-      "package": "com.hoverapp.hover"
+      "package": "com.hoverapp.hover",
+      "versionCode": 1
     },
     "web": {
       "favicon": "./assets/images/favicon.png"
+    },
+    "notification": {
+      "iosDisplayInForeground": true
     }
   }
 }
