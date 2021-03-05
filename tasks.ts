@@ -22,9 +22,6 @@ TaskManager.defineTask(LOCATION_BACKGROUND_TRACKING, async ({ data, error }) => 
   const anyData: any = data;
   if (anyData.locations) {
     const currentLocation: LocationObject = anyData.locations[0];
-    console.log(
-      'Background location update [' + currentLocation.coords.latitude + ',' + currentLocation.coords.longitude + ']',
-    );
 
     const geoFence = await readGeofence();
     if (!geoFence) {

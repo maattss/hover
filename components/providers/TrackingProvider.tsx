@@ -140,9 +140,6 @@ export const TrackingProvider = ({ children }: Props) => {
     updateUserLocation(getLocationObject(newUserLocation.latitude, newUserLocation.longitude, Date.now()));
 
   const updateUserLocation = (newUserLocation: LocationObject) => {
-    console.log(
-      'Foreground location update [' + newUserLocation.coords.latitude + ',' + newUserLocation.coords.longitude + ']',
-    );
     setUserLocation(newUserLocation);
     const insideGeoFence = insideGeoFences(newUserLocation, geoFences);
 
@@ -280,7 +277,6 @@ export const TrackingProvider = ({ children }: Props) => {
       previousEntry.timestamp = location.location.timestamp;
       previousEntry.inside = location.insideGeofence;
     }
-    console.log('Duration outside: ', duration); // TODO: Remove, only for debugging
     return duration;
   };
 
