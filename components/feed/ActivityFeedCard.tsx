@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity, Alert } from 'react-native';
 import { Colors, Typography, Spacing } from '../../theme';
 import { ActivityFeedData } from '../../types/feedTypes';
 import MapView, { LatLng, Marker, Region } from 'react-native-maps';
@@ -37,6 +37,14 @@ const ActivityFeedCard: React.FC<ActivityFeedCardProps> = ({ data }: ActivityFee
     if (auth.user?.uid === data.user.id) return 'Your activity';
     return data.user.name;
   };
+  const showInfoPopup = () =>
+    Alert.alert(
+      'Hover with friends',
+      `${data.user.name} hovered together with ${
+        data.activity.friend?.name ?? defaultUserProfile.name
+      } and got double points! You can also track together with a friend if you press 
+      'Start session' or 'Join friend' while tracking.`,
+    );
 
   return (
     <View style={styles.card}>
@@ -56,15 +64,15 @@ const ActivityFeedCard: React.FC<ActivityFeedCardProps> = ({ data }: ActivityFee
         </View>
       </TouchableProfile>
 
-      {data.activity.caption ? (
+      {data.activity.caption !== '' && (
         <View style={styles.captionCard}>
-          <Text style={styles.captionText} numberOfLines={3}>
+          <Text style={styles.captionText} numberOfLines={4}>
             {data.activity.caption}
           </Text>
         </View>
-      ) : null}
+      )}
       <View style={styles.innerCard}>
-        <View style={data.activity.friend ? { width: '60%' } : { width: '100%' }}>
+        <View>
           <View style={[styles.flexRowLeft, { marginBottom: Spacing.smaller }]}>
             <FAIcon name={'stopwatch'} style={styles.infoIcons} />
             <Text style={styles.label}>{data.activity.duration}</Text>
@@ -73,18 +81,31 @@ const ActivityFeedCard: React.FC<ActivityFeedCardProps> = ({ data }: ActivityFee
             <FAIcon name={'map-marker-alt'} style={styles.infoIcons} />
             <Text style={styles.label}>{data.activity.geofence.name}</Text>
           </View>
-          {data.activity.friend && (
-            <TouchableProfile user_id={data.activity.friend.id} name={data.activity.friend.name}>
-              <View style={styles.flexRowLeft}>
-                <FAIcon name={'user-friends'} style={styles.infoIcons} />
-                <Text style={styles.label}>{data.activity.friend?.name}</Text>
-              </View>
-            </TouchableProfile>
-          )}
         </View>
         {data.activity.friend && (
-          <View style={styles.collabIcon}>
-            <Text style={styles.collabIconText}>2x points</Text>
+          <View style={styles.collab}>
+            <View style={styles.flexRowSpaceBetween}>
+              <Text style={styles.collabIconText}>2x points</Text>
+              <TouchableOpacity style={styles.flexRowLeft} onPress={showInfoPopup}>
+                <FAIcon name={'info-circle'} style={styles.collabIconText} />
+              </TouchableOpacity>
+            </View>
+            <View style={styles.flexRowLeft}>
+              <Text style={styles.friendName}>Together with</Text>
+            </View>
+            <TouchableProfile user_id={data.activity.friend.id} name={data.activity.friend.name}>
+              <View style={[styles.flexRowLeft, { paddingTop: Spacing.smallest }]}>
+                <Image
+                  style={styles.miniAvatar}
+                  source={{
+                    uri: data.activity.friend.picture ? data.activity.friend.picture : defaultUserProfile.picture,
+                  }}
+                />
+                <Text style={styles.friendName} numberOfLines={1}>
+                  {data.activity.friend?.name}
+                </Text>
+              </View>
+            </TouchableProfile>
           </View>
         )}
       </View>
@@ -111,7 +132,7 @@ const ActivityFeedCard: React.FC<ActivityFeedCardProps> = ({ data }: ActivityFee
           {activityGeoFence && <GeoFences geofences={[activityGeoFence]} />}
         </MapView>
       </View>
-      <Divider style={{ borderColor: Colors.gray800 }} />
+      <Divider style={{ borderColor: Colors.gray800, marginTop: Spacing.base }} />
       <Reaction feed_id={data.id} user_id={auth.user?.uid ?? ''} likes={data.likes} />
     </View>
   );
@@ -181,10 +202,10 @@ const styles = StyleSheet.create({
     borderRadius: Spacing.smallest,
   },
   miniAvatar: {
-    height: 25,
-    width: 25,
-    borderRadius: 25 / 2,
-    marginRight: Spacing.small,
+    height: 20,
+    width: 20,
+    borderRadius: 20 / 2,
+    marginRight: Spacing.smallest,
   },
   infoIcons: {
     ...Typography.smallIcon,
@@ -206,6 +227,11 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
     alignItems: 'center',
   },
+  flexRowSpaceBetween: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
   innerCard: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -213,20 +239,24 @@ const styles = StyleSheet.create({
     padding: Spacing.smallest,
     marginVertical: Spacing.smallest,
   },
-  collabIcon: {
+  collab: {
+    justifyContent: 'flex-end',
     borderStyle: 'solid',
     borderWidth: 1,
     backgroundColor: Colors.gray900,
     borderColor: Colors.gold,
     borderRadius: Spacing.smaller,
     padding: Spacing.smaller,
-    width: '30%',
-    alignItems: 'center',
+    width: '40%',
   },
   collabIconText: {
     ...Typography.largeBodyText,
     fontWeight: 'bold',
     color: Colors.gold,
+  },
+  friendName: {
+    ...Typography.bodyText,
+    fontSize: 10,
   },
 });
 
