@@ -6,10 +6,10 @@ import Achievement from '../general/Achievement';
 import { defaultUserProfile } from '../../helpers/objectMappers';
 import TouchableProfile from '../general/TouchableProfile';
 import Reaction from './Reaction';
-import Footer from './Footer';
 import { Avatar } from 'react-native-elements';
 import useAuthentication from '../../hooks/useAuthentication';
 import { timeStampToPresentable } from '../../helpers/dateTimeHelpers';
+import Divider from '../general/Divider';
 
 interface AchievementFeedCardProps {
   data: AchievementFeedData;
@@ -44,7 +44,7 @@ const AchievementFeedCard: React.FC<AchievementFeedCardProps> = ({ data }: Achie
           <Achievement achievement={data.achievement} />
         </View>
       </View>
-
+      <Divider style={{ borderColor: Colors.gray800 }} />
       <Reaction feed_id={data.id} user_id={auth.user?.uid ?? ''} likes={data.likes} />
     </View>
   );

@@ -111,7 +111,7 @@ const ActivityFeedCard: React.FC<ActivityFeedCardProps> = ({ data }: ActivityFee
           {activityGeoFence && <GeoFences geofences={[activityGeoFence]} />}
         </MapView>
       </View>
-      <Divider style={{ borderBottomColor: Colors.gray800 }} />
+      <Divider style={{ borderColor: Colors.gray800 }} />
       <Reaction feed_id={data.id} user_id={auth.user?.uid ?? ''} likes={data.likes} />
     </View>
   );

@@ -10,8 +10,8 @@ const Divider: React.FC<DividerProps> = ({ style }: DividerProps) => {
 
 const styles = StyleSheet.create({
   divider: {
-    borderBottomColor: Colors.almostWhite,
-    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderColor: Colors.almostWhite,
+    borderWidth: StyleSheet.hairlineWidth,
     marginVertical: Spacing.smaller,
   },
 });
