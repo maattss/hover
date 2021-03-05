@@ -19,7 +19,7 @@ import {
   storeTrackingLocations,
   TrackingLocation,
 } from '../../helpers/storage';
-import { console, Date } from '@ungap/global-this';
+import { console, Date, Math } from '@ungap/global-this';
 import { useInterval } from '../../hooks/useInterval';
 
 export enum TrackingState {
@@ -243,7 +243,7 @@ export const TrackingProvider = ({ children }: Props) => {
       caption: caption,
       geofence_id: currentGeoFence?.id,
       user_id: userId ?? '0',
-      score: await getScore(),
+      score: Math.floor(score),
       started_at: trackingStart ? new Date(trackingStart).toISOString() : new Date().toISOString(),
       duration: durationToTimestamp(await getDuration()),
     };

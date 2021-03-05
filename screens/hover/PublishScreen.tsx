@@ -102,7 +102,7 @@ const PublishScreen: React.FC = () => {
             </View>
           </View>
           <View style={styles.summaryContainer}>
-            <Text style={styles.infoScore}>{tracking.score} points</Text>
+            <Text style={styles.infoScore}>{Math.floor(tracking.score)} points</Text>
 
             <Text style={styles.label}>Summary</Text>
             <View style={styles.infoContainer}>
