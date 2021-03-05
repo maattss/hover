@@ -88,7 +88,7 @@ export const TrackingContext = React.createContext<TrackingContextValues>({
 TrackingContext.displayName = 'TrackingContext';
 
 export const TrackingProvider = ({ children }: Props) => {
-  const userId = useAuthentication().user?.uid;
+  const userId = useAuthentication().user?.uid ?? '';
   const [locationPermission] = usePermissions(LOCATION, { ask: true });
   const [loadingUserLocation, setLoadingUserLocation] = useState(false);
   const [userLocation, setUserLocation] = useState<LocationObject>();
@@ -140,7 +140,9 @@ export const TrackingProvider = ({ children }: Props) => {
     updateUserLocation(getLocationObject(newUserLocation.latitude, newUserLocation.longitude, Date.now()));
 
   const updateUserLocation = (newUserLocation: LocationObject) => {
-    console.log('Location update [' + newUserLocation.coords.latitude + ',' + newUserLocation.coords.longitude + ']');
+    console.log(
+      'Foreground location update [' + newUserLocation.coords.latitude + ',' + newUserLocation.coords.longitude + ']',
+    );
     setUserLocation(newUserLocation);
     const insideGeoFence = insideGeoFences(newUserLocation, geoFences);
 
@@ -149,7 +151,7 @@ export const TrackingProvider = ({ children }: Props) => {
     if (insideGeoFence) {
       setCurrentGeofence(insideGeoFence);
       if (trackingState === TrackingState.TRACKINGPAUSED && insideGeoFence.id === trackingGeoFence?.id) {
-        console.log('Inside geofence! Tracking auto start');
+        console.log('Foreground location event: Moved back in to geofence.');
         autoResumeTracking();
       }
     }
@@ -157,7 +159,7 @@ export const TrackingProvider = ({ children }: Props) => {
     if (!insideGeoFence) {
       setCurrentGeofence(undefined);
       if (trackingState === TrackingState.TRACKING) {
-        console.log('Outside geofence! Tracking auto paused');
+        console.log('Foreground location event: Moved out of geofence.');
         autoPauseTracking();
       }
     }
@@ -242,7 +244,7 @@ export const TrackingProvider = ({ children }: Props) => {
     const activity: Activities_Insert_Input = {
       caption: caption,
       geofence_id: currentGeoFence?.id,
-      user_id: userId ?? '0',
+      user_id: userId,
       score: Math.floor(score),
       started_at: trackingStart ? new Date(trackingStart).toISOString() : new Date().toISOString(),
       duration: durationToTimestamp(await getDuration()),
@@ -294,7 +296,6 @@ export const TrackingProvider = ({ children }: Props) => {
       }
     }
     if (!alwaysInsideGeofence) duration -= getOutsideDuration(locations);
-    console.log('Duration: ' + Math.floor(duration / 1000)); // TODO: Remove, only for debugging
     return Math.floor(duration / 1000);
   };
 

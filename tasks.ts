@@ -22,7 +22,9 @@ TaskManager.defineTask(LOCATION_BACKGROUND_TRACKING, async ({ data, error }) => 
   const anyData: any = data;
   if (anyData.locations) {
     const currentLocation: LocationObject = anyData.locations[0];
-    console.log('Tracking... [' + currentLocation.coords.latitude + ',' + currentLocation.coords.longitude + ']');
+    console.log(
+      'Background location update [' + currentLocation.coords.latitude + ',' + currentLocation.coords.longitude + ']',
+    );
 
     const geoFence = await readGeofence();
     if (!geoFence) {
@@ -43,7 +45,7 @@ TaskManager.defineTask(LOCATION_BACKGROUND_TRACKING, async ({ data, error }) => 
       }
       const lastStoredLocation = trackingLocations[trackingLocations.length - 1];
       if (lastStoredLocation.insideGeofence === true) {
-        console.log('Moved out of Hover zone');
+        console.log('Background location event: Moved back in to geofence.');
         const location: TrackingLocation = {
           location: currentLocation,
           insideGeofence: false,
@@ -54,8 +56,8 @@ TaskManager.defineTask(LOCATION_BACKGROUND_TRACKING, async ({ data, error }) => 
           if (pushToken) {
             sendPushNotification(
               pushToken,
-              'Oh noo! Outside Hover zone...',
-              'Move back to continue earning points.',
+              'Oh noo! You are outside the Hover zone...',
+              'Move back in to continue earning points (tracking will start automagically).',
               true,
             );
           }
@@ -72,7 +74,7 @@ TaskManager.defineTask(LOCATION_BACKGROUND_TRACKING, async ({ data, error }) => 
       }
       const lastStoredLocation = trackingLocations[trackingLocations.length - 1];
       if (lastStoredLocation.insideGeofence === false) {
-        console.log('Moved back in to the Hover zone');
+        console.log('Background location event: Moved out of geofence.');
         const location: TrackingLocation = {
           location: currentLocation,
           insideGeofence: true,
