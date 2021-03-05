@@ -200,3 +200,18 @@ fragment notificationFragment on notifications {
   user_id
   created_at
 }
+
+fragment profileActivityFragment on feed {
+  id
+  user {
+    ...listUserFragment
+  }
+  activity_id
+  activity {
+    ...feedActivityFragment
+  }
+  created_at
+  likes {
+    ...likesFragment
+  }
+}

@@ -18,7 +18,7 @@ export type ActivityFeedData = {
   activity: FeedActivityFragmentFragment;
   createdAt: string;
   feedCategory: FeedCategory;
-  likes: LikesFragmentFragment[];
+  likes: readonly LikesFragmentFragment[];
 };
 export type AchievementFeedData = {
   id: number;
@@ -26,7 +26,7 @@ export type AchievementFeedData = {
   achievement: AchievementFragmentFragment;
   createdAt: string;
   feedCategory: FeedCategory;
-  likes: LikesFragmentFragment[];
+  likes: readonly LikesFragmentFragment[];
 };
 
 export type ChallengeFeedData = {
@@ -35,7 +35,7 @@ export type ChallengeFeedData = {
   challenge: ChallengeFeedFragmentFragment;
   createdAt: string;
   feedCategory: FeedCategory;
-  likes: LikesFragmentFragment[];
+  likes: readonly LikesFragmentFragment[];
 };
 
 export type FeedData = ActivityFeedData | AchievementFeedData | ChallengeFeedData;

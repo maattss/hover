@@ -122,6 +122,15 @@ export type NotificationFragmentFragment = { readonly __typename: 'notifications
   'id' | 'type' | 'text' | 'seen' | 'user_id' | 'created_at'
 >;
 
+export type ProfileActivityFragmentFragment = { readonly __typename: 'feed' } & Pick<
+  Types.Feed,
+  'id' | 'activity_id' | 'created_at'
+> & {
+    readonly user?: Types.Maybe<{ readonly __typename: 'users' } & ListUserFragmentFragment>;
+    readonly activity?: Types.Maybe<{ readonly __typename: 'activities' } & FeedActivityFragmentFragment>;
+    readonly likes: ReadonlyArray<{ readonly __typename: 'likes' } & LikesFragmentFragment>;
+  };
+
 export const ListUserFragmentFragmentDoc = gql`
   fragment listUserFragment on users {
     id
@@ -363,4 +372,23 @@ export const NotificationFragmentFragmentDoc = gql`
     user_id
     created_at
   }
+`;
+export const ProfileActivityFragmentFragmentDoc = gql`
+  fragment profileActivityFragment on feed {
+    id
+    user {
+      ...listUserFragment
+    }
+    activity_id
+    activity {
+      ...feedActivityFragment
+    }
+    created_at
+    likes {
+      ...likesFragment
+    }
+  }
+  ${ListUserFragmentFragmentDoc}
+  ${FeedActivityFragmentFragmentDoc}
+  ${LikesFragmentFragmentDoc}
 `;
