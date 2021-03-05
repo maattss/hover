@@ -19,7 +19,6 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true,
       "infoPlist": {
         "NSLocationAlwaysUsage": "YES",
         "NSLocationWhenInUseUsageDescription": "Your location will only be used to determine if you are in a valid geofence.",

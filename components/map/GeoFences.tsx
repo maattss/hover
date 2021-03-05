@@ -19,7 +19,7 @@ const drawGeoFences = (geoFences: GeoFence[] | undefined, zoom: number, customMa
       if (geoFence.variant === GeoFenceVariant.CIRCLE) {
         const currentGeoFence = geoFence as CircleGeoFence;
         return (
-          <Fragment key={index}>
+          <View key={index}>
             <Circle
               center={{ latitude: currentGeoFence.latitude, longitude: currentGeoFence.longitude }}
               radius={currentGeoFence.radius}
@@ -56,7 +56,7 @@ const drawGeoFences = (geoFences: GeoFence[] | undefined, zoom: number, customMa
                 </View>
               </Marker>
             )}
-          </Fragment>
+          </View>
         );
       } else if (geoFence.variant === GeoFenceVariant.POLYGON) {
         const currentGeoFence = geoFence as PolygonGeoFence;
