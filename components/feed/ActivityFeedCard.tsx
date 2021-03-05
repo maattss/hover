@@ -43,6 +43,7 @@ const ActivityFeedCard: React.FC<ActivityFeedCardProps> = ({ data }: ActivityFee
         <View style={styles.flexRowLeft}>
           <View style={styles.topBar}>
             <Avatar
+              rounded
               source={{ uri: data.user.picture ? data.user.picture : defaultUserProfile.picture }}
               size={'medium'}
             />

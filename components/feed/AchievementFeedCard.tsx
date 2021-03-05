@@ -21,6 +21,7 @@ const AchievementFeedCard: React.FC<AchievementFeedCardProps> = ({ data }: Achie
           <TouchableProfile user_id={data.user.id} name={data.user.name}>
             <View style={styles.topBar}>
               <Avatar
+                rounded
                 source={{ uri: data.user.picture ? data.user.picture : defaultUserProfile.picture }}
                 size={'medium'}
               />

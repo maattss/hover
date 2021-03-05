@@ -13,6 +13,7 @@ interface Props {
 const TrackingInformation: React.FC<Props> = ({ collabState }: Props) => {
   const tracking = useTracking();
   const stopTracking = () => tracking.pauseTracking();
+
   const score = Math.floor(tracking.score);
   const progress = tracking.score - score;
   const nextScore = tracking.score == 0 ? 1 : Math.ceil(tracking.score);
@@ -26,7 +27,9 @@ const TrackingInformation: React.FC<Props> = ({ collabState }: Props) => {
           </View>
         )}
         <View>
-          {tracking.trackingState === TrackingState.TRACKING && <Text style={styles.trackingHeader}>Tracking...</Text>}
+          {tracking.trackingState !== TrackingState.TRACKINGPAUSED && (
+            <Text style={styles.trackingHeader}>Tracking...</Text>
+          )}
           {tracking.trackingState === TrackingState.TRACKINGPAUSED && (
             <>
               <Text style={styles.trackingHeader}>Tracking paused...</Text>

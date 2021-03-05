@@ -47,16 +47,16 @@ const PublishScreen: React.FC = () => {
   };
 
   const renderMap = () => {
-    if (tracking.insideGeoFence) {
+    if (tracking.trackingGeoFence) {
       const mapRegion: Region = {
-        latitude: tracking.insideGeoFence?.latitude,
-        longitude: tracking.insideGeoFence?.longitude,
+        latitude: tracking.trackingGeoFence.latitude,
+        longitude: tracking.trackingGeoFence.longitude,
         latitudeDelta: 0.01,
         longitudeDelta: 0.01,
       };
       const markerCoordinate: LatLng = {
-        latitude: tracking.insideGeoFence?.latitude,
-        longitude: tracking.insideGeoFence?.longitude,
+        latitude: tracking.trackingGeoFence.latitude,
+        longitude: tracking.trackingGeoFence.longitude,
       };
       return (
         <MapView
@@ -68,10 +68,10 @@ const PublishScreen: React.FC = () => {
           zoomEnabled={false}>
           <Marker
             coordinate={markerCoordinate}
-            title={tracking.insideGeoFence?.name ?? 'No name'}
-            description={tracking.insideGeoFence?.description ?? 'No description'}
+            title={tracking.trackingGeoFence.name}
+            description={tracking.trackingGeoFence.description}
           />
-          <GeoFences geofences={[tracking.insideGeoFence]} />
+          <GeoFences geofences={[tracking.trackingGeoFence]} />
         </MapView>
       );
     }
@@ -116,21 +116,19 @@ const PublishScreen: React.FC = () => {
                     <FA5Icon name={'clock'} style={styles.infoIcons} />
                     <Text style={styles.infoText}>{timeStampToHours(tracking.trackingStart)}</Text>
                   </View>
-                  {tracking.insideGeoFence && (
-                    <View style={styles.flexRowLeft}>
-                      <FA5Icon name={'map-marker-alt'} style={styles.infoIcons} />
-                      <Text style={styles.infoText}>{tracking.insideGeoFence?.name}</Text>
-                    </View>
-                  )}
+                  <View style={styles.flexRowLeft}>
+                    <FA5Icon name={'map-marker-alt'} style={styles.infoIcons} />
+                    <Text style={styles.infoText}>{tracking.trackingGeoFence?.name}</Text>
+                  </View>
                 </View>
               </View>
               <View style={{ width: '39%' }}>
                 <View style={[styles.infoCard, { alignItems: 'center' }]}>
                   <Image
-                    source={{ uri: getGeoFenceImage(tracking.insideGeoFence?.category) }}
+                    source={{ uri: getGeoFenceImage(tracking.trackingGeoFence?.category) }}
                     style={styles.categoryIcon}
                   />
-                  <Text style={{ ...Typography.largeBodyText }}>{tracking.insideGeoFence?.category}</Text>
+                  <Text style={{ ...Typography.largeBodyText }}>{tracking.trackingGeoFence?.category}</Text>
                 </View>
               </View>
             </View>
@@ -147,12 +145,10 @@ const PublishScreen: React.FC = () => {
               </TextInput>
             </View>
 
-            {tracking.insideGeoFence && (
-              <View style={{ marginBottom: 150 }}>
-                <Text style={styles.label}>Map</Text>
-                {renderMap()}
-              </View>
-            )}
+            <View style={{ marginBottom: 150 }}>
+              <Text style={styles.label}>Map</Text>
+              {renderMap()}
+            </View>
           </View>
         </ScrollView>
       </TouchableWithoutFeedback>

@@ -87,7 +87,7 @@ const HoverWithFriends: React.FC<Props> = ({
           variables: {
             user_id: auth.user?.uid ?? '',
             linking_word: yourCollabCode,
-            geofence_id: tracking.insideGeoFence?.id ?? 0,
+            geofence_id: tracking.trackingGeoFence?.id ?? 0,
           },
         });
         setTrackingWithFriendId(response.data?.insert_friend_tracking_one?.id);
@@ -101,14 +101,14 @@ const HoverWithFriends: React.FC<Props> = ({
 
   const joinFriendTracking = async () => {
     try {
-      if (!tracking.insideGeoFence) throw Error('User not inside geofence.');
+      if (!tracking.trackingGeoFence) throw Error('User not inside geofence.');
 
       const response = await UpdateFriendTracking({
         variables: {
           user_id: auth.user?.uid ?? '',
           linking_word: friendCollabCode,
           timestamp: getCurrentTimestamp(),
-          geofence_id: tracking.insideGeoFence.id,
+          geofence_id: tracking.trackingGeoFence.id,
         },
       });
 

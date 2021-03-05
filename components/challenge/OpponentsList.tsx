@@ -13,7 +13,7 @@ const OpponentsRowList: React.FC<OpponentsListProps> = ({ opponents }: Opponents
     <View style={styles.opponentRow}>
       {opponents.map((opponent: ListUserFragmentFragment) => (
         <View key={opponent.id} style={styles.opponentBox}>
-          <Avatar source={{ uri: opponent.picture ?? defaultUserProfile.picture }} size="small" />
+          <Avatar rounded source={{ uri: opponent.picture ?? defaultUserProfile.picture }} size="small" />
           <Text style={styles.opponentNameText}>{opponent.name.split(' ')[0]}</Text>
         </View>
       ))}

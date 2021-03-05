@@ -2,7 +2,8 @@
   "expo": {
     "name": "Hover",
     "slug": "hover",
-    "version": "1.0.0",
+    "version": "1.0.1",
+    "owner": "mmaattss",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
@@ -20,9 +21,9 @@
       "supportsTablet": true,
       "infoPlist": {
         "NSLocationAlwaysUsage": "YES",
-        "NSLocationWhenInUseUsageDescription": "Your location will be used to determine if you are within a valid geofencing region.",
-        "NSLocationAlwaysAndWhenInUseUsageDescription": "Your location will be used to determine and notify you if you are within a valid geofencing region.",
-        "NSLocationAlwaysUsageDescription": "Your location will be used to notify you when you are located at valid geofencing region."
+        "NSLocationWhenInUseUsageDescription": "Your location will only be used to determine if you are in a valid geofence.",
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "Your location will only be used to determine if you are in a valid geofence.",
+        "NSLocationAlwaysUsageDescription": "Your location will only be used to determine if you are in a valid geofence."
       }
     },
     "android": {
@@ -32,7 +33,7 @@
       },
       "useNextNotificationsApi": true,
       "permissions": ["ACCESS_COARSE_LOCATION", "ACCESS_FINE_LOCATION", "ACCESS_BACKGROUND_LOCATION"],
-      "package": "com.sirimykland.hover"
+      "package": "com.hoverapp.hover"
     },
     "web": {
       "favicon": "./assets/images/favicon.png"
