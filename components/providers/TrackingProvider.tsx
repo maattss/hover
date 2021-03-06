@@ -149,18 +149,13 @@ export const TrackingProvider = ({ children }: Props) => {
 
     if (insideGeoFence) {
       setCurrentGeofence(insideGeoFence);
-      if (trackingState === TrackingState.TRACKINGPAUSED && insideGeoFence.id === trackingGeoFence?.id) {
-        console.log('Foreground location event: Moved back in to geofence.');
+      if (trackingState === TrackingState.TRACKINGPAUSED && insideGeoFence.id === trackingGeoFence?.id)
         autoResumeTracking();
-      }
     }
 
     if (!insideGeoFence) {
       setCurrentGeofence(undefined);
-      if (trackingState === TrackingState.TRACKING) {
-        console.log('Foreground location event: Moved out of geofence.');
-        autoPauseTracking();
-      }
+      if (trackingState === TrackingState.TRACKING) autoPauseTracking();
     }
   };
 
@@ -228,11 +223,12 @@ export const TrackingProvider = ({ children }: Props) => {
 
   const stopTracking = async (caption: string) => {
     setTrackingState(TrackingState.EXPLORE);
+    const publishScore = score < 0 ? 0 : Math.floor(score);
     const activity: Activities_Insert_Input = {
       caption: caption,
       geofence_id: currentGeoFence?.id,
       user_id: userId,
-      score: Math.floor(score),
+      score: publishScore,
       started_at: trackingStart ? new Date(trackingStart).toISOString() : new Date().toISOString(),
       duration: durationToTimestamp(await getDuration()),
     };

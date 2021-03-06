@@ -44,6 +44,7 @@ export const PushNotificationProvider = ({ children }: Props) => {
           },
         });
         storePushToken(expoPushToken);
+        console.log("Added push notification token '" + expoPushToken + "'");
       } catch (error) {
         console.error(error.message);
       }
