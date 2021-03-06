@@ -20,6 +20,7 @@ import {
   readPauseEvents,
   storeGeofence,
   storePauseEvents,
+  storeTrackingStart,
 } from '../../helpers/storage';
 import { console, Date, Math } from '@ungap/global-this';
 import { useInterval } from '../../hooks/useInterval';
@@ -184,11 +185,13 @@ export const TrackingProvider = ({ children }: Props) => {
     setTrackingStart(Date.now());
     await clearTrackingStorage();
     await storeGeofence(currentGeoFence);
+    await storeTrackingStart(Date.now());
     setTrackingGeofence(currentGeoFence);
     startBackgroundUpdate();
   };
   const autoResumeTracking = async () => {
     setTrackingEnd(undefined);
+    startBackgroundUpdate();
     setTrackingState(TrackingState.TRACKING);
   };
   const resumeTracking = async () => {
@@ -204,6 +207,7 @@ export const TrackingProvider = ({ children }: Props) => {
   };
   const autoPauseTracking = async () => {
     setTrackingEnd(Date.now());
+    stopBackgroundUpdate();
     setTrackingState(TrackingState.TRACKINGPAUSED);
   };
   const pauseTracking = async () => {
@@ -262,7 +266,7 @@ export const TrackingProvider = ({ children }: Props) => {
       previousEntry.timestamp = location.location.timestamp;
       previousEntry.inside = location.insideGeofence;
     }
-    console.log('Outside duration', duration);
+    //console.log('Outside duration', duration);
     return duration;
   };
 
@@ -279,18 +283,18 @@ export const TrackingProvider = ({ children }: Props) => {
       previousEntry.timestamp = event.timestamp;
       previousEntry.paused = event.paused;
     }
-    console.log('Paused duration', duration);
+    //console.log('Paused duration', duration);
     return duration;
   };
 
   const getDuration = async () => {
     if (!trackingGeoFence || !trackingStart) return 0;
     let duration = trackingEnd ? trackingEnd - trackingStart : Date.now() - trackingStart;
-    console.log('--------------------------------');
-    console.log('Total duration', duration);
+    //console.log('--------------------------------');
+    //console.log('Total duration', duration);
 
     const locations = await readLocationEvents();
-    console.log('Locations:', locations);
+    //console.log('Locations:', locations);
     let alwaysInsideGeofence = true;
     for (const location of locations) {
       if (location.insideGeofence === false) {
@@ -301,9 +305,9 @@ export const TrackingProvider = ({ children }: Props) => {
     if (!alwaysInsideGeofence) duration -= getOutsideDuration(locations);
 
     const pauseEvents = await readPauseEvents();
-    console.log('Pauses:', pauseEvents);
+    //console.log('Pauses:', pauseEvents);
     if (pauseEvents.length > 1) duration -= getPausedDuration(pauseEvents);
-    console.log('Inside duration', duration);
+    //console.log('Inside duration', duration);
     return Math.floor(duration / 1000);
   };
 
