@@ -1,12 +1,6 @@
 import { LocationObject } from 'expo-location';
 import { insideGeoFences } from './helpers/geoFenceCalculations';
-import {
-  readGeofence,
-  readTrackingLocations,
-  readPushToken,
-  storeTrackingLocations,
-  TrackingLocation,
-} from './helpers/storage';
+import { readGeofence, readLocationEvents, readPushToken, storeLocationEvents, LocationEvent } from './helpers/storage';
 import { sendPushNotification } from './helpers/pushNotifications';
 import * as TaskManager from 'expo-task-manager';
 import Constants from 'expo-constants';
@@ -29,25 +23,25 @@ TaskManager.defineTask(LOCATION_BACKGROUND_TRACKING, async ({ data, error }) => 
       return;
     }
     const insideGeoFence = insideGeoFences(currentLocation, [geoFence]);
-    const trackingLocations = await readTrackingLocations();
+    const trackingLocations = await readLocationEvents();
 
     if (!insideGeoFence) {
       if (trackingLocations.length === 0) {
-        const location: TrackingLocation = {
+        const location: LocationEvent = {
           location: currentLocation,
           insideGeofence: false,
         };
-        storeTrackingLocations([location]);
+        storeLocationEvents([location]);
         return;
       }
       const lastStoredLocation = trackingLocations[trackingLocations.length - 1];
       if (lastStoredLocation.insideGeofence === true) {
         console.log('Background location event: Moved back in to geofence.');
-        const location: TrackingLocation = {
+        const location: LocationEvent = {
           location: currentLocation,
           insideGeofence: false,
         };
-        storeTrackingLocations([...trackingLocations, location]);
+        storeLocationEvents([...trackingLocations, location]);
         if (Constants.isDevice) {
           const pushToken = await readPushToken();
           if (pushToken) {
@@ -62,21 +56,21 @@ TaskManager.defineTask(LOCATION_BACKGROUND_TRACKING, async ({ data, error }) => 
       }
     } else {
       if (trackingLocations.length === 0) {
-        const location: TrackingLocation = {
+        const location: LocationEvent = {
           location: currentLocation,
           insideGeofence: true,
         };
-        storeTrackingLocations([location]);
+        storeLocationEvents([location]);
         return;
       }
       const lastStoredLocation = trackingLocations[trackingLocations.length - 1];
       if (lastStoredLocation.insideGeofence === false) {
         console.log('Background location event: Moved out of geofence.');
-        const location: TrackingLocation = {
+        const location: LocationEvent = {
           location: currentLocation,
           insideGeofence: true,
         };
-        storeTrackingLocations([...trackingLocations, location]);
+        storeLocationEvents([...trackingLocations, location]);
       }
     }
   }
