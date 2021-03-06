@@ -193,12 +193,6 @@ export const TrackingProvider = ({ children }: Props) => {
     startBackgroundUpdate();
   };
   const autoResumeTracking = async () => {
-    const pauseEvents = await readPauseEvents();
-    const newEvent: PauseEvent = {
-      timestamp: Date.now(),
-      paused: false,
-    };
-    await storePauseEvents([...pauseEvents, newEvent]);
     setTrackingEnd(undefined);
     setTrackingState(TrackingState.TRACKING);
   };
@@ -214,12 +208,6 @@ export const TrackingProvider = ({ children }: Props) => {
     setTrackingState(TrackingState.TRACKING);
   };
   const autoPauseTracking = async () => {
-    const pauseEvents = await readPauseEvents();
-    const newEvent: PauseEvent = {
-      timestamp: Date.now(),
-      paused: true,
-    };
-    await storePauseEvents([...pauseEvents, newEvent]);
     setTrackingEnd(Date.now());
     setTrackingState(TrackingState.TRACKINGPAUSED);
   };
@@ -304,7 +292,9 @@ export const TrackingProvider = ({ children }: Props) => {
     let duration = trackingEnd ? trackingEnd - trackingStart : Date.now() - trackingStart;
     console.log('--------------------------------');
     console.log('Total duration', duration);
+
     const locations = await readLocationEvents();
+    console.log('Locations:', locations);
     let alwaysInsideGeofence = true;
     for (const location of locations) {
       if (location.insideGeofence === false) {
@@ -315,6 +305,7 @@ export const TrackingProvider = ({ children }: Props) => {
     if (!alwaysInsideGeofence) duration -= getOutsideDuration(locations);
 
     const pauseEvents = await readPauseEvents();
+    console.log('Pauses:', pauseEvents);
     if (pauseEvents.length > 1) duration -= getPausedDuration(pauseEvents);
     console.log('Inside duration', duration);
     return Math.floor(duration / 1000);
