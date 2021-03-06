@@ -3,7 +3,8 @@ import { LocationObject } from 'expo-location';
 import { GeoFence } from '../types/geoFenceTypes';
 
 const GEOFENCE_KEY = '@hover_current_geofence';
-const TRACKING_KEY = '@hover_location_events';
+const LOCATION_KEY = '@hover_location_events';
+const TRACKING_START_KEY = '@hover_tracking_start';
 const PAUSE_KEY = '@hover_pause_events';
 const PUSH_KEY = '@hover_push_token';
 
@@ -17,12 +18,13 @@ export interface PauseEvent {
   paused: boolean;
 }
 
+export const storeTrackingStart = async (value: number) => storeString(TRACKING_START_KEY, value.toString());
+
+export const readTrackingStart = async () => await readString(TRACKING_START_KEY);
+
 export const storePushToken = async (value: string) => storeString(PUSH_KEY, value);
 
-export const readPushToken = async () => {
-  const pushToken = await readString(PUSH_KEY);
-  return pushToken;
-};
+export const readPushToken = async () => await readString(PUSH_KEY);
 
 export const storeGeofence = async (value: GeoFence) => storeObject(GEOFENCE_KEY, value);
 
@@ -39,17 +41,17 @@ export const readPauseEvents = async () => {
   return events;
 };
 
-export const storeLocationEvents = async (value: LocationEvent[]) => storeObject(TRACKING_KEY, value);
+export const storeLocationEvents = async (value: LocationEvent[]) => storeObject(LOCATION_KEY, value);
 
 export const readLocationEvents = async () => {
-  const events: LocationEvent[] = await readObject(TRACKING_KEY);
+  const events: LocationEvent[] = await readObject(LOCATION_KEY);
   if (!events) return [];
   return events;
 };
 
 export const clearTrackingStorage = async () => {
   try {
-    await AsyncStorage.multiRemove([GEOFENCE_KEY, TRACKING_KEY, PAUSE_KEY]);
+    await AsyncStorage.multiRemove([GEOFENCE_KEY, TRACKING_START_KEY, PAUSE_KEY, LOCATION_KEY]);
   } catch (e) {
     console.error('STORAGE: Error clearing tracking storage', e);
   }
@@ -57,7 +59,7 @@ export const clearTrackingStorage = async () => {
 
 export const clearHoverStorage = async () => {
   try {
-    await AsyncStorage.multiRemove([GEOFENCE_KEY, TRACKING_KEY, PAUSE_KEY, PUSH_KEY]);
+    await AsyncStorage.multiRemove([GEOFENCE_KEY, TRACKING_START_KEY, PAUSE_KEY, LOCATION_KEY, PUSH_KEY]);
   } catch (e) {
     console.error('STORAGE: Error clearing Hover storage', e);
   }

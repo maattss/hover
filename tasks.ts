@@ -1,6 +1,13 @@
 import { LocationObject } from 'expo-location';
 import { insideGeoFences } from './helpers/geoFenceCalculations';
-import { readGeofence, readLocationEvents, readPushToken, storeLocationEvents, LocationEvent } from './helpers/storage';
+import {
+  readGeofence,
+  readLocationEvents,
+  readPushToken,
+  storeLocationEvents,
+  LocationEvent,
+  readTrackingStart,
+} from './helpers/storage';
 import { sendPushNotification } from './helpers/pushNotifications';
 import * as TaskManager from 'expo-task-manager';
 import Constants from 'expo-constants';
@@ -16,6 +23,10 @@ TaskManager.defineTask(LOCATION_BACKGROUND_TRACKING, async ({ data, error }) => 
   const anyData: any = data;
   if (anyData.locations) {
     const currentLocation: LocationObject = anyData.locations[0];
+    const trackingStart = Number((await readTrackingStart()) ?? '0');
+
+    // Locations with timestamp before tracking started should be discarded
+    if (currentLocation.timestamp < trackingStart) return;
 
     const geoFence = await readGeofence();
     if (!geoFence) {
