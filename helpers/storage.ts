@@ -64,7 +64,7 @@ export const clearHoverStorage = async () => {
 };
 
 // General
-const storeString = async (value: string, key: string) => {
+const storeString = async (key: string, value: string) => {
   try {
     await AsyncStorage.setItem(key, value);
   } catch (e) {
