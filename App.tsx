@@ -16,6 +16,7 @@ import fragmentMatcher from './types/fragmentMatcher';
 import PushNotificationProvider from './components/providers/PushNotificationProvider';
 import NotificationProvider from './components/providers/NotificationProvider';
 import { LikesFragmentFragment } from './graphql/Fragments.generated';
+import * as TaskManager from 'expo-task-manager';
 
 const asyncAuthLink = setContext(async () => {
   return {
@@ -52,16 +53,18 @@ export const apolloClient = new ApolloClient({
 
 export default function App() {
   const [loadingCache, setLoadingCache] = useState(true);
+  const [unregisterTasks, setUnregisterTasks] = useState(true);
 
   useEffect(() => {
     persistCache({
       cache,
       storage: AsyncStorage,
     }).then(() => setLoadingCache(false));
+    TaskManager.unregisterAllTasksAsync().then(() => setUnregisterTasks(false));
   }, []);
 
   const isLoadingAssets = useCachedResources();
-  if (isLoadingAssets || loadingCache) {
+  if (isLoadingAssets || loadingCache || unregisterTasks) {
     SplashScreen.preventAutoHideAsync();
     return null;
   } else {
