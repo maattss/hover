@@ -3,17 +3,26 @@ import { LocationObject } from 'expo-location';
 import { GeoFence } from '../types/geoFenceTypes';
 
 const GEOFENCE_KEY = '@hover_current_geofence';
-const TRACKING_KEY = '@hover_tracking_locations';
-const PUSH_KEY = '@hover_push';
+const TRACKING_KEY = '@hover_location_events';
+const PAUSE_KEY = '@hover_pause_events';
+const PUSH_KEY = '@hover_push_token';
 
-export interface TrackingLocation {
+export interface LocationEvent {
   location: LocationObject;
   insideGeofence: boolean;
 }
 
+export interface PauseEvent {
+  timestamp: number;
+  paused: boolean;
+}
+
 export const storePushToken = async (value: string) => storeString(PUSH_KEY, value);
 
-export const readPushToken = async () => await readString(PUSH_KEY);
+export const readPushToken = async () => {
+  const pushToken = await readString(PUSH_KEY);
+  return pushToken;
+};
 
 export const storeGeofence = async (value: GeoFence) => storeObject(GEOFENCE_KEY, value);
 
@@ -22,17 +31,25 @@ export const readGeofence = async () => {
   return geoFence;
 };
 
-export const storeTrackingLocations = async (value: TrackingLocation[]) => storeObject(TRACKING_KEY, value);
+export const storePauseEvents = async (value: PauseEvent[]) => storeObject(PAUSE_KEY, value);
 
-export const readTrackingLocations = async () => {
-  const locations: TrackingLocation[] = await readObject(TRACKING_KEY);
-  if (!locations) return [];
-  return locations;
+export const readPauseEvents = async () => {
+  const events: PauseEvent[] = await readObject(PAUSE_KEY);
+  if (!events) return [];
+  return events;
+};
+
+export const storeLocationEvents = async (value: LocationEvent[]) => storeObject(TRACKING_KEY, value);
+
+export const readLocationEvents = async () => {
+  const events: LocationEvent[] = await readObject(TRACKING_KEY);
+  if (!events) return [];
+  return events;
 };
 
 export const clearTrackingStorage = async () => {
   try {
-    await AsyncStorage.multiRemove([GEOFENCE_KEY, TRACKING_KEY]);
+    await AsyncStorage.multiRemove([GEOFENCE_KEY, TRACKING_KEY, PAUSE_KEY]);
   } catch (e) {
     console.error('STORAGE: Error clearing tracking storage', e);
   }
@@ -40,7 +57,7 @@ export const clearTrackingStorage = async () => {
 
 export const clearHoverStorage = async () => {
   try {
-    await AsyncStorage.multiRemove([GEOFENCE_KEY, TRACKING_KEY, PUSH_KEY]);
+    await AsyncStorage.multiRemove([GEOFENCE_KEY, TRACKING_KEY, PAUSE_KEY, PUSH_KEY]);
   } catch (e) {
     console.error('STORAGE: Error clearing Hover storage', e);
   }
