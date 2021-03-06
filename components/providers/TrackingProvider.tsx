@@ -266,7 +266,6 @@ export const TrackingProvider = ({ children }: Props) => {
       previousEntry.timestamp = location.location.timestamp;
       previousEntry.inside = location.insideGeofence;
     }
-    //console.log('Outside duration', duration);
     return duration;
   };
 
@@ -283,18 +282,14 @@ export const TrackingProvider = ({ children }: Props) => {
       previousEntry.timestamp = event.timestamp;
       previousEntry.paused = event.paused;
     }
-    //console.log('Paused duration', duration);
     return duration;
   };
 
   const getDuration = async () => {
     if (!trackingGeoFence || !trackingStart) return 0;
     let duration = trackingEnd ? trackingEnd - trackingStart : Date.now() - trackingStart;
-    //console.log('--------------------------------');
-    //console.log('Total duration', duration);
 
     const locations = await readLocationEvents();
-    //console.log('Locations:', locations);
     let alwaysInsideGeofence = true;
     for (const location of locations) {
       if (location.insideGeofence === false) {
@@ -305,9 +300,7 @@ export const TrackingProvider = ({ children }: Props) => {
     if (!alwaysInsideGeofence) duration -= getOutsideDuration(locations);
 
     const pauseEvents = await readPauseEvents();
-    //console.log('Pauses:', pauseEvents);
     if (pauseEvents.length > 1) duration -= getPausedDuration(pauseEvents);
-    //console.log('Inside duration', duration);
     return Math.floor(duration / 1000);
   };
 
