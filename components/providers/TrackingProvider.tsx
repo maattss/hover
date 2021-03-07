@@ -230,7 +230,7 @@ export const TrackingProvider = ({ children }: Props) => {
     const publishScore = score < 0 ? 0 : Math.floor(score);
     const activity: Activities_Insert_Input = {
       caption: caption,
-      geofence_id: currentGeoFence?.id,
+      geofence_id: trackingGeoFence?.id,
       user_id: userId,
       score: publishScore,
       started_at: trackingStart ? new Date(trackingStart).toISOString() : new Date().toISOString(),
@@ -247,6 +247,7 @@ export const TrackingProvider = ({ children }: Props) => {
       console.log('Activity inserted to db', response);
       Alert.alert('Upload complete', 'Activity uploaded successfully!');
     } catch (error) {
+      Alert.alert('Upload error', error.message);
       console.error('Mutation error', error.message);
       addUnUploadedActivity(activity);
     }
