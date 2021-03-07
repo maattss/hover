@@ -2904,11 +2904,33 @@ export type Feed = {
   feedTypeByFeedType: Feed_Type;
   feed_type: Feed_Type_Enum;
   id: Scalars['Int'];
+  /** An array relationship */
+  likes: Array<Likes>;
+  /** An aggregated array relationship */
+  likes_aggregate: Likes_Aggregate;
   /** An object relationship */
   user?: Maybe<Users>;
   /** An object relationship */
   user_achievement?: Maybe<User_Achievement>;
   user_id?: Maybe<Scalars['String']>;
+};
+
+/** columns and relationships of "feed" */
+export type FeedLikesArgs = {
+  distinct_on?: Maybe<Array<Likes_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Likes_Order_By>>;
+  where?: Maybe<Likes_Bool_Exp>;
+};
+
+/** columns and relationships of "feed" */
+export type FeedLikes_AggregateArgs = {
+  distinct_on?: Maybe<Array<Likes_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Likes_Order_By>>;
+  where?: Maybe<Likes_Bool_Exp>;
 };
 
 /** aggregated selection of "feed" */
@@ -2993,6 +3015,7 @@ export type Feed_Bool_Exp = {
   feedTypeByFeedType?: Maybe<Feed_Type_Bool_Exp>;
   feed_type?: Maybe<Feed_Type_Enum_Comparison_Exp>;
   id?: Maybe<Int_Comparison_Exp>;
+  likes?: Maybe<Likes_Bool_Exp>;
   user?: Maybe<Users_Bool_Exp>;
   user_achievement?: Maybe<User_Achievement_Bool_Exp>;
   user_id?: Maybe<String_Comparison_Exp>;
@@ -3030,6 +3053,7 @@ export type Feed_Insert_Input = {
   feedTypeByFeedType?: Maybe<Feed_Type_Obj_Rel_Insert_Input>;
   feed_type?: Maybe<Feed_Type_Enum>;
   id?: Maybe<Scalars['Int']>;
+  likes?: Maybe<Likes_Arr_Rel_Insert_Input>;
   user?: Maybe<Users_Obj_Rel_Insert_Input>;
   user_achievement?: Maybe<User_Achievement_Obj_Rel_Insert_Input>;
   user_id?: Maybe<Scalars['String']>;
@@ -3111,6 +3135,7 @@ export type Feed_Order_By = {
   feedTypeByFeedType?: Maybe<Feed_Type_Order_By>;
   feed_type?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
+  likes_aggregate?: Maybe<Likes_Aggregate_Order_By>;
   user?: Maybe<Users_Order_By>;
   user_achievement?: Maybe<User_Achievement_Order_By>;
   user_id?: Maybe<Order_By>;
@@ -4678,9 +4703,9 @@ export type Json_Comparison_Exp = {
 /** columns and relationships of "likes" */
 export type Likes = {
   __typename?: 'likes';
-  /** An object relationship */
-  activity: Activities;
   created_at?: Maybe<Scalars['timestamptz']>;
+  /** An object relationship */
+  feed: Feed;
   feed_id: Scalars['Int'];
   updated_at?: Maybe<Scalars['timestamptz']>;
   /** An object relationship */
@@ -4754,8 +4779,8 @@ export type Likes_Bool_Exp = {
   _and?: Maybe<Array<Maybe<Likes_Bool_Exp>>>;
   _not?: Maybe<Likes_Bool_Exp>;
   _or?: Maybe<Array<Maybe<Likes_Bool_Exp>>>;
-  activity?: Maybe<Activities_Bool_Exp>;
   created_at?: Maybe<Timestamptz_Comparison_Exp>;
+  feed?: Maybe<Feed_Bool_Exp>;
   feed_id?: Maybe<Int_Comparison_Exp>;
   updated_at?: Maybe<Timestamptz_Comparison_Exp>;
   user?: Maybe<Users_Bool_Exp>;
@@ -4765,9 +4790,9 @@ export type Likes_Bool_Exp = {
 /** unique or primary key constraints on table "likes" */
 export enum Likes_Constraint {
   /** unique or primary key constraint */
-  LikesPkey = 'Likes_pkey',
-  /** unique or primary key constraint */
   LikesUserIdActivityIdKey = 'Likes_user_id_activity_id_key',
+  /** unique or primary key constraint */
+  LikesPkey = 'likes_pkey',
 }
 
 /** input type for incrementing integer column in table "likes" */
@@ -4777,8 +4802,8 @@ export type Likes_Inc_Input = {
 
 /** input type for inserting data into table "likes" */
 export type Likes_Insert_Input = {
-  activity?: Maybe<Activities_Obj_Rel_Insert_Input>;
   created_at?: Maybe<Scalars['timestamptz']>;
+  feed?: Maybe<Feed_Obj_Rel_Insert_Input>;
   feed_id?: Maybe<Scalars['Int']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
   user?: Maybe<Users_Obj_Rel_Insert_Input>;
@@ -4843,8 +4868,8 @@ export type Likes_On_Conflict = {
 
 /** ordering options when selecting data from "likes" */
 export type Likes_Order_By = {
-  activity?: Maybe<Activities_Order_By>;
   created_at?: Maybe<Order_By>;
+  feed?: Maybe<Feed_Order_By>;
   feed_id?: Maybe<Order_By>;
   updated_at?: Maybe<Order_By>;
   user?: Maybe<Users_Order_By>;

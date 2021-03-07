@@ -40,8 +40,6 @@ export const registerForPushNotificationsAsync = async () => {
       return;
     }
     token = (await Notifications.getExpoPushTokenAsync()).data;
-
-    console.log('Push notifactions token', token);
   } else {
     console.log('Error', 'Must use physical device for Push Notifications');
   }
