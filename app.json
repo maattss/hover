@@ -2,7 +2,7 @@
   "expo": {
     "name": "Hover",
     "slug": "hover",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "owner": "mmaattss",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -27,7 +27,7 @@
         "NSLocationAlwaysUsageDescription": "Your location will only be used to determine if you are in a valid geofence."
       },
       "bundleIdentifier": "com.hoverapp.hover",
-      "buildNumber": "1.0.1"
+      "buildNumber": "1.0.2"
     },
     "android": {
       "adaptiveIcon": {
@@ -37,7 +37,7 @@
       "useNextNotificationsApi": true,
       "permissions": ["ACCESS_COARSE_LOCATION", "ACCESS_FINE_LOCATION", "ACCESS_BACKGROUND_LOCATION"],
       "package": "com.hoverapp.hover",
-      "versionCode": 1
+      "versionCode": 3
     },
     "web": {
       "favicon": "./assets/images/favicon.png"

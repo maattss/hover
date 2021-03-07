@@ -1,6 +1,7 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { Spacing, Typography } from '../../../theme';
+import { StyleSheet, Text, View, Linking } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { Colors, Spacing, Typography } from '../../../theme';
 import { SettingsProps } from './SettingsMenuScreen';
 
 const AboutScreen: React.FC<SettingsProps> = () => {
@@ -10,9 +11,13 @@ const AboutScreen: React.FC<SettingsProps> = () => {
       <Text style={styles.bodyText}>
         Hover is a game created by Siri Mykland and Mats Tyldum as a part of our master project in Computer Science at
         the Norwegian University of Science and Technology (NTNU) during the spring of 2021. The goal of the project was
-        to invent and develop an alternative game where Hover is the result of this work.
+        to invent and develop an alternative game. This application is the result of that work. Any questions? Send us
+        an email at:
       </Text>
-      <Text style={styles.versionText}>Version 1.0.1 (beta)</Text>
+      <TouchableOpacity onPress={() => Linking.openURL('mailto:contact.hoverapp@gmail.com')}>
+        <Text style={styles.mailButton}>contact.hoverapp@gmail.com</Text>
+      </TouchableOpacity>
+      <Text style={styles.versionText}>Version 1.0.2 (beta)</Text>
     </View>
   );
 };
@@ -33,10 +38,17 @@ const styles = StyleSheet.create({
   bodyText: {
     ...Typography.bodyText,
     paddingTop: Spacing.base,
+    paddingBottom: Spacing.smaller,
   },
   versionText: {
     ...Typography.bodyText,
-    paddingTop: Spacing.base,
+    paddingTop: Spacing.large,
     fontWeight: 'bold',
+  },
+  mailButton: {
+    ...Typography.bodyText,
+    color: Colors.blue,
+    textAlign: 'center',
+    padding: Spacing.smaller,
   },
 });
