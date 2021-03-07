@@ -39,8 +39,8 @@ TaskManager.defineTask(LOCATION_BACKGROUND_TRACKING, async ({ data, error }) => 
     const trackingLocations = await readLocationEvents();
 
     if (!insideGeoFence) {
-      // If tracking accuracy is bad, we should not treat it as an "Out of geofence event"
-      if (currentLocation.coords.accuracy && currentLocation.coords.accuracy < 10) return;
+      // If tracking accuracy is not present or poor, we should not treat it as an "Out of geofence event"
+      if (!currentLocation.coords.accuracy || currentLocation.coords.accuracy < 10) return;
 
       if (trackingLocations.length === 0) {
         const location: LocationEvent = {
@@ -63,6 +63,7 @@ TaskManager.defineTask(LOCATION_BACKGROUND_TRACKING, async ({ data, error }) => 
           const pushToken = await readPushToken();
           const previousPushUpdate = await readPreviousPushUpdate();
           const lessThanFiveMinutesAgo = Date.now() - 5 * 1000 < previousPushUpdate;
+
           // Do not send push notification if last was one was sent less than 5 minutes ago
           if (pushToken && !lessThanFiveMinutesAgo) {
             sendPushNotification(
