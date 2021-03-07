@@ -7,6 +7,7 @@ const LOCATION_KEY = '@hover_location_events';
 const TRACKING_START_KEY = '@hover_tracking_start';
 const PAUSE_KEY = '@hover_pause_events';
 const PUSH_KEY = '@hover_push_token';
+const PREVIOUS_PUSH_KEY = '@hover_previous_push';
 
 export interface LocationEvent {
   location: LocationObject;
@@ -20,11 +21,15 @@ export interface PauseEvent {
 
 export const storeTrackingStart = async (value: number) => storeString(TRACKING_START_KEY, value.toString());
 
-export const readTrackingStart = async () => await readString(TRACKING_START_KEY);
+export const readTrackingStart = async () => Number((await readString(TRACKING_START_KEY)) ?? '0');
 
 export const storePushToken = async (value: string) => storeString(PUSH_KEY, value);
 
 export const readPushToken = async () => await readString(PUSH_KEY);
+
+export const storePreviousPushUpdate = async (value: number) => storeString(PREVIOUS_PUSH_KEY, value.toString());
+
+export const readPreviousPushUpdate = async () => Number((await readString(PREVIOUS_PUSH_KEY)) ?? '0');
 
 export const storeGeofence = async (value: GeoFence) => storeObject(GEOFENCE_KEY, value);
 
