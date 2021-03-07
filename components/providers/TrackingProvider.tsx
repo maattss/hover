@@ -226,7 +226,6 @@ export const TrackingProvider = ({ children }: Props) => {
   };
 
   const stopTracking = async (caption: string) => {
-    setTrackingState(TrackingState.EXPLORE);
     const publishScore = score < 0 ? 0 : Math.floor(score);
     const activity: Activities_Insert_Input = {
       caption: caption,
@@ -244,6 +243,7 @@ export const TrackingProvider = ({ children }: Props) => {
           activity: activity,
         },
       });
+      setTrackingState(TrackingState.EXPLORE);
       console.log('Activity inserted to db', response);
       Alert.alert('Upload complete', 'Activity uploaded successfully!');
     } catch (error) {
