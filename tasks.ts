@@ -7,6 +7,8 @@ import {
   storeLocationEvents,
   LocationEvent,
   readTrackingStart,
+  readPreviousPushUpdate,
+  storePreviousPushUpdate,
 } from './helpers/storage';
 import { sendPushNotification } from './helpers/pushNotifications';
 import * as TaskManager from 'expo-task-manager';
@@ -23,7 +25,7 @@ TaskManager.defineTask(LOCATION_BACKGROUND_TRACKING, async ({ data, error }) => 
   const anyData: any = data;
   if (anyData.locations) {
     const currentLocation: LocationObject = anyData.locations[0];
-    const trackingStart = Number((await readTrackingStart()) ?? '0');
+    const trackingStart = await readTrackingStart();
 
     // Locations with timestamp before tracking started should be discarded
     if (currentLocation.timestamp < trackingStart) return;
@@ -37,6 +39,9 @@ TaskManager.defineTask(LOCATION_BACKGROUND_TRACKING, async ({ data, error }) => 
     const trackingLocations = await readLocationEvents();
 
     if (!insideGeoFence) {
+      // If tracking accuracy is bad, we should not treat it as an "Out of geofence event"
+      if (currentLocation.coords.accuracy && currentLocation.coords.accuracy < 10) return;
+
       if (trackingLocations.length === 0) {
         const location: LocationEvent = {
           location: currentLocation,
@@ -47,21 +52,27 @@ TaskManager.defineTask(LOCATION_BACKGROUND_TRACKING, async ({ data, error }) => 
       }
       const lastStoredLocation = trackingLocations[trackingLocations.length - 1];
       if (lastStoredLocation.insideGeofence === true) {
-        console.log('Background location event: Moved back in to geofence.');
+        console.log('Background location event: Moved out of geofence.');
         const location: LocationEvent = {
           location: currentLocation,
           insideGeofence: false,
         };
         storeLocationEvents([...trackingLocations, location]);
+
         if (Constants.isDevice) {
           const pushToken = await readPushToken();
-          if (pushToken) {
+          const previousPushUpdate = await readPreviousPushUpdate();
+          const lessThanFiveMinutesAgo = Date.now() - 5 * 1000 < previousPushUpdate;
+          // Do not send push notification if last was one was sent less than 5 minutes ago
+          if (pushToken && !lessThanFiveMinutesAgo) {
             sendPushNotification(
               pushToken,
               'Oh noo! You are outside the Hover zone...',
-              'Move back in to continue earning points (tracking will start automagically).',
+              'Move back in to continue earning points.' +
+                'Tracking will start automagically when your location is inside the Hover zone.',
               true,
             );
+            storePreviousPushUpdate(Date.now());
           }
         }
       }
@@ -76,7 +87,7 @@ TaskManager.defineTask(LOCATION_BACKGROUND_TRACKING, async ({ data, error }) => 
       }
       const lastStoredLocation = trackingLocations[trackingLocations.length - 1];
       if (lastStoredLocation.insideGeofence === false) {
-        console.log('Background location event: Moved out of geofence.');
+        console.log('Background location event: Moved back in to geofence.');
         const location: LocationEvent = {
           location: currentLocation,
           insideGeofence: true,
