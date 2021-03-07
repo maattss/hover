@@ -17,7 +17,7 @@ export type ProfileActivitiesQuery = { readonly __typename: 'query_root' } & {
 
 export const ProfileActivitiesDocument = gql`
   query ProfileActivities($id: String!, $limit: Int!, $offset: Int!) {
-    activities(where: { user_id: { _eq: $id } }, order_by: { created_at: asc }, limit: $limit, offset: $offset) {
+    activities(where: { user_id: { _eq: $id } }, order_by: { created_at: desc }, limit: $limit, offset: $offset) {
       ...feedActivityFragment
     }
   }
