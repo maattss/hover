@@ -119,7 +119,7 @@ const ActivityFeedCard: React.FC<ActivityFeedCardProps> = ({ data }: ActivityFee
         </View>
         <MapView
           style={styles.map}
-          initialRegion={mapRegion}
+          region={mapRegion}
           rotateEnabled={false}
           scrollEnabled={false}
           pitchEnabled={false}
