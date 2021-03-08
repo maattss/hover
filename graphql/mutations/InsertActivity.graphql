@@ -1,5 +1,5 @@
 mutation InsertActivity($activity: activities_insert_input!) {
   insert_feed_one(object: { feed_type: ACTIVITY, activity: { data: $activity } }) {
-    ...activityFeedFragment
+    ...fullFeedFragment
   }
 }
