@@ -86,7 +86,6 @@ const Reaction: React.FC<ReactionProps> = (props: ReactionProps) => {
         });
     }
   };
-  const showInfoPopup = () => Alert.alert('Likes', 'These people have reacted to this post!');
   const openModal = () => setModalVisible(true);
   const renderItem = (like: LikesFragmentFragment) => {
     const getName = () => {
@@ -116,20 +115,15 @@ const Reaction: React.FC<ReactionProps> = (props: ReactionProps) => {
       </TouchableOpacity>
       {modalVisible && (
         <Modal
-          animationType="slide"
+          animationType="fade"
           transparent={true}
           visible={modalVisible}
-          onRequestClose={() => {
-            setModalVisible(!modalVisible);
-          }}>
+          onRequestClose={() => setModalVisible(!modalVisible)}>
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
               <View style={styles.header}>
                 <View style={styles.headerleft}>
-                  <Text style={styles.headerText}>Liked by</Text>
-                  <TouchableOpacity style={styles.infoIcon} onPress={showInfoPopup}>
-                    <FAIcon name={'info-circle'} style={styles.icon} />
-                  </TouchableOpacity>
+                  <Text style={styles.headerText}>Reactions</Text>
                 </View>
                 <TouchableOpacity style={styles.exitIcon} onPress={() => setModalVisible(!modalVisible)}>
                   <FAIcon name={'times'} style={styles.icon} />
@@ -151,8 +145,8 @@ const Reaction: React.FC<ReactionProps> = (props: ReactionProps) => {
 const styles = StyleSheet.create({
   reactionIcon: {
     padding: Spacing.base,
-    height: 40,
-    width: 40,
+    height: 35,
+    width: 35,
   },
   reactionContainer: {
     flexDirection: 'row',
@@ -170,28 +164,18 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 22,
     backgroundColor: Colors.almostBlackTransparent,
   },
   modalView: {
-    margin: Spacing.base,
     backgroundColor: Colors.gray900,
     borderRadius: 10,
-    padding: 35,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
     width: '90%',
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    paddingLeft: Spacing.small,
   },
   headerText: {
     ...Typography.headerText,
@@ -199,32 +183,24 @@ const styles = StyleSheet.create({
   headerleft: {
     flexDirection: 'row',
     justifyContent: 'flex-start',
-    alignItems: 'center',
   },
   row: {
     flexDirection: 'row',
-    justifyContent: 'flex-start',
     width: '100%',
     alignItems: 'center',
     paddingVertical: Spacing.smallest,
+    paddingHorizontal: Spacing.small,
+    marginBottom: Spacing.smaller,
   },
   nameText: {
-    justifyContent: 'flex-start',
-    alignItems: 'center',
     ...Typography.bodyText,
+    fontWeight: 'bold',
   },
   avatar: {
     marginRight: Spacing.small,
   },
-  infoIcon: {
-    ...Typography.smallIcon,
-    marginHorizontal: Spacing.smaller,
-  },
   exitIcon: {
-    ...Typography.smallIcon,
-
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
+    padding: Spacing.small,
   },
   icon: {
     ...Typography.icon,
