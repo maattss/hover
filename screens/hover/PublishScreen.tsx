@@ -27,6 +27,7 @@ const PublishScreen: React.FC = () => {
   const tracking = useTracking();
   const insets = useSafeAreaInsets();
   const [caption, setCaption] = useState('');
+  const roundedScore = Math.floor(tracking.score);
 
   const publishActivity = () => tracking.stopTracking(caption);
   const resumeTracking = () => tracking.resumeTracking();
@@ -102,7 +103,9 @@ const PublishScreen: React.FC = () => {
             </View>
           </View>
           <View style={styles.summaryContainer}>
-            <Text style={styles.infoScore}>{Math.floor(tracking.score)} points</Text>
+            <Text style={styles.infoScore}>
+              {roundedScore} {roundedScore === 1 ? 'point' : 'points'}
+            </Text>
 
             <Text style={styles.label}>Summary</Text>
             <View style={styles.infoContainer}>
