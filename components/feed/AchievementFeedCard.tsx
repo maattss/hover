@@ -6,14 +6,18 @@ import Achievement from '../general/Achievement';
 import { defaultUserProfile } from '../../helpers/objectMappers';
 import TouchableProfile from '../general/TouchableProfile';
 import Reaction from './Reaction';
-import Footer from './Footer';
 import { Avatar } from 'react-native-elements';
+import useAuthentication from '../../hooks/useAuthentication';
+import { timeStampToPresentable } from '../../helpers/dateTimeHelpers';
+import Divider from '../general/Divider';
 
 interface AchievementFeedCardProps {
   data: AchievementFeedData;
 }
 
 const AchievementFeedCard: React.FC<AchievementFeedCardProps> = ({ data }: AchievementFeedCardProps) => {
+  const auth = useAuthentication();
+
   return (
     <View style={styles.card}>
       <View style={styles.main}>
@@ -25,23 +29,22 @@ const AchievementFeedCard: React.FC<AchievementFeedCardProps> = ({ data }: Achie
                 source={{ uri: data.user.picture ? data.user.picture : defaultUserProfile.picture }}
                 size={'medium'}
               />
-              <Text style={styles.nameText} numberOfLines={1}>
-                {data.user.name}
-              </Text>
+              <View style={{ marginLeft: Spacing.smaller, width: '80%' }}>
+                <Text style={styles.nameText}>{data.user.name}</Text>
+                <Text style={styles.timeText}>{timeStampToPresentable(data.createdAt)}</Text>
+              </View>
             </View>
           </TouchableProfile>
           <View style={styles.description}>
             <Text style={styles.descriptionText}>{data.achievement.description}</Text>
           </View>
         </View>
-
         <View style={styles.achievement}>
           <Achievement achievement={data.achievement} />
         </View>
       </View>
-
-      <Reaction />
-      <Footer createdAt={data.createdAt} />
+      <Divider style={{ borderColor: Colors.gray800 }} />
+      <Reaction feed_id={data.id} user_id={auth.user?.uid ?? ''} likes={data.likes} />
     </View>
   );
 };
@@ -64,10 +67,13 @@ const styles = StyleSheet.create({
     ...Typography.headerText,
     fontSize: 20,
     lineHeight: 30,
+    marginTop: Spacing.smallest,
+  },
+  timeText: {
+    color: Colors.almostWhite,
+    fontSize: 12,
+    fontStyle: 'italic',
     flexWrap: 'wrap',
-    marginTop: Spacing.smaller,
-    width: '80%',
-    marginLeft: Spacing.small,
   },
   description: {
     flexDirection: 'row',

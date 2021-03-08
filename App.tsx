@@ -15,6 +15,7 @@ import { GRAPHQL_API_URL } from './lib/config';
 import fragmentMatcher from './types/fragmentMatcher';
 import PushNotificationProvider from './components/providers/PushNotificationProvider';
 import NotificationProvider from './components/providers/NotificationProvider';
+import { LikesFragmentFragment } from './graphql/Fragments.generated';
 
 const asyncAuthLink = setContext(async () => {
   return {
@@ -24,7 +25,20 @@ const asyncAuthLink = setContext(async () => {
   };
 });
 
-const cache = new InMemoryCache({ possibleTypes: fragmentMatcher.possibleTypes });
+const cache = new InMemoryCache({
+  possibleTypes: fragmentMatcher.possibleTypes,
+  typePolicies: {
+    feed: {
+      fields: {
+        likes: {
+          merge(incoming: LikesFragmentFragment[]) {
+            return incoming;
+          },
+        },
+      },
+    },
+  },
+});
 
 const httpLink = new HttpLink({
   uri: GRAPHQL_API_URL,

@@ -13,9 +13,10 @@ type Props = {
   children: React.ReactChild;
   user_id: string;
   name: string;
+  onPress?: () => void;
 };
 
-const TouchableProfile: React.FC<Props> = ({ user_id, children, name }: Props) => {
+const TouchableProfile: React.FC<Props> = ({ user_id, children, name, onPress }: Props) => {
   const bottomNavigation = useNavigation<BottomNavigationProp>();
   const id = useAuthentication().user?.uid;
   const feedNavigation = useNavigation<FeedNavigationProp>();
@@ -29,7 +30,15 @@ const TouchableProfile: React.FC<Props> = ({ user_id, children, name }: Props) =
       });
     }
   };
-  return <TouchableOpacity onPress={() => navigate()}>{children}</TouchableOpacity>;
+  return (
+    <TouchableOpacity
+      onPress={() => {
+        if (onPress) onPress();
+        navigate();
+      }}>
+      {children}
+    </TouchableOpacity>
+  );
 };
 
 export default TouchableProfile;
