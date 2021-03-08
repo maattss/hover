@@ -110,12 +110,26 @@ export type FullFeedFragmentFragment = { readonly __typename: 'feed' } & Pick<
       }
     >;
     readonly challenge?: Types.Maybe<{ readonly __typename: 'challenge' } & ChallengeFeedFragmentFragment>;
+    readonly likes: ReadonlyArray<{ readonly __typename: 'likes' } & LikesFragmentFragment>;
   };
+
+export type LikesFragmentFragment = { readonly __typename: 'likes' } & {
+  readonly user: { readonly __typename: 'users' } & ListUserFragmentFragment;
+};
 
 export type NotificationFragmentFragment = { readonly __typename: 'notifications' } & Pick<
   Types.Notifications,
   'id' | 'type' | 'text' | 'seen' | 'user_id' | 'created_at'
 >;
+
+export type ProfileActivityFragmentFragment = { readonly __typename: 'feed' } & Pick<
+  Types.Feed,
+  'id' | 'activity_id' | 'created_at'
+> & {
+    readonly user?: Types.Maybe<{ readonly __typename: 'users' } & ListUserFragmentFragment>;
+    readonly activity?: Types.Maybe<{ readonly __typename: 'activities' } & FeedActivityFragmentFragment>;
+    readonly likes: ReadonlyArray<{ readonly __typename: 'likes' } & LikesFragmentFragment>;
+  };
 
 export const ListUserFragmentFragmentDoc = gql`
   fragment listUserFragment on users {
@@ -311,6 +325,14 @@ export const ChallengeFeedFragmentFragmentDoc = gql`
   ${ChallengeFragmentFragmentDoc}
   ${ListUserFragmentFragmentDoc}
 `;
+export const LikesFragmentFragmentDoc = gql`
+  fragment likesFragment on likes {
+    user {
+      ...listUserFragment
+    }
+  }
+  ${ListUserFragmentFragmentDoc}
+`;
 export const FullFeedFragmentFragmentDoc = gql`
   fragment fullFeedFragment on feed {
     id
@@ -331,11 +353,15 @@ export const FullFeedFragmentFragmentDoc = gql`
       ...challengeFeedFragment
     }
     created_at
+    likes {
+      ...likesFragment
+    }
   }
   ${ListUserFragmentFragmentDoc}
   ${FeedActivityFragmentFragmentDoc}
   ${AchievementFragmentFragmentDoc}
   ${ChallengeFeedFragmentFragmentDoc}
+  ${LikesFragmentFragmentDoc}
 `;
 export const NotificationFragmentFragmentDoc = gql`
   fragment notificationFragment on notifications {
@@ -346,4 +372,23 @@ export const NotificationFragmentFragmentDoc = gql`
     user_id
     created_at
   }
+`;
+export const ProfileActivityFragmentFragmentDoc = gql`
+  fragment profileActivityFragment on feed {
+    id
+    user {
+      ...listUserFragment
+    }
+    activity_id
+    activity {
+      ...feedActivityFragment
+    }
+    created_at
+    likes {
+      ...likesFragment
+    }
+  }
+  ${ListUserFragmentFragmentDoc}
+  ${FeedActivityFragmentFragmentDoc}
+  ${LikesFragmentFragmentDoc}
 `;

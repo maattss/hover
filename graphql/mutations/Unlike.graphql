@@ -1,0 +1,7 @@
+mutation Unlike($user_id: String!, $feed_id: Int!) {
+  delete_likes_by_pk(feed_id: $feed_id, user_id: $user_id) {
+    feed {
+      ...fullFeedFragment
+    }
+  }
+}

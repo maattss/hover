@@ -19,6 +19,7 @@ import {
   ChallengeFeedFragmentFragment,
   ChallengeFragmentFragment,
   GeofenceFragmentFragment,
+  LikesFragmentFragment,
   ListUserFragmentFragment,
 } from '../graphql/Fragments.generated';
 import { FeedQuery } from '../graphql/queries/Feed.generated';
@@ -135,7 +136,6 @@ export const defaultUserProfile: UserProfile = {
   socialScore: 0,
   exerciseScore: 0,
   achievements: [],
-  activities: [],
 };
 
 export const convertToUserProfile = (data: ProfileUserQuery | undefined) => {
@@ -155,7 +155,6 @@ export const convertToUserProfile = (data: ProfileUserQuery | undefined) => {
       socialScore: data.user.social_score.aggregate?.sum?.score ?? defaultUserProfile.socialScore,
       exerciseScore: data.user.exercise_score.aggregate?.sum?.score ?? defaultUserProfile.exerciseScore,
       achievements: achievements,
-      activities: data.user.activities,
     } as UserProfile;
   }
 };
@@ -206,48 +205,62 @@ export const convertToFeedData = (data: FeedQuery) => {
   const feedData: FeedData[] = [];
   for (const obj of data.feed) {
     if (obj.activity) {
-      feedData.push(convertToActivityFeedData(obj.activity, obj.user, obj.created_at));
+      feedData.push(convertToActivityFeedData(obj.id, obj.activity, obj.user, obj.created_at, obj.likes));
     } else if (obj.user_achievement && obj.user_achievement.achievement) {
-      feedData.push(convertToAchievementFeedData(obj.user_achievement.achievement, obj.user, obj.created_at));
+      feedData.push(
+        convertToAchievementFeedData(obj.id, obj.user_achievement.achievement, obj.user, obj.created_at, obj.likes),
+      );
     } else if (obj.challenge) {
-      feedData.push(convertToChallengeFeedData(obj.challenge, obj.user, obj.created_at));
+      feedData.push(convertToChallengeFeedData(obj.id, obj.challenge, obj.user, obj.created_at, obj.likes));
     }
   }
   return feedData;
 };
 export const convertToActivityFeedData = (
+  id: number,
   activity: ActivityFragmentFragment,
   user: ListUserFragmentFragment | null | undefined,
   createdAt: string,
+  likes: readonly LikesFragmentFragment[],
 ) => {
   return {
+    id: id,
     activity: activity,
     user: user,
     createdAt: createdAt,
     feedCategory: FeedCategory.ACTIVITY,
+    likes: likes,
   } as ActivityFeedData;
 };
 export const convertToAchievementFeedData = (
+  id: number,
   achievement: AchievementFragmentFragment,
   user: ListUserFragmentFragment | null | undefined,
   createdAt: string,
+  likes: readonly LikesFragmentFragment[],
 ) => {
   return {
+    id: id,
     achievement: achievement,
     user: user,
     createdAt: createdAt,
     feedCategory: FeedCategory.ACHIEVEMENT,
+    likes: likes,
   } as AchievementFeedData;
 };
 export const convertToChallengeFeedData = (
+  id: number,
   challenge: ChallengeFeedFragmentFragment,
   user: ListUserFragmentFragment | null | undefined,
   createdAt: string,
+  likes: readonly LikesFragmentFragment[],
 ) => {
   return {
+    id: id,
     challenge: challenge,
     user: user,
     createdAt: createdAt,
     feedCategory: FeedCategory.CHALLENGE,
+    likes: likes,
   } as ChallengeFeedData;
 };

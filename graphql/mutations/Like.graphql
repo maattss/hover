@@ -1,0 +1,7 @@
+mutation like($user_id: String!, $feed_id: Int!) {
+  insert_likes_one(object: { feed_id: $feed_id, user_id: $user_id }) {
+    feed {
+      ...fullFeedFragment
+    }
+  }
+}

@@ -23,7 +23,7 @@ import { RouteProp } from '@react-navigation/native';
 import { FeedStackParamList, ProfileStackParamList } from '../../types/navigationTypes';
 import ActivityFeedCard from '../../components/feed/ActivityFeedCard';
 import { useProfileActivitiesQuery } from '../../graphql/queries/ProfileActivities.generated';
-import { FeedActivityFragmentFragment } from '../../graphql/Fragments.generated';
+import { ProfileActivityFragmentFragment } from '../../graphql/Fragments.generated';
 import { ActivityFeedData, FeedCategory } from '../../types/feedTypes';
 import { Avatar } from 'react-native-elements';
 
@@ -54,7 +54,7 @@ const ProfileScreen: React.FC<Props> = ({ route }: Props) => {
   if (id) {
     const pageSize = 3;
     const [userProfile, setUserProfile] = useState<UserProfile>(defaultUserProfile);
-    const [activities, setActivities] = useState<readonly FeedActivityFragmentFragment[]>([]);
+    const [activities, setActivities] = useState<readonly ProfileActivityFragmentFragment[]>([]);
     const [refreshing, setRefreshing] = useState(false);
     const [endReached, setEndReached] = useState(false);
     const [offset, setOffset] = useState(0);
@@ -97,15 +97,15 @@ const ProfileScreen: React.FC<Props> = ({ route }: Props) => {
       }
     }, [userData]);
     useEffect(() => {
-      if (activitiesData && activitiesData.activities) {
-        if (activitiesData.activities.length === 0) {
+      if (activitiesData && activitiesData.feed) {
+        if (activitiesData.feed.length === 0) {
           setEndReached(true);
         } else {
           if (fetchingMore) {
-            setActivities(activities.concat(activitiesData.activities));
+            setActivities(activities.concat(activitiesData.feed));
             setFetchingMore(false);
           } else {
-            setActivities(activitiesData.activities);
+            setActivities(activitiesData.feed.filter((element) => element.activity !== undefined));
           }
         }
         const data = convertToUserProfile(userData);
@@ -174,24 +174,30 @@ const ProfileScreen: React.FC<Props> = ({ route }: Props) => {
         );
       }
 
-      return activities.map((activity, index) => {
-        const data: ActivityFeedData = {
-          activity: activity,
-          user: {
-            __typename: 'users',
-            id: userProfile.id,
-            name: userProfile.name,
-            picture: userProfile.picture,
-          },
-          createdAt: activity.created_at,
-          feedCategory: FeedCategory.ACTIVITY,
-        };
-        return (
-          <View key={index} style={{ marginBottom: Spacing.smaller }}>
-            <ActivityFeedCard data={data} />
-          </View>
-        );
-      });
+      return activities
+        .filter((element) => element.activity !== undefined || element.activity !== null)
+        .map((profileActivity, index) => {
+          if (profileActivity && profileActivity.activity) {
+            const data: ActivityFeedData = {
+              id: profileActivity.id,
+              activity: profileActivity.activity,
+              user: {
+                __typename: 'users',
+                id: userProfile.id,
+                name: userProfile.name,
+                picture: userProfile.picture,
+              },
+              createdAt: profileActivity.activity?.created_at,
+              feedCategory: FeedCategory.ACTIVITY,
+              likes: profileActivity.likes ?? [],
+            };
+            return (
+              <View key={index} style={{ marginBottom: Spacing.smaller }}>
+                <ActivityFeedCard data={data} />
+              </View>
+            );
+          }
+        });
     };
 
     const renderActivitiesFooter = () => {

@@ -1,9 +1,9 @@
 /* eslint-disable */
 import * as Types from '../../types/types';
 
-import { FeedActivityFragmentFragment } from '../Fragments.generated';
+import { ProfileActivityFragmentFragment } from '../Fragments.generated';
 import { gql } from '@apollo/client';
-import { FeedActivityFragmentFragmentDoc } from '../Fragments.generated';
+import { ProfileActivityFragmentFragmentDoc } from '../Fragments.generated';
 import * as Apollo from '@apollo/client';
 export type ProfileActivitiesQueryVariables = Types.Exact<{
   id: Types.Scalars['String'];
@@ -12,16 +12,21 @@ export type ProfileActivitiesQueryVariables = Types.Exact<{
 }>;
 
 export type ProfileActivitiesQuery = { readonly __typename: 'query_root' } & {
-  readonly activities: ReadonlyArray<{ readonly __typename: 'activities' } & FeedActivityFragmentFragment>;
+  readonly feed: ReadonlyArray<{ readonly __typename: 'feed' } & ProfileActivityFragmentFragment>;
 };
 
 export const ProfileActivitiesDocument = gql`
   query ProfileActivities($id: String!, $limit: Int!, $offset: Int!) {
-    activities(where: { user_id: { _eq: $id } }, order_by: { created_at: desc }, limit: $limit, offset: $offset) {
-      ...feedActivityFragment
+    feed(
+      where: { user_id: { _eq: $id }, feed_type: { _eq: ACTIVITY }, activity_id: { _is_null: false } }
+      order_by: { created_at: desc }
+      limit: $limit
+      offset: $offset
+    ) {
+      ...profileActivityFragment
     }
   }
-  ${FeedActivityFragmentFragmentDoc}
+  ${ProfileActivityFragmentFragmentDoc}
 `;
 
 /**
