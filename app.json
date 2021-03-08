@@ -2,11 +2,12 @@
   "expo": {
     "name": "Hover",
     "slug": "hover",
+    "description": "Hover description",
     "version": "1.0.2",
     "owner": "mmaattss",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "myapp",
+    "scheme": "hover",
     "userInterfaceStyle": "dark",
     "backgroundColor": "#121212'",
     "splash": {
@@ -15,7 +16,7 @@
       "backgroundColor": "#121212"
     },
     "updates": {
-      "fallbackToCacheTimeout": 0
+      "fallbackToCacheTimeout": 30000
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
