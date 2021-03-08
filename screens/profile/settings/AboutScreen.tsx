@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, Linking } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Colors, Spacing, Typography } from '../../../theme';
 import { SettingsProps } from './SettingsMenuScreen';
+import Constants from 'expo-constants';
 
 const AboutScreen: React.FC<SettingsProps> = () => {
   return (
@@ -17,7 +18,7 @@ const AboutScreen: React.FC<SettingsProps> = () => {
       <TouchableOpacity onPress={() => Linking.openURL('mailto:contact.hoverapp@gmail.com')}>
         <Text style={styles.mailButton}>contact.hoverapp@gmail.com</Text>
       </TouchableOpacity>
-      <Text style={styles.versionText}>Version 1.0.2 (beta)</Text>
+      <Text style={styles.versionText}>Version {Constants.manifest.version} (beta)</Text>
     </View>
   );
 };
