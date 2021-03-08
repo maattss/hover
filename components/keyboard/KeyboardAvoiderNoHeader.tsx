@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
     left: 0,
     width: Dimensions.get('screen').width,
     zIndex: 99,
-    backgroundColor: Colors.black,
+    backgroundColor: Colors.almostBlack,
   },
 });
 

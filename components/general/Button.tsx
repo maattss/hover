@@ -56,7 +56,7 @@ interface MenuButtonProps {
 
 export const MenuButton: React.FC<MenuButtonProps> = (props: MenuButtonProps) => {
   const evenColor = Colors.gray900;
-  const oddColor = Colors.black;
+  const oddColor = Colors.almostBlack;
   const rowColor = props.index && props.index % 2 !== 0 ? oddColor : evenColor;
   return (
     <TouchableOpacity

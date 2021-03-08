@@ -66,12 +66,7 @@ const OngoingChallengesScreen: React.FC<Props> = ({ route }: Props) => {
     </View>
   );
   const renderFooter = () => {
-    return (
-      <View style={styles.footer}>
-        {loading ? <Loading /> : null}
-        {endReached ? <Text style={{ ...Typography.bodyText }}>No more challenges ongoing challenges...</Text> : null}
-      </View>
-    );
+    return <View style={styles.footer}>{loading ? <Loading /> : null}</View>;
   };
 
   if (error) return <Error message={error.message} apolloError={error} />;

@@ -52,7 +52,7 @@ const getScore = (category: GeoFenceCategory, userProfile: UserProfile) => {
 const ProfileScreen: React.FC<Props> = ({ route }: Props) => {
   const id = route && route.params && route.params.user_id ? route.params.user_id : useAuthentication().user?.uid;
   if (id) {
-    const pageSize = 3;
+    const pageSize = 5;
     const [userProfile, setUserProfile] = useState<UserProfile>(defaultUserProfile);
     const [activities, setActivities] = useState<readonly ProfileActivityFragmentFragment[]>([]);
     const [refreshing, setRefreshing] = useState(false);
@@ -108,8 +108,6 @@ const ProfileScreen: React.FC<Props> = ({ route }: Props) => {
             setActivities(activitiesData.feed.filter((element) => element.activity !== undefined));
           }
         }
-        const data = convertToUserProfile(userData);
-        if (data) setUserProfile(data);
       }
     }, [activitiesData]);
 

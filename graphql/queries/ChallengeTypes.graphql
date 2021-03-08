@@ -1,5 +1,5 @@
 query ChallengeTypes {
-  challenge_type {
+  challenge_type(order_by: { name: desc }) {
     ...challengeTypeFragment
   }
 }

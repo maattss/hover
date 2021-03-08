@@ -1,19 +1,24 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { Spacing, Typography } from '../../../theme';
+import { StyleSheet, Text, View, Linking } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { Colors, Spacing, Typography } from '../../../theme';
 import { SettingsProps } from './SettingsMenuScreen';
+import Constants from 'expo-constants';
 
 const AboutScreen: React.FC<SettingsProps> = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.titleText}>About Hover</Text>
       <Text style={styles.bodyText}>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis sapiente error maiores, corporis molestias
-        mollitia numquam voluptatem, sunt corrupti fugiat inventore hic doloribus, quidem odit quas consectetur eius
-        labore ad!
-        {/* TODO: Insert description of applciation */}
+        Hover is a game created by Siri Mykland and Mats Tyldum as a part of our master project in Computer Science at
+        the Norwegian University of Science and Technology (NTNU) during the spring of 2021. The goal of the project was
+        to invent and develop an alternative game. This application is the result of that work. Any questions? Send us
+        an email at:
       </Text>
-      <Text style={styles.bodyText}>Version 0.0.1 (alpha)</Text>
+      <TouchableOpacity onPress={() => Linking.openURL('mailto:contact.hoverapp@gmail.com')}>
+        <Text style={styles.mailButton}>contact.hoverapp@gmail.com</Text>
+      </TouchableOpacity>
+      <Text style={styles.versionText}>Version {Constants.manifest.version} (beta)</Text>
     </View>
   );
 };
@@ -23,7 +28,7 @@ const styles = StyleSheet.create({
   container: {
     display: 'flex',
     alignItems: 'center',
-    paddingHorizontal: Spacing.base,
+    paddingHorizontal: Spacing.large,
   },
   titleText: {
     ...Typography.headerText,
@@ -34,5 +39,17 @@ const styles = StyleSheet.create({
   bodyText: {
     ...Typography.bodyText,
     paddingTop: Spacing.base,
+    paddingBottom: Spacing.smaller,
+  },
+  versionText: {
+    ...Typography.bodyText,
+    paddingTop: Spacing.large,
+    fontWeight: 'bold',
+  },
+  mailButton: {
+    ...Typography.bodyText,
+    color: Colors.blue,
+    textAlign: 'center',
+    padding: Spacing.smaller,
   },
 });

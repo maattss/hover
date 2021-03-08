@@ -27,40 +27,15 @@ const HoverMap: React.FC<HoverMapProps> = ({ customWidth, customHeight }: HoverM
 
   const [chosenMapType, setChosenMapType] = useState<MapTypes>('standard');
   const [userLocationMap, setUserLocationMap] = useState<LatLng>();
-  const [mapRegion, setMapRegion] = useState<Region>(defaultRegion);
   const [centreOnUser, setCentreOnUser] = useState(false);
   const [zoom, setZoom] = useState<number>(defaultZoom);
+  const [initUserLocationUpdate, setInitUserLocationUpdate] = useState<boolean>(false);
 
   const tracking = useTracking();
   const insets = useSafeAreaInsets();
 
-  // Refetch geofences and animate map to user position on init render
+  // Refetch geofences on init render
   useEffect(() => {
-    if (tracking.userLocation) {
-      setUserLocationMap({
-        latitude: tracking.userLocation.coords.latitude,
-        longitude: tracking.userLocation.coords.longitude,
-      });
-      setMapRegion({
-        latitude: tracking.userLocation.coords.latitude + centreVerticalOffset,
-        longitude: tracking.userLocation.coords.longitude,
-        latitudeDelta: defaultZoom,
-        longitudeDelta: defaultZoom,
-      });
-    } else if (userLocationMap) {
-      setUserLocationMap({
-        latitude: userLocationMap.latitude,
-        longitude: userLocationMap.longitude,
-      });
-      setMapRegion({
-        latitude: userLocationMap.latitude + centreVerticalOffset,
-        longitude: userLocationMap.longitude,
-        latitudeDelta: defaultZoom,
-        longitudeDelta: defaultZoom,
-      });
-    }
-
-    animateMapToUserPos();
     tracking.refetchGeoFences();
   }, []);
 
@@ -75,7 +50,13 @@ const HoverMap: React.FC<HoverMapProps> = ({ customWidth, customHeight }: HoverM
   };
 
   useEffect(() => {
-    if (userLocationMap) tracking.updateUserLocation(userLocationMap);
+    if (userLocationMap) {
+      tracking.updateUserLocation(userLocationMap);
+      if (!initUserLocationUpdate) {
+        animateMapToUserPos();
+        setInitUserLocationUpdate(true);
+      }
+    }
   }, [userLocationMap]);
 
   // Map event functions
@@ -93,13 +74,13 @@ const HoverMap: React.FC<HoverMapProps> = ({ customWidth, customHeight }: HoverM
 
     if (userLocationMap) {
       const userRegion: Region = {
-        latitude: userLocationMap.latitude,
+        latitude: userLocationMap.latitude + centreVerticalOffset,
         longitude: userLocationMap.longitude,
-        latitudeDelta: 0.02,
-        longitudeDelta: 0.02,
+        latitudeDelta: defaultZoom,
+        longitudeDelta: defaultZoom,
       };
       setCentreOnUser(true);
-      mapView.current?.animateToRegion(userRegion, 1000);
+      mapView.current?.animateToRegion(userRegion, 1500);
     }
   };
   const userLocationChange = (e: EventUserLocation) => {
@@ -119,7 +100,7 @@ const HoverMap: React.FC<HoverMapProps> = ({ customWidth, customHeight }: HoverM
       <MapView
         ref={mapView}
         mapType={chosenMapType}
-        initialRegion={mapRegion}
+        initialRegion={defaultRegion}
         showsUserLocation
         style={{ width: width, height: height }}
         onUserLocationChange={userLocationChange}

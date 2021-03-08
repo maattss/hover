@@ -65,12 +65,7 @@ const PendingChallengesScreen: React.FC<Props> = ({ route }: Props) => {
     </View>
   );
   const renderFooter = () => {
-    return (
-      <View style={styles.footer}>
-        {loading ? <ActivityIndicator color={Colors.blue} /> : null}
-        {endReached ? <Text style={{ ...Typography.bodyText }}>No more pending challenges...</Text> : null}
-      </View>
-    );
+    return <View style={styles.footer}>{loading ? <ActivityIndicator color={Colors.blue} /> : null}</View>;
   };
 
   if (error) return <Error message={error.message} apolloError={error} />;

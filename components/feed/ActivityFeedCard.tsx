@@ -39,10 +39,10 @@ const ActivityFeedCard: React.FC<ActivityFeedCardProps> = ({ data }: ActivityFee
   };
   const showInfoPopup = () =>
     Alert.alert(
-      'Hover with friends',
+      'Hover together with a friend and earn 2x points!',
       `${data.user.name} hovered together with ${
         data.activity.friend?.name ?? defaultUserProfile.name
-      } and got double points! You can also track together with a friend if you press 
+      } and got double points! You can also do this by using 
       'Start session' or 'Join friend' while tracking.`,
     );
 
@@ -72,7 +72,7 @@ const ActivityFeedCard: React.FC<ActivityFeedCardProps> = ({ data }: ActivityFee
         </View>
       )}
       <View style={styles.innerCard}>
-        <View>
+        <View style={{ paddingTop: Spacing.smaller }}>
           <View style={[styles.flexRowLeft, { marginBottom: Spacing.smaller }]}>
             <FAIcon name={'stopwatch'} style={styles.infoIcons} />
             <Text style={styles.label}>{data.activity.duration}</Text>
@@ -83,17 +83,13 @@ const ActivityFeedCard: React.FC<ActivityFeedCardProps> = ({ data }: ActivityFee
           </View>
         </View>
         {data.activity.friend && (
-          <View style={styles.collab}>
-            <View style={styles.flexRowSpaceBetween}>
-              <Text style={styles.collabIconText}>2x points</Text>
-              <TouchableOpacity style={styles.flexRowLeft} onPress={showInfoPopup}>
-                <FAIcon name={'info-circle'} style={styles.collabIconText} />
-              </TouchableOpacity>
-            </View>
-            <View style={styles.flexRowLeft}>
-              <Text style={styles.friendName}>Together with</Text>
-            </View>
-            <TouchableProfile user_id={data.activity.friend.id} name={data.activity.friend.name}>
+          <TouchableOpacity style={styles.collab} onPress={showInfoPopup}>
+            <View>
+              <View style={styles.flexRowSpaceBetween}>
+                <Text style={styles.collabIconText}>2x points with</Text>
+                <FAIcon name={'info-circle'} style={styles.collabInfoIcon} />
+              </View>
+
               <View style={[styles.flexRowLeft, { paddingTop: Spacing.smallest }]}>
                 <Image
                   style={styles.miniAvatar}
@@ -105,8 +101,8 @@ const ActivityFeedCard: React.FC<ActivityFeedCardProps> = ({ data }: ActivityFee
                   {data.activity.friend?.name}
                 </Text>
               </View>
-            </TouchableProfile>
-          </View>
+            </View>
+          </TouchableOpacity>
         )}
       </View>
       <View style={styles.main}>
@@ -119,7 +115,7 @@ const ActivityFeedCard: React.FC<ActivityFeedCardProps> = ({ data }: ActivityFee
         </View>
         <MapView
           style={styles.map}
-          initialRegion={mapRegion}
+          region={mapRegion}
           rotateEnabled={false}
           scrollEnabled={false}
           pitchEnabled={false}
@@ -132,7 +128,7 @@ const ActivityFeedCard: React.FC<ActivityFeedCardProps> = ({ data }: ActivityFee
           {activityGeoFence && <GeoFences geofences={[activityGeoFence]} />}
         </MapView>
       </View>
-      <Divider style={{ borderColor: Colors.gray800, marginTop: Spacing.base }} />
+      <Divider style={{ borderColor: Colors.gray800, marginTop: Spacing.smaller }} />
       <Reaction feed_id={data.id} user_id={auth.user?.uid ?? ''} likes={data.likes} />
     </View>
   );
@@ -237,26 +233,30 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: Spacing.smallest,
-    marginVertical: Spacing.smallest,
   },
   collab: {
-    justifyContent: 'flex-end',
     borderStyle: 'solid',
     borderWidth: 1,
-    backgroundColor: Colors.gray900,
     borderColor: Colors.gold,
     borderRadius: Spacing.smaller,
     padding: Spacing.smaller,
-    width: '40%',
+    width: '45%',
+  },
+  collabInfoIcon: {
+    fontSize: 14,
+    color: Colors.gold,
+    marginLeft: Spacing.smallest,
   },
   collabIconText: {
-    ...Typography.largeBodyText,
+    fontSize: 17,
     fontWeight: 'bold',
     color: Colors.gold,
   },
   friendName: {
     ...Typography.bodyText,
-    fontSize: 10,
+    fontSize: 12,
+    flexWrap: 'wrap',
+    marginRight: Spacing.large,
   },
 });
 

@@ -13,7 +13,7 @@ export type ChallengeTypesQuery = { readonly __typename: 'query_root' } & {
 
 export const ChallengeTypesDocument = gql`
   query ChallengeTypes {
-    challenge_type {
+    challenge_type(order_by: { name: desc }) {
       ...challengeTypeFragment
     }
   }

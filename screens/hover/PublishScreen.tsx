@@ -213,7 +213,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: Spacing.base,
-    height: 100,
+    height: 105,
   },
   infoCard: {
     backgroundColor: Colors.gray900,
