@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View, Modal, FlatList, Alert, Image } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, Modal, FlatList, Image } from 'react-native';
 import { Typography, Spacing } from '../../theme';
 import { Asset } from 'expo-asset';
 import { LikesFragmentFragment } from '../../graphql/Fragments.generated';
