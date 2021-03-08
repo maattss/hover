@@ -233,7 +233,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: Spacing.smallest,
-    marginVertical: Spacing.smallest,
   },
   collab: {
     borderStyle: 'solid',
