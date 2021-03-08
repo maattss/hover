@@ -19,7 +19,7 @@ export const ProfileActivitiesDocument = gql`
   query ProfileActivities($id: String!, $limit: Int!, $offset: Int!) {
     feed(
       where: { user_id: { _eq: $id }, feed_type: { _eq: ACTIVITY }, activity_id: { _is_null: false } }
-      order_by: { created_at: asc }
+      order_by: { created_at: desc }
       limit: $limit
       offset: $offset
     ) {
