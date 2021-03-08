@@ -4,7 +4,6 @@
     "slug": "hover",
     "description": "Hover description",
     "version": "1.0.2",
-    "owner": "mmaattss",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "hover",

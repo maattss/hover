@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
   divider: {
     borderColor: Colors.almostWhite,
     borderWidth: StyleSheet.hairlineWidth,
-    marginVertical: Spacing.smaller,
+    marginVertical: Spacing.smallest,
   },
 });
 
