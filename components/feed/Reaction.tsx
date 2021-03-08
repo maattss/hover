@@ -15,8 +15,9 @@ import useAuthentication from '../../hooks/useAuthentication';
 const getReactionText = (reactionCount: number, userReacted: boolean) => {
   if (reactionCount === 0) return 'Be the first to react to this activity!';
   if (reactionCount === 1 && userReacted) return 'You reacted to this activity.';
-  if (reactionCount === 1 && !userReacted) return '1 user reacted to this activity.';
-  if (userReacted) return 'You and ' + (reactionCount - 1) + ' users reacted to this activity.';
+  if (reactionCount === 1 && !userReacted) return '1 other user reacted to this activity.';
+  if (reactionCount === 2 && userReacted) return 'You and 1 other user reacted to this activity.';
+  if (userReacted) return 'You and ' + (reactionCount - 1) + ' other users reacted to this activity.';
   return reactionCount + ' users reacted to this activity.';
 };
 const getImageURI = (userReacted: boolean) => {
