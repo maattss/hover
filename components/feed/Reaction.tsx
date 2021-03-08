@@ -120,7 +120,9 @@ const Reaction: React.FC<ReactionProps> = (props: ReactionProps) => {
         )}
       </TouchableOpacity>
       <TouchableOpacity onPress={openModal} disabled={isDisabled}>
-        <Text style={styles.reactionText}>{getReactionText(reactionCount, userReacted)}</Text>
+        <Text style={styles.reactionText} numberOfLines={1}>
+          {getReactionText(reactionCount, userReacted)}
+        </Text>
       </TouchableOpacity>
       {modalVisible && (
         <Modal
