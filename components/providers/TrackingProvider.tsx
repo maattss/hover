@@ -49,7 +49,6 @@ interface TrackingContextValues {
   trackingStart: number | undefined;
   trackingEnd: number | undefined;
   friendId: string | undefined;
-  updateDoubleScore: (value: boolean) => void;
   setFriendId: React.Dispatch<React.SetStateAction<string>>;
   startTracking: () => void;
   resumeTracking: () => void;

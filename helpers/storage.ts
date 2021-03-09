@@ -33,9 +33,17 @@ export interface PauseEvent {
   paused: boolean;
 }
 
+// TODO: Delete
 export const storeTrackingStart = async (value: number) => storeString(TRACKING_START_KEY, value.toString());
 
 export const readTrackingStart = async () => Number((await readString(TRACKING_START_KEY)) ?? '0');
+
+export const storeGeofence = async (value: GeoFence) => storeObject(GEOFENCE_KEY, value);
+
+export const readGeofence = async () => {
+  const geoFence: GeoFence = await readObject(GEOFENCE_KEY);
+  return geoFence;
+};
 
 export const storePushToken = async (value: string) => storeString(PUSH_KEY, value);
 
@@ -45,11 +53,11 @@ export const storePreviousPushUpdate = async (value: number) => storeString(PREV
 
 export const readPreviousPushUpdate = async () => Number((await readString(PREVIOUS_PUSH_KEY)) ?? '0');
 
-export const storeGeofence = async (value: GeoFence) => storeObject(GEOFENCE_KEY, value);
+export const storeTrackingIno = async (value: TrackingInfo) => storeObject(TRACKING_INFO_KEY, value);
 
-export const readGeofence = async () => {
-  const geoFence: GeoFence = await readObject(GEOFENCE_KEY);
-  return geoFence;
+export const readTrackingInfo = async () => {
+  const trackingInfo: TrackingInfo = await readObject(TRACKING_INFO_KEY);
+  return trackingInfo;
 };
 
 export const storePauseEvents = async (value: PauseEvent[]) => storeObject(PAUSE_EVENTS_KEY, value);
@@ -68,21 +76,21 @@ export const readLocationEvents = async () => {
   return events;
 };
 
-export const clearTrackingStorage = async () => {
-  try {
-    await AsyncStorage.multiRemove([GEOFENCE_KEY, TRACKING_START_KEY, PAUSE_EVENTS_KEY, LOCATION_EVENTS_KEY]);
-  } catch (e) {
-    console.error('STORAGE: Error clearing tracking storage', e);
-  }
-};
+export const clearPushStorage = async () => clear([PUSH_KEY, PREVIOUS_PUSH_KEY]);
 
-export const clearHoverStorage = async () => {
-  try {
-    await AsyncStorage.multiRemove([GEOFENCE_KEY, TRACKING_START_KEY, PAUSE_EVENTS_KEY, LOCATION_EVENTS_KEY, PUSH_KEY]);
-  } catch (e) {
-    console.error('STORAGE: Error clearing Hover storage', e);
-  }
-};
+export const clearTrackingStorage = async () =>
+  clear([GEOFENCE_KEY, TRACKING_START_KEY, PAUSE_EVENTS_KEY, LOCATION_EVENTS_KEY, TRACKING_INFO_KEY]);
+
+export const clearAll = async () =>
+  clear([
+    GEOFENCE_KEY,
+    TRACKING_START_KEY,
+    PAUSE_EVENTS_KEY,
+    LOCATION_EVENTS_KEY,
+    PUSH_KEY,
+    PREVIOUS_PUSH_KEY,
+    TRACKING_INFO_KEY,
+  ]);
 
 // General
 const storeString = async (key: string, value: string) => {
@@ -117,5 +125,12 @@ const readObject = async (key: string) => {
     return jsonValue != null ? JSON.parse(jsonValue) : null;
   } catch (e) {
     console.error("STORAGE: Error reading object with key '" + key + "' from async storage. ", e);
+  }
+};
+const clear = async (keys: string[]) => {
+  try {
+    await AsyncStorage.multiRemove(keys);
+  } catch (e) {
+    console.error('STORAGE: Error clearing [' + keys.toString() + ']', e);
   }
 };
