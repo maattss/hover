@@ -6057,8 +6057,12 @@ export enum Notification_Type_Enum {
   ChallengeInvite = 'CHALLENGE_INVITE',
   /** Congratulation */
   ChallengeWon = 'CHALLENGE_WON',
+  /** Message from developers */
+  Message = 'MESSAGE',
   /** Congratulation */
   NewAchievement = 'NEW_ACHIEVEMENT',
+  /** Someone reacted to your activity. */
+  NewReaction = 'NEW_REACTION',
   /** Someone responded to your challenge */
   ParticipantUpdate = 'PARTICIPANT_UPDATE',
   /** This notification is a test */

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, Alert, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import { Colors, Spacing, Typography } from '../../../theme';
 import { NotificationFragmentFragment } from '../../../graphql/Fragments.generated';
@@ -24,9 +24,6 @@ const NotificationCard: React.FC<NotificationCardProps> = (props: NotificationCa
       case Notification_Type_Enum.ChallengeClosed:
         bottomNavigation.navigate('Challenge');
         break;
-      case Notification_Type_Enum.ChallengeExpired:
-        Alert.alert('This object does not have an action');
-        break;
       case Notification_Type_Enum.ChallengeFinished:
         bottomNavigation.navigate('Feed');
         break;
@@ -42,8 +39,10 @@ const NotificationCard: React.FC<NotificationCardProps> = (props: NotificationCa
       case Notification_Type_Enum.ParticipantUpdate:
         bottomNavigation.navigate('Challenge');
         break;
+      case Notification_Type_Enum.NewReaction:
+        bottomNavigation.navigate('Profile');
+        break;
       default:
-        Alert.alert('This object does not have an action');
         break;
     }
   };
