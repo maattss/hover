@@ -249,14 +249,19 @@ export const TrackingProvider = ({ children }: Props) => {
   };
 
   const autoResumeTracking = async () => {
-    // TODO: Update presistent storage
-    setTrackingEnd(undefined);
     setTrackingState(TrackingState.TRACKING);
+    setTrackingEnd(undefined);
+
+    const trackingInfo = await readTrackingInfo();
+    trackingInfo.endTimestamp = 0;
+    storeTrackingInfo(trackingInfo);
   };
   const autoPauseTracking = async () => {
-    // TODO: Update presistent storage
-    setTrackingEnd(Date.now());
     setTrackingState(TrackingState.TRACKINGPAUSED);
+    setTrackingEnd(Date.now());
+    const trackingInfo = await readTrackingInfo();
+    trackingInfo.endTimestamp = Date.now();
+    storeTrackingInfo(trackingInfo);
   };
 
   const resumeTracking = async () => {
@@ -268,10 +273,12 @@ export const TrackingProvider = ({ children }: Props) => {
     await storePauseEvents([...pauseEvents, newEvent]);
 
     startBackgroundUpdate();
-
-    setTrackingEnd(undefined);
-    // TODO: Update presistent storage
     setTrackingState(TrackingState.TRACKING);
+    setTrackingEnd(undefined);
+
+    const trackingInfo = await readTrackingInfo();
+    trackingInfo.endTimestamp = 0;
+    storeTrackingInfo(trackingInfo);
   };
   const pauseTracking = async () => {
     const pauseEvents = await readPauseEvents();
@@ -281,10 +288,12 @@ export const TrackingProvider = ({ children }: Props) => {
     };
     await storePauseEvents([...pauseEvents, newEvent]);
     stopBackgroundUpdate();
-
-    setTrackingEnd(Date.now());
-    // TODO: Update presistent storage
     setTrackingState(TrackingState.PUBLISH);
+    setTrackingEnd(Date.now());
+
+    const trackingInfo = await readTrackingInfo();
+    trackingInfo.endTimestamp = Date.now();
+    storeTrackingInfo(trackingInfo);
   };
 
   const discardActivity = async () => {
