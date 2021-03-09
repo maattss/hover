@@ -19,7 +19,9 @@ import {
   readPauseEvents,
   storeGeofence,
   storePauseEvents,
+  storeTrackingInfo,
   storeTrackingStart,
+  TrackingInfo,
 } from '../../helpers/storage';
 import { console, Date, Math } from '@ungap/global-this';
 import { useInterval } from '../../hooks/useInterval';
@@ -177,14 +179,21 @@ export const TrackingProvider = ({ children }: Props) => {
       return;
     }
 
-    // TODO: Update based on async storage state
+    // TODO: Remove?
     setTrackingState(TrackingState.TRACKING);
     setTrackingEnd(undefined);
     setTrackingStart(Date.now());
-    await clearTrackingStorage();
-    await storeGeofence(currentGeoFence);
-    await storeTrackingStart(Date.now());
     setTrackingGeofence(currentGeoFence);
+
+    await storeTrackingInfo({
+      geoFence: currentGeoFence,
+      friendId: '',
+      duration: 0,
+      score: 0,
+      startTimestamp: Date.now(),
+      endTimestamp: 0,
+      state: trackingState,
+    } as TrackingInfo);
     startBackgroundUpdate();
   };
 

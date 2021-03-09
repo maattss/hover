@@ -29,9 +29,13 @@ TaskManager.defineTask(LOCATION_BACKGROUND_TRACKING, async ({ data, error }) => 
   const anyData: any = data;
   if (anyData.locations) {
     const currentLocation: LocationObject = anyData.locations[0];
-
-    // Update tracking info
     const trackingInfo = await readTrackingInfo();
+
+    if (!trackingInfo.geoFence) {
+      console.error('LOCATION_BACKGROUND_TRACKING: No geofence present in storage.');
+      return;
+    }
+
     const updatedDuration = await getDuration(trackingInfo);
     const updatedScore = getScore(updatedDuration, trackingInfo.geoFence.category, trackingInfo.friendId);
     await storeTrackingInfo({
@@ -47,12 +51,7 @@ TaskManager.defineTask(LOCATION_BACKGROUND_TRACKING, async ({ data, error }) => 
     // Locations with timestamp before tracking started should be discarded
     if (currentLocation.timestamp < trackingInfo.startTimestamp) return;
 
-    const geoFence = await readGeofence();
-    if (!geoFence) {
-      console.error('LOCATION_BACKGROUND_TRACKING: No geofence present in storage.');
-      return;
-    }
-    const insideGeoFence = insideGeoFences(currentLocation, [geoFence]);
+    const insideGeoFence = insideGeoFences(currentLocation, [trackingInfo.geoFence]);
     const trackingLocations = await readLocationEvents();
     console.log('Tracking locations', trackingLocations);
 
