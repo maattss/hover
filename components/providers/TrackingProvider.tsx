@@ -127,21 +127,21 @@ export const TrackingProvider = ({ children }: Props) => {
   };
   useInterval(() => getUpdatedInfo(), shouldUpdateInfo() ? 1000 : null);
 
-  const getLocationObject = (latitude: number | undefined, longitude: number | undefined, timestamp: number) => ({
-    coords: {
-      latitude: latitude ?? 0,
-      longitude: longitude ?? 0,
-      altitude: null,
-      accuracy: null,
-      altitudeAccuracy: null,
-      heading: null,
-      speed: null,
-    },
-    timestamp: timestamp,
-  });
-
-  const externalUpdateUserLocation = (newUserLocation: LatLng) =>
-    updateUserLocation(getLocationObject(newUserLocation.latitude, newUserLocation.longitude, Date.now()));
+  const externalUpdateUserLocation = (newUserLocation: LatLng) => {
+    const locationObject = {
+      coords: {
+        latitude: newUserLocation.latitude ?? 0,
+        longitude: newUserLocation.longitude ?? 0,
+        altitude: null,
+        accuracy: null,
+        altitudeAccuracy: null,
+        heading: null,
+        speed: null,
+      },
+      timestamp: Date.now(),
+    };
+    updateUserLocation(locationObject);
+  };
 
   const updateUserLocation = (newUserLocation: LocationObject) => {
     setUserLocation(newUserLocation);
