@@ -1,12 +1,10 @@
 import { LocationObject } from 'expo-location';
 import { insideGeoFences } from './helpers/geoFenceCalculations';
 import {
-  readGeofence,
   readLocationEvents,
   readPushToken,
   storeLocationEvents,
   LocationEvent,
-  readTrackingStart,
   readPreviousPushUpdate,
   storePreviousPushUpdate,
   readTrackingInfo,

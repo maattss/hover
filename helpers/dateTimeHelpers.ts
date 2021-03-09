@@ -1,6 +1,6 @@
 import moment from 'moment';
 
-export const durationToTimestamp = (duration: number | undefined) => {
+export const durationToTime = (duration: number | undefined) => {
   const finalDuration = new Date(0);
   finalDuration.setSeconds(duration ?? 0);
   return finalDuration.toISOString().substr(11, 8);

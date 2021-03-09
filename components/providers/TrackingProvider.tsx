@@ -5,7 +5,7 @@ import { usePermissions, LOCATION, PermissionResponse } from 'expo-permissions';
 import { useGeofencesQuery } from '../../graphql/queries/Geofences.generated';
 import { useInsertActivityMutation } from '../../graphql/mutations/InsertActivity.generated';
 import { Alert, AppState } from 'react-native';
-import { durationToTimestamp } from '../../helpers/dateTimeHelpers';
+import { durationToTime } from '../../helpers/dateTimeHelpers';
 import { getGeoFenceScoreRatio, insideGeoFences } from '../../helpers/geoFenceCalculations';
 import { LocationObject } from 'expo-location';
 import useAuthentication from '../../hooks/useAuthentication';
@@ -17,10 +17,9 @@ import {
   PauseEvent,
   readLocationEvents,
   readPauseEvents,
-  storeGeofence,
+  readTrackingInfo,
   storePauseEvents,
   storeTrackingInfo,
-  storeTrackingStart,
   TrackingInfo,
 } from '../../helpers/storage';
 import { console, Date, Math } from '@ungap/global-this';
@@ -198,16 +197,17 @@ export const TrackingProvider = ({ children }: Props) => {
   };
 
   const stopTracking = async (caption: string) => {
-    const publishScore = score < 0 ? 0 : Math.floor(score);
+    const trackingInfo = await readTrackingInfo();
+    const publishScore = trackingInfo.score < 0 ? 0 : Math.floor(trackingInfo.score);
     const activity: Activities_Insert_Input = {
       caption: caption,
-      geofence_id: trackingGeoFence?.id,
+      geofence_id: trackingInfo.geoFence.id,
       user_id: userId,
       score: publishScore,
-      started_at: trackingStart ? new Date(trackingStart).toISOString() : new Date().toISOString(),
-      duration: durationToTimestamp(await getDuration()),
+      started_at: new Date(trackingInfo.startTimestamp).toISOString(),
+      duration: durationToTime(trackingInfo.duration),
     };
-    if (friendId) activity.friend_id = friendId;
+    if (trackingInfo.friendId !== '') activity.friend_id = friendId;
 
     try {
       const response = await InsertActivity({
@@ -216,6 +216,7 @@ export const TrackingProvider = ({ children }: Props) => {
         },
       });
       setTrackingState(TrackingState.EXPLORE);
+      await clearTrackingStorage();
       console.log('Activity inserted to db', response);
       Alert.alert('Upload complete', 'Activity uploaded successfully!');
     } catch (error) {
