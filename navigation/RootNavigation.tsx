@@ -7,19 +7,25 @@ import TabNavigator from './TabNavigator';
 import AuthNavigator from './AuthNavigator';
 import useAuthentication from '../hooks/useAuthentication';
 import { DarkTheme } from '../theme/colors';
+import DisclaimerScreen from '../screens/disclaimer/DisclaimerScreen';
+import useTracking from '../hooks/useTracking';
 
 export const RootStack = createStackNavigator<RootStackParamList>();
 
 const AppNavigation: React.FC = () => {
   const { user, isLoadingUser } = useAuthentication();
-
+  const locationPermission = useTracking().locationPermission;
   return (
     <NavigationContainer theme={DarkTheme}>
       <RootStack.Navigator screenOptions={{ headerShown: false }}>
         {isLoadingUser ? (
           <RootStack.Screen name="Loading" component={Loading} />
         ) : user ? (
-          <RootStack.Screen name="Main" component={TabNavigator} />
+          locationPermission?.status !== 'granted' ? (
+            <RootStack.Screen name="Disclaimer" component={DisclaimerScreen} />
+          ) : (
+            <RootStack.Screen name="Main" component={TabNavigator} />
+          )
         ) : (
           <RootStack.Screen name="Auth" component={AuthNavigator} />
         )}
