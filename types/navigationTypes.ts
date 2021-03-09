@@ -71,7 +71,8 @@ export type ProfileStackParamList = {
 
 export type SettingsNavigationStackParamList = {
   Settings: undefined;
-  'User Information': undefined;
+  'Edit Profile': undefined;
+  'Privacy Policy': undefined;
   About: undefined;
 };
 export type AuthStackParamList = {
