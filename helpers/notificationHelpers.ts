@@ -20,7 +20,7 @@ export const getNotificationTitle = (type: Notification_Type_Enum) => {
     case Notification_Type_Enum.NewReaction:
       return 'Someone reacted your activity';
     case Notification_Type_Enum.Message:
-      return 'New message from developers';
+      return 'New message';
     default:
       return 'Notification!';
   }
