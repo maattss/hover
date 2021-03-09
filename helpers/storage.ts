@@ -1,11 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { LocationObject } from 'expo-location';
-import { TrackingState } from '../components/providers/TrackingProvider';
 import { GeoFence } from '../types/geoFenceTypes';
-
-// TODO: Delete
-const GEOFENCE_KEY = '@hover_current_geofence';
-const TRACKING_START_KEY = '@hover_tracking_start';
 
 const TRACKING_INFO_KEY = '@hover_tracking_info';
 const LOCATION_EVENTS_KEY = '@hover_location_events';
@@ -20,7 +15,6 @@ export interface TrackingInfo {
   score: number;
   startTimestamp: number;
   endTimestamp: number;
-  state: TrackingState;
 }
 
 export interface LocationEvent {
@@ -32,18 +26,6 @@ export interface PauseEvent {
   timestamp: number;
   paused: boolean;
 }
-
-// TODO: Delete
-export const storeTrackingStart = async (value: number) => storeString(TRACKING_START_KEY, value.toString());
-
-export const readTrackingStart = async () => Number((await readString(TRACKING_START_KEY)) ?? '0');
-
-export const storeGeofence = async (value: GeoFence) => storeObject(GEOFENCE_KEY, value);
-
-export const readGeofence = async () => {
-  const geoFence: GeoFence = await readObject(GEOFENCE_KEY);
-  return geoFence;
-};
 
 export const storePushToken = async (value: string) => storeString(PUSH_KEY, value);
 
@@ -78,19 +60,10 @@ export const readLocationEvents = async () => {
 
 export const clearPushStorage = async () => clear([PUSH_KEY, PREVIOUS_PUSH_KEY]);
 
-export const clearTrackingStorage = async () =>
-  clear([GEOFENCE_KEY, TRACKING_START_KEY, PAUSE_EVENTS_KEY, LOCATION_EVENTS_KEY, TRACKING_INFO_KEY]);
+export const clearTrackingStorage = async () => clear([PAUSE_EVENTS_KEY, LOCATION_EVENTS_KEY, TRACKING_INFO_KEY]);
 
 export const clearAll = async () =>
-  clear([
-    GEOFENCE_KEY,
-    TRACKING_START_KEY,
-    PAUSE_EVENTS_KEY,
-    LOCATION_EVENTS_KEY,
-    PUSH_KEY,
-    PREVIOUS_PUSH_KEY,
-    TRACKING_INFO_KEY,
-  ]);
+  clear([PAUSE_EVENTS_KEY, LOCATION_EVENTS_KEY, PUSH_KEY, PREVIOUS_PUSH_KEY, TRACKING_INFO_KEY]);
 
 // General
 const storeString = async (key: string, value: string) => {

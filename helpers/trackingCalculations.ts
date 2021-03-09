@@ -2,8 +2,7 @@ import { GeoFenceCategory } from '../types/geoFenceTypes';
 import { getGeoFenceScoreRatio } from './geoFenceCalculations';
 import { LocationEvent, PauseEvent, readLocationEvents, readPauseEvents, TrackingInfo } from './storage';
 
-// TODO: Not export
-export const getOutsideDuration = (locations: LocationEvent[]) => {
+const getOutsideDuration = (locations: LocationEvent[]) => {
   let duration = 0;
   const previousEntry = {
     inside: true,
@@ -19,8 +18,7 @@ export const getOutsideDuration = (locations: LocationEvent[]) => {
   return duration;
 };
 
-// TODO: Not export
-export const getPausedDuration = (events: PauseEvent[]) => {
+const getPausedDuration = (events: PauseEvent[]) => {
   let duration = 0;
   const previousEntry = {
     paused: true,

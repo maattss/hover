@@ -81,6 +81,7 @@ const HoverWithFriends: React.FC<Props> = ({
 
   const startFriendTracking = async () => {
     try {
+      setCollabState(HoverWithFriendState.STARTING);
       if (!trackingWithFriendId) {
         const response = await InsertFriendTracking({
           variables: {
@@ -91,8 +92,8 @@ const HoverWithFriends: React.FC<Props> = ({
         });
         setTrackingWithFriendId(response.data?.insert_friend_tracking_one?.id);
       }
-      setCollabState(HoverWithFriendState.STARTING);
     } catch (error) {
+      setCollabState(HoverWithFriendState.NONE);
       console.error('Mutation error', error.message);
       Alert.alert('Something went wrong...');
     }

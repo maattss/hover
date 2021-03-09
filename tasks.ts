@@ -43,7 +43,6 @@ TaskManager.defineTask(LOCATION_BACKGROUND_TRACKING, async ({ data, error }) => 
       score: updatedScore,
       startTimestamp: trackingInfo.startTimestamp,
       endTimestamp: trackingInfo.endTimestamp,
-      state: trackingInfo.state,
     } as TrackingInfo);
 
     // Locations with timestamp before tracking started should be discarded
