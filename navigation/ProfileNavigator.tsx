@@ -2,10 +2,11 @@ import React from 'react';
 import { ProfileStackParamList } from '../types/navigationTypes';
 import { createStackNavigator } from '@react-navigation/stack';
 import ProfileScreen from '../screens/profile/ProfileScreen';
-import UserSettingsScreen from '../screens/profile/settings/UserSettingsScreen';
 import AboutScreen from '../screens/profile/settings/AboutScreen';
 import SettingsScreen from '../screens/profile/settings/SettingsMenuScreen';
 import { HeaderIcon } from '../components/general/HeaderIcon';
+import PrivacyScreen from '../screens/profile/settings/PrivacyScreen';
+import EditProfileScreen from '../screens/profile/settings/EditProfileScreen';
 
 const ProfileStack = createStackNavigator<ProfileStackParamList>();
 
@@ -28,8 +29,9 @@ const ProfileNavigator: React.FC = () => {
           headerTitle: 'Settings',
         }}
       />
-      <ProfileStack.Screen name="User Information" component={UserSettingsScreen} />
+      <ProfileStack.Screen name="Edit Profile" component={EditProfileScreen} />
       <ProfileStack.Screen name="About" component={AboutScreen} />
+      <ProfileStack.Screen name="Privacy Policy" component={PrivacyScreen} />
     </ProfileStack.Navigator>
   );
 };

@@ -11,7 +11,7 @@ import { randomPictureURI } from '../../auth/SignUpScreen';
 import { Asset } from 'expo-asset';
 import KeyboardAvoider from '../../../components/keyboard/KeyboardAvoider';
 
-const UserSettingsScreen: React.FC<SettingsProps> = ({ navigation }: SettingsProps) => {
+const EditProfileScreen: React.FC<SettingsProps> = ({ navigation }: SettingsProps) => {
   const id = useAuthentication().user?.uid;
   if (!id) {
     console.error('Error: UserId is', id);
@@ -106,7 +106,7 @@ const UserSettingsScreen: React.FC<SettingsProps> = ({ navigation }: SettingsPro
     );
   }
 };
-export default UserSettingsScreen;
+export default EditProfileScreen;
 
 const styles = StyleSheet.create({
   container: {
