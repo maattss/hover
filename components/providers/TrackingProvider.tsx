@@ -246,6 +246,12 @@ export const TrackingProvider = ({ children }: Props) => {
     stopBackgroundUpdate();
     setTrackingState(TrackingState.PUBLISH);
   };
+  const crashResumeTracking = () => {
+    // TODO: Implement
+    setTrackingEnd(undefined);
+    setTrackingState(TrackingState.TRACKING);
+  };
+
   const discardActivity = () => {
     setTrackingState(TrackingState.EXPLORE);
   };
