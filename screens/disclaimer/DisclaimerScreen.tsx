@@ -16,10 +16,10 @@ const DisclaimerScreen: React.FC = () => {
       </Text>
 
       <Text style={styles.bodyText}>
-        The main functionality of the app is to let users to record a track when they are located within a particular
-        geofence. Your activity can be started, paused, stopped at any time. Aditionally we will not send your
-        activity(including your geofence location) before you choose to publish the tracked activity. You can at any
-        time discard the activity.
+        The main functionality of this application is to let users track their position when they are located in
+        pre-defined geofences. An activity can be started, paused, and stopped at any time. We will not send your
+        location data to our servers unless you actively decide to publish and share your activity. You may also, at any
+        time during tracking, choose to discard the activity.
       </Text>
       <View style={styles.mapContainer}>
         <Image
