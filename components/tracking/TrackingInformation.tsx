@@ -44,7 +44,7 @@ const TrackingInformation: React.FC<Props> = ({ collabState }: Props) => {
           <Text style={styles.scoreText}>{score}</Text>
         </View>
 
-        <View style={{ width: '65%' }}>
+        <View style={{ width: '55%' }}>
           <Progress.Bar
             progress={progress}
             width={null}
@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   progressBarLabels: {
-    width: '15%',
+    width: '20%',
     alignItems: 'center',
     justifyContent: 'center',
     marginVertical: Spacing.smallest,

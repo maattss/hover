@@ -181,7 +181,8 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.gray900,
     borderRadius: 10,
     width: '90%',
-    paddingBottom: Spacing.smallest,
+    padding: Spacing.smallest,
+    paddingBottom: Spacing.smaller,
   },
   header: {
     flexDirection: 'row',
