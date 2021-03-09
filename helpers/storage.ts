@@ -15,6 +15,7 @@ export interface TrackingInfo {
   score: number;
   startTimestamp: number;
   endTimestamp: number;
+  updatedAtTimestamp: number;
 }
 
 export interface LocationEvent {

@@ -221,6 +221,7 @@ export const TrackingProvider = ({ children }: Props) => {
       startTimestamp: Date.now(),
       endTimestamp: 0,
       state: trackingState,
+      updatedAtTimestamp: Date.now(),
     } as TrackingInfo);
     startBackgroundUpdate();
   };
