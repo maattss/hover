@@ -41,9 +41,9 @@ const SettingsScreen: React.FC<SettingsProps> = ({ navigation }: SettingsProps) 
   const SettingMenu: Item[] = [
     {
       id: 'bd7acbea-c1b1-873h-aed5-3ad53ahsj8ba',
-      title: 'User Information',
+      title: 'Edit Profile',
       disabled: false,
-      onClick: () => navigation.navigate('User Information'),
+      onClick: () => navigation.navigate('Edit Profile'),
     },
     {
       id: 'bd78heea-c1b1-873h-aed5-3hjsnahsj8ba',
@@ -53,13 +53,9 @@ const SettingsScreen: React.FC<SettingsProps> = ({ navigation }: SettingsProps) 
     },
     {
       id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-      title: 'Language (not implemented)',
-      disabled: true,
-    },
-    {
-      id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-      title: 'Appearance (not implemented)',
-      disabled: true,
+      title: 'Privacy Policy',
+      disabled: false,
+      onClick: () => navigation.navigate('Privacy Policy'),
     },
   ];
 
