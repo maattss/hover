@@ -1,6 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Linking } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { StyleSheet, Text, View, Linking, TouchableOpacity } from 'react-native';
 import { Colors, Spacing, Typography } from '../../../theme';
 import { SettingsProps } from './SettingsMenuScreen';
 import Constants from 'expo-constants';

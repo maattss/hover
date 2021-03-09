@@ -142,3 +142,5 @@ docs/pages/versions/*/react-native/*.diff
 
 # Firebase config
 config.ts
+
+hover-key.json

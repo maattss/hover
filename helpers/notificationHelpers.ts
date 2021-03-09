@@ -17,6 +17,10 @@ export const getNotificationTitle = (type: Notification_Type_Enum) => {
       return 'Congratulation!';
     case Notification_Type_Enum.ParticipantUpdate:
       return 'Someone responded to your challenge';
+    case Notification_Type_Enum.NewReaction:
+      return 'Someone reacted your activity';
+    case Notification_Type_Enum.Message:
+      return 'New message';
     default:
       return 'Notification!';
   }
@@ -37,6 +41,10 @@ export const getNotificationIcon = (type: Notification_Type_Enum) => {
       return 'trophy';
     case Notification_Type_Enum.ParticipantUpdate:
       return 'user-check';
+    case Notification_Type_Enum.NewReaction:
+      return 'thumbs-up';
+    case Notification_Type_Enum.Message:
+      return 'comment';
     default:
       return 'comment';
   }
@@ -57,6 +65,10 @@ export const getNotificationColor = (type: Notification_Type_Enum): string => {
     case Notification_Type_Enum.NewAchievement:
       return Colors.gold;
     case Notification_Type_Enum.ParticipantUpdate:
+      return Colors.blue;
+    case Notification_Type_Enum.NewReaction:
+      return Colors.blue;
+    case Notification_Type_Enum.Message:
       return Colors.blue;
     default:
       return Colors.white;
