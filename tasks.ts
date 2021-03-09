@@ -27,6 +27,8 @@ TaskManager.defineTask(LOCATION_BACKGROUND_TRACKING, async ({ data, error }) => 
     const currentLocation: LocationObject = anyData.locations[0];
     const trackingStart = await readTrackingStart();
 
+    // TODO: Update score
+
     // Locations with timestamp before tracking started should be discarded
     if (currentLocation.timestamp < trackingStart) return;
 
@@ -37,10 +39,11 @@ TaskManager.defineTask(LOCATION_BACKGROUND_TRACKING, async ({ data, error }) => 
     }
     const insideGeoFence = insideGeoFences(currentLocation, [geoFence]);
     const trackingLocations = await readLocationEvents();
+    console.log('Tracking locations', trackingLocations);
 
     if (!insideGeoFence) {
       // If tracking accuracy is not present or poor, we should not treat it as an "Out of geofence event"
-      if (!currentLocation.coords.accuracy || currentLocation.coords.accuracy < 10) return;
+      if (currentLocation.coords.accuracy && currentLocation.coords.accuracy < 10) return;
 
       if (trackingLocations.length === 0) {
         const location: LocationEvent = {
@@ -58,6 +61,11 @@ TaskManager.defineTask(LOCATION_BACKGROUND_TRACKING, async ({ data, error }) => 
           insideGeofence: false,
         };
         storeLocationEvents([...trackingLocations, location]);
+
+        // TODO: Remove. Only for debugging
+        const previousPushUpdate = await readPreviousPushUpdate();
+        const lessThanFiveMinutesAgo = Date.now() - 5 * 1000 < previousPushUpdate;
+        if (!lessThanFiveMinutesAgo) console.log('Sending push notification');
 
         if (Constants.isDevice) {
           const pushToken = await readPushToken();

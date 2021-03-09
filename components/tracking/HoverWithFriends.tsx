@@ -64,7 +64,6 @@ const HoverWithFriends: React.FC<Props> = ({
   const updateFriendData = (friend: ListUserFragmentFragment) => {
     setFriend(friend);
     tracking.setFriendId(friend.id);
-    tracking.updateDoubleScore(true);
     setCollabState(HoverWithFriendState.ONGOING);
   };
 
