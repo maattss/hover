@@ -35,7 +35,10 @@ const getPausedDuration = (events: PauseEvent[]) => {
 
 export const getDuration = async (trackingInfo: TrackingInfo | undefined | null) => {
   if (!trackingInfo) return 0;
-  let duration = trackingInfo.endTimestamp - trackingInfo.startTimestamp;
+  let duration =
+    trackingInfo.endTimestamp === 0
+      ? Date.now() - trackingInfo.startTimestamp
+      : trackingInfo.endTimestamp - trackingInfo.startTimestamp;
 
   const locations = await readLocationEvents();
   let alwaysInsideGeofence = true;
@@ -57,7 +60,5 @@ export const getScore = (duration: number, geoFenceCategory: GeoFenceCategory, f
   const score = duration * scoreRatio;
 
   if (friendId !== '') return score * 2;
-  // TODO: Remove
-  console.log('Updating score', score);
   return score;
 };

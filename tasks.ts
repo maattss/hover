@@ -28,6 +28,12 @@ TaskManager.defineTask(LOCATION_BACKGROUND_TRACKING, async ({ data, error }) => 
   if (anyData.locations) {
     const currentLocation: LocationObject = anyData.locations[0];
     const trackingInfo = await readTrackingInfo();
+    console.log('------------------------------');
+    console.log('Tracking score:' + trackingInfo.score);
+    console.log('Tracking duration: ' + trackingInfo.duration);
+    console.log('Tracking start: ' + trackingInfo.startTimestamp);
+    console.log('Tracking end: ' + trackingInfo.endTimestamp);
+    console.log('Tracking geofence: ' + trackingInfo.geoFence.name);
 
     if (!trackingInfo.geoFence) {
       console.error('LOCATION_BACKGROUND_TRACKING: No geofence present in storage.');
@@ -50,7 +56,6 @@ TaskManager.defineTask(LOCATION_BACKGROUND_TRACKING, async ({ data, error }) => 
 
     const insideGeoFence = insideGeoFences(currentLocation, [trackingInfo.geoFence]);
     const trackingLocations = await readLocationEvents();
-    console.log('Tracking locations', trackingLocations);
 
     if (!insideGeoFence) {
       // If tracking accuracy is not present or poor, we should not treat it as an "Out of geofence event"

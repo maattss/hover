@@ -13,6 +13,7 @@ import { LatLng } from 'react-native-maps';
 import { Activities_Insert_Input } from '../../types/types';
 import { startBackgroundUpdate, stopBackgroundUpdate } from '../../tasks/locationBackgroundtasks';
 import {
+  clearAll,
   clearTrackingStorage,
   PauseEvent,
   readPauseEvents,
@@ -23,6 +24,7 @@ import {
 } from '../../helpers/storage';
 import { console, Date, Math } from '@ungap/global-this';
 import { useInterval } from '../../hooks/useInterval';
+import { NavigationHelpersContext } from '@react-navigation/core';
 
 export enum TrackingState {
   EXPLORE,
@@ -106,12 +108,16 @@ export const TrackingProvider = ({ children }: Props) => {
     nextFetchPolicy: 'network-only',
   });
 
+  // TODO: Add if simulator update every second
+
   // Restore tracking if application has chrashed
   useEffect(() => {
-    async () => {
-      stopBackgroundUpdate();
+    const init = async () => {
+      // await clearTrackingStorage(); // Only for debug, remove later
       const trackingInfo = await readTrackingInfo();
+      console.log('Init tracking info', trackingInfo);
       if (trackingInfo) {
+        // TODO: Add pause window in case of app crash
         setTrackingState(TrackingState.TRACKING);
         setTrackingEnd(undefined);
         setTrackingStart(trackingInfo.startTimestamp);
@@ -122,6 +128,7 @@ export const TrackingProvider = ({ children }: Props) => {
         startBackgroundUpdate();
       }
     };
+    init();
   }, []);
 
   useEffect(() => {
@@ -247,21 +254,28 @@ export const TrackingProvider = ({ children }: Props) => {
       console.error('Mutation error', error.message);
     }
   };
+  const storeNewEndTimestamp = async (endTimestamp: number) => {
+    const trackingInfo = await readTrackingInfo();
+    await storeTrackingInfo({
+      geoFence: trackingInfo.geoFence,
+      friendId: trackingInfo.friendId,
+      duration: trackingInfo.duration,
+      score: trackingInfo.score,
+      startTimestamp: trackingInfo.startTimestamp,
+      endTimestamp: endTimestamp,
+    } as TrackingInfo);
+    console.log('New end timestamp', endTimestamp);
+  };
 
   const autoResumeTracking = async () => {
     setTrackingState(TrackingState.TRACKING);
     setTrackingEnd(undefined);
-
-    const trackingInfo = await readTrackingInfo();
-    trackingInfo.endTimestamp = 0;
-    storeTrackingInfo(trackingInfo);
+    await storeNewEndTimestamp(0);
   };
   const autoPauseTracking = async () => {
     setTrackingState(TrackingState.TRACKINGPAUSED);
     setTrackingEnd(Date.now());
-    const trackingInfo = await readTrackingInfo();
-    trackingInfo.endTimestamp = Date.now();
-    storeTrackingInfo(trackingInfo);
+    await storeNewEndTimestamp(Date.now());
   };
 
   const resumeTracking = async () => {
@@ -272,13 +286,10 @@ export const TrackingProvider = ({ children }: Props) => {
     };
     await storePauseEvents([...pauseEvents, newEvent]);
 
-    startBackgroundUpdate();
     setTrackingState(TrackingState.TRACKING);
     setTrackingEnd(undefined);
-
-    const trackingInfo = await readTrackingInfo();
-    trackingInfo.endTimestamp = 0;
-    storeTrackingInfo(trackingInfo);
+    await storeNewEndTimestamp(0);
+    startBackgroundUpdate();
   };
   const pauseTracking = async () => {
     const pauseEvents = await readPauseEvents();
@@ -287,13 +298,11 @@ export const TrackingProvider = ({ children }: Props) => {
       paused: true,
     };
     await storePauseEvents([...pauseEvents, newEvent]);
-    stopBackgroundUpdate();
+
     setTrackingState(TrackingState.PUBLISH);
     setTrackingEnd(Date.now());
-
-    const trackingInfo = await readTrackingInfo();
-    trackingInfo.endTimestamp = Date.now();
-    storeTrackingInfo(trackingInfo);
+    await storeNewEndTimestamp(Date.now());
+    stopBackgroundUpdate();
   };
 
   const discardActivity = async () => {
