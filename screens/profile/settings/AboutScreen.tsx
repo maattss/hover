@@ -7,7 +7,6 @@ import Constants from 'expo-constants';
 const AboutScreen: React.FC<SettingsProps> = () => {
   return (
     <View style={styles.container}>
-      <Text style={styles.titleText}>About Hover</Text>
       <Text style={styles.bodyText}>
         Hover is a game created by Siri Mykland and Mats Tyldum as a part of our master project in Computer Science at
         the Norwegian University of Science and Technology (NTNU) during the spring of 2021. The goal of the project was
@@ -42,7 +41,7 @@ const styles = StyleSheet.create({
   },
   versionText: {
     ...Typography.bodyText,
-    paddingTop: Spacing.large,
+    paddingTop: Spacing.base,
     fontWeight: 'bold',
   },
   mailButton: {
