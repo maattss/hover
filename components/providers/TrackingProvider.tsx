@@ -24,7 +24,8 @@ import {
 } from '../../helpers/storage';
 import { console, Date, Math } from '@ungap/global-this';
 import { useInterval } from '../../hooks/useInterval';
-import { NavigationHelpersContext } from '@react-navigation/core';
+import Constants from 'expo-constants';
+import { getDuration, getScore } from '../../helpers/trackingCalculations';
 
 export enum TrackingState {
   EXPLORE,
@@ -108,8 +109,6 @@ export const TrackingProvider = ({ children }: Props) => {
     nextFetchPolicy: 'network-only',
   });
 
-  // TODO: Add if simulator update every second
-
   // Restore tracking if application has chrashed
   useEffect(() => {
     const init = async () => {
@@ -136,8 +135,30 @@ export const TrackingProvider = ({ children }: Props) => {
     if (geoFenceFetchError) console.error(geoFenceFetchError.message);
   }, [geoFenceData, geoFenceFetchError]);
 
+  const forceUpdateScoreAndDuration = async (trackingInfo: TrackingInfo) => {
+    const updatedDuration = await getDuration(trackingInfo);
+    const updatedScore = getScore(updatedDuration, trackingInfo.geoFence.category, trackingInfo.friendId);
+    storeTrackingInfo({
+      geoFence: trackingInfo.geoFence,
+      friendId: trackingInfo.friendId,
+      duration: updatedDuration,
+      score: updatedScore,
+      startTimestamp: trackingInfo.startTimestamp,
+      endTimestamp: trackingInfo.endTimestamp,
+      updatedAtTimestamp: Date.now(),
+    });
+    setDuration(updatedDuration);
+    setScore(updatedScore);
+  };
+
   const getUpdatedInfo = async () => {
     const updatedInfo = await readTrackingInfo();
+
+    if (!Constants.isDevice) {
+      // Need to manually update score and duration when simulator is used
+      forceUpdateScoreAndDuration(updatedInfo);
+      return;
+    }
     setDuration(updatedInfo.duration);
     setScore(updatedInfo.score);
   };
@@ -269,11 +290,25 @@ export const TrackingProvider = ({ children }: Props) => {
   };
 
   const autoResumeTracking = async () => {
+    const pauseEvents = await readPauseEvents();
+    const newEvent: PauseEvent = {
+      timestamp: Date.now(),
+      paused: false,
+    };
+    await storePauseEvents([...pauseEvents, newEvent]);
+
     setTrackingState(TrackingState.TRACKING);
     setTrackingEnd(undefined);
     await storeNewEndTimestamp(0);
   };
   const autoPauseTracking = async () => {
+    const pauseEvents = await readPauseEvents();
+    const newEvent: PauseEvent = {
+      timestamp: Date.now(),
+      paused: true,
+    };
+    await storePauseEvents([...pauseEvents, newEvent]);
+
     setTrackingState(TrackingState.TRACKINGPAUSED);
     setTrackingEnd(Date.now());
     await storeNewEndTimestamp(Date.now());
