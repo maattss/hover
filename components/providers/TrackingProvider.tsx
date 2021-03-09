@@ -72,7 +72,6 @@ export const TrackingContext = React.createContext<TrackingContextValues>({
   trackingStart: undefined,
   trackingEnd: undefined,
   friendId: undefined,
-  updateDoubleScore: () => console.error('Function not initialized'),
   setFriendId: () => console.error('Function not initialized'),
   startTracking: () => console.error('Function not initialized'),
   resumeTracking: () => console.error('Function not initialized'),
@@ -251,6 +250,7 @@ export const TrackingProvider = ({ children }: Props) => {
     setTrackingState(TrackingState.EXPLORE);
   };
 
+  // TODO: Remove
   const getDuration = async () => {
     if (!trackingGeoFence || !trackingStart) return 0;
     let duration = trackingEnd ? trackingEnd - trackingStart : Date.now() - trackingStart;
@@ -270,6 +270,7 @@ export const TrackingProvider = ({ children }: Props) => {
     return Math.floor(duration / 1000);
   };
 
+  // TODO: Remove
   const getScore = async () => {
     if (!trackingGeoFence) return 0;
 
@@ -278,7 +279,6 @@ export const TrackingProvider = ({ children }: Props) => {
     const score = duration * scoreRatio;
 
     if (friendId !== '') return score * 2;
-    console.log('Updating score', score);
     return score;
   };
 

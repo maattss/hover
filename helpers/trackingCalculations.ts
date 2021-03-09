@@ -1,5 +1,8 @@
-import { LocationEvent, PauseEvent } from './storage';
+import { GeoFenceCategory } from '../types/geoFenceTypes';
+import { getGeoFenceScoreRatio } from './geoFenceCalculations';
+import { LocationEvent, PauseEvent, readLocationEvents, readPauseEvents, TrackingInfo } from './storage';
 
+// TODO: Not export
 export const getOutsideDuration = (locations: LocationEvent[]) => {
   let duration = 0;
   const previousEntry = {
@@ -16,6 +19,7 @@ export const getOutsideDuration = (locations: LocationEvent[]) => {
   return duration;
 };
 
+// TODO: Not export
 export const getPausedDuration = (events: PauseEvent[]) => {
   let duration = 0;
   const previousEntry = {
@@ -31,33 +35,31 @@ export const getPausedDuration = (events: PauseEvent[]) => {
   return duration;
 };
 
-// const getDuration = async () => {
-//   if (!trackingGeoFence || !trackingStart) return 0;
-//   let duration = trackingEnd ? trackingEnd - trackingStart : Date.now() - trackingStart;
+export const getDuration = async (trackingInfo: TrackingInfo | undefined | null) => {
+  if (!trackingInfo) return 0;
+  let duration = trackingInfo.endTimestamp - trackingInfo.startTimestamp;
 
-//   const locations = await readLocationEvents();
-//   let alwaysInsideGeofence = true;
-//   for (const location of locations) {
-//     if (location.insideGeofence === false) {
-//       alwaysInsideGeofence = false;
-//       break;
-//     }
-//   }
-//   if (!alwaysInsideGeofence) duration -= getOutsideDuration(locations);
+  const locations = await readLocationEvents();
+  let alwaysInsideGeofence = true;
+  for (const location of locations) {
+    if (location.insideGeofence === false) {
+      alwaysInsideGeofence = false;
+      break;
+    }
+  }
+  if (!alwaysInsideGeofence) duration -= getOutsideDuration(locations);
 
-//   const pauseEvents = await readPauseEvents();
-//   if (pauseEvents.length > 1) duration -= getPausedDuration(pauseEvents);
-//   return Math.floor(duration / 1000);
-// };
+  const pauseEvents = await readPauseEvents();
+  if (pauseEvents.length > 1) duration -= getPausedDuration(pauseEvents);
+  return Math.floor(duration / 1000);
+};
 
-// const getScore = async () => {
-//   if (!trackingGeoFence) return 0;
+export const getScore = (duration: number, geoFenceCategory: GeoFenceCategory, friendId: string) => {
+  const scoreRatio = getGeoFenceScoreRatio(geoFenceCategory);
+  const score = duration * scoreRatio;
 
-//   const duration = await getDuration();
-//   const scoreRatio = getGeoFenceScoreRatio(trackingGeoFence.category);
-//   const score = duration * scoreRatio;
-
-//   if (doubleScore) return score * 2;
-//   console.log('Updating score', score);
-//   return score;
-// };
+  if (friendId !== '') return score * 2;
+  // TODO: Remove
+  console.log('Updating score', score);
+  return score;
+};

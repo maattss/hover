@@ -16,8 +16,8 @@ const PREVIOUS_PUSH_KEY = '@hover_previous_push';
 export interface TrackingInfo {
   geoFence: GeoFence;
   friendId: string;
-  score: number;
   duration: number;
+  score: number;
   startTimestamp: number;
   endTimestamp: number;
   state: TrackingState;
@@ -53,7 +53,7 @@ export const storePreviousPushUpdate = async (value: number) => storeString(PREV
 
 export const readPreviousPushUpdate = async () => Number((await readString(PREVIOUS_PUSH_KEY)) ?? '0');
 
-export const storeTrackingIno = async (value: TrackingInfo) => storeObject(TRACKING_INFO_KEY, value);
+export const storeTrackingInfo = async (value: TrackingInfo) => storeObject(TRACKING_INFO_KEY, value);
 
 export const readTrackingInfo = async () => {
   const trackingInfo: TrackingInfo = await readObject(TRACKING_INFO_KEY);
