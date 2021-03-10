@@ -1,30 +1,36 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TextInput } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Alert } from 'react-native';
 import { Buttons, Colors, Spacing, Typography } from '../../../theme';
 import { SettingsProps } from './SettingsMenuScreen';
 import CustomButton from '../../../components/general/Button';
 import KeyboardAvoider from '../../../components/keyboard/KeyboardAvoider';
+import * as MailComposer from 'expo-mail-composer';
+import useAuthentication from '../../../hooks/useAuthentication';
 
 const FeedbackScreen: React.FC<SettingsProps> = ({ navigation }: SettingsProps) => {
-  const [subject, setSubject] = useState<string>('');
   const [feedback, setFeedback] = useState<string>('');
 
+  const id = useAuthentication().user?.uid;
   const onSubmit = () => {
-    console.log('Send Feedback');
-    //open mail
-    navigation.goBack();
+    MailComposer.composeAsync({
+      recipients: ['contact.hoverapp@gmail.com'], // array of email addresses
+      subject: 'Feedback',
+      body: `Feedback from user ${id}: \n ${feedback}.`,
+    })
+      .then((value) => {
+        if (value.status !== 'sent') {
+          Alert.alert('Something went wrong', 'Feedback not submitted');
+        } else {
+          Alert.alert('Feedback submitted!');
+          navigation.goBack();
+        }
+        return;
+      })
+      .catch((reason) => Alert.alert('Something went wrong', reason));
   };
   return (
     <KeyboardAvoider>
       <View style={styles.container}>
-        <Text style={styles.label}>Subject</Text>
-        <TextInput
-          placeholder={'Subject'}
-          placeholderTextColor={Colors.gray600}
-          value={subject}
-          onChangeText={(val) => setSubject(val)}
-          style={styles.formField}
-        />
         <Text style={styles.label}>Feedback</Text>
         <TextInput
           placeholder={'Give us your honest feedback!'}
