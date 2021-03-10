@@ -6,6 +6,8 @@ import CustomButton, { CategoryButton } from '../../../components/general/Button
 import KeyboardAvoider from '../../../components/keyboard/KeyboardAvoider';
 import { GeoFenceCategory } from '../../../types/geoFenceTypes';
 import * as MailComposer from 'expo-mail-composer';
+import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
+import { gray700 } from '../../../theme/colors';
 
 const SuggestGeofenceScreen: React.FC<SettingsProps> = ({ navigation }: SettingsProps) => {
   const [location, setLocation] = useState<string>('');
@@ -47,6 +49,11 @@ const SuggestGeofenceScreen: React.FC<SettingsProps> = ({ navigation }: Settings
   return (
     <KeyboardAvoider>
       <View style={styles.container}>
+        <View style={styles.iconContainer}>
+          <View style={styles.iconRound}>
+            <FAIcon name={'map-marked-alt'} style={styles.icon} />
+          </View>
+        </View>
         <Text style={styles.label}>Category</Text>
         <View style={styles.categoryButtonsContainer}>{renderCategories()}</View>
         <Text style={styles.label}>Location</Text>
@@ -70,6 +77,24 @@ const styles = StyleSheet.create({
   container: {
     marginTop: Spacing.base,
     padding: Spacing.smaller,
+  },
+  iconContainer: {
+    alignItems: 'center',
+    marginBottom: Spacing.base,
+  },
+  iconRound: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 60,
+    width: 120,
+    height: 120,
+    backgroundColor: Colors.gray900,
+  },
+  icon: {
+    ...Typography.icon,
+    margin: Spacing.large,
+    paddingBottom: Spacing.small,
+    fontSize: 60,
   },
   label: {
     ...Typography.bodyText,

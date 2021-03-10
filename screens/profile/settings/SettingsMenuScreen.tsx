@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
     ...Typography.icon,
     margin: Spacing.large,
     paddingBottom: Spacing.small,
-    fontSize: 50,
+    fontSize: 60,
   },
   settingsItem: {
     ...Buttons.button,
