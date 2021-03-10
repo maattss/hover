@@ -4,11 +4,13 @@ import { Spacing, Typography } from '../../theme';
 import Button from '../../components/general/Button';
 import { Asset } from 'expo-asset';
 import useTracking from '../../hooks/useTracking';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const DisclaimerScreen: React.FC = () => {
   const askPermission = useTracking().askPermission;
+  const insets = useSafeAreaInsets();
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Text style={styles.titleText}>Location disclaimer</Text>
       <Text style={styles.bodyText}>
         This app collects location data to enable background tracking. Note that your location is never sent anywhere
@@ -28,10 +30,10 @@ const DisclaimerScreen: React.FC = () => {
           style={styles.image}
         />
       </View>
-      <View style={styles.button}>
+      <View style={[styles.button, { bottom: insets.bottom }]}>
         <Button onPress={() => askPermission()}>Grant location access</Button>
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 export default DisclaimerScreen;
@@ -41,7 +43,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     paddingHorizontal: Spacing.large,
-    paddingVertical: Spacing.largest,
+    paddingVertical: Spacing.smaller,
   },
   titleText: {
     ...Typography.headerText,
@@ -65,7 +67,6 @@ const styles = StyleSheet.create({
   button: {
     width: '100%',
     position: 'absolute',
-    bottom: 0,
-    paddingVertical: Spacing.large,
+    marginBottom: Spacing.smaller,
   },
 });
