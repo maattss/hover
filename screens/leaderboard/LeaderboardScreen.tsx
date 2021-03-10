@@ -49,7 +49,7 @@ const LeaderboardScreen: React.FC = () => {
     if (highscoreLoading) return <Loading />;
     if (highscoreError) return <Text style={styles.infoText}>{highscoreError.message}</Text>;
     return (
-      <View>
+      <View style={styles.container}>
         <View style={styles.filterContainer}>
           <FilterPickerAndriod
             items={STATIC_CATEGORIES}
