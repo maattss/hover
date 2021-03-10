@@ -7,6 +7,8 @@ import SettingsScreen from '../screens/profile/settings/SettingsMenuScreen';
 import { HeaderIcon } from '../components/general/HeaderIcon';
 import PrivacyScreen from '../screens/profile/settings/PrivacyScreen';
 import EditProfileScreen from '../screens/profile/settings/EditProfileScreen';
+import SuggestGeofenceScreen from '../screens/profile/settings/SuggestGeofenceScreen';
+import FeedbackScreen from '../screens/profile/settings/FeedbackScreen';
 
 const ProfileStack = createStackNavigator<ProfileStackParamList>();
 
@@ -30,6 +32,14 @@ const ProfileNavigator: React.FC = () => {
         }}
       />
       <ProfileStack.Screen name="Edit Profile" component={EditProfileScreen} />
+      <ProfileStack.Screen
+        name="SuggestGeofence"
+        component={SuggestGeofenceScreen}
+        options={{
+          headerTitle: 'Suggest new location',
+        }}
+      />
+      <ProfileStack.Screen name="Feedback" component={FeedbackScreen} />
       <ProfileStack.Screen name="About Hover" component={AboutScreen} />
       <ProfileStack.Screen name="Privacy Policy" component={PrivacyScreen} />
     </ProfileStack.Navigator>
