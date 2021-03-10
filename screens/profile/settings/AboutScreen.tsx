@@ -17,10 +17,10 @@ const AboutScreen: React.FC<SettingsProps> = () => {
       <Text style={styles.bodyText}>
         Hover is a game created by Siri Mykland and Mats Tyldum as a part of our master project in Computer Science at
         the Norwegian University of Science and Technology (NTNU) during the spring of 2021. The goal of the project was
-        to invent and develop an alternative game. This application is the result of that work. Any questions? Send us
-        an email or checkout out our website.
+        to invent and develop an alternative game. This application is the result of that work.
       </Text>
-      <Text style={styles.versionText}>Version {Constants.manifest.version} (beta)</Text>
+
+      <Text style={styles.bodyText}>Any questions? Send us an email or checkout out our website.</Text>
       <View style={{ marginVertical: Spacing.base }}>
         <TouchableOpacity style={styles.button} onPress={() => Linking.openURL('mailto:contact.hoverapp@gmail.com')}>
           <FAIcon name={'envelope'} style={styles.icon} />
@@ -31,6 +31,7 @@ const AboutScreen: React.FC<SettingsProps> = () => {
           <Text style={styles.mailButton}>hover-game.web.app</Text>
         </TouchableOpacity>
       </View>
+      <Text style={styles.versionText}>Version {Constants.manifest.version} (beta)</Text>
     </View>
   );
 };
@@ -56,6 +57,7 @@ const styles = StyleSheet.create({
     ...Typography.bodyText,
     paddingTop: Spacing.base,
     paddingBottom: Spacing.smaller,
+    textAlign: 'center',
   },
   versionText: {
     ...Typography.bodyText,
