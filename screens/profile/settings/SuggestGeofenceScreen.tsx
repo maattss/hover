@@ -1,19 +1,32 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TextInput } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Alert } from 'react-native';
 import { Buttons, Colors, Spacing, Typography } from '../../../theme';
 import { SettingsProps } from './SettingsMenuScreen';
 import CustomButton, { CategoryButton } from '../../../components/general/Button';
 import KeyboardAvoider from '../../../components/keyboard/KeyboardAvoider';
 import { GeoFenceCategory } from '../../../types/geoFenceTypes';
+import * as MailComposer from 'expo-mail-composer';
 
 const SuggestGeofenceScreen: React.FC<SettingsProps> = ({ navigation }: SettingsProps) => {
   const [location, setLocation] = useState<string>('');
   const [category, setCategory] = useState<string>('');
 
   const onSubmit = () => {
-    console.log('Send Suggestion');
-    //open mail
-    navigation.goBack();
+    MailComposer.composeAsync({
+      recipients: ['contact.hoverapp@gmail.com'],
+      subject: 'Location suggestion',
+      body: `New location suggestion: \n  Category: ${category} \n  Location: ${location}`,
+    })
+      .then((value) => {
+        if (value.status !== 'sent') {
+          Alert.alert('Something went wrong', 'Feedback not submitted');
+        } else {
+          Alert.alert('Feedback submitted!');
+          navigation.goBack();
+        }
+        return;
+      })
+      .catch((reason) => Alert.alert('Something went wrong', reason));
   };
   const renderCategories = () =>
     Object.keys(GeoFenceCategory).map((cat, index) => {
@@ -33,6 +46,8 @@ const SuggestGeofenceScreen: React.FC<SettingsProps> = ({ navigation }: Settings
   return (
     <KeyboardAvoider>
       <View style={styles.container}>
+        <Text style={styles.label}>Category</Text>
+        <View style={styles.categoryButtonsContainer}>{renderCategories()}</View>
         <Text style={styles.label}>Location</Text>
         <TextInput
           placeholder={'What location would you like for us to add?'}
@@ -43,8 +58,6 @@ const SuggestGeofenceScreen: React.FC<SettingsProps> = ({ navigation }: Settings
           multiline={true}
           numberOfLines={5}
         />
-        <Text style={styles.label}>Category</Text>
-        <View style={styles.categoryButtonsContainer}>{renderCategories()}</View>
         <CustomButton onPress={onSubmit}>Send Suggestion</CustomButton>
       </View>
     </KeyboardAvoider>
