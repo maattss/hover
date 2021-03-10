@@ -46,16 +46,16 @@ const SettingsScreen: React.FC<SettingsProps> = ({ navigation }: SettingsProps) 
       onClick: () => navigation.navigate('Edit Profile'),
     },
     {
-      id: 'bd78heea-c1b1-873h-aed5-3hjsnahsj8ba',
-      title: 'About',
-      disabled: false,
-      onClick: () => navigation.navigate('About'),
-    },
-    {
       id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
       title: 'Privacy Policy',
       disabled: false,
       onClick: () => navigation.navigate('Privacy Policy'),
+    },
+    {
+      id: 'bd78heea-c1b1-873h-aed5-3hjsnahsj8ba',
+      title: 'About Hover',
+      disabled: false,
+      onClick: () => navigation.navigate('About Hover'),
     },
   ];
 

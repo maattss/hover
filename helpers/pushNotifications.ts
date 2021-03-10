@@ -41,7 +41,7 @@ export const registerForPushNotificationsAsync = async () => {
     }
     token = (await Notifications.getExpoPushTokenAsync()).data;
   } else {
-    console.log('Error', 'Must use physical device for Push Notifications');
+    console.log('Push notifications disabled. Must use physical device for this feature.');
   }
 
   if (Platform.OS === 'android') {

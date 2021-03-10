@@ -16,7 +16,7 @@ import useTracking from '../../hooks/useTracking';
 import { Buttons, Colors, Spacing, Typography } from '../../theme';
 import { FontAwesome as FAIcon } from '@expo/vector-icons';
 import { FontAwesome5 as FA5Icon } from '@expo/vector-icons';
-import { durationToTimestamp, timeStampToHours } from '../../helpers/dateTimeHelpers';
+import { durationToTime, timeStampToHours } from '../../helpers/dateTimeHelpers';
 import Button from '../../components/general/Button';
 import { getGeoFenceImage } from '../../helpers/geoFenceCalculations';
 import MapView, { LatLng, Marker, Region } from 'react-native-maps';
@@ -27,6 +27,7 @@ const PublishScreen: React.FC = () => {
   const tracking = useTracking();
   const insets = useSafeAreaInsets();
   const [caption, setCaption] = useState('');
+  const roundedScore = tracking.score < 0 ? 0 : Math.floor(tracking.score);
 
   const publishActivity = () => tracking.stopTracking(caption);
   const resumeTracking = () => tracking.resumeTracking();
@@ -102,7 +103,9 @@ const PublishScreen: React.FC = () => {
             </View>
           </View>
           <View style={styles.summaryContainer}>
-            <Text style={styles.infoScore}>{Math.floor(tracking.score)} points</Text>
+            <Text style={styles.infoScore}>
+              {roundedScore} {roundedScore === 1 ? 'point' : 'points'}
+            </Text>
 
             <Text style={styles.label}>Summary</Text>
             <View style={styles.infoContainer}>
@@ -110,7 +113,7 @@ const PublishScreen: React.FC = () => {
                 <View style={[styles.infoCard, { alignItems: 'flex-start' }]}>
                   <View style={[styles.mbSmall, styles.flexRowLeft]}>
                     <FA5Icon name={'stopwatch'} style={styles.infoIcons} />
-                    <Text style={styles.infoText}>{durationToTimestamp(tracking.duration)}</Text>
+                    <Text style={styles.infoText}>{durationToTime(tracking.duration)}</Text>
                   </View>
                   <View style={[styles.mbSmall, styles.flexRowLeft]}>
                     <FA5Icon name={'clock'} style={styles.infoIcons} />

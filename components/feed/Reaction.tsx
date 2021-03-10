@@ -20,10 +20,6 @@ const getReactionText = (reactionCount: number, userReacted: boolean) => {
   if (userReacted) return 'You and ' + (reactionCount - 1) + ' other users reacted to this activity.';
   return reactionCount + ' users reacted to this activity.';
 };
-const getImageURI = (userReacted: boolean) => {
-  if (userReacted) return require('../../assets/images/clap.png');
-  return require('../../assets/images/clap-gray.gif');
-};
 type ReactionProps = {
   feed_id: number;
   user_id: string;
@@ -108,10 +104,25 @@ const Reaction: React.FC<ReactionProps> = (props: ReactionProps) => {
   return (
     <View style={styles.reactionContainer}>
       <TouchableOpacity onPress={reactToActivity}>
-        <Image source={{ uri: Asset.fromModule(getImageURI(userReacted)).uri }} style={styles.reactionIcon} />
+        {userReacted && (
+          <Image
+            // eslint-disable-next-line @typescript-eslint/no-var-requires
+            source={{ uri: Asset.fromModule(require('../../assets/images/clap.png')).uri }}
+            style={styles.reactionIcon}
+          />
+        )}
+        {!userReacted && (
+          <Image
+            // eslint-disable-next-line @typescript-eslint/no-var-requires
+            source={{ uri: Asset.fromModule(require('../../assets/images/clap-gray.gif')).uri }}
+            style={styles.reactionIcon}
+          />
+        )}
       </TouchableOpacity>
       <TouchableOpacity onPress={openModal} disabled={isDisabled}>
-        <Text style={styles.reactionText}>{getReactionText(reactionCount, userReacted)}</Text>
+        <Text style={styles.reactionText} numberOfLines={1}>
+          {getReactionText(reactionCount, userReacted)}
+        </Text>
       </TouchableOpacity>
       {modalVisible && (
         <Modal
@@ -170,6 +181,8 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.gray900,
     borderRadius: 10,
     width: '90%',
+    padding: Spacing.smallest,
+    paddingBottom: Spacing.smaller,
   },
   header: {
     flexDirection: 'row',

@@ -64,7 +64,6 @@ const HoverWithFriends: React.FC<Props> = ({
   const updateFriendData = (friend: ListUserFragmentFragment) => {
     setFriend(friend);
     tracking.setFriendId(friend.id);
-    tracking.updateDoubleScore(true);
     setCollabState(HoverWithFriendState.ONGOING);
   };
 
@@ -82,18 +81,24 @@ const HoverWithFriends: React.FC<Props> = ({
 
   const startFriendTracking = async () => {
     try {
-      if (!trackingWithFriendId) {
-        const response = await InsertFriendTracking({
-          variables: {
-            user_id: auth.user?.uid ?? '',
-            linking_word: yourCollabCode,
-            geofence_id: tracking.trackingGeoFence?.id ?? 0,
-          },
-        });
-        setTrackingWithFriendId(response.data?.insert_friend_tracking_one?.id);
-      }
       setCollabState(HoverWithFriendState.STARTING);
+      if (!trackingWithFriendId) {
+        const id = auth.user?.uid ?? '';
+        if (id) {
+          const response = await InsertFriendTracking({
+            variables: {
+              user_id: id,
+              linking_word: yourCollabCode,
+              geofence_id: tracking.trackingGeoFence?.id ?? 0,
+            },
+          });
+          setTrackingWithFriendId(response.data?.insert_friend_tracking_one?.id);
+        } else {
+          throw Error('Error: User id not present');
+        }
+      }
     } catch (error) {
+      setCollabState(HoverWithFriendState.NONE);
       console.error('Mutation error', error.message);
       Alert.alert('Something went wrong...');
     }
@@ -208,7 +213,7 @@ const HoverWithFriends: React.FC<Props> = ({
               <FAIcon name={'chevron-down'} style={styles.icon} />
             </TouchableOpacity>
           </View>
-          <Text style={styles.collabSubHeader}>Earning 2x points together with: </Text>
+          <Text style={styles.collabSubHeader}>Earning 2x points together with</Text>
           <View style={styles.friendContainer}>
             <View style={styles.rowFlexJustifyStart}>
               <Avatar

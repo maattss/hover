@@ -1,14 +1,13 @@
 import { LocationObject } from 'expo-location';
 import { insideGeoFences } from './helpers/geoFenceCalculations';
 import {
-  readGeofence,
   readLocationEvents,
   readPushToken,
   storeLocationEvents,
   LocationEvent,
-  readTrackingStart,
   readPreviousPushUpdate,
   storePreviousPushUpdate,
+  readTrackingInfo,
 } from './helpers/storage';
 import { sendPushNotification } from './helpers/pushNotifications';
 import * as TaskManager from 'expo-task-manager';
@@ -21,26 +20,27 @@ TaskManager.defineTask(LOCATION_BACKGROUND_TRACKING, async ({ data, error }) => 
     console.error('LOCATION_BACKGROUND_TRACKING: ', error.message);
     return;
   }
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const anyData: any = data;
   if (anyData.locations) {
     const currentLocation: LocationObject = anyData.locations[0];
-    const trackingStart = await readTrackingStart();
+    const trackingInfo = await readTrackingInfo();
 
-    // Locations with timestamp before tracking started should be discarded
-    if (currentLocation.timestamp < trackingStart) return;
-
-    const geoFence = await readGeofence();
-    if (!geoFence) {
+    if (!trackingInfo.geoFence) {
       console.error('LOCATION_BACKGROUND_TRACKING: No geofence present in storage.');
       return;
     }
-    const insideGeoFence = insideGeoFences(currentLocation, [geoFence]);
+
+    // Locations with timestamp before tracking started should be discarded
+    if (currentLocation.timestamp < trackingInfo.startTimestamp) return;
+
+    const insideGeoFence = insideGeoFences(currentLocation, [trackingInfo.geoFence]);
     const trackingLocations = await readLocationEvents();
 
     if (!insideGeoFence) {
-      // If tracking accuracy is not present or poor, we should not treat it as an "Out of geofence event"
-      if (!currentLocation.coords.accuracy || currentLocation.coords.accuracy < 10) return;
+      // If tracking accuracy is poor, we should not treat it as an "Out of geofence event"
+      if (currentLocation.coords.accuracy && currentLocation.coords.accuracy < 10) return;
 
       if (trackingLocations.length === 0) {
         const location: LocationEvent = {
@@ -62,15 +62,15 @@ TaskManager.defineTask(LOCATION_BACKGROUND_TRACKING, async ({ data, error }) => 
         if (Constants.isDevice) {
           const pushToken = await readPushToken();
           const previousPushUpdate = await readPreviousPushUpdate();
-          const lessThanFiveMinutesAgo = Date.now() - 5 * 1000 < previousPushUpdate;
 
-          // Do not send push notification if last was one was sent less than 5 minutes ago
-          if (pushToken && !lessThanFiveMinutesAgo) {
+          // Send push notification if it is more than 5 minutes since previous
+          // "Outside geofence" push notification was sent.
+          if (pushToken && previousPushUpdate && previousPushUpdate < Date.now() - 5 * 60) {
             sendPushNotification(
               pushToken,
               'Oh noo! You are outside the Hover zone...',
               'Move back in to continue earning points.' +
-                'Tracking will start automagically when your location is inside the Hover zone.',
+                'Tracking will start automagically when you are inside the Hover zone.',
               true,
             );
             storePreviousPushUpdate(Date.now());

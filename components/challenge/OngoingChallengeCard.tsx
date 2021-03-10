@@ -116,6 +116,7 @@ const styles = StyleSheet.create({
   infoContainer: {
     justifyContent: 'center',
     flexShrink: 1,
+    paddingBottom: Spacing.smallest,
   },
   colum: {
     marginTop: Spacing.smaller,

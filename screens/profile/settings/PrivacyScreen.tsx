@@ -22,12 +22,30 @@ const PrivacyScreen: React.FC<SettingsProps> = () => {
         identifiable information. The information that we request will be retained on your device and is not collected
         by us in any way.
       </Text>
+      <Text style={styles.subHeaderText}>Account, Profile and Activity</Text>
+      <Text style={styles.bodyText}>
+        Activity and use information is collected about you when you choose to upload an activity (including date, time
+        and geofence-location information). We use your contact information so we can respond to your support requests
+        and comments.
+      </Text>
+      <Text style={styles.subHeaderText}>Location Information</Text>
+      <Text style={styles.bodyText}>
+        We collect and process location information when you sign up for and use the Services. We do not track your
+        device location while you are not using Hover, but in order to provide Hovers&apos; core service, it is
+        necessary for us to track your device location while you use Hover. You may at any time adjusting your device
+        settings if you would like to stop the device location tracking.
+      </Text>
+      <Text style={styles.subHeaderText}>Content You Share</Text>
+      <Text style={styles.bodyText}>
+        We gather information from the activities and reactions you share on the Service, including when you create or
+        participate in challenges.
+      </Text>
       <Text style={styles.subHeaderText}>Log Data</Text>
       <Text style={styles.bodyText}>
         We want to inform you that whenever you use our Service, in a case of an error in the app we collect data and
         information (through third party products) on your phone called Log Data. This Log Data may include information
         such as your device Internet Protocol (“IP”) address, device name, operating system version, the configuration
-        of the app when utilizing our Service, the time and date of your use of the Service, and other statistics.{' '}
+        of the app when utilizing our Service, the time and date of your use of the Service, and other statistics.
       </Text>
       <Text style={styles.subHeaderText}>Cookies</Text>
       <Text style={styles.bodyText}>
