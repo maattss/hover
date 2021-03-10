@@ -46,6 +46,18 @@ const SettingsScreen: React.FC<SettingsProps> = ({ navigation }: SettingsProps) 
       onClick: () => navigation.navigate('Edit Profile'),
     },
     {
+      id: 'bd7acbea-c1b1-jk34-aed5-3ad5hj70j8ba',
+      title: 'Suggest New Location',
+      disabled: false,
+      onClick: () => navigation.navigate('SuggestGeofence'),
+    },
+    {
+      id: '3jhacbea-c1b1-873h-aed5-3ad8hshsj8ba',
+      title: 'Give Feedback',
+      disabled: false,
+      onClick: () => navigation.navigate('Feedback'),
+    },
+    {
       id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
       title: 'Privacy Policy',
       disabled: false,
