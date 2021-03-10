@@ -8,13 +8,10 @@ import {
   readPreviousPushUpdate,
   storePreviousPushUpdate,
   readTrackingInfo,
-  TrackingInfo,
-  storeTrackingInfo,
 } from './helpers/storage';
 import { sendPushNotification } from './helpers/pushNotifications';
 import * as TaskManager from 'expo-task-manager';
 import Constants from 'expo-constants';
-import { getDuration, getScore } from './helpers/trackingCalculations';
 
 export const LOCATION_BACKGROUND_TRACKING = 'location-background-tracking';
 
@@ -28,29 +25,11 @@ TaskManager.defineTask(LOCATION_BACKGROUND_TRACKING, async ({ data, error }) => 
   if (anyData.locations) {
     const currentLocation: LocationObject = anyData.locations[0];
     const trackingInfo = await readTrackingInfo();
-    console.log('------------------------------');
-    console.log('Tracking score:' + trackingInfo.score);
-    console.log('Tracking duration: ' + trackingInfo.duration);
-    console.log('Tracking start: ' + trackingInfo.startTimestamp);
-    console.log('Tracking end: ' + trackingInfo.endTimestamp);
-    console.log('Tracking geofence: ' + trackingInfo.geoFence.name);
 
     if (!trackingInfo.geoFence) {
       console.error('LOCATION_BACKGROUND_TRACKING: No geofence present in storage.');
       return;
     }
-
-    const updatedDuration = await getDuration(trackingInfo);
-    const updatedScore = getScore(updatedDuration, trackingInfo.geoFence.category, trackingInfo.friendId);
-    await storeTrackingInfo({
-      geoFence: trackingInfo.geoFence,
-      friendId: trackingInfo.friendId,
-      duration: updatedDuration,
-      score: updatedScore,
-      startTimestamp: trackingInfo.startTimestamp,
-      endTimestamp: trackingInfo.endTimestamp,
-      updatedAtTimestamp: Date.now(),
-    } as TrackingInfo);
 
     // Locations with timestamp before tracking started should be discarded
     if (currentLocation.timestamp < trackingInfo.startTimestamp) return;
@@ -82,10 +61,11 @@ TaskManager.defineTask(LOCATION_BACKGROUND_TRACKING, async ({ data, error }) => 
         if (Constants.isDevice) {
           const pushToken = await readPushToken();
           const previousPushUpdate = await readPreviousPushUpdate();
-          const lessThanTwoMinutesAgo = Date.now() - 2 * 1000 < previousPushUpdate;
+          const moreThanTwoMinutesAgo = Date.now() - 2 * 60 > previousPushUpdate;
 
-          // Do not send push notification if last was one was sent less than 2 minutes ago
-          if (pushToken && !lessThanTwoMinutesAgo) {
+          // Send push notification if it is more than 2 minutes since previous
+          // "Outside geofence" push notification was sent.
+          if (pushToken && moreThanTwoMinutesAgo) {
             sendPushNotification(
               pushToken,
               'Oh noo! You are outside the Hover zone...',

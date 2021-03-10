@@ -4,8 +4,8 @@ import { convertToGeoFences } from '../../helpers/objectMappers';
 import { usePermissions, LOCATION, PermissionResponse } from 'expo-permissions';
 import { useGeofencesQuery } from '../../graphql/queries/Geofences.generated';
 import { useInsertActivityMutation } from '../../graphql/mutations/InsertActivity.generated';
-import { Alert, AppState } from 'react-native';
-import { durationToTime } from '../../helpers/dateTimeHelpers';
+import { Alert } from 'react-native';
+import { durationToTime, timeStampToHours } from '../../helpers/dateTimeHelpers';
 import { insideGeoFences } from '../../helpers/geoFenceCalculations';
 import { LocationObject } from 'expo-location';
 import useAuthentication from '../../hooks/useAuthentication';
@@ -24,7 +24,6 @@ import {
 } from '../../helpers/storage';
 import { console, Date, Math } from '@ungap/global-this';
 import { useInterval } from '../../hooks/useInterval';
-import Constants from 'expo-constants';
 import { getDuration, getScore } from '../../helpers/trackingCalculations';
 
 export enum TrackingState {
@@ -52,7 +51,7 @@ interface TrackingContextValues {
   trackingStart: number | undefined;
   trackingEnd: number | undefined;
   friendId: string | undefined;
-  setFriendId: React.Dispatch<React.SetStateAction<string>>;
+  setFriendId: (friendId: string) => Promise<void>;
   startTracking: () => void;
   resumeTracking: () => void;
   pauseTracking: () => void;
@@ -76,7 +75,7 @@ export const TrackingContext = React.createContext<TrackingContextValues>({
   trackingStart: undefined,
   trackingEnd: undefined,
   friendId: undefined,
-  setFriendId: () => console.error('Function not initialized'),
+  setFriendId: () => new Promise(() => console.error('Function not initialized')),
   startTracking: () => console.error('Function not initialized'),
   resumeTracking: () => console.error('Function not initialized'),
   pauseTracking: () => console.error('Function not initialized'),
@@ -114,12 +113,27 @@ export const TrackingProvider = ({ children }: Props) => {
   useEffect(() => {
     // Restore tracking on initial render if application chrashed
     const restore = async () => {
-      // await clearTrackingStorage(); // Only for debug, remove later
+      //await clearAll(); // Only for debug, remove later
       const trackingInfo = await readTrackingInfo();
-      console.log('Init tracking info', trackingInfo);
+
+      // TODO: Remove, onlye for debug
+      if (trackingInfo) {
+        console.log('**********************');
+        console.log('Init tracking info');
+        console.log('Tracking score:' + trackingInfo.score);
+        console.log('Tracking duration: ' + trackingInfo.duration);
+        console.log('Tracking start: ' + trackingInfo.startTimestamp);
+        console.log('Tracking end: ' + trackingInfo.endTimestamp);
+        console.log('Tracking geofence: ' + trackingInfo.geoFence.name);
+        console.log('Updated at: ' + timeStampToHours(trackingInfo.updatedAtTimestamp));
+        console.log('**********************');
+      } else {
+        console.log('No tracking info present in storage');
+      }
+
       if (trackingInfo) {
         // Add pause window if app chrashed more than 2 minutes ago
-        const lessThanTwoMinutesAgo = Date.now() - 2 * 1000 < trackingInfo.updatedAtTimestamp;
+        const lessThanTwoMinutesAgo = Date.now() - 2 * 60 > trackingInfo.updatedAtTimestamp;
         if (lessThanTwoMinutesAgo) {
           const pauseEvents = await readPauseEvents();
           const startEvent: PauseEvent = {
@@ -131,8 +145,10 @@ export const TrackingProvider = ({ children }: Props) => {
             paused: false,
           };
           await storePauseEvents([...pauseEvents, startEvent, endEvent]);
+          console.log('Added pause event');
         }
 
+        // Restore tracking session
         setTrackingState(TrackingState.TRACKING);
         setTrackingEnd(undefined);
         setTrackingStart(trackingInfo.startTimestamp);
@@ -151,7 +167,8 @@ export const TrackingProvider = ({ children }: Props) => {
     if (geoFenceFetchError) console.error(geoFenceFetchError.message);
   }, [geoFenceData, geoFenceFetchError]);
 
-  const forceUpdateScoreAndDuration = async (trackingInfo: TrackingInfo) => {
+  const updateScoreAndDuration = async () => {
+    const trackingInfo = await readTrackingInfo();
     const updatedDuration = await getDuration(trackingInfo);
     const updatedScore = getScore(updatedDuration, trackingInfo.geoFence.category, trackingInfo.friendId);
     storeTrackingInfo({
@@ -165,31 +182,20 @@ export const TrackingProvider = ({ children }: Props) => {
     });
     setDuration(updatedDuration);
     setScore(updatedScore);
+
+    // TODO: Remove, only for debug
+    console.log('------------------------------');
+    console.log('Tracking score:' + updatedScore);
+    console.log('Tracking duration: ' + updatedDuration);
+    console.log('Tracking start: ' + trackingInfo.startTimestamp);
+    console.log('Tracking end: ' + trackingInfo.endTimestamp);
+    console.log('Tracking geofence: ' + trackingInfo.geoFence.name);
+    console.log('Friend id: ' + trackingInfo.friendId);
+    console.log('Updated at: ' + timeStampToHours(trackingInfo.updatedAtTimestamp));
+    console.log('------------------------------');
   };
 
-  const getUpdatedInfo = async () => {
-    console.log('Updating score');
-    const updatedInfo = await readTrackingInfo();
-
-    if (!Constants.isDevice) {
-      // Need to manually update score and duration when simulator is used
-      forceUpdateScoreAndDuration(updatedInfo);
-      return;
-    }
-    setDuration(updatedInfo.duration);
-    setScore(updatedInfo.score);
-  };
-
-  // Update info every second when app is active and tracking
-  const shouldUpdateInfo = () => {
-    if (trackingState === TrackingState.TRACKING) return true;
-    return false;
-  };
-  useInterval(() => getUpdatedInfo(), shouldUpdateInfo() ? 1000 : null);
-
-  // Add UseEffect
-  // TODO: Update only when application is active?
-  // AppState.currentState === 'active'
+  useInterval(() => updateScoreAndDuration(), trackingState === TrackingState.TRACKING ? 2000 : null);
 
   const externalUpdateUserLocation = (newUserLocation: LatLng) => {
     const locationObject = {
@@ -363,6 +369,18 @@ export const TrackingProvider = ({ children }: Props) => {
     await clearTrackingStorage();
     setTrackingState(TrackingState.EXPLORE);
   };
+  const updateFriendId = async (friendId: string) => {
+    setFriendId(friendId);
+    const trackingInfo = await readTrackingInfo();
+    await storeTrackingInfo({
+      geoFence: trackingInfo.geoFence,
+      friendId: friendId,
+      duration: trackingInfo.duration,
+      score: trackingInfo.score,
+      startTimestamp: trackingInfo.startTimestamp,
+      endTimestamp: trackingInfo.endTimestamp,
+    } as TrackingInfo);
+  };
 
   const value: TrackingContextValues = {
     locationPermission: locationPermission,
@@ -383,7 +401,7 @@ export const TrackingProvider = ({ children }: Props) => {
     stopTracking: stopTracking,
     discardActivity: discardActivity,
     friendId: friendId,
-    setFriendId: setFriendId,
+    setFriendId: updateFriendId,
     score: score,
     duration: duration,
   };

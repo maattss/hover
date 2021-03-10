@@ -213,7 +213,7 @@ const HoverWithFriends: React.FC<Props> = ({
               <FAIcon name={'chevron-down'} style={styles.icon} />
             </TouchableOpacity>
           </View>
-          <Text style={styles.collabSubHeader}>Earning 2x points together with: </Text>
+          <Text style={styles.collabSubHeader}>Earning 2x points together with</Text>
           <View style={styles.friendContainer}>
             <View style={styles.rowFlexJustifyStart}>
               <Avatar
