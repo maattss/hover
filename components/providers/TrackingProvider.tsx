@@ -16,6 +16,7 @@ import {
   clearAll,
   clearTrackingStorage,
   PauseEvent,
+  readLocationEvents,
   readPauseEvents,
   readTrackingInfo,
   storePauseEvents,
@@ -116,7 +117,7 @@ export const TrackingProvider = ({ children }: Props) => {
       //await clearAll(); // Only for debug, remove later
       const trackingInfo = await readTrackingInfo();
 
-      // TODO: Remove, onlye for debug
+      // TODO: Remove, only for debug
       if (trackingInfo) {
         console.log('**********************');
         console.log('Init tracking info');
@@ -127,15 +128,43 @@ export const TrackingProvider = ({ children }: Props) => {
         console.log('Tracking geofence: ' + trackingInfo.geoFence.name);
         console.log('Updated at: ' + timeStampToHours(trackingInfo.updatedAtTimestamp));
         console.log('**********************');
-      } else {
-        console.log('No tracking info present in storage');
       }
 
       if (trackingInfo) {
+        console.log('Restoring tracking session...');
+
+        const pauseEvents = await readPauseEvents();
+        if (pauseEvents.length > 0 && pauseEvents[pauseEvents.length - 1].paused === true) {
+          console.log('User on publish screen when app chrashed');
+          setTrackingState(TrackingState.PUBLISH);
+          setTrackingEnd(trackingInfo.endTimestamp);
+          setTrackingStart(trackingInfo.startTimestamp);
+          setTrackingGeofence(trackingInfo.geoFence);
+          setScore(trackingInfo.score);
+          setDuration(trackingInfo.duration);
+          setFriendId(trackingInfo.friendId);
+          return;
+        }
+
+        const trackingLocations = await readLocationEvents();
+        if (trackingLocations.length > 0 && trackingLocations[trackingLocations.length - 1].insideGeofence === false) {
+          console.log('User outside geofence when app chrased. Tracking auto paused.');
+          setTrackingState(TrackingState.TRACKINGPAUSED);
+          setTrackingEnd(trackingInfo.endTimestamp);
+          setTrackingStart(trackingInfo.startTimestamp);
+          setTrackingGeofence(trackingInfo.geoFence);
+          setScore(trackingInfo.score);
+          setDuration(trackingInfo.duration);
+          setFriendId(trackingInfo.friendId);
+          return;
+        }
+
+        console.log('User inside geofence when app chrased. Tracking active.');
         // Add pause window if app chrashed more than 2 minutes ago
-        const lessThanTwoMinutesAgo = Date.now() - 2 * 60 > trackingInfo.updatedAtTimestamp;
-        if (lessThanTwoMinutesAgo) {
-          const pauseEvents = await readPauseEvents();
+        const moreThanTwoMinutesAgo = trackingInfo.updatedAtTimestamp < Date.now() - 2 * 60;
+        if (moreThanTwoMinutesAgo) {
+          console.log('More than two minutes ago since app chrashed. Adding pause event.');
+
           const startEvent: PauseEvent = {
             timestamp: trackingInfo.updatedAtTimestamp,
             paused: true,
@@ -145,10 +174,8 @@ export const TrackingProvider = ({ children }: Props) => {
             paused: false,
           };
           await storePauseEvents([...pauseEvents, startEvent, endEvent]);
-          console.log('Added pause event');
         }
 
-        // Restore tracking session
         setTrackingState(TrackingState.TRACKING);
         setTrackingEnd(undefined);
         setTrackingStart(trackingInfo.startTimestamp);
@@ -314,25 +341,11 @@ export const TrackingProvider = ({ children }: Props) => {
   };
 
   const autoResumeTracking = async () => {
-    const pauseEvents = await readPauseEvents();
-    const newEvent: PauseEvent = {
-      timestamp: Date.now(),
-      paused: false,
-    };
-    await storePauseEvents([...pauseEvents, newEvent]);
-
     setTrackingState(TrackingState.TRACKING);
     setTrackingEnd(undefined);
     await storeNewEndTimestamp(0);
   };
   const autoPauseTracking = async () => {
-    const pauseEvents = await readPauseEvents();
-    const newEvent: PauseEvent = {
-      timestamp: Date.now(),
-      paused: true,
-    };
-    await storePauseEvents([...pauseEvents, newEvent]);
-
     setTrackingState(TrackingState.TRACKINGPAUSED);
     setTrackingEnd(Date.now());
     await storeNewEndTimestamp(Date.now());

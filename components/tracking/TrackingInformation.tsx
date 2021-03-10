@@ -16,7 +16,7 @@ const TrackingInformation: React.FC<Props> = ({ collabState }: Props) => {
 
   const score = Math.floor(tracking.score);
   const progress = tracking.score - score;
-  const nextScore = tracking.score == 0 ? 1 : Math.ceil(tracking.score);
+  const nextScore = Math.ceil(tracking.score) === tracking.score ? tracking.score + 1 : Math.ceil(tracking.score);
 
   return (
     <View style={styles.trackingInfo}>

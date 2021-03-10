@@ -20,6 +20,7 @@ TaskManager.defineTask(LOCATION_BACKGROUND_TRACKING, async ({ data, error }) => 
     console.error('LOCATION_BACKGROUND_TRACKING: ', error.message);
     return;
   }
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const anyData: any = data;
   if (anyData.locations) {
@@ -61,7 +62,7 @@ TaskManager.defineTask(LOCATION_BACKGROUND_TRACKING, async ({ data, error }) => 
         if (Constants.isDevice) {
           const pushToken = await readPushToken();
           const previousPushUpdate = await readPreviousPushUpdate();
-          const moreThanTwoMinutesAgo = Date.now() - 2 * 60 > previousPushUpdate;
+          const moreThanTwoMinutesAgo = previousPushUpdate < Date.now() - 2 * 60;
 
           // Send push notification if it is more than 2 minutes since previous
           // "Outside geofence" push notification was sent.
