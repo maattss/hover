@@ -178,6 +178,7 @@ export const TrackingProvider = ({ children }: Props) => {
   }, [geoFenceData, geoFenceFetchError]);
 
   const updateScoreAndDuration = async () => {
+    console.log('Update...');
     const trackingInfo = await readTrackingInfo();
     const updatedDuration = await getDuration(trackingInfo);
     const updatedScore = getScore(updatedDuration, trackingInfo.geoFence.category, trackingInfo.friendId);
@@ -248,6 +249,7 @@ export const TrackingProvider = ({ children }: Props) => {
     }
 
     // Reset tracking state
+    await clearTrackingStorage();
     setTrackingState(TrackingState.TRACKING);
     setTrackingEnd(undefined);
     setTrackingStart(Date.now());
@@ -264,7 +266,6 @@ export const TrackingProvider = ({ children }: Props) => {
       score: 0,
       startTimestamp: Date.now(),
       endTimestamp: 0,
-      state: trackingState,
       updatedAtTimestamp: Date.now(),
     } as TrackingInfo);
     startBackgroundUpdate();
@@ -289,7 +290,7 @@ export const TrackingProvider = ({ children }: Props) => {
           activity: activity,
         },
       });
-      stopBackgroundUpdate();
+
       await clearTrackingStorage();
       setTrackingState(TrackingState.EXPLORE);
       console.log('Activity inserted to db', response);
