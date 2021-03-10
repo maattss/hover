@@ -15,7 +15,8 @@ const FeedbackScreen: React.FC<SettingsProps> = ({ navigation }: SettingsProps) 
     MailComposer.composeAsync({
       recipients: ['contact.hoverapp@gmail.com'], // array of email addresses
       subject: 'Feedback',
-      body: `Feedback from user ${id}: \n ${feedback}.`,
+      body: `<p><b>Feedback from user ${id}:</b></p><p><i>${feedback}</i></p>`,
+      isHtml: true,
     })
       .then((value) => {
         if (value.status !== 'sent') {
