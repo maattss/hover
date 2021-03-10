@@ -65,7 +65,7 @@ TaskManager.defineTask(LOCATION_BACKGROUND_TRACKING, async ({ data, error }) => 
 
           // Send push notification if it is more than 5 minutes since previous
           // "Outside geofence" push notification was sent.
-          if (pushToken && previousPushUpdate && previousPushUpdate > Date.now() - 5 * 60) {
+          if (pushToken && previousPushUpdate && previousPushUpdate < Date.now() - 5 * 60) {
             sendPushNotification(
               pushToken,
               'Oh noo! You are outside the Hover zone...',
