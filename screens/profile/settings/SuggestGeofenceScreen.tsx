@@ -2,38 +2,49 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View, TextInput } from 'react-native';
 import { Buttons, Colors, Spacing, Typography } from '../../../theme';
 import { SettingsProps } from './SettingsMenuScreen';
-import CustomButton from '../../../components/general/Button';
+import CustomButton, { CategoryButton } from '../../../components/general/Button';
 import KeyboardAvoider from '../../../components/keyboard/KeyboardAvoider';
+import { GeoFenceCategory } from '../../../types/geoFenceTypes';
 
 const SuggestGeofenceScreen: React.FC<SettingsProps> = ({ navigation }: SettingsProps) => {
-  const [subject, setSubject] = useState<string>('');
-  const [feedback, setFeedback] = useState<string>('');
+  const [location, setLocation] = useState<string>('');
+  const [category, setCategory] = useState<string>('');
 
   const onSubmit = () => {
-    console.log('Send Feedback');
+    console.log('Send Suggestion');
+    //open mail
+    navigation.goBack();
   };
+  const renderCategories = () =>
+    Object.keys(GeoFenceCategory).map((cat, index) => {
+      const categoryEnum: GeoFenceCategory = GeoFenceCategory[cat as keyof typeof GeoFenceCategory];
+      return (
+        <CategoryButton
+          key={index}
+          category={categoryEnum}
+          isSelected={category == categoryEnum}
+          onPress={() => {
+            setCategory(categoryEnum);
+          }}
+        />
+      );
+    });
 
   return (
     <KeyboardAvoider>
       <View style={styles.container}>
-        <Text style={styles.label}>Subject</Text>
-        <TextInput
-          placeholder={'Subject'}
-          placeholderTextColor={Colors.gray600}
-          value={subject}
-          onChangeText={(val) => setSubject(val)}
-          style={styles.formField}
-        />
         <Text style={styles.label}>Location</Text>
         <TextInput
           placeholder={'What location would you like for us to add?'}
           placeholderTextColor={Colors.gray600}
-          value={feedback}
-          onChangeText={(val) => setFeedback(val)}
+          value={location}
+          onChangeText={(val) => setLocation(val)}
           style={styles.formFieldMultiLine}
           multiline={true}
           numberOfLines={5}
         />
+        <Text style={styles.label}>Category</Text>
+        <View style={styles.categoryButtonsContainer}>{renderCategories()}</View>
         <CustomButton onPress={onSubmit}>Send Suggestion</CustomButton>
       </View>
     </KeyboardAvoider>
@@ -65,6 +76,12 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.gray900,
     paddingTop: Spacing.base,
     paddingLeft: Spacing.base,
+    marginBottom: Spacing.base,
+  },
+  categoryButtonsContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
     marginBottom: Spacing.base,
   },
 });
