@@ -59,7 +59,7 @@ TaskManager.defineTask(LOCATION_BACKGROUND_TRACKING, async ({ data, error }) => 
     const trackingLocations = await readLocationEvents();
 
     if (!insideGeoFence) {
-      // If tracking accuracy is not present or poor, we should not treat it as an "Out of geofence event"
+      // If tracking accuracy is poor, we should not treat it as an "Out of geofence event"
       if (currentLocation.coords.accuracy && currentLocation.coords.accuracy < 10) return;
 
       if (trackingLocations.length === 0) {
@@ -79,18 +79,13 @@ TaskManager.defineTask(LOCATION_BACKGROUND_TRACKING, async ({ data, error }) => 
         };
         storeLocationEvents([...trackingLocations, location]);
 
-        // TODO: Remove. Only for debugging
-        const previousPushUpdate = await readPreviousPushUpdate();
-        const lessThanFiveMinutesAgo = Date.now() - 5 * 1000 < previousPushUpdate;
-        if (!lessThanFiveMinutesAgo) console.log('Sending push notification');
-
         if (Constants.isDevice) {
           const pushToken = await readPushToken();
           const previousPushUpdate = await readPreviousPushUpdate();
-          const lessThanFiveMinutesAgo = Date.now() - 5 * 1000 < previousPushUpdate;
+          const lessThanTwoMinutesAgo = Date.now() - 2 * 1000 < previousPushUpdate;
 
-          // Do not send push notification if last was one was sent less than 5 minutes ago
-          if (pushToken && !lessThanFiveMinutesAgo) {
+          // Do not send push notification if last was one was sent less than 2 minutes ago
+          if (pushToken && !lessThanTwoMinutesAgo) {
             sendPushNotification(
               pushToken,
               'Oh noo! You are outside the Hover zone...',

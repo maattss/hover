@@ -83,14 +83,19 @@ const HoverWithFriends: React.FC<Props> = ({
     try {
       setCollabState(HoverWithFriendState.STARTING);
       if (!trackingWithFriendId) {
-        const response = await InsertFriendTracking({
-          variables: {
-            user_id: auth.user?.uid ?? '',
-            linking_word: yourCollabCode,
-            geofence_id: tracking.trackingGeoFence?.id ?? 0,
-          },
-        });
-        setTrackingWithFriendId(response.data?.insert_friend_tracking_one?.id);
+        const id = auth.user?.uid ?? '';
+        if (id) {
+          const response = await InsertFriendTracking({
+            variables: {
+              user_id: id,
+              linking_word: yourCollabCode,
+              geofence_id: tracking.trackingGeoFence?.id ?? 0,
+            },
+          });
+          setTrackingWithFriendId(response.data?.insert_friend_tracking_one?.id);
+        } else {
+          throw Error('Error: User id not present');
+        }
       }
     } catch (error) {
       setCollabState(HoverWithFriendState.NONE);

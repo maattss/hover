@@ -109,14 +109,28 @@ export const TrackingProvider = ({ children }: Props) => {
     nextFetchPolicy: 'network-only',
   });
 
-  // Restore tracking if application has chrashed
   useEffect(() => {
-    const init = async () => {
+    // Restore tracking on initial render if application chrashed
+    const restore = async () => {
       // await clearTrackingStorage(); // Only for debug, remove later
       const trackingInfo = await readTrackingInfo();
       console.log('Init tracking info', trackingInfo);
       if (trackingInfo) {
-        // TODO: Add pause window in case of app crash
+        // Add pause window if app chrashed more than 2 minutes ago
+        const lessThanTwoMinutesAgo = Date.now() - 2 * 1000 < trackingInfo.updatedAtTimestamp;
+        if (lessThanTwoMinutesAgo) {
+          const pauseEvents = await readPauseEvents();
+          const startEvent: PauseEvent = {
+            timestamp: trackingInfo.updatedAtTimestamp,
+            paused: true,
+          };
+          const endEvent: PauseEvent = {
+            timestamp: Date.now(),
+            paused: false,
+          };
+          await storePauseEvents([...pauseEvents, startEvent, endEvent]);
+        }
+
         setTrackingState(TrackingState.TRACKING);
         setTrackingEnd(undefined);
         setTrackingStart(trackingInfo.startTimestamp);
@@ -127,7 +141,7 @@ export const TrackingProvider = ({ children }: Props) => {
         startBackgroundUpdate();
       }
     };
-    init();
+    restore();
   }, []);
 
   useEffect(() => {
@@ -152,6 +166,7 @@ export const TrackingProvider = ({ children }: Props) => {
   };
 
   const getUpdatedInfo = async () => {
+    console.log('Updating score');
     const updatedInfo = await readTrackingInfo();
 
     if (!Constants.isDevice) {
@@ -170,6 +185,7 @@ export const TrackingProvider = ({ children }: Props) => {
   };
   useInterval(() => getUpdatedInfo(), shouldUpdateInfo() ? 1000 : null);
 
+  // Add UseEffect
   // TODO: Update only when application is active?
   // AppState.currentState === 'active'
 
