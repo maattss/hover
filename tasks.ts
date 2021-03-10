@@ -62,11 +62,11 @@ TaskManager.defineTask(LOCATION_BACKGROUND_TRACKING, async ({ data, error }) => 
         if (Constants.isDevice) {
           const pushToken = await readPushToken();
           const previousPushUpdate = await readPreviousPushUpdate();
-          const moreThanTwoMinutesAgo = previousPushUpdate < Date.now() - 2 * 60;
+          const moreThanFiveMinutesAgo = previousPushUpdate < Date.now() - 5 * 60;
 
-          // Send push notification if it is more than 2 minutes since previous
+          // Send push notification if it is more than 5 minutes since previous
           // "Outside geofence" push notification was sent.
-          if (pushToken && moreThanTwoMinutesAgo) {
+          if (pushToken && moreThanFiveMinutesAgo) {
             sendPushNotification(
               pushToken,
               'Oh noo! You are outside the Hover zone...',

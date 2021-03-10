@@ -13,7 +13,6 @@ import { LatLng } from 'react-native-maps';
 import { Activities_Insert_Input } from '../../types/types';
 import { startBackgroundUpdate, stopBackgroundUpdate } from '../../tasks/locationBackgroundtasks';
 import {
-  clearAll,
   clearTrackingStorage,
   PauseEvent,
   readLocationEvents,
@@ -114,21 +113,7 @@ export const TrackingProvider = ({ children }: Props) => {
   useEffect(() => {
     // Restore tracking on initial render if application chrashed
     const restore = async () => {
-      //await clearAll(); // Only for debug, remove later
       const trackingInfo = await readTrackingInfo();
-
-      // TODO: Remove, only for debug
-      if (trackingInfo) {
-        console.log('**********************');
-        console.log('Init tracking info');
-        console.log('Tracking score:' + trackingInfo.score);
-        console.log('Tracking duration: ' + trackingInfo.duration);
-        console.log('Tracking start: ' + trackingInfo.startTimestamp);
-        console.log('Tracking end: ' + trackingInfo.endTimestamp);
-        console.log('Tracking geofence: ' + trackingInfo.geoFence.name);
-        console.log('Updated at: ' + timeStampToHours(trackingInfo.updatedAtTimestamp));
-        console.log('**********************');
-      }
 
       if (trackingInfo) {
         console.log('Restoring tracking session...');
@@ -160,11 +145,9 @@ export const TrackingProvider = ({ children }: Props) => {
         }
 
         console.log('User inside geofence when app chrased. Tracking active.');
-        // Add pause window if app chrashed more than 2 minutes ago
-        const moreThanTwoMinutesAgo = trackingInfo.updatedAtTimestamp < Date.now() - 2 * 60;
-        if (moreThanTwoMinutesAgo) {
-          console.log('More than two minutes ago since app chrashed. Adding pause event.');
-
+        // Add pause window if app chrashed more than 30 minutes ago
+        const moreThanThirtyMinutesAgo = trackingInfo.updatedAtTimestamp < Date.now() - 30 * 60;
+        if (moreThanThirtyMinutesAgo) {
           const startEvent: PauseEvent = {
             timestamp: trackingInfo.updatedAtTimestamp,
             paused: true,
@@ -209,17 +192,6 @@ export const TrackingProvider = ({ children }: Props) => {
     });
     setDuration(updatedDuration);
     setScore(updatedScore);
-
-    // TODO: Remove, only for debug
-    console.log('------------------------------');
-    console.log('Tracking score:' + updatedScore);
-    console.log('Tracking duration: ' + updatedDuration);
-    console.log('Tracking start: ' + trackingInfo.startTimestamp);
-    console.log('Tracking end: ' + trackingInfo.endTimestamp);
-    console.log('Tracking geofence: ' + trackingInfo.geoFence.name);
-    console.log('Friend id: ' + trackingInfo.friendId);
-    console.log('Updated at: ' + timeStampToHours(trackingInfo.updatedAtTimestamp));
-    console.log('------------------------------');
   };
 
   useInterval(() => updateScoreAndDuration(), trackingState === TrackingState.TRACKING ? 2000 : null);
