@@ -6,6 +6,7 @@ import PendingChallengesScreen from '../screens/challenge/PendingChallengesScree
 import OngoingChallengesScreen from '../screens/challenge/OngoingChallengesScreen';
 import NewChallengeNavigator from './NewChallengeNavigator';
 import { HeaderIcon } from '../components/general/HeaderIcon';
+import ProfileScreen from '../screens/profile/ProfileScreen';
 
 const ChallengeStack = createStackNavigator<ChallengeStackParamList>();
 
@@ -40,6 +41,13 @@ const ChallengeNavigator: React.FC = () => {
         component={NewChallengeNavigator}
         options={() => ({
           headerShown: false,
+        })}
+      />
+      <ChallengeStack.Screen
+        name="UserProfile"
+        component={ProfileScreen}
+        options={({ route }) => ({
+          title: `${route.params.titleName}'s Profile`,
         })}
       />
     </ChallengeStack.Navigator>

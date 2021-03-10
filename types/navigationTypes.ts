@@ -24,16 +24,19 @@ export type FeedStackParamList = {
 
 export type NotificationsStackParamList = {
   Notifications: undefined;
+  UserProfile: { user_id: string; titleName: string };
 };
+
 export type ChallengeStackParamList = {
   Challenge: undefined;
+  NewChallenge: undefined;
   PendingChallenges: {
     user_id: string;
   };
   OngoingChallenges: {
     user_id: string;
   };
-  NewChallenge: undefined;
+  UserProfile: { user_id: string; titleName: string };
 };
 
 export type NewChallengeStackParamList = {
@@ -58,16 +61,21 @@ export type NewChallengeStackParamList = {
   };
   ChallengeInfo: undefined;
 };
+
 export type HoverStackParamList = {
   Explore: undefined;
   Tracking: undefined;
   Publish: undefined;
 };
+
 export type StatisticsStackParamList = {
   Leaderboard: undefined;
+  UserProfile: { user_id: string; titleName: string };
 };
+
 export type ProfileStackParamList = {
   Profile: undefined;
+  UserProfile: { user_id: string; titleName: string };
 } & SettingsNavigationStackParamList;
 
 export type SettingsNavigationStackParamList = {
@@ -76,6 +84,7 @@ export type SettingsNavigationStackParamList = {
   'Privacy Policy': undefined;
   'About Hover': undefined;
 };
+
 export type AuthStackParamList = {
   Login: undefined;
   Signup: undefined;

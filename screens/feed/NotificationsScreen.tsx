@@ -3,7 +3,6 @@ import { View, Text, StyleSheet, FlatList, RefreshControl } from 'react-native';
 import { Colors, Spacing, Typography } from '../../theme';
 import { NotificationFragmentFragment } from '../../graphql/Fragments.generated';
 import NotificationCard from '../../components/feed/notification/NotificationCard';
-import Divider from '../../components/general/Divider';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { FeedStackParamList } from '../../types/navigationTypes';
 import useNotification from '../../hooks/useNotification';
@@ -47,7 +46,7 @@ const NotificationsScreen: React.FC<NotificationProps> = ({ navigation }: Notifi
     return (
       <View style={styles.footer}>
         <Text style={{ ...Typography.largeBodyText }}>
-          {sections?.length == 0 ? 'You have no notifications' : "You've reached the end"}
+          {sections?.length == 0 ? 'You have no notifications' : 'No more notifications'}
         </Text>
       </View>
     );
@@ -81,7 +80,6 @@ const NotificationsScreen: React.FC<NotificationProps> = ({ navigation }: Notifi
               <Text style={{ ...Typography.subHeaderText, marginTop: Spacing.base }}>{item.title}</Text>
             </View>
           }
-          ItemSeparatorComponent={() => <Divider style={styles.divider} />}
         />
       )}
       ListFooterComponent={renderFooter}
@@ -92,9 +90,9 @@ const NotificationsScreen: React.FC<NotificationProps> = ({ navigation }: Notifi
 const styles = StyleSheet.create({
   header: {
     justifyContent: 'center',
-    paddingHorizontal: Spacing.base,
+    paddingHorizontal: Spacing.small,
     flex: 1,
-    paddingBottom: Spacing.base,
+    paddingBottom: Spacing.smaller,
   },
   footer: {
     padding: Spacing.base,
@@ -105,10 +103,6 @@ const styles = StyleSheet.create({
   cardbox: {
     marginHorizontal: Spacing.smaller,
     marginVertical: Spacing.smallest,
-  },
-  divider: {
-    borderBottomColor: Colors.gray700,
-    marginVertical: 0,
   },
 });
 export default NotificationsScreen;
