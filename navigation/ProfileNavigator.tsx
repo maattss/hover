@@ -32,6 +32,13 @@ const ProfileNavigator: React.FC = () => {
       <ProfileStack.Screen name="Edit Profile" component={EditProfileScreen} />
       <ProfileStack.Screen name="About Hover" component={AboutScreen} />
       <ProfileStack.Screen name="Privacy Policy" component={PrivacyScreen} />
+      <ProfileStack.Screen
+        name="UserProfile"
+        component={ProfileScreen}
+        options={({ route }) => ({
+          title: `${route.params.titleName}'s Profile`,
+        })}
+      />
     </ProfileStack.Navigator>
   );
 };

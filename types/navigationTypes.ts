@@ -30,19 +30,10 @@ export type NotificationsStackParamList = {
 export type ChallengeStackParamList = {
   Challenge: undefined;
   NewChallenge: undefined;
-  UserProfile: { user_id: string; titleName: string };
-} & OngoingChallengesStackParamList &
-  PendingChallengesStackParamList;
-
-export type OngoingChallengesStackParamList = {
-  OngoingChallenges: {
+  PendingChallenges: {
     user_id: string;
   };
-  UserProfile: { user_id: string; titleName: string };
-};
-
-export type PendingChallengesStackParamList = {
-  PendingChallenges: {
+  OngoingChallenges: {
     user_id: string;
   };
   UserProfile: { user_id: string; titleName: string };
