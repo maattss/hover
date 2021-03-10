@@ -5,6 +5,7 @@ import { Avatar } from 'react-native-elements';
 import { HighscoreQuery } from '../../graphql/queries/Highscore.generated';
 import { defaultUserProfile } from '../../helpers/objectMappers';
 import { Colors, Spacing, Typography } from '../../theme';
+import TouchableProfile from '../general/TouchableProfile';
 
 interface SortParam {
   data: Item[];
@@ -49,27 +50,34 @@ const Leaderboard: React.FC<LeaderboardProps> = (props: LeaderboardProps) => {
     const rowColor = index % 2 === 0 ? evenColor : oddColor;
 
     const rowJSx = (
-      <View key={item.id} style={[styles.row, props.rowStyle, { backgroundColor: rowColor }]}>
-        <View style={styles.left}>
-          <Text
-            style={[styles.text, styles.rank, props.rankStyle, index < 9 ? styles.singleDidget : styles.doubleDidget]}>
-            {index + 1}
-          </Text>
-          {item.picture && (
-            <View style={[styles.avatar, props.avatarStyle]}>
-              <Avatar
-                rounded
-                source={{ uri: item.picture ? item.picture : defaultUserProfile.picture }}
-                size={'small'}
-              />
-            </View>
-          )}
-          <Text style={[styles.text, styles.label, props.labelStyle]} numberOfLines={1}>
-            {item.name}
-          </Text>
+      <TouchableProfile user_id={item.id} name={item.name} key={item.id}>
+        <View key={item.id} style={[styles.row, props.rowStyle, { backgroundColor: rowColor }]}>
+          <View style={styles.left}>
+            <Text
+              style={[
+                styles.text,
+                styles.rank,
+                props.rankStyle,
+                index < 9 ? styles.singleDidget : styles.doubleDidget,
+              ]}>
+              {index + 1}
+            </Text>
+            {item.picture && (
+              <View style={[styles.avatar, props.avatarStyle]}>
+                <Avatar
+                  rounded
+                  source={{ uri: item.picture ? item.picture : defaultUserProfile.picture }}
+                  size={'small'}
+                />
+              </View>
+            )}
+            <Text style={[styles.text, styles.label, props.labelStyle]} numberOfLines={1}>
+              {item.name}
+            </Text>
+          </View>
+          <Text style={[styles.text, styles.score, props.scoreStyle]}>{item.score || 0}</Text>
         </View>
-        <Text style={[styles.text, styles.score, props.scoreStyle]}>{item.score || 0}</Text>
-      </View>
+      </TouchableProfile>
     );
 
     return props.onRowPress ? (
