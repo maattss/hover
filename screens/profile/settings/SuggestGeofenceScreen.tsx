@@ -22,9 +22,9 @@ const SuggestGeofenceScreen: React.FC<SettingsProps> = ({ navigation }: Settings
     })
       .then((value) => {
         if (value.status !== 'sent') {
-          Alert.alert('Something went wrong', 'Feedback not submitted');
+          Alert.alert('Something went wrong', 'New location not submitted');
         } else {
-          Alert.alert('Feedback submitted!');
+          Alert.alert('New location submitted!');
           navigation.goBack();
         }
         return;
