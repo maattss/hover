@@ -5,7 +5,7 @@ import { usePermissions, LOCATION, PermissionResponse } from 'expo-permissions';
 import { useGeofencesQuery } from '../../graphql/queries/Geofences.generated';
 import { useInsertActivityMutation } from '../../graphql/mutations/InsertActivity.generated';
 import { Alert } from 'react-native';
-import { durationToTime, timeStampToHours } from '../../helpers/dateTimeHelpers';
+import { durationToTime } from '../../helpers/dateTimeHelpers';
 import { insideGeoFences } from '../../helpers/geoFenceCalculations';
 import { LocationObject } from 'expo-location';
 import useAuthentication from '../../hooks/useAuthentication';
