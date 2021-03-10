@@ -79,6 +79,9 @@ const styles = StyleSheet.create({
   card: {
     paddingHorizontal: Spacing.base,
     paddingVertical: Spacing.smaller,
+    marginVertical: Spacing.smallest,
+    marginHorizontal: Spacing.smaller,
+    borderRadius: Spacing.smaller,
   },
   title: {
     ...Typography.headerText,
