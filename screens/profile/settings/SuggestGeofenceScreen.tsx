@@ -15,7 +15,8 @@ const SuggestGeofenceScreen: React.FC<SettingsProps> = ({ navigation }: Settings
     MailComposer.composeAsync({
       recipients: ['contact.hoverapp@gmail.com'],
       subject: 'Location suggestion',
-      body: `New location suggestion: \n  Category: ${category} \n  Location: ${location}`,
+      body: `<p><b>New location suggestion:</b></p><p>Category: <i>${category}</i></br>Location: <i>${location}</i></p>`,
+      isHtml: true,
     })
       .then((value) => {
         if (value.status !== 'sent') {
