@@ -40,6 +40,7 @@ interface Props {
 
 interface TrackingContextValues {
   locationPermission: PermissionResponse | undefined;
+  askPermission: () => void;
   loadingUserLocation: boolean;
   userLocation: LocationObject | undefined;
   updateUserLocation: (location: LatLng) => void;
@@ -63,6 +64,7 @@ interface TrackingContextValues {
 
 export const TrackingContext = React.createContext<TrackingContextValues>({
   locationPermission: undefined,
+  askPermission: () => console.error('Function not initialized'),
   loadingUserLocation: true,
   userLocation: undefined,
   updateUserLocation: () => console.error('Function not initialized'),
@@ -89,7 +91,7 @@ TrackingContext.displayName = 'TrackingContext';
 export const TrackingProvider = ({ children }: Props) => {
   // Tracking provider state
   const userId = useAuthentication().user?.uid ?? '';
-  const [locationPermission] = usePermissions(LOCATION, { ask: true });
+  const [locationPermission, askPermission] = usePermissions(LOCATION);
   const [loadingUserLocation, setLoadingUserLocation] = useState(false);
   const [userLocation, setUserLocation] = useState<LocationObject>();
   const [geoFences, setGeoFences] = useState<GeoFence[]>([]);
@@ -364,6 +366,7 @@ export const TrackingProvider = ({ children }: Props) => {
 
   const value: TrackingContextValues = {
     locationPermission: locationPermission,
+    askPermission: askPermission,
     loadingUserLocation: loadingUserLocation,
     userLocation: userLocation,
     updateUserLocation: externalUpdateUserLocation,

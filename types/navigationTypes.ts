@@ -4,6 +4,7 @@ import { Challenge_Type_Enum } from './types';
 
 export type RootStackParamList = {
   Main: undefined;
+  Disclaimer: undefined;
   Auth: undefined;
   Loading: undefined;
 };
