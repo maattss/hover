@@ -6,6 +6,7 @@ import CustomButton from '../../../components/general/Button';
 import KeyboardAvoider from '../../../components/keyboard/KeyboardAvoider';
 import * as MailComposer from 'expo-mail-composer';
 import useAuthentication from '../../../hooks/useAuthentication';
+import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 
 const FeedbackScreen: React.FC<SettingsProps> = ({ navigation }: SettingsProps) => {
   const [feedback, setFeedback] = useState<string>('');
@@ -32,6 +33,11 @@ const FeedbackScreen: React.FC<SettingsProps> = ({ navigation }: SettingsProps) 
   return (
     <KeyboardAvoider>
       <View style={styles.container}>
+        <View style={styles.iconContainer}>
+          <View style={styles.iconRound}>
+            <FAIcon name={'clipboard-list'} style={styles.icon} />
+          </View>
+        </View>
         <Text style={styles.label}>Feedback</Text>
         <TextInput
           placeholder={'Give us your honest feedback!'}
@@ -53,6 +59,24 @@ const styles = StyleSheet.create({
   container: {
     marginTop: Spacing.base,
     padding: Spacing.smaller,
+  },
+  iconContainer: {
+    alignItems: 'center',
+    marginBottom: Spacing.base,
+  },
+  iconRound: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 60,
+    width: 120,
+    height: 120,
+    backgroundColor: Colors.gray900,
+  },
+  icon: {
+    ...Typography.icon,
+    margin: Spacing.large,
+    paddingBottom: Spacing.small,
+    fontSize: 60,
   },
   label: {
     ...Typography.bodyText,
