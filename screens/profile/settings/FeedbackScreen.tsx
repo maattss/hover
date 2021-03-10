@@ -11,6 +11,8 @@ const FeedbackScreen: React.FC<SettingsProps> = ({ navigation }: SettingsProps) 
 
   const onSubmit = () => {
     console.log('Send Feedback');
+    //open mail
+    navigation.goBack();
   };
   return (
     <KeyboardAvoider>
