@@ -22,7 +22,6 @@ import {
   storeTrackingInfo,
   TrackingInfo,
 } from '../../helpers/storage';
-import { console, Date, Math } from '@ungap/global-this';
 import { useInterval } from '../../hooks/useInterval';
 import { getDuration, getScore } from '../../helpers/trackingCalculations';
 

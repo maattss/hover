@@ -70,7 +70,7 @@ TaskManager.defineTask(LOCATION_BACKGROUND_TRACKING, async ({ data, error }) => 
               pushToken,
               'Oh noo! You are outside the Hover zone...',
               'Move back in to continue earning points.' +
-                'Tracking will start automagically when your location is inside the Hover zone.',
+                'Tracking will start automagically when you are inside the Hover zone.',
               true,
             );
             storePreviousPushUpdate(Date.now());

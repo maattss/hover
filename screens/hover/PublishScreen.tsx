@@ -27,7 +27,7 @@ const PublishScreen: React.FC = () => {
   const tracking = useTracking();
   const insets = useSafeAreaInsets();
   const [caption, setCaption] = useState('');
-  const roundedScore = Math.floor(tracking.score);
+  const roundedScore = tracking.score < 0 ? 0 : Math.floor(tracking.score);
 
   const publishActivity = () => tracking.stopTracking(caption);
   const resumeTracking = () => tracking.resumeTracking();
