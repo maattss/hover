@@ -9,6 +9,8 @@ import { PickerItemProps } from '@react-native-picker/picker/typings/Picker';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import moment from 'moment';
 import Loading from '../../components/general/Loading';
+import Divider from '../../components/general/Divider';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const STATIC_CATEGORIES: PickerItemProps[] = [
   { label: 'All Categories', value: '' },
@@ -30,6 +32,7 @@ const LeaderboardScreen: React.FC = () => {
   const [editCategory, setEditCategory] = useState(false);
   const [timespan, setTimespan] = useState<number | string>('');
   const [editTimespan, setEditTimespan] = useState(false);
+  const insets = useSafeAreaInsets();
 
   const { data: highscoreData, loading: highscoreLoading, error: highscoreError, refetch } = useHighscoreQuery({
     variables: {
@@ -47,7 +50,7 @@ const LeaderboardScreen: React.FC = () => {
     if (highscoreLoading) return <Loading />;
     if (highscoreError) return <Text style={styles.infoText}>{highscoreError.message}</Text>;
     return (
-      <View style={styles.container}>
+      <View>
         <View style={styles.filterContainer}>
           <FilterPickerAndriod
             items={STATIC_CATEGORIES}
@@ -71,7 +74,9 @@ const LeaderboardScreen: React.FC = () => {
             closePicker={() => setEditTimespan(false)}
           />
         </View>
-        <View style={styles.leaderboardContainer}>{highscores && <Leaderboard data={highscores} />}</View>
+        <View style={{ paddingBottom: insets.bottom + Spacing.smaller }}>
+          {highscores && <Leaderboard data={highscores} />}
+        </View>
       </View>
     );
   } else {
@@ -103,10 +108,10 @@ const LeaderboardScreen: React.FC = () => {
           </TouchableOpacity>
         </View>
 
-        <View style={styles.leaderboardContainer}>
+        <View style={{ paddingBottom: insets.bottom + Spacing.smaller }}>
           {highscoreLoading && <ActivityIndicator size={'large'} color={Colors.blue} />}
           {highscoreError && <Text style={styles.infoText}>{highscoreError.message}</Text>}
-          {!highscoreLoading && !highscoreError && highscores && <Leaderboard data={highscores} refetch={refetch} />}
+          {!highscoreLoading && !highscoreError && highscores && <Leaderboard data={highscores} />}
         </View>
 
         {editCategory && !editTimespan && (
@@ -185,20 +190,12 @@ const FilterPickerAndriod = ({ items, selectedValue, onValueChange }: PickerProp
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    display: 'flex',
-    alignItems: 'center',
+    height: '100%',
   },
   filterContainer: {
     width: '100%',
-    display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
-  },
-  leaderboardContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   pickerContainerIos: {
     width: '96%',
