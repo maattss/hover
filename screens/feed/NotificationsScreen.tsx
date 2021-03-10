@@ -3,7 +3,6 @@ import { View, Text, StyleSheet, FlatList, RefreshControl } from 'react-native';
 import { Colors, Spacing, Typography } from '../../theme';
 import { NotificationFragmentFragment } from '../../graphql/Fragments.generated';
 import NotificationCard from '../../components/feed/notification/NotificationCard';
-import Divider from '../../components/general/Divider';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { FeedStackParamList } from '../../types/navigationTypes';
 import useNotification from '../../hooks/useNotification';
