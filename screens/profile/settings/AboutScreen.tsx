@@ -41,6 +41,7 @@ const AboutScreen: React.FC<SettingsProps> = () => {
       <View style={styles.versionFooter}>
         <Text style={styles.versionText}>Version {Constants.manifest.version}</Text>
       </View>
+      <Text style={styles.versionText}>Version {Constants.manifest.version} (beta)</Text>
     </View>
   );
 };
@@ -61,6 +62,7 @@ const styles = StyleSheet.create({
   bodyText: {
     ...Typography.bodyText,
     paddingBottom: Spacing.smaller,
+    textAlign: 'center',
   },
   centeredContainer: {
     marginVertical: Spacing.base,
