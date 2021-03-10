@@ -65,8 +65,6 @@ const SuggestGeofenceScreen: React.FC<SettingsProps> = ({ navigation }: Settings
           multiline={true}
           numberOfLines={5}
         />
-        <Text style={styles.label}>Category</Text>
-        <View style={styles.categoryButtonsContainer}>{renderCategories()}</View>
         <CustomButton onPress={onSubmit}>Send Suggestion</CustomButton>
       </View>
     </KeyboardAvoider>
