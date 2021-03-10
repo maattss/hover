@@ -177,7 +177,6 @@ export const TrackingProvider = ({ children }: Props) => {
   }, [geoFenceData, geoFenceFetchError]);
 
   const updateScoreAndDuration = async () => {
-    console.log('Update...');
     const trackingInfo = await readTrackingInfo();
     const updatedDuration = await getDuration(trackingInfo);
     const updatedScore = getScore(updatedDuration, trackingInfo.geoFence.category, trackingInfo.friendId);
