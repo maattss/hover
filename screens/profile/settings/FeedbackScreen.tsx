@@ -75,7 +75,6 @@ const styles = StyleSheet.create({
   icon: {
     ...Typography.icon,
     margin: Spacing.large,
-    paddingBottom: Spacing.small,
     fontSize: 60,
   },
   label: {

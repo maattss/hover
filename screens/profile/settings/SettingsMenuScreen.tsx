@@ -90,16 +90,20 @@ const SettingsScreen: React.FC<SettingsProps> = ({ navigation }: SettingsProps) 
 
   return (
     <View style={styles.container}>
-      <View style={styles.settingsContainer}>
-        <FAIcon name={'cog'} style={styles.icon} />
-        <FlatList
-          data={SettingMenu}
-          renderItem={renderItem}
-          keyExtractor={(item) => item.id}
-          style={styles.settingsList}
-          scrollEnabled={false}
-        />
+      <View style={styles.iconContainer}>
+        <View style={styles.iconRound}>
+          <FAIcon name={'cog'} style={styles.icon} />
+        </View>
       </View>
+
+      <FlatList
+        data={SettingMenu}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.id}
+        style={styles.settingsList}
+        scrollEnabled={false}
+      />
+
       <Button style={styles.logoutButton} onPress={areYouSure}>
         Sign out
       </Button>
@@ -110,18 +114,26 @@ const SettingsScreen: React.FC<SettingsProps> = ({ navigation }: SettingsProps) 
 const styles = StyleSheet.create({
   container: {
     padding: Spacing.smaller,
-  },
-  settingsContainer: {
     width: '100%',
     alignItems: 'center',
   },
   settingsList: {
     width: '100%',
   },
+  iconContainer: {
+    marginBottom: Spacing.base,
+  },
+  iconRound: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 60,
+    width: 120,
+    height: 120,
+    backgroundColor: Colors.gray900,
+  },
   icon: {
     ...Typography.icon,
     margin: Spacing.large,
-    paddingBottom: Spacing.small,
     fontSize: 60,
   },
   settingsItem: {

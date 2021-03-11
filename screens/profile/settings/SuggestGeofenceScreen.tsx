@@ -7,7 +7,6 @@ import KeyboardAvoider from '../../../components/keyboard/KeyboardAvoider';
 import { GeoFenceCategory } from '../../../types/geoFenceTypes';
 import * as MailComposer from 'expo-mail-composer';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
-import { gray700 } from '../../../theme/colors';
 
 const SuggestGeofenceScreen: React.FC<SettingsProps> = ({ navigation }: SettingsProps) => {
   const [location, setLocation] = useState<string>('');
@@ -93,7 +92,6 @@ const styles = StyleSheet.create({
   icon: {
     ...Typography.icon,
     margin: Spacing.large,
-    paddingBottom: Spacing.small,
     fontSize: 60,
   },
   label: {
