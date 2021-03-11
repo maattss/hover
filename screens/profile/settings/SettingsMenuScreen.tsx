@@ -46,6 +46,18 @@ const SettingsScreen: React.FC<SettingsProps> = ({ navigation }: SettingsProps) 
       onClick: () => navigation.navigate('Edit Profile'),
     },
     {
+      id: 'bd7acbea-c1b1-jk34-aed5-3ad5hj70j8ba',
+      title: 'Suggest New Location',
+      disabled: false,
+      onClick: () => navigation.navigate('SuggestGeofence'),
+    },
+    {
+      id: '3jhacbea-c1b1-873h-aed5-3ad8hshsj8ba',
+      title: 'Give Feedback',
+      disabled: false,
+      onClick: () => navigation.navigate('Feedback'),
+    },
+    {
       id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
       title: 'Privacy Policy',
       disabled: false,
@@ -78,16 +90,20 @@ const SettingsScreen: React.FC<SettingsProps> = ({ navigation }: SettingsProps) 
 
   return (
     <View style={styles.container}>
-      <View style={styles.settingsContainer}>
-        <FAIcon name={'cog'} style={styles.icon} />
-        <FlatList
-          data={SettingMenu}
-          renderItem={renderItem}
-          keyExtractor={(item) => item.id}
-          style={styles.settingsList}
-          scrollEnabled={false}
-        />
+      <View style={styles.iconContainer}>
+        <View style={styles.iconRound}>
+          <FAIcon name={'cog'} style={styles.icon} />
+        </View>
       </View>
+
+      <FlatList
+        data={SettingMenu}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.id}
+        style={styles.settingsList}
+        scrollEnabled={false}
+      />
+
       <Button style={styles.logoutButton} onPress={areYouSure}>
         Sign out
       </Button>
@@ -98,19 +114,27 @@ const SettingsScreen: React.FC<SettingsProps> = ({ navigation }: SettingsProps) 
 const styles = StyleSheet.create({
   container: {
     padding: Spacing.smaller,
-  },
-  settingsContainer: {
     width: '100%',
     alignItems: 'center',
   },
   settingsList: {
     width: '100%',
   },
+  iconContainer: {
+    marginBottom: Spacing.base,
+  },
+  iconRound: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 60,
+    width: 120,
+    height: 120,
+    backgroundColor: Colors.gray900,
+  },
   icon: {
     ...Typography.icon,
     margin: Spacing.large,
-    paddingBottom: Spacing.small,
-    fontSize: 50,
+    fontSize: 60,
   },
   settingsItem: {
     ...Buttons.button,

@@ -1,5 +1,5 @@
 import { ApolloQueryResult } from '@apollo/client';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, ReactElement } from 'react';
 import { FlatList, StyleSheet, Text, TextStyle, TouchableOpacity, View, ViewStyle } from 'react-native';
 import { Avatar } from 'react-native-elements';
 import { HighscoreQuery } from '../../graphql/queries/Highscore.generated';
@@ -14,6 +14,7 @@ interface SortParam {
 
 interface LeaderboardProps {
   data: Item[];
+  header?: ReactElement;
   sort?: (data: Item[]) => [];
   onRowPress?: (item: Item, index: number) => void;
   renderItem?: (item: Item, index: number) => JSX.Element;
@@ -94,6 +95,8 @@ const Leaderboard: React.FC<LeaderboardProps> = (props: LeaderboardProps) => {
 
   return (
     <FlatList
+      ListHeaderComponent={props.header}
+      stickyHeaderIndices={[0]}
       contentContainerStyle={props.containerStyle}
       data={sortedData}
       keyExtractor={(_, index) => index.toString()}
