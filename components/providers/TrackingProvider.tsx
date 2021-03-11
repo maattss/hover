@@ -14,6 +14,7 @@ import { Activities_Insert_Input } from '../../types/types';
 import { startBackgroundUpdate, stopBackgroundUpdate } from '../../tasks/locationBackgroundtasks';
 import {
   clearTrackingStorage,
+  clearPreviousPushStorage,
   PauseEvent,
   readLocationEvents,
   readPauseEvents,
@@ -50,7 +51,8 @@ interface TrackingContextValues {
   trackingStart: number | undefined;
   trackingEnd: number | undefined;
   friendId: string | undefined;
-  setFriendId: (friendId: string) => Promise<void>;
+  trackingWithFriendId: number | undefined;
+  updateFriend: (friendId: string, trackingWithFriendId: number) => Promise<void>;
   startTracking: () => void;
   resumeTracking: () => void;
   pauseTracking: () => void;
@@ -74,7 +76,8 @@ export const TrackingContext = React.createContext<TrackingContextValues>({
   trackingStart: undefined,
   trackingEnd: undefined,
   friendId: undefined,
-  setFriendId: () => new Promise(() => console.error('Function not initialized')),
+  trackingWithFriendId: undefined,
+  updateFriend: () => new Promise(() => console.error('Function not initialized')),
   startTracking: () => console.error('Function not initialized'),
   resumeTracking: () => console.error('Function not initialized'),
   pauseTracking: () => console.error('Function not initialized'),
@@ -103,11 +106,48 @@ export const TrackingProvider = ({ children }: Props) => {
   const [score, setScore] = useState<number>(0);
   const [duration, setDuration] = useState<number>(0);
   const [friendId, setFriendId] = useState('');
+  const [trackingWithfriendId, setTrackingWithfriendId] = useState(0);
 
   const [InsertActivity] = useInsertActivityMutation();
   const { data: geoFenceData, error: geoFenceFetchError, refetch } = useGeofencesQuery({
     nextFetchPolicy: 'network-only',
   });
+
+  const updateLocalState = (trackingInfo: TrackingInfo) => {
+    setTrackingState(TrackingState.PUBLISH);
+    setTrackingEnd(trackingInfo.endTimestamp);
+    setTrackingStart(trackingInfo.startTimestamp);
+    setTrackingGeofence(trackingInfo.geoFence);
+    setScore(trackingInfo.score);
+    setDuration(trackingInfo.duration);
+    setFriendId(trackingInfo.friendId);
+    setTrackingWithfriendId(trackingInfo.trackingWithFriendId);
+  };
+
+  const resetTrackingState = async () => {
+    await clearTrackingStorage();
+    await clearPreviousPushStorage();
+
+    setTrackingState(TrackingState.TRACKING);
+    setTrackingEnd(undefined);
+    setTrackingStart(Date.now());
+    setTrackingGeofence(currentGeoFence);
+    setScore(0);
+    setDuration(0);
+    setFriendId('');
+    setTrackingWithfriendId(0);
+
+    await storeTrackingInfo({
+      geoFence: currentGeoFence,
+      friendId: '',
+      trackingWithFriendId: 0,
+      duration: 0,
+      score: 0,
+      startTimestamp: Date.now(),
+      endTimestamp: 0,
+      updatedAtTimestamp: Date.now(),
+    } as TrackingInfo);
+  };
 
   useEffect(() => {
     // Restore tracking on initial render if application chrashed
@@ -121,12 +161,7 @@ export const TrackingProvider = ({ children }: Props) => {
         if (pauseEvents.length > 0 && pauseEvents[pauseEvents.length - 1].paused === true) {
           console.log('User on publish screen when app chrashed');
           setTrackingState(TrackingState.PUBLISH);
-          setTrackingEnd(trackingInfo.endTimestamp);
-          setTrackingStart(trackingInfo.startTimestamp);
-          setTrackingGeofence(trackingInfo.geoFence);
-          setScore(trackingInfo.score);
-          setDuration(trackingInfo.duration);
-          setFriendId(trackingInfo.friendId);
+          updateLocalState(trackingInfo);
           return;
         }
 
@@ -134,12 +169,7 @@ export const TrackingProvider = ({ children }: Props) => {
         if (trackingLocations.length > 0 && trackingLocations[trackingLocations.length - 1].insideGeofence === false) {
           console.log('User outside geofence when app chrased. Tracking auto paused.');
           setTrackingState(TrackingState.TRACKINGPAUSED);
-          setTrackingEnd(trackingInfo.endTimestamp);
-          setTrackingStart(trackingInfo.startTimestamp);
-          setTrackingGeofence(trackingInfo.geoFence);
-          setScore(trackingInfo.score);
-          setDuration(trackingInfo.duration);
-          setFriendId(trackingInfo.friendId);
+          updateLocalState(trackingInfo);
           return;
         }
 
@@ -164,7 +194,8 @@ export const TrackingProvider = ({ children }: Props) => {
         setTrackingGeofence(trackingInfo.geoFence);
         setScore(trackingInfo.score);
         setDuration(trackingInfo.duration);
-        setFriendId(trackingInfo.friendId);
+        setFriendId(trackingInfo.friendId ?? '');
+        setTrackingWithfriendId(trackingInfo.trackingWithFriendId ?? 0);
         startBackgroundUpdate();
       }
     };
@@ -182,12 +213,13 @@ export const TrackingProvider = ({ children }: Props) => {
     const updatedScore = getScore(updatedDuration, trackingInfo.geoFence.category, trackingInfo.friendId);
     storeTrackingInfo({
       geoFence: trackingInfo.geoFence,
-      friendId: trackingInfo.friendId,
       duration: updatedDuration,
       score: updatedScore,
       startTimestamp: trackingInfo.startTimestamp,
       endTimestamp: trackingInfo.endTimestamp,
       updatedAtTimestamp: Date.now(),
+      friendId: trackingInfo.friendId,
+      trackingWithFriendId: trackingInfo.trackingWithFriendId,
     });
     setDuration(updatedDuration);
     setScore(updatedScore);
@@ -246,26 +278,7 @@ export const TrackingProvider = ({ children }: Props) => {
       return;
     }
 
-    // Reset tracking state
-    await clearTrackingStorage();
-    setTrackingState(TrackingState.TRACKING);
-    setTrackingEnd(undefined);
-    setTrackingStart(Date.now());
-    setTrackingGeofence(currentGeoFence);
-    setScore(0);
-    setDuration(0);
-    setFriendId('');
-
-    // Store tracking state
-    await storeTrackingInfo({
-      geoFence: currentGeoFence,
-      friendId: '',
-      duration: 0,
-      score: 0,
-      startTimestamp: Date.now(),
-      endTimestamp: 0,
-      updatedAtTimestamp: Date.now(),
-    } as TrackingInfo);
+    await resetTrackingState();
     startBackgroundUpdate();
   };
 
@@ -290,6 +303,7 @@ export const TrackingProvider = ({ children }: Props) => {
       });
 
       await clearTrackingStorage();
+      await clearPreviousPushStorage();
       setTrackingState(TrackingState.EXPLORE);
       console.log('Activity inserted to db', response);
       Alert.alert('Upload complete', 'Activity uploaded successfully!');
@@ -303,10 +317,12 @@ export const TrackingProvider = ({ children }: Props) => {
     await storeTrackingInfo({
       geoFence: trackingInfo.geoFence,
       friendId: trackingInfo.friendId,
+      trackingWithFriendId: trackingInfo.trackingWithFriendId,
       duration: trackingInfo.duration,
       score: trackingInfo.score,
       startTimestamp: trackingInfo.startTimestamp,
       endTimestamp: endTimestamp,
+      updatedAtTimestamp: trackingInfo.updatedAtTimestamp,
     } as TrackingInfo);
   };
 
@@ -352,16 +368,20 @@ export const TrackingProvider = ({ children }: Props) => {
     await clearTrackingStorage();
     setTrackingState(TrackingState.EXPLORE);
   };
-  const updateFriendId = async (friendId: string) => {
-    setFriendId(friendId);
+  const updateFriend = async (newFriendId: string, newTrackingWithFriendId: number) => {
+    setFriendId(newFriendId);
+    setTrackingWithfriendId(newTrackingWithFriendId);
+
     const trackingInfo = await readTrackingInfo();
     await storeTrackingInfo({
       geoFence: trackingInfo.geoFence,
-      friendId: friendId,
       duration: trackingInfo.duration,
       score: trackingInfo.score,
       startTimestamp: trackingInfo.startTimestamp,
       endTimestamp: trackingInfo.endTimestamp,
+      friendId: newFriendId,
+      trackingWithFriendId: newTrackingWithFriendId,
+      updatedAtTimestamp: trackingInfo.updatedAtTimestamp,
     } as TrackingInfo);
   };
 
@@ -384,7 +404,8 @@ export const TrackingProvider = ({ children }: Props) => {
     stopTracking: stopTracking,
     discardActivity: discardActivity,
     friendId: friendId,
-    setFriendId: updateFriendId,
+    trackingWithFriendId: trackingWithfriendId,
+    updateFriend: updateFriend,
     score: score,
     duration: duration,
   };

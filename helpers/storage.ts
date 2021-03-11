@@ -3,7 +3,6 @@ import { LocationObject } from 'expo-location';
 import { GeoFence } from '../types/geoFenceTypes';
 
 const TRACKING_INFO_KEY = '@hover_tracking_info';
-const HOVER_WITH_FRIENDS_KEY = '@hover_with_friends';
 const LOCATION_EVENTS_KEY = '@hover_location_events';
 const PAUSE_EVENTS_KEY = '@hover_pause_events';
 const PUSH_KEY = '@hover_push_token';
@@ -11,16 +10,13 @@ const PREVIOUS_PUSH_KEY = '@hover_previous_push';
 
 export interface TrackingInfo {
   geoFence: GeoFence;
+  friendId: string;
+  trackingWithFriendId: number;
   duration: number;
   score: number;
   startTimestamp: number;
   endTimestamp: number;
   updatedAtTimestamp: number;
-}
-
-export interface HoverWithFriends {
-  friendId: string;
-  trackingWithFriendId: number;
 }
 
 export interface LocationEvent {
@@ -42,13 +38,6 @@ export const storePreviousPushUpdate = async (value: number) => storeString(PREV
 export const readPreviousPushUpdate = async () => Number((await readString(PREVIOUS_PUSH_KEY)) ?? '0');
 
 export const storeTrackingInfo = async (value: TrackingInfo) => storeObject(TRACKING_INFO_KEY, value);
-
-export const readHoverWithFriends = async () => {
-  const hoverWithFriends: HoverWithFriends = await readObject(HOVER_WITH_FRIENDS_KEY);
-  return hoverWithFriends;
-};
-
-export const storeHoverWithFriends = async (value: HoverWithFriends) => storeObject(HOVER_WITH_FRIENDS_KEY, value);
 
 export const readTrackingInfo = async () => {
   const trackingInfo: TrackingInfo = await readObject(TRACKING_INFO_KEY);
@@ -75,8 +64,7 @@ export const clearPushStorage = async () => clear([PUSH_KEY, PREVIOUS_PUSH_KEY])
 
 export const clearPreviousPushStorage = async () => clear([PREVIOUS_PUSH_KEY]);
 
-export const clearTrackingStorage = async () =>
-  clear([PAUSE_EVENTS_KEY, LOCATION_EVENTS_KEY, TRACKING_INFO_KEY, HOVER_WITH_FRIENDS_KEY]);
+export const clearTrackingStorage = async () => clear([PAUSE_EVENTS_KEY, LOCATION_EVENTS_KEY, TRACKING_INFO_KEY]);
 
 export const clearAll = async () =>
   clear([PAUSE_EVENTS_KEY, LOCATION_EVENTS_KEY, PUSH_KEY, PREVIOUS_PUSH_KEY, TRACKING_INFO_KEY]);

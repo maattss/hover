@@ -58,6 +58,9 @@ export const getDuration = async (trackingInfo: TrackingInfo | undefined | null)
 export const getScore = (duration: number, geoFenceCategory: GeoFenceCategory, friendId: string) => {
   const scoreRatio = getGeoFenceScoreRatio(geoFenceCategory);
   const score = duration * scoreRatio;
+  console.log('Duration', duration);
+  console.log('Updating score: ', score);
+  console.log('friendId: ', friendId);
 
   if (friendId !== '') return score * 2;
   return score;
