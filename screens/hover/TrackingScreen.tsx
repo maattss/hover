@@ -24,16 +24,16 @@ const TrackingScreen: React.FC = () => {
       <View style={[styles.infoContainer, bottomPosition]}>
         <KeyboardAvoiderAbsolutePosition newBottom={Platform.OS == 'ios' ? 10 : -100}>
           <View>
-            {!collabInfoHidden && (
+            <View style={collabInfoHidden ? { display: 'none' } : { display: 'flex' }}>
               <HoverWithFriends
                 collabState={collabState}
                 setCollabState={setCollabState}
                 collabInfoHidden={collabInfoHidden}
                 setCollabInfoHidden={setCollabInfoHidden}
               />
-            )}
+            </View>
 
-            {collabInfoHidden && (
+            <View style={!collabInfoHidden ? { display: 'none' } : { display: 'flex' }}>
               <View style={styles.rowFlexJustifyEnd}>
                 <View style={styles.collabShowContainer}>
                   <TouchableOpacity onPress={() => setCollabInfoHidden(!collabInfoHidden)}>
@@ -41,7 +41,7 @@ const TrackingScreen: React.FC = () => {
                   </TouchableOpacity>
                 </View>
               </View>
-            )}
+            </View>
 
             <TrackingInformation collabState={collabState} />
           </View>

@@ -308,7 +308,6 @@ export const TrackingProvider = ({ children }: Props) => {
       startTimestamp: trackingInfo.startTimestamp,
       endTimestamp: endTimestamp,
     } as TrackingInfo);
-    console.log('New end timestamp', endTimestamp);
   };
 
   const autoResumeTracking = async () => {

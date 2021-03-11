@@ -70,6 +70,7 @@ const styles = StyleSheet.create({
   button: {
     flexDirection: 'row',
     paddingBottom: Spacing.small,
+    alignItems: 'center',
   },
   icon: {
     ...Typography.icon,
