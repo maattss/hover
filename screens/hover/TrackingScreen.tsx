@@ -10,7 +10,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import KeyboardAvoiderAbsolutePosition from '../../components/keyboard/KeyboardAvoiderAbsolutePosition';
 
 const TrackingScreen: React.FC = () => {
-  const [collabState, setCollabState] = useState<HoverWithFriendState>(HoverWithFriendState.NONE);
+  const [collabState, setCollabState] = useState(HoverWithFriendState.NONE);
   const [collabInfoHidden, setCollabInfoHidden] = useState(false);
 
   const insets = useSafeAreaInsets();
@@ -33,7 +33,7 @@ const TrackingScreen: React.FC = () => {
               />
             </View>
 
-            <View style={!collabInfoHidden ? { display: 'none' } : { display: 'flex' }}>
+            <View style={collabInfoHidden ? { display: 'flex' } : { display: 'none' }}>
               <View style={styles.rowFlexJustifyEnd}>
                 <View style={styles.collabShowContainer}>
                   <TouchableOpacity onPress={() => setCollabInfoHidden(!collabInfoHidden)}>
