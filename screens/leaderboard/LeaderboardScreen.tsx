@@ -9,7 +9,6 @@ import { PickerItemProps } from '@react-native-picker/picker/typings/Picker';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import moment from 'moment';
 import Loading from '../../components/general/Loading';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const STATIC_CATEGORIES: PickerItemProps[] = [
   { label: 'All Categories', value: '' },
@@ -31,7 +30,6 @@ const LeaderboardScreen: React.FC = () => {
   const [editCategory, setEditCategory] = useState(false);
   const [timespan, setTimespan] = useState<number | string>('');
   const [editTimespan, setEditTimespan] = useState(false);
-  const insets = useSafeAreaInsets();
 
   const { data: highscoreData, loading: highscoreLoading, error: highscoreError, refetch } = useHighscoreQuery({
     variables: {
@@ -50,68 +48,75 @@ const LeaderboardScreen: React.FC = () => {
     if (highscoreError) return <Text style={styles.infoText}>{highscoreError.message}</Text>;
     return (
       <View style={styles.container}>
-        <View style={styles.filterContainer}>
-          <FilterPickerAndriod
-            items={STATIC_CATEGORIES}
-            selectedValue={category}
-            onValueChange={(value) => {
-              setCategory(value);
-              setEditCategory(false);
-              refetch();
-            }}
-            closePicker={() => setEditCategory(false)}
-          />
+        {highscores && (
+          <Leaderboard
+            data={highscores}
+            header={
+              <View style={styles.filterContainer}>
+                <FilterPickerAndriod
+                  items={STATIC_CATEGORIES}
+                  selectedValue={category}
+                  onValueChange={(value) => {
+                    setCategory(value);
+                    setEditCategory(false);
+                    refetch();
+                  }}
+                  closePicker={() => setEditCategory(false)}
+                />
 
-          <FilterPickerAndriod
-            items={STATIC_TIMESPAN}
-            selectedValue={timespan}
-            onValueChange={(value) => {
-              setTimespan(value);
-              setEditTimespan(false);
-              refetch();
-            }}
-            closePicker={() => setEditTimespan(false)}
+                <FilterPickerAndriod
+                  items={STATIC_TIMESPAN}
+                  selectedValue={timespan}
+                  onValueChange={(value) => {
+                    setTimespan(value);
+                    setEditTimespan(false);
+                    refetch();
+                  }}
+                  closePicker={() => setEditTimespan(false)}
+                />
+              </View>
+            }
           />
-        </View>
-        <View style={{ paddingBottom: insets.bottom + Spacing.smaller }}>
-          {highscores && <Leaderboard data={highscores} />}
-        </View>
+        )}
       </View>
     );
   } else {
     return (
       <View style={styles.container}>
-        <View style={styles.filterContainer}>
-          <TouchableOpacity
-            style={styles.filterButton}
-            onPress={() => {
-              setEditCategory(true);
-              setEditTimespan(false);
-            }}>
-            <Text style={{ ...Buttons.buttonText }}>
-              {STATIC_CATEGORIES.find((obj) => obj.value === category)?.label}
-            </Text>
-            <FAIcon name="filter" style={styles.filterIcon} />
-          </TouchableOpacity>
+        {highscoreLoading && <ActivityIndicator size={'large'} color={Colors.blue} />}
+        {highscoreError && <Text style={styles.infoText}>{highscoreError.message}</Text>}
+        {!highscoreLoading && !highscoreError && highscores && (
+          <Leaderboard
+            data={highscores}
+            header={
+              <View style={styles.filterContainer}>
+                <TouchableOpacity
+                  style={styles.filterButton}
+                  onPress={() => {
+                    setEditCategory(true);
+                    setEditTimespan(false);
+                  }}>
+                  <Text style={{ ...Buttons.buttonText }}>
+                    {STATIC_CATEGORIES.find((obj) => obj.value === category)?.label}
+                  </Text>
+                  <FAIcon name="filter" style={styles.filterIcon} />
+                </TouchableOpacity>
 
-          <TouchableOpacity
-            style={[styles.filterButton, { justifyContent: 'flex-end' }]}
-            onPress={() => {
-              setEditTimespan(true);
-              setEditCategory(false);
-            }}>
-            <Text style={{ ...Buttons.buttonText }}>
-              {STATIC_TIMESPAN.find((obj) => obj.value === timespan)?.label}
-            </Text>
-            <FAIcon name="clock" style={styles.filterIcon} />
-          </TouchableOpacity>
-        </View>
-
-        <View style={{ paddingBottom: insets.bottom + Spacing.smaller }}>
-          {highscoreLoading && <ActivityIndicator size={'large'} color={Colors.blue} />}
-          {highscoreError && <Text style={styles.infoText}>{highscoreError.message}</Text>}
-          {!highscoreLoading && !highscoreError && highscores && <Leaderboard data={highscores} />}
-        </View>
+                <TouchableOpacity
+                  style={[styles.filterButton, { justifyContent: 'flex-end' }]}
+                  onPress={() => {
+                    setEditTimespan(true);
+                    setEditCategory(false);
+                  }}>
+                  <Text style={{ ...Buttons.buttonText }}>
+                    {STATIC_TIMESPAN.find((obj) => obj.value === timespan)?.label}
+                  </Text>
+                  <FAIcon name="clock" style={styles.filterIcon} />
+                </TouchableOpacity>
+              </View>
+            }
+          />
+        )}
 
         {editCategory && !editTimespan && (
           <FilterPickerIos
@@ -189,12 +194,13 @@ const FilterPickerAndriod = ({ items, selectedValue, onValueChange }: PickerProp
 
 const styles = StyleSheet.create({
   container: {
-    height: '100%',
+    flex: 1,
   },
   filterContainer: {
     width: '100%',
     flexDirection: 'row',
     justifyContent: 'space-between',
+    backgroundColor: Colors.almostBlack,
   },
   pickerContainerIos: {
     width: '96%',
@@ -219,11 +225,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     textAlign: 'center',
-  },
-  refreshContainer: {
-    marginHorizontal: Spacing.base,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   infoText: {
     ...Typography.bodyText,
