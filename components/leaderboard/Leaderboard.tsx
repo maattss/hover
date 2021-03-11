@@ -64,15 +64,13 @@ const Leaderboard: React.FC<LeaderboardProps> = (props: LeaderboardProps) => {
               ]}>
               {index + 1}
             </Text>
-            {item.picture && (
-              <View style={[styles.avatar, props.avatarStyle]}>
-                <Avatar
-                  rounded
-                  source={{ uri: item.picture ? item.picture : defaultUserProfile.picture }}
-                  size={'small'}
-                />
-              </View>
-            )}
+            <View style={[styles.avatar, props.avatarStyle]}>
+              <Avatar
+                rounded
+                source={{ uri: item.picture && item.picture !== '' ? item.picture : defaultUserProfile.picture }}
+                size={'small'}
+              />
+            </View>
             <Text style={[styles.text, styles.label, props.labelStyle]} numberOfLines={1}>
               {item.name}
             </Text>

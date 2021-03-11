@@ -117,7 +117,12 @@ const FriendItem: React.FC<FriendItemProps> = (props: FriendItemProps) => {
         uncheckedIcon="circle"
         checked={checked}
       />
-      <Avatar rounded source={{ uri: props.item.picture ?? defaultUserProfile.picture }} />
+      <Avatar
+        rounded
+        source={{
+          uri: props.item.picture && props.item.picture !== '' ? props.item.picture : defaultUserProfile.picture,
+        }}
+      />
       <Text style={styles.label}>{props.item.name}</Text>
     </TouchableOpacity>
   );
