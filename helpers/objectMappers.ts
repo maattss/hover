@@ -111,7 +111,7 @@ const fromRawCoordinatesToLatLng = (coordinatesRaw: string) => {
   return coordinates;
 };
 
-export const convertToHighscoreList = (data: HighscoreQuery) => {
+export const convertToHighscoreList = (data: HighscoreQuery, id?: string) => {
   const highscores: Item[] = [];
   data.users.forEach((obj) =>
     highscores.push({
@@ -119,6 +119,7 @@ export const convertToHighscoreList = (data: HighscoreQuery) => {
       name: obj.name,
       score: obj.activities_aggregate.aggregate?.sum?.score,
       picture: obj.picture,
+      specialRow: obj.id === id ? true : false,
     } as Item),
   );
   return highscores;
