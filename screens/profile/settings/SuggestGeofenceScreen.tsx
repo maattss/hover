@@ -9,8 +9,8 @@ import * as MailComposer from 'expo-mail-composer';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 
 const SuggestGeofenceScreen: React.FC<SettingsProps> = ({ navigation }: SettingsProps) => {
-  const [location, setLocation] = useState<string>('');
-  const [category, setCategory] = useState<string>('');
+  const [location, setLocation] = useState('');
+  const [category, setCategory] = useState('');
 
   const onSubmit = () => {
     MailComposer.composeAsync({
