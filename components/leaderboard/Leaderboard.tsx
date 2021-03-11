@@ -15,7 +15,6 @@ interface SortParam {
 interface LeaderboardProps {
   data: Item[];
   header?: ReactElement;
-  footer?: ReactElement;
   sort?: (data: Item[]) => [];
   onRowPress?: (item: Item, index: number) => void;
   renderItem?: (item: Item, index: number) => JSX.Element;
@@ -98,7 +97,6 @@ const Leaderboard: React.FC<LeaderboardProps> = (props: LeaderboardProps) => {
     <FlatList
       ListHeaderComponent={props.header}
       stickyHeaderIndices={[0]}
-      ListFooterComponent={props.footer}
       contentContainerStyle={props.containerStyle}
       data={sortedData}
       keyExtractor={(_, index) => index.toString()}
