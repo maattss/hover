@@ -9,6 +9,7 @@ import { PickerItemProps } from '@react-native-picker/picker/typings/Picker';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import moment from 'moment';
 import Loading from '../../components/general/Loading';
+import useAuthentication from '../../hooks/useAuthentication';
 
 const STATIC_CATEGORIES: PickerItemProps[] = [
   { label: 'All Categories', value: '' },
@@ -38,9 +39,9 @@ const LeaderboardScreen: React.FC = () => {
     } as HighscoreQueryVariables,
   });
   const [highscores, setHighscores] = useState<Item[]>([]);
-
+  const id = useAuthentication().user?.uid;
   useEffect(() => {
-    if (highscoreData) setHighscores(convertToHighscoreList(highscoreData));
+    if (highscoreData) setHighscores(convertToHighscoreList(highscoreData, id));
   }, [highscoreData]);
 
   if (Platform.OS == 'android') {
