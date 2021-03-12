@@ -51,16 +51,18 @@ const HoverWithFriends: React.FC<Props> = ({
     const init = async () => {
       const trackingInfo = await readTrackingInfo();
       console.log('Checking if hover with friends was used');
-      if (trackingInfo.friendId !== '' && trackingInfo.trackingWithFriendId !== 0) {
-        console.log('Init friend id', trackingInfo.friendId);
-        console.log('Init tracking with friend id', trackingInfo.trackingWithFriendId);
-        tracking.updateFriend(trackingInfo.friendId, trackingInfo.trackingWithFriendId);
-        getFriend({
-          variables: {
-            id: trackingInfo.trackingWithFriendId,
-          },
-        });
-        setCollabState(HoverWithFriendState.ONGOING);
+      if (trackingInfo.friendId && trackingInfo.trackingWithFriendId) {
+        if (trackingInfo.friendId !== '' && trackingInfo.trackingWithFriendId !== 0) {
+          console.log('Init friend id', trackingInfo.friendId);
+          console.log('Init tracking with friend id', trackingInfo.trackingWithFriendId);
+          tracking.updateFriend(trackingInfo.friendId, trackingInfo.trackingWithFriendId);
+          getFriend({
+            variables: {
+              id: trackingInfo.trackingWithFriendId,
+            },
+          });
+          setCollabState(HoverWithFriendState.ONGOING);
+        }
       }
     };
     init();

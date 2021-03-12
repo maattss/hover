@@ -114,7 +114,6 @@ export const TrackingProvider = ({ children }: Props) => {
   });
 
   const updateLocalState = (trackingInfo: TrackingInfo) => {
-    setTrackingState(TrackingState.PUBLISH);
     setTrackingEnd(trackingInfo.endTimestamp);
     setTrackingStart(trackingInfo.startTimestamp);
     setTrackingGeofence(trackingInfo.geoFence);
