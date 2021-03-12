@@ -112,7 +112,6 @@ TaskManager.defineTask(NOTIFICATION_WHEN_INSIDE_GEOFENCE, async () => {
     const currentLocation = await Location.getCurrentPositionAsync({});
     const insideGeoFence = insideGeoFences(currentLocation, geoFences);
     if (insideGeoFence) {
-      // Check if not tracking
       const trackingLocations = await readLocationEvents();
       if (trackingLocations.length === 0) {
         // Not currently tracking
@@ -133,8 +132,4 @@ TaskManager.defineTask(NOTIFICATION_WHEN_INSIDE_GEOFENCE, async () => {
       }
     }
   }
-  // Fetch geofence
-  // Check if inside
-  // Check that not tracking by reading Tracking Info
-  // If inside, send push notification. Display in foreground = false
 });
