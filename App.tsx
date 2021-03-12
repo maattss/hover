@@ -17,6 +17,7 @@ import PushNotificationProvider from './components/providers/PushNotificationPro
 import NotificationProvider from './components/providers/NotificationProvider';
 import { LikesFragmentFragment } from './graphql/Fragments.generated';
 import * as TaskManager from 'expo-task-manager';
+import { startBackgroundFetch } from './tasks/fetchBackgroundTasks';
 
 const asyncAuthLink = setContext(async () => {
   return {
@@ -54,6 +55,7 @@ export const apolloClient = new ApolloClient({
 export default function App() {
   const [loadingCache, setLoadingCache] = useState(true);
   const [unregisterTasks, setUnregisterTasks] = useState(true);
+  const [startedBackgroundFetch, setStartedBackgroundFetch] = useState(false);
 
   useEffect(() => {
     persistCache({
@@ -61,10 +63,11 @@ export default function App() {
       storage: AsyncStorage,
     }).then(() => setLoadingCache(false));
     TaskManager.unregisterAllTasksAsync().then(() => setUnregisterTasks(false));
+    startBackgroundFetch().then(() => setStartedBackgroundFetch(true));
   }, []);
 
   const isLoadingAssets = useCachedResources();
-  if (isLoadingAssets || loadingCache || unregisterTasks) {
+  if (isLoadingAssets || loadingCache || unregisterTasks || !startedBackgroundFetch) {
     SplashScreen.preventAutoHideAsync();
     return null;
   } else {

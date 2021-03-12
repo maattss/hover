@@ -14,6 +14,7 @@ import * as TaskManager from 'expo-task-manager';
 import Constants from 'expo-constants';
 
 export const LOCATION_BACKGROUND_TRACKING = 'location-background-tracking';
+export const NOTIFICATION_WHEN_INSIDE_GEOFENCE = 'notification-when-inside-geofence';
 
 TaskManager.defineTask(LOCATION_BACKGROUND_TRACKING, async ({ data, error }) => {
   if (error) {
@@ -69,7 +70,7 @@ TaskManager.defineTask(LOCATION_BACKGROUND_TRACKING, async ({ data, error }) => 
             sendPushNotification(
               pushToken,
               'Oh noo! You are outside the Hover zone...',
-              'Move back in to continue earning points.' +
+              'Move back in to continue earning points. ' +
                 'Tracking will start automagically when you are inside the Hover zone.',
               true,
             );
@@ -97,4 +98,8 @@ TaskManager.defineTask(LOCATION_BACKGROUND_TRACKING, async ({ data, error }) => 
       }
     }
   }
+});
+
+TaskManager.defineTask(NOTIFICATION_WHEN_INSIDE_GEOFENCE, async () => {
+  console.log('Backgorund fetch task running');
 });
