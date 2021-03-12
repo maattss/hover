@@ -22,7 +22,7 @@ const TrackingScreen: React.FC = () => {
     <>
       <HoverMap />
       <View style={[styles.infoContainer, bottomPosition]}>
-        <KeyboardAvoiderAbsolutePosition newBottom={Platform.OS == 'ios' ? 10 : -100}>
+        <KeyboardAvoiderAbsolutePosition newBottom={Platform.OS == 'ios' ? 50 : -200}>
           <View>
             <View style={collabInfoHidden ? { display: 'none' } : { display: 'flex' }}>
               <HoverWithFriends
