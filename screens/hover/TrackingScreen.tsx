@@ -10,7 +10,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import KeyboardAvoiderAbsolutePosition from '../../components/keyboard/KeyboardAvoiderAbsolutePosition';
 
 const TrackingScreen: React.FC = () => {
-  const [collabState, setCollabState] = useState<HoverWithFriendState>(HoverWithFriendState.NONE);
+  const [collabState, setCollabState] = useState(HoverWithFriendState.NONE);
   const [collabInfoHidden, setCollabInfoHidden] = useState(false);
 
   const insets = useSafeAreaInsets();
@@ -22,18 +22,18 @@ const TrackingScreen: React.FC = () => {
     <>
       <HoverMap />
       <View style={[styles.infoContainer, bottomPosition]}>
-        <KeyboardAvoiderAbsolutePosition newBottom={Platform.OS == 'ios' ? 10 : -100}>
+        <KeyboardAvoiderAbsolutePosition newBottom={Platform.OS == 'ios' ? 50 : -200}>
           <View>
-            {!collabInfoHidden && (
+            <View style={collabInfoHidden ? { display: 'none' } : { display: 'flex' }}>
               <HoverWithFriends
                 collabState={collabState}
                 setCollabState={setCollabState}
                 collabInfoHidden={collabInfoHidden}
                 setCollabInfoHidden={setCollabInfoHidden}
               />
-            )}
+            </View>
 
-            {collabInfoHidden && (
+            <View style={collabInfoHidden ? { display: 'flex' } : { display: 'none' }}>
               <View style={styles.rowFlexJustifyEnd}>
                 <View style={styles.collabShowContainer}>
                   <TouchableOpacity onPress={() => setCollabInfoHidden(!collabInfoHidden)}>
@@ -41,7 +41,7 @@ const TrackingScreen: React.FC = () => {
                   </TouchableOpacity>
                 </View>
               </View>
-            )}
+            </View>
 
             <TrackingInformation collabState={collabState} />
           </View>

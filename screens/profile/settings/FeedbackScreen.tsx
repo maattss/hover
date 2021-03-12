@@ -9,7 +9,7 @@ import useAuthentication from '../../../hooks/useAuthentication';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 
 const FeedbackScreen: React.FC<SettingsProps> = ({ navigation }: SettingsProps) => {
-  const [feedback, setFeedback] = useState<string>('');
+  const [feedback, setFeedback] = useState('');
 
   const id = useAuthentication().user?.uid;
   const onSubmit = () => {

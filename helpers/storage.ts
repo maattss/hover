@@ -11,6 +11,7 @@ const PREVIOUS_PUSH_KEY = '@hover_previous_push';
 export interface TrackingInfo {
   geoFence: GeoFence;
   friendId: string;
+  trackingWithFriendId: number;
   duration: number;
   score: number;
   startTimestamp: number;
@@ -60,6 +61,8 @@ export const readLocationEvents = async () => {
 };
 
 export const clearPushStorage = async () => clear([PUSH_KEY, PREVIOUS_PUSH_KEY]);
+
+export const clearPreviousPushStorage = async () => clear([PREVIOUS_PUSH_KEY]);
 
 export const clearTrackingStorage = async () => clear([PAUSE_EVENTS_KEY, LOCATION_EVENTS_KEY, TRACKING_INFO_KEY]);
 

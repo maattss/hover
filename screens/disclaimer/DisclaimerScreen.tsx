@@ -5,6 +5,7 @@ import Button from '../../components/general/Button';
 import { Asset } from 'expo-asset';
 import useTracking from '../../hooks/useTracking';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 const DisclaimerScreen: React.FC = () => {
   const askPermission = useTracking().askPermission;
@@ -42,7 +43,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    paddingHorizontal: Spacing.large,
+    paddingHorizontal: Spacing.base,
     paddingVertical: Spacing.smaller,
   },
   titleText: {
@@ -57,12 +58,12 @@ const styles = StyleSheet.create({
     paddingBottom: Spacing.smaller,
   },
   mapContainer: {
-    flexDirection: 'row',
+    marginTop: Spacing.base,
   },
   image: {
-    resizeMode: 'contain',
-    flex: 1,
-    aspectRatio: 1,
+    aspectRatio: 1.5,
+    width: '100%',
+    borderRadius: Spacing.smaller,
   },
   button: {
     width: '100%',

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Text, View, TouchableOpacity, ActivityIndicator, TextInput, Button, Alert, StyleSheet } from 'react-native';
-import { uniqueNamesGenerator, Config, adjectives, animals } from 'unique-names-generator';
+import { uniqueNamesGenerator, Config, colors, animals } from 'unique-names-generator';
 import { Buttons, Colors, Spacing, Typography } from '../../theme';
 import useTracking from '../../hooks/useTracking';
 import CustomButton from '../general/Button';
@@ -17,7 +17,7 @@ import { useInterval } from '../../hooks/useInterval';
 import { HoverWithFriendState } from '../../types/hoverWithFriendsType';
 
 const wordConfig: Config = {
-  dictionaries: [adjectives, animals],
+  dictionaries: [colors, animals],
   separator: ' ',
   style: 'upperCase',
   length: 2,
@@ -39,21 +39,46 @@ const HoverWithFriends: React.FC<Props> = ({
   const auth = useAuthentication();
   const [yourCollabCode] = useState(uniqueNamesGenerator(wordConfig));
   const [friendCollabCode, setFriendCollabCode] = useState('');
-  const [trackingWithFriendId, setTrackingWithFriendId] = useState<number | undefined>();
+  const [trackingWithFriendId, setTrackingWithFriendId] = useState(0);
   const [friend, setFriend] = useState<ListUserFragmentFragment>();
   const [UpdateFriendTracking] = useUpdateFriendTrackingMutation();
   const [InsertFriendTracking] = useInsertFriendTrackingMutation();
   const [getFriend, { data: data, error: error }] = useGetFriendTrackingLazyQuery({ fetchPolicy: 'network-only' });
 
   useEffect(() => {
+    const id = tracking.friendId ?? '';
+    const friendId = tracking.trackingWithFriendId ?? 0;
+    if (id !== '' && friendId !== 0) {
+      getFriend({
+        variables: {
+          id: friendId,
+        },
+      });
+      return;
+    }
+    setFriend(undefined);
+    setTrackingWithFriendId(0);
+    setCollabState(HoverWithFriendState.NONE);
+  }, []);
+
+  useEffect(() => {
     const friend = data?.friend_tracking[0].user_join;
-    if (friend) updateFriendData(friend);
+    const id = data?.friend_tracking[0].id;
+    if (friend && id) {
+      setFriend(friend);
+      setTrackingWithFriendId(id);
+      tracking.updateFriend(friend.id, id);
+      setCollabState(HoverWithFriendState.ONGOING);
+    }
 
     if (error) console.error(error.message);
   }, [data, error]);
 
   // Refresh friend data every 5 seconds if session is STARTING
-  useInterval(() => refreshFriendData(), collabState === HoverWithFriendState.STARTING ? 5000 : null);
+  useInterval(
+    () => refreshFriendData(trackingWithFriendId),
+    collabState === HoverWithFriendState.STARTING ? 5000 : null,
+  );
 
   const showInfoPopup = () =>
     Alert.alert(
@@ -61,13 +86,7 @@ const HoverWithFriends: React.FC<Props> = ({
       'Start a session to get a code you can share, or ' + 'join a friends by entering their code.',
     );
 
-  const updateFriendData = (friend: ListUserFragmentFragment) => {
-    setFriend(friend);
-    tracking.setFriendId(friend.id);
-    setCollabState(HoverWithFriendState.ONGOING);
-  };
-
-  const refreshFriendData = () => {
+  const refreshFriendData = (trackingWithFriendId: number | undefined) => {
     if (trackingWithFriendId) {
       getFriend({
         variables: {
@@ -92,7 +111,7 @@ const HoverWithFriends: React.FC<Props> = ({
               geofence_id: tracking.trackingGeoFence?.id ?? 0,
             },
           });
-          setTrackingWithFriendId(response.data?.insert_friend_tracking_one?.id);
+          setTrackingWithFriendId(response.data?.insert_friend_tracking_one?.id ?? 0);
         } else {
           throw Error('Error: User id not present');
         }
@@ -119,7 +138,9 @@ const HoverWithFriends: React.FC<Props> = ({
 
       const friend = response.data?.update_friend_tracking?.returning[0].user_start;
       if (!friend) throw Error('Mutation did not return a response.');
-      updateFriendData(friend);
+      setFriend(friend);
+      tracking.updateFriend(friend.id, trackingWithFriendId);
+      setCollabState(HoverWithFriendState.ONGOING);
     } catch (error) {
       console.error('Mutation error', error.message);
       Alert.alert(
@@ -165,7 +186,7 @@ const HoverWithFriends: React.FC<Props> = ({
         <>
           <View style={styles.rowFlexSpaceBetween}>
             <Button title={'Back'} onPress={() => setCollabState(HoverWithFriendState.NONE)} />
-            <TouchableOpacity onPress={refreshFriendData} style={styles.iconButton}>
+            <TouchableOpacity onPress={() => refreshFriendData(trackingWithFriendId)} style={styles.iconButton}>
               <FAIcon name={'sync'} style={styles.iconBlue} />
             </TouchableOpacity>
           </View>

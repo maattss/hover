@@ -29,7 +29,9 @@ const STATIC_TIMESPAN: PickerItemProps[] = [
 const LeaderboardScreen: React.FC = () => {
   const [category, setCategory] = useState<number | string>('');
   const [editCategory, setEditCategory] = useState(false);
-  const [timespan, setTimespan] = useState<number | string>('');
+  const [timespan, setTimespan] = useState<number | string>(
+    moment().utc().subtract(1, 'week').startOf('day').toISOString(),
+  );
   const [editTimespan, setEditTimespan] = useState(false);
 
   const { data: highscoreData, loading: highscoreLoading, error: highscoreError, refetch } = useHighscoreQuery({
@@ -201,7 +203,7 @@ const styles = StyleSheet.create({
     width: '100%',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    backgroundColor: Colors.almostBlack,
+    backgroundColor: Colors.black,
   },
   pickerContainerIos: {
     width: '96%',

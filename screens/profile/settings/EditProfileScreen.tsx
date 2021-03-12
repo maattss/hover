@@ -11,6 +11,16 @@ import { randomPictureURI } from '../../auth/SignUpScreen';
 import { Asset } from 'expo-asset';
 import KeyboardAvoider from '../../../components/keyboard/KeyboardAvoider';
 
+const getName = (email: string | undefined) => {
+  // Remove email domain, replace _ with ' ' and upper case on all words
+  if (email) {
+    let name = email.replace('@hover.app', '');
+    name = name.replace('_', ' ');
+    return name.replace(/\b\w/g, (c) => c.toUpperCase());
+  }
+  return '';
+};
+
 const EditProfileScreen: React.FC<SettingsProps> = ({ navigation }: SettingsProps) => {
   const id = useAuthentication().user?.uid;
   if (!id) {
@@ -18,6 +28,7 @@ const EditProfileScreen: React.FC<SettingsProps> = ({ navigation }: SettingsProp
     Alert.alert('Error: UserId is', id);
     return <></>;
   } else {
+    const [userName, setUserName] = useState('');
     const [name, setName] = useState('');
     const [bio, setBio] = useState('');
     const [loadingImage, setLoadingImage] = useState(true);
@@ -37,6 +48,7 @@ const EditProfileScreen: React.FC<SettingsProps> = ({ navigation }: SettingsProp
 
     useEffect(() => {
       if (data) {
+        setUserName(getName(data.user?.email));
         setName(data.user?.name ? data.user?.name : '');
         setBio(data.user?.bio ? data.user?.bio : '');
         setPicture(data.user?.picture ? data.user?.picture : defaultPicture);
@@ -82,6 +94,8 @@ const EditProfileScreen: React.FC<SettingsProps> = ({ navigation }: SettingsProp
             <Button onPress={() => setPicture(randomPictureURI())} title="Regenerate picture" />
           </View>
 
+          <Text style={styles.label}>Username</Text>
+          <TextInput value={userName} style={styles.formFieldDisabled} editable={false} />
           <Text style={styles.label}>Name</Text>
           <TextInput
             placeholder={'Enter your name'}
@@ -125,6 +139,14 @@ const styles = StyleSheet.create({
     padding: Spacing.base,
     marginBottom: Spacing.base,
     backgroundColor: Colors.gray900,
+  },
+  formFieldDisabled: {
+    ...Buttons.button,
+    ...Typography.bodyText,
+    padding: Spacing.base,
+    marginBottom: Spacing.base,
+    backgroundColor: Colors.gray900,
+    color: Colors.gray600,
   },
   formFieldMultiLine: {
     ...Buttons.button,
