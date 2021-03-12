@@ -37,7 +37,12 @@
       "useNextNotificationsApi": true,
       "permissions": ["ACCESS_COARSE_LOCATION", "ACCESS_FINE_LOCATION", "ACCESS_BACKGROUND_LOCATION"],
       "package": "com.hoverapp.hover",
-      "versionCode": 7
+      "versionCode": 7,
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyDmh6QsOqVlgYSRw5DJiDb42cYFvLfVIH4"
+        }
+      }
     },
     "web": {
       "favicon": "./assets/images/favicon.png"
