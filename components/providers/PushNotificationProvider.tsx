@@ -71,7 +71,7 @@ export const PushNotificationProvider = ({ children }: Props) => {
   }, []);
 
   const notify = (title: string, body: string, sound: boolean) =>
-    sendPushNotification(expoPushToken, title, body, sound);
+    sendPushNotification(expoPushToken, title, body, sound, true);
 
   const value: PushNotificationContextValues = {
     token: expoPushToken,
