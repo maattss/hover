@@ -8,12 +8,17 @@ import {
   readPreviousPushUpdate,
   storePreviousPushUpdate,
   readTrackingInfo,
+  readGeoFences,
+  readPreviousGeofenceIdPush,
+  storePreviousGeofenceIdPush,
 } from './helpers/storage';
 import { sendPushNotification } from './helpers/pushNotifications';
 import * as TaskManager from 'expo-task-manager';
+import * as Location from 'expo-location';
 import Constants from 'expo-constants';
 
 export const LOCATION_BACKGROUND_TRACKING = 'location-background-tracking';
+export const NOTIFICATION_WHEN_INSIDE_GEOFENCE = 'notification-when-inside-geofence';
 
 TaskManager.defineTask(LOCATION_BACKGROUND_TRACKING, async ({ data, error }) => {
   if (error) {
@@ -69,8 +74,9 @@ TaskManager.defineTask(LOCATION_BACKGROUND_TRACKING, async ({ data, error }) => 
             sendPushNotification(
               pushToken,
               'Oh noo! You are outside the Hover zone...',
-              'Move back in to continue earning points.' +
+              'Move back in to continue earning points. ' +
                 'Tracking will start automagically when you are inside the Hover zone.',
+              true,
               true,
             );
             storePreviousPushUpdate(Date.now());
@@ -94,6 +100,35 @@ TaskManager.defineTask(LOCATION_BACKGROUND_TRACKING, async ({ data, error }) => 
           insideGeofence: true,
         };
         storeLocationEvents([...trackingLocations, location]);
+      }
+    }
+  }
+});
+
+TaskManager.defineTask(NOTIFICATION_WHEN_INSIDE_GEOFENCE, async () => {
+  console.log('Background fetch task running');
+  const geoFences = await readGeoFences();
+  if (geoFences.length > 0) {
+    const currentLocation = await Location.getCurrentPositionAsync({});
+    const insideGeoFence = insideGeoFences(currentLocation, geoFences);
+    if (insideGeoFence) {
+      const trackingLocations = await readLocationEvents();
+      if (trackingLocations.length === 0) {
+        // Not currently tracking
+        const previousGeofenceIdPush = await readPreviousGeofenceIdPush();
+        if (previousGeofenceIdPush === 0 || insideGeoFence.id !== previousGeofenceIdPush) {
+          const pushToken = await readPushToken();
+          if (pushToken) {
+            sendPushNotification(
+              pushToken,
+              'Hi there! I see you are inside a Hover zone',
+              'Do you want to start tracking?.',
+              true,
+              false,
+            );
+            storePreviousGeofenceIdPush(insideGeoFence.id);
+          }
+        }
       }
     }
   }

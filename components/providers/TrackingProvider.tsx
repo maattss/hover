@@ -11,7 +11,7 @@ import { LocationObject } from 'expo-location';
 import useAuthentication from '../../hooks/useAuthentication';
 import { LatLng } from 'react-native-maps';
 import { Activities_Insert_Input } from '../../types/types';
-import { startBackgroundUpdate, stopBackgroundUpdate } from '../../tasks/locationBackgroundtasks';
+import { startBackgroundUpdate, stopBackgroundUpdate } from '../../tasks/locationBackgroundTasks';
 import {
   clearTrackingStorage,
   clearPreviousPushStorage,
@@ -22,9 +22,11 @@ import {
   storePauseEvents,
   storeTrackingInfo,
   TrackingInfo,
+  storeGeoFences,
 } from '../../helpers/storage';
 import { useInterval } from '../../hooks/useInterval';
 import { getDuration, getScore } from '../../helpers/trackingCalculations';
+import * as Location from 'expo-location';
 
 export enum TrackingState {
   EXPLORE,
@@ -154,7 +156,7 @@ export const TrackingProvider = ({ children }: Props) => {
 
       if (trackingInfo) {
         if (trackingInfo.friendId !== '' && trackingInfo.trackingWithFriendId !== 0) {
-          console.log('Restoring Hover with friends session session...');
+          console.log('Restoring Hover with friends session...');
           setFriendId(trackingInfo.friendId);
           setTrackingWithfriendId(trackingInfo.trackingWithFriendId);
         }
@@ -191,22 +193,31 @@ export const TrackingProvider = ({ children }: Props) => {
           await storePauseEvents([...pauseEvents, startEvent, endEvent]);
         }
 
-        setTrackingState(TrackingState.TRACKING);
-        setTrackingEnd(undefined);
-        setTrackingStart(trackingInfo.startTimestamp);
-        setTrackingGeofence(trackingInfo.geoFence);
-        setScore(trackingInfo.score);
-        setDuration(trackingInfo.duration);
-        setFriendId(trackingInfo.friendId ?? '');
-        setTrackingWithfriendId(trackingInfo.trackingWithFriendId ?? 0);
-        startBackgroundUpdate();
+        const currentLocation = await Location.getCurrentPositionAsync({});
+        const insideGeoFence = insideGeoFences(currentLocation, [trackingInfo.geoFence]);
+        if (insideGeoFence) {
+          setTrackingState(TrackingState.TRACKING);
+          setTrackingEnd(undefined);
+          setTrackingStart(trackingInfo.startTimestamp);
+          setTrackingGeofence(trackingInfo.geoFence);
+          setScore(trackingInfo.score);
+          setDuration(trackingInfo.duration);
+          setFriendId(trackingInfo.friendId ?? '');
+          setTrackingWithfriendId(trackingInfo.trackingWithFriendId ?? 0);
+          startBackgroundUpdate();
+        }
       }
     };
     restore();
   }, []);
 
   useEffect(() => {
-    if (geoFenceData) setGeoFences(convertToGeoFences(geoFenceData));
+    const store = async (newGeofences: GeoFence[]) => await storeGeoFences(newGeofences);
+    if (geoFenceData) {
+      const newGeofences = convertToGeoFences(geoFenceData);
+      setGeoFences(newGeofences);
+      store(newGeofences);
+    }
     if (geoFenceFetchError) console.error(geoFenceFetchError.message);
   }, [geoFenceData, geoFenceFetchError]);
 

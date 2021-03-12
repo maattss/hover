@@ -18,7 +18,7 @@ export const getNotificationTitle = (type: Notification_Type_Enum) => {
     case Notification_Type_Enum.ParticipantUpdate:
       return 'Someone responded to your challenge';
     case Notification_Type_Enum.NewReaction:
-      return 'Someone reacted your activity';
+      return 'New reaction';
     case Notification_Type_Enum.Message:
       return 'New message';
     default:
