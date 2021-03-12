@@ -39,6 +39,7 @@
     "apollo3-cache-persist": "^0.9.1",
     "expo": "^40.0.0",
     "expo-asset": "~8.2.1",
+    "expo-background-fetch": "~8.6.0",
     "expo-constants": "~9.3.3",
     "expo-font": "~8.4.0",
     "expo-linking": "~2.0.1",

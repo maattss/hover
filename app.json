@@ -20,7 +20,7 @@
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "infoPlist": {
-        "UIBackgroundModes": ["location"],
+        "UIBackgroundModes": ["location", "fetch"],
         "NSLocationAlwaysUsage": "YES",
         "NSLocationWhenInUseUsageDescription": "Your location will only be used to determine if you are in a valid geofence.",
         "NSLocationAlwaysAndWhenInUseUsageDescription": "Your location will only be used to determine if you are in a valid geofence.",
