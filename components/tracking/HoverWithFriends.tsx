@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Text, View, TouchableOpacity, ActivityIndicator, TextInput, Button, Alert, StyleSheet } from 'react-native';
-import { uniqueNamesGenerator, Config, adjectives, animals } from 'unique-names-generator';
+import { uniqueNamesGenerator, Config, colors, animals } from 'unique-names-generator';
 import { Buttons, Colors, Spacing, Typography } from '../../theme';
 import useTracking from '../../hooks/useTracking';
 import CustomButton from '../general/Button';
@@ -15,10 +15,9 @@ import { ListUserFragmentFragment } from '../../graphql/Fragments.generated';
 import { getCurrentTimestamp } from '../../helpers/dateTimeHelpers';
 import { useInterval } from '../../hooks/useInterval';
 import { HoverWithFriendState } from '../../types/hoverWithFriendsType';
-import { readTrackingInfo } from '../../helpers/storage';
 
 const wordConfig: Config = {
-  dictionaries: [adjectives, animals],
+  dictionaries: [colors, animals],
   separator: ' ',
   style: 'upperCase',
   length: 2,
