@@ -47,25 +47,19 @@ const HoverWithFriends: React.FC<Props> = ({
   const [getFriend, { data: data, error: error }] = useGetFriendTrackingLazyQuery({ fetchPolicy: 'network-only' });
 
   useEffect(() => {
-    // Restore friend session if app crashed
-    const init = async () => {
-      const trackingInfo = await readTrackingInfo();
-      console.log('Checking if hover with friends was used');
-      if (trackingInfo.friendId && trackingInfo.trackingWithFriendId) {
-        if (trackingInfo.friendId !== '' && trackingInfo.trackingWithFriendId !== 0) {
-          console.log('Init friend id', trackingInfo.friendId);
-          console.log('Init tracking with friend id', trackingInfo.trackingWithFriendId);
-          tracking.updateFriend(trackingInfo.friendId, trackingInfo.trackingWithFriendId);
-          getFriend({
-            variables: {
-              id: trackingInfo.trackingWithFriendId,
-            },
-          });
-          setCollabState(HoverWithFriendState.ONGOING);
-        }
-      }
-    };
-    init();
+    const id = tracking.friendId ?? '';
+    const friendId = tracking.trackingWithFriendId ?? 0;
+    if (id !== '' && friendId !== 0) {
+      getFriend({
+        variables: {
+          id: friendId,
+        },
+      });
+      return;
+    }
+    setFriend(undefined);
+    setTrackingWithFriendId(0);
+    setCollabState(HoverWithFriendState.NONE);
   }, []);
 
   useEffect(() => {

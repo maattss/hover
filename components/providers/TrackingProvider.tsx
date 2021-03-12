@@ -119,15 +119,14 @@ export const TrackingProvider = ({ children }: Props) => {
     setTrackingGeofence(trackingInfo.geoFence);
     setScore(trackingInfo.score);
     setDuration(trackingInfo.duration);
-    setFriendId(trackingInfo.friendId);
-    setTrackingWithfriendId(trackingInfo.trackingWithFriendId);
+    setFriendId(trackingInfo.friendId ?? '');
+    setTrackingWithfriendId(trackingInfo.trackingWithFriendId ?? 0);
   };
 
   const resetTrackingState = async () => {
     await clearTrackingStorage();
     await clearPreviousPushStorage();
 
-    setTrackingState(TrackingState.TRACKING);
     setTrackingEnd(undefined);
     setTrackingStart(Date.now());
     setTrackingGeofence(currentGeoFence);
@@ -154,8 +153,13 @@ export const TrackingProvider = ({ children }: Props) => {
       const trackingInfo = await readTrackingInfo();
 
       if (trackingInfo) {
-        console.log('Restoring tracking session...');
+        if (trackingInfo.friendId !== '' && trackingInfo.trackingWithFriendId !== 0) {
+          console.log('Restoring Hover with friends session session...');
+          setFriendId(trackingInfo.friendId);
+          setTrackingWithfriendId(trackingInfo.trackingWithFriendId);
+        }
 
+        console.log('Restoring tracking session...');
         const pauseEvents = await readPauseEvents();
         if (pauseEvents.length > 0 && pauseEvents[pauseEvents.length - 1].paused === true) {
           console.log('User on publish screen when app chrashed');
@@ -209,7 +213,7 @@ export const TrackingProvider = ({ children }: Props) => {
   const updateScoreAndDuration = async () => {
     const trackingInfo = await readTrackingInfo();
     const updatedDuration = await getDuration(trackingInfo);
-    const updatedScore = getScore(updatedDuration, trackingInfo.geoFence.category, trackingInfo.friendId);
+    const updatedScore = getScore(updatedDuration, trackingInfo.geoFence.category, trackingInfo.friendId ?? '');
     storeTrackingInfo({
       geoFence: trackingInfo.geoFence,
       duration: updatedDuration,
@@ -217,8 +221,8 @@ export const TrackingProvider = ({ children }: Props) => {
       startTimestamp: trackingInfo.startTimestamp,
       endTimestamp: trackingInfo.endTimestamp,
       updatedAtTimestamp: Date.now(),
-      friendId: trackingInfo.friendId,
-      trackingWithFriendId: trackingInfo.trackingWithFriendId,
+      friendId: trackingInfo.friendId ?? '',
+      trackingWithFriendId: trackingInfo.trackingWithFriendId ?? 0,
     });
     setDuration(updatedDuration);
     setScore(updatedScore);
@@ -279,6 +283,7 @@ export const TrackingProvider = ({ children }: Props) => {
 
     await resetTrackingState();
     startBackgroundUpdate();
+    setTrackingState(TrackingState.TRACKING);
   };
 
   const stopTracking = async (caption: string) => {
@@ -301,9 +306,8 @@ export const TrackingProvider = ({ children }: Props) => {
         },
       });
 
-      await clearTrackingStorage();
-      await clearPreviousPushStorage();
       setTrackingState(TrackingState.EXPLORE);
+      await resetTrackingState();
       console.log('Activity inserted to db', response);
       Alert.alert('Upload complete', 'Activity uploaded successfully!');
     } catch (error) {
@@ -315,8 +319,8 @@ export const TrackingProvider = ({ children }: Props) => {
     const trackingInfo = await readTrackingInfo();
     await storeTrackingInfo({
       geoFence: trackingInfo.geoFence,
-      friendId: trackingInfo.friendId,
-      trackingWithFriendId: trackingInfo.trackingWithFriendId,
+      friendId: trackingInfo.friendId ?? '',
+      trackingWithFriendId: trackingInfo.trackingWithFriendId ?? 0,
       duration: trackingInfo.duration,
       score: trackingInfo.score,
       startTimestamp: trackingInfo.startTimestamp,
@@ -364,8 +368,8 @@ export const TrackingProvider = ({ children }: Props) => {
   };
 
   const discardActivity = async () => {
-    await clearTrackingStorage();
     setTrackingState(TrackingState.EXPLORE);
+    await resetTrackingState();
   };
   const updateFriend = async (newFriendId: string, newTrackingWithFriendId: number) => {
     setFriendId(newFriendId);
