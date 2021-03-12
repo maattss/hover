@@ -80,7 +80,7 @@ export const generateOngoingChallengeDescription = (challenge: Challenge) => {
   description += challenge.rules.score ? ' get ' + challenge.rules.score + ' points' : '';
   description += challenge.rules.time ? ' spend ' + challenge.rules.time + ' hours' : '';
   description += challenge.rules.category
-    ? ' at a location within the ' + challenge.rules.category.toLowerCase() + ' category'
+    ? ' at a location in the ' + challenge.rules.category.toLowerCase() + ' category'
     : ' at any valid Hover location';
   description += challenge.end_date ? ' by ' + toPrettyDate(new Date(challenge.end_date)) + '.' : '';
   return description;
