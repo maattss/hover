@@ -53,7 +53,9 @@ const ActivityFeedCard: React.FC<ActivityFeedCardProps> = ({ data }: ActivityFee
           <View style={styles.topBar}>
             <Avatar
               rounded
-              source={{ uri: data.user.picture ? data.user.picture : defaultUserProfile.picture }}
+              source={{
+                uri: data.user.picture && data.user.picture !== '' ? data.user.picture : defaultUserProfile.picture,
+              }}
               size={'medium'}
             />
             <View style={{ marginLeft: Spacing.smaller }}>
@@ -94,7 +96,10 @@ const ActivityFeedCard: React.FC<ActivityFeedCardProps> = ({ data }: ActivityFee
                 <Image
                   style={styles.miniAvatar}
                   source={{
-                    uri: data.activity.friend.picture ? data.activity.friend.picture : defaultUserProfile.picture,
+                    uri:
+                      data.activity.friend.picture && data.activity.friend.picture !== ''
+                        ? data.activity.friend.picture
+                        : defaultUserProfile.picture,
                   }}
                 />
                 <Text style={styles.friendName} numberOfLines={1}>

@@ -26,7 +26,9 @@ const AchievementFeedCard: React.FC<AchievementFeedCardProps> = ({ data }: Achie
             <View style={styles.topBar}>
               <Avatar
                 rounded
-                source={{ uri: data.user.picture ? data.user.picture : defaultUserProfile.picture }}
+                source={{
+                  uri: data.user.picture && data.user.picture !== '' ? data.user.picture : defaultUserProfile.picture,
+                }}
                 size={'medium'}
               />
               <View style={{ marginLeft: Spacing.smaller, width: '80%' }}>

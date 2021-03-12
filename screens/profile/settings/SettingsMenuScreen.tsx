@@ -89,38 +89,37 @@ const SettingsScreen: React.FC<SettingsProps> = ({ navigation }: SettingsProps) 
   );
 
   return (
-    <View style={styles.container}>
-      <View style={styles.iconContainer}>
-        <View style={styles.iconRound}>
-          <FAIcon name={'cog'} style={styles.icon} />
+    <FlatList
+      data={SettingMenu}
+      renderItem={renderItem}
+      keyExtractor={(item) => item.id}
+      contentContainerStyle={styles.container}
+      style={styles.settingsList}
+      ListHeaderComponent={
+        <View style={styles.iconContainer}>
+          <View style={styles.iconRound}>
+            <FAIcon name={'cog'} style={styles.icon} />
+          </View>
         </View>
-      </View>
-
-      <FlatList
-        data={SettingMenu}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id}
-        style={styles.settingsList}
-        scrollEnabled={false}
-      />
-
-      <Button style={styles.logoutButton} onPress={areYouSure}>
-        Sign out
-      </Button>
-    </View>
+      }
+      ListFooterComponent={
+        <Button style={styles.logoutButton} onPress={areYouSure}>
+          Sign out
+        </Button>
+      }
+    />
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     padding: Spacing.smaller,
-    width: '100%',
-    alignItems: 'center',
   },
   settingsList: {
     width: '100%',
   },
   iconContainer: {
+    alignItems: 'center',
     marginBottom: Spacing.base,
   },
   iconRound: {

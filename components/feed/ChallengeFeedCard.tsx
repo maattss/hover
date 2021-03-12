@@ -80,9 +80,13 @@ const ChallengeLeaderboardRow = ({ item, index }: { item: Item; index: number })
         <Text style={[{ ...Typography.bodyText }, styles.rank, index < 9 ? styles.singleDidget : styles.doubleDidget]}>
           {index < 3 ? <FAIcon name={'medal'} style={iconStyle} /> : index + 1}
         </Text>
-        {item.picture && (
+        {item.picture !== '' && (
           <View style={styles.avatar}>
-            <Avatar rounded source={{ uri: item.picture ? item.picture : defaultUserProfile.picture }} size={'small'} />
+            <Avatar
+              rounded
+              source={{ uri: item.picture && item.picture !== '' ? item.picture : defaultUserProfile.picture }}
+              size={'small'}
+            />
           </View>
         )}
         <Text style={[{ ...Typography.bodyText }, styles.label]} numberOfLines={1}>

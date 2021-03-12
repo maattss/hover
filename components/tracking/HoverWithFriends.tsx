@@ -239,7 +239,7 @@ const HoverWithFriends: React.FC<Props> = ({
             <View style={styles.rowFlexJustifyStart}>
               <Avatar
                 rounded
-                source={{ uri: friend?.picture ? friend.picture : defaultUserProfile.picture }}
+                source={{ uri: friend?.picture && friend.picture !== '' ? friend.picture : defaultUserProfile.picture }}
                 size="medium"
               />
               <Text style={styles.collabFriendName}>{friend ? friend.name : 'Unknown'}</Text>
