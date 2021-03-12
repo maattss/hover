@@ -41,7 +41,7 @@ export const registerForPushNotificationsAsync = async () => {
     if (finalStatus !== 'granted') {
       Alert.alert(
         'Push notifications disabled',
-        'Please enable push notifications in the settings for the applications to work properly.' +
+        'Please enable push notifications in the settings for the applications to work properly. ' +
           'We will not spam you with unimportant notifications.',
       );
       return;

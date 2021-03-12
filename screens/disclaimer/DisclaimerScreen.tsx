@@ -5,7 +5,6 @@ import Button from '../../components/general/Button';
 import { Asset } from 'expo-asset';
 import useTracking from '../../hooks/useTracking';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 const DisclaimerScreen: React.FC = () => {
   const askPermission = useTracking().askPermission;

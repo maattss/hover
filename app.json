@@ -3,7 +3,7 @@
     "name": "Hover",
     "slug": "hover",
     "description": "Hover description",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "hover",
@@ -15,7 +15,7 @@
       "backgroundColor": "#121212"
     },
     "updates": {
-      "fallbackToCacheTimeout": 30000
+      "fallbackToCacheTimeout": 0
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
@@ -27,7 +27,7 @@
         "NSLocationAlwaysUsageDescription": "Your location will only be used to determine if you are in a valid geofence."
       },
       "bundleIdentifier": "com.hoverapp.hover",
-      "buildNumber": "1.0.2"
+      "buildNumber": "1.0.3"
     },
     "android": {
       "adaptiveIcon": {

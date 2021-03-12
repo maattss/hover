@@ -67,7 +67,7 @@ export default function App() {
   }, []);
 
   const isLoadingAssets = useCachedResources();
-  if (isLoadingAssets || loadingCache || unregisterTasks || !startedBackgroundFetch) {
+  if (isLoadingAssets || loadingCache || unregisterTasks) {
     SplashScreen.preventAutoHideAsync();
     return null;
   } else {
