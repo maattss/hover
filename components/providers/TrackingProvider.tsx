@@ -14,7 +14,7 @@ import { Activities_Insert_Input } from '../../types/types';
 import { startBackgroundUpdate, stopBackgroundUpdate } from '../../tasks/locationBackgroundTasks';
 import {
   clearTrackingStorage,
-  clearPreviousPushStorage,
+  clearPreviousOutsidePushStorage,
   PauseEvent,
   readLocationEvents,
   readPauseEvents,
@@ -290,7 +290,7 @@ export const TrackingProvider = ({ children }: Props) => {
     }
 
     await clearTrackingStorage();
-    await clearPreviousPushStorage();
+    await clearPreviousOutsidePushStorage();
     await resetTrackingState();
     startBackgroundUpdate();
     setTrackingState(TrackingState.TRACKING);
@@ -381,7 +381,7 @@ export const TrackingProvider = ({ children }: Props) => {
   const discardActivity = async () => {
     setTrackingState(TrackingState.EXPLORE);
     await clearTrackingStorage();
-    await clearPreviousPushStorage();
+    await clearPreviousOutsidePushStorage();
   };
   const updateFriend = async (newFriendId: string, newTrackingWithFriendId: number) => {
     setFriendId(newFriendId);

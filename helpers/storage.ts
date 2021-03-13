@@ -6,9 +6,9 @@ const TRACKING_INFO_KEY = '@hover_tracking_info';
 const LOCATION_EVENTS_KEY = '@hover_location_events';
 const PAUSE_EVENTS_KEY = '@hover_pause_events';
 const PUSH_KEY = '@hover_push_token';
-const PREVIOUS_PUSH_KEY = '@hover_previous_push';
-const GEOFENCES_KEY = '@hover_geofences';
+const PREVIOUS_OUTSIDE_GEOFENCE_PUSH_KEY = '@hover_outside_geofence_previous_push';
 const PREVIOUS_INSIDE_GEOFENCE_PUSH_KEY = '@hover_inside_geofence_previous_push';
+const GEOFENCES_KEY = '@hover_geofences';
 
 export interface TrackingInfo {
   geoFence: GeoFence;
@@ -39,19 +39,21 @@ export const readGeoFences = async () => {
   return geoFences;
 };
 
+export const storePushToken = async (value: string) => storeString(PUSH_KEY, value);
+
+export const readPushToken = async () => await readString(PUSH_KEY);
+
 export const storePreviousGeofenceIdPush = async (value: number) =>
   storeString(PREVIOUS_INSIDE_GEOFENCE_PUSH_KEY, value.toString());
 
 export const readPreviousGeofenceIdPush = async () =>
   Number((await readString(PREVIOUS_INSIDE_GEOFENCE_PUSH_KEY)) ?? '0');
 
-export const storePushToken = async (value: string) => storeString(PUSH_KEY, value);
+export const updatePreviousOutsideGeofencePushTimestamp = async () =>
+  storeString(PREVIOUS_OUTSIDE_GEOFENCE_PUSH_KEY, Date.now().toString());
 
-export const readPushToken = async () => await readString(PUSH_KEY);
-
-export const storePreviousPushUpdate = async (value: number) => storeString(PREVIOUS_PUSH_KEY, value.toString());
-
-export const readPreviousPushUpdate = async () => Number((await readString(PREVIOUS_PUSH_KEY)) ?? '0');
+export const readPreviousOutsideGeofencePushTimestamp = async () =>
+  Number((await readString(PREVIOUS_OUTSIDE_GEOFENCE_PUSH_KEY)) ?? '0');
 
 export const storeTrackingInfo = async (value: TrackingInfo) => storeObject(TRACKING_INFO_KEY, value);
 
@@ -76,14 +78,28 @@ export const readLocationEvents = async () => {
   return events;
 };
 
-export const clearPushStorage = async () => clear([PUSH_KEY, PREVIOUS_PUSH_KEY]);
+export const clearPushStorage = async () =>
+  clear([PUSH_KEY, PREVIOUS_OUTSIDE_GEOFENCE_PUSH_KEY, PREVIOUS_INSIDE_GEOFENCE_PUSH_KEY]);
 
-export const clearPreviousPushStorage = async () => clear([PREVIOUS_PUSH_KEY]);
+export const clearPreviousOutsidePushStorage = async () => clear([PREVIOUS_OUTSIDE_GEOFENCE_PUSH_KEY]);
 
-export const clearTrackingStorage = async () => clear([PAUSE_EVENTS_KEY, LOCATION_EVENTS_KEY, TRACKING_INFO_KEY]);
+export const clearPreviousInsidePushStorage = async () => clear([PREVIOUS_OUTSIDE_GEOFENCE_PUSH_KEY]);
+
+export const clearGeofencesStorage = async () => clear([GEOFENCES_KEY]);
+
+export const clearTrackingStorage = async () =>
+  clear([PAUSE_EVENTS_KEY, LOCATION_EVENTS_KEY, TRACKING_INFO_KEY, PREVIOUS_OUTSIDE_GEOFENCE_PUSH_KEY]);
 
 export const clearAll = async () =>
-  clear([PAUSE_EVENTS_KEY, LOCATION_EVENTS_KEY, PUSH_KEY, PREVIOUS_PUSH_KEY, TRACKING_INFO_KEY]);
+  clear([
+    PAUSE_EVENTS_KEY,
+    LOCATION_EVENTS_KEY,
+    PUSH_KEY,
+    PREVIOUS_INSIDE_GEOFENCE_PUSH_KEY,
+    PREVIOUS_OUTSIDE_GEOFENCE_PUSH_KEY,
+    TRACKING_INFO_KEY,
+    GEOFENCES_KEY,
+  ]);
 
 // General
 const storeString = async (key: string, value: string) => {

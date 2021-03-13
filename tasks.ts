@@ -5,17 +5,18 @@ import {
   readPushToken,
   storeLocationEvents,
   LocationEvent,
-  readPreviousPushUpdate,
-  storePreviousPushUpdate,
   readTrackingInfo,
   readGeoFences,
   readPreviousGeofenceIdPush,
   storePreviousGeofenceIdPush,
+  updatePreviousOutsideGeofencePushTimestamp,
+  readPreviousOutsideGeofencePushTimestamp,
 } from './helpers/storage';
 import { sendPushNotification } from './helpers/pushNotifications';
 import * as TaskManager from 'expo-task-manager';
 import * as Location from 'expo-location';
 import Constants from 'expo-constants';
+import { Alert } from 'react-native';
 
 export const LOCATION_BACKGROUND_TRACKING = 'location-background-tracking';
 export const NOTIFICATION_WHEN_INSIDE_GEOFENCE = 'notification-when-inside-geofence';
@@ -66,10 +67,9 @@ TaskManager.defineTask(LOCATION_BACKGROUND_TRACKING, async ({ data, error }) => 
 
         if (Constants.isDevice) {
           const pushToken = await readPushToken();
-          const previousPushUpdate = await readPreviousPushUpdate();
+          const previousPushUpdate = await readPreviousOutsideGeofencePushTimestamp();
 
-          // Send push notification if it is more than 5 minutes since previous
-          // "Outside geofence" push notification was sent.
+          // Send push notification if it is more than 5 minutes since previous "Outside geofence" push notification was sent.
           if ((pushToken && !previousPushUpdate) || (pushToken && previousPushUpdate < Date.now() - 5 * 60)) {
             sendPushNotification(
               pushToken,
@@ -79,7 +79,12 @@ TaskManager.defineTask(LOCATION_BACKGROUND_TRACKING, async ({ data, error }) => 
               true,
               true,
             );
-            storePreviousPushUpdate(Date.now());
+            updatePreviousOutsideGeofencePushTimestamp();
+          } else {
+            Alert.alert(
+              'Outside geofence but no push was sent because',
+              'Pushtoken: [' + pushToken + ']. Previous push: ' + previousPushUpdate,
+            );
           }
         }
       }
