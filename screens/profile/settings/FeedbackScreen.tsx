@@ -13,18 +13,18 @@ const FeedbackScreen: React.FC<SettingsProps> = ({ navigation }: SettingsProps) 
   const [feedback, setFeedback] = useState('');
 
   const id = useAuthentication().user?.uid;
-  const userName = getName(useAuthentication().user?.email);
+
   const onSubmit = async () => {
     const available = await MailComposer.isAvailableAsync();
     const subject = 'Feedback';
 
     if (!available) {
-      const body = `Feedback from ${userName} (id: ${id}):\n${feedback}`;
+      const body = `Feedback from user with id '${id}':\n${feedback}`;
       Linking.openURL(`mailto:contact.hoverapp@gmail.com?subject=${subject}&body=${body}`);
       return;
     }
 
-    const bodyHTML = `<p><b>Feedback from ${userName} (id: ${id}):</b></p><p><i>${feedback}</i></p>`;
+    const bodyHTML = `<p><b>Feedback from user with id '${id}':</b></p><p><i>${feedback}</i></p>`;
     try {
       const value = await MailComposer.composeAsync({
         recipients: ['contact.hoverapp@gmail.com'],

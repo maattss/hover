@@ -11,7 +11,7 @@ import { randomPictureURI } from '../../auth/SignUpScreen';
 import { Asset } from 'expo-asset';
 import KeyboardAvoider from '../../../components/keyboard/KeyboardAvoider';
 
-export const getName = (email: string | null | undefined) => {
+const getName = (email: string | null | undefined) => {
   // Remove email domain, replace _ with ' ' and upper case on all words
   if (email) {
     let name = email.replace('@hover.app', '');
