@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     height: '100%',
     width: '100%',
-    marginTop: '20%',
+    marginTop: '10%',
   },
   loadingText: {
     ...Typography.bodyText,
