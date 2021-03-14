@@ -26,11 +26,12 @@ export const getNotificationTitle = (type: Notification_Type_Enum) => {
   }
 };
 export const getNotificationIcon = (type: Notification_Type_Enum) => {
+  // TODO: Add path instead if icon name, e.g. '../../assets/images/clap.png'
   switch (type) {
     case Notification_Type_Enum.ChallengeClosed:
       return 'user-slash';
     case Notification_Type_Enum.ChallengeExpired:
-      return 'exclamation-circle'; //OK
+      return 'exclamation-circle';
     case Notification_Type_Enum.ChallengeFinished:
       return 'flag';
     case Notification_Type_Enum.ChallengeInvite:
