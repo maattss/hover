@@ -28,24 +28,24 @@ export const getNotificationTitle = (type: Notification_Type_Enum) => {
 export const getNotificationIcon = (type: Notification_Type_Enum) => {
   switch (type) {
     case Notification_Type_Enum.ChallengeClosed:
-      return require('../assets/images/notifications/challenge-closed.png');
+      return require('../assets/images/notificationIcons/challenge-closed.png');
     case Notification_Type_Enum.ChallengeExpired:
-      return require('../assets/images/notifications/challenge-expired.png');
+      return require('../assets/images/notificationIcons/challenge-expired.png');
     case Notification_Type_Enum.ChallengeFinished:
-      return require('../assets/images/notifications/challenge-finished.png');
+      return require('../assets/images/notificationIcons/challenge-finished.png');
     case Notification_Type_Enum.ChallengeInvite:
-      return require('../assets/images/notifications/challenge-invite.png');
+      return require('../assets/images/notificationIcons/challenge-invite.png');
     case Notification_Type_Enum.ChallengeWon:
-      return require('../assets/images/notifications/challenge-won.png');
+      return require('../assets/images/notificationIcons/challenge-won.png');
     case Notification_Type_Enum.NewAchievement:
-      return require('../assets/images/notifications/new-achievement.png');
+      return require('../assets/images/notificationIcons/trophy.png');
     case Notification_Type_Enum.ParticipantUpdate:
-      return require('../assets/images/notifications/participant-update.png');
+      return require('../assets/images/notificationIcons/participant-update.png');
     case Notification_Type_Enum.NewReaction:
-      return require('../assets/images/notifications/new-reaction.png');
+      return require('../assets/images/reactionIcons/clap.png');
     case Notification_Type_Enum.Message:
-      return require('../assets/images/notifications/message.png');
+      return require('../assets/images/notificationIcons/message.png');
     default:
-      return require('../assets/images/notifications/default.png');
+      return require('../assets/images/notificationIcons/default.png');
   }
 };

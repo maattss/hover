@@ -26,7 +26,7 @@ const DisclaimerScreen: React.FC = () => {
       <View style={styles.mapContainer}>
         <Image
           // eslint-disable-next-line @typescript-eslint/no-var-requires
-          source={{ uri: Asset.fromModule(require('../../assets/images/map-disclosure.png')).uri }}
+          source={{ uri: Asset.fromModule(require('../../assets/images/disclaimer/map.png')).uri }}
           style={styles.image}
         />
       </View>

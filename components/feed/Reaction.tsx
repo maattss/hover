@@ -107,14 +107,14 @@ const Reaction: React.FC<ReactionProps> = (props: ReactionProps) => {
         {userReacted && (
           <Image
             // eslint-disable-next-line @typescript-eslint/no-var-requires
-            source={{ uri: Asset.fromModule(require('../../assets/images/clap.png')).uri }}
+            source={{ uri: Asset.fromModule(require('../../assets/images/reactionIcons/clap.png')).uri }}
             style={styles.reactionIcon}
           />
         )}
         {!userReacted && (
           <Image
             // eslint-disable-next-line @typescript-eslint/no-var-requires
-            source={{ uri: Asset.fromModule(require('../../assets/images/clap-gray.gif')).uri }}
+            source={{ uri: Asset.fromModule(require('../../assets/images/reactionIcons/clap-gray.gif')).uri }}
             style={styles.reactionIcon}
           />
         )}
