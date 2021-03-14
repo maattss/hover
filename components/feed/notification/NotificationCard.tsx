@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import { Colors, Spacing, Typography } from '../../../theme';
 import { NotificationFragmentFragment } from '../../../graphql/Fragments.generated';
-import { getNotificationColor, getNotificationIcon, getNotificationTitle } from '../../../helpers/notificationHelpers';
+import { getNotificationIcon, getNotificationTitle } from '../../../helpers/notificationHelpers';
 import { timeStampToPresentable } from '../../../helpers/dateTimeHelpers';
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import { RootTabParamList } from '../../../types/navigationTypes';
@@ -85,6 +85,7 @@ const styles = StyleSheet.create({
   title: {
     ...Typography.headerText,
     fontSize: 20,
+    marginBottom: Spacing.smallest,
   },
   main: {
     ...Typography.bodyText,
@@ -96,7 +97,7 @@ const styles = StyleSheet.create({
   notificationIcon: {
     width: 40,
     height: 40,
-    marginRight: Spacing.smallest,
+    marginRight: Spacing.smaller,
   },
   body: {
     width: '80%',
