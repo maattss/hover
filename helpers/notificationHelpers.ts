@@ -26,52 +26,26 @@ export const getNotificationTitle = (type: Notification_Type_Enum) => {
   }
 };
 export const getNotificationIcon = (type: Notification_Type_Enum) => {
-  // TODO: Add path instead if icon name, e.g. '../../assets/images/clap.png'
   switch (type) {
     case Notification_Type_Enum.ChallengeClosed:
-      return 'user-slash';
+      return require('../assets/images/notifications/challenge-closed.png');
     case Notification_Type_Enum.ChallengeExpired:
-      return 'exclamation-circle';
+      return require('../assets/images/notifications/challenge-expired.png');
     case Notification_Type_Enum.ChallengeFinished:
-      return 'flag';
+      return require('../assets/images/notifications/challenge-finished.png');
     case Notification_Type_Enum.ChallengeInvite:
-      return 'user-clock';
+      return require('../assets/images/notifications/challenge-invite.png');
     case Notification_Type_Enum.ChallengeWon:
-      return 'star';
+      return require('../assets/images/notifications/challenge-won.png');
     case Notification_Type_Enum.NewAchievement:
-      return 'trophy';
+      return require('../assets/images/notifications/new-achievement.png');
     case Notification_Type_Enum.ParticipantUpdate:
-      return 'user-check';
+      return require('../assets/images/notifications/participant-update.png');
     case Notification_Type_Enum.NewReaction:
-      return 'thumbs-up';
+      return require('../assets/images/notifications/new-reaction.png');
     case Notification_Type_Enum.Message:
-      return 'comment';
+      return require('../assets/images/notifications/message.png');
     default:
-      return 'comment';
-  }
-};
-
-export const getNotificationColor = (type: Notification_Type_Enum): string => {
-  switch (type) {
-    case Notification_Type_Enum.ChallengeClosed:
-      return Colors.red;
-    case Notification_Type_Enum.ChallengeExpired:
-      return Colors.red;
-    case Notification_Type_Enum.ChallengeFinished:
-      return Colors.green;
-    case Notification_Type_Enum.ChallengeInvite:
-      return Colors.blue;
-    case Notification_Type_Enum.ChallengeWon:
-      return Colors.gold;
-    case Notification_Type_Enum.NewAchievement:
-      return Colors.gold;
-    case Notification_Type_Enum.ParticipantUpdate:
-      return Colors.blue;
-    case Notification_Type_Enum.NewReaction:
-      return Colors.blue;
-    case Notification_Type_Enum.Message:
-      return Colors.blue;
-    default:
-      return Colors.white;
+      return require('../assets/images/notifications/default.png');
   }
 };

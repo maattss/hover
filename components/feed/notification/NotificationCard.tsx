@@ -47,14 +47,13 @@ const NotificationCard: React.FC<NotificationCardProps> = (props: NotificationCa
         break;
     }
   };
-  const color = getNotificationColor(props.notification.type);
   return (
     <TouchableOpacity onPress={() => getNotificationGoToAction()}>
       <View style={[styles.card, { backgroundColor: bgColor }]}>
         <View style={styles.main}>
           <Image
             // eslint-disable-next-line @typescript-eslint/no-var-requires
-            source={{ uri: Asset.fromModule(require(getNotificationIcon(props.notification.type))).uri }}
+            source={{ uri: Asset.fromModule(getNotificationIcon(props.notification.type)).uri }}
             style={styles.notificationIcon}
           />
           <View style={styles.body}>
@@ -62,7 +61,6 @@ const NotificationCard: React.FC<NotificationCardProps> = (props: NotificationCa
             <Text style={{ ...Typography.bodyText }}>{props.notification.text}</Text>
           </View>
           <View style={styles.goTo}>
-            {/* TODO: Bigger chevron */}
             <FAIcon name={'chevron-right'} style={{ ...Typography.largeBodyText }} />
           </View>
         </View>
@@ -93,14 +91,12 @@ const styles = StyleSheet.create({
     marginVertical: Spacing.smallest,
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
   },
   notificationIcon: {
-    width: '15%',
-    paddingRight: Spacing.small,
-    paddingTop: Spacing.small,
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
+    width: 40,
+    height: 40,
+    marginRight: Spacing.smallest,
   },
   body: {
     width: '80%',
