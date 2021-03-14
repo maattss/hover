@@ -122,7 +122,7 @@ TaskManager.defineTask(NOTIFICATION_WHEN_INSIDE_GEOFENCE, async () => {
             sendPushNotification(
               pushToken,
               'Hi there! I see you are inside a Hover zone',
-              'Do you want to start tracking?.',
+              'Do you want to start tracking?',
               true,
               false,
             );
