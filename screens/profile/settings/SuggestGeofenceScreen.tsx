@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TextInput, Alert } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Alert, Linking } from 'react-native';
 import { Buttons, Colors, Spacing, Typography } from '../../../theme';
 import { SettingsProps } from './SettingsMenuScreen';
 import CustomButton, { CategoryButton } from '../../../components/general/Button';
@@ -12,23 +12,30 @@ const SuggestGeofenceScreen: React.FC<SettingsProps> = ({ navigation }: Settings
   const [location, setLocation] = useState('');
   const [category, setCategory] = useState('');
 
-  const onSubmit = () => {
-    MailComposer.composeAsync({
-      recipients: ['contact.hoverapp@gmail.com'],
-      subject: 'Location suggestion',
-      body: `<p><b>New location suggestion:</b></p><p>Category: <i>${category}</i></br>Location: <i>${location}</i></p>`,
-      isHtml: true,
-    })
-      .then((value) => {
-        if (value.status !== 'sent') {
-          Alert.alert('Something went wrong', 'New location not submitted');
-        } else {
-          Alert.alert('New location submitted!');
-          navigation.goBack();
-        }
-        return;
-      })
-      .catch((reason) => Alert.alert('Something went wrong', reason));
+  const subject = 'Location suggestion';
+
+  const onSubmit = async () => {
+    const available = await MailComposer.isAvailableAsync();
+    if (!available) {
+      const body = `New location suggestion\nCategory: ${category}\nLocation: ${location}`;
+      Linking.openURL(`mailto:contact.hoverapp@gmail.com?subject=${subject}&body=${body}`);
+      return;
+    }
+
+    const bodyHTML = `<p><b>New location suggestion</b></p><p>Category: <i>${category}</i></br>Location: <i>${location}</i></p>`;
+    try {
+      const value = await MailComposer.composeAsync({
+        recipients: ['contact.hoverapp@gmail.com'],
+        subject: subject,
+        body: bodyHTML,
+        isHtml: true,
+      });
+      if (value.status !== 'sent') throw Error();
+      Alert.alert('New location submitted!');
+      navigation.goBack();
+    } catch (reason) {
+      Alert.alert('Something went wrong', reason);
+    }
   };
   const renderCategories = () =>
     Object.keys(GeoFenceCategory).map((cat, index) => {
@@ -65,7 +72,7 @@ const SuggestGeofenceScreen: React.FC<SettingsProps> = ({ navigation }: Settings
           multiline={true}
           numberOfLines={5}
         />
-        <CustomButton onPress={onSubmit}>Send Suggestion</CustomButton>
+        <CustomButton onPress={async () => await onSubmit()}>Send Suggestion</CustomButton>
       </View>
     </KeyboardAvoider>
   );
