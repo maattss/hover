@@ -13,6 +13,7 @@ import {
   readPreviousOutsideGeofencePushTimestamp,
 } from './helpers/storage';
 import { sendPushNotification } from './helpers/pushNotifications';
+import * as BackgroundFetch from 'expo-background-fetch';
 import * as TaskManager from 'expo-task-manager';
 import * as Location from 'expo-location';
 import Constants from 'expo-constants';
@@ -132,9 +133,14 @@ TaskManager.defineTask(NOTIFICATION_WHEN_INSIDE_GEOFENCE, async () => {
               false,
             );
             storePreviousGeofenceIdPush(insideGeoFence.id);
+            return BackgroundFetch.Result.NewData;
           }
         }
+        return BackgroundFetch.Result.NoData;
       }
+      return BackgroundFetch.Result.NoData;
     }
+    return BackgroundFetch.Result.NoData;
   }
+  return BackgroundFetch.Result.Failed;
 });
