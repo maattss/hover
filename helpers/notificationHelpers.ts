@@ -8,13 +8,13 @@ export const getNotificationTitle = (type: Notification_Type_Enum) => {
     case Notification_Type_Enum.ChallengeExpired:
       return 'Oh no...';
     case Notification_Type_Enum.ChallengeFinished:
-      return 'We have a winner ...';
+      return 'We have a winner!';
     case Notification_Type_Enum.ChallengeInvite:
       return `You've been challenged!`;
     case Notification_Type_Enum.ChallengeWon:
-      return 'Congratulation you won!';
+      return 'Congratulations, you won!';
     case Notification_Type_Enum.NewAchievement:
-      return 'Congratulation!';
+      return 'Congratulations!';
     case Notification_Type_Enum.ParticipantUpdate:
       return 'Someone responded to your challenge';
     case Notification_Type_Enum.NewReaction:
@@ -28,9 +28,9 @@ export const getNotificationTitle = (type: Notification_Type_Enum) => {
 export const getNotificationIcon = (type: Notification_Type_Enum) => {
   switch (type) {
     case Notification_Type_Enum.ChallengeClosed:
-      return 'user-slash'; // users-slash user-clock
+      return 'user-slash';
     case Notification_Type_Enum.ChallengeExpired:
-      return 'exclamation-circle';
+      return 'exclamation-circle'; //OK
     case Notification_Type_Enum.ChallengeFinished:
       return 'flag';
     case Notification_Type_Enum.ChallengeInvite:
