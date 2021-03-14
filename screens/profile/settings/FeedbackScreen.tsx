@@ -7,7 +7,6 @@ import KeyboardAvoider from '../../../components/keyboard/KeyboardAvoider';
 import * as MailComposer from 'expo-mail-composer';
 import useAuthentication from '../../../hooks/useAuthentication';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
-import { getName } from '../../profile/settings/EditProfileScreen';
 
 const FeedbackScreen: React.FC<SettingsProps> = ({ navigation }: SettingsProps) => {
   const [feedback, setFeedback] = useState('');

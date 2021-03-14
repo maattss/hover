@@ -1,4 +1,3 @@
-import { Colors } from '../theme';
 import { Notification_Type_Enum } from '../types/types';
 
 export const getNotificationTitle = (type: Notification_Type_Enum) => {

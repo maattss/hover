@@ -17,7 +17,6 @@ import * as BackgroundFetch from 'expo-background-fetch';
 import * as TaskManager from 'expo-task-manager';
 import * as Location from 'expo-location';
 import Constants from 'expo-constants';
-import { Alert } from 'react-native';
 
 export const LOCATION_BACKGROUND_TRACKING = 'location-background-tracking';
 export const NOTIFICATION_WHEN_INSIDE_GEOFENCE = 'notification-when-inside-geofence';
