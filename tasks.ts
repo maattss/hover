@@ -81,11 +81,6 @@ TaskManager.defineTask(LOCATION_BACKGROUND_TRACKING, async ({ data, error }) => 
               true,
             );
             updatePreviousOutsideGeofencePushTimestamp();
-          } else {
-            Alert.alert(
-              'Outside geofence but no push was sent because',
-              'Pushtoken: [' + pushToken + ']. Previous push: ' + previousPushUpdate,
-            );
           }
         }
       }
