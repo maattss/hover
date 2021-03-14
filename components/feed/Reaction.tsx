@@ -164,11 +164,12 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'center',
     paddingHorizontal: Spacing.smaller,
+    marginTop: Spacing.smallest,
   },
   reactionText: {
     ...Typography.bodyText,
     fontWeight: 'bold',
-    paddingVertical: Spacing.large,
+    paddingVertical: Spacing.base,
     marginLeft: Spacing.base,
   },
   centeredView: {

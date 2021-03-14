@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
   },
   icon: {
     ...Typography.icon,
-    margin: Spacing.large,
+    marginBottom: Spacing.smallest,
     fontSize: 60,
   },
   label: {
