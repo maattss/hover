@@ -7,10 +7,10 @@ import {
   LocationEvent,
   readTrackingInfo,
   readGeoFences,
-  readPreviousGeofenceIdPush,
-  storePreviousGeofenceIdPush,
   updatePreviousOutsideGeofencePushTimestamp,
   readPreviousOutsideGeofencePushTimestamp,
+  readPreviousInsideGeofencePush,
+  storePreviousInsideGeofencePush,
 } from './helpers/storage';
 import { sendPushNotification } from './helpers/pushNotifications';
 import * as BackgroundFetch from 'expo-background-fetch';
@@ -115,8 +115,12 @@ TaskManager.defineTask(NOTIFICATION_WHEN_INSIDE_GEOFENCE, async () => {
       const trackingLocations = await readLocationEvents();
       if (trackingLocations.length === 0) {
         // Not currently tracking
-        const previousGeofenceIdPush = await readPreviousGeofenceIdPush();
-        if (previousGeofenceIdPush === 0 || insideGeoFence.id !== previousGeofenceIdPush) {
+        const previousInsideGeofencePush = await readPreviousInsideGeofencePush();
+        if (
+          !previousInsideGeofencePush ||
+          insideGeoFence.id !== previousInsideGeofencePush.geoFenceId ||
+          previousInsideGeofencePush.timestamp < Date.now() - 60 * 60 * 24
+        ) {
           const pushToken = await readPushToken();
           if (pushToken) {
             sendPushNotification(
@@ -126,7 +130,7 @@ TaskManager.defineTask(NOTIFICATION_WHEN_INSIDE_GEOFENCE, async () => {
               true,
               false,
             );
-            storePreviousGeofenceIdPush(insideGeoFence.id);
+            storePreviousInsideGeofencePush(insideGeoFence.id);
             return BackgroundFetch.Result.NewData;
           }
         }

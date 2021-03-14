@@ -31,6 +31,11 @@ export interface PauseEvent {
   paused: boolean;
 }
 
+export interface InsideGeoFencePush {
+  timestamp: number;
+  geoFenceId: number;
+}
+
 export const storeGeoFences = async (value: GeoFence[]) => storeObject(GEOFENCES_KEY, value);
 
 export const readGeoFences = async () => {
@@ -43,11 +48,18 @@ export const storePushToken = async (value: string) => storeString(PUSH_KEY, val
 
 export const readPushToken = async () => await readString(PUSH_KEY);
 
-export const storePreviousGeofenceIdPush = async (value: number) =>
-  storeString(PREVIOUS_INSIDE_GEOFENCE_PUSH_KEY, value.toString());
+export const storePreviousInsideGeofencePush = async (id: number) => {
+  const previousInsideGeoFencePush: InsideGeoFencePush = {
+    geoFenceId: id,
+    timestamp: Date.now(),
+  };
+  storeObject(PREVIOUS_INSIDE_GEOFENCE_PUSH_KEY, previousInsideGeoFencePush);
+};
 
-export const readPreviousGeofenceIdPush = async () =>
-  Number((await readString(PREVIOUS_INSIDE_GEOFENCE_PUSH_KEY)) ?? '0');
+export const readPreviousInsideGeofencePush = async () => {
+  const insideGeoFencePush: InsideGeoFencePush = await readObject(PREVIOUS_INSIDE_GEOFENCE_PUSH_KEY);
+  return insideGeoFencePush;
+};
 
 export const updatePreviousOutsideGeofencePushTimestamp = async () =>
   storeString(PREVIOUS_OUTSIDE_GEOFENCE_PUSH_KEY, Date.now().toString());
