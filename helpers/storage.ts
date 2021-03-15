@@ -95,7 +95,7 @@ export const clearPushStorage = async () =>
 
 export const clearPreviousOutsidePushStorage = async () => clear([PREVIOUS_OUTSIDE_GEOFENCE_PUSH_KEY]);
 
-export const clearPreviousInsidePushStorage = async () => clear([PREVIOUS_OUTSIDE_GEOFENCE_PUSH_KEY]);
+export const clearPreviousInsidePushStorage = async () => clear([PREVIOUS_INSIDE_GEOFENCE_PUSH_KEY]);
 
 export const clearGeofencesStorage = async () => clear([GEOFENCES_KEY]);
 

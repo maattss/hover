@@ -318,7 +318,7 @@ export const TrackingProvider = ({ children }: Props) => {
 
       setTrackingState(TrackingState.EXPLORE);
       await clearTrackingStorage();
-      await clearPreviousPushStorage();
+      await clearPreviousOutsidePushStorage();
       console.log('Activity inserted to db', response);
       Alert.alert('Upload complete', 'Activity uploaded successfully!');
     } catch (error) {
