@@ -14,7 +14,7 @@ import { Activities_Insert_Input } from '../../types/types';
 import { startBackgroundUpdate, stopBackgroundUpdate } from '../../tasks/locationBackgroundTasks';
 import {
   clearTrackingStorage,
-  clearPreviousPushStorage,
+  clearPreviousOutsidePushStorage,
   PauseEvent,
   readLocationEvents,
   readPauseEvents,
@@ -126,9 +126,6 @@ export const TrackingProvider = ({ children }: Props) => {
   };
 
   const resetTrackingState = async () => {
-    await clearTrackingStorage();
-    await clearPreviousPushStorage();
-
     setTrackingEnd(undefined);
     setTrackingStart(Date.now());
     setTrackingGeofence(currentGeoFence);
@@ -292,6 +289,8 @@ export const TrackingProvider = ({ children }: Props) => {
       return;
     }
 
+    await clearTrackingStorage();
+    await clearPreviousOutsidePushStorage();
     await resetTrackingState();
     startBackgroundUpdate();
     setTrackingState(TrackingState.TRACKING);
@@ -318,7 +317,8 @@ export const TrackingProvider = ({ children }: Props) => {
       });
 
       setTrackingState(TrackingState.EXPLORE);
-      await resetTrackingState();
+      await clearTrackingStorage();
+      await clearPreviousOutsidePushStorage();
       console.log('Activity inserted to db', response);
       Alert.alert('Upload complete', 'Activity uploaded successfully!');
     } catch (error) {
@@ -380,7 +380,8 @@ export const TrackingProvider = ({ children }: Props) => {
 
   const discardActivity = async () => {
     setTrackingState(TrackingState.EXPLORE);
-    await resetTrackingState();
+    await clearTrackingStorage();
+    await clearPreviousOutsidePushStorage();
   };
   const updateFriend = async (newFriendId: string, newTrackingWithFriendId: number) => {
     setFriendId(newFriendId);

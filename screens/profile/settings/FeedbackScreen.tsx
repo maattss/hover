@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TextInput, Alert } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Alert, Linking } from 'react-native';
 import { Buttons, Colors, Spacing, Typography } from '../../../theme';
 import { SettingsProps } from './SettingsMenuScreen';
 import CustomButton from '../../../components/general/Button';
@@ -12,23 +12,31 @@ const FeedbackScreen: React.FC<SettingsProps> = ({ navigation }: SettingsProps) 
   const [feedback, setFeedback] = useState('');
 
   const id = useAuthentication().user?.uid;
-  const onSubmit = () => {
-    MailComposer.composeAsync({
-      recipients: ['contact.hoverapp@gmail.com'], // array of email addresses
-      subject: 'Feedback',
-      body: `<p><b>Feedback from user ${id}:</b></p><p><i>${feedback}</i></p>`,
-      isHtml: true,
-    })
-      .then((value) => {
-        if (value.status !== 'sent') {
-          Alert.alert('Something went wrong', 'Feedback not submitted');
-        } else {
-          Alert.alert('Feedback submitted!');
-          navigation.goBack();
-        }
-        return;
-      })
-      .catch((reason) => Alert.alert('Something went wrong', reason));
+
+  const onSubmit = async () => {
+    const available = await MailComposer.isAvailableAsync();
+    const subject = 'Feedback';
+
+    if (!available) {
+      const body = `Feedback from user with id '${id}':\n${feedback}`;
+      Linking.openURL(`mailto:contact.hoverapp@gmail.com?subject=${subject}&body=${body}`);
+      return;
+    }
+
+    const bodyHTML = `<p><b>Feedback from user with id '${id}':</b></p><p><i>${feedback}</i></p>`;
+    try {
+      const value = await MailComposer.composeAsync({
+        recipients: ['contact.hoverapp@gmail.com'],
+        subject: subject,
+        body: bodyHTML,
+        isHtml: true,
+      });
+      if (value.status !== 'sent') throw Error();
+      Alert.alert('Feedback submitted!');
+      navigation.goBack();
+    } catch (reason) {
+      Alert.alert('Something went wrong', reason);
+    }
   };
   return (
     <KeyboardAvoider>
@@ -40,7 +48,7 @@ const FeedbackScreen: React.FC<SettingsProps> = ({ navigation }: SettingsProps) 
         </View>
         <Text style={styles.label}>Feedback</Text>
         <TextInput
-          placeholder={'Give us your honest feedback!'}
+          placeholder={'Give us your honest opinion!'}
           placeholderTextColor={Colors.gray600}
           value={feedback}
           onChangeText={(val) => setFeedback(val)}
@@ -74,7 +82,7 @@ const styles = StyleSheet.create({
   },
   icon: {
     ...Typography.icon,
-    margin: Spacing.large,
+    marginBottom: Spacing.smallest,
     fontSize: 60,
   },
   label: {

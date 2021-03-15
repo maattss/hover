@@ -128,11 +128,10 @@ const styles = StyleSheet.create({
     borderRadius: 60,
     width: 120,
     height: 120,
-    backgroundColor: Colors.gray900,
+    marginVertical: Spacing.smaller,
   },
   icon: {
     ...Typography.icon,
-    margin: Spacing.large,
     fontSize: 60,
   },
   settingsItem: {
@@ -147,7 +146,6 @@ const styles = StyleSheet.create({
   },
   logoutButton: {
     backgroundColor: Colors.red,
-    marginTop: Spacing.base,
   },
 });
 

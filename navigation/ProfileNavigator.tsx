@@ -36,10 +36,16 @@ const ProfileNavigator: React.FC = () => {
         name="SuggestGeofence"
         component={SuggestGeofenceScreen}
         options={{
-          headerTitle: 'Suggest new location',
+          headerTitle: 'Suggest New Location',
         }}
       />
-      <ProfileStack.Screen name="Feedback" component={FeedbackScreen} />
+      <ProfileStack.Screen
+        name="Feedback"
+        component={FeedbackScreen}
+        options={{
+          headerTitle: 'Give Feedback',
+        }}
+      />
       <ProfileStack.Screen name="About Hover" component={AboutScreen} />
       <ProfileStack.Screen name="Privacy Policy" component={PrivacyScreen} />
       <ProfileStack.Screen

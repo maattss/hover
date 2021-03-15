@@ -1,14 +1,15 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import { Colors, Spacing, Typography } from '../../../theme';
 import { NotificationFragmentFragment } from '../../../graphql/Fragments.generated';
-import { getNotificationColor, getNotificationIcon, getNotificationTitle } from '../../../helpers/notificationHelpers';
+import { getNotificationIcon, getNotificationTitle } from '../../../helpers/notificationHelpers';
 import { timeStampToPresentable } from '../../../helpers/dateTimeHelpers';
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import { RootTabParamList } from '../../../types/navigationTypes';
 import { useNavigation } from '@react-navigation/native';
 import { Notification_Type_Enum } from '../../../types/types';
+import { Asset } from 'expo-asset';
 
 type BottomNavigationProp = BottomTabNavigationProp<RootTabParamList>;
 
@@ -46,23 +47,21 @@ const NotificationCard: React.FC<NotificationCardProps> = (props: NotificationCa
         break;
     }
   };
-  const color = getNotificationColor(props.notification.type);
   return (
     <TouchableOpacity onPress={() => getNotificationGoToAction()}>
       <View style={[styles.card, { backgroundColor: bgColor }]}>
         <View style={styles.main}>
-          <View style={styles.notificationIcon}>
-            <FAIcon
-              name={getNotificationIcon(props.notification.type)}
-              style={[{ ...Typography.headerText, color: color }]}
-            />
-          </View>
+          <Image
+            // eslint-disable-next-line @typescript-eslint/no-var-requires
+            source={{ uri: Asset.fromModule(getNotificationIcon(props.notification.type)).uri }}
+            style={styles.notificationIcon}
+          />
           <View style={styles.body}>
             <Text style={styles.title}>{getNotificationTitle(props.notification.type)}</Text>
             <Text style={{ ...Typography.bodyText }}>{props.notification.text}</Text>
           </View>
           <View style={styles.goTo}>
-            <FAIcon name={'chevron-right'} style={{ ...Typography.bodyText }} />
+            <FAIcon name={'chevron-right'} style={{ ...Typography.largeBodyText }} />
           </View>
         </View>
         <View style={styles.footer}>
@@ -86,20 +85,19 @@ const styles = StyleSheet.create({
   title: {
     ...Typography.headerText,
     fontSize: 20,
+    marginBottom: Spacing.smallest,
   },
   main: {
     ...Typography.bodyText,
     marginVertical: Spacing.smallest,
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
   },
   notificationIcon: {
-    width: '15%',
-    paddingRight: Spacing.small,
-    paddingTop: Spacing.small,
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
+    width: 40,
+    height: 40,
+    marginRight: Spacing.smaller,
   },
   body: {
     width: '80%',

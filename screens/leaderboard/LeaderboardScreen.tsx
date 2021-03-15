@@ -86,7 +86,9 @@ const LeaderboardScreen: React.FC = () => {
   } else {
     return (
       <View style={styles.container}>
-        {highscoreLoading && <ActivityIndicator size={'large'} color={Colors.blue} />}
+        {highscoreLoading && (
+          <ActivityIndicator size={'large'} color={Colors.blue} style={{ marginTop: Spacing.largest }} />
+        )}
         {highscoreError && <Text style={styles.infoText}>{highscoreError.message}</Text>}
         {!highscoreLoading && !highscoreError && highscores && (
           <Leaderboard
@@ -206,11 +208,16 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.black,
   },
   pickerContainerIos: {
-    width: '96%',
-    marginBottom: Spacing.smaller,
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
     backgroundColor: Colors.almostBlack,
-    borderRadius: Spacing.base,
     alignItems: 'flex-end',
+    borderTopColor: Colors.gray900,
+    borderTopWidth: 1,
+    borderBottomColor: Colors.gray900,
+    borderBottomWidth: 1,
   },
   pickerIos: {
     width: '100%',

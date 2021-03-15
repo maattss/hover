@@ -15,14 +15,14 @@ const TrackingScreen: React.FC = () => {
 
   const insets = useSafeAreaInsets();
   const bottomPosition = {
-    bottom: Platform.OS == 'ios' ? 0 : insets.bottom,
+    bottom: Platform.OS === 'ios' ? 0 : insets.bottom,
   };
 
   return (
     <>
       <HoverMap />
       <View style={[styles.infoContainer, bottomPosition]}>
-        <KeyboardAvoiderAbsolutePosition newBottom={Platform.OS == 'ios' ? 50 : -200}>
+        <KeyboardAvoiderAbsolutePosition newBottom={Platform.OS === 'ios' ? 100 : -200}>
           <View>
             <View style={collabInfoHidden ? { display: 'none' } : { display: 'flex' }}>
               <HoverWithFriends

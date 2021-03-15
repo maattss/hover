@@ -54,20 +54,22 @@ export const apolloClient = new ApolloClient({
 
 export default function App() {
   const [loadingCache, setLoadingCache] = useState(true);
-  const [unregisterTasks, setUnregisterTasks] = useState(true);
-  const [startedBackgroundFetch, setStartedBackgroundFetch] = useState(false);
 
   useEffect(() => {
     persistCache({
       cache,
       storage: AsyncStorage,
     }).then(() => setLoadingCache(false));
-    TaskManager.unregisterAllTasksAsync().then(() => setUnregisterTasks(false));
-    startBackgroundFetch().then(() => setStartedBackgroundFetch(true));
+
+    const restoreTasks = async () => {
+      await TaskManager.unregisterAllTasksAsync();
+      await startBackgroundFetch();
+    };
+    restoreTasks();
   }, []);
 
   const isLoadingAssets = useCachedResources();
-  if (isLoadingAssets || loadingCache || unregisterTasks || !startedBackgroundFetch) {
+  if (isLoadingAssets || loadingCache) {
     SplashScreen.preventAutoHideAsync();
     return null;
   } else {

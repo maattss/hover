@@ -22,5 +22,5 @@ export const getChallengeTypeFields = (challengeType: Challenge_Type_Enum): stri
 };
 
 export const getChallengeIcon = () => {
-  return Asset.fromModule(require('../assets/images/trophy.png')).uri;
+  return Asset.fromModule(require('../assets/images/notificationIcons/trophy.png')).uri;
 };

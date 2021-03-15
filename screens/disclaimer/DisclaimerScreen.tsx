@@ -5,7 +5,6 @@ import Button from '../../components/general/Button';
 import { Asset } from 'expo-asset';
 import useTracking from '../../hooks/useTracking';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 const DisclaimerScreen: React.FC = () => {
   const askPermission = useTracking().askPermission;
@@ -27,7 +26,7 @@ const DisclaimerScreen: React.FC = () => {
       <View style={styles.mapContainer}>
         <Image
           // eslint-disable-next-line @typescript-eslint/no-var-requires
-          source={{ uri: Asset.fromModule(require('../../assets/images/map-disclosure.png')).uri }}
+          source={{ uri: Asset.fromModule(require('../../assets/images/disclaimer/map.png')).uri }}
           style={styles.image}
         />
       </View>

@@ -5,14 +5,15 @@ import {
   readPushToken,
   storeLocationEvents,
   LocationEvent,
-  readPreviousPushUpdate,
-  storePreviousPushUpdate,
   readTrackingInfo,
   readGeoFences,
-  readPreviousGeofenceIdPush,
-  storePreviousGeofenceIdPush,
+  updatePreviousOutsideGeofencePushTimestamp,
+  readPreviousOutsideGeofencePushTimestamp,
+  readPreviousInsideGeofencePush,
+  storePreviousInsideGeofencePush,
 } from './helpers/storage';
 import { sendPushNotification } from './helpers/pushNotifications';
+import * as BackgroundFetch from 'expo-background-fetch';
 import * as TaskManager from 'expo-task-manager';
 import * as Location from 'expo-location';
 import Constants from 'expo-constants';
@@ -66,10 +67,9 @@ TaskManager.defineTask(LOCATION_BACKGROUND_TRACKING, async ({ data, error }) => 
 
         if (Constants.isDevice) {
           const pushToken = await readPushToken();
-          const previousPushUpdate = await readPreviousPushUpdate();
+          const previousPushUpdate = await readPreviousOutsideGeofencePushTimestamp();
 
-          // Send push notification if it is more than 5 minutes since previous
-          // "Outside geofence" push notification was sent.
+          // Send push notification if it is more than 5 minutes since previous "Outside geofence" push notification was sent.
           if ((pushToken && !previousPushUpdate) || (pushToken && previousPushUpdate < Date.now() - 5 * 60)) {
             sendPushNotification(
               pushToken,
@@ -79,7 +79,7 @@ TaskManager.defineTask(LOCATION_BACKGROUND_TRACKING, async ({ data, error }) => 
               true,
               true,
             );
-            storePreviousPushUpdate(Date.now());
+            updatePreviousOutsideGeofencePushTimestamp();
           }
         }
       }
@@ -115,21 +115,30 @@ TaskManager.defineTask(NOTIFICATION_WHEN_INSIDE_GEOFENCE, async () => {
       const trackingLocations = await readLocationEvents();
       if (trackingLocations.length === 0) {
         // Not currently tracking
-        const previousGeofenceIdPush = await readPreviousGeofenceIdPush();
-        if (previousGeofenceIdPush === 0 || insideGeoFence.id !== previousGeofenceIdPush) {
+        const previousInsideGeofencePush = await readPreviousInsideGeofencePush();
+        if (
+          !previousInsideGeofencePush ||
+          insideGeoFence.id !== previousInsideGeofencePush.geoFenceId ||
+          previousInsideGeofencePush.timestamp < Date.now() - 60 * 60 * 24
+        ) {
           const pushToken = await readPushToken();
           if (pushToken) {
             sendPushNotification(
               pushToken,
               'Hi there! I see you are inside a Hover zone',
-              'Do you want to start tracking?.',
+              'Do you want to start tracking?',
               true,
               false,
             );
-            storePreviousGeofenceIdPush(insideGeoFence.id);
+            storePreviousInsideGeofencePush(insideGeoFence.id);
+            return BackgroundFetch.Result.NewData;
           }
         }
+        return BackgroundFetch.Result.NoData;
       }
+      return BackgroundFetch.Result.NoData;
     }
+    return BackgroundFetch.Result.NoData;
   }
+  return BackgroundFetch.Result.Failed;
 });
