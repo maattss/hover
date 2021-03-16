@@ -37,7 +37,8 @@
       "useNextNotificationsApi": true,
       "permissions": ["ACCESS_COARSE_LOCATION", "ACCESS_FINE_LOCATION", "ACCESS_BACKGROUND_LOCATION"],
       "package": "com.hoverapp.hover",
-      "versionCode": 8,
+      "googleServicesFile": "./google-services.json",
+      "versionCode": 10,
       "config": {
         "googleMaps": {
           "apiKey": "AIzaSyC2cQbh0D5hTNvGhn9aML-M5zxzvQdT6Q8"
