@@ -144,3 +144,5 @@ docs/pages/versions/*/react-native/*.diff
 config.ts
 
 hover-key.json
+
+google-services.json
