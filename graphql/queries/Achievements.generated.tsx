@@ -10,32 +10,28 @@ export type AchievementsQueryVariables = Types.Exact<{
 }>;
 
 export type AchievementsQuery = { readonly __typename: 'query_root' } & {
-  readonly total_acheivements: { readonly __typename: 'achievement_aggregate' } & {
-    readonly aggregate?: Types.Maybe<
-      { readonly __typename: 'achievement_aggregate_fields' } & Pick<Types.Achievement_Aggregate_Fields, 'count'>
-    >;
-  };
   readonly unachievedachievements: ReadonlyArray<{ readonly __typename: 'achievement' } & AchievementFragmentFragment>;
-  readonly user_achievement: ReadonlyArray<
-    { readonly __typename: 'user_achievement' } & {
-      readonly achievement: { readonly __typename: 'achievement' } & AchievementFragmentFragment;
+  readonly user?: Types.Maybe<
+    { readonly __typename: 'users' } & {
+      readonly user_achievement: ReadonlyArray<
+        { readonly __typename: 'user_achievement' } & {
+          readonly achievement: { readonly __typename: 'achievement' } & AchievementFragmentFragment;
+        }
+      >;
     }
   >;
 };
 
 export const AchievementsDocument = gql`
   query Achievements($user_id: String!) {
-    total_acheivements: achievement_aggregate {
-      aggregate {
-        count(columns: id)
-      }
-    }
-    unachievedachievements(args: { uid: $user_id }) {
+    unachievedachievements(args: { uid: $user_id }, order_by: { achievement_type: desc, level: desc }) {
       ...achievementFragment
     }
-    user_achievement(where: { user_id: { _eq: $user_id } }) {
-      achievement {
-        ...achievementFragment
+    user(id: $user_id) {
+      user_achievement(order_by: { created_at: desc, achievement: { level: desc } }) {
+        achievement {
+          ...achievementFragment
+        }
       }
     }
   }

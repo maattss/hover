@@ -246,7 +246,7 @@ const ProfileScreen: React.FC<Props> = ({ route }: Props) => {
             {renderAchievements()}
           </ScrollView>
         )}
-        <Button onPress={() => navigation.navigate('Achievements', { user_id: id })} />
+        <Button onPress={() => navigation.navigate('Achievements', { user_id: id, userProfile })} />
         <Text style={styles.header}>Score</Text>
         <View style={styles.scoreContainer}>
           <View style={styles.categoryScore}>{renderScore()}</View>
