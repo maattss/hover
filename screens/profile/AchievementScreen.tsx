@@ -17,7 +17,7 @@ type Props = {
   route: ProfileRouteProp | FeedRouteProp;
 };
 
-const AchievmentScreen: React.FC<Props> = ({ route }: Props) => {
+const AchievementScreen: React.FC<Props> = ({ route }: Props) => {
   const id = route && route.params && route.params.user_id ? route.params.user_id : useAuthentication().user?.uid;
   if (id) {
     const [achieved, setAchieved] = useState<readonly AchievementFragmentFragment[]>([]);
@@ -162,4 +162,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AchievmentScreen;
+export default AchievementScreen;

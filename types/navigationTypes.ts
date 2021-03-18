@@ -76,6 +76,7 @@ export type StatisticsStackParamList = {
 export type ProfileStackParamList = {
   Profile: undefined;
   UserProfile: { user_id: string; titleName: string };
+  Achievements: { user_id: string };
 } & SettingsNavigationStackParamList;
 
 export type SettingsNavigationStackParamList = {

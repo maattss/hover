@@ -19,13 +19,14 @@ import { convertToUserProfile, defaultUserProfile } from '../../helpers/objectMa
 import Error from '../../components/general/Error';
 import Loading from '../../components/general/Loading';
 import { getGeoFenceImage } from '../../helpers/geoFenceCalculations';
-import { RouteProp } from '@react-navigation/native';
+import { RouteProp, useNavigation } from '@react-navigation/native';
 import { FeedStackParamList, ProfileStackParamList } from '../../types/navigationTypes';
 import ActivityFeedCard from '../../components/feed/ActivityFeedCard';
 import { useProfileActivitiesQuery } from '../../graphql/queries/ProfileActivities.generated';
 import { ProfileActivityFragmentFragment } from '../../graphql/Fragments.generated';
 import { ActivityFeedData, FeedCategory } from '../../types/feedTypes';
 import { Avatar } from 'react-native-elements';
+import Button from '../../components/general/Button';
 
 type FeedRouteProp = RouteProp<FeedStackParamList, 'UserProfile'>;
 type ProfileRouteProp = RouteProp<ProfileStackParamList, 'Profile'>;
@@ -69,6 +70,7 @@ const ProfileScreen: React.FC<Props> = ({ route }: Props) => {
       setRefreshing(false);
     }, []);
 
+    const navigation = useNavigation();
     const { loading: userLoading, error: userError, data: userData, refetch: userRefetch } = useProfileUserQuery({
       variables: {
         id: id,
@@ -244,6 +246,7 @@ const ProfileScreen: React.FC<Props> = ({ route }: Props) => {
             {renderAchievements()}
           </ScrollView>
         )}
+        <Button onPress={() => navigation.navigate('Achievements', { user_id: id })} />
         <Text style={styles.header}>Score</Text>
         <View style={styles.scoreContainer}>
           <View style={styles.categoryScore}>{renderScore()}</View>

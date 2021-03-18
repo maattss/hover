@@ -6,6 +6,7 @@ import AboutScreen from '../screens/profile/settings/AboutScreen';
 import SettingsScreen from '../screens/profile/settings/SettingsMenuScreen';
 import { HeaderIcon } from '../components/general/HeaderIcon';
 import PrivacyScreen from '../screens/profile/settings/PrivacyScreen';
+import AchievementScreen from '../screens/profile/AchievementScreen';
 import EditProfileScreen from '../screens/profile/settings/EditProfileScreen';
 import SuggestGeofenceScreen from '../screens/profile/settings/SuggestGeofenceScreen';
 import FeedbackScreen from '../screens/profile/settings/FeedbackScreen';
@@ -23,6 +24,13 @@ const ProfileNavigator: React.FC = () => {
           // eslint-disable-next-line react/display-name
           headerRight: () => <HeaderIcon name="cog" onPress={() => navigation.navigate('Settings')} />,
         })}
+      />
+      <ProfileStack.Screen
+        name="Achievements"
+        component={AchievementScreen}
+        options={{
+          headerTitle: 'Achievements',
+        }}
       />
       <ProfileStack.Screen
         name="Settings"
