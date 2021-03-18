@@ -28,7 +28,8 @@ const getProgress = (userProfile: UserProfile, achievement: AchievementFragmentF
     else if (rule.category === GeoFenceCategory.EDUCATION) return userProfile.educationScore / rule.score;
     else if (rule.category === GeoFenceCategory.EXERCISE) return userProfile.exerciseScore / rule.score;
     else if (rule.category === GeoFenceCategory.SOCIAL) return userProfile.socialScore / rule.score;
-  } else return 0;
+  }
+  return 0;
 };
 
 const AchievementScreen: React.FC<Props> = ({ route }: Props) => {
@@ -68,18 +69,25 @@ const AchievementScreen: React.FC<Props> = ({ route }: Props) => {
     if (error) return <Error message={error.message} apolloError={error} />;
     if (loading) return <Loading />;
     return (
-      <ScrollView>
-        {achieved.length + unachieved.length < 1 ? (
+      <ScrollView contentContainerStyle={styles.achievementsContainer}>
+        <Text style={styles.header}>Achieved</Text>
+        {achieved.length < 1 ? (
           <View style={styles.noData}>
             <Text style={{ ...Typography.largeBodyText }}>No achivements...</Text>
           </View>
         ) : (
-          <ScrollView contentContainerStyle={styles.achievementsContainer}>
-            <Text style={styles.header}>Achieved</Text>
-            {renderAchievements(achieved, true)}
-            <Text style={styles.header}>Unachieved</Text>
-            {renderAchievements(unachieved, false)}
-          </ScrollView>
+          renderAchievements(achieved, true)
+        )}
+
+        <Text style={styles.header}>Unachieved</Text>
+        {unachieved.length < 1 ? (
+          <View style={styles.noData}>
+            <Text style={{ ...Typography.largeBodyText }}>
+              Congratulations you have received all possible achievments!
+            </Text>
+          </View>
+        ) : (
+          renderAchievements(unachieved, false)
         )}
       </ScrollView>
     );
@@ -88,29 +96,24 @@ const AchievementScreen: React.FC<Props> = ({ route }: Props) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    padding: Spacing.smaller,
-  },
   header: {
     ...Typography.headerText,
-    marginTop: Spacing.base,
-    marginBottom: Spacing.smaller,
-    marginLeft: Spacing.smaller,
     width: '100%',
+    marginVertical: Spacing.smaller,
+    marginHorizontal: Spacing.base,
   },
   achievementsContainer: {
-    paddingVertical: 20,
+    marginVertical: Spacing.smaller,
     flexDirection: 'row',
-    flex: 1,
     flexWrap: 'wrap',
   },
   achievement: {
-    marginHorizontal: Spacing.smallest,
+    paddingHorizontal: Spacing.smallest,
     marginBottom: Spacing.smaller,
-    width: '30%',
+    width: '33%',
   },
   noData: {
-    marginLeft: Spacing.smaller,
+    marginHorizontal: Spacing.base,
     marginBottom: Spacing.small,
   },
 });

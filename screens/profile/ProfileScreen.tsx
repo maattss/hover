@@ -240,7 +240,9 @@ const ProfileScreen: React.FC<Props> = ({ route }: Props) => {
         <View style={{ flex: 1, flexDirection: 'row' }}>
           <Text style={styles.header}>Achievements</Text>
           <IconButton
-            onPress={() => navigation.navigate('Achievements', { user_id: id, userProfile })}
+            onPress={() =>
+              navigation.navigate('Achievements', { user_id: id, userProfile, titleName: userProfile.name })
+            }
             label={'See more'}
             icon={'chevron-right'}
             style={styles.headerButton}

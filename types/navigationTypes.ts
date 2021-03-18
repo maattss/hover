@@ -21,12 +21,11 @@ export type RootTabParamList = {
 export type FeedStackParamList = {
   Feed: undefined;
   UserProfile: { user_id: string; titleName: string };
-  Achievements: { user_id: string; userProfile: UserProfile };
+  Achievements: { user_id: string; userProfile: UserProfile; titleName: string };
 } & NotificationsStackParamList;
 
 export type NotificationsStackParamList = {
   Notifications: undefined;
-  UserProfile: { user_id: string; titleName: string };
 };
 
 export type ChallengeStackParamList = {
@@ -39,7 +38,7 @@ export type ChallengeStackParamList = {
     user_id: string;
   };
   UserProfile: { user_id: string; titleName: string };
-  Achievements: { user_id: string; userProfile: UserProfile };
+  Achievements: { user_id: string; userProfile: UserProfile; titleName: string };
 };
 
 export type NewChallengeStackParamList = {
