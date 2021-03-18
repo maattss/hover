@@ -20,9 +20,8 @@ export type RootTabParamList = {
 
 export type FeedStackParamList = {
   Feed: undefined;
-  UserProfile: { user_id: string; titleName: string };
-  Achievements: { user_id: string; userProfile: UserProfile; titleName: string };
-} & NotificationsStackParamList;
+} & UserProfileStackParamList &
+  NotificationsStackParamList;
 
 export type NotificationsStackParamList = {
   Notifications: undefined;
@@ -37,9 +36,7 @@ export type ChallengeStackParamList = {
   OngoingChallenges: {
     user_id: string;
   };
-  UserProfile: { user_id: string; titleName: string };
-  Achievements: { user_id: string; userProfile: UserProfile; titleName: string };
-};
+} & UserProfileStackParamList;
 
 export type NewChallengeStackParamList = {
   PickUsers: {
@@ -72,16 +69,17 @@ export type HoverStackParamList = {
 
 export type StatisticsStackParamList = {
   Leaderboard: undefined;
-  UserProfile: { user_id: string; titleName: string };
-  Achievements: { user_id: string; userProfile: UserProfile };
-};
+} & UserProfileStackParamList;
 
 export type ProfileStackParamList = {
   Profile: undefined;
-  UserProfile: { user_id: string; titleName: string };
-  Achievements: { user_id: string; userProfile: UserProfile };
-} & SettingsNavigationStackParamList;
+} & UserProfileStackParamList &
+  SettingsNavigationStackParamList;
 
+export type UserProfileStackParamList = {
+  UserProfile: { user_id: string; titleName: string };
+  Achievements: { user_id: string; userProfile: UserProfile; titleName: string };
+};
 export type SettingsNavigationStackParamList = {
   Settings: undefined;
   'Edit Profile': undefined;
