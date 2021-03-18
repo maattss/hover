@@ -1,0 +1,15 @@
+query Achievements($user_id: String!) {
+  total_acheivements: achievement_aggregate {
+    aggregate {
+      count(columns: id)
+    }
+  }
+  unachievedachievements(args: { uid: $user_id }) {
+    ...achievementFragment
+  }
+  user_achievement(where: { user_id: { _eq: $user_id } }) {
+    achievement {
+      ...achievementFragment
+    }
+  }
+}

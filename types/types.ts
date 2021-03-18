@@ -1338,6 +1338,8 @@ export type Challenge = {
   /** An object relationship */
   feed?: Maybe<Feed>;
   id: Scalars['Int'];
+  /** A computed field, executes function "challenge_participant_count" */
+  participant_count?: Maybe<Scalars['bigint']>;
   rules: Scalars['json'];
   start_date: Scalars['date'];
   state: Challenge_State_Enum;
