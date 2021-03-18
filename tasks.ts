@@ -70,7 +70,7 @@ TaskManager.defineTask(LOCATION_BACKGROUND_TRACKING, async ({ data, error }) => 
           const previousPushUpdate = await readPreviousOutsideGeofencePushTimestamp();
 
           // Send push notification if it is more than 5 minutes since previous "Outside geofence" push notification was sent.
-          if ((pushToken && !previousPushUpdate) || (pushToken && previousPushUpdate < Date.now() - 5 * 60)) {
+          if ((pushToken && !previousPushUpdate) || (pushToken && previousPushUpdate < Date.now() - 5 * 60 * 1000)) {
             sendPushNotification(
               pushToken,
               'Oh noo! You are outside the Hover zone...',
@@ -119,7 +119,7 @@ TaskManager.defineTask(NOTIFICATION_WHEN_INSIDE_GEOFENCE, async () => {
         if (
           !previousInsideGeofencePush ||
           insideGeoFence.id !== previousInsideGeofencePush.geoFenceId ||
-          previousInsideGeofencePush.timestamp < Date.now() - 60 * 60 * 24
+          previousInsideGeofencePush.timestamp < Date.now() - 60 * 60 * 12 * 1000
         ) {
           const pushToken = await readPushToken();
           if (pushToken) {
