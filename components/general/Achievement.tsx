@@ -6,9 +6,13 @@ import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import { GeoFenceCategory } from '../../types/geoFenceTypes';
 import { AchievementFragmentFragment } from '../../graphql/Fragments.generated';
 import { Achievement_Type_Enum } from '../../types/types';
+import * as Progress from 'react-native-progress';
+import { hexToRGB } from '../../theme/colors';
 
 interface AchievementProps {
   achievement: AchievementFragmentFragment;
+  achieved?: boolean;
+  progress?: number;
 }
 export const getAchievementIcon = (achievement: AchievementFragmentFragment) => {
   switch (achievement.achievement_type) {
@@ -38,25 +42,32 @@ export const getCategoryIconName = (category: GeoFenceCategory | undefined) => {
   }
 };
 
-export const getAchievementColor = (level: number) => {
+export const getAchievementColor = (level: number, achieved = true) => {
+  let color;
   switch (level) {
     case 1:
-      return Colors.gold;
+      color = Colors.gold;
+      break;
     case 2:
-      return Colors.silver;
+      color = Colors.silver;
+      break;
     case 3:
-      return Colors.bronze;
+      color = Colors.bronze;
+      break;
     default:
-      return Colors.gray800;
+      color = Colors.gray800;
+      break;
   }
+  if (!achieved) color = hexToRGB(color, 0.4);
+  return color;
 };
 
-const Achievement: React.FC<AchievementProps> = ({ achievement }: AchievementProps) => {
+const Achievement: React.FC<AchievementProps> = ({ achievement, achieved = true, progress }: AchievementProps) => {
   const trophyBorderColor = {
-    borderColor: getAchievementColor(achievement.level),
+    borderColor: getAchievementColor(achievement.level, achieved),
   };
   const iconColor = {
-    color: getAchievementColor(achievement.level),
+    color: getAchievementColor(achievement.level, achieved),
   };
 
   return (
@@ -65,6 +76,17 @@ const Achievement: React.FC<AchievementProps> = ({ achievement }: AchievementPro
         <FAIcon name={getAchievementIcon(achievement)} style={[styles.icon, iconColor]}></FAIcon>
       </View>
       <Text style={styles.text}>{achievement.name}</Text>
+      {!achieved && (
+        <Progress.Bar
+          style={styles.progress}
+          progress={progress ?? 0}
+          height={10}
+          width={100}
+          borderColor={Colors.blue}
+          color={Colors.blue}
+          borderWidth={2}
+        />
+      )}
     </View>
   );
 };
@@ -91,6 +113,9 @@ const styles = StyleSheet.create({
     fontSize: 45,
     textAlign: 'center',
     color: Colors.almostWhite,
+  },
+  progress: {
+    marginVertical: Spacing.smaller,
   },
 });
 

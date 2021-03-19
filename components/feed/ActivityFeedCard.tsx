@@ -74,7 +74,7 @@ const ActivityFeedCard: React.FC<ActivityFeedCardProps> = ({ data }: ActivityFee
         </View>
       )}
       <View style={styles.innerCard}>
-        <View style={{ paddingTop: Spacing.smaller }}>
+        <View style={[{ paddingTop: Spacing.smaller }, data.activity.friend ? { width: '55%' } : {}]}>
           <View style={[styles.flexRowLeft, { marginBottom: Spacing.smaller }]}>
             <FAIcon name={'stopwatch'} style={styles.infoIcons} />
             <Text style={styles.label}>{data.activity.duration}</Text>
