@@ -102,6 +102,7 @@ const HoverMap: React.FC<HoverMapProps> = ({ customWidth, customHeight }: HoverM
         mapType={chosenMapType}
         initialRegion={defaultRegion}
         showsUserLocation
+        showsMyLocationButton={false}
         style={{ width: width, height: height }}
         onUserLocationChange={userLocationChange}
         onDoublePress={() => setCentreOnUser(false)}
