@@ -1,5 +1,6 @@
 import { ListUserFragmentFragment } from '../graphql/Fragments.generated';
 import { ChallengeRules } from './challengeTypes';
+import { UserProfile } from './profileTypes';
 import { Challenge_Type_Enum } from './types';
 
 export type RootStackParamList = {
@@ -19,12 +20,11 @@ export type RootTabParamList = {
 
 export type FeedStackParamList = {
   Feed: undefined;
-  UserProfile: { user_id: string; titleName: string };
-} & NotificationsStackParamList;
+} & UserProfileStackParamList &
+  NotificationsStackParamList;
 
 export type NotificationsStackParamList = {
   Notifications: undefined;
-  UserProfile: { user_id: string; titleName: string };
 };
 
 export type ChallengeStackParamList = {
@@ -36,8 +36,7 @@ export type ChallengeStackParamList = {
   OngoingChallenges: {
     user_id: string;
   };
-  UserProfile: { user_id: string; titleName: string };
-};
+} & UserProfileStackParamList;
 
 export type NewChallengeStackParamList = {
   PickUsers: {
@@ -70,14 +69,17 @@ export type HoverStackParamList = {
 
 export type StatisticsStackParamList = {
   Leaderboard: undefined;
-  UserProfile: { user_id: string; titleName: string };
-};
+} & UserProfileStackParamList;
 
 export type ProfileStackParamList = {
   Profile: undefined;
-  UserProfile: { user_id: string; titleName: string };
-} & SettingsNavigationStackParamList;
+} & UserProfileStackParamList &
+  SettingsNavigationStackParamList;
 
+export type UserProfileStackParamList = {
+  UserProfile: { user_id: string; titleName: string };
+  Achievements: { user_id: string; userProfile: UserProfile; titleName: string };
+};
 export type SettingsNavigationStackParamList = {
   Settings: undefined;
   'Edit Profile': undefined;

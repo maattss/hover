@@ -1,0 +1,12 @@
+query Achievements($user_id: String!) {
+  unachievedachievements(args: { uid: $user_id }, order_by: { achievement_type: desc, level: desc }) {
+    ...achievementFragment
+  }
+  user(id: $user_id) {
+    user_achievement(order_by: { created_at: desc, achievement: { level: desc } }) {
+      achievement {
+        ...achievementFragment
+      }
+    }
+  }
+}

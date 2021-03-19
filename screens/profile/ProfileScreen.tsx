@@ -19,19 +19,21 @@ import { convertToUserProfile, defaultUserProfile } from '../../helpers/objectMa
 import Error from '../../components/general/Error';
 import Loading from '../../components/general/Loading';
 import { getGeoFenceImage } from '../../helpers/geoFenceCalculations';
-import { RouteProp } from '@react-navigation/native';
-import { FeedStackParamList, ProfileStackParamList } from '../../types/navigationTypes';
+import { RouteProp, useNavigation } from '@react-navigation/native';
+import { ChallengeStackParamList, FeedStackParamList, ProfileStackParamList } from '../../types/navigationTypes';
 import ActivityFeedCard from '../../components/feed/ActivityFeedCard';
 import { useProfileActivitiesQuery } from '../../graphql/queries/ProfileActivities.generated';
 import { ProfileActivityFragmentFragment } from '../../graphql/Fragments.generated';
 import { ActivityFeedData, FeedCategory } from '../../types/feedTypes';
 import { Avatar } from 'react-native-elements';
+import { IconButton } from '../../components/general/Button';
 
 type FeedRouteProp = RouteProp<FeedStackParamList, 'UserProfile'>;
+type ChallengeRouteProp = RouteProp<ChallengeStackParamList, 'UserProfile'>;
 type ProfileRouteProp = RouteProp<ProfileStackParamList, 'Profile'>;
 
 type Props = {
-  route: ProfileRouteProp | FeedRouteProp;
+  route: ProfileRouteProp | FeedRouteProp | ChallengeRouteProp;
 };
 
 const getScore = (category: GeoFenceCategory, userProfile: UserProfile) => {
@@ -69,6 +71,7 @@ const ProfileScreen: React.FC<Props> = ({ route }: Props) => {
       setRefreshing(false);
     }, []);
 
+    const navigation = useNavigation();
     const { loading: userLoading, error: userError, data: userData, refetch: userRefetch } = useProfileUserQuery({
       variables: {
         id: id,
@@ -234,7 +237,17 @@ const ProfileScreen: React.FC<Props> = ({ route }: Props) => {
             <Text style={styles.bio}>{userProfile.bio}</Text>
           </View>
         </View>
-        <Text style={styles.header}>Achievements</Text>
+        <View style={{ flex: 1, flexDirection: 'row' }}>
+          <Text style={styles.header}>Achievements</Text>
+          <IconButton
+            onPress={() =>
+              navigation.navigate('Achievements', { user_id: id, userProfile, titleName: userProfile.name })
+            }
+            label={'See more'}
+            icon={'chevron-right'}
+            style={styles.headerButton}
+          />
+        </View>
         {userProfile.achievements.length < 1 ? (
           <View style={styles.noData}>
             <Text style={{ ...Typography.largeBodyText }}>No achivements...</Text>
@@ -244,6 +257,7 @@ const ProfileScreen: React.FC<Props> = ({ route }: Props) => {
             {renderAchievements()}
           </ScrollView>
         )}
+
         <Text style={styles.header}>Score</Text>
         <View style={styles.scoreContainer}>
           <View style={styles.categoryScore}>{renderScore()}</View>
@@ -287,6 +301,15 @@ const styles = StyleSheet.create({
     marginTop: Spacing.base,
     marginBottom: Spacing.smaller,
     marginLeft: Spacing.smaller,
+  },
+  headerButton: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    backgroundColor: Colors.transparent,
+    marginTop: Spacing.base,
+    marginBottom: Spacing.smaller,
+    paddingRight: Spacing.smaller,
   },
   infoContainer: {
     padding: Spacing.base,

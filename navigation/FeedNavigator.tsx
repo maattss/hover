@@ -7,6 +7,7 @@ import ProfileScreen from '../screens/profile/ProfileScreen';
 import BadgeIcon from '../components/general/BadgeIcon';
 import useNotification from '../hooks/useNotification';
 import { HeaderIcon } from '../components/general/HeaderIcon';
+import AchievementScreen from '../screens/profile/AchievementScreen';
 
 const FeedStack = createStackNavigator<FeedStackParamList>();
 
@@ -39,6 +40,13 @@ const FeedNavigator: React.FC = () => {
         component={ProfileScreen}
         options={({ route }) => ({
           title: `${route.params.titleName}'s Profile`,
+        })}
+      />
+      <FeedStack.Screen
+        name="Achievements"
+        component={AchievementScreen}
+        options={({ route }) => ({
+          title: `${route.params.titleName}'s Achievements`,
         })}
       />
     </FeedStack.Navigator>
