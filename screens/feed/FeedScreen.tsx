@@ -106,7 +106,7 @@ const FeedScreen: React.FC = () => {
       style={styles.container}
       data={feedElements}
       renderItem={(item) => renderItem(item)}
-      keyExtractor={(_, index) => index.toString()}
+      keyExtractor={(item) => item.id.toString()}
       refreshControl={
         <RefreshControl
           refreshing={refreshing}
