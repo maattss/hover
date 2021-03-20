@@ -6,8 +6,8 @@ There is also another repository containing code for backend cloud functions whi
 
 ## The concept
 
-This concept is inspired by an existing application called [Hold](https://www.hold.app/). In short, players get points in Hold for not using their phone. Hover uses the same principle, but the points are awarded based on their location. Meaning the players get points when they are located at certain spots in the real world. The points can then later be used to receive rewards, such as discounts or free items.
+Hover is a pervasive game where your location is used as the input. In short, players get points for being at certain locations in the real world. The spots are based on places that could improve your well-being, such as training centers, schools, libraries, museums, and art galleries. They are classified into four different categories corresponding to their purpose; health, knowledge, cultural and social. For example, training centers will be categorized as health, school as knowledge, museums and concert venues as culture, and bowling alleys and restaurants as social.
 
-The spots are based on locations that could improve a person’s well-being, such as training centers, schools, libraries, museums, and art galleries. The locations are classified into four different categories corresponding to their purpose; health, knowledge, cultural and social. For example, training centers will be categorized as health, school as knowledge, museums and concert venues as culture, and bowling alleys and restaurants as social. The rewards and points will be summarized both for the individual categories and to a total score. In this way, the players can focus on doing their best in a specific category or try to get the best overall score.
+Achievements and points are awarded based on individual categories and total score. In this way, you can focus on doing your best in a specific category or try to get the best overall score. Players can also challenge each other in pre-defined challenges where they decide the rules themselves
 
 Developed and maintained by [Mats Tyldum](https://github.com/maattss) and [Siri Mykland](https://github.com/sirimykland)
