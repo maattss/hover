@@ -64,7 +64,7 @@ const SuggestGeofenceScreen: React.FC<SettingsProps> = ({ navigation }: Settings
         <View style={styles.categoryButtonsContainer}>{renderCategories()}</View>
         <Text style={styles.label}>Location</Text>
         <TextInput
-          placeholder={'What location would you like for us to add?'}
+          placeholder={'Which location would you like us to add?'}
           placeholderTextColor={Colors.gray600}
           value={location}
           onChangeText={(val) => setLocation(val)}
