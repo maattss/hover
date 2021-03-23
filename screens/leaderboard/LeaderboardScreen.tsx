@@ -19,14 +19,14 @@ const STATIC_CATEGORIES: PickerItemProps[] = [
   { label: 'Social', value: 'SOCIAL' },
 ];
 
-const STATIC_TIMESPAN: PickerItemProps[] = [
-  { label: 'All Time', value: '' },
-  { label: 'Today', value: moment().utc().startOf('day').toISOString() },
-  { label: 'Past 7 days', value: moment().utc().subtract(1, 'week').startOf('day').toISOString() },
-  { label: 'Past 30 days', value: moment().utc().subtract(1, 'month').startOf('day').toISOString() },
-];
-
 const LeaderboardScreen: React.FC = () => {
+  const TIMESPAN: PickerItemProps[] = [
+    { label: 'All Time', value: '' },
+    { label: 'Today', value: moment().utc().startOf('day').toISOString() },
+    { label: 'Past 7 days', value: moment().utc().subtract(1, 'week').startOf('day').toISOString() },
+    { label: 'Past 30 days', value: moment().utc().subtract(1, 'month').startOf('day').toISOString() },
+  ];
+
   const [category, setCategory] = useState<number | string>('');
   const [editCategory, setEditCategory] = useState(false);
   const [timespan, setTimespan] = useState<number | string>(
@@ -68,7 +68,7 @@ const LeaderboardScreen: React.FC = () => {
                 />
 
                 <FilterPickerAndriod
-                  items={STATIC_TIMESPAN}
+                  items={TIMESPAN}
                   selectedValue={timespan}
                   onValueChange={(value) => {
                     setTimespan(value);
@@ -113,9 +113,7 @@ const LeaderboardScreen: React.FC = () => {
                     setEditTimespan(true);
                     setEditCategory(false);
                   }}>
-                  <Text style={{ ...Buttons.buttonText }}>
-                    {STATIC_TIMESPAN.find((obj) => obj.value === timespan)?.label}
-                  </Text>
+                  <Text style={{ ...Buttons.buttonText }}>{TIMESPAN.find((obj) => obj.value === timespan)?.label}</Text>
                   <FAIcon name="clock" style={styles.filterIcon} />
                 </TouchableOpacity>
               </View>
@@ -136,7 +134,7 @@ const LeaderboardScreen: React.FC = () => {
         )}
         {editTimespan && !editCategory && (
           <FilterPickerIos
-            items={STATIC_TIMESPAN}
+            items={TIMESPAN}
             selectedValue={timespan}
             onValueChange={(value) => {
               setTimespan(value);
