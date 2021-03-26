@@ -72,7 +72,10 @@ const SuggestGeofenceScreen: React.FC<SettingsProps> = ({ navigation }: Settings
           multiline={true}
           numberOfLines={5}
         />
-        <CustomButton onPress={async () => await onSubmit()}>Send Suggestion</CustomButton>
+        <CustomButton onPress={async () => await onSubmit()}>
+          Send Suggestion {'  '}
+          <FAIcon name={'external-link-alt'} style={{ ...Typography.icon, fontSize: 20 }} />
+        </CustomButton>
       </View>
     </KeyboardAvoider>
   );
