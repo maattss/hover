@@ -18,7 +18,7 @@ interface AchievementFeedCardProps {
 const AchievementFeedCard: React.FC<AchievementFeedCardProps> = ({ data }: AchievementFeedCardProps) => {
   const auth = useAuthentication();
   const getName = () => {
-    if (auth.user?.uid === data.user.id) return 'Your activity';
+    if (auth.user?.uid === data.user.id) return 'Your achievement';
     return data.user.name;
   };
 
