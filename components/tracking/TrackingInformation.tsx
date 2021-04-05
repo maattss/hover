@@ -26,7 +26,7 @@ const TrackingInformation: React.FC<Props> = ({ collabState }: Props) => {
             <Text style={styles.collabIconText}>2x points</Text>
           </View>
         )}
-        <View>
+        <View style={styles.trackingInfoText}>
           {tracking.trackingState !== TrackingState.TRACKINGPAUSED && (
             <Text style={styles.trackingHeader}>Tracking...</Text>
           )}
@@ -90,17 +90,19 @@ const styles = StyleSheet.create({
     borderStyle: 'solid',
     borderWidth: 1,
     backgroundColor: Colors.gray900,
-    height: '75%',
     borderColor: Colors.gold,
     borderRadius: Spacing.smaller,
     padding: Spacing.smaller,
-    marginLeft: -Spacing.extraLarge,
+    marginLeft: -Spacing.largest,
     marginRight: Spacing.base,
   },
   collabIconText: {
     ...Typography.largeBodyText,
     fontWeight: 'bold',
     color: Colors.gold,
+  },
+  trackingInfoText: {
+    maxWidth: '61%',
   },
   trackingHeader: {
     ...Typography.headerText,
