@@ -11,7 +11,6 @@ import DisclaimerScreen from '../screens/disclaimer/DisclaimerScreen';
 import useTracking from '../hooks/useTracking';
 
 export const RootStack = createStackNavigator<RootStackParamList>();
-
 const AppNavigation: React.FC = () => {
   const { user, isLoadingUser } = useAuthentication();
   const locationPermission = useTracking().locationPermission;

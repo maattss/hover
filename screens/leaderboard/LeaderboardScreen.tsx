@@ -10,6 +10,7 @@ import { FontAwesome5 as FAIcon } from '@expo/vector-icons';
 import moment from 'moment';
 import Loading from '../../components/general/Loading';
 import useAuthentication from '../../hooks/useAuthentication';
+import * as Analytics from 'expo-firebase-analytics';
 
 const STATIC_CATEGORIES: PickerItemProps[] = [
   { label: 'All Categories', value: '' },
@@ -42,6 +43,10 @@ const LeaderboardScreen: React.FC = () => {
   });
   const [highscores, setHighscores] = useState<Item[]>([]);
   const id = useAuthentication().user?.uid;
+
+  useEffect(() => {
+    Analytics.setCurrentScreen('Leaderboard');
+  }, []);
   useEffect(() => {
     if (highscoreData) setHighscores(convertToHighscoreList(highscoreData, id));
   }, [highscoreData]);

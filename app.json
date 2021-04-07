@@ -27,7 +27,8 @@
         "NSLocationAlwaysUsageDescription": "Your location will only be used to determine if you are in a valid geofence."
       },
       "bundleIdentifier": "com.hoverapp.hover",
-      "buildNumber": "1.0.3"
+      "buildNumber": "1.0.3",
+      "googleServicesFile": "./GoogleService-Info.plist"
     },
     "android": {
       "adaptiveIcon": {
