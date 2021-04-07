@@ -90,7 +90,7 @@ const PendingChallengeCard: React.FC<PendingChallengeCardProps> = ({ challenge }
         user_id={challenge.created_by.id}
         name={challenge.created_by.name}
         onPress={() =>
-          Analytics.logEvent('OpenProfile', {
+          Analytics.logEvent('visit_profile', {
             navigateFrom: 'ChallengeScreen',
             user: challenge.created_by.id,
             navigateTo: 'ProfileScreen',
@@ -120,7 +120,7 @@ const PendingChallengeCard: React.FC<PendingChallengeCardProps> = ({ challenge }
               user_id={opponent.user.id}
               name={opponent.user.name}
               onPress={() =>
-                Analytics.logEvent('OpenProfile', {
+                Analytics.logEvent('visit_profile', {
                   navigateFrom: 'ChallengeScreen',
                   user: opponent.user.id,
                   navigateTo: 'ProfileScreen',

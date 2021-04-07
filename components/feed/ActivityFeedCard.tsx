@@ -53,7 +53,7 @@ const ActivityFeedCard: React.FC<ActivityFeedCardProps> = ({ data }: ActivityFee
         user_id={data.user.id}
         name={data.user.name}
         onPress={() =>
-          Analytics.logEvent('OpenProfile', {
+          Analytics.logEvent('visit_profile', {
             navigateFrom: 'FeedScreen',
             user: data.user.id,
             navigateTo: 'ProfileScreen',

@@ -58,7 +58,7 @@ const Leaderboard: React.FC<LeaderboardProps> = (props: LeaderboardProps) => {
         name={item.name}
         key={item.id}
         onPress={() =>
-          Analytics.logEvent('OpenProfile', {
+          Analytics.logEvent('visit_profile', {
             navigateFrom: 'LeaderboardScreen',
             user: item.id,
             navigateTo: 'ProfileScreen',

@@ -30,7 +30,7 @@ const ChallengeFeedCard: React.FC<ChallengeFeedCardProps> = ({ data }: Challenge
       user_id={item.id}
       name={item.name}
       onPress={() =>
-        Analytics.logEvent('OpenProfile', {
+        Analytics.logEvent('visit_profile', {
           navigateFrom: 'FeedScreen',
           user: data.user.id,
           navigateTo: 'ProfileScreen',
@@ -61,7 +61,7 @@ const ChallengeFeedCard: React.FC<ChallengeFeedCardProps> = ({ data }: Challenge
         user_id={data.user.id}
         name={data.user.name}
         onPress={() =>
-          Analytics.logEvent('OpenProfile', {
+          Analytics.logEvent('visit_profile', {
             navigateFrom: 'FeedScreen',
             user: data.user.id,
             navigateTo: 'ProfileScreen',

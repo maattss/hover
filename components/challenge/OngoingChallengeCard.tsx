@@ -47,7 +47,7 @@ export const ChallengeOpponents: React.FC<ChallengeOpponentsProps> = ({ challeng
               user_id={opponent.user.id}
               name={opponent.user.name}
               onPress={() =>
-                Analytics.logEvent('OpenProfile', {
+                Analytics.logEvent('visit_profile', {
                   navigateFrom: 'ChallengeScreen',
                   user: opponent.user.id,
                   navigateTo: 'ProfileScreen',
@@ -96,7 +96,7 @@ const OngoingChallengeCard: React.FC<OngoingChallengeCardProps> = ({ challenge }
         user_id={challenge.created_by.id}
         name={challenge.created_by.name}
         onPress={() =>
-          Analytics.logEvent('OpenProfile', {
+          Analytics.logEvent('visit_profile', {
             navigateFrom: 'ChallengeScreen',
             user: challenge.created_by.id,
             navigateTo: 'ProfileScreen',

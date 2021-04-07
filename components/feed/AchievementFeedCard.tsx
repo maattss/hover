@@ -27,7 +27,7 @@ const AchievementFeedCard: React.FC<AchievementFeedCardProps> = ({ data }: Achie
             user_id={data.user.id}
             name={data.user.name}
             onPress={() =>
-              Analytics.logEvent('OpenProfile', {
+              Analytics.logEvent('visit_profile', {
                 navigateFrom: 'FeedScreen',
                 user: data.user.id,
                 navigateTo: 'ProfileScreen',

@@ -96,7 +96,7 @@ const Reaction: React.FC<ReactionProps> = (props: ReactionProps) => {
         name={like.user.name}
         onPress={() => {
           setModalVisible(false);
-          Analytics.logEvent('OpenProfile', {
+          Analytics.logEvent('visit_profile', {
             navigateFrom: 'FeedScreen',
             user: like.user.id,
             navigateTo: 'ProfileScreen',
