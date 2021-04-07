@@ -5,6 +5,8 @@ import { Subscription } from '@unimodules/core';
 import { useUpdateUserPushTokenMutation } from '../../graphql/mutations/UpdateUserPushToken.generated';
 import useAuthentication from '../../hooks/useAuthentication';
 import { storePushToken } from '../../helpers/storage';
+import * as Analytics from 'expo-firebase-analytics';
+import { NotificationResponse } from 'expo-notifications';
 
 interface Props {
   children: ReactNode;
@@ -60,9 +62,15 @@ export const PushNotificationProvider = ({ children }: Props) => {
     });
 
     // This listener is fired whenever a user taps on or interacts with a notification (works when app is foregrounded, backgrounded, or killed)
-    responseListener.current = Notifications.addNotificationResponseReceivedListener((response) => {
-      console.log(response);
-    });
+    responseListener.current = Notifications.addNotificationResponseReceivedListener(
+      (response: NotificationResponse) => {
+        console.log(response);
+        Analytics.logEvent('notification_open_event', {
+          user: id,
+          purpose: 'Count number of times a user opens the app when push notification is received.',
+        });
+      },
+    );
 
     return () => {
       if (notificationListener.current) Notifications.removeNotificationSubscription(notificationListener.current);
