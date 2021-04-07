@@ -59,15 +59,21 @@ export const PushNotificationProvider = ({ children }: Props) => {
     // This listener is fired whenever a notification is received while the app is foregrounded
     notificationListener.current = Notifications.addNotificationReceivedListener((notification) => {
       setNotification(notification);
+      Analytics.logEvent('push_notification_event', {
+        user: id,
+        action: 'received',
+        purpose: 'User received push notification.',
+      });
     });
 
     // This listener is fired whenever a user taps on or interacts with a notification (works when app is foregrounded, backgrounded, or killed)
     responseListener.current = Notifications.addNotificationResponseReceivedListener(
       (response: NotificationResponse) => {
         console.log(response);
-        Analytics.logEvent('notification_open_event', {
+        Analytics.logEvent('push_notification_event', {
           user: id,
-          purpose: 'Count number of times a user opens the app when push notification is received.',
+          action: 'open',
+          purpose: 'User open push notification.',
         });
       },
     );
