@@ -45,7 +45,7 @@ const LeaderboardScreen: React.FC = () => {
   const id = useAuthentication().user?.uid;
 
   useEffect(() => {
-    Analytics.setCurrentScreen('Leaderboard');
+    Analytics.setCurrentScreen('Leaderboard', 'Leaderboard');
   }, []);
   useEffect(() => {
     if (highscoreData) setHighscores(convertToHighscoreList(highscoreData, id));
