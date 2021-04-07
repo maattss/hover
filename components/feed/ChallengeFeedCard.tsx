@@ -11,6 +11,7 @@ import { getAchievementColor } from '../general/Achievement';
 import TouchableProfile from '../general/TouchableProfile';
 import Reaction from './Reaction';
 import useAuthentication from '../../hooks/useAuthentication';
+import * as Analytics from 'expo-firebase-analytics';
 
 type ChallengeFeedCardProps = {
   data: ChallengeFeedData;
@@ -25,7 +26,17 @@ const ChallengeFeedCard: React.FC<ChallengeFeedCardProps> = ({ data }: Challenge
   };
 
   const renderItem = (item: Item, index: number) => (
-    <TouchableProfile user_id={item.id} name={item.name}>
+    <TouchableProfile
+      user_id={item.id}
+      name={item.name}
+      onPress={() =>
+        Analytics.logEvent('OpenProfile', {
+          navigateFrom: 'FeedScreen',
+          user: data.user.id,
+          navigateTo: 'ProfileScreen',
+          purpose: 'Viewing more info on a user',
+        })
+      }>
       <View key={item.id}>
         <ChallengeLeaderboardRow item={item} index={index} />
       </View>
@@ -46,7 +57,17 @@ const ChallengeFeedCard: React.FC<ChallengeFeedCardProps> = ({ data }: Challenge
       <View style={styles.topBar}>
         <Text style={{ ...Typography.headerText }}>We have a winner!</Text>
       </View>
-      <TouchableProfile user_id={data.user.id} name={data.user.name}>
+      <TouchableProfile
+        user_id={data.user.id}
+        name={data.user.name}
+        onPress={() =>
+          Analytics.logEvent('OpenProfile', {
+            navigateFrom: 'FeedScreen',
+            user: data.user.id,
+            navigateTo: 'ProfileScreen',
+            purpose: 'Viewing more info on a user',
+          })
+        }>
         <View style={styles.topBar}>
           <View style={styles.infoContainer}>
             <Text style={styles.descriptionText}>

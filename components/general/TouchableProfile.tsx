@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import { TouchableOpacity } from 'react-native';
 import useAuthentication from '../../hooks/useAuthentication';
 import { ProfileStackParamList, RootTabParamList } from '../../types/navigationTypes';
-import * as Analytics from 'expo-firebase-analytics';
+
 type BottomNavigationProp = BottomTabNavigationProp<RootTabParamList>;
 type ProfileNavigationProp = BottomTabNavigationProp<ProfileStackParamList>;
 
@@ -33,10 +33,6 @@ const TouchableProfile: React.FC<Props> = ({ user_id, children, name, onPress }:
         titleName: name,
       });
     }
-    await Analytics.logEvent('VisitProfile', {
-      name: 'UserProfile',
-      purpose: 'Opens the another users profile',
-    });
   };
   return (
     <TouchableOpacity
