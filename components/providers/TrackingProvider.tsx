@@ -203,6 +203,12 @@ export const TrackingProvider = ({ children }: Props) => {
           setFriendId(trackingInfo.friendId ?? '');
           setTrackingWithfriendId(trackingInfo.trackingWithFriendId ?? 0);
           startBackgroundUpdate();
+
+          await Analytics.logEvent('tracking_event_restore_tracking', {
+            action: 'restoreTracking',
+            userId: userId,
+            purpose: 'Tracking is restored and resumed after crash or kill.',
+          });
         }
       }
     };
