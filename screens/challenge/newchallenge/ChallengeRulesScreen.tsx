@@ -12,6 +12,7 @@ import { GeoFenceCategory } from '../../../types/geoFenceTypes';
 import { getChallengeTypeFields, getChallengeIcon } from '../../../helpers/challengeMappers';
 import { generateRuleChallengeDescription } from '../../../helpers/decriptionHelper';
 import KeyboardAvoider from '../../../components/keyboard/KeyboardAvoider';
+import * as Analytics from 'expo-firebase-analytics';
 
 type ChallengeRulesRouteProp = RouteProp<NewChallengeStackParamList, 'ChallengeRules'>;
 type NavigationProp = StackNavigationProp<NewChallengeStackParamList>;
@@ -30,6 +31,14 @@ const ChallengeRulesScreen: React.FC<Props> = ({ route, navigation }: Props) => 
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [isDisabled, setDisabled] = useState(true);
   const fields = getChallengeTypeFields(route.params.challenge_type);
+
+  useEffect(() => {
+    Analytics.logEvent('new_challenge_pick_rules', {
+      user: route.params.user_id,
+      screen: 'ChallengeRulesScreen',
+      purpose: 'Track the progress of creating av new challenge',
+    });
+  }, []);
 
   const showDatePicker = () => setDatePickerVisibility(true);
   const hideDatePicker = () => setDatePickerVisibility(false);

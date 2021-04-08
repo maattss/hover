@@ -6,6 +6,7 @@ import { HighscoreQuery } from '../../graphql/queries/Highscore.generated';
 import { defaultUserProfile } from '../../helpers/objectMappers';
 import { Colors, Spacing, Typography } from '../../theme';
 import TouchableProfile from '../general/TouchableProfile';
+import * as Analytics from 'expo-firebase-analytics';
 
 interface SortParam {
   data: Item[];
@@ -52,7 +53,18 @@ const Leaderboard: React.FC<LeaderboardProps> = (props: LeaderboardProps) => {
     const rowColor = item.specialRow ? Colors.blueTransparent : index % 2 === 0 ? evenColor : oddColor;
 
     const rowJSx = (
-      <TouchableProfile user_id={item.id} name={item.name} key={item.id}>
+      <TouchableProfile
+        user_id={item.id}
+        name={item.name}
+        key={item.id}
+        onPress={() =>
+          Analytics.logEvent('visit_profile', {
+            navigateFrom: 'LeaderboardScreen',
+            user: item.id,
+            navigateTo: 'ProfileScreen',
+            purpose: 'Viewing more info on a user',
+          })
+        }>
         <View key={item.id} style={[styles.row, props.rowStyle, { backgroundColor: rowColor }]}>
           <View style={styles.left}>
             <Text

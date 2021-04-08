@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-extra-non-null-assertion */
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StyleSheet, View, Text, Image, Alert } from 'react-native';
 import Button from '../../../components/general/Button';
 import OpponentsRowList from '../../../components/challenge/OpponentsList';
@@ -13,6 +13,7 @@ import { Challenge_Participant_Insert_Input, Challenge_Participant_State_Enum } 
 import Divider from '../../../components/general/Divider';
 import { generateNewChallengeDescription } from '../../../helpers/decriptionHelper';
 import { getGeoFenceImage } from '../../../helpers/geoFenceCalculations';
+import * as Analytics from 'expo-firebase-analytics';
 
 type NewChallengeRouteProp = RouteProp<NewChallengeStackParamList, 'NewChallengeOverview'>;
 type NavigationProp = StackNavigationProp<RootTabParamList, 'Challenge'>;
@@ -23,6 +24,14 @@ type Props = {
 };
 
 const NewChallengeOverviewScreen: React.FC<Props> = ({ route, navigation }: Props) => {
+  useEffect(() => {
+    Analytics.logEvent('new_challenge_overview', {
+      user: route.params.user_id,
+      navigateTo: 'NewChallengeOverviewScreen',
+      purpose: 'Track the progress of creating av new challenge',
+    });
+  }, []);
+
   const createNewChallenge = () =>
     createChallenge({
       variables: {
@@ -37,6 +46,11 @@ const NewChallengeOverviewScreen: React.FC<Props> = ({ route, navigation }: Prop
         navigation.navigate('Challenge');
         console.log('Challenge inserted to db', response);
         Alert.alert('Upload complete', 'Challenge uploaded successfully!');
+        Analytics.logEvent('new_challenge_created', {
+          user: route.params.user_id,
+          screen: 'NewChallengeOverviewScreen',
+          purpose: 'Track the progress of creating av new challenge',
+        });
       })
       .catch((error) => console.error('Mutation error', error.message));
 

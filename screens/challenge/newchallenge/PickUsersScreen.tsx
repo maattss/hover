@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Alert, FlatList, ViewStyle } from 'react-native';
 import { Avatar, CheckBox } from 'react-native-elements';
 import Loading from '../../../components/general/Loading';
@@ -10,6 +10,7 @@ import { Buttons, Colors, Spacing, Typography } from '../../../theme';
 import Button from '../../../components/general/Button';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { defaultUserProfile } from '../../../helpers/objectMappers';
+import * as Analytics from 'expo-firebase-analytics';
 
 type PickUsersRouteProp = RouteProp<NewChallengeStackParamList, 'PickUsers'>;
 type NavigationProp = StackNavigationProp<NewChallengeStackParamList>;
@@ -29,6 +30,14 @@ const PickUsersScreen: React.FC<Props> = ({
   const { data: friends, loading } = useGetFriendsQuery({
     variables: { user_id: user_id },
   });
+
+  useEffect(() => {
+    Analytics.logEvent('new_challenge_pick_users', {
+      user: user_id,
+      screen: 'PickUsersScreen',
+      purpose: 'Track the progress of creating av new challenge',
+    });
+  }, []);
 
   const onChecked = (user: ListUserFragmentFragment) => {
     const index = participants.findIndex((x) => x.id == user.id);

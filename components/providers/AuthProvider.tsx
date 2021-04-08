@@ -1,6 +1,7 @@
 import React, { useEffect, useState, ReactNode } from 'react';
 import { User } from 'firebase';
 import Firebase from '../../lib/firebase';
+import * as Analytics from 'expo-firebase-analytics';
 
 interface Props {
   children: ReactNode;
@@ -23,6 +24,7 @@ export const AuthProvider = ({ children }: Props) => {
       if (user) {
         setUserAuthState(user);
         setLoadingUser(false);
+        Analytics.setUserId(user.uid);
       } else {
         setUserAuthState(null);
         setLoadingUser(false);

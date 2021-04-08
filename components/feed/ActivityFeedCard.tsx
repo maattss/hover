@@ -14,6 +14,7 @@ import useAuthentication from '../../hooks/useAuthentication';
 import Reaction from './Reaction';
 import { timeStampToPresentable } from '../../helpers/dateTimeHelpers';
 import Divider from '../general/Divider';
+import * as Analytics from 'expo-firebase-analytics';
 
 interface ActivityFeedCardProps {
   data: ActivityFeedData;
@@ -48,7 +49,17 @@ const ActivityFeedCard: React.FC<ActivityFeedCardProps> = ({ data }: ActivityFee
 
   return (
     <View style={styles.card}>
-      <TouchableProfile user_id={data.user.id} name={data.user.name}>
+      <TouchableProfile
+        user_id={data.user.id}
+        name={data.user.name}
+        onPress={() =>
+          Analytics.logEvent('visit_profile', {
+            navigateFrom: 'FeedScreen',
+            user: data.user.id,
+            navigateTo: 'ProfileScreen',
+            purpose: 'Viewing more info on a user',
+          })
+        }>
         <View style={styles.flexRowLeft}>
           <View style={styles.topBar}>
             <Avatar

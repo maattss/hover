@@ -11,6 +11,7 @@ import { Avatar } from 'react-native-elements';
 import { defaultUserProfile } from '../../helpers/objectMappers';
 import TouchableProfile from '../general/TouchableProfile';
 import useAuthentication from '../../hooks/useAuthentication';
+import * as Analytics from 'expo-firebase-analytics';
 
 const getReactionText = (reactionCount: number, userReacted: boolean) => {
   if (reactionCount === 0) return 'Be the first to react to this activity!';
@@ -90,7 +91,18 @@ const Reaction: React.FC<ReactionProps> = (props: ReactionProps) => {
     };
 
     return (
-      <TouchableProfile user_id={like.user.id} name={like.user.name} onPress={() => setModalVisible(false)}>
+      <TouchableProfile
+        user_id={like.user.id}
+        name={like.user.name}
+        onPress={() => {
+          setModalVisible(false);
+          Analytics.logEvent('visit_profile', {
+            navigateFrom: 'FeedScreen',
+            user: like.user.id,
+            navigateTo: 'ProfileScreen',
+            purpose: 'Viewing more info on a user',
+          });
+        }}>
         <View style={styles.row}>
           <View style={styles.avatar}>
             <Avatar rounded source={{ uri: like.user.picture ?? defaultUserProfile.picture }} size="small" />

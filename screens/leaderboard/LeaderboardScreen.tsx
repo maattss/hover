@@ -42,6 +42,7 @@ const LeaderboardScreen: React.FC = () => {
   });
   const [highscores, setHighscores] = useState<Item[]>([]);
   const id = useAuthentication().user?.uid;
+
   useEffect(() => {
     if (highscoreData) setHighscores(convertToHighscoreList(highscoreData, id));
   }, [highscoreData]);
