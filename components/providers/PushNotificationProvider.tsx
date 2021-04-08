@@ -5,6 +5,8 @@ import { Subscription } from '@unimodules/core';
 import { useUpdateUserPushTokenMutation } from '../../graphql/mutations/UpdateUserPushToken.generated';
 import useAuthentication from '../../hooks/useAuthentication';
 import { storePushToken } from '../../helpers/storage';
+import * as Analytics from 'expo-firebase-analytics';
+import { NotificationResponse } from 'expo-notifications';
 
 interface Props {
   children: ReactNode;
@@ -57,12 +59,36 @@ export const PushNotificationProvider = ({ children }: Props) => {
     // This listener is fired whenever a notification is received while the app is foregrounded
     notificationListener.current = Notifications.addNotificationReceivedListener((notification) => {
       setNotification(notification);
+      Analytics.logEvent('push_notification_event', {
+        user: id,
+        action: 'received_in_foreground',
+        purpose: 'User received push notification.',
+      });
+      if (notification.request.content.title === 'Hi there! I see you are inside a Hover zone') {
+        Analytics.logEvent('PN_inside_geofence_received_foreground', {
+          event: 'received_in_foreground',
+          purpose: 'User receives inside geofence push notification while app in foreground.',
+        });
+      }
     });
 
     // This listener is fired whenever a user taps on or interacts with a notification (works when app is foregrounded, backgrounded, or killed)
-    responseListener.current = Notifications.addNotificationResponseReceivedListener((response) => {
-      console.log(response);
-    });
+    responseListener.current = Notifications.addNotificationResponseReceivedListener(
+      (response: NotificationResponse) => {
+        console.log(response);
+        Analytics.logEvent('push_notification_event', {
+          user: id,
+          action: 'open',
+          purpose: 'User opens push notification.',
+        });
+        if (response.notification.request.content.title === 'Hi there! I see you are inside a Hover zone') {
+          Analytics.logEvent('PN_inside_geofence_open', {
+            event: 'open',
+            purpose: 'User opens inside geofence push notification.',
+          });
+        }
+      },
+    );
 
     return () => {
       if (notificationListener.current) Notifications.removeNotificationSubscription(notificationListener.current);

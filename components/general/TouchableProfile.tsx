@@ -21,7 +21,7 @@ const TouchableProfile: React.FC<Props> = ({ user_id, children, name, onPress }:
   const navigation = useNavigation();
   const profileNavigator = useNavigation<ProfileNavigationProp>();
 
-  const navigate = () => {
+  const navigate = async () => {
     if (user_id == id) {
       bottomNavigation.navigate('Profile');
       profileNavigator.reset({

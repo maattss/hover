@@ -10,6 +10,7 @@ import { OpponentFragmentFragment, ChallengeFeedFragmentFragment } from '../../g
 import TouchableProfile from '../general/TouchableProfile';
 import { defaultUserProfile } from '../../helpers/objectMappers';
 import * as Progress from 'react-native-progress';
+import * as Analytics from 'expo-firebase-analytics';
 
 interface ChallengeOpponentsProps {
   challenge: Challenge | ChallengeFeedFragmentFragment;
@@ -41,7 +42,18 @@ export const ChallengeOpponents: React.FC<ChallengeOpponentsProps> = ({ challeng
         <Text style={styles.opponentHeaderText}>Participants</Text>
         {challenge.opponents.map((opponent, index) => {
           return (
-            <TouchableProfile key={index} user_id={opponent.user.id} name={opponent.user.name}>
+            <TouchableProfile
+              key={index}
+              user_id={opponent.user.id}
+              name={opponent.user.name}
+              onPress={() =>
+                Analytics.logEvent('visit_profile', {
+                  navigateFrom: 'ChallengeScreen',
+                  user: opponent.user.id,
+                  navigateTo: 'ProfileScreen',
+                  purpose: 'Viewing more info on a user',
+                })
+              }>
               <View style={styles.opponentRow}>
                 <View style={styles.opponentAvatar}>
                   <Avatar rounded source={{ uri: opponent.user.picture ?? defaultUserProfile.picture }} size="small" />
@@ -80,7 +92,17 @@ interface OngoingChallengeCardProps {
 const OngoingChallengeCard: React.FC<OngoingChallengeCardProps> = ({ challenge }: OngoingChallengeCardProps) => {
   return (
     <View style={styles.card}>
-      <TouchableProfile user_id={challenge.created_by.id} name={challenge.created_by.name}>
+      <TouchableProfile
+        user_id={challenge.created_by.id}
+        name={challenge.created_by.name}
+        onPress={() =>
+          Analytics.logEvent('visit_profile', {
+            navigateFrom: 'ChallengeScreen',
+            user: challenge.created_by.id,
+            navigateTo: 'ProfileScreen',
+            purpose: 'Viewing more info on a user',
+          })
+        }>
         <View style={styles.row}>
           <View style={styles.avatar}>
             <Avatar

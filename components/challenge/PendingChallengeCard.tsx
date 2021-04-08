@@ -8,6 +8,7 @@ import { Colors, Typography, Spacing, Buttons } from '../../theme';
 import { Challenge } from '../../types/challengeTypes';
 import { Challenge_Participant_State_Enum } from '../../types/types';
 import TouchableProfile from '../general/TouchableProfile';
+import * as Analytics from 'expo-firebase-analytics';
 
 interface PendingChallengeCardProps {
   challenge: Challenge;
@@ -85,7 +86,17 @@ const PendingChallengeCard: React.FC<PendingChallengeCardProps> = ({ challenge }
 
   return (
     <View style={styles.card}>
-      <TouchableProfile user_id={challenge.created_by.id} name={challenge.created_by.name}>
+      <TouchableProfile
+        user_id={challenge.created_by.id}
+        name={challenge.created_by.name}
+        onPress={() =>
+          Analytics.logEvent('visit_profile', {
+            navigateFrom: 'ChallengeScreen',
+            user: challenge.created_by.id,
+            navigateTo: 'ProfileScreen',
+            purpose: 'Viewing more info on a user',
+          })
+        }>
         <View style={styles.row}>
           <View style={styles.avatar}>
             <Avatar
@@ -104,7 +115,18 @@ const PendingChallengeCard: React.FC<PendingChallengeCardProps> = ({ challenge }
         <View style={styles.opponentContainer}>
           <Text style={styles.opponentHeaderText}>Other partcicipants</Text>
           {opponents.map((opponent) => (
-            <TouchableProfile key={opponent.user.id} user_id={opponent.user.id} name={opponent.user.name}>
+            <TouchableProfile
+              key={opponent.user.id}
+              user_id={opponent.user.id}
+              name={opponent.user.name}
+              onPress={() =>
+                Analytics.logEvent('visit_profile', {
+                  navigateFrom: 'ChallengeScreen',
+                  user: opponent.user.id,
+                  navigateTo: 'ProfileScreen',
+                  purpose: 'Viewing more info on a user',
+                })
+              }>
               <View style={styles.opponentRow}>
                 <View style={styles.opponentAvatar}>
                   <Avatar rounded source={{ uri: opponent.user.picture ?? defaultUserProfile.picture }} size="medium" />

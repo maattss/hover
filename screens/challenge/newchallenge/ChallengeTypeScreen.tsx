@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StyleSheet, Text, View, FlatList } from 'react-native';
 import Loading from '../../../components/general/Loading';
 import { NewChallengeStackParamList } from '../../../types/navigationTypes';
@@ -9,6 +9,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { useChallengeTypesQuery } from '../../../graphql/queries/ChallengeTypes.generated';
 import { MenuButton } from '../../../components/general/Button';
 import { Challenge_Type_Enum } from '../../../types/types';
+import * as Analytics from 'expo-firebase-analytics';
 
 type ChallengeTypeRouteProp = RouteProp<NewChallengeStackParamList, 'ChallengeType'>;
 type NavigationProp = StackNavigationProp<NewChallengeStackParamList>;
@@ -19,6 +20,14 @@ type Props = {
 };
 const ChallengeTypeScreen: React.FC<Props> = ({ route, navigation }: Props) => {
   const { data: challengeTypes, loading } = useChallengeTypesQuery();
+
+  useEffect(() => {
+    Analytics.logEvent('new_challenge_pick_type', {
+      user: route.params.user_id,
+      screen: 'ChallengeTypeScreen',
+      purpose: 'Track the progress of creating av new challenge',
+    });
+  }, []);
 
   const getIcon = (type: string) => {
     switch (type) {
