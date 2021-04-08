@@ -295,7 +295,7 @@ export const TrackingProvider = ({ children }: Props) => {
     await resetTrackingState();
     startBackgroundUpdate();
     setTrackingState(TrackingState.TRACKING);
-    await Analytics.logEvent('tracking_event', {
+    await Analytics.logEvent('tracking_event_start', {
       action: 'start',
       userId: userId,
       purpose: 'User start tracking.',
@@ -327,7 +327,7 @@ export const TrackingProvider = ({ children }: Props) => {
       await clearPreviousOutsidePushStorage();
       console.log('Activity inserted to db', response);
       Alert.alert('Upload complete', 'Activity uploaded successfully!');
-      await Analytics.logEvent('tracking_event', {
+      await Analytics.logEvent('tracking_event_publish', {
         action: 'publish',
         userId: userId,
         purpose: 'User publish activity.',
@@ -374,7 +374,7 @@ export const TrackingProvider = ({ children }: Props) => {
     setTrackingEnd(undefined);
     await storeNewEndTimestamp(0);
     startBackgroundUpdate();
-    await Analytics.logEvent('tracking_event', {
+    await Analytics.logEvent('tracking_event_resume', {
       action: 'resume',
       userId: userId,
       purpose: 'User resume tracking activity.',
@@ -398,7 +398,7 @@ export const TrackingProvider = ({ children }: Props) => {
     setTrackingState(TrackingState.EXPLORE);
     await clearTrackingStorage();
     await clearPreviousOutsidePushStorage();
-    await Analytics.logEvent('tracking_event', {
+    await Analytics.logEvent('tracking_event_discard', {
       action: 'discard',
       userId: userId,
       purpose: 'User discards activity.',
@@ -419,7 +419,7 @@ export const TrackingProvider = ({ children }: Props) => {
       trackingWithFriendId: newTrackingWithFriendId,
       updatedAtTimestamp: trackingInfo.updatedAtTimestamp,
     } as TrackingInfo);
-    await Analytics.logEvent('tracking_event', {
+    await Analytics.logEvent('tracking_event_join_friend', {
       action: 'joinFriend',
       userId: userId,
       purpose: 'User tracks with a friend.',
