@@ -61,9 +61,15 @@ export const PushNotificationProvider = ({ children }: Props) => {
       setNotification(notification);
       Analytics.logEvent('push_notification_event', {
         user: id,
-        action: 'received',
+        action: 'received_in_foreground',
         purpose: 'User received push notification.',
       });
+      if (notification.request.content.title === 'Hi there! I see you are inside a Hover zone') {
+        Analytics.logEvent('PN_inside_geofence_received_foreground', {
+          event: 'received_in_foreground',
+          purpose: 'User receives inside geofence push notification while app in foreground.',
+        });
+      }
     });
 
     // This listener is fired whenever a user taps on or interacts with a notification (works when app is foregrounded, backgrounded, or killed)
@@ -73,8 +79,14 @@ export const PushNotificationProvider = ({ children }: Props) => {
         Analytics.logEvent('push_notification_event', {
           user: id,
           action: 'open',
-          purpose: 'User open push notification.',
+          purpose: 'User opens push notification.',
         });
+        if (response.notification.request.content.title === 'Hi there! I see you are inside a Hover zone') {
+          Analytics.logEvent('PN_inside_geofence_open', {
+            event: 'open',
+            purpose: 'User opens inside geofence push notification.',
+          });
+        }
       },
     );
 

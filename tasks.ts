@@ -16,6 +16,7 @@ import { sendPushNotification } from './helpers/pushNotifications';
 import * as BackgroundFetch from 'expo-background-fetch';
 import * as TaskManager from 'expo-task-manager';
 import * as Location from 'expo-location';
+import * as Analytics from 'expo-firebase-analytics';
 import Constants from 'expo-constants';
 
 export const LOCATION_BACKGROUND_TRACKING = 'location-background-tracking';
@@ -131,6 +132,12 @@ TaskManager.defineTask(NOTIFICATION_WHEN_INSIDE_GEOFENCE, async () => {
               false,
             );
             storePreviousInsideGeofencePush(insideGeoFence.id);
+
+            Analytics.logEvent('PN_inside_geofence_sent', {
+              event: 'sent',
+              purpose: 'User open push notification.',
+            });
+
             return BackgroundFetch.Result.NewData;
           }
         }
