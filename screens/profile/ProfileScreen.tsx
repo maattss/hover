@@ -237,7 +237,7 @@ const ProfileScreen: React.FC<Props> = ({ route }: Props) => {
             <Text style={styles.bio}>{userProfile.bio}</Text>
           </View>
         </View>
-        <View style={{ flex: 1, flexDirection: 'row' }}>
+        <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
           <Text style={styles.header}>Achievements</Text>
           <IconButton
             onPress={() =>

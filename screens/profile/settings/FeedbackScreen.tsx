@@ -56,7 +56,10 @@ const FeedbackScreen: React.FC<SettingsProps> = ({ navigation }: SettingsProps) 
           multiline={true}
           numberOfLines={5}
         />
-        <CustomButton onPress={onSubmit}>Send Feedback</CustomButton>
+        <CustomButton onPress={onSubmit}>
+          Send Feedback{'  '}
+          <FAIcon name={'external-link-alt'} style={{ ...Typography.icon, fontSize: 20 }} />
+        </CustomButton>
       </View>
     </KeyboardAvoider>
   );

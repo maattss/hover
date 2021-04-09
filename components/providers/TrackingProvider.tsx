@@ -227,20 +227,25 @@ export const TrackingProvider = ({ children }: Props) => {
 
   const updateScoreAndDuration = async () => {
     const trackingInfo = await readTrackingInfo();
-    const updatedDuration = await getDuration(trackingInfo);
-    const updatedScore = getScore(updatedDuration, trackingInfo.geoFence.category, trackingInfo.friendId ?? '');
-    storeTrackingInfo({
-      geoFence: trackingInfo.geoFence,
-      duration: updatedDuration,
-      score: updatedScore,
-      startTimestamp: trackingInfo.startTimestamp,
-      endTimestamp: trackingInfo.endTimestamp,
-      updatedAtTimestamp: Date.now(),
-      friendId: trackingInfo.friendId ?? '',
-      trackingWithFriendId: trackingInfo.trackingWithFriendId ?? 0,
-    });
-    setDuration(updatedDuration);
-    setScore(updatedScore);
+    if (currentGeoFence?.id === trackingInfo.geoFence.id) {
+      if (trackingState === TrackingState.TRACKINGPAUSED) autoResumeTracking();
+      const updatedDuration = await getDuration(trackingInfo);
+      const updatedScore = getScore(updatedDuration, trackingInfo.geoFence.category, trackingInfo.friendId ?? '');
+      storeTrackingInfo({
+        geoFence: trackingInfo.geoFence,
+        duration: updatedDuration,
+        score: updatedScore,
+        startTimestamp: trackingInfo.startTimestamp,
+        endTimestamp: trackingInfo.endTimestamp,
+        updatedAtTimestamp: Date.now(),
+        friendId: trackingInfo.friendId ?? '',
+        trackingWithFriendId: trackingInfo.trackingWithFriendId ?? 0,
+      });
+      setDuration(updatedDuration);
+      setScore(updatedScore);
+      return;
+    }
+    if (trackingState === TrackingState.TRACKING) autoPauseTracking();
   };
 
   useInterval(() => updateScoreAndDuration(), trackingState === TrackingState.TRACKING ? 2000 : null);

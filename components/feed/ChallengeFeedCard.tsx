@@ -98,7 +98,8 @@ const ChallengeLeaderboardRow = ({ item, index }: { item: Item; index: number })
   return (
     <View style={[styles.row, border]}>
       <View style={styles.left}>
-        <Text style={[{ ...Typography.bodyText }, styles.rank, index < 9 ? styles.singleDidget : styles.doubleDidget]}>
+        <Text
+          style={[{ ...Typography.largeBodyText }, styles.rank, index < 9 ? styles.singleDidget : styles.doubleDidget]}>
           {index < 3 ? <FAIcon name={'medal'} style={iconStyle} /> : index + 1}
         </Text>
         {item.picture !== '' && (

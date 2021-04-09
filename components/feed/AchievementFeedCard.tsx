@@ -18,6 +18,10 @@ interface AchievementFeedCardProps {
 
 const AchievementFeedCard: React.FC<AchievementFeedCardProps> = ({ data }: AchievementFeedCardProps) => {
   const auth = useAuthentication();
+  const getName = () => {
+    if (auth.user?.uid === data.user.id) return 'Your achievement';
+    return data.user.name;
+  };
 
   return (
     <View style={styles.card}>
@@ -43,7 +47,7 @@ const AchievementFeedCard: React.FC<AchievementFeedCardProps> = ({ data }: Achie
                 size={'medium'}
               />
               <View style={{ marginLeft: Spacing.smaller, width: '80%' }}>
-                <Text style={styles.nameText}>{data.user.name}</Text>
+                <Text style={styles.nameText}>{getName()}</Text>
                 <Text style={styles.timeText}>{timeStampToPresentable(data.createdAt)}</Text>
               </View>
             </View>
