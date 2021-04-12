@@ -113,7 +113,7 @@ const fromRawCoordinatesToLatLng = (coordinatesRaw: string) => {
 
 export const convertToHighscoreList = (data: HighscoreQuery, id?: string) => {
   const highscores: Item[] = [];
-  data.users.forEach((obj) =>
+  data.leaderboard_users.forEach((obj) =>
     highscores.push({
       id: obj.id,
       name: obj.name,

@@ -15,7 +15,6 @@ export type Scalars = {
   float8: any;
   interval: any;
   json: any;
-  timestamp: any;
   timestamptz: any;
 };
 
@@ -2545,337 +2544,6 @@ export type Challenge_Variance_Order_By = {
   id?: Maybe<Order_By>;
 };
 
-/** columns and relationships of "comments" */
-export type Comments = {
-  __typename?: 'comments';
-  /** An object relationship */
-  activity: Activities;
-  activity_id: Scalars['Int'];
-  comment_id: Scalars['Int'];
-  content: Scalars['String'];
-  created_at?: Maybe<Scalars['timestamptz']>;
-  updated_at?: Maybe<Scalars['timestamp']>;
-  /** An object relationship */
-  user: Users;
-  user_id: Scalars['String'];
-};
-
-/** aggregated selection of "comments" */
-export type Comments_Aggregate = {
-  __typename?: 'comments_aggregate';
-  aggregate?: Maybe<Comments_Aggregate_Fields>;
-  nodes: Array<Comments>;
-};
-
-/** aggregate fields of "comments" */
-export type Comments_Aggregate_Fields = {
-  __typename?: 'comments_aggregate_fields';
-  avg?: Maybe<Comments_Avg_Fields>;
-  count?: Maybe<Scalars['Int']>;
-  max?: Maybe<Comments_Max_Fields>;
-  min?: Maybe<Comments_Min_Fields>;
-  stddev?: Maybe<Comments_Stddev_Fields>;
-  stddev_pop?: Maybe<Comments_Stddev_Pop_Fields>;
-  stddev_samp?: Maybe<Comments_Stddev_Samp_Fields>;
-  sum?: Maybe<Comments_Sum_Fields>;
-  var_pop?: Maybe<Comments_Var_Pop_Fields>;
-  var_samp?: Maybe<Comments_Var_Samp_Fields>;
-  variance?: Maybe<Comments_Variance_Fields>;
-};
-
-/** aggregate fields of "comments" */
-export type Comments_Aggregate_FieldsCountArgs = {
-  columns?: Maybe<Array<Comments_Select_Column>>;
-  distinct?: Maybe<Scalars['Boolean']>;
-};
-
-/** order by aggregate values of table "comments" */
-export type Comments_Aggregate_Order_By = {
-  avg?: Maybe<Comments_Avg_Order_By>;
-  count?: Maybe<Order_By>;
-  max?: Maybe<Comments_Max_Order_By>;
-  min?: Maybe<Comments_Min_Order_By>;
-  stddev?: Maybe<Comments_Stddev_Order_By>;
-  stddev_pop?: Maybe<Comments_Stddev_Pop_Order_By>;
-  stddev_samp?: Maybe<Comments_Stddev_Samp_Order_By>;
-  sum?: Maybe<Comments_Sum_Order_By>;
-  var_pop?: Maybe<Comments_Var_Pop_Order_By>;
-  var_samp?: Maybe<Comments_Var_Samp_Order_By>;
-  variance?: Maybe<Comments_Variance_Order_By>;
-};
-
-/** input type for inserting array relation for remote table "comments" */
-export type Comments_Arr_Rel_Insert_Input = {
-  data: Array<Comments_Insert_Input>;
-  on_conflict?: Maybe<Comments_On_Conflict>;
-};
-
-/** aggregate avg on columns */
-export type Comments_Avg_Fields = {
-  __typename?: 'comments_avg_fields';
-  activity_id?: Maybe<Scalars['Float']>;
-  comment_id?: Maybe<Scalars['Float']>;
-};
-
-/** order by avg() on columns of table "comments" */
-export type Comments_Avg_Order_By = {
-  activity_id?: Maybe<Order_By>;
-  comment_id?: Maybe<Order_By>;
-};
-
-/** Boolean expression to filter rows from the table "comments". All fields are combined with a logical 'AND'. */
-export type Comments_Bool_Exp = {
-  _and?: Maybe<Array<Maybe<Comments_Bool_Exp>>>;
-  _not?: Maybe<Comments_Bool_Exp>;
-  _or?: Maybe<Array<Maybe<Comments_Bool_Exp>>>;
-  activity?: Maybe<Activities_Bool_Exp>;
-  activity_id?: Maybe<Int_Comparison_Exp>;
-  comment_id?: Maybe<Int_Comparison_Exp>;
-  content?: Maybe<String_Comparison_Exp>;
-  created_at?: Maybe<Timestamptz_Comparison_Exp>;
-  updated_at?: Maybe<Timestamp_Comparison_Exp>;
-  user?: Maybe<Users_Bool_Exp>;
-  user_id?: Maybe<String_Comparison_Exp>;
-};
-
-/** unique or primary key constraints on table "comments" */
-export enum Comments_Constraint {
-  /** unique or primary key constraint */
-  CommentsPkey = 'Comments_pkey',
-}
-
-/** input type for incrementing integer column in table "comments" */
-export type Comments_Inc_Input = {
-  activity_id?: Maybe<Scalars['Int']>;
-  comment_id?: Maybe<Scalars['Int']>;
-};
-
-/** input type for inserting data into table "comments" */
-export type Comments_Insert_Input = {
-  activity?: Maybe<Activities_Obj_Rel_Insert_Input>;
-  activity_id?: Maybe<Scalars['Int']>;
-  comment_id?: Maybe<Scalars['Int']>;
-  content?: Maybe<Scalars['String']>;
-  created_at?: Maybe<Scalars['timestamptz']>;
-  updated_at?: Maybe<Scalars['timestamp']>;
-  user?: Maybe<Users_Obj_Rel_Insert_Input>;
-  user_id?: Maybe<Scalars['String']>;
-};
-
-/** aggregate max on columns */
-export type Comments_Max_Fields = {
-  __typename?: 'comments_max_fields';
-  activity_id?: Maybe<Scalars['Int']>;
-  comment_id?: Maybe<Scalars['Int']>;
-  content?: Maybe<Scalars['String']>;
-  created_at?: Maybe<Scalars['timestamptz']>;
-  updated_at?: Maybe<Scalars['timestamp']>;
-  user_id?: Maybe<Scalars['String']>;
-};
-
-/** order by max() on columns of table "comments" */
-export type Comments_Max_Order_By = {
-  activity_id?: Maybe<Order_By>;
-  comment_id?: Maybe<Order_By>;
-  content?: Maybe<Order_By>;
-  created_at?: Maybe<Order_By>;
-  updated_at?: Maybe<Order_By>;
-  user_id?: Maybe<Order_By>;
-};
-
-/** aggregate min on columns */
-export type Comments_Min_Fields = {
-  __typename?: 'comments_min_fields';
-  activity_id?: Maybe<Scalars['Int']>;
-  comment_id?: Maybe<Scalars['Int']>;
-  content?: Maybe<Scalars['String']>;
-  created_at?: Maybe<Scalars['timestamptz']>;
-  updated_at?: Maybe<Scalars['timestamp']>;
-  user_id?: Maybe<Scalars['String']>;
-};
-
-/** order by min() on columns of table "comments" */
-export type Comments_Min_Order_By = {
-  activity_id?: Maybe<Order_By>;
-  comment_id?: Maybe<Order_By>;
-  content?: Maybe<Order_By>;
-  created_at?: Maybe<Order_By>;
-  updated_at?: Maybe<Order_By>;
-  user_id?: Maybe<Order_By>;
-};
-
-/** response of any mutation on the table "comments" */
-export type Comments_Mutation_Response = {
-  __typename?: 'comments_mutation_response';
-  /** number of affected rows by the mutation */
-  affected_rows: Scalars['Int'];
-  /** data of the affected rows by the mutation */
-  returning: Array<Comments>;
-};
-
-/** input type for inserting object relation for remote table "comments" */
-export type Comments_Obj_Rel_Insert_Input = {
-  data: Comments_Insert_Input;
-  on_conflict?: Maybe<Comments_On_Conflict>;
-};
-
-/** on conflict condition type for table "comments" */
-export type Comments_On_Conflict = {
-  constraint: Comments_Constraint;
-  update_columns: Array<Comments_Update_Column>;
-  where?: Maybe<Comments_Bool_Exp>;
-};
-
-/** ordering options when selecting data from "comments" */
-export type Comments_Order_By = {
-  activity?: Maybe<Activities_Order_By>;
-  activity_id?: Maybe<Order_By>;
-  comment_id?: Maybe<Order_By>;
-  content?: Maybe<Order_By>;
-  created_at?: Maybe<Order_By>;
-  updated_at?: Maybe<Order_By>;
-  user?: Maybe<Users_Order_By>;
-  user_id?: Maybe<Order_By>;
-};
-
-/** primary key columns input for table: "comments" */
-export type Comments_Pk_Columns_Input = {
-  comment_id: Scalars['Int'];
-};
-
-/** select columns of table "comments" */
-export enum Comments_Select_Column {
-  /** column name */
-  ActivityId = 'activity_id',
-  /** column name */
-  CommentId = 'comment_id',
-  /** column name */
-  Content = 'content',
-  /** column name */
-  CreatedAt = 'created_at',
-  /** column name */
-  UpdatedAt = 'updated_at',
-  /** column name */
-  UserId = 'user_id',
-}
-
-/** input type for updating data in table "comments" */
-export type Comments_Set_Input = {
-  activity_id?: Maybe<Scalars['Int']>;
-  comment_id?: Maybe<Scalars['Int']>;
-  content?: Maybe<Scalars['String']>;
-  created_at?: Maybe<Scalars['timestamptz']>;
-  updated_at?: Maybe<Scalars['timestamp']>;
-  user_id?: Maybe<Scalars['String']>;
-};
-
-/** aggregate stddev on columns */
-export type Comments_Stddev_Fields = {
-  __typename?: 'comments_stddev_fields';
-  activity_id?: Maybe<Scalars['Float']>;
-  comment_id?: Maybe<Scalars['Float']>;
-};
-
-/** order by stddev() on columns of table "comments" */
-export type Comments_Stddev_Order_By = {
-  activity_id?: Maybe<Order_By>;
-  comment_id?: Maybe<Order_By>;
-};
-
-/** aggregate stddev_pop on columns */
-export type Comments_Stddev_Pop_Fields = {
-  __typename?: 'comments_stddev_pop_fields';
-  activity_id?: Maybe<Scalars['Float']>;
-  comment_id?: Maybe<Scalars['Float']>;
-};
-
-/** order by stddev_pop() on columns of table "comments" */
-export type Comments_Stddev_Pop_Order_By = {
-  activity_id?: Maybe<Order_By>;
-  comment_id?: Maybe<Order_By>;
-};
-
-/** aggregate stddev_samp on columns */
-export type Comments_Stddev_Samp_Fields = {
-  __typename?: 'comments_stddev_samp_fields';
-  activity_id?: Maybe<Scalars['Float']>;
-  comment_id?: Maybe<Scalars['Float']>;
-};
-
-/** order by stddev_samp() on columns of table "comments" */
-export type Comments_Stddev_Samp_Order_By = {
-  activity_id?: Maybe<Order_By>;
-  comment_id?: Maybe<Order_By>;
-};
-
-/** aggregate sum on columns */
-export type Comments_Sum_Fields = {
-  __typename?: 'comments_sum_fields';
-  activity_id?: Maybe<Scalars['Int']>;
-  comment_id?: Maybe<Scalars['Int']>;
-};
-
-/** order by sum() on columns of table "comments" */
-export type Comments_Sum_Order_By = {
-  activity_id?: Maybe<Order_By>;
-  comment_id?: Maybe<Order_By>;
-};
-
-/** update columns of table "comments" */
-export enum Comments_Update_Column {
-  /** column name */
-  ActivityId = 'activity_id',
-  /** column name */
-  CommentId = 'comment_id',
-  /** column name */
-  Content = 'content',
-  /** column name */
-  CreatedAt = 'created_at',
-  /** column name */
-  UpdatedAt = 'updated_at',
-  /** column name */
-  UserId = 'user_id',
-}
-
-/** aggregate var_pop on columns */
-export type Comments_Var_Pop_Fields = {
-  __typename?: 'comments_var_pop_fields';
-  activity_id?: Maybe<Scalars['Float']>;
-  comment_id?: Maybe<Scalars['Float']>;
-};
-
-/** order by var_pop() on columns of table "comments" */
-export type Comments_Var_Pop_Order_By = {
-  activity_id?: Maybe<Order_By>;
-  comment_id?: Maybe<Order_By>;
-};
-
-/** aggregate var_samp on columns */
-export type Comments_Var_Samp_Fields = {
-  __typename?: 'comments_var_samp_fields';
-  activity_id?: Maybe<Scalars['Float']>;
-  comment_id?: Maybe<Scalars['Float']>;
-};
-
-/** order by var_samp() on columns of table "comments" */
-export type Comments_Var_Samp_Order_By = {
-  activity_id?: Maybe<Order_By>;
-  comment_id?: Maybe<Order_By>;
-};
-
-/** aggregate variance on columns */
-export type Comments_Variance_Fields = {
-  __typename?: 'comments_variance_fields';
-  activity_id?: Maybe<Scalars['Float']>;
-  comment_id?: Maybe<Scalars['Float']>;
-};
-
-/** order by variance() on columns of table "comments" */
-export type Comments_Variance_Order_By = {
-  activity_id?: Maybe<Order_By>;
-  comment_id?: Maybe<Order_By>;
-};
-
 /** expression to compare columns of type date. All fields are combined with logical 'AND'. */
 export type Date_Comparison_Exp = {
   _eq?: Maybe<Scalars['date']>;
@@ -5032,10 +4700,6 @@ export type Mutation_Root = {
   delete_challenge_type?: Maybe<Challenge_Type_Mutation_Response>;
   /** delete single row from the table: "challenge_type" */
   delete_challenge_type_by_pk?: Maybe<Challenge_Type>;
-  /** delete single row from the table: "comments" */
-  delete_comment?: Maybe<Comments>;
-  /** delete data from the table: "comments" */
-  delete_comments?: Maybe<Comments_Mutation_Response>;
   /** delete data from the table: "feed" */
   delete_feed?: Maybe<Feed_Mutation_Response>;
   /** delete single row from the table: "feed" */
@@ -5116,10 +4780,6 @@ export type Mutation_Root = {
   insert_challenge_type?: Maybe<Challenge_Type_Mutation_Response>;
   /** insert a single row into the table: "challenge_type" */
   insert_challenge_type_one?: Maybe<Challenge_Type>;
-  /** insert a single row into the table: "comments" */
-  insert_comment?: Maybe<Comments>;
-  /** insert data into the table: "comments" */
-  insert_comments?: Maybe<Comments_Mutation_Response>;
   /** insert data into the table: "feed" */
   insert_feed?: Maybe<Feed_Mutation_Response>;
   /** insert a single row into the table: "feed" */
@@ -5200,10 +4860,6 @@ export type Mutation_Root = {
   update_challenge_type?: Maybe<Challenge_Type_Mutation_Response>;
   /** update single row of the table: "challenge_type" */
   update_challenge_type_by_pk?: Maybe<Challenge_Type>;
-  /** update single row of the table: "comments" */
-  update_comment?: Maybe<Comments>;
-  /** update data of the table: "comments" */
-  update_comments?: Maybe<Comments_Mutation_Response>;
   /** update data of the table: "feed" */
   update_feed?: Maybe<Feed_Mutation_Response>;
   /** update single row of the table: "feed" */
@@ -5339,16 +4995,6 @@ export type Mutation_RootDelete_Challenge_TypeArgs = {
 /** mutation root */
 export type Mutation_RootDelete_Challenge_Type_By_PkArgs = {
   name: Scalars['String'];
-};
-
-/** mutation root */
-export type Mutation_RootDelete_CommentArgs = {
-  comment_id: Scalars['Int'];
-};
-
-/** mutation root */
-export type Mutation_RootDelete_CommentsArgs = {
-  where: Comments_Bool_Exp;
 };
 
 /** mutation root */
@@ -5570,18 +5216,6 @@ export type Mutation_RootInsert_Challenge_TypeArgs = {
 export type Mutation_RootInsert_Challenge_Type_OneArgs = {
   object: Challenge_Type_Insert_Input;
   on_conflict?: Maybe<Challenge_Type_On_Conflict>;
-};
-
-/** mutation root */
-export type Mutation_RootInsert_CommentArgs = {
-  object: Comments_Insert_Input;
-  on_conflict?: Maybe<Comments_On_Conflict>;
-};
-
-/** mutation root */
-export type Mutation_RootInsert_CommentsArgs = {
-  objects: Array<Comments_Insert_Input>;
-  on_conflict?: Maybe<Comments_On_Conflict>;
 };
 
 /** mutation root */
@@ -5832,20 +5466,6 @@ export type Mutation_RootUpdate_Challenge_TypeArgs = {
 export type Mutation_RootUpdate_Challenge_Type_By_PkArgs = {
   _set?: Maybe<Challenge_Type_Set_Input>;
   pk_columns: Challenge_Type_Pk_Columns_Input;
-};
-
-/** mutation root */
-export type Mutation_RootUpdate_CommentArgs = {
-  _inc?: Maybe<Comments_Inc_Input>;
-  _set?: Maybe<Comments_Set_Input>;
-  pk_columns: Comments_Pk_Columns_Input;
-};
-
-/** mutation root */
-export type Mutation_RootUpdate_CommentsArgs = {
-  _inc?: Maybe<Comments_Inc_Input>;
-  _set?: Maybe<Comments_Set_Input>;
-  where: Comments_Bool_Exp;
 };
 
 /** mutation root */
@@ -6546,12 +6166,6 @@ export type Query_Root = {
   challenge_type_aggregate: Challenge_Type_Aggregate;
   /** fetch data from the table: "challenge_type" using primary key columns */
   challenge_type_by_pk?: Maybe<Challenge_Type>;
-  /** fetch data from the table: "comments" using primary key columns */
-  comment?: Maybe<Comments>;
-  /** fetch data from the table: "comments" */
-  comments: Array<Comments>;
-  /** fetch aggregated fields from the table: "comments" */
-  comments_aggregate: Comments_Aggregate;
   /** fetch data from the table: "feed" */
   feed: Array<Feed>;
   /** fetch aggregated fields from the table: "feed" */
@@ -6830,29 +6444,6 @@ export type Query_RootChallenge_Type_AggregateArgs = {
 /** query root */
 export type Query_RootChallenge_Type_By_PkArgs = {
   name: Scalars['String'];
-};
-
-/** query root */
-export type Query_RootCommentArgs = {
-  comment_id: Scalars['Int'];
-};
-
-/** query root */
-export type Query_RootCommentsArgs = {
-  distinct_on?: Maybe<Array<Comments_Select_Column>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  order_by?: Maybe<Array<Comments_Order_By>>;
-  where?: Maybe<Comments_Bool_Exp>;
-};
-
-/** query root */
-export type Query_RootComments_AggregateArgs = {
-  distinct_on?: Maybe<Array<Comments_Select_Column>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  order_by?: Maybe<Array<Comments_Order_By>>;
-  where?: Maybe<Comments_Bool_Exp>;
 };
 
 /** query root */
@@ -7188,12 +6779,6 @@ export type Subscription_Root = {
   challenge_type_aggregate: Challenge_Type_Aggregate;
   /** fetch data from the table: "challenge_type" using primary key columns */
   challenge_type_by_pk?: Maybe<Challenge_Type>;
-  /** fetch data from the table: "comments" using primary key columns */
-  comment?: Maybe<Comments>;
-  /** fetch data from the table: "comments" */
-  comments: Array<Comments>;
-  /** fetch aggregated fields from the table: "comments" */
-  comments_aggregate: Comments_Aggregate;
   /** fetch data from the table: "feed" */
   feed: Array<Feed>;
   /** fetch aggregated fields from the table: "feed" */
@@ -7475,29 +7060,6 @@ export type Subscription_RootChallenge_Type_By_PkArgs = {
 };
 
 /** subscription root */
-export type Subscription_RootCommentArgs = {
-  comment_id: Scalars['Int'];
-};
-
-/** subscription root */
-export type Subscription_RootCommentsArgs = {
-  distinct_on?: Maybe<Array<Comments_Select_Column>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  order_by?: Maybe<Array<Comments_Order_By>>;
-  where?: Maybe<Comments_Bool_Exp>;
-};
-
-/** subscription root */
-export type Subscription_RootComments_AggregateArgs = {
-  distinct_on?: Maybe<Array<Comments_Select_Column>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  order_by?: Maybe<Array<Comments_Order_By>>;
-  where?: Maybe<Comments_Bool_Exp>;
-};
-
-/** subscription root */
 export type Subscription_RootFeedArgs = {
   distinct_on?: Maybe<Array<Feed_Select_Column>>;
   limit?: Maybe<Scalars['Int']>;
@@ -7771,19 +7333,6 @@ export type Subscription_RootUsers_AggregateArgs = {
   offset?: Maybe<Scalars['Int']>;
   order_by?: Maybe<Array<Users_Order_By>>;
   where?: Maybe<Users_Bool_Exp>;
-};
-
-/** expression to compare columns of type timestamp. All fields are combined with logical 'AND'. */
-export type Timestamp_Comparison_Exp = {
-  _eq?: Maybe<Scalars['timestamp']>;
-  _gt?: Maybe<Scalars['timestamp']>;
-  _gte?: Maybe<Scalars['timestamp']>;
-  _in?: Maybe<Array<Scalars['timestamp']>>;
-  _is_null?: Maybe<Scalars['Boolean']>;
-  _lt?: Maybe<Scalars['timestamp']>;
-  _lte?: Maybe<Scalars['timestamp']>;
-  _neq?: Maybe<Scalars['timestamp']>;
-  _nin?: Maybe<Array<Scalars['timestamp']>>;
 };
 
 /** expression to compare columns of type timestamptz. All fields are combined with logical 'AND'. */

@@ -1,5 +1,5 @@
 query Highscore($timespan: timestamptz, $category: String) {
-  users {
+  leaderboard_users: users {
     id
     name
     picture
