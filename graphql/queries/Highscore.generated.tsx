@@ -9,7 +9,7 @@ export type HighscoreQueryVariables = Types.Exact<{
 }>;
 
 export type HighscoreQuery = { readonly __typename: 'query_root' } & {
-  readonly users: ReadonlyArray<
+  readonly leaderboard_users: ReadonlyArray<
     { readonly __typename: 'users' } & Pick<Types.Users, 'id' | 'name' | 'picture'> & {
         readonly activities_aggregate: { readonly __typename: 'activities_aggregate' } & {
           readonly aggregate?: Types.Maybe<
@@ -26,7 +26,7 @@ export type HighscoreQuery = { readonly __typename: 'query_root' } & {
 
 export const HighscoreDocument = gql`
   query Highscore($timespan: timestamptz, $category: String) {
-    users {
+    leaderboard_users: users {
       id
       name
       picture

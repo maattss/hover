@@ -52,15 +52,6 @@ fragment activityFragment on activities {
   }
 }
 
-fragment commentFragment on comments {
-  comment_id
-  activity_id
-  content
-  user {
-    ...listUserFragment
-  }
-}
-
 fragment geofenceFragment on geofences {
   id
   name

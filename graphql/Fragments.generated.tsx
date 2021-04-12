@@ -36,11 +36,6 @@ export type ActivityFragmentFragment = { readonly __typename: 'activities' } & P
   'activity_id' | 'caption' | 'created_at'
 > & { readonly geofence: { readonly __typename: 'geofences' } & GeofenceFragmentFragment };
 
-export type CommentFragmentFragment = { readonly __typename: 'comments' } & Pick<
-  Types.Comments,
-  'comment_id' | 'activity_id' | 'content'
-> & { readonly user: { readonly __typename: 'users' } & ListUserFragmentFragment };
-
 export type GeofenceFragmentFragment = { readonly __typename: 'geofences' } & Pick<
   Types.Geofences,
   'id' | 'name' | 'category' | 'coordinates' | 'description' | 'latitude' | 'longitude' | 'radius' | 'variant'
@@ -194,17 +189,6 @@ export const UserFragmentFragmentDoc = gql`
   }
   ${BasicUserFragmentFragmentDoc}
   ${ActivityFragmentFragmentDoc}
-`;
-export const CommentFragmentFragmentDoc = gql`
-  fragment commentFragment on comments {
-    comment_id
-    activity_id
-    content
-    user {
-      ...listUserFragment
-    }
-  }
-  ${ListUserFragmentFragmentDoc}
 `;
 export const ChallengeTypeFragmentFragmentDoc = gql`
   fragment challengeTypeFragment on challenge_type {
