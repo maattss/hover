@@ -11,7 +11,7 @@ export type ProfileUserQueryVariables = Types.Exact<{
 
 export type ProfileUserQuery = { readonly __typename: 'query_root' } & {
   readonly user?: Types.Maybe<
-    { readonly __typename: 'users' } & Pick<Types.Users, 'totalScore'> & {
+    { readonly __typename: 'users' } & Pick<Types.Users, 'streak' | 'totalScore'> & {
         readonly user_achievement: ReadonlyArray<
           { readonly __typename: 'user_achievement' } & {
             readonly achievement: { readonly __typename: 'achievement' } & AchievementFragmentFragment;
@@ -61,6 +61,7 @@ export const ProfileUserDocument = gql`
   query ProfileUser($id: String!) {
     user(id: $id) {
       ...basicUserFragment
+      streak
       totalScore
       user_achievement(order_by: { created_at: asc }) {
         achievement {

@@ -3,6 +3,7 @@ query Highscore($timespan: timestamptz, $category: String) {
     id
     name
     picture
+    streak
     activities_aggregate(
       where: { started_at: { _gt: $timespan }, geofence: { category: { _eq: $category } } }
       order_by: { score: desc_nulls_last }

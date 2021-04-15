@@ -2,10 +2,7 @@
 import * as Types from '../types/types';
 
 import { gql } from '@apollo/client';
-export type ListUserFragmentFragment = { readonly __typename: 'users' } & Pick<
-  Types.Users,
-  'id' | 'name' | 'picture' | 'streak'
->;
+export type ListUserFragmentFragment = { readonly __typename: 'users' } & Pick<Types.Users, 'id' | 'name' | 'picture'>;
 
 export type BasicUserFragmentFragment = { readonly __typename: 'users' } & Pick<Types.Users, 'email' | 'bio'> &
   ListUserFragmentFragment;
@@ -124,7 +121,9 @@ export type ProfileActivityFragmentFragment = { readonly __typename: 'feed' } & 
   Types.Feed,
   'id' | 'activity_id' | 'created_at'
 > & {
-    readonly user?: Types.Maybe<{ readonly __typename: 'users' } & ListUserFragmentFragment>;
+    readonly user?: Types.Maybe<
+      { readonly __typename: 'users' } & Pick<Types.Users, 'streak'> & ListUserFragmentFragment
+    >;
     readonly activity?: Types.Maybe<{ readonly __typename: 'activities' } & FeedActivityFragmentFragment>;
     readonly likes: ReadonlyArray<{ readonly __typename: 'likes' } & LikesFragmentFragment>;
   };
@@ -134,7 +133,6 @@ export const ListUserFragmentFragmentDoc = gql`
     id
     name
     picture
-    streak
   }
 `;
 export const BasicUserFragmentFragmentDoc = gql`
@@ -366,6 +364,7 @@ export const ProfileActivityFragmentFragmentDoc = gql`
     id
     user {
       ...listUserFragment
+      streak
     }
     activity_id
     activity {
