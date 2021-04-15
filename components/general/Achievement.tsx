@@ -75,8 +75,9 @@ const Achievement: React.FC<AchievementProps> = ({ achievement, achieved = true,
       <View style={[styles.trophy, trophyBorderColor]}>
         <FAIcon name={getAchievementIcon(achievement)} style={[styles.icon, iconColor]}></FAIcon>
       </View>
-      <Text style={styles.text}>{achievement.name}</Text>
-      {!achieved && (
+      {achieved ? (
+        <Text style={styles.text}>{achievement.name}</Text>
+      ) : (
         <Progress.Bar
           style={styles.progress}
           progress={progress ?? 0}
