@@ -24,7 +24,7 @@ export const getAchievementIcon = (achievement: AchievementFragmentFragment) => 
     case Achievement_Type_Enum.FirstActivity:
       return 'award';
     case Achievement_Type_Enum.Streak:
-      return 'fire-alt';
+      return 'fire';
     default:
       return 'medal';
   }

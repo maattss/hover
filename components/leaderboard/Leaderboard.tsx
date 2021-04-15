@@ -7,6 +7,7 @@ import { defaultUserProfile } from '../../helpers/objectMappers';
 import { Colors, Spacing, Typography } from '../../theme';
 import TouchableProfile from '../general/TouchableProfile';
 import * as Analytics from 'expo-firebase-analytics';
+import Streak from '../general/Streak';
 
 interface SortParam {
   data: Item[];
@@ -36,6 +37,7 @@ export type Item = {
   name: string;
   score: number | null;
   picture?: string;
+  streak: number;
   specialRow?: boolean;
 };
 
@@ -86,6 +88,7 @@ const Leaderboard: React.FC<LeaderboardProps> = (props: LeaderboardProps) => {
             <Text style={[styles.text, styles.label, props.labelStyle]} numberOfLines={1}>
               {item.name}
             </Text>
+            {item.streak >= 2 && <Streak streak={item.streak} />}
           </View>
           <Text style={[styles.text, styles.score, props.scoreStyle]}>{item.score || 0}</Text>
         </View>
@@ -157,7 +160,7 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 17,
-    paddingRight: 80,
+    paddingRight: Spacing.base,
   },
   score: {
     fontSize: 22,

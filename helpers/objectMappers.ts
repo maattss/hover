@@ -119,6 +119,7 @@ export const convertToHighscoreList = (data: HighscoreQuery, id?: string) => {
       name: obj.name,
       score: obj.activities_aggregate.aggregate?.sum?.score,
       picture: obj.picture,
+      streak: obj.streak,
       specialRow: obj.id === id ? true : false,
     } as Item),
   );
