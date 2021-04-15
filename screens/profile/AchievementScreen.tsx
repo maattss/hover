@@ -23,6 +23,7 @@ const getProgress = (userProfile: UserProfile, achievement: AchievementFragmentF
   const rule: AchievementRule = achievement.rule;
 
   if (rule.score && rule.score > 0) {
+    if (rule.streak_count) return userProfile.streak / rule.streak_count;
     if (!rule.category) return userProfile.totalScore / rule.score;
     else if (rule.category === GeoFenceCategory.CULTURE) return userProfile.cultureScore / rule.score;
     else if (rule.category === GeoFenceCategory.EDUCATION) return userProfile.educationScore / rule.score;

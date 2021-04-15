@@ -2,6 +2,7 @@ fragment listUserFragment on users {
   id
   name
   picture
+  streak
 }
 
 fragment basicUserFragment on users {

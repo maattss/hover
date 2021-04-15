@@ -2,7 +2,10 @@
 import * as Types from '../types/types';
 
 import { gql } from '@apollo/client';
-export type ListUserFragmentFragment = { readonly __typename: 'users' } & Pick<Types.Users, 'id' | 'name' | 'picture'>;
+export type ListUserFragmentFragment = { readonly __typename: 'users' } & Pick<
+  Types.Users,
+  'id' | 'name' | 'picture' | 'streak'
+>;
 
 export type BasicUserFragmentFragment = { readonly __typename: 'users' } & Pick<Types.Users, 'email' | 'bio'> &
   ListUserFragmentFragment;
@@ -131,6 +134,7 @@ export const ListUserFragmentFragmentDoc = gql`
     id
     name
     picture
+    streak
   }
 `;
 export const BasicUserFragmentFragmentDoc = gql`
