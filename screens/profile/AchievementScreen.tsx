@@ -28,7 +28,7 @@ const getProgress = (userProfile: UserProfile, achievement: AchievementFragmentF
     else if (rule.category === GeoFenceCategory.EDUCATION) return userProfile.educationScore / rule.score;
     else if (rule.category === GeoFenceCategory.EXERCISE) return userProfile.exerciseScore / rule.score;
     else if (rule.category === GeoFenceCategory.SOCIAL) return userProfile.socialScore / rule.score;
-  }
+  } else if (rule.streak_count && rule.streak_count > 0) return userProfile.streak / rule.streak_count;
   return 0;
 };
 

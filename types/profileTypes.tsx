@@ -9,6 +9,7 @@ export enum AchievementVariant {
 export type AchievementRule = {
   category?: string;
   score?: number;
+  streak_count?: number;
 };
 
 export type UserProfile = {
@@ -23,4 +24,5 @@ export type UserProfile = {
   socialScore: number;
   exerciseScore: number;
   achievements: readonly AchievementFragmentFragment[];
+  streak: number;
 };

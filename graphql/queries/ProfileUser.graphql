@@ -1,6 +1,7 @@
 query ProfileUser($id: String!) {
   user(id: $id) {
     ...basicUserFragment
+    streak
     totalScore
     user_achievement(order_by: { created_at: asc }) {
       achievement {

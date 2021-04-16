@@ -119,6 +119,7 @@ export const convertToHighscoreList = (data: HighscoreQuery, id?: string) => {
       name: obj.name,
       score: obj.activities_aggregate.aggregate?.sum?.score,
       picture: obj.picture,
+      streak: obj.streak,
       specialRow: obj.id === id ? true : false,
     } as Item),
   );
@@ -137,6 +138,7 @@ export const defaultUserProfile: UserProfile = {
   socialScore: 0,
   exerciseScore: 0,
   achievements: [],
+  streak: 0,
 };
 
 export const convertToUserProfile = (data: ProfileUserQuery | undefined) => {
@@ -156,6 +158,7 @@ export const convertToUserProfile = (data: ProfileUserQuery | undefined) => {
       socialScore: data.user.social_score.aggregate?.sum?.score ?? defaultUserProfile.socialScore,
       exerciseScore: data.user.exercise_score.aggregate?.sum?.score ?? defaultUserProfile.exerciseScore,
       achievements: achievements,
+      streak: data.user.streak ?? defaultUserProfile.streak,
     } as UserProfile;
   }
 };

@@ -23,6 +23,8 @@ export const getAchievementIcon = (achievement: AchievementFragmentFragment) => 
       return getCategoryIconName(category);
     case Achievement_Type_Enum.FirstActivity:
       return 'award';
+    case Achievement_Type_Enum.Streak:
+      return 'fire';
     default:
       return 'medal';
   }

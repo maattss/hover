@@ -196,6 +196,7 @@ fragment profileActivityFragment on feed {
   id
   user {
     ...listUserFragment
+    streak
   }
   activity_id
   activity {

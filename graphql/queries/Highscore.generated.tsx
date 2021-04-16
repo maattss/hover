@@ -10,7 +10,7 @@ export type HighscoreQueryVariables = Types.Exact<{
 
 export type HighscoreQuery = { readonly __typename: 'query_root' } & {
   readonly leaderboard_users: ReadonlyArray<
-    { readonly __typename: 'users' } & Pick<Types.Users, 'id' | 'name' | 'picture'> & {
+    { readonly __typename: 'users' } & Pick<Types.Users, 'id' | 'name' | 'picture' | 'streak'> & {
         readonly activities_aggregate: { readonly __typename: 'activities_aggregate' } & {
           readonly aggregate?: Types.Maybe<
             { readonly __typename: 'activities_aggregate_fields' } & {
@@ -30,6 +30,7 @@ export const HighscoreDocument = gql`
       id
       name
       picture
+      streak
       activities_aggregate(
         where: { started_at: { _gt: $timespan }, geofence: { category: { _eq: $category } } }
         order_by: { score: desc_nulls_last }

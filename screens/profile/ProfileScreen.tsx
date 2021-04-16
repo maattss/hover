@@ -187,6 +187,7 @@ const ProfileScreen: React.FC<Props> = ({ route }: Props) => {
                 id: userProfile.id,
                 name: userProfile.name,
                 picture: userProfile.picture,
+                streak: userProfile.streak,
               },
               createdAt: profileActivity.activity?.created_at,
               feedCategory: FeedCategory.ACTIVITY,
