@@ -45,7 +45,10 @@ const NewChallengeOverviewScreen: React.FC<Props> = ({ route, navigation }: Prop
       .then((response) => {
         navigation.navigate('Challenge');
         console.log('Challenge inserted to db', response);
-        Alert.alert('Upload complete', 'Challenge uploaded successfully!');
+        Alert.alert(
+          'You have successfully challenged your friends!😍',
+          'We have notified them, so now we wait for them to respond!⏳ \nPS: you can get a head start if you start tracking now!🙈',
+        );
         Analytics.logEvent('new_challenge_created', {
           user: route.params.user_id,
           screen: 'NewChallengeOverviewScreen',
