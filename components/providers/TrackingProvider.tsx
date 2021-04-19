@@ -337,14 +337,14 @@ export const TrackingProvider = ({ children }: Props) => {
       await clearTrackingStorage();
       await clearPreviousOutsidePushStorage();
       console.log('Activity inserted to db', response);
-      Alert.alert('Upload complete', 'Activity uploaded successfully!');
+      Alert.alert('Great work!🔥', 'Your activity was successfully uploaded!');
       await Analytics.logEvent('tracking_event_publish', {
         action: 'publish',
         userId: userId,
         purpose: 'User publish activity.',
       });
     } catch (error) {
-      Alert.alert('Upload error', error.message);
+      Alert.alert('Upload error 😩', error.message);
       console.error('Mutation error', error.message);
     }
   };
