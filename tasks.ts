@@ -74,7 +74,7 @@ TaskManager.defineTask(LOCATION_BACKGROUND_TRACKING, async ({ data, error }) => 
           if ((pushToken && !previousPushUpdate) || (pushToken && previousPushUpdate < Date.now() - 5 * 60 * 1000)) {
             sendPushNotification(
               pushToken,
-              'Oh noo! You are outside the Hover zone...',
+              'Oh noo!😯 You are outside the Hover zone...',
               'Move back in to continue earning points. ' +
                 'Tracking will start automagically when you are inside the Hover zone.',
               true,
@@ -126,7 +126,7 @@ TaskManager.defineTask(NOTIFICATION_WHEN_INSIDE_GEOFENCE, async () => {
           if (pushToken) {
             sendPushNotification(
               pushToken,
-              'Hi there! I see you are inside a Hover zone',
+              'Hi there!👋 I see you are inside a Hover zone',
               'Do you want to start tracking?',
               true,
               false,
