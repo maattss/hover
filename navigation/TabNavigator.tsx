@@ -30,7 +30,7 @@ const TabNavigator: React.FC = () => {
   return (
     <Tab.Navigator
       tabBarOptions={{ activeTintColor: Colors.blue, keyboardHidesTabBar: true }}
-      initialRouteName={'Feed'}>
+      initialRouteName={'Hover'}>
       <Tab.Screen
         name="Feed"
         component={FeedNavigator}
